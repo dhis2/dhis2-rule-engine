@@ -44,7 +44,6 @@ class RuleEngineExecution
                         // send expression to evaluator
                         if ( Boolean.valueOf( process( rule.condition() ) ) )
                         {
-
                                 // process each action for this rule
                                 for ( int j = 0; j < rule.actions().size(); j++ )
                                 {
@@ -65,6 +64,10 @@ class RuleEngineExecution
                 {
                         return RuleEffect.create( ruleAction,
                             process( ((RuleActionAssign) ruleAction).data() ) );
+                }
+                else if ( ruleAction instanceof RuleActionSendMessage )
+                {
+                        return RuleEffect.create( ruleAction );
                 }
                 else if ( ruleAction instanceof RuleActionCreateEvent )
                 {

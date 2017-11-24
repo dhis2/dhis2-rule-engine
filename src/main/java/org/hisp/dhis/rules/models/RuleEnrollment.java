@@ -9,32 +9,35 @@ import java.util.Date;
 import java.util.List;
 
 @AutoValue
-public abstract class RuleEnrollment {
+public abstract class RuleEnrollment
+{
 
-    @Nonnull
-    public abstract String enrollment();
+        @Nonnull
+        public abstract String enrollment();
 
-    @Nonnull
-    public abstract Date incidentDate();
+        @Nonnull
+        public abstract Date incidentDate();
 
-    @Nonnull
-    public abstract Date enrollmentDate();
+        @Nonnull
+        public abstract Date enrollmentDate();
 
-    @Nonnull
-    public abstract Status status();
+        @Nonnull
+        public abstract Status status();
 
-    @Nonnull
-    public abstract List<RuleAttributeValue> attributeValues();
+        @Nonnull
+        public abstract List<RuleAttributeValue> attributeValues();
 
-    public enum Status {
-        ACTIVE, COMPLETED, CANCELLED
-    }
+        public enum Status
+        {
+                ACTIVE, COMPLETED, CANCELLED
+        }
 
-    @Nonnull
-    public static RuleEnrollment create(@Nonnull String enrollment, @Nonnull Date incidentDate,
+        @Nonnull
+        public static RuleEnrollment create( @Nonnull String enrollment, @Nonnull Date incidentDate,
             @Nonnull Date enrollmentDate, @Nonnull Status status,
-            @Nonnull List<RuleAttributeValue> attributeValues) {
-        return new AutoValue_RuleEnrollment(enrollment, incidentDate, enrollmentDate, status,
-                Collections.unmodifiableList(new ArrayList<>(attributeValues)));
-    }
+            @Nonnull List<RuleAttributeValue> attributeValues )
+        {
+                return new AutoValue_RuleEnrollment( enrollment, incidentDate, enrollmentDate, status,
+                    Collections.unmodifiableList( new ArrayList<>( attributeValues ) ) );
+        }
 }
