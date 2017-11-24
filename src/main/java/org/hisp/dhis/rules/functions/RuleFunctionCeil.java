@@ -7,35 +7,45 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-final class RuleFunctionCeil extends RuleFunction {
-    static final String D2_CEIL = "d2:ceil";
+final class RuleFunctionCeil
+    extends RuleFunction
+{
+        static final String D2_CEIL = "d2:ceil";
 
-    @Nonnull
-    static RuleFunctionCeil create() {
-        return new RuleFunctionCeil();
-    }
-
-    @Nonnull
-    @Override
-    public String evaluate(@Nonnull List<String> arguments,
-            Map<String, RuleVariableValue> valueMap) {
-        if (arguments.size() != 1) {
-            throw new IllegalArgumentException("One argument was expected, " +
-                    arguments.size() + " were supplied");
+        @Nonnull
+        static RuleFunctionCeil create()
+        {
+                return new RuleFunctionCeil();
         }
 
-        return String.valueOf((long) Math.ceil(toDouble(arguments.get(0), 0.0)));
-    }
+        @Nonnull
+        @Override
+        public String evaluate( @Nonnull List<String> arguments,
+            Map<String, RuleVariableValue> valueMap )
+        {
+                if ( arguments.size() != 1 )
+                {
+                        throw new IllegalArgumentException( "One argument was expected, " +
+                            arguments.size() + " were supplied" );
+                }
 
-    private static double toDouble(@Nullable final String str, final double defaultValue) {
-        if (str == null) {
-            return defaultValue;
+                return String.valueOf( (long) Math.ceil( toDouble( arguments.get( 0 ), 0.0 ) ) );
         }
 
-        try {
-            return Double.parseDouble(str);
-        } catch (final NumberFormatException nfe) {
-            return defaultValue;
+        private static double toDouble( @Nullable final String str, final double defaultValue )
+        {
+                if ( str == null )
+                {
+                        return defaultValue;
+                }
+
+                try
+                {
+                        return Double.parseDouble( str );
+                }
+                catch ( final NumberFormatException nfe )
+                {
+                        return defaultValue;
+                }
         }
-    }
 }

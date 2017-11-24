@@ -11,51 +11,57 @@ import java.util.List;
 import java.util.Locale;
 
 @AutoValue
-public abstract class RuleVariableValue {
+public abstract class RuleVariableValue
+{
 
-    @Nullable
-    public abstract String value();
+        @Nullable
+        public abstract String value();
 
-    @Nonnull
-    public abstract RuleValueType type();
+        @Nonnull
+        public abstract RuleValueType type();
 
-    @Nonnull
-    public abstract List<String> candidates();
+        @Nonnull
+        public abstract List<String> candidates();
 
-    @Nonnull
-    static RuleVariableValue create(@Nonnull RuleValueType ruleValueType) {
-        return new AutoValue_RuleVariableValue(null, ruleValueType,
-                Collections.unmodifiableList(new ArrayList<String>()));
-    }
-
-    @Nonnull
-    static RuleVariableValue create(@Nonnull String value,
-            @Nonnull RuleValueType ruleValueType) {
-
-        // clean-up the value before processing it
-        String processedValue = value.replace("'", "");
-
-        // if text processedValue, wrap it
-        if (RuleValueType.TEXT.equals(ruleValueType)) {
-            processedValue = String.format(Locale.US, "'%s'", processedValue);
+        @Nonnull
+        static RuleVariableValue create( @Nonnull RuleValueType ruleValueType )
+        {
+                return new AutoValue_RuleVariableValue( null, ruleValueType,
+                    Collections.unmodifiableList( new ArrayList<String>() ) );
         }
 
-        return new AutoValue_RuleVariableValue(processedValue, ruleValueType,
-                Collections.unmodifiableList(new ArrayList<String>()));
-    }
+        @Nonnull
+        static RuleVariableValue create( @Nonnull String value,
+            @Nonnull RuleValueType ruleValueType )
+        {
 
-    @Nonnull
-    static RuleVariableValue create(@Nonnull String value,
-            @Nonnull RuleValueType ruleValueType, @Nonnull List<String> candidates) {
-        // clean-up the value before processing it
-        String processedValue = value.replace("'", "");
+                // clean-up the value before processing it
+                String processedValue = value.replace( "'", "" );
 
-        // if text processedValue, wrap it
-        if (RuleValueType.TEXT.equals(ruleValueType)) {
-            processedValue = String.format(Locale.US, "'%s'", processedValue);
+                // if text processedValue, wrap it
+                if ( RuleValueType.TEXT.equals( ruleValueType ) )
+                {
+                        processedValue = String.format( Locale.US, "'%s'", processedValue );
+                }
+
+                return new AutoValue_RuleVariableValue( processedValue, ruleValueType,
+                    Collections.unmodifiableList( new ArrayList<String>() ) );
         }
 
-        return new AutoValue_RuleVariableValue(processedValue, ruleValueType,
-                Collections.unmodifiableList(candidates));
-    }
+        @Nonnull
+        static RuleVariableValue create( @Nonnull String value,
+            @Nonnull RuleValueType ruleValueType, @Nonnull List<String> candidates )
+        {
+                // clean-up the value before processing it
+                String processedValue = value.replace( "'", "" );
+
+                // if text processedValue, wrap it
+                if ( RuleValueType.TEXT.equals( ruleValueType ) )
+                {
+                        processedValue = String.format( Locale.US, "'%s'", processedValue );
+                }
+
+                return new AutoValue_RuleVariableValue( processedValue, ruleValueType,
+                    Collections.unmodifiableList( candidates ) );
+        }
 }

@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.hisp.rules</groupId>
-    <artifactId>core-rules</artifactId>
+    <artifactId>rule-engine</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>core-rules</name>
+    <name>rule-engine</name>
 
     <description>
 

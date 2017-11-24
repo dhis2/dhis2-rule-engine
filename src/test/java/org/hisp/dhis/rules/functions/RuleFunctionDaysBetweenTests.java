@@ -13,34 +13,43 @@ import java.util.HashMap;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.assertj.core.api.Java6Assertions.fail;
 
-@RunWith(JUnit4.class)
-public class RuleFunctionDaysBetweenTests {
+@RunWith( JUnit4.class )
+public class RuleFunctionDaysBetweenTests
+{
 
-    @Test
-    public void evaluateMustReturnCorrectNumberOfDays() {
-        RuleFunction daysBetween = RuleFunctionDaysBetween.create();
+        @Test
+        public void evaluateMustReturnCorrectNumberOfDays()
+        {
+                RuleFunction daysBetween = RuleFunctionDaysBetween.create();
 
-        String days = daysBetween.evaluate(Arrays.asList(
-                "2016-01-01", "2016-01-31"), new HashMap<String, RuleVariableValue>());
-        assertThat(days).isEqualTo("30");
-    }
-
-    @Test
-    public void evaluateMustFailOnWrongArgumentCount() {
-        try {
-            RuleFunctionDaysBetween.create().evaluate(Arrays.asList("one"),
-                    new HashMap<String, RuleVariableValue>());
-            fail("IllegalArgumentException was expected, but nothing was thrown.");
-        } catch (IllegalArgumentException illegalArgumentException) {
-            // noop
+                String days = daysBetween.evaluate( Arrays.asList(
+                    "2016-01-01", "2016-01-31" ), new HashMap<String, RuleVariableValue>() );
+                assertThat( days ).isEqualTo( "30" );
         }
 
-        try {
-            RuleFunctionDaysBetween.create().evaluate(Arrays.asList("one", "two", "three"),
-                    new HashMap<String, RuleVariableValue>());
-            fail("IllegalArgumentException was expected, but nothing was thrown.");
-        } catch (IllegalArgumentException illegalArgumentException) {
-            // noop
+        @Test
+        public void evaluateMustFailOnWrongArgumentCount()
+        {
+                try
+                {
+                        RuleFunctionDaysBetween.create().evaluate( Arrays.asList( "one" ),
+                            new HashMap<String, RuleVariableValue>() );
+                        fail( "IllegalArgumentException was expected, but nothing was thrown." );
+                }
+                catch ( IllegalArgumentException illegalArgumentException )
+                {
+                        // noop
+                }
+
+                try
+                {
+                        RuleFunctionDaysBetween.create().evaluate( Arrays.asList( "one", "two", "three" ),
+                            new HashMap<String, RuleVariableValue>() );
+                        fail( "IllegalArgumentException was expected, but nothing was thrown." );
+                }
+                catch ( IllegalArgumentException illegalArgumentException )
+                {
+                        // noop
+                }
         }
-    }
 }

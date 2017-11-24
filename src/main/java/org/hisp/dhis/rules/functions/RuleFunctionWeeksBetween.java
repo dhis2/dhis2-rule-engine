@@ -8,23 +8,28 @@ import java.util.Map;
 
 import static org.hisp.dhis.rules.functions.RuleFunctionDaysBetween.daysBetween;
 
-final class RuleFunctionWeeksBetween extends RuleFunction {
-    static final String D2_WEEKS_BETWEEN = "d2:weeksBetween";
+final class RuleFunctionWeeksBetween
+    extends RuleFunction
+{
+        static final String D2_WEEKS_BETWEEN = "d2:weeksBetween";
 
-    @Nonnull
-    public static RuleFunctionWeeksBetween create() {
-        return new RuleFunctionWeeksBetween();
-    }
-
-    @Nonnull
-    @Override
-    public String evaluate(@Nonnull List<String> arguments,
-            Map<String, RuleVariableValue> valueMap) {
-        if (arguments.size() != 2) {
-            throw new IllegalArgumentException("Two arguments were expected, " +
-                    arguments.size() + " were supplied");
+        @Nonnull
+        public static RuleFunctionWeeksBetween create()
+        {
+                return new RuleFunctionWeeksBetween();
         }
 
-        return String.valueOf(daysBetween(arguments.get(0), arguments.get(1)) / 7);
-    }
+        @Nonnull
+        @Override
+        public String evaluate( @Nonnull List<String> arguments,
+            Map<String, RuleVariableValue> valueMap )
+        {
+                if ( arguments.size() != 2 )
+                {
+                        throw new IllegalArgumentException( "Two arguments were expected, " +
+                            arguments.size() + " were supplied" );
+                }
+
+                return String.valueOf( daysBetween( arguments.get( 0 ), arguments.get( 1 ) ) / 7 );
+        }
 }
