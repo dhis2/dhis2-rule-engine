@@ -1,8 +1,6 @@
 package org.hisp.dhis.rules;
 
 import org.hisp.dhis.rules.models.*;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -23,7 +21,7 @@ public class RuleEngineEffectTypesTests
             throws Exception
         {
                 RuleAction ruleAction = RuleActionAssign.create(
-                    "test_action_content", "\'test_string\'", "test_data_element" );
+                    null, "\'test_string\'", "test_data_element" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
 
                 RuleEngine ruleEngine = RuleEngineContext
@@ -157,6 +155,29 @@ public class RuleEngineEffectTypesTests
                         new Date(), "test_program_stage", "test_data_element", "test_value" ) ) );
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
+                assertThat( ruleEffects.size() ).isEqualTo( 1 );
+                assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "" );
+                assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        }
+        
+        @Test
+        public void simpleConditionMustResultInHideProgramStageEffect()
+            throws Exception
+        {
+                RuleAction ruleAction = RuleActionHideProgramStage.create( "test_program_stage" );
+                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
+
+                RuleEngine ruleEngine = RuleEngineContext
+                    .builder( new ExpressionEvaluator() )
+                    .rules( Arrays.asList( rule ) )
+                    .build().toEngineBuilder()
+                    .build();
+
+                RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), Arrays.asList( RuleDataValue.create(
+                        new Date(), "test_program_stage", "test_data_element", "test_value" ) ) );
+                List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
+                
                 assertThat( ruleEffects.size() ).isEqualTo( 1 );
                 assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "" );
                 assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
