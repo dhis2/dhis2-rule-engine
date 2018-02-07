@@ -184,6 +184,29 @@ public class RuleEngineEffectTypesTests
         }
 
         @Test
+        public void simpleConditionMustResultInScheduleMessage()
+            throws Exception
+        {
+                RuleAction ruleAction = RuleActionScheduleMessage.create( new Date() );
+                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
+
+                RuleEngine ruleEngine = RuleEngineContext
+                    .builder( new ExpressionEvaluator() )
+                    .rules( Arrays.asList( rule ) )
+                    .build().toEngineBuilder()
+                    .build();
+
+                RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), Arrays.asList( RuleDataValue.create(
+                        new Date(), "test_program_stage", "test_data_element", "test_value" ) ) );
+                List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
+
+                assertThat( ruleEffects.size() ).isEqualTo( 1 );
+                assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "" );
+                assertThat( ruleEffects.get( 0 ).ruleAction() instanceof RuleActionScheduleMessage );
+        }
+
+        @Test
         public void simpleConditionMustResultInHideSectionEffect()
             throws Exception
         {
