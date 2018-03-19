@@ -34,6 +34,10 @@ final class RuleVariableValueMapBuilder
 
         private static final String ENV_VAR_TEI_COUNT = "tei_count";
 
+        private static final String ENV_VAR_EVENT_STATUS = "event_status";
+
+        private static final String ENV_VAR_ENROLLMENT_STATUS = "enrollment_status";
+
         @Nonnull
         private final SimpleDateFormat dateFormat;
 
@@ -263,6 +267,10 @@ final class RuleVariableValueMapBuilder
                         String incidentDate = dateFormat.format( ruleEnrollment.incidentDate() );
                         valueMap.put( ENV_VAR_INCIDENT_DATE, create( incidentDate,
                             RuleValueType.TEXT, Arrays.asList( incidentDate ) ) );
+
+                        String status = ruleEnrollment.status().toString();
+                        valueMap.put( ENV_VAR_ENROLLMENT_STATUS, create( status,
+                            RuleValueType.TEXT, Arrays.asList( status ) ) );
                 }
 
                 if ( ruleEvent != null )
@@ -281,6 +289,10 @@ final class RuleVariableValueMapBuilder
                             RuleValueType.NUMERIC, Arrays.asList( eventCount ) ) );
                         valueMap.put( ENV_VAR_EVENT_ID, create( ruleEvent.event(),
                             RuleValueType.TEXT, Arrays.asList( ruleEvent.event() ) ) );
+
+                        String status = ruleEvent.status().toString();
+                        valueMap.put( ENV_VAR_EVENT_STATUS, create( status,
+                            RuleValueType.TEXT, Arrays.asList( status ) ) );
                 }
         }
 

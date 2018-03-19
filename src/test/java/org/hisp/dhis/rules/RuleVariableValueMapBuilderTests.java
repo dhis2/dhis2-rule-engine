@@ -39,6 +39,7 @@ public class RuleVariableValueMapBuilderTests
         {
                 RuleEvent ruleEvent = mock( RuleEvent.class );
                 when( ruleEvent.event() ).thenReturn( "test_event_uid" );
+                when( ruleEvent.status() ).thenReturn( RuleEvent.Status.ACTIVE );
                 when( ruleEvent.eventDate() ).thenReturn( dateFormat.parse( "1994-02-03" ) );
                 when( ruleEvent.dueDate() ).thenReturn( dateFormat.parse( "1995-02-03" ) );
 
@@ -110,13 +111,16 @@ public class RuleVariableValueMapBuilderTests
                     .ruleEvents( Arrays.asList( contextEventOne, contextEventTwo ) )
                     .build();
 
-                assertThat( valueMap.size() ).isEqualTo( 7 );
+                assertThat( valueMap.size() ).isEqualTo( 8 );
 
                 assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
 
                 assertThatVariable( valueMap.get( "event_date" ) ).hasValue( wrap( dateFormat.format( eventDate ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( eventDate ) );
+
+                assertThatVariable( valueMap.get( "event_status" ) ).hasValue( wrap(RuleEvent.Status.ACTIVE.toString()) )
+                    .isTypeOf( RuleValueType.TEXT ).hasCandidates( RuleEvent.Status.ACTIVE.toString() );
 
                 // event count variable should respect current event
                 assertThatVariable( valueMap.get( "event_count" ) ).hasValue( "3" )
@@ -173,7 +177,7 @@ public class RuleVariableValueMapBuilderTests
                     .ruleEvents( Arrays.asList( oldestRuleEvent, newestRuleEvent ) )
                     .build();
 
-                assertThat( valueMap.size() ).isEqualTo( 7 );
+                assertThat( valueMap.size() ).isEqualTo( 8 );
 
                 assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -238,7 +242,7 @@ public class RuleVariableValueMapBuilderTests
                     .ruleEvents( Arrays.asList( firstRuleEvent, secondRuleEvent ) )
                     .build();
 
-                assertThat( valueMap.size() ).isEqualTo( 7 );
+                assertThat( valueMap.size() ).isEqualTo( 8 );
 
                 assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -303,7 +307,7 @@ public class RuleVariableValueMapBuilderTests
                     .ruleEvents( Arrays.asList( eventOne, eventTwo, eventThree ) )
                     .build();
 
-                assertThat( valueMap.size() ).isEqualTo( 6 );
+                assertThat( valueMap.size() ).isEqualTo( 7 );
 
                 assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -350,7 +354,7 @@ public class RuleVariableValueMapBuilderTests
                     .ruleEvents( Arrays.asList( ruleEventOne ) )
                     .build();
 
-                assertThat( valueMap.size() ).isEqualTo( 6 );
+                assertThat( valueMap.size() ).isEqualTo( 7 );
 
                 assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -405,7 +409,7 @@ public class RuleVariableValueMapBuilderTests
                     .ruleEvents( Arrays.asList( ruleEventOne, ruleEventTwo, ruleEventThree ) )
                     .build();
 
-                assertThat( valueMap.size() ).isEqualTo( 6 );
+                assertThat( valueMap.size() ).isEqualTo( 7 );
 
                 assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -468,7 +472,7 @@ public class RuleVariableValueMapBuilderTests
                     .ruleEvents( Arrays.asList( contextEvent ) )
                     .build();
 
-                assertThat( valueMap.size() ).isEqualTo( 12 );
+                assertThat( valueMap.size() ).isEqualTo( 14 );
 
                 assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -484,6 +488,9 @@ public class RuleVariableValueMapBuilderTests
 
                 assertThatVariable( valueMap.get( "due_date" ) ).hasValue( wrap( dateFormat.format( eventDate ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( eventDate ) );
+
+                assertThatVariable( valueMap.get( "enrollment_status" ) ).hasValue( wrap( RuleEnrollment.Status.ACTIVE.toString() ) )
+                    .isTypeOf( RuleValueType.TEXT ).hasCandidates( RuleEnrollment.Status.ACTIVE.toString() );
 
                 assertThatVariable( valueMap.get( "enrollment_date" ) )
                     .hasValue( wrap( dateFormat.format( enrollmentDate ) ) )
@@ -538,7 +545,7 @@ public class RuleVariableValueMapBuilderTests
                     .ruleEvents( Arrays.asList( ruleEventOne, ruleEventTwo ) )
                     .build();
 
-                assertThat( valueMap.size() ).isEqualTo( 9 );
+                assertThat( valueMap.size() ).isEqualTo( 10 );
 
                 assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( currentDate ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( currentDate );
