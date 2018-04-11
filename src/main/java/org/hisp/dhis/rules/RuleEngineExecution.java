@@ -67,7 +67,8 @@ class RuleEngineExecution
                 }
                 else if ( ruleAction instanceof RuleActionSendMessage )
                 {
-                        return RuleEffect.create( ruleAction );
+                        return RuleEffect.create( ruleAction, process(
+                            ((RuleActionSendMessage) ruleAction ).data() ) );
                 }
                 else if ( ruleAction instanceof RuleActionCreateEvent )
                 {

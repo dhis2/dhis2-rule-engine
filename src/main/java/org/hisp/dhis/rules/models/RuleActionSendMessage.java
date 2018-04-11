@@ -45,13 +45,16 @@ public abstract class RuleActionSendMessage
         public abstract String notification();
 
         @Nonnull
-        public static RuleActionSendMessage create( @Nullable String notification )
+        public abstract String data();
+
+        @Nonnull
+        public static RuleActionSendMessage create( @Nullable String notification, @Nullable String data  )
         {
                 if ( notification == null )
                 {
                         throw new IllegalArgumentException( "Notification cannot be null" );
                 }
 
-                return new AutoValue_RuleActionSendMessage( notification == null ? "" : notification );
+                return new AutoValue_RuleActionSendMessage( notification == null ? "" : notification, data == null ? "" : data );
         }
 }
