@@ -30,6 +30,8 @@ public abstract class RuleFunction
                         return RuleFunctionFloor.create();
                 case RuleFunctionCeil.D2_CEIL:
                         return RuleFunctionCeil.create();
+                case RuleFunctionAddDays.D2_ADD_DAYS:
+                        return RuleFunctionAddDays.create();
                 default:
                         return null;
                 }
