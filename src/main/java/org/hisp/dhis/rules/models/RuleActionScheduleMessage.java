@@ -42,16 +42,19 @@ public abstract class RuleActionScheduleMessage
     extends RuleAction
 {
         @Nonnull
-        public abstract Date scheduleDate();
+        public abstract String notification();
 
         @Nonnull
-        public static RuleActionScheduleMessage create( @Nullable Date scheduleDate )
+        public abstract String data();
+
+        @Nonnull
+        public static RuleActionScheduleMessage create( @Nullable String notification, @Nullable String data  )
         {
-                if ( scheduleDate == null )
+                if ( notification == null )
                 {
-                        throw new IllegalArgumentException( "scheduleDate cannot be null" );
+                        throw new IllegalArgumentException( "Notification cannot be null" );
                 }
 
-                return new AutoValue_RuleActionScheduleMessage( scheduleDate == null ? new Date() : scheduleDate );
+                return new AutoValue_RuleActionScheduleMessage( notification == null ? "" : notification, data == null ? "" : data );
         }
 }

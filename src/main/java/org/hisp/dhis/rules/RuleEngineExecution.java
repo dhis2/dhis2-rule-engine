@@ -70,6 +70,11 @@ class RuleEngineExecution
                         return RuleEffect.create( ruleAction, process(
                             ((RuleActionSendMessage) ruleAction ).data() ) );
                 }
+                else if ( ruleAction instanceof RuleActionScheduleMessage )
+                {
+                        return RuleEffect.create( ruleAction, process(
+                            ((RuleActionScheduleMessage) ruleAction ).data() ) );
+                }
                 else if ( ruleAction instanceof RuleActionCreateEvent )
                 {
                         return RuleEffect.create( ruleAction, process(

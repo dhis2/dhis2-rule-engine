@@ -43,8 +43,7 @@ import java.util.Map;
  * @Author Zubair Asghar.
  */
 
-@AutoValue
-abstract class RuleFunctionAddDays
+class RuleFunctionAddDays
         extends RuleFunction
 {
         static final String D2_ADD_DAYS = "d2:addDays";
@@ -65,7 +64,7 @@ abstract class RuleFunctionAddDays
         @Nonnull
         public static RuleFunctionAddDays create()
         {
-                return new AutoValue_RuleFunctionAddDays();
+                return new RuleFunctionAddDays();
         }
 
         /**

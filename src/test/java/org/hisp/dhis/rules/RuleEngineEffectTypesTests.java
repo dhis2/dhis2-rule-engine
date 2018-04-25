@@ -211,7 +211,7 @@ public class RuleEngineEffectTypesTests
         public void simpleConditionMustResultInScheduleMessage()
             throws Exception
         {
-                RuleAction ruleAction = RuleActionScheduleMessage.create( new Date() );
+                RuleAction ruleAction = RuleActionScheduleMessage.create( "", "'2018-04-24'" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
 
                 RuleEngine ruleEngine = RuleEngineContext
@@ -225,9 +225,10 @@ public class RuleEngineEffectTypesTests
                         new Date(), "test_program_stage", "test_data_element", "test_value" ) ) );
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
+                System.out.println( ruleEffects );
                 assertThat( ruleEffects.size() ).isEqualTo( 1 );
-                assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "" );
                 assertThat( ruleEffects.get( 0 ).ruleAction() instanceof RuleActionScheduleMessage );
+                assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "2018-04-24" );
         }
 
         @Test
