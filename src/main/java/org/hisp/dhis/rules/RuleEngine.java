@@ -72,7 +72,7 @@ public final class RuleEngine
                     .build();
 
                 return new RuleEngineExecution( executionContext().expressionEvaluator(),
-                    ruleEngineContext.rules(), valueMap );
+                    ruleEngineContext.rules(), valueMap, ruleEngineContext.supplementaryData() );
         }
 
         @Nonnull
@@ -95,7 +95,7 @@ public final class RuleEngine
                     .build();
 
                 return new RuleEngineExecution( executionContext().expressionEvaluator(),
-                    ruleEngineContext.rules(), valueMap );
+                    ruleEngineContext.rules(), valueMap, ruleEngineContext.supplementaryData()  );
         }
 
         public static class Builder

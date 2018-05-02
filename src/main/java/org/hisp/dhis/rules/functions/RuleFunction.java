@@ -13,7 +13,7 @@ public abstract class RuleFunction
 
         @Nonnull
         public abstract String evaluate( @Nonnull List<String> arguments,
-            Map<String, RuleVariableValue> valueMap );
+            Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData );
 
         @Nullable
         public static RuleFunction create( @Nonnull String fun )
@@ -32,6 +32,8 @@ public abstract class RuleFunction
                         return RuleFunctionCeil.create();
                 case RuleFunctionAddDays.D2_ADD_DAYS:
                         return RuleFunctionAddDays.create();
+                case RuleFunctionInOrgUnitGroup.D2_IN_ORG_UNIT_GROUP:
+                        return RuleFunctionInOrgUnitGroup.create();
                 default:
                         return null;
                 }

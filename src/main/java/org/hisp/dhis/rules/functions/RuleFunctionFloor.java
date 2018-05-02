@@ -21,7 +21,7 @@ final class RuleFunctionFloor
         @Nonnull
         @Override
         public String evaluate( @Nonnull List<String> arguments,
-            Map<String, RuleVariableValue> valueMap )
+            Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
         {
                 if ( arguments.size() != 1 )
                 {

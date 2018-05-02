@@ -7,7 +7,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import static java.util.Collections.checkedMap;
 import static java.util.Collections.unmodifiableList;
 
 public final class RuleEngineContext
@@ -22,12 +24,16 @@ public final class RuleEngineContext
         @Nonnull
         private final List<RuleVariable> ruleVariables;
 
+        @Nonnull
+        private final Map<String, List<String>> supplementaryData;
+
         RuleEngineContext( @Nonnull RuleExpressionEvaluator expressionEvaluator,
-            @Nonnull List<Rule> rules, @Nonnull List<RuleVariable> ruleVariables )
+            @Nonnull List<Rule> rules, @Nonnull List<RuleVariable> ruleVariables, Map<String, List<String>> supplementaryData )
         {
                 this.expressionEvaluator = expressionEvaluator;
                 this.rules = rules;
                 this.ruleVariables = ruleVariables;
+                this.supplementaryData = supplementaryData;
         }
 
         @Nonnull
@@ -40,6 +46,12 @@ public final class RuleEngineContext
         public List<RuleVariable> ruleVariables()
         {
                 return ruleVariables;
+        }
+
+        @Nonnull
+        public Map<String, List<String>> supplementaryData()
+        {
+                return supplementaryData;
         }
 
         @Nonnull
@@ -77,6 +89,9 @@ public final class RuleEngineContext
                 @Nullable
                 private List<RuleVariable> ruleVariables;
 
+                @Nullable
+                private Map<String, List<String>> supplementaryData;
+
                 Builder( @Nonnull RuleExpressionEvaluator evaluator )
                 {
                         this.evaluator = evaluator;
@@ -107,6 +122,17 @@ public final class RuleEngineContext
                 }
 
                 @Nonnull
+                public Builder supplementaryData( Map<String, List<String>> supplementaryData )
+                {
+                        if ( supplementaryData == null )
+                        {
+                                throw new IllegalArgumentException( "supplementaryData == null" );
+                        }
+                        this.supplementaryData = supplementaryData;
+                        return this;
+                }
+
+                @Nonnull
                 public RuleEngineContext build()
                 {
                         if ( rules == null )
@@ -119,7 +145,7 @@ public final class RuleEngineContext
                                 ruleVariables = unmodifiableList( new ArrayList<RuleVariable>() );
                         }
 
-                        return new RuleEngineContext( evaluator, rules, ruleVariables );
+                        return new RuleEngineContext( evaluator, rules, ruleVariables, supplementaryData );
                 }
         }
 }

@@ -31,7 +31,7 @@ public class RuleEngineEffectTypesTests
                     .build();
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                    RuleEvent.Status.ACTIVE, new Date(), new Date(), Arrays.asList( RuleDataValue.create(
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "",Arrays.asList( RuleDataValue.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value" ) ) );
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
@@ -55,7 +55,7 @@ public class RuleEngineEffectTypesTests
                     .build();
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                    RuleEvent.Status.ACTIVE, new Date(), new Date(), Arrays.asList( RuleDataValue.create(
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList( RuleDataValue.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value" ) ) );
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
@@ -79,7 +79,7 @@ public class RuleEngineEffectTypesTests
                     .build();
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                    RuleEvent.Status.ACTIVE, new Date(), new Date(), Arrays.asList( RuleDataValue.create(
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList( RuleDataValue.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value" ) ) );
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
@@ -103,7 +103,7 @@ public class RuleEngineEffectTypesTests
                     .build();
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                    RuleEvent.Status.ACTIVE, new Date(), new Date(), Arrays.asList( RuleDataValue.create(
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList( RuleDataValue.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value" ) ) );
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
@@ -127,7 +127,7 @@ public class RuleEngineEffectTypesTests
                     .build();
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                    RuleEvent.Status.ACTIVE, new Date(), new Date(), Arrays.asList( RuleDataValue.create(
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList( RuleDataValue.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value" ) ) );
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
@@ -151,7 +151,7 @@ public class RuleEngineEffectTypesTests
                     .build();
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                    RuleEvent.Status.ACTIVE, new Date(), new Date(), Arrays.asList( RuleDataValue.create(
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList( RuleDataValue.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value" ) ) );
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
@@ -175,7 +175,7 @@ public class RuleEngineEffectTypesTests
                     .build();
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                    RuleEvent.Status.COMPLETED, new Date(), new Date(), Arrays.asList( RuleDataValue.create(
+                    RuleEvent.Status.COMPLETED, new Date(), new Date(), "",Arrays.asList( RuleDataValue.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value" ) ) );
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
@@ -198,7 +198,7 @@ public class RuleEngineEffectTypesTests
                     .build();
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                    RuleEvent.Status.ACTIVE, new Date(), new Date(), Arrays.asList( RuleDataValue.create(
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList( RuleDataValue.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value" ) ) );
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
                 
@@ -221,7 +221,7 @@ public class RuleEngineEffectTypesTests
                     .build();
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                    RuleEvent.Status.ACTIVE, new Date(), new Date(), Arrays.asList( RuleDataValue.create(
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "",Arrays.asList( RuleDataValue.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value" ) ) );
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
@@ -245,7 +245,7 @@ public class RuleEngineEffectTypesTests
                     .build();
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                    RuleEvent.Status.ACTIVE, new Date(), new Date(), Arrays.asList( RuleDataValue.create(
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "",Arrays.asList( RuleDataValue.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value" ) ) );
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
@@ -268,7 +268,7 @@ public class RuleEngineEffectTypesTests
                     .build();
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                    RuleEvent.Status.ACTIVE, new Date(), new Date(), Arrays.asList( RuleDataValue.create(
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "",Arrays.asList( RuleDataValue.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value" ) ) );
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
@@ -292,7 +292,7 @@ public class RuleEngineEffectTypesTests
                     .build();
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                    RuleEvent.Status.ACTIVE, new Date(), new Date(), Arrays.asList( RuleDataValue.create(
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "",Arrays.asList( RuleDataValue.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value" ) ) );
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
@@ -316,7 +316,7 @@ public class RuleEngineEffectTypesTests
                     .build();
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                    RuleEvent.Status.ACTIVE, new Date(), new Date(), Arrays.asList( RuleDataValue.create(
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList( RuleDataValue.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value" ) ) );
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
@@ -340,7 +340,7 @@ public class RuleEngineEffectTypesTests
                     .build();
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                    RuleEvent.Status.ACTIVE, new Date(), new Date(), Arrays.asList( RuleDataValue.create(
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "",Arrays.asList( RuleDataValue.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value" ) ) );
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 

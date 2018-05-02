@@ -1,8 +1,6 @@
 package org.hisp.dhis.rules.functions;
 
 import org.hisp.dhis.rules.RuleVariableValue;
-import org.hisp.dhis.rules.functions.RuleFunction;
-import org.hisp.dhis.rules.functions.RuleFunctionFloor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -24,7 +22,7 @@ public class RuleFunctionFloorTests
                 RuleFunction floor = RuleFunctionFloor.create();
 
                 String flooredNumber = floor.evaluate( Arrays.asList( "5.9" ),
-                    new HashMap<String, RuleVariableValue>() );
+                    new HashMap<String, RuleVariableValue>(), null);
 
                 assertThat( flooredNumber ).isEqualTo( "5" );
         }
@@ -35,7 +33,7 @@ public class RuleFunctionFloorTests
                 try
                 {
                         RuleFunctionFloor.create().evaluate( Arrays.asList( "5.9", "6.8" ),
-                            new HashMap<String, RuleVariableValue>() );
+                            new HashMap<String, RuleVariableValue>(), null);
                         fail( "IllegalArgumentException was expected, but nothing was thrown." );
                 }
                 catch ( IllegalArgumentException illegalArgumentException )
@@ -46,7 +44,7 @@ public class RuleFunctionFloorTests
                 try
                 {
                         RuleFunctionFloor.create().evaluate( new ArrayList<String>(),
-                            new HashMap<String, RuleVariableValue>() );
+                            new HashMap<String, RuleVariableValue>(), null);
                         fail( "IllegalArgumentException was expected, but nothing was thrown." );
                 }
                 catch ( IllegalArgumentException illegalArgumentException )

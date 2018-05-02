@@ -27,6 +27,9 @@ public abstract class RuleEvent
         public abstract Date dueDate();
 
         @Nonnull
+        public abstract String organisationUnit();
+
+        @Nonnull
         public abstract List<RuleDataValue> dataValues();
 
         @Nonnull
@@ -36,10 +39,10 @@ public abstract class RuleEvent
             @Nonnull Status status,
             @Nonnull Date eventDate,
             @Nonnull Date dueDate,
+            @Nonnull String organisationUnit,
             @Nonnull List<RuleDataValue> ruleDataValues )
         {
-                return new AutoValue_RuleEvent( event, programStage, status, eventDate, dueDate,
-                    Collections.unmodifiableList( new ArrayList<>( ruleDataValues ) ) );
+                return new AutoValue_RuleEvent( event, programStage, status, eventDate, dueDate, organisationUnit, Collections.unmodifiableList( new ArrayList<>( ruleDataValues ) ) );
         }
 
         public enum Status

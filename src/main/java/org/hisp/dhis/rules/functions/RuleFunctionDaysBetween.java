@@ -19,7 +19,7 @@ abstract class RuleFunctionDaysBetween
         @Nonnull
         @Override
         public String evaluate( @Nonnull List<String> arguments,
-            @Nonnull Map<String, RuleVariableValue> valueMap )
+            @Nonnull Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
         {
                 if ( arguments.size() != 2 )
                 {

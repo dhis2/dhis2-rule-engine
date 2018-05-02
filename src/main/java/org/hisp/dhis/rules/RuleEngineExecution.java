@@ -21,14 +21,18 @@ class RuleEngineExecution
         private final Map<String, RuleVariableValue> valueMap;
 
         @Nonnull
+        private final Map<String, List<String>> supplememtaryData;
+
+        @Nonnull
         private final List<Rule> rules;
 
         RuleEngineExecution( @Nonnull RuleExpressionEvaluator expressionEvaluator,
-            @Nonnull List<Rule> rules, @Nonnull Map<String, RuleVariableValue> valueMap )
+            @Nonnull List<Rule> rules, @Nonnull Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplememtaryData )
         {
                 this.expressionEvaluator = expressionEvaluator;
                 this.valueMap = valueMap;
                 this.rules = rules;
+                this.supplememtaryData = supplememtaryData;
         }
 
         @Override
@@ -168,7 +172,7 @@ class RuleEngineExecution
                         }
 
                         ruleExpressionBinder.bindFunction( ruleFunctionCall.functionCall(), RuleFunction
-                            .create( ruleFunctionCall.functionName() ).evaluate( arguments, valueMap ) );
+                            .create( ruleFunctionCall.functionName() ).evaluate( arguments, valueMap, supplememtaryData ) );
                 }
 
                 String processedExpression = ruleExpressionBinder.build();

@@ -25,7 +25,7 @@ public class RuleEnrollmentTests
                 try
                 {
                         RuleEnrollment.create( null, new Date(), new Date(),
-                            RuleEnrollment.Status.ACTIVE, new ArrayList<RuleAttributeValue>() );
+                            RuleEnrollment.Status.ACTIVE, null, new ArrayList<RuleAttributeValue>() );
                         fail( "NullPointerException was expected, but nothing was thrown." );
                 }
                 catch ( NullPointerException nullPointerException )
@@ -40,7 +40,7 @@ public class RuleEnrollmentTests
                 try
                 {
                         RuleEnrollment.create( "test_enrollment", null, new Date(),
-                            RuleEnrollment.Status.ACTIVE, new ArrayList<RuleAttributeValue>() );
+                            RuleEnrollment.Status.ACTIVE,null, new ArrayList<RuleAttributeValue>() );
                         fail( "NullPointerException was expected, but nothing was thrown." );
                 }
                 catch ( NullPointerException nullPointerException )
@@ -55,7 +55,7 @@ public class RuleEnrollmentTests
                 try
                 {
                         RuleEnrollment.create( "test_enrollment", new Date(), null,
-                            RuleEnrollment.Status.ACTIVE, new ArrayList<RuleAttributeValue>() );
+                            RuleEnrollment.Status.ACTIVE,null, new ArrayList<RuleAttributeValue>() );
                         fail( "NullPointerException was expected, but nothing was thrown." );
                 }
                 catch ( NullPointerException nullPointerException )
@@ -70,7 +70,7 @@ public class RuleEnrollmentTests
                 try
                 {
                         RuleEnrollment.create( "test_enrollment", new Date(), new Date(),
-                            null, new ArrayList<RuleAttributeValue>() );
+                            null, null,new ArrayList<RuleAttributeValue>() );
                         fail( "NullPointerException was expected, but nothing was thrown." );
                 }
                 catch ( NullPointerException nullPointerException )
@@ -85,7 +85,7 @@ public class RuleEnrollmentTests
                 try
                 {
                         RuleEnrollment.create( "test_enrollment", new Date(), new Date(),
-                            RuleEnrollment.Status.ACTIVE, null );
+                            RuleEnrollment.Status.ACTIVE, null,null);
                         fail( "NullPointerException was expected, but nothing was thrown." );
                 }
                 catch ( NullPointerException nullPointerException )
@@ -105,7 +105,7 @@ public class RuleEnrollmentTests
                 Date enrollmentDate = new Date();
 
                 RuleEnrollment ruleEnrollment = RuleEnrollment.create( "test_enrollment",
-                    incidentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE,
+                    incidentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE, "",
                     Arrays.asList( ruleAttributeValueOne, ruleAttributeValueTwo, ruleAttributeValueThree ) );
 
                 assertThat( ruleEnrollment.enrollment() ).isEqualTo( "test_enrollment" );
@@ -130,7 +130,7 @@ public class RuleEnrollmentTests
                 attributeValues.add( ruleAttributeValueTwo );
 
                 RuleEnrollment ruleEnrollment = RuleEnrollment.create( "test_enrollment",
-                    new Date(), new Date(), RuleEnrollment.Status.ACTIVE, attributeValues );
+                    new Date(), new Date(), RuleEnrollment.Status.ACTIVE, "", attributeValues );
 
                 // mutating source array
                 attributeValues.add( ruleAttributeValueThree );

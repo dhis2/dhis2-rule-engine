@@ -25,6 +25,9 @@ public abstract class RuleEnrollment
         public abstract Status status();
 
         @Nonnull
+        public abstract String organisationUnit();
+
+        @Nonnull
         public abstract List<RuleAttributeValue> attributeValues();
 
         public enum Status
@@ -34,10 +37,10 @@ public abstract class RuleEnrollment
 
         @Nonnull
         public static RuleEnrollment create( @Nonnull String enrollment, @Nonnull Date incidentDate,
-            @Nonnull Date enrollmentDate, @Nonnull Status status,
+            @Nonnull Date enrollmentDate, @Nonnull Status status, @Nonnull String organisationUnit,
             @Nonnull List<RuleAttributeValue> attributeValues )
         {
-                return new AutoValue_RuleEnrollment( enrollment, incidentDate, enrollmentDate, status,
+                return new AutoValue_RuleEnrollment( enrollment, incidentDate, enrollmentDate, status, organisationUnit,
                     Collections.unmodifiableList( new ArrayList<>( attributeValues ) ) );
         }
 }

@@ -12,9 +12,7 @@ import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Java6Assertions.assertThat;
@@ -89,6 +87,10 @@ public class RuleEngineContextTests
                 Rule ruleOne = mock( Rule.class );
                 Rule ruleTwo = mock( Rule.class );
 
+                List<String> members = Arrays.asList( "one", "two" );
+                Map<String, List<String>> supplementaryData = new HashMap<>();
+                supplementaryData.put( "text-key", members );
+
                 List<RuleVariable> ruleVariables = new ArrayList<>();
                 List<Rule> rules = new ArrayList<>();
 
@@ -97,6 +99,7 @@ public class RuleEngineContextTests
 
                 RuleEngineContext ruleEngineContext = RuleEngineContext.builder( ruleExpressionEvaluator )
                     .ruleVariables( ruleVariables )
+                    .supplementaryData( supplementaryData )
                     .rules( rules )
                     .build();
 
@@ -106,6 +109,11 @@ public class RuleEngineContextTests
                 assertThat( ruleEngineContext.expressionEvaluator() ).isEqualTo( ruleExpressionEvaluator );
                 assertThat( ruleEngineContext.ruleVariables().size() ).isEqualTo( 1 );
                 assertThat( ruleEngineContext.ruleVariables().get( 0 ) ).isEqualTo( ruleVariableOne );
+
+                assertThat( ruleEngineContext.supplementaryData().size() ).isEqualTo( 1 );
+                assertThat( ruleEngineContext.supplementaryData().get( "text-key" ) ).isNotNull();
+                assertThat( ruleEngineContext.supplementaryData().get( "text-key" ) ).isEqualTo( members );
+
 
                 assertThat( ruleEngineContext.rules().size() ).isEqualTo( 1 );
                 assertThat( ruleEngineContext.rules().get( 0 ) ).isEqualTo( ruleOne );
@@ -136,6 +144,7 @@ public class RuleEngineContextTests
         {
                 RuleEngineContext ruleEngineContext = RuleEngineContext.builder( ruleExpressionEvaluator )
                     .ruleVariables( Arrays.asList( mock( RuleVariable.class ) ) )
+                    .supplementaryData( new HashMap<String, List<String>>() )
                     .rules( Arrays.asList( mock( Rule.class ) ) )
                     .build();
 

@@ -1,8 +1,6 @@
 package org.hisp.dhis.rules.functions;
 
 import org.hisp.dhis.rules.RuleVariableValue;
-import org.hisp.dhis.rules.functions.RuleFunction;
-import org.hisp.dhis.rules.functions.RuleFunctionCeil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -24,7 +22,7 @@ public class RuleFunctionCeilTests
                 RuleFunction ceil = RuleFunctionCeil.create();
 
                 String ceiledNumber = ceil.evaluate( Arrays.asList( "5.9" ),
-                    new HashMap<String, RuleVariableValue>() );
+                    new HashMap<String, RuleVariableValue>(), null);
 
                 assertThat( ceiledNumber ).isEqualTo( "6" );
         }
@@ -35,7 +33,7 @@ public class RuleFunctionCeilTests
                 try
                 {
                         RuleFunctionCeil.create().evaluate( Arrays.asList( "5.9", "6.8" ),
-                            new HashMap<String, RuleVariableValue>() );
+                            new HashMap<String, RuleVariableValue>(), null);
                         fail( "IllegalArgumentException was expected, but nothing was thrown." );
                 }
                 catch ( IllegalArgumentException illegalArgumentException )
@@ -46,7 +44,7 @@ public class RuleFunctionCeilTests
                 try
                 {
                         RuleFunctionCeil.create().evaluate( new ArrayList<String>(),
-                            new HashMap<String, RuleVariableValue>() );
+                            new HashMap<String, RuleVariableValue>(), null);
                         fail( "IllegalArgumentException was expected, but nothing was thrown." );
                 }
                 catch ( IllegalArgumentException illegalArgumentException )

@@ -1,8 +1,6 @@
 package org.hisp.dhis.rules.functions;
 
 import org.hisp.dhis.rules.RuleVariableValue;
-import org.hisp.dhis.rules.functions.RuleFunction;
-import org.hisp.dhis.rules.functions.RuleFunctionDaysBetween;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -23,7 +21,7 @@ public class RuleFunctionDaysBetweenTests
                 RuleFunction daysBetween = RuleFunctionDaysBetween.create();
 
                 String days = daysBetween.evaluate( Arrays.asList(
-                    "2016-01-01", "2016-01-31" ), new HashMap<String, RuleVariableValue>() );
+                    "2016-01-01", "2016-01-31" ), new HashMap<String, RuleVariableValue>(), null );
                 assertThat( days ).isEqualTo( "30" );
         }
 
@@ -33,7 +31,7 @@ public class RuleFunctionDaysBetweenTests
                 try
                 {
                         RuleFunctionDaysBetween.create().evaluate( Arrays.asList( "one" ),
-                            new HashMap<String, RuleVariableValue>() );
+                            new HashMap<String, RuleVariableValue>(), null);
                         fail( "IllegalArgumentException was expected, but nothing was thrown." );
                 }
                 catch ( IllegalArgumentException illegalArgumentException )
@@ -44,7 +42,7 @@ public class RuleFunctionDaysBetweenTests
                 try
                 {
                         RuleFunctionDaysBetween.create().evaluate( Arrays.asList( "one", "two", "three" ),
-                            new HashMap<String, RuleVariableValue>() );
+                            new HashMap<String, RuleVariableValue>(), null );
                         fail( "IllegalArgumentException was expected, but nothing was thrown." );
                 }
                 catch ( IllegalArgumentException illegalArgumentException )

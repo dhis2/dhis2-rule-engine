@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules;
 
+import com.sun.deploy.security.ValidationState;
 import org.hisp.dhis.rules.models.*;
 
 import javax.annotation.Nonnull;
@@ -35,6 +36,8 @@ final class RuleVariableValueMapBuilder
         private static final String ENV_VAR_TEI_COUNT = "tei_count";
 
         private static final String ENV_VAR_EVENT_STATUS = "event_status";
+
+        private static final String ENV_VAR_OU = "org_unit";
 
         private static final String ENV_VAR_ENROLLMENT_STATUS = "enrollment_status";
 
@@ -271,6 +274,9 @@ final class RuleVariableValueMapBuilder
                         String status = ruleEnrollment.status().toString();
                         valueMap.put( ENV_VAR_ENROLLMENT_STATUS, create( status,
                             RuleValueType.TEXT, Arrays.asList( status ) ) );
+
+                        String organisationUnit = ruleEnrollment.organisationUnit();
+                        valueMap.put( ENV_VAR_OU, create( organisationUnit, RuleValueType.TEXT ) );
                 }
 
                 if ( ruleEvent != null )
@@ -293,6 +299,9 @@ final class RuleVariableValueMapBuilder
                         String status = ruleEvent.status().toString();
                         valueMap.put( ENV_VAR_EVENT_STATUS, create( status,
                             RuleValueType.TEXT, Arrays.asList( status ) ) );
+
+                        String organisationUnit = ruleEvent.organisationUnit();
+                        valueMap.put( ENV_VAR_OU, create( organisationUnit, RuleValueType.TEXT ) );
                 }
         }
 
