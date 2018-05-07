@@ -1,8 +1,5 @@
 package org.hisp.dhis.rules;
 
-import org.hisp.dhis.rules.RuleEngine;
-import org.hisp.dhis.rules.RuleEngineContext;
-import org.hisp.dhis.rules.RuleExpressionEvaluator;
 import org.hisp.dhis.rules.models.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -159,7 +156,7 @@ public class RuleEngineTests
         public void evaluateShouldThrowIfEventIsAlreadyInContext()
         {
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_programstage",
-                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "", new ArrayList<RuleDataValue>() );
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "", new ArrayList<RuleDataValue>(), "");
 
                 List<RuleEvent> ruleEvents = new ArrayList<>();
                 ruleEvents.add( ruleEvent );

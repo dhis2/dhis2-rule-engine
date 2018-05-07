@@ -1,9 +1,6 @@
 package org.hisp.dhis.rules;
 
-import org.hisp.dhis.rules.functions.RuleFunctionInOrgUnitGroup;
 import org.hisp.dhis.rules.models.*;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -34,7 +31,7 @@ public class RuleEngineFunctionTests
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList( RuleDataValue.create(
-                        new Date(), "test_program_stage", "test_data_element", "test_value" ) ) );
+                        new Date(), "test_program_stage", "test_data_element", "test_value" ) ), "");
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
                 assertThat( ruleEffects.size() ).isEqualTo( 1 );
@@ -60,7 +57,7 @@ public class RuleEngineFunctionTests
                     .build();
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "", new ArrayList<RuleDataValue>() );
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "", new ArrayList<RuleDataValue>(), "");
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
                 assertThat( ruleEffects.size() ).isEqualTo( 1 );
@@ -91,7 +88,7 @@ public class RuleEngineFunctionTests
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(
                         RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "2017-01-01" ),
                         RuleDataValue
-                            .create( new Date(), "test_program_stage", "test_data_element_two", "2017-02-01" ) ) );
+                            .create( new Date(), "test_program_stage", "test_data_element_two", "2017-02-01" ) ), "");
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
                 assertThat( ruleEffects.size() ).isEqualTo( 1 );
@@ -125,7 +122,7 @@ public class RuleEngineFunctionTests
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "location1" ,Arrays.asList(
-                        RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "OU_GROUP_ID" )));
+                        RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "OU_GROUP_ID" )), "");
 
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
@@ -156,7 +153,7 @@ public class RuleEngineFunctionTests
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(
                         RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "2017-01-01" ),
-                        RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "2" ) ) );
+                        RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "2" ) ), "");
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
                 assertThat( ruleEffects.size() ).isEqualTo( 1 );
@@ -167,7 +164,7 @@ public class RuleEngineFunctionTests
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(
                         RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "2017-01-03" ),
                         RuleDataValue
-                            .create( new Date(), "test_program_stage", "test_data_element_two", "-2" ) ) );
+                            .create( new Date(), "test_program_stage", "test_data_element_two", "-2" ) ), "");
                 List<RuleEffect> ruleEffects2 = ruleEngine.evaluate( ruleEvent2 ).call();
 
                 assertThat( ruleEffects2.size() ).isEqualTo( 1 );
@@ -204,7 +201,7 @@ public class RuleEngineFunctionTests
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(
                         RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "19.9" ),
                         RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "0.9" ),
-                        RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_three", "10.6" ) ) );
+                        RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_three", "10.6" ) ), "");
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
                 assertThat( ruleEffects.size() ).isEqualTo( 1 );

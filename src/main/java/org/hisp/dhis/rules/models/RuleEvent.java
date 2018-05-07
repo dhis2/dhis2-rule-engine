@@ -18,6 +18,9 @@ public abstract class RuleEvent
         public abstract String programStage();
 
         @Nonnull
+        public abstract String programStageName();
+
+        @Nonnull
         public abstract Status status();
 
         @Nonnull
@@ -34,15 +37,16 @@ public abstract class RuleEvent
 
         @Nonnull
         public static RuleEvent create(
-            @Nonnull String event,
-            @Nonnull String programStage,
-            @Nonnull Status status,
-            @Nonnull Date eventDate,
-            @Nonnull Date dueDate,
-            @Nonnull String organisationUnit,
-            @Nonnull List<RuleDataValue> ruleDataValues )
+                @Nonnull String event,
+                @Nonnull String programStage,
+                @Nonnull Status status,
+                @Nonnull Date eventDate,
+                @Nonnull Date dueDate,
+                @Nonnull String organisationUnit,
+                @Nonnull List<RuleDataValue> ruleDataValues,
+                @Nonnull String programStageName )
         {
-                return new AutoValue_RuleEvent( event, programStage, status, eventDate, dueDate, organisationUnit, Collections.unmodifiableList( new ArrayList<>( ruleDataValues ) ) );
+                return new AutoValue_RuleEvent( event, programStage, programStageName, status, eventDate, dueDate, organisationUnit, Collections.unmodifiableList( new ArrayList<>( ruleDataValues ) ) );
         }
 
         public enum Status

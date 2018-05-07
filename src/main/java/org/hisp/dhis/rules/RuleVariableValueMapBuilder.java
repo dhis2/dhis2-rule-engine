@@ -40,6 +40,10 @@ final class RuleVariableValueMapBuilder
 
         private static final String ENV_VAR_ENROLLMENT_STATUS = "enrollment_status";
 
+        private static final String ENV_VAR_PROGRAM_STAGE_ID = "program_stage_id";
+
+        private static final String ENV_VAR_PROGRAM_STAGE_NAME = "program_stage_name";
+
         @Nonnull
         private final SimpleDateFormat dateFormat;
 
@@ -301,6 +305,12 @@ final class RuleVariableValueMapBuilder
 
                         String organisationUnit = ruleEvent.organisationUnit();
                         valueMap.put( ENV_VAR_OU, create( organisationUnit, RuleValueType.TEXT ) );
+
+                        String programStageId = ruleEvent.programStage();
+                        valueMap.put( ENV_VAR_PROGRAM_STAGE_ID, create( programStageId, RuleValueType.TEXT ) );
+
+                        String programStageName = ruleEvent.programStageName();
+                        valueMap.put( ENV_VAR_PROGRAM_STAGE_NAME, create( programStageName, RuleValueType.TEXT ) );
                 }
         }
 
