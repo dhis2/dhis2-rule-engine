@@ -1,6 +1,5 @@
 package org.hisp.dhis.rules;
 
-import com.sun.deploy.security.ValidationState;
 import org.hisp.dhis.rules.models.*;
 
 import javax.annotation.Nonnull;
