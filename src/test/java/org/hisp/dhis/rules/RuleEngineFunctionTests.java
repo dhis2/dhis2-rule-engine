@@ -57,12 +57,37 @@ public class RuleEngineFunctionTests
                     .build();
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "", new ArrayList<RuleDataValue>(), "");
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "", new ArrayList<RuleDataValue>(), "test_program_stage_name");
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
                 assertThat( ruleEffects.size() ).isEqualTo( 1 );
                 assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "false" );
                 assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        }
+
+        @Test
+        public void evaluateEnvironmentVariableProgramStageName()
+                throws Exception
+        {
+                RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+                        "test_action_content", "V{program_stage_name}" );
+                RuleVariable ruleVariable = RuleVariableCurrentEvent.create( "variable", "test_data_element", RuleValueType.TEXT );
+                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
+
+                RuleEngine ruleEngine = RuleEngineContext
+                        .builder( new ExpressionEvaluator() )
+                        .rules( Arrays.asList( rule ) )
+                        .ruleVariables( Arrays.asList( ruleVariable ) )
+                        .build().toEngineBuilder()
+                        .build();
+
+                RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage_id",
+                        RuleEvent.Status.ACTIVE, new Date(), new Date(), "", new ArrayList<RuleDataValue>(), "test_program_stage_name");
+                List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
+
+                assertThat( ruleEffects.size() ).isEqualTo( 1 );
+                assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+                assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "test_program_stage_name" );
         }
 
         @Test
