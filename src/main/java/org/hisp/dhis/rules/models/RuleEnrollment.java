@@ -16,6 +16,9 @@ public abstract class RuleEnrollment
         public abstract String enrollment();
 
         @Nonnull
+        public abstract String programName();
+
+        @Nonnull
         public abstract Date incidentDate();
 
         @Nonnull
@@ -36,11 +39,11 @@ public abstract class RuleEnrollment
         }
 
         @Nonnull
-        public static RuleEnrollment create( @Nonnull String enrollment, @Nonnull Date incidentDate,
-            @Nonnull Date enrollmentDate, @Nonnull Status status, @Nonnull String organisationUnit,
-            @Nonnull List<RuleAttributeValue> attributeValues )
+        public static RuleEnrollment create(@Nonnull String enrollment, @Nonnull Date incidentDate,
+                                            @Nonnull Date enrollmentDate, @Nonnull Status status, @Nonnull String organisationUnit,
+                                            @Nonnull List<RuleAttributeValue> attributeValues, String programName)
         {
-                return new AutoValue_RuleEnrollment( enrollment, incidentDate, enrollmentDate, status, organisationUnit,
+                return new AutoValue_RuleEnrollment( enrollment, programName, incidentDate, enrollmentDate, status, organisationUnit,
                     Collections.unmodifiableList( new ArrayList<>( attributeValues ) ) );
         }
 }

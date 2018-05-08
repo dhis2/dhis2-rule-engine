@@ -44,6 +44,8 @@ final class RuleVariableValueMapBuilder
 
         private static final String ENV_VAR_PROGRAM_STAGE_NAME = "program_stage_name";
 
+        private static final String ENV_VAR_PROGRAM_NAME = "program_name";
+
         @Nonnull
         private final SimpleDateFormat dateFormat;
 
@@ -280,6 +282,9 @@ final class RuleVariableValueMapBuilder
 
                         String organisationUnit = ruleEnrollment.organisationUnit();
                         valueMap.put( ENV_VAR_OU, create( organisationUnit, RuleValueType.TEXT ) );
+
+                        String programName = ruleEnrollment.programName();
+                        valueMap.put( ENV_VAR_PROGRAM_NAME, create( programName, RuleValueType.TEXT ) );
                 }
 
                 if ( ruleEvent != null )

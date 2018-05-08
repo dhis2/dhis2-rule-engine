@@ -450,7 +450,7 @@ public class RuleVariableValueMapBuilderTests
                 RuleEnrollment ruleEnrollment = RuleEnrollment.create( "test_enrollment",
                     enrollmentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE, "",Arrays.asList(
                         RuleAttributeValue.create( "test_attribute_one", "test_attribute_value_one" ),
-                        RuleAttributeValue.create( "test_attribute_two", "test_attribute_value_two" ) ) );
+                        RuleAttributeValue.create( "test_attribute_two", "test_attribute_value_two" ) ), "");
 
                 // values from context ruleEvents should be ignored
                 RuleEvent contextEvent = RuleEvent.create( "test_context_event_one", "test_program_stage",
@@ -473,7 +473,7 @@ public class RuleVariableValueMapBuilderTests
                     .ruleEvents( Arrays.asList( contextEvent ) )
                     .build();
 
-                assertThat( valueMap.size() ).isEqualTo( 17 );
+                assertThat( valueMap.size() ).isEqualTo( 18 );
 
                 assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -534,7 +534,7 @@ public class RuleVariableValueMapBuilderTests
                     enrollmentDate, RuleEnrollment.Status.ACTIVE, "",Arrays.asList(
                         RuleAttributeValue.create( "test_attribute_one", "test_attribute_value_one" ),
                         RuleAttributeValue.create( "test_attribute_two", "test_attribute_value_two" ),
-                        RuleAttributeValue.create( "test_attribute_three", "test_attribute_value_three" ) ) );
+                        RuleAttributeValue.create( "test_attribute_three", "test_attribute_value_three" ) ), "");
 
                 RuleEvent ruleEventOne = RuleEvent.create( "test_event_one", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "",new ArrayList<RuleDataValue>(), "");
@@ -546,7 +546,7 @@ public class RuleVariableValueMapBuilderTests
                     .ruleEvents( Arrays.asList( ruleEventOne, ruleEventTwo ) )
                     .build();
 
-                assertThat( valueMap.size() ).isEqualTo( 11 );
+                assertThat( valueMap.size() ).isEqualTo( 12 );
 
                 assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( currentDate ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( currentDate );
