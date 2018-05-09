@@ -225,7 +225,6 @@ public class RuleEngineEffectTypesTests
                         new Date(), "test_program_stage", "test_data_element", "test_value" ) ), "");
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
-                System.out.println( ruleEffects );
                 assertThat( ruleEffects.size() ).isEqualTo( 1 );
                 assertThat( ruleEffects.get( 0 ).ruleAction() instanceof RuleActionScheduleMessage );
                 assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "2018-04-24" );
