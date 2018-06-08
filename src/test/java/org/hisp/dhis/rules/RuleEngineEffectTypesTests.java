@@ -24,11 +24,7 @@ public class RuleEngineEffectTypesTests
                     null, "\'test_string\'", "test_data_element" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
 
-                RuleEngine ruleEngine = RuleEngineContext
-                    .builder( new ExpressionEvaluator() )
-                    .rules( Arrays.asList( rule ) )
-                    .build().toEngineBuilder()
-                    .build();
+                RuleEngine ruleEngine = getRuleEngine( rule );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "",Arrays.asList( RuleDataValue.create(
@@ -48,11 +44,7 @@ public class RuleEngineEffectTypesTests
                     "test_action_content", "'event_uid;test_data_value_one'", "test_program_stage" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
 
-                RuleEngine ruleEngine = RuleEngineContext
-                    .builder( new ExpressionEvaluator() )
-                    .rules( Arrays.asList( rule ) )
-                    .build().toEngineBuilder()
-                    .build();
+                RuleEngine ruleEngine = getRuleEngine( rule );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList( RuleDataValue.create(
@@ -72,11 +64,7 @@ public class RuleEngineEffectTypesTests
                     "test_action_content", "2 + 2" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
 
-                RuleEngine ruleEngine = RuleEngineContext
-                    .builder( new ExpressionEvaluator() )
-                    .rules( Arrays.asList( rule ) )
-                    .build().toEngineBuilder()
-                    .build();
+                RuleEngine ruleEngine = getRuleEngine( rule );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList( RuleDataValue.create(
@@ -96,11 +84,7 @@ public class RuleEngineEffectTypesTests
                     "test_action_content", "2 + 2" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
 
-                RuleEngine ruleEngine = RuleEngineContext
-                    .builder( new ExpressionEvaluator() )
-                    .rules( Arrays.asList( rule ) )
-                    .build().toEngineBuilder()
-                    .build();
+                RuleEngine ruleEngine = getRuleEngine( rule );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList( RuleDataValue.create(
@@ -120,11 +104,7 @@ public class RuleEngineEffectTypesTests
                     "test_action_content", "2 + 2", "test_data_element" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
 
-                RuleEngine ruleEngine = RuleEngineContext
-                    .builder( new ExpressionEvaluator() )
-                    .rules( Arrays.asList( rule ) )
-                    .build().toEngineBuilder()
-                    .build();
+                RuleEngine ruleEngine = getRuleEngine( rule );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList( RuleDataValue.create(
@@ -144,11 +124,7 @@ public class RuleEngineEffectTypesTests
                     "test_action_content", "test_data_element" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
 
-                RuleEngine ruleEngine = RuleEngineContext
-                    .builder( new ExpressionEvaluator() )
-                    .rules( Arrays.asList( rule ) )
-                    .build().toEngineBuilder()
-                    .build();
+                RuleEngine ruleEngine = getRuleEngine( rule );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList( RuleDataValue.create(
@@ -168,15 +144,31 @@ public class RuleEngineEffectTypesTests
                     "test_action_content", "test_data_element" );
                 Rule rule = Rule.create( null, null, "V{event_status} =='COMPLETED'", Arrays.asList( ruleAction ) );
 
-                RuleEngine ruleEngine = RuleEngineContext
-                    .builder( new ExpressionEvaluator() )
-                    .rules( Arrays.asList( rule ) )
-                    .build().toEngineBuilder()
-                    .build();
+                RuleEngine ruleEngine = getRuleEngine( rule );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.COMPLETED, new Date(), new Date(), "",Arrays.asList( RuleDataValue.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value" ) ), "");
+                List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
+
+                assertThat( ruleEffects.size() ).isEqualTo( 1 );
+                assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "" );
+                assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        }
+
+        @Test
+        public void testTriggerEnvironment() throws Exception
+        {
+                RuleAction ruleAction = RuleActionHideField.create(
+                        "test_action_content", "test_data_element" );
+                Rule rule = Rule.create( null, null, "V{environment} =='Server'", Arrays.asList( ruleAction ) );
+
+                RuleEngine ruleEngine = getRuleEngine( rule );
+
+                RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                        RuleEvent.Status.ACTIVE, new Date(), new Date(), "",Arrays.asList( RuleDataValue.create(
+                                new Date(), "test_program_stage", "test_data_element", "test_value" ) ), "");
+
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
                 assertThat( ruleEffects.size() ).isEqualTo( 1 );
@@ -191,11 +183,7 @@ public class RuleEngineEffectTypesTests
                 RuleAction ruleAction = RuleActionHideProgramStage.create( "test_program_stage" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
 
-                RuleEngine ruleEngine = RuleEngineContext
-                    .builder( new ExpressionEvaluator() )
-                    .rules( Arrays.asList( rule ) )
-                    .build().toEngineBuilder()
-                    .build();
+                RuleEngine ruleEngine = getRuleEngine( rule );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList( RuleDataValue.create(
@@ -214,11 +202,7 @@ public class RuleEngineEffectTypesTests
                 RuleAction ruleAction = RuleActionScheduleMessage.create( "", "'2018-04-24'" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
 
-                RuleEngine ruleEngine = RuleEngineContext
-                    .builder( new ExpressionEvaluator() )
-                    .rules( Arrays.asList( rule ) )
-                    .build().toEngineBuilder()
-                    .build();
+                RuleEngine ruleEngine = getRuleEngine( rule );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "",Arrays.asList( RuleDataValue.create(
@@ -237,11 +221,7 @@ public class RuleEngineEffectTypesTests
                 RuleAction ruleAction = RuleActionHideSection.create( "test_section" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
 
-                RuleEngine ruleEngine = RuleEngineContext
-                    .builder( new ExpressionEvaluator() )
-                    .rules( Arrays.asList( rule ) )
-                    .build().toEngineBuilder()
-                    .build();
+                RuleEngine ruleEngine = getRuleEngine( rule );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "",Arrays.asList( RuleDataValue.create(
@@ -260,11 +240,7 @@ public class RuleEngineEffectTypesTests
                 RuleAction ruleAction = RuleActionSetMandatoryField.create( "test_data_element" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
 
-                RuleEngine ruleEngine = RuleEngineContext
-                    .builder( new ExpressionEvaluator() )
-                    .rules( Arrays.asList( rule ) )
-                    .build().toEngineBuilder()
-                    .build();
+                RuleEngine ruleEngine = getRuleEngine( rule );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "",Arrays.asList( RuleDataValue.create(
@@ -284,11 +260,7 @@ public class RuleEngineEffectTypesTests
                     "test_warning_message", null, "target_field" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
 
-                RuleEngine ruleEngine = RuleEngineContext
-                    .builder( new ExpressionEvaluator() )
-                    .rules( Arrays.asList( rule ) )
-                    .build().toEngineBuilder()
-                    .build();
+                RuleEngine ruleEngine = getRuleEngine( rule );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "",Arrays.asList( RuleDataValue.create(
@@ -308,11 +280,7 @@ public class RuleEngineEffectTypesTests
                     "test_error_message", "2 + 2", "target_field" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
 
-                RuleEngine ruleEngine = RuleEngineContext
-                    .builder( new ExpressionEvaluator() )
-                    .rules( Arrays.asList( rule ) )
-                    .build().toEngineBuilder()
-                    .build();
+                RuleEngine ruleEngine = getRuleEngine( rule );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList( RuleDataValue.create(
@@ -332,11 +300,7 @@ public class RuleEngineEffectTypesTests
                     "test_warning_message", "2 + 2", "target_field" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
 
-                RuleEngine ruleEngine = RuleEngineContext
-                    .builder( new ExpressionEvaluator() )
-                    .rules( Arrays.asList( rule ) )
-                    .build().toEngineBuilder()
-                    .build();
+                RuleEngine ruleEngine = getRuleEngine( rule );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "",Arrays.asList( RuleDataValue.create(
@@ -346,5 +310,14 @@ public class RuleEngineEffectTypesTests
                 assertThat( ruleEffects.size() ).isEqualTo( 1 );
                 assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
                 assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        }
+
+        private RuleEngine getRuleEngine( Rule rule )
+        {
+                return RuleEngineContext
+                        .builder( new ExpressionEvaluator() )
+                        .rules( Arrays.asList( rule ) )
+                        .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
+                        .build();
         }
 }

@@ -25,12 +25,7 @@ public class RuleEngineValueTypesTests
                 RuleVariable ruleVariable = RuleVariableCurrentEvent
                     .create( "test_variable", "test_data_element", RuleValueType.BOOLEAN );
 
-                RuleEngine ruleEngine = RuleEngineContext
-                    .builder(new ExpressionEvaluator() )
-                    .rules( Arrays.asList( rule ) )
-                    .ruleVariables( Arrays.asList( ruleVariable ) )
-                    .build().toEngineBuilder()
-                    .build();
+                RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable ) );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "", new ArrayList<RuleDataValue>(), "");
@@ -51,12 +46,7 @@ public class RuleEngineValueTypesTests
                 RuleVariable ruleVariable = RuleVariableCurrentEvent
                     .create( "test_variable", "test_data_element", RuleValueType.NUMERIC );
 
-                RuleEngine ruleEngine = RuleEngineContext
-                    .builder( new ExpressionEvaluator() )
-                    .rules( Arrays.asList( rule ) )
-                    .ruleVariables( Arrays.asList( ruleVariable ) )
-                    .build().toEngineBuilder()
-                    .build();
+                RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable ) );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "", new ArrayList<RuleDataValue>(), "");
@@ -77,12 +67,7 @@ public class RuleEngineValueTypesTests
                 RuleVariable ruleVariable = RuleVariableCurrentEvent
                     .create( "test_variable", "test_data_element", RuleValueType.TEXT );
 
-                RuleEngine ruleEngine = RuleEngineContext
-                    .builder( new ExpressionEvaluator() )
-                    .rules( Arrays.asList( rule ) )
-                    .ruleVariables( Arrays.asList( ruleVariable ) )
-                    .build().toEngineBuilder()
-                    .build();
+                RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable ) );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "", new ArrayList<RuleDataValue>(), "");
@@ -91,5 +76,15 @@ public class RuleEngineValueTypesTests
                 assertThat( ruleEffects.size() ).isEqualTo( 1 );
                 assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "" );
                 assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        }
+
+        private RuleEngine getRuleEngine( Rule rule, List<RuleVariable> ruleVariables )
+        {
+                return RuleEngineContext
+                        .builder( new ExpressionEvaluator() )
+                        .rules( Arrays.asList( rule ) )
+                        .ruleVariables( ruleVariables )
+                        .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
+                        .build();
         }
 }

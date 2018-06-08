@@ -48,6 +48,7 @@ public class RuleVariableValueMapBuilderTests
                 {
                         RuleVariableValueMapBuilder.target( ruleEvent )
                             .ruleVariables( new ArrayList<RuleVariable>() )
+                            .triggerEnvironment( TriggerEnvironment.SERVER )
                             .build().clear();
                         fail( "UnsupportedOperationException expected, but nothing was thrown" );
                 }
@@ -110,9 +111,10 @@ public class RuleVariableValueMapBuilderTests
                 Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( currentEvent )
                     .ruleVariables( Arrays.asList( ruleVariableOne, ruleVariableTwo ) )
                     .ruleEvents( Arrays.asList( contextEventOne, contextEventTwo ) )
+                    .triggerEnvironment( TriggerEnvironment.SERVER )
                     .build();
 
-                assertThat( valueMap.size() ).isEqualTo( 11 );
+                assertThat( valueMap.size() ).isEqualTo( 12 );
 
                 assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -176,9 +178,10 @@ public class RuleVariableValueMapBuilderTests
                 Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( currentEvent )
                     .ruleVariables( Arrays.asList( ruleVariableOne, ruleVariableTwo ) )
                     .ruleEvents( Arrays.asList( oldestRuleEvent, newestRuleEvent ) )
+                    .triggerEnvironment( TriggerEnvironment.SERVER )
                     .build();
 
-                assertThat( valueMap.size() ).isEqualTo( 11 );
+                assertThat( valueMap.size() ).isEqualTo( 12 );
 
                 assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -240,10 +243,11 @@ public class RuleVariableValueMapBuilderTests
 
                 Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( currentEvent )
                     .ruleVariables( Arrays.asList( ruleVariableOne, ruleVariableTwo ) )
+                    .triggerEnvironment( TriggerEnvironment.SERVER )
                     .ruleEvents( Arrays.asList( firstRuleEvent, secondRuleEvent ) )
                     .build();
 
-                assertThat( valueMap.size() ).isEqualTo( 11 );
+                assertThat( valueMap.size() ).isEqualTo( 12 );
 
                 assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -306,9 +310,10 @@ public class RuleVariableValueMapBuilderTests
                 Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( eventCurrent )
                     .ruleVariables( Arrays.asList( ruleVariable ) )
                     .ruleEvents( Arrays.asList( eventOne, eventTwo, eventThree ) )
+                    .triggerEnvironment( TriggerEnvironment.SERVER )
                     .build();
 
-                assertThat( valueMap.size() ).isEqualTo( 10 );
+                assertThat( valueMap.size() ).isEqualTo( 11 );
 
                 assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -352,10 +357,11 @@ public class RuleVariableValueMapBuilderTests
 
                 Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEventTwo )
                     .ruleVariables( Arrays.asList( ruleVariable ) )
+                    .triggerEnvironment( TriggerEnvironment.SERVER )
                     .ruleEvents( Arrays.asList( ruleEventOne ) )
                     .build();
 
-                assertThat( valueMap.size() ).isEqualTo( 10 );
+                assertThat( valueMap.size() ).isEqualTo( 11 );
 
                 assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -407,10 +413,11 @@ public class RuleVariableValueMapBuilderTests
 
                 Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEventCurrent )
                     .ruleVariables( Arrays.asList( ruleVariable ) )
+                    .triggerEnvironment( TriggerEnvironment.SERVER )
                     .ruleEvents( Arrays.asList( ruleEventOne, ruleEventTwo, ruleEventThree ) )
                     .build();
 
-                assertThat( valueMap.size() ).isEqualTo( 10 );
+                assertThat( valueMap.size() ).isEqualTo( 11 );
 
                 assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -469,11 +476,12 @@ public class RuleVariableValueMapBuilderTests
                 // here we will expect correct values to be returned
                 Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( currentEvent )
                     .ruleEnrollment( ruleEnrollment )
+                    .triggerEnvironment( TriggerEnvironment.SERVER )
                     .ruleVariables( Arrays.asList( ruleVariableOne, ruleVariableTwo ) )
                     .ruleEvents( Arrays.asList( contextEvent ) )
                     .build();
 
-                assertThat( valueMap.size() ).isEqualTo( 18 );
+                assertThat( valueMap.size() ).isEqualTo( 19 );
 
                 assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -544,9 +552,10 @@ public class RuleVariableValueMapBuilderTests
                 Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEnrollment )
                     .ruleVariables( Arrays.asList( ruleVariableOne, ruleVariableTwo, ruleVariableThree ) )
                     .ruleEvents( Arrays.asList( ruleEventOne, ruleEventTwo ) )
+                    .triggerEnvironment( TriggerEnvironment.SERVER )
                     .build();
 
-                assertThat( valueMap.size() ).isEqualTo( 12 );
+                assertThat( valueMap.size() ).isEqualTo( 13 );
 
                 assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( currentDate ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( currentDate );

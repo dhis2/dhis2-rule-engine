@@ -3,6 +3,7 @@ package org.hisp.dhis.rules;
 import org.hisp.dhis.rules.models.RuleEffect;
 import org.hisp.dhis.rules.models.RuleEnrollment;
 import org.hisp.dhis.rules.models.RuleEvent;
+import org.hisp.dhis.rules.models.TriggerEnvironment;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -21,13 +22,17 @@ public final class RuleEngine
         @Nullable
         private final RuleEnrollment ruleEnrollment;
 
+        @Nullable
+        private TriggerEnvironment triggerEnvironment;
+
         RuleEngine( @Nonnull RuleEngineContext ruleEngineContext,
             @Nonnull List<RuleEvent> ruleEvents,
-            @Nullable RuleEnrollment ruleEnrollment )
+            @Nullable RuleEnrollment ruleEnrollment, @Nullable TriggerEnvironment triggerEnvironment )
         {
                 this.ruleEngineContext = ruleEngineContext;
                 this.ruleEvents = ruleEvents;
                 this.ruleEnrollment = ruleEnrollment;
+                this.triggerEnvironment = triggerEnvironment;
         }
 
         @Nonnull
@@ -40,6 +45,12 @@ public final class RuleEngine
         public RuleEnrollment enrollment()
         {
                 return ruleEnrollment;
+        }
+
+        @Nullable
+        public TriggerEnvironment triggerEnvironment()
+        {
+                return triggerEnvironment;
         }
 
         @Nonnull
@@ -68,6 +79,7 @@ public final class RuleEngine
                 Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEvent )
                     .ruleVariables( ruleEngineContext.ruleVariables() )
                     .ruleEnrollment( ruleEnrollment )
+                    .triggerEnvironment( triggerEnvironment )
                     .ruleEvents( ruleEvents )
                     .build();
 
@@ -91,6 +103,7 @@ public final class RuleEngine
 
                 Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEnrollment )
                     .ruleVariables( ruleEngineContext.ruleVariables() )
+                    .triggerEnvironment( triggerEnvironment )
                     .ruleEvents( ruleEvents )
                     .build();
 
@@ -109,6 +122,9 @@ public final class RuleEngine
 
                 @Nullable
                 private RuleEnrollment ruleEnrollment;
+
+                @Nullable
+                private TriggerEnvironment triggerEnvironment;
 
                 Builder( @Nonnull RuleEngineContext ruleEngineContext )
                 {
@@ -140,6 +156,18 @@ public final class RuleEngine
                 }
 
                 @Nonnull
+                public Builder triggerEnvironment( @Nonnull TriggerEnvironment triggerEnvironment )
+                {
+                        if ( triggerEnvironment == null )
+                        {
+                                throw new IllegalArgumentException( "triggerEnvironment == null" );
+                        }
+
+                        this.triggerEnvironment = triggerEnvironment;
+                        return this;
+                }
+
+                @Nonnull
                 public RuleEngine build()
                 {
                         if ( ruleEvents == null )
@@ -147,7 +175,7 @@ public final class RuleEngine
                                 ruleEvents = Collections.unmodifiableList( new ArrayList<RuleEvent>() );
                         }
 
-                        return new RuleEngine( ruleEngineContext, ruleEvents, ruleEnrollment );
+                        return new RuleEngine( ruleEngineContext, ruleEvents, ruleEnrollment, triggerEnvironment );
                 }
         }
 }

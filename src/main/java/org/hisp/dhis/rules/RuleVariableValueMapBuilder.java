@@ -46,6 +46,8 @@ final class RuleVariableValueMapBuilder
 
         private static final String ENV_VAR_PROGRAM_NAME = "program_name";
 
+        private static final String ENV_VAR_ENVIRONMENT = "environment";
+
         @Nonnull
         private final SimpleDateFormat dateFormat;
 
@@ -69,6 +71,9 @@ final class RuleVariableValueMapBuilder
 
         @Nullable
         private RuleEvent ruleEvent;
+
+        @Nullable
+        private TriggerEnvironment triggerEnvironment;
 
         private RuleVariableValueMapBuilder()
         {
@@ -127,6 +132,18 @@ final class RuleVariableValueMapBuilder
                 }
 
                 this.ruleEnrollment = ruleEnrollment;
+                return this;
+        }
+
+        @Nonnull
+        RuleVariableValueMapBuilder triggerEnvironment( @Nullable TriggerEnvironment triggerEnvironment )
+        {
+                if ( this.triggerEnvironment != null )
+                {
+                        throw new IllegalStateException( "triggerEnvironment == null" );
+                }
+
+                this.triggerEnvironment = triggerEnvironment;
                 return this;
         }
 
@@ -252,6 +269,12 @@ final class RuleVariableValueMapBuilder
                 String currentDate = dateFormat.format( new Date() );
                 valueMap.put( ENV_VAR_CURRENT_DATE, create( currentDate,
                     RuleValueType.TEXT, Arrays.asList( currentDate ) ) );
+
+                if ( triggerEnvironment != null )
+                {
+                        String environment = triggerEnvironment.getClientName();
+                        valueMap.put( ENV_VAR_ENVIRONMENT, create( environment, RuleValueType.TEXT, Arrays.asList( environment ) ) );
+                }
 
                 if ( !ruleEvents.isEmpty() )
                 {
