@@ -1,5 +1,8 @@
 package org.hisp.dhis.rules;
 
+import org.apache.commons.jexl2.JexlException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hisp.dhis.rules.functions.RuleFunction;
 import org.hisp.dhis.rules.models.*;
 
@@ -13,6 +16,8 @@ class RuleEngineExecution
     implements Callable<List<RuleEffect>>
 {
         private static final String D2_FUNCTION_PREFIX = "d2:";
+
+        private static final Log log = LogFactory.getLog( RuleEngineExecution.class );
 
         @Nonnull
         private final RuleExpressionEvaluator expressionEvaluator;
@@ -37,7 +42,6 @@ class RuleEngineExecution
 
         @Override
         public List<RuleEffect> call()
-            throws Exception
         {
                 List<RuleEffect> ruleEffects = new ArrayList<>();
 
@@ -45,14 +49,25 @@ class RuleEngineExecution
                 {
                         Rule rule = rules.get( i );
 
-                        // send expression to evaluator
-                        if ( Boolean.valueOf( process( rule.condition() ) ) )
+                        try
                         {
-                                // process each action for this rule
-                                for ( int j = 0; j < rule.actions().size(); j++ )
+                                // send expression to evaluator
+                                if ( Boolean.valueOf( process( rule.condition() ) ) )
                                 {
-                                        ruleEffects.add( create( rule.actions().get( j ) ) );
+                                        // process each action for this rule
+                                        for ( int j = 0; j < rule.actions().size(); j++ )
+                                        {
+                                                ruleEffects.add( create( rule.actions().get( j ) ) );
+                                        }
                                 }
+                        }
+                        catch( JexlException jexlException )
+                        {
+                                log.error( "Parser exception: " + jexlException.getMessage() );
+                        }
+                        catch( Exception e )
+                        {
+                                log.error( "Exception: " + e.getMessage() );
                         }
                 }
 

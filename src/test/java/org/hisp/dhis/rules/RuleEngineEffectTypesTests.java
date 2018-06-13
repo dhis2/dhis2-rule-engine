@@ -123,8 +123,13 @@ public class RuleEngineEffectTypesTests
                 RuleAction ruleAction = RuleActionHideField.create(
                     "test_action_content", "test_data_element" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
+                Rule rule2 = Rule.create( null, null, "a=", Arrays.asList( ruleAction ) );
 
-                RuleEngine ruleEngine = getRuleEngine( rule );
+                RuleEngine ruleEngine = RuleEngineContext
+                        .builder( new ExpressionEvaluator() )
+                        .rules( Arrays.asList( rule, rule2 ) )
+                        .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
+                        .build();
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList( RuleDataValue.create(
