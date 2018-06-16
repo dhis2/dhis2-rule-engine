@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.regex.Matcher;
 
 class RuleEngineExecution
     implements Callable<List<RuleEffect>>
@@ -173,6 +174,7 @@ class RuleEngineExecution
         @SuppressWarnings( "PMD.AvoidInstantiatingObjectsInLoops" )
         private String bindFunctionValues( @Nonnull String expression )
         {
+
                 RuleExpression ruleExpression = RuleExpression.from( expression );
                 RuleExpressionBinder ruleExpressionBinder = RuleExpressionBinder.from( ruleExpression );
 
@@ -196,9 +198,14 @@ class RuleEngineExecution
                 // are not processed completely.
                 if ( processedExpression.contains( D2_FUNCTION_PREFIX ) )
                 {
-                        // Another recursive call to process rest of
-                        // the d2 function calls.
-                        processedExpression = bindFunctionValues( processedExpression );
+                        Matcher functionMatcher = RuleExpression.FUNCTION_PATTERN_COMPILED.matcher( processedExpression );
+
+                        if ( functionMatcher.find() )
+                        {
+                                // Another recursive call to process rest of
+                                // the d2 function calls.
+                                processedExpression = bindFunctionValues( processedExpression );
+                        }
                 }
 
                 return processedExpression;
