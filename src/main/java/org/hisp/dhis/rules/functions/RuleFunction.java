@@ -32,10 +32,23 @@ public abstract class RuleFunction
                         return RuleFunctionCeil.create();
                 case RuleFunctionAddDays.D2_ADD_DAYS:
                         return RuleFunctionAddDays.create();
+                case RuleFunctionCountIfValue.D2_COUNT_IF_VALUE:
+                        return RuleFunctionCountIfValue.create();
                 case RuleFunctionInOrgUnitGroup.D2_IN_ORG_UNIT_GROUP:
                         return RuleFunctionInOrgUnitGroup.create();
                 default:
                         return null;
                 }
+        }
+
+        @Nonnull
+        public String wrap( String input )
+        {
+                if( input == null )
+                {
+                        return "";
+                }
+
+                return "'"+input+"'";
         }
 }

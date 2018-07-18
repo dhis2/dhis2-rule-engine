@@ -97,14 +97,4 @@ class RuleFunctionAddDays
                         throw new RuntimeException( parseException );
                 }
         }
-
-        private String wrap( String input )
-        {
-                if( input == null )
-                {
-                        return "";
-                }
-
-                return "'"+input+"'";
-        }
 }

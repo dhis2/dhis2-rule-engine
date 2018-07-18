@@ -393,7 +393,7 @@ final class RuleVariableValueMapBuilder
                         return;
                 }
 
-                RuleVariableValue variableValue;
+                                RuleVariableValue variableValue;
                 if ( currentEnrollmentValues.containsKey( variable.trackedEntityAttribute() ) )
                 {
                         RuleAttributeValue value = currentEnrollmentValues

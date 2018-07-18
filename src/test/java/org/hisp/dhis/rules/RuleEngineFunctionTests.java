@@ -8,6 +8,7 @@ import org.junit.runners.JUnit4;
 import java.util.*;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.*;
 
 @RunWith( JUnit4.class )
 public class RuleEngineFunctionTests
@@ -173,6 +174,38 @@ public class RuleEngineFunctionTests
         }
 
         @Test
+        public void evaluateD2CountIfValue()
+                throws Exception
+        {
+                RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+                        "test_action_content", "d2:countIfValue('test_var_one', 'condition')" );
+                RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
+                        "test_var_one", "test_data_element_one", RuleValueType.TEXT );
+
+                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
+
+                RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
+
+                RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                        RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(
+                                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition" ) ), "");
+                RuleEvent ruleEvent2 = RuleEvent.create( "test_event2", "test_program_stage2",
+                        RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(
+                                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition2" ) ), "");
+                RuleEvent ruleEvent3 = RuleEvent.create( "test_event3", "test_program_stage3",
+                        RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(
+                                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition" ) ), "");
+
+                ruleEngineBuilder.events( Arrays.asList( ruleEvent2, ruleEvent3 ) );
+
+                List<RuleEffect> ruleEffects = ruleEngineBuilder.build().evaluate( ruleEvent ).call();
+
+                assertThat( ruleEffects.size() ).isEqualTo( 1 );
+                assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+                assertTrue( ruleEffects.get( 0 ).data().equals( "2" ) );
+        }
+
+        @Test
         public void evaluateNestedFunctionCalls()
             throws Exception
         {
@@ -211,5 +244,14 @@ public class RuleEngineFunctionTests
                         .ruleVariables( ruleVariables )
                         .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
                         .build();
+        }
+
+        private RuleEngine.Builder getRuleEngineBuilder( Rule rule, List<RuleVariable> ruleVariables )
+        {
+                return RuleEngineContext
+                        .builder( new ExpressionEvaluator() )
+                        .rules( Arrays.asList( rule ) )
+                        .ruleVariables( ruleVariables )
+                        .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );
         }
 }
