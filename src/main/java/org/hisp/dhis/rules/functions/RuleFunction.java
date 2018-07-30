@@ -34,6 +34,8 @@ public abstract class RuleFunction
                         return RuleFunctionAddDays.create();
                 case RuleFunctionCountIfValue.D2_COUNT_IF_VALUE:
                         return RuleFunctionCountIfValue.create();
+                case RuleFunctionRound.D2_ROUND:
+                        return RuleFunctionRound.create();
                 case RuleFunctionInOrgUnitGroup.D2_IN_ORG_UNIT_GROUP:
                         return RuleFunctionInOrgUnitGroup.create();
                 default:
