@@ -40,6 +40,8 @@ public abstract class RuleFunction
                         return RuleFunctionModulus.create();
                 case RuleFunctionLength.D2_LENGTH:
                         return RuleFunctionLength.create();
+                case RuleFunctionSplit.D2_SPLIT:
+                        return RuleFunctionSplit.create();
                 case RuleFunctionInOrgUnitGroup.D2_IN_ORG_UNIT_GROUP:
                         return RuleFunctionInOrgUnitGroup.create();
                 default:
