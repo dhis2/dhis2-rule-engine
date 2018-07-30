@@ -37,28 +37,26 @@ import java.util.Map;
 /**
  * @Author Zubair Asghar.
  */
-
-public class RuleFunctionRound extends RuleFunction
+public class RuleFunctionModulus extends RuleFunction
 {
-    static final String D2_ROUND = "d2:round";
+    static final String D2_MODULUS = "d2:modulus";
 
     @Nonnull
     @Override
     public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
     {
-        if ( arguments.size() != 1 )
+        if ( arguments.size() != 2 )
         {
-            throw new IllegalArgumentException( "One argument was expected, " +
+            throw new IllegalArgumentException( "two argument were expected, " +
                     arguments.size() + " were supplied" );
         }
 
-
-        return String.valueOf( Math.round( toDouble( arguments.get( 0 ), 0.0 ) ) );
+        return String.valueOf( toDouble( arguments.get( 0 ), 0.0) % toDouble( arguments.get( 1 ), 0.0) ) ;
     }
 
     @Nonnull
-    public static RuleFunctionRound create()
+    public static RuleFunctionModulus create()
     {
-        return new RuleFunctionRound();
+        return new RuleFunctionModulus();
     }
 }

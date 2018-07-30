@@ -31,21 +31,4 @@ final class RuleFunctionFloor
 
                 return String.valueOf( (long) toDouble( arguments.get( 0 ), 0.0 ) );
         }
-
-        private static double toDouble( @Nullable final String str, final double defaultValue )
-        {
-                if ( str == null )
-                {
-                        return defaultValue;
-                }
-
-                try
-                {
-                        return Double.parseDouble( str );
-                }
-                catch ( final NumberFormatException nfe )
-                {
-                        return defaultValue;
-                }
-        }
 }

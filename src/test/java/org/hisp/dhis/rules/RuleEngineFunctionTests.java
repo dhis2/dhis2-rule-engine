@@ -209,12 +209,12 @@ public class RuleEngineFunctionTests
         public void evaluateD2Round()
                 throws Exception
         {
-                RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+                RuleAction ruleAction1 = RuleActionDisplayKeyValuePair.createForFeedback(
                         "test_action_content", "d2:round(#{test_var_one})" );
                 RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
                         "test_var_one", "test_data_element_one", RuleValueType.NUMERIC );
 
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
+                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction1 ) );
 
                 RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
 
@@ -225,8 +225,32 @@ public class RuleEngineFunctionTests
                 List<RuleEffect> ruleEffects = ruleEngineBuilder.build().evaluate( ruleEvent ).call();
 
                 assertThat( ruleEffects.size() ).isEqualTo( 1 );
-                assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+                assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction1 );
                 assertEquals( "3", ruleEffects.get( 0 ).data() );
+        }
+
+        @Test
+        public void evaluateD2Modulus()
+                throws Exception
+        {
+                RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+                        "test_action_content", "d2:modulus(#{test_var_one}, 2)" );
+                RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
+                        "test_var_one", "test_data_element_one", RuleValueType.NUMERIC );
+
+                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
+
+                RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
+
+                RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                        RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(
+                                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "2.6" ) ), "");
+
+                List<RuleEffect> ruleEffects = ruleEngineBuilder.build().evaluate( ruleEvent ).call();
+
+                assertThat( ruleEffects.size() ).isEqualTo( 1 );
+                assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+                assertEquals( "0.6", ruleEffects.get( 0 ).data() );
         }
 
         @Test

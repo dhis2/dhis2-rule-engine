@@ -45,27 +45,16 @@ import static org.assertj.core.api.Java6Assertions.fail;
  */
 
 @RunWith( JUnit4.class )
-public class RuleFunctionRoundTests
+public class RuleFunctionModulusTests
 {
     @Test
-    public void evaluateMustReturnRoundValue()
+    public void evaluateMustReturnModulusValue()
     {
-        RuleFunction round = RuleFunctionRound.create();
+        RuleFunctionModulus modulusFunction = RuleFunctionModulus.create();
 
-        String roundNumber = round.evaluate( Arrays.asList( "5.9" ),
-                new HashMap<String, RuleVariableValue>(), null);
+        String modulusValue = modulusFunction.evaluate( Arrays.asList( "3", "2" ), new HashMap<String, RuleVariableValue>(), null );
 
-        assertThat( roundNumber ).isEqualTo( "6" );
-
-        roundNumber = round.evaluate( Arrays.asList( "5.5" ),
-                new HashMap<String, RuleVariableValue>(), null);
-
-        assertThat( roundNumber ).isEqualTo( "6" );
-
-        roundNumber = round.evaluate( Arrays.asList( "5.2" ),
-                new HashMap<String, RuleVariableValue>(), null);
-
-        assertThat( roundNumber ).isEqualTo( "5" );
+        assertThat( modulusValue ).isEqualTo( "1.0" );
     }
 
     @Test
@@ -73,7 +62,7 @@ public class RuleFunctionRoundTests
     {
         try
         {
-            RuleFunctionRound.create().evaluate( Arrays.asList( "5.9", "6.8" ),
+            RuleFunctionModulus.create().evaluate( Arrays.asList( "5.9"  ),
                     new HashMap<String, RuleVariableValue>(), null);
             fail( "IllegalArgumentException was expected, but nothing was thrown." );
         }
@@ -84,7 +73,7 @@ public class RuleFunctionRoundTests
 
         try
         {
-            RuleFunctionRound.create().evaluate( new ArrayList<String>(),
+            RuleFunctionModulus.create().evaluate( new ArrayList<String>(),
                     new HashMap<String, RuleVariableValue>(), null);
             fail( "IllegalArgumentException was expected, but nothing was thrown." );
         }
@@ -93,4 +82,5 @@ public class RuleFunctionRoundTests
             // noop
         }
     }
+
 }

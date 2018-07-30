@@ -36,10 +36,30 @@ public abstract class RuleFunction
                         return RuleFunctionCountIfValue.create();
                 case RuleFunctionRound.D2_ROUND:
                         return RuleFunctionRound.create();
+                case RuleFunctionModulus.D2_MODULUS:
+                        return RuleFunctionModulus.create();
                 case RuleFunctionInOrgUnitGroup.D2_IN_ORG_UNIT_GROUP:
                         return RuleFunctionInOrgUnitGroup.create();
                 default:
                         return null;
+                }
+        }
+
+        @Nonnull
+        public double toDouble( @Nullable final String str, final double defaultValue )
+        {
+                if ( str == null )
+                {
+                        return defaultValue;
+                }
+
+                try
+                {
+                        return Double.parseDouble( str );
+                }
+                catch ( final NumberFormatException nfe )
+                {
+                        return defaultValue;
                 }
         }
 
