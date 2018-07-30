@@ -38,6 +38,8 @@ public abstract class RuleFunction
                         return RuleFunctionRound.create();
                 case RuleFunctionModulus.D2_MODULUS:
                         return RuleFunctionModulus.create();
+                case RuleFunctionLength.D2_LENGTH:
+                        return RuleFunctionLength.create();
                 case RuleFunctionInOrgUnitGroup.D2_IN_ORG_UNIT_GROUP:
                         return RuleFunctionInOrgUnitGroup.create();
                 default:

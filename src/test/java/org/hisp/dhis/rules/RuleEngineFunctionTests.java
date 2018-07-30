@@ -254,6 +254,29 @@ public class RuleEngineFunctionTests
         }
 
         @Test
+        public void evaluateD2Length() throws Exception
+        {
+                RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+                        "test_action_content", "d2:length(#{test_var_one})" );
+                RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
+                        "test_var_one", "test_data_element_one", RuleValueType.TEXT );
+
+                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
+
+                RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
+
+                RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                        RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(
+                                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "testString" ) ), "");
+
+                List<RuleEffect> ruleEffects = ruleEngineBuilder.build().evaluate( ruleEvent ).call();
+
+                assertThat( ruleEffects.size() ).isEqualTo( 1 );
+                assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+                assertEquals( "10", ruleEffects.get( 0 ).data() );
+        }
+
+        @Test
         public void evaluateNestedFunctionCalls()
             throws Exception
         {
