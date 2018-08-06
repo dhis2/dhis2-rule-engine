@@ -71,7 +71,7 @@ public class RuleFunctionMonthsBetween extends RuleFunction
         }
 
 
-        return wrap( String.valueOf( ChronoUnit.MONTHS.between( startDate, endDate ) ) );
+        return String.valueOf( ChronoUnit.MONTHS.between( startDate, endDate ) );
     }
 
     public static RuleFunctionMonthsBetween create()

@@ -69,7 +69,7 @@ public class RuleFunctionYearsBetween extends RuleFunction
             throw  new IllegalArgumentException( "Date cannot be parsed" );
         }
 
-        return wrap( String.valueOf( ChronoUnit.YEARS.between( startDate, endDate ) ) );
+        return String.valueOf( ChronoUnit.YEARS.between( startDate, endDate ) );
     }
 
     public static RuleFunctionYearsBetween create()

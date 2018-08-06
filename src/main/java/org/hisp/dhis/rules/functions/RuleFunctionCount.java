@@ -50,7 +50,7 @@ public class RuleFunctionCount extends RuleFunction
                 arguments.size() + " were supplied" );
         }
 
-        return wrap( count( arguments, valueMap ) );
+        return count( arguments, valueMap );
     }
 
     public static RuleFunctionCount create()

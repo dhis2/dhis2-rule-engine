@@ -52,7 +52,7 @@ public class RuleFunctionCountIfValue extends RuleFunction
                     arguments.size() + " were supplied" );
         }
 
-        return wrap( countIfValue( arguments, valueMap ) );
+        return countIfValue( arguments, valueMap );
     }
 
     @Nonnull

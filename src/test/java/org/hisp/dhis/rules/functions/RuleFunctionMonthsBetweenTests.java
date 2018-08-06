@@ -53,6 +53,6 @@ public class RuleFunctionMonthsBetweenTests
         String weeks = monthsBetween.evaluate( Arrays.asList(
                 "2016-01-01", "2016-10-01" ), new HashMap<String, RuleVariableValue>(), null);
 
-        assertThat( weeks ).isEqualTo( "'9'" );
+        assertThat( weeks ).isEqualTo( "9" );
     }
 }
