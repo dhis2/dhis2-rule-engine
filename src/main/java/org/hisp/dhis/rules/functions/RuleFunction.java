@@ -48,6 +48,8 @@ public abstract class RuleFunction
                         return RuleFunctionSubString.create();
                 case RuleFunctionMonthsBetween.D2_MONTHS_BETWEEN:
                         return RuleFunctionMonthsBetween.create();
+                case RuleFunctionYearsBetween.D2_YEARS_BETWEEN:
+                        return RuleFunctionYearsBetween.create();
                 case RuleFunctionInOrgUnitGroup.D2_IN_ORG_UNIT_GROUP:
                         return RuleFunctionInOrgUnitGroup.create();
                 default:
