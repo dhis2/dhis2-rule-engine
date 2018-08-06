@@ -41,7 +41,7 @@ import java.util.Map;
 /**
  * @Author Zubair Asghar.
  */
-@SuppressWarnings("ALL")
+
 public class RuleFunctionMonthsBetween extends RuleFunction
 {
     public static final String D2_MONTHS_BETWEEN = "d2:monthsBetween";

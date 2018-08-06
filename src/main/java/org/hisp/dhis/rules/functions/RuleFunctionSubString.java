@@ -37,6 +37,8 @@ import java.util.Map;
 
 /**
  * @Author Zubair Asghar.
+ *
+ * Evaluates to the part of a string specified by the start and end character number.
  */
 public class RuleFunctionSubString extends RuleFunction
 {

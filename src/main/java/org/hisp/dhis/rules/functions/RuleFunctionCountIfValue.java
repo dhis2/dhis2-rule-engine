@@ -37,6 +37,9 @@ import java.util.Map;
 
 /**
  * @Author Zubair Asghar.
+ *
+ * Counts the number of matching values that is entered for the source field in the first argument. Only occurrences that matches the second argument is counted.
+ * The source field parameter is the name of one of the defined source fields in the program.
  */
 public class RuleFunctionCountIfValue extends RuleFunction
 {

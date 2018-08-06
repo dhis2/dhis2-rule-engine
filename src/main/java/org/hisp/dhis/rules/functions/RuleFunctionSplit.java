@@ -38,6 +38,8 @@ import java.util.Map;
 
 /**
  * @Author Zubair Asghar.
+ *
+ * Split the text by delimiter, and keep the nth element(0 is the first).
  */
 public class RuleFunctionSplit extends RuleFunction
 {

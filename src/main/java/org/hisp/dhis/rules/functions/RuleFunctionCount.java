@@ -36,6 +36,9 @@ import java.util.Map;
 
 /**
  * @Author Zubair Asghar.
+ *
+ * Counts the number of values that is entered for the source field in the argument.
+ * The source field parameter is the name of one of the defined source fields in the program
  */
 public class RuleFunctionCount extends RuleFunction
 {
