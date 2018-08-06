@@ -46,6 +46,8 @@ public abstract class RuleFunction
                         return RuleFunctionCount.create();
                 case RuleFunctionSubString.D2_SUBSTRING:
                         return RuleFunctionSubString.create();
+                case RuleFunctionMonthsBetween.D2_MONTHS_BETWEEN:
+                        return RuleFunctionMonthsBetween.create();
                 case RuleFunctionInOrgUnitGroup.D2_IN_ORG_UNIT_GROUP:
                         return RuleFunctionInOrgUnitGroup.create();
                 default:
