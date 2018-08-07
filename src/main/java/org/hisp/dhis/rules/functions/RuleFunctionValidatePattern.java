@@ -38,6 +38,8 @@ import java.util.regex.Pattern;
 
 /**
  * @Author Zubair Asghar.
+ *
+ * Evaluates to true if the input text is an exact match with the supplied regular expression pattern. The regular expression needs to be escaped.
  */
 public class RuleFunctionValidatePattern extends RuleFunction
 {
