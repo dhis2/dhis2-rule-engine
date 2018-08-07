@@ -29,42 +29,40 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Arrays;
+import java.util.HashMap;
+
+import static org.assertj.core.api.Java6Assertions.assertThat;
 
 /**
  * @Author Zubair Asghar.
  */
-public class RuleFunctionValidatePattern extends RuleFunction
+
+@RunWith( JUnit4.class )
+public class RuleFunctionValidatePatternTests
 {
-    public static final String D2_VALIDATE_PATTERN = "d2:validatePattern";
-
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    @Test
+    public void evaluateD2Validate()
     {
-        if ( arguments.size() != 2 )
-        {
-            throw new IllegalArgumentException( "Two arguments were expected, " +
-                    arguments.size() + " were supplied" );
-        }
-        
-        String input = arguments.get( 0 );
-        String regex = arguments.get( 1 );
+        RuleFunction validatePattern = RuleFunctionValidatePattern.create();
 
-        Pattern pattern = Pattern.compile( regex );
+        String matched = validatePattern.evaluate( Arrays.asList( "4400555666", ".*555.*" ),
+                new HashMap<String, RuleVariableValue>(), null);
 
-        Matcher matcher = pattern.matcher( input );
-        
-        return wrap( String.valueOf( matcher.matches() ) );
-    }
+        assertThat( matched ).isEqualTo( "'true'" );
 
-    public static RuleFunctionValidatePattern create()
-    {
-        return new RuleFunctionValidatePattern();
+        matched = validatePattern.evaluate( Arrays.asList( "xman2", "[^\\\\d]*" ),
+                new HashMap<String, RuleVariableValue>(), null);
+
+        assertThat( matched ).isEqualTo( "'true'" );
+
+        matched = validatePattern.evaluate( Arrays.asList( "4400555666", ".*222.*" ),
+                new HashMap<String, RuleVariableValue>(), null);
+
+        assertThat( matched ).isEqualTo( "'false'" );
     }
 }
