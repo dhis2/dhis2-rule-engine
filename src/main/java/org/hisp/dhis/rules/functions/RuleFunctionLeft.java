@@ -33,33 +33,31 @@ import org.hisp.dhis.rules.RuleVariableValue;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @Author Zubair Asghar.
- *
- * Returns the number of numeric zero and positive values among the given object arguments. Can be provided with any number of arguments.
  */
-public class RuleFunctionZeroPositiveCount extends RuleFunction
+
+public class RuleFunctionLeft extends RuleFunction
 {
-    public static final String D2_ZPVC = "d2:zpvc";
+    public static final String D2_LEFT = "d2:left";
 
     @Nonnull
     @Override
     public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
     {
-        if ( arguments.size() < 1 )
+
+        if ( arguments.size() != 2 )
         {
-            throw new IllegalArgumentException( "At least one argument should be provided" );
+            throw new IllegalArgumentException( "Two argument was expected, " +
+                    arguments.size() + " were supplied" );
         }
 
-        List<Double> list = arguments.stream().map( Double::new ).filter( v -> v >= 0 ).collect( Collectors.toList() );
-
-        return String.valueOf( list.size() );
+        return null;
     }
 
-    public static RuleFunctionZeroPositiveCount create()
+    public static RuleFunctionLeft create()
     {
-        return new RuleFunctionZeroPositiveCount();
+        return new RuleFunctionLeft();
     }
 }

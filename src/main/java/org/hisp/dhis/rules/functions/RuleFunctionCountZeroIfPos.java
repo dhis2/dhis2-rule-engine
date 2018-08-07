@@ -38,28 +38,41 @@ import java.util.stream.Collectors;
 /**
  * @Author Zubair Asghar.
  *
- * Returns the number of numeric zero and positive values among the given object arguments. Can be provided with any number of arguments.
+ * Counts the number of values that is zero or positive entered for the source field in the argument.
+ * The source field parameter is the name of one of the defined source fields in the program.
  */
-public class RuleFunctionZeroPositiveCount extends RuleFunction
+public class RuleFunctionCountZeroIfPos extends RuleFunction
 {
-    public static final String D2_ZPVC = "d2:zpvc";
+    public static final String D2_COUNT_IF_POS = "d2:countIfPos";
 
     @Nonnull
     @Override
     public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
     {
-        if ( arguments.size() < 1 )
+        if ( arguments.size() != 1 )
         {
-            throw new IllegalArgumentException( "At least one argument should be provided" );
+            throw new IllegalArgumentException( "One arguments were expected, " +
+                    arguments.size() + " were supplied" );
         }
 
-        List<Double> list = arguments.stream().map( Double::new ).filter( v -> v >= 0 ).collect( Collectors.toList() );
+        RuleVariableValue value = valueMap.get( arguments.get( 0 ) );
 
-        return String.valueOf( list.size() );
+        List<String> candidates = value.candidates();
+
+        Integer count = candidates.stream().filter( this::isZeroPos ).collect( Collectors.toList() ).size();
+
+        return String.valueOf( count );
     }
 
-    public static RuleFunctionZeroPositiveCount create()
+    public static RuleFunctionCountZeroIfPos create()
     {
-        return new RuleFunctionZeroPositiveCount();
+        return new RuleFunctionCountZeroIfPos();
+    }
+
+    private boolean isZeroPos( String input )
+    {
+        Double value = Double.parseDouble( input );
+
+        return value >= 0;
     }
 }

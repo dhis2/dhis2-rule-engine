@@ -29,37 +29,30 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.HashMap;
+
+import static org.assertj.core.api.Java6Assertions.assertThat;
 
 /**
  * @Author Zubair Asghar.
- *
- * Returns the number of numeric zero and positive values among the given object arguments. Can be provided with any number of arguments.
  */
-public class RuleFunctionZeroPositiveCount extends RuleFunction
+
+@RunWith( JUnit4.class )
+public class RuleFunctionConcatenateTests
 {
-    public static final String D2_ZPVC = "d2:zpvc";
-
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    @Test
+    public void evaluateD2Concatenate()
     {
-        if ( arguments.size() < 1 )
-        {
-            throw new IllegalArgumentException( "At least one argument should be provided" );
-        }
+        RuleFunction concatenate = RuleFunctionConcatenate.create();
 
-        List<Double> list = arguments.stream().map( Double::new ).filter( v -> v >= 0 ).collect( Collectors.toList() );
+        String concatenatedString = concatenate.evaluate( Arrays.asList( "firstName", "+", "lastName" ),
+                new HashMap<String, RuleVariableValue>(), null);
 
-        return String.valueOf( list.size() );
-    }
-
-    public static RuleFunctionZeroPositiveCount create()
-    {
-        return new RuleFunctionZeroPositiveCount();
+        assertThat( concatenatedString ).isEqualTo( "'firstName+lastName'" );
     }
 }

@@ -50,9 +50,9 @@ public class RuleFunctionZeroPositiveCountTests
     {
         RuleFunction zpvc = RuleFunctionZeroPositiveCount.create();
 
-        String count = zpvc.evaluate( Arrays.asList( "5", "0", "-1", "45", "-15" ),
+        String count = zpvc.evaluate( Arrays.asList( "5", "0", "-1", "45", "-15", "1.2", "-2.3" ),
                 new HashMap<String, RuleVariableValue>(), null);
 
-        assertThat( count ).isEqualTo( "2" );
+        assertThat( count ).isEqualTo( "4" );
     }
 }
