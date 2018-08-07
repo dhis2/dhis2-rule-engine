@@ -367,6 +367,177 @@ public class RuleEngineFunctionTests
         }
 
         @Test
+        public void evaluateD2Zpvc() throws Exception
+        {
+                RuleAction ruleAction = RuleActionDisplayText.createForFeedback(
+                        "test_action_content", "d2:zpvc( '1', '0', '-1' )" );
+                RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
+                        "test_var_one", "test_data_element_one", RuleValueType.NUMERIC );
+                RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
+                        "test_var_two", "test_data_element_two", RuleValueType.NUMERIC );
+                RuleVariable ruleVariableThree = RuleVariableNewestEvent.create(
+                        "test_var_three", "test_data_element_two", RuleValueType.NUMERIC );
+                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
+
+                RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
+
+                RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                        RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(), "");
+
+                List<RuleEffect> ruleEffects = ruleEngineBuilder.build().evaluate( ruleEvent ).call();
+
+                assertThat( ruleEffects.size() ).isEqualTo( 1 );
+                assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+                assertEquals( "2", ruleEffects.get( 0 ).data() );
+        }
+
+        @Test
+        public void evaluateD2Zing() throws Exception
+        {
+                RuleAction ruleAction = RuleActionDisplayText.createForFeedback(
+                        "test_action_content", "d2:zing( '-1' )" );
+
+                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
+
+                RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList() );
+
+                RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                        RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(), "");
+
+                List<RuleEffect> ruleEffects = ruleEngineBuilder.build().evaluate( ruleEvent ).call();
+
+                assertThat( ruleEffects.size() ).isEqualTo( 1 );
+                assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+                assertEquals( "0", ruleEffects.get( 0 ).data() );
+        }
+
+        @Test
+        public void evaluateD2Oizp() throws Exception
+        {
+                RuleAction ruleAction = RuleActionDisplayText.createForFeedback(
+                        "test_action_content", "d2:oizp( '0' )" );
+
+                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
+
+                RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList() );
+
+                RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                        RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(), "");
+
+                List<RuleEffect> ruleEffects = ruleEngineBuilder.build().evaluate( ruleEvent ).call();
+
+                assertThat( ruleEffects.size() ).isEqualTo( 1 );
+                assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+                assertEquals( "1", ruleEffects.get( 0 ).data() );
+        }
+
+        @Test
+        public void evaluateD2CountIfZeroPos() throws Exception
+        {
+                RuleAction ruleAction = RuleActionDisplayText.createForFeedback(
+                        "test_action_content", "d2:countIfZeroPos('test_var_one')" );
+                RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
+                        "test_var_one", "test_data_element_one", RuleValueType.NUMERIC );
+
+                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
+
+                RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
+
+                RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "0" )), "");
+
+                RuleEvent ruleEvent1 = RuleEvent.create( "test_event1", "test_program_stage",
+                RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "1" ) ), "");
+
+                RuleEvent ruleEvent2 = RuleEvent.create( "test_event1", "test_program_stage",
+                RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "-3" ) ), "");
+
+                List<RuleEffect> ruleEffects = ruleEngineBuilder.events( Arrays.asList( ruleEvent1, ruleEvent2 ) ).build().evaluate( ruleEvent ).call();
+
+                assertThat( ruleEffects.size() ).isEqualTo( 1 );
+                assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+                assertEquals( "2", ruleEffects.get( 0 ).data() );
+        }
+
+        @Test
+        public void evaluateD2Left() throws Exception
+        {
+                RuleAction ruleAction = RuleActionDisplayText.createForFeedback(
+                        "test_action_content", "d2:left(#{test_var_one}, 4)" );
+                RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
+                        "test_var_one", "test_data_element_one", RuleValueType.TEXT );
+
+                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
+
+                RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
+
+                RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                        RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(
+                                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "yyyy-mm-dd" )), "");
+
+                List<RuleEffect> ruleEffects = ruleEngineBuilder.build().evaluate( ruleEvent ).call();
+
+                assertThat( ruleEffects.size() ).isEqualTo( 1 );
+                assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+                assertEquals( "yyyy", ruleEffects.get( 0 ).data() );
+        }
+
+        @Test
+        public void evaluateD2Right() throws Exception
+        {
+                RuleAction ruleAction = RuleActionDisplayText.createForFeedback(
+                        "test_action_content", "d2:right(#{test_var_one}, 2)" );
+                RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
+                        "test_var_one", "test_data_element_one", RuleValueType.TEXT );
+
+                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
+
+                RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
+
+                RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                        RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(
+                                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "yyyy-mm-dd" )), "");
+
+                List<RuleEffect> ruleEffects = ruleEngineBuilder.build().evaluate( ruleEvent ).call();
+
+                assertThat( ruleEffects.size() ).isEqualTo( 1 );
+                assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+                assertEquals( "dd", ruleEffects.get( 0 ).data() );
+        }
+
+        @Test
+        public void evaluateD2Concatenate() throws Exception
+        {
+                RuleAction ruleAction = RuleActionDisplayText.createForFeedback(
+                        "test_action_content", "d2:concatenate(#{test_var_one}, '+days')" );
+                RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
+                        "test_var_one", "test_data_element_one", RuleValueType.TEXT );
+
+                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
+
+                RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
+
+                RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                        RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(
+                                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "weeks" )), "");
+
+                List<RuleEffect> ruleEffects = ruleEngineBuilder.build().evaluate( ruleEvent ).call();
+
+                assertThat( ruleEffects.size() ).isEqualTo( 1 );
+                assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+                assertEquals( "weeks+days", ruleEffects.get( 0 ).data() );
+        }
+
+        @Test
+        public void evaluateD2ValidatePattern() throws Exception
+        {
+
+        }
+
+        @Test
         public void evaluateD2Length() throws Exception
         {
                 RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(

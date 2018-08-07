@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  */
 public class RuleFunctionCountIfZeroPos extends RuleFunction
 {
-    public static final String D2_COUNT_IF_POS = "d2:countIfPos";
+    public static final String D2_COUNT_IF_ZERO_POS = "d2:countIfZeroPos";
 
     @Nonnull
     @Override

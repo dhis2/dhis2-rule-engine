@@ -65,7 +65,7 @@ public class RuleFunctionLeft extends RuleFunction
             throw new IllegalArgumentException( "Number has to be an integer" );
         }
 
-        return StringUtils.substring( arguments.get( 0 ), 0, chars );
+        return wrap( StringUtils.substring( arguments.get( 0 ), 0, chars ) );
     }
 
     public static RuleFunctionLeft create()

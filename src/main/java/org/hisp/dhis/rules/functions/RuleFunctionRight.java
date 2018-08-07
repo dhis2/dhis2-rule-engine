@@ -63,7 +63,7 @@ public class RuleFunctionRight extends RuleFunction
             throw new IllegalArgumentException( "Number has to be an integer" );
         }
 
-        return StringUtils.reverse( StringUtils.substring( StringUtils.reverse( arguments.get( 0 ) ), 0, chars ) );
+        return wrap( StringUtils.reverse( StringUtils.substring( StringUtils.reverse( arguments.get( 0 ) ), 0, chars ) ) );
     }
 
     public static RuleFunctionRight create()

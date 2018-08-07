@@ -29,47 +29,46 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.HashMap;
+
+import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.assertj.core.api.Java6Assertions.fail;
 
 /**
  * @Author Zubair Asghar.
- *
- * Returns the number of numeric zero and positive values among the given object arguments. Can be provided with any number of arguments.
  */
-public class RuleFunctionZeroPositiveCount extends RuleFunction
+
+@RunWith( JUnit4.class )
+public class RuleFunctionZpvcTests
 {
-    public static final String D2_ZPVC = "d2:zpvc";
-
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    @Test
+    public void evaluateD2Zpvc()
     {
-        if ( arguments.size() < 1 )
-        {
-            throw new IllegalArgumentException( "At least one argument should be provided" );
-        }
+        RuleFunction zpvc = RuleFunctionZpvc.create();
 
-        List<Double> list = new ArrayList<>();
+        String count = zpvc.evaluate( Arrays.asList( "5", "0", "-1", "45", "-15", "1.2", "-2.3" ),
+                new HashMap<String, RuleVariableValue>(), null );
 
-        try
-        {
-            list = arguments.stream().map( Double::new ).filter( v -> v >= 0 ).collect( Collectors.toList() );
-        }
-        catch ( NumberFormatException e )
-        {
-            throw new IllegalArgumentException( "Number has to be an integer" );
-        }
-
-        return String.valueOf( list.size() );
+        assertThat( count ).isEqualTo( "4" );
     }
 
-    public static RuleFunctionZeroPositiveCount create()
+    @Test
+    public void evaluateMustFailOnWrongArgumentCount()
     {
-        return new RuleFunctionZeroPositiveCount();
+        try
+        {
+            RuleFunctionZpvc.create().evaluate( Arrays.asList( "5", "0", "-1", "45", "-15", "1.2", "-2.3", "abc" ),
+                    new HashMap<String, RuleVariableValue>(), null );
+            fail( "Invalid number format" );
+        }
+        catch ( IllegalArgumentException illegalArgumentException )
+        {
+            // noop
+        }
     }
 }

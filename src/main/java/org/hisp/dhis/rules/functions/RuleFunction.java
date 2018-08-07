@@ -50,11 +50,13 @@ public abstract class RuleFunction
                         return RuleFunctionMonthsBetween.create();
                 case RuleFunctionYearsBetween.D2_YEARS_BETWEEN:
                         return RuleFunctionYearsBetween.create();
+                case RuleFunctionZpvc.D2_ZPVC:
+                        return RuleFunctionZpvc.create();
                 case RuleFunctionZing.D2_ZING:
                         return RuleFunctionZing.create();
                 case RuleFunctionOizp.D2_OIZP:
                         return RuleFunctionOizp.create();
-                case RuleFunctionCountIfZeroPos.D2_COUNT_IF_POS:
+                case RuleFunctionCountIfZeroPos.D2_COUNT_IF_ZERO_POS:
                         return RuleFunctionCountIfZeroPos.create();
                 case RuleFunctionLeft.D2_LEFT:
                         return RuleFunctionLeft.create();

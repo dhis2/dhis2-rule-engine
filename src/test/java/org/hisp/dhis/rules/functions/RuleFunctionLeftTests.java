@@ -54,7 +54,7 @@ public class RuleFunctionLeftTests
         String result = left.evaluate( Arrays.asList( "yyyy-MM-dd", "4" ),
                 new HashMap<String, RuleVariableValue>(), null);
 
-        assertThat( result ).isEqualTo( "yyyy" );
+        assertThat( result ).isEqualTo( "'yyyy'" );
     }
 
     @Test

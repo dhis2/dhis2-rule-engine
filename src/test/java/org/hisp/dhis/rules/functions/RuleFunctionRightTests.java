@@ -55,7 +55,7 @@ public class RuleFunctionRightTests
         String result = right.evaluate( Arrays.asList( "yyyy-MM-dd", "4" ),
                 new HashMap<String, RuleVariableValue>(), null);
 
-        assertThat( result ).isEqualTo( "M-dd" );
+        assertThat( result ).isEqualTo( "'M-dd'" );
     }
 
     @Test
