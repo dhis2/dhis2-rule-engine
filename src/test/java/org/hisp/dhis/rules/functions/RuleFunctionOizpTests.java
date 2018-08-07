@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.assertj.core.api.Java6Assertions.fail;
 
 /**
  * @Author Zubair Asghar.
@@ -69,5 +70,20 @@ public class RuleFunctionOizpTests
                 new HashMap<String, RuleVariableValue>(), null);
 
         assertThat( oizpFloat ).isEqualTo( "1" );
+    }
+
+    @Test
+    public void evaluateMustFailOnWrongArgumentCount()
+    {
+        try
+        {
+            RuleFunctionOizp.create().evaluate( Arrays.asList( "abc" ),
+                    new HashMap<String, RuleVariableValue>(), null);
+            fail( "number has to be an integer" );
+        }
+        catch ( IllegalArgumentException illegalArgumentException )
+        {
+            // noop
+        }
     }
 }

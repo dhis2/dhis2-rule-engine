@@ -31,6 +31,7 @@ package org.hisp.dhis.rules.functions;
 import org.hisp.dhis.rules.RuleVariableValue;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -53,7 +54,16 @@ public class RuleFunctionZeroPositiveCount extends RuleFunction
             throw new IllegalArgumentException( "At least one argument should be provided" );
         }
 
-        List<Double> list = arguments.stream().map( Double::new ).filter( v -> v >= 0 ).collect( Collectors.toList() );
+        List<Double> list = new ArrayList<>();
+
+        try
+        {
+            list = arguments.stream().map( Double::new ).filter( v -> v >= 0 ).collect( Collectors.toList() );
+        }
+        catch ( NumberFormatException e )
+        {
+            throw new IllegalArgumentException( "Number has to be an integer" );
+        }
 
         return String.valueOf( list.size() );
     }

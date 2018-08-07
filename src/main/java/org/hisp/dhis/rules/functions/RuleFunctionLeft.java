@@ -28,6 +28,7 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.apache.commons.lang3.StringUtils;
 import org.hisp.dhis.rules.RuleVariableValue;
 
 import javax.annotation.Nonnull;
@@ -53,7 +54,18 @@ public class RuleFunctionLeft extends RuleFunction
                     arguments.size() + " were supplied" );
         }
 
-        return null;
+        int chars = 0;
+
+        try
+        {
+            chars = Integer.parseInt( arguments.get( 1 ) );
+        }
+        catch ( NumberFormatException e )
+        {
+            throw new IllegalArgumentException( "Number has to be an integer" );
+        }
+
+        return StringUtils.substring( arguments.get( 0 ), 0, chars );
     }
 
     public static RuleFunctionLeft create()

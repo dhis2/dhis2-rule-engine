@@ -29,12 +29,17 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.models.RuleValueType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.assertj.core.api.Java6Assertions.fail;
@@ -44,26 +49,68 @@ import static org.assertj.core.api.Java6Assertions.fail;
  */
 
 @RunWith( JUnit4.class )
-public class RuleFunctionZeroPositiveCountTests
+public class RuleFunctionCountIfZeroPosTests
 {
     @Test
-    public void evaluateD2ZPVC()
+    public void evaluateD2CountIfZeroPos()
     {
-        RuleFunction zpvc = RuleFunctionZeroPositiveCount.create();
+        RuleFunction countIfZeroPos = RuleFunctionCountIfZeroPos.create();
 
-        String count = zpvc.evaluate( Arrays.asList( "5", "0", "-1", "45", "-15", "1.2", "-2.3" ),
-                new HashMap<String, RuleVariableValue>(), null );
+        Map<String, RuleVariableValue> map = new HashMap<>();
+        map.put("source_field", new RuleVariableValue() {
+            @Nullable
+            @Override
+            public String value() {
+                return "4";
+            }
 
-        assertThat( count ).isEqualTo( "4" );
+            @Nonnull
+            @Override
+            public RuleValueType type() {
+                return RuleValueType.TEXT;
+            }
+
+            @Nonnull
+            @Override
+            public List<String> candidates() {
+                return Arrays.asList( "4", "0", "-1" );
+            }
+        });
+
+        String result = countIfZeroPos.evaluate( Arrays.asList( "source_field" ), map, null);
+
+        assertThat( result ).isEqualTo( "2" );
     }
 
     @Test
     public void evaluateMustFailOnWrongArgumentCount()
     {
+        RuleFunction countIfZeroPos = RuleFunctionCountIfZeroPos.create();
+
+        Map<String, RuleVariableValue> map = new HashMap<>();
+        map.put("source_field", new RuleVariableValue() {
+            @Nullable
+            @Override
+            public String value() {
+                return "4";
+            }
+
+            @Nonnull
+            @Override
+            public RuleValueType type() {
+                return RuleValueType.TEXT;
+            }
+
+            @Nonnull
+            @Override
+            public List<String> candidates() {
+                return Arrays.asList( "4", "ABC", "-1" );
+            }
+        });
+
         try
         {
-            RuleFunctionZeroPositiveCount.create().evaluate( Arrays.asList( "5", "0", "-1", "45", "-15", "1.2", "-2.3", "abc" ),
-                    new HashMap<String, RuleVariableValue>(), null );
+            countIfZeroPos.evaluate( Arrays.asList( "source_field" ), map, null);
             fail( "Invalid number format" );
         }
         catch ( IllegalArgumentException illegalArgumentException )

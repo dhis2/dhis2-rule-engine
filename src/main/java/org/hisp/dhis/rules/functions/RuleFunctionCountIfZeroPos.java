@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
  * Counts the number of values that is zero or positive entered for the source field in the argument.
  * The source field parameter is the name of one of the defined source fields in the program.
  */
-public class RuleFunctionCountZeroIfPos extends RuleFunction
+public class RuleFunctionCountIfZeroPos extends RuleFunction
 {
     public static final String D2_COUNT_IF_POS = "d2:countIfPos";
 
@@ -64,14 +64,23 @@ public class RuleFunctionCountZeroIfPos extends RuleFunction
         return String.valueOf( count );
     }
 
-    public static RuleFunctionCountZeroIfPos create()
+    public static RuleFunctionCountIfZeroPos create()
     {
-        return new RuleFunctionCountZeroIfPos();
+        return new RuleFunctionCountIfZeroPos();
     }
 
     private boolean isZeroPos( String input )
     {
-        Double value = Double.parseDouble( input );
+        Double value;
+
+        try
+        {
+            value = Double.parseDouble( input );
+        }
+        catch ( NumberFormatException e )
+        {
+            throw new IllegalArgumentException( "Invalid number format" );
+        }
 
         return value >= 0;
     }

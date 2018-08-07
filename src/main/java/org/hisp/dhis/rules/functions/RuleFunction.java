@@ -1,6 +1,5 @@
 package org.hisp.dhis.rules.functions;
 
-import com.google.common.collect.ImmutableMap;
 import org.hisp.dhis.rules.RuleVariableValue;
 
 import javax.annotation.Nonnull;
@@ -55,8 +54,8 @@ public abstract class RuleFunction
                         return RuleFunctionZing.create();
                 case RuleFunctionOizp.D2_OIZP:
                         return RuleFunctionOizp.create();
-                case RuleFunctionCountZeroIfPos.D2_COUNT_IF_POS:
-                        return RuleFunctionCountZeroIfPos.create();
+                case RuleFunctionCountIfZeroPos.D2_COUNT_IF_POS:
+                        return RuleFunctionCountIfZeroPos.create();
                 case RuleFunctionLeft.D2_LEFT:
                         return RuleFunctionLeft.create();
                 case RuleFunctionRight.D2_RIGHT:

@@ -28,46 +28,47 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.apache.commons.lang3.StringUtils;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.HashMap;
+
+import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.assertj.core.api.Java6Assertions.fail;
 
 /**
  * @Author Zubair Asghar.
  */
-public class RuleFunctionRight extends RuleFunction
+
+@RunWith( JUnit4.class )
+public class RuleFunctionLeftTests
 {
-    public static final String D2_RIGHT = "d2:right";
-
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    @Test
+    public void evaluateD2Left()
     {
-        if ( arguments.size() != 2 )
-        {
-            throw new IllegalArgumentException( "Two argument was expected, " +
-                    arguments.size() + " were supplied" );
-        }
+        RuleFunction left = RuleFunctionLeft.create();
 
-        int chars = 0;
+        String result = left.evaluate( Arrays.asList( "yyyy-MM-dd", "4" ),
+                new HashMap<String, RuleVariableValue>(), null);
 
-        try
-        {
-            chars = Integer.parseInt( arguments.get( 1 ) );
-        }
-        catch ( NumberFormatException e )
-        {
-            throw new IllegalArgumentException( "Number has to be an integer" );
-        }
-
-        return StringUtils.reverse( StringUtils.substring( StringUtils.reverse( arguments.get( 0 ) ), 0, chars ) );
+        assertThat( result ).isEqualTo( "yyyy" );
     }
 
-    public static RuleFunctionRight create()
+    @Test
+    public void evaluateMustFailOnWrongArgumentCount()
     {
-        return new RuleFunctionRight();
+        try
+        {
+            RuleFunctionLeft.create().evaluate( Arrays.asList( "yyyy-MM-dd", "6.8" ),
+                    new HashMap<String, RuleVariableValue>(), null);
+            fail( "number has to be an integer" );
+        }
+        catch ( IllegalArgumentException illegalArgumentException )
+        {
+            // noop
+        }
     }
 }

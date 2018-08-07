@@ -53,7 +53,16 @@ public class RuleFunctionOizp extends RuleFunction
                     arguments.size() + " were supplied" );
         }
 
-        Double value = Double.parseDouble( arguments.get( 0 ) );
+        Double value = 0.0;
+
+        try
+        {
+            value = Double.parseDouble( arguments.get( 0 ) );
+        }
+        catch ( NumberFormatException e )
+        {
+            throw new IllegalArgumentException( "Invalid number format" );
+        }
 
         return value >= 0 ? String.valueOf( 1 ) : String.valueOf(  0 );
     }

@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.assertj.core.api.Java6Assertions.fail;
 
 /**
  * @Author Zubair Asghar.
@@ -69,5 +70,20 @@ public class RuleFunctionZingTests
                 new HashMap<String, RuleVariableValue>(), null);
 
         assertThat( zingFloat ).isEqualTo( "5.6" );
+    }
+
+    @Test
+    public void evaluateMustFailOnWrongArgumentCount()
+    {
+        try
+        {
+            RuleFunctionZing.create().evaluate( Arrays.asList( "abc" ),
+                    new HashMap<String, RuleVariableValue>(), null );
+            fail( "Invalid number format" );
+        }
+        catch ( IllegalArgumentException illegalArgumentException )
+        {
+            // noop
+        }
     }
 }
