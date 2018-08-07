@@ -36,6 +36,8 @@ import java.util.Map;
 
 /**
  * @Author Zubair Asghar.
+ *
+ * Evaluates the argument of type number to zero if the value is negative, otherwise to the value itself.
  */
 public class RuleFunctionZing extends RuleFunction
 {

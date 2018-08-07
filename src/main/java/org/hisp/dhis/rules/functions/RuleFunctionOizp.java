@@ -36,6 +36,8 @@ import java.util.Map;
 
 /**
  * @Author Zubair Asghar.
+ *
+ * Evaluates the argument of type number to one if the value is zero or positive, otherwise to zero.
  */
 public class RuleFunctionOizp extends RuleFunction
 {
