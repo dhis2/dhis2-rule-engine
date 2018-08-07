@@ -50,6 +50,10 @@ public abstract class RuleFunction
                         return RuleFunctionMonthsBetween.create();
                 case RuleFunctionYearsBetween.D2_YEARS_BETWEEN:
                         return RuleFunctionYearsBetween.create();
+                case RuleFunctionZing.D2_ZING:
+                        return RuleFunctionZing.create();
+                case RuleFunctionOizp.D2_OIZP:
+                        return RuleFunctionOizp.create();
                 case RuleFunctionInOrgUnitGroup.D2_IN_ORG_UNIT_GROUP:
                         return RuleFunctionInOrgUnitGroup.create();
                 default:
