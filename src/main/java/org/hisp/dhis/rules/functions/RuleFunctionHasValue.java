@@ -22,6 +22,11 @@ final class RuleFunctionHasValue
         public String evaluate( @Nonnull List<String> arguments,
             Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
         {
+                if ( valueMap == null )
+                {
+                        throw new IllegalArgumentException( "valueMap is expected" );
+                }
+
                 if ( arguments.size() != 1 )
                 {
                         throw new IllegalArgumentException( "One argument was expected, " +
@@ -30,6 +35,13 @@ final class RuleFunctionHasValue
 
                 // ToDo: make sure that argument names are actually argument names and not values.
                 String variableName = arguments.get( 0 ).replace( "'", "" );
+                RuleVariableValue variableValue = valueMap.get( variableName );
+
+                if ( variableValue == null )
+                {
+                        return String.valueOf( false );
+                }
+
                 return String.valueOf( valueMap.get( variableName ).value() != null );
         }
 }
