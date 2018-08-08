@@ -46,7 +46,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 
 @RunWith( JUnit4.class )
-public class RuleFunctionCountsTests
+public class RuleFunctionCountTests
 {
         @Rule
         public ExpectedException thrown = ExpectedException.none();
@@ -85,18 +85,6 @@ public class RuleFunctionCountsTests
 
                 MatcherAssert.assertThat(countFunction.evaluate(
                     asList(variableName), variableValues, null), is("2"));
-        }
-
-        @Test
-        public void return_one_for_variable_with_value_and_without_candidates() {
-                RuleFunction countFunction = RuleFunctionCount.create();
-
-                String variableName = "with_value_var";
-
-                variableValues = givenAVariableValuesAndOneWithUndefinedCandidates(variableName);
-
-                MatcherAssert.assertThat(countFunction.evaluate(
-                    asList(variableName), variableValues, null), is("1"));
         }
 
         @Test
@@ -162,4 +150,5 @@ public class RuleFunctionCountsTests
                         .build());
 
                 return variableValues;
-        }}
+        }
+}
