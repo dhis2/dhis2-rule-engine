@@ -28,21 +28,24 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.MatcherAssert;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.RuleVariableValueBuilder;
 import org.hisp.dhis.rules.models.RuleValueType;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.assertj.core.api.Java6Assertions.fail;
+import static org.hamcrest.CoreMatchers.is;
 
 /**
  * @Author Zubair Asghar.
@@ -51,71 +54,149 @@ import static org.assertj.core.api.Java6Assertions.fail;
 @RunWith( JUnit4.class )
 public class RuleFunctionCountIfZeroPosTests
 {
-    @Test
-    public void evaluateD2CountIfZeroPos()
-    {
-        RuleFunction countIfZeroPos = RuleFunctionCountIfZeroPos.create();
+        @Rule
+        public ExpectedException thrown = ExpectedException.none();
 
-        Map<String, RuleVariableValue> map = new HashMap<>();
-        map.put("source_field", new RuleVariableValue() {
-            @Nullable
-            @Override
-            public String value() {
-                return "4";
-            }
+        private Map<String, RuleVariableValue> variableValues = new HashMap<>();
 
-            @Nonnull
-            @Override
-            public RuleValueType type() {
-                return RuleValueType.TEXT;
-            }
-
-            @Nonnull
-            @Override
-            public List<String> candidates() {
-                return Arrays.asList( "4", "0", "-1" );
-            }
-        });
-
-        String result = countIfZeroPos.evaluate( Arrays.asList( "source_field" ), map, null);
-
-        assertThat( result ).isEqualTo( "2" );
-    }
-
-    @Test
-    public void evaluateMustFailOnWrongArgumentCount()
-    {
-        RuleFunction countIfZeroPos = RuleFunctionCountIfZeroPos.create();
-
-        Map<String, RuleVariableValue> map = new HashMap<>();
-        map.put("source_field", new RuleVariableValue() {
-            @Nullable
-            @Override
-            public String value() {
-                return "4";
-            }
-
-            @Nonnull
-            @Override
-            public RuleValueType type() {
-                return RuleValueType.TEXT;
-            }
-
-            @Nonnull
-            @Override
-            public List<String> candidates() {
-                return Arrays.asList( "4", "ABC", "-1" );
-            }
-        });
-
-        try
+        @Test
+        public void return_zero_for_non_existing_variable()
         {
-            countIfZeroPos.evaluate( Arrays.asList( "source_field" ), map, null);
-            fail( "Invalid number format" );
+                RuleFunction ifZeroPosFunction = RuleFunctionCountIfZeroPos.create();
+
+                variableValues = givenAEmptyVariableValues();
+
+                MatcherAssert.assertThat( ifZeroPosFunction.evaluate(
+                    asList( "nonexisting" ), variableValues, null ), is( "0" ) );
         }
-        catch ( IllegalArgumentException illegalArgumentException )
+
+        @Test
+        public void return_zero_for_variable_without_values()
         {
-            // noop
+                RuleFunction ifZeroPosFunction = RuleFunctionCountIfZeroPos.create();
+
+                String variableName = "non_value_var";
+
+                variableValues = givenAVariableValuesAndOneWithoutValue( variableName );
+
+                MatcherAssert.assertThat( ifZeroPosFunction.evaluate(
+                    asList( variableName ), variableValues, null ), is( "0" ) );
         }
-    }
+
+        @Test
+        public void return_size_of_zero_or_positive_values_for_variable_with_value_and_candidates()
+        {
+                RuleFunction ifZeroPosFunction = RuleFunctionCountIfZeroPos.create();
+
+                String variableName = "with_value_var";
+
+                variableValues = givenAVariableValuesAndOneWithCandidates(
+                    variableName, Arrays.asList( "0", "-1", "2" ) );
+
+                MatcherAssert.assertThat( ifZeroPosFunction.evaluate(
+                    asList( variableName ), variableValues, null ), is( "2" ) );
+        }
+
+        @Test
+        public void
+        return_zero_for_non_zero_or_positive_values_for_variable_with_value_and_candidates()
+        {
+                RuleFunction ifZeroPosFunction = RuleFunctionCountIfZeroPos.create();
+
+                String variableName = "with_value_var";
+
+                variableValues = givenAVariableValuesAndOneWithCandidates(
+                    variableName, Arrays.asList( "-1", "-6" ) );
+
+                MatcherAssert.assertThat( ifZeroPosFunction.evaluate(
+                    asList( variableName ), variableValues, null ), is( "0" ) );
+        }
+
+        @Test
+        public void
+        return_zero_for_non_zero_or_positive_value_for_variable_with_value_and_without_candidates()
+        {
+                RuleFunction ifZeroPosFunction = RuleFunctionCountIfZeroPos.create();
+
+                String variableName = "with_value_var";
+
+                variableValues = givenAVariableValuesAndOneWithUndefinedCandidates( variableName, "-10" );
+
+                MatcherAssert.assertThat( ifZeroPosFunction.evaluate(
+                    asList( variableName ), variableValues, null ), is( "0" ) );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_variable_map_is_null()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionCountIfZeroPos.create().evaluate( asList( "variable_name" ), null, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_argument_count_is_greater_than_expected()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionCountIfZeroPos.create().evaluate( asList( "variable_name", "6.8" ),
+                    variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionCountIfZeroPos.create().evaluate( new ArrayList<String>(), variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_arguments_is_null()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionCountIfZeroPos.create().evaluate( null, variableValues, null );
+        }
+
+        private Map<String, RuleVariableValue> givenAEmptyVariableValues()
+        {
+                return new HashMap<>();
+        }
+
+        private Map<String, RuleVariableValue> givenAVariableValuesAndOneWithoutValue(
+            String variableNameWithoutValue )
+        {
+                variableValues.put( variableNameWithoutValue, null );
+
+                variableValues.put( "test_variable_two",
+                    RuleVariableValueBuilder.create()
+                        .withValue( "Value two" )
+                        .build() );
+
+                return variableValues;
+        }
+
+        private Map<String, RuleVariableValue> givenAVariableValuesAndOneWithCandidates(
+            String variableNameWithValueAndCandidates, List<String> candidates )
+        {
+                variableValues.put( "test_variable_one", null );
+
+                variableValues.put( variableNameWithValueAndCandidates,
+                    RuleVariableValueBuilder.create()
+                        .withValue( candidates.get( 0 ) )
+                        .withCandidates( candidates )
+                        .build() );
+
+                return variableValues;
+        }
+
+        private Map<String, RuleVariableValue> givenAVariableValuesAndOneWithUndefinedCandidates(
+            String variableNameWithValueAndNonCandidates, String value )
+        {
+                variableValues.put( "test_variable_one", null );
+
+                variableValues.put( variableNameWithValueAndNonCandidates,
+                    RuleVariableValueBuilder.create()
+                        .withValue( value )
+                        .build() );
+
+                return variableValues;
+        }
 }

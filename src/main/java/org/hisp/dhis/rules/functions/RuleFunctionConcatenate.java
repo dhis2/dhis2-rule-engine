@@ -34,6 +34,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @Author Zubair Asghar.
@@ -50,7 +51,7 @@ public class RuleFunctionConcatenate
         {
                 StringBuilder builder = new StringBuilder();
 
-                arguments.stream().filter( Objects::nonNull ).forEach( builder::append );
+                arguments.stream().filter( Objects::nonNull ).collect( Collectors.toList() ).forEach( builder::append );
 
                 return wrap( builder.toString() );
         }
