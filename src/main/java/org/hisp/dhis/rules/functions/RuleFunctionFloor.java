@@ -29,6 +29,6 @@ final class RuleFunctionFloor
                             arguments.size() + " were supplied" );
                 }
 
-                return String.valueOf( (long) toDouble( arguments.get( 0 ), 0.0 ) );
+                return String.valueOf( (long) Math.floor( toDouble( arguments.get( 0 ), 0.0 ) ) );
         }
 }
