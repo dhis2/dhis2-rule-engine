@@ -36,37 +36,61 @@ import java.util.Map;
 
 /**
  * @Author Zubair Asghar.
- *
+ * <p>
  * Counts the number of values that is entered for the source field in the argument.
  * The source field parameter is the name of one of the defined source fields in the program
  */
-public class RuleFunctionCount extends RuleFunction
+public class RuleFunctionCount
+    extends RuleFunction
 {
-    public static final String D2_COUNT = "d2:count";
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() != 1 )
+        public static final String D2_COUNT = "d2:count";
+
+        @Nonnull
+        @Override
+        public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
+            Map<String, List<String>> supplementaryData )
         {
-            throw new IllegalArgumentException( "One argument was expected, " +
-                arguments.size() + " were supplied" );
+                if ( valueMap == null )
+                {
+                        throw new IllegalArgumentException( "valueMap is expected" );
+                }
+
+                if ( arguments.size() != 1 )
+                {
+                        throw new IllegalArgumentException( "One argument was expected, " +
+                            arguments.size() + " were supplied" );
+                }
+
+                return count( arguments, valueMap );
         }
 
-        return count( arguments, valueMap );
-    }
+        public static RuleFunctionCount create()
+        {
+                return new RuleFunctionCount();
+        }
 
-    public static RuleFunctionCount create()
-    {
-        return new RuleFunctionCount();
-    }
+        private String count( List<String> arguments, Map<String, RuleVariableValue> valueMap )
+        {
+                String ruleVariableName = arguments.get( 0 );
 
-    private String count( List<String> arguments, Map<String, RuleVariableValue> valueMap )
-    {
-        String ruleVariableName = arguments.get( 0 );
+                RuleVariableValue ruleVariableValue = valueMap.get( ruleVariableName );
 
-        RuleVariableValue variableValue = valueMap.get( ruleVariableName );
+                Integer count = 0;
 
-        return Integer.toString( variableValue.candidates().size() );
-    }
+                if ( ruleVariableValue != null && ruleVariableValue.value() != null )
+                {
+                        if ( ruleVariableValue.candidates().size() > 0 )
+                        {
+                                count = ruleVariableValue.candidates().size();
+                        }
+                        else
+                        {
+                                //If there is a value found for the variable, the count is 1 even if there is
+                                // no list of alternate values
+                                //This happens for variables of "DATAELEMENT_CURRENT_STAGE" and "TEI_ATTRIBUTE"
+                                count = 1;
+                        }
+                }
+                return Integer.toString( count );
+        }
 }
