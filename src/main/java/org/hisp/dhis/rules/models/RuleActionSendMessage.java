@@ -50,11 +50,6 @@ public abstract class RuleActionSendMessage
         @Nonnull
         public static RuleActionSendMessage create( @Nullable String notification, @Nullable String data  )
         {
-                if ( notification == null )
-                {
-                        throw new IllegalArgumentException( "Notification cannot be null" );
-                }
-
                 return new AutoValue_RuleActionSendMessage( notification == null ? "" : notification, data == null ? "" : data );
         }
 }
