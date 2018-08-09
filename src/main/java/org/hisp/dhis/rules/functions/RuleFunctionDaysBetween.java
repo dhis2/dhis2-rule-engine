@@ -66,9 +66,4 @@ abstract class RuleFunctionDaysBetween
                         throw new RuntimeException( parseException );
                 }
         }
-
-        private static boolean isEmpty( CharSequence charSequence )
-        {
-                return charSequence == null || charSequence.length() == 0;
-        }
 }
