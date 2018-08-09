@@ -56,11 +56,17 @@ public class RuleFunctionSplit extends RuleFunction
 
         String input = arguments.get( 0 );
         String delimiter = arguments.get( 1 );
+
+        if ( input == null || delimiter == null )
+        {
+            return "";
+        }
+
         int index = Integer.parseInt( arguments.get( 2 ) );
 
         List<String> tokens = Arrays.asList( StringUtils.split( input, delimiter ) );
 
-        if ( tokens.size() > index )
+        if ( tokens.size() > index && index >= 0 )
         {
             return wrap( tokens.get( index ) );
         }
