@@ -1,6 +1,5 @@
 package org.hisp.dhis.rules;
 
-import org.hisp.dhis.rules.RuleFunctionCall;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -45,6 +44,17 @@ public class RuleFunctionCallTests
                 assertThat( ruleFunctionCall.functionCall() ).isEqualTo( "d2:some()" );
                 assertThat( ruleFunctionCall.functionName() ).isEqualTo( "d2:some" );
                 assertThat( ruleFunctionCall.arguments().size() ).isEqualTo( 0 );
+        }
+
+        @Test
+        public void fromMustReturnFunctionCallWithBlankSpaceBetweenArguments()
+        {
+                RuleFunctionCall ruleFunctionCall = RuleFunctionCall.from( "d2:some('one' , 'two')" );
+                assertThat( ruleFunctionCall.functionCall() ).isEqualTo( "d2:some('one' , 'two')" );
+                assertThat( ruleFunctionCall.functionName() ).isEqualTo( "d2:some" );
+                assertThat( ruleFunctionCall.arguments().size() ).isEqualTo( 2 );
+                assertThat( ruleFunctionCall.arguments().get( 0 ) ).isEqualTo( "'one'" );
+                assertThat( ruleFunctionCall.arguments().get( 1 ) ).isEqualTo( "'two'" );
         }
 
         @Test
