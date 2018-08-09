@@ -28,17 +28,20 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.MatcherAssert;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.assertj.core.api.Java6Assertions.fail;
+import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.is;
 
 /**
  * @Author Zubair Asghar.
@@ -47,50 +50,42 @@ import static org.assertj.core.api.Java6Assertions.fail;
 @RunWith( JUnit4.class )
 public class RuleFunctionRoundTests
 {
-    @Test
-    public void evaluateMustReturnRoundValue()
-    {
-        RuleFunction round = RuleFunctionRound.create();
+        @Rule
+        public ExpectedException thrown = ExpectedException.none();
 
-        String roundNumber = round.evaluate( Arrays.asList( "5.9" ),
-                new HashMap<String, RuleVariableValue>(), null);
+        private Map<String, RuleVariableValue> variableValues = new HashMap<>();
 
-        assertThat( roundNumber ).isEqualTo( "6" );
-
-        roundNumber = round.evaluate( Arrays.asList( "5.5" ),
-                new HashMap<String, RuleVariableValue>(), null);
-
-        assertThat( roundNumber ).isEqualTo( "6" );
-
-        roundNumber = round.evaluate( Arrays.asList( "5.2" ),
-                new HashMap<String, RuleVariableValue>(), null);
-
-        assertThat( roundNumber ).isEqualTo( "5" );
-    }
-
-    @Test
-    public void evaluateMustFailOnWrongArgumentCount()
-    {
-        try
+        @Test
+        public void return_argument_rounded_up_to_nearest_whole_number()
         {
-            RuleFunctionRound.create().evaluate( Arrays.asList( "5.9", "6.8" ),
-                    new HashMap<String, RuleVariableValue>(), null);
-            fail( "IllegalArgumentException was expected, but nothing was thrown." );
-        }
-        catch ( IllegalArgumentException illegalArgumentException )
-        {
-            // noop
+                RuleFunction roundFunction = RuleFunctionRound.create();
+
+                MatcherAssert.assertThat( roundFunction.evaluate( asList( "0" ), variableValues, null ), is( "0" ) );
+                MatcherAssert.assertThat( roundFunction.evaluate( asList( "0.8" ), variableValues, null ), is( "1" ) );
+                MatcherAssert.assertThat( roundFunction.evaluate( asList( "0.4999" ), variableValues, null ), is( "0" ) );
+                MatcherAssert.assertThat( roundFunction.evaluate( asList( "0.5001" ), variableValues, null ), is( "1" ) );
+                MatcherAssert.assertThat( roundFunction.evaluate( asList( "-9.3" ), variableValues, null ), is( "-9" ) );
+                MatcherAssert.assertThat( roundFunction.evaluate( asList( "-9.8" ), variableValues, null ), is( "-10" ) );
         }
 
-        try
+        @Test
+        public void throw_illegal_argument_exception_when_argument_count_is_greater_than_expected()
         {
-            RuleFunctionRound.create().evaluate( new ArrayList<String>(),
-                    new HashMap<String, RuleVariableValue>(), null);
-            fail( "IllegalArgumentException was expected, but nothing was thrown." );
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionRound.create().evaluate( asList( "5.9", "6.8" ), variableValues, null );
         }
-        catch ( IllegalArgumentException illegalArgumentException )
+
+        @Test
+        public void throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected()
         {
-            // noop
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionRound.create().evaluate( new ArrayList<>(), variableValues, null );
         }
-    }
+
+        @Test
+        public void throw_illegal_argument_exception_when_arguments_is_null()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionRound.create().evaluate( null, variableValues, null );
+        }
 }
