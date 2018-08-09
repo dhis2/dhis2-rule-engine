@@ -2,7 +2,6 @@ package org.hisp.dhis.rules.models;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import org.hisp.dhis.rules.models.RuleActionWarningOnCompletion;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -17,11 +16,11 @@ public class RuleActionErrorOnCompletionTests
         @Test
         public void createMustSubstituteEmptyStringsForNullArguments()
         {
-                RuleActionWarningOnCompletion ruleActionNoContent = RuleActionWarningOnCompletion
+                RuleActionErrorOnCompletion ruleActionNoContent = RuleActionErrorOnCompletion
                     .create( null, "test_data", "test_field" );
-                RuleActionWarningOnCompletion ruleActionNoData = RuleActionWarningOnCompletion
+                RuleActionErrorOnCompletion ruleActionNoData = RuleActionErrorOnCompletion
                     .create( "test_content", null, "test_field" );
-                RuleActionWarningOnCompletion ruleActionNoField = RuleActionWarningOnCompletion
+                RuleActionErrorOnCompletion ruleActionNoField = RuleActionErrorOnCompletion
                     .create( "test_content", "test_data", null );
 
                 assertThat( ruleActionNoContent.content() ).isEqualTo( "" );
@@ -42,7 +41,7 @@ public class RuleActionErrorOnCompletionTests
         {
                 try
                 {
-                        RuleActionWarningOnCompletion.create( null, null, null );
+                        RuleActionErrorOnCompletion.create( null, null, null );
                         fail( "IllegalArgumentException was expected, but nothing was thrown." );
                 }
                 catch ( IllegalArgumentException illegalArgumentException )
@@ -54,7 +53,7 @@ public class RuleActionErrorOnCompletionTests
         @Test
         public void equalsAndHashcodeFunctionsMustConformToContract()
         {
-                EqualsVerifier.forClass( RuleActionWarningOnCompletion
+                EqualsVerifier.forClass( RuleActionErrorOnCompletion
                     .create( "test_content", "test_data", "test_field" ).getClass() )
                     .suppress( Warning.NULL_FIELDS )
                     .verify();
