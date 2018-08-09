@@ -76,7 +76,7 @@ public class RuleFunctionOizpTests
         }
 
         @Test
-        public void return_zero_for_non_number_argument()
+        public void throw_illegal_argument_exception_for_non_number_argument()
         {
                 thrown.expect( IllegalArgumentException.class );
                 RuleFunctionOizp.create().evaluate( asList( "non_number" ), variableValues, null );
