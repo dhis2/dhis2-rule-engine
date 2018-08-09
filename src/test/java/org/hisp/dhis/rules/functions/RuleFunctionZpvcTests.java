@@ -28,16 +28,17 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.MatcherAssert;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.assertj.core.api.Java6Assertions.fail;
+import static org.hamcrest.CoreMatchers.is;
 
 /**
  * @Author Zubair Asghar.
@@ -46,29 +47,42 @@ import static org.assertj.core.api.Java6Assertions.fail;
 @RunWith( JUnit4.class )
 public class RuleFunctionZpvcTests
 {
-    @Test
-    public void evaluateD2Zpvc()
-    {
-        RuleFunction zpvc = RuleFunctionZpvc.create();
+        @Rule
+        public ExpectedException thrown = ExpectedException.none();
 
-        String count = zpvc.evaluate( Arrays.asList( "5", "0", "-1", "45", "-15", "1.2", "-2.3" ),
-                new HashMap<String, RuleVariableValue>(), null );
+        private Map<String, RuleVariableValue> variableValues = new HashMap<>();
 
-        assertThat( count ).isEqualTo( "4" );
-    }
-
-    @Test
-    public void evaluateMustFailOnWrongArgumentCount()
-    {
-        try
+        @Test
+        public void return_count_of_non_negative_values_in_arguments()
         {
-            RuleFunctionZpvc.create().evaluate( Arrays.asList( "5", "0", "-1", "45", "-15", "1.2", "-2.3", "abc" ),
-                    new HashMap<String, RuleVariableValue>(), null );
-            fail( "Invalid number format" );
+                RuleFunction zpvc = RuleFunctionZpvc.create();
+
+                List<String> arguments = Arrays.asList( "0", "1", "-1", "2", "-2", "3" );
+
+                MatcherAssert.assertThat( zpvc.evaluate( arguments, variableValues, null ), is( "4" ) );
         }
-        catch ( IllegalArgumentException illegalArgumentException )
+
+        @Test
+        public void throw_illegal_argument_exception_for_no_number_argument()
         {
-            // noop
+                thrown.expect( IllegalArgumentException.class );
+
+                List<String> arguments = Arrays.asList( "sxsx", null, "0", "1", "-1", "2", "-2", "3" );
+
+                RuleFunctionZpvc.create().evaluate( arguments, variableValues, null );
         }
-    }
+
+        @Test
+        public void throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionZpvc.create().evaluate( new ArrayList<>(), variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_arguments_is_null()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionZpvc.create().evaluate( null, variableValues, null );
+        }
 }
