@@ -28,17 +28,21 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.MatcherAssert;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.assertj.core.api.Java6Assertions.fail;
+import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.is;
 
 /**
  * @Author Zubair Asghar.
@@ -47,29 +51,79 @@ import static org.assertj.core.api.Java6Assertions.fail;
 @RunWith( JUnit4.class )
 public class RuleFunctionRightTests
 {
-    @Test
-    public void evaluateD2Right()
-    {
-        RuleFunction right = RuleFunctionRight.create();
+        @Rule
+        public ExpectedException thrown = ExpectedException.none();
 
-        String result = right.evaluate( Arrays.asList( "yyyy-MM-dd", "4" ),
-                new HashMap<String, RuleVariableValue>(), null);
+        private Map<String, RuleVariableValue> variableValues = new HashMap<>();
 
-        assertThat( result ).isEqualTo( "'M-dd'" );
-    }
-
-    @Test
-    public void evaluateMustFailOnWrongArgumentCount()
-    {
-        try
+        @Test
+        public void return_empty_string_for_null_input()
         {
-            RuleFunctionRight.create().evaluate( Arrays.asList( "yyyy-MM-dd", "6.8" ),
-                    new HashMap<String, RuleVariableValue>(), null);
-            fail( "number has to be an integer" );
+                RuleFunction rightFunction = RuleFunctionRight.create();
+
+                MatcherAssert.assertThat( rightFunction.evaluate( Arrays.asList( null, "0" ), variableValues, null ),
+                    is( "" ) );
+                MatcherAssert.assertThat( rightFunction.evaluate( Arrays.asList( null, "10" ), variableValues, null ),
+                    is( "" ) );
+                MatcherAssert.assertThat( rightFunction.evaluate( Arrays.asList( null, "-10" ), variableValues, null ),
+                    is( "" ) );
         }
-        catch ( IllegalArgumentException illegalArgumentException )
+
+        @Test
+        public void return_substring_of_first_argument_from_the_beginning()
         {
-            // noop
+                RuleFunction rightFunction = RuleFunctionRight.create();
+
+                MatcherAssert.assertThat( rightFunction.evaluate(
+                    Arrays.asList( "abcdef", "0" ), variableValues, null ), is( "''" ) );
+
+                MatcherAssert.assertThat( rightFunction.evaluate(
+                    Arrays.asList( "abcdef", "-5" ), variableValues, null ), is( "'f'" ) );
+
+                MatcherAssert.assertThat( rightFunction.evaluate(
+                    Arrays.asList( "abcdef", "2" ), variableValues, null ), is( "'ef'" ) );
+
+                MatcherAssert.assertThat( rightFunction.evaluate(
+                    Arrays.asList( "abcdef", "30" ), variableValues, null ), is( "'abcdef'" ) );
         }
-    }
+
+        @Test
+        public void throw_illegal_argument_exception_if_position_is_a_text()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunction rightFunction = RuleFunctionRight.create();
+
+                rightFunction.evaluate( asList( "test_variable_one", "text" ), variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_if_first_parameter_is_empty_list()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunction rightFunction = RuleFunctionRight.create();
+
+                rightFunction.evaluate( new ArrayList<>(), variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_argument_count_is_greater_than_expected()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionRight.create().evaluate(
+                    asList( "cdcdcd", "2", "2016-01-01" ), variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionRight.create().evaluate( asList( "cdcdcdcdc" ), variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_arguments_is_null()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionRight.create().evaluate( null, variableValues, null );
+        }
 }
