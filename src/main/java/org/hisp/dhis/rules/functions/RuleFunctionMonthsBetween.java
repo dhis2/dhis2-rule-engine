@@ -42,40 +42,55 @@ import java.util.Map;
  * @Author Zubair Asghar.
  */
 
-public class RuleFunctionMonthsBetween extends RuleFunction
+public class RuleFunctionMonthsBetween
+    extends RuleFunction
 {
-    public static final String D2_MONTHS_BETWEEN = "d2:monthsBetween";
+        public static final String D2_MONTHS_BETWEEN = "d2:monthsBetween";
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "yyyy-MM-dd" );
+        private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "yyyy-MM-dd" );
 
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() != 2 )
+        @Nonnull
+        @Override
+        public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
+            Map<String, List<String>> supplementaryData )
         {
-            throw new IllegalArgumentException( "Two arguments were expected, " + arguments.size() + " were supplied" );
+                if ( arguments.size() != 2 )
+                {
+                        throw new IllegalArgumentException(
+                            "Two arguments were expected, " + arguments.size() + " were supplied" );
+                }
+
+                String startDateString = arguments.get( 0 );
+                String endDateString = arguments.get( 1 );
+
+                if ( isEmpty( startDateString ) || isEmpty( endDateString ) )
+                {
+                        return "0";
+                }
+
+                LocalDate startDate = null;
+                LocalDate endDate = null;
+
+                try
+                {
+                        startDate = LocalDate.parse( startDateString, formatter );
+                        endDate = LocalDate.parse( endDateString, formatter );
+                }
+                catch ( DateTimeParseException e )
+                {
+                        throw new IllegalArgumentException( "Date cannot be parsed" );
+                }
+
+                return String.valueOf( ChronoUnit.MONTHS.between( startDate, endDate ) );
         }
 
-        LocalDate startDate = null;
-        LocalDate endDate = null;
-
-        try
+        public static RuleFunctionMonthsBetween create()
         {
-            startDate = LocalDate.parse( arguments.get( 0 ), formatter );
-            endDate = LocalDate.parse( arguments.get( 1 ), formatter );
-        }
-        catch ( DateTimeParseException e )
-        {
-            throw  new IllegalArgumentException( "Date cannot be parsed" );
+                return new RuleFunctionMonthsBetween();
         }
 
-
-        return String.valueOf( ChronoUnit.MONTHS.between( startDate, endDate ) );
-    }
-
-    public static RuleFunctionMonthsBetween create()
-    {
-        return new RuleFunctionMonthsBetween();
-    }
+        private static boolean isEmpty( CharSequence charSequence )
+        {
+                return charSequence == null || charSequence.length() == 0;
+        }
 }
