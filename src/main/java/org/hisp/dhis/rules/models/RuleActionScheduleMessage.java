@@ -50,11 +50,6 @@ public abstract class RuleActionScheduleMessage
         @Nonnull
         public static RuleActionScheduleMessage create( @Nullable String notification, @Nullable String data  )
         {
-                if ( notification == null )
-                {
-                        throw new IllegalArgumentException( "Notification cannot be null" );
-                }
-
                 return new AutoValue_RuleActionScheduleMessage( notification == null ? "" : notification, data == null ? "" : data );
         }
 }
