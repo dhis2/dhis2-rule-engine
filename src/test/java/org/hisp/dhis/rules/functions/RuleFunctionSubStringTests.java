@@ -28,15 +28,21 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.MatcherAssert;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.is;
 
 /**
  * @Author Zubair Asghar.
@@ -45,14 +51,88 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 @RunWith( JUnit4.class )
 public class RuleFunctionSubStringTests
 {
-    @Test
-    public void evaluateD2SubString()
-    {
-        RuleFunctionSubString ruleFunctionSubString = RuleFunctionSubString.create();
+        @Rule
+        public ExpectedException thrown = ExpectedException.none();
 
-        String result = ruleFunctionSubString.evaluate( Arrays.asList( "ABCD", "1", "3" ),
-            new HashMap<String, RuleVariableValue>(), null );
+        private Map<String, RuleVariableValue> variableValues = new HashMap<>();
 
-        assertThat( result ).isEqualTo( "'BC'" );
-    }
+        @Test
+        public void return_empty_string_for_null_inputs()
+        {
+                RuleFunction subStringFunction = RuleFunctionSubString.create();
+
+                MatcherAssert
+                    .assertThat( subStringFunction.evaluate( asList( null, "0", "0" ), variableValues, null ), is( "" ) );
+                MatcherAssert
+                    .assertThat( subStringFunction.evaluate( asList( null, "0", "10" ), variableValues, null ), is( "" ) );
+        }
+
+        @Test
+        public void return_substring_from_start_index_to_end_index_of_input_string()
+        {
+                RuleFunction subStringFunction = RuleFunctionSubString.create();
+
+                MatcherAssert.assertThat( subStringFunction.evaluate(
+                    asList( "abcdef", "0", "0" ), variableValues, null ), is( "''" ) );
+
+                MatcherAssert.assertThat( subStringFunction.evaluate(
+                    asList( "abcdef", "0", "1" ), variableValues, null ), is( "'a'" ) );
+
+                MatcherAssert.assertThat( subStringFunction.evaluate(
+                    asList( "abcdef", "-10", "1" ), variableValues, null ), is( "'a'" ) );
+
+                MatcherAssert.assertThat( subStringFunction.evaluate(
+                    asList( "abcdef", "2", "4" ), variableValues, null ), is( "'cd'" ) );
+
+                MatcherAssert.assertThat( subStringFunction.evaluate(
+                    asList( "abcdef", "2", "10" ), variableValues, null ), is( "'cdef'" ) );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_if_start_index_is_a_text()
+        {
+                thrown.expect( IllegalArgumentException.class );
+
+                RuleFunctionSubString.create().evaluate(
+                    Arrays.asList( "test_variable_one", "variable", "3" ), variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_if_end_index_is_a_text()
+        {
+                thrown.expect( IllegalArgumentException.class );
+
+                RuleFunctionSubString.create().evaluate(
+                    Arrays.asList( "test_variable_one", "3", "ede" ), variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_if_first_parameter_is_empty_list()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionSubString.create().evaluate( new ArrayList<>(), variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_argument_count_is_greater_than_expected()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionSubString.create().evaluate(
+                    asList( "test_variable_one", "1", "2", "4" ), variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_argument_count_is_lower_than_expected()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionSubString.create().evaluate(
+                    asList( "test_variable_one", "0" ), variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_arguments_is_null()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionSubString.create().evaluate( null, variableValues, null );
+        }
 }
