@@ -24,6 +24,18 @@ public class RuleExpressionTests
         }
 
         @Test
+        public void fromShouldReturnExpressionWhenVariableNameHasSpaces()
+        {
+                String expression = "#{test_variable one} <0 && #{test variable two} == ''";
+
+                RuleExpression ruleExpression = RuleExpression.from( expression );
+                assertThat( ruleExpression.variables().size() ).isEqualTo( 2 );
+                assertThat( ruleExpression.variables() ).contains( "#{test_variable one}" );
+                assertThat( ruleExpression.variables() ).contains( "#{test variable two}" );
+                assertThat( ruleExpression.functions().size() ).isEqualTo( 0 );
+        }
+
+        @Test
         public void fromShouldReturnExpressionWithAttributeVariables()
         {
                 String expression = "A{test_variable_one} <0 && A{test_variable_two} == ''";
