@@ -28,16 +28,21 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.MatcherAssert;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.assertj.core.api.Java6Assertions.fail;
+import static java.util.Arrays.asList;
+import static org.hamcrest.core.Is.is;
 
 /**
  * @Author Zubair Asghar.
@@ -46,44 +51,55 @@ import static org.assertj.core.api.Java6Assertions.fail;
 @RunWith( JUnit4.class )
 public class RuleFunctionOizpTests
 {
-    @Test
-    public void evaluateD2Oizp()
-    {
-        RuleFunction oizp = RuleFunctionOizp.create();
+        @Rule
+        public ExpectedException thrown = ExpectedException.none();
 
-        String oizpPositive = oizp.evaluate( Arrays.asList( "5" ),
-                new HashMap<String, RuleVariableValue>(), null);
+        private Map<String, RuleVariableValue> variableValues = new HashMap<>();
 
-        assertThat( oizpPositive ).isEqualTo( "1" );
-
-        String oizpNegative = oizp.evaluate( Arrays.asList( "-5" ),
-                new HashMap<String, RuleVariableValue>(), null);
-
-        assertThat( oizpNegative ).isEqualTo( "0" );
-
-        String oizpZero = oizp.evaluate( Arrays.asList( "0" ),
-                new HashMap<String, RuleVariableValue>(), null);
-
-        assertThat( oizpZero ).isEqualTo( "1" );
-
-        String oizpFloat = oizp.evaluate( Arrays.asList( "5.6" ),
-                new HashMap<String, RuleVariableValue>(), null);
-
-        assertThat( oizpFloat ).isEqualTo( "1" );
-    }
-
-    @Test
-    public void evaluateMustFailOnWrongArgumentCount()
-    {
-        try
+        @Test
+        public void return_one_for_non_negative_argument()
         {
-            RuleFunctionOizp.create().evaluate( Arrays.asList( "abc" ),
-                    new HashMap<String, RuleVariableValue>(), null);
-            fail( "number has to be an integer" );
+                RuleFunction oizp = RuleFunctionOizp.create();
+
+                MatcherAssert.assertThat( oizp.evaluate( asList( "0" ), variableValues, null ), is( "1" ) );
+                MatcherAssert.assertThat( oizp.evaluate( asList( "1" ), variableValues, null ), is( "1" ) );
+                MatcherAssert.assertThat( oizp.evaluate( asList( "10" ), variableValues, null ), is( "1" ) );
         }
-        catch ( IllegalArgumentException illegalArgumentException )
+
+        @Test
+        public void return_zero_for_negative_argument()
         {
-            // noop
+                RuleFunction oizp = RuleFunctionOizp.create();
+
+                MatcherAssert.assertThat( oizp.evaluate( asList( "-1" ), variableValues, null ), is( "0" ) );
+                MatcherAssert.assertThat( oizp.evaluate( asList( "-10" ), variableValues, null ), is( "0" ) );
         }
-    }
+
+        @Test
+        public void return_zero_for_non_number_argument()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionOizp.create().evaluate( asList( "non_number" ), variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_argument_count_is_greater_than_expected()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionOizp.create().evaluate( asList( "5.9", "6.8" ), variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionOizp.create().evaluate( new ArrayList<>(), variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_arguments_is_null()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionOizp.create().evaluate( null, variableValues, null );
+        }
 }
