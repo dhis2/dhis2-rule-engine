@@ -35,11 +35,9 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.mockito.internal.matchers.Null;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
@@ -121,9 +119,9 @@ public class RuleFunctionLeftTests
         }
 
         @Test
-        public void throw_illegal_argument_exception_when_arguments_is_null()
+        public void throw_null_pointer_exception_when_arguments_is_null()
         {
-                thrown.expect( IllegalArgumentException.class );
+                thrown.expect( NullPointerException.class );
                 RuleFunctionLeft.create().evaluate( null, variableValues, null );
         }
 

@@ -38,20 +38,23 @@ public class RuleFunctionCeilTests
         }
 
         @Test
-        public void throw_illegal_argument_exception_when_argument_count_is_greater_than_expected() {
+        public void throw_illegal_argument_exception_when_argument_count_is_greater_than_expected()
+        {
                 thrown.expect(IllegalArgumentException.class);
                 RuleFunctionCeil.create().evaluate(asList("5.9", "6.8"), variableValues, null);
         }
 
         @Test
-        public void throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected() {
+        public void throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected()
+        {
                 thrown.expect(IllegalArgumentException.class);
                 RuleFunctionCeil.create().evaluate(new ArrayList<String>(), variableValues, null);
         }
 
         @Test
-        public void throw_illegal_argument_exception_when_arguments_is_null() {
-                thrown.expect( IllegalArgumentException.class );
+        public void throw_null_pointer_exception_when_arguments_is_null()
+        {
+                thrown.expect( NullPointerException.class );
                 RuleFunctionCeil.create().evaluate(null, variableValues, null);
         }
 }

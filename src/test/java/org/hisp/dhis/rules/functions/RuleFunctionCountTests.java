@@ -100,23 +100,26 @@ public class RuleFunctionCountTests
         }
 
         @Test
-        public void throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected() {
+        public void throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected()
+        {
                 thrown.expect(IllegalArgumentException.class);
-                RuleFunctionCount.create().evaluate(new ArrayList<String>(), variableValues, null);
+                RuleFunctionCount.create().evaluate( new ArrayList<String>(), variableValues, null );
         }
 
         @Test
-        public void throw_illegal_argument_exception_when_arguments_is_null() {
-                thrown.expect(IllegalArgumentException.class);
+        public void throw_null_pointer_exception_when_arguments_is_null()
+        {
+                thrown.expect( NullPointerException.class );
                 RuleFunctionCount.create().evaluate(null, variableValues, null);
         }
 
-        private Map<String, RuleVariableValue> givenAEmptyVariableValues() {
+        private Map<String, RuleVariableValue> givenAEmptyVariableValues()
+        {
                 return new HashMap<>();
         }
 
-        private Map<String, RuleVariableValue> givenAVariableValuesAndOneWithoutValue(
-            String variableNameWithoutValue) {
+        private Map<String, RuleVariableValue> givenAVariableValuesAndOneWithoutValue( String variableNameWithoutValue )
+        {
                 variableValues.put(variableNameWithoutValue, null);
 
                 variableValues.put("test_variable_two",
@@ -127,8 +130,8 @@ public class RuleFunctionCountTests
                 return variableValues;
         }
 
-        private Map<String, RuleVariableValue> givenAVariableValuesAndOneWithTwoCandidates(
-            String variableNameWithValueAndCandidates) {
+        private Map<String, RuleVariableValue> givenAVariableValuesAndOneWithTwoCandidates( String variableNameWithValueAndCandidates )
+        {
                 variableValues.put("test_variable_one", null);
 
                 variableValues.put(variableNameWithValueAndCandidates,
@@ -140,9 +143,9 @@ public class RuleFunctionCountTests
                 return variableValues;
         }
 
-        private Map<String, RuleVariableValue> givenAVariableValuesAndOneWithUndefinedCandidates(
-            String variableNameWithValueAndNonCandidates) {
-                variableValues.put("test_variable_one", null);
+        private Map<String, RuleVariableValue> givenAVariableValuesAndOneWithUndefinedCandidates( String variableNameWithValueAndNonCandidates )
+        {
+                variableValues.put( "test_variable_one", null );
 
                 variableValues.put(variableNameWithValueAndNonCandidates,
                     RuleVariableValueBuilder.create()

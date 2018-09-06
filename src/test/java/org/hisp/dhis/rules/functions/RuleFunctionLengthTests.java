@@ -85,9 +85,9 @@ public class RuleFunctionLengthTests
         }
 
         @Test
-        public void throw_illegal_argument_exception_when_arguments_is_null()
+        public void throw_null_pointer_exception_when_arguments_is_null()
         {
-                thrown.expect( IllegalArgumentException.class );
+                thrown.expect( NullPointerException.class );
                 RuleFunctionLength.create().evaluate( null, variableValues, null );
         }
 }
