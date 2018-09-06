@@ -56,6 +56,14 @@ public class RuleFunctionYearsBetween extends RuleFunction
             throw new IllegalArgumentException( "Two arguments were expected, " + arguments.size() + " were supplied" );
         }
 
+        String startDateString = arguments.get( 0 );
+        String endDateString = arguments.get( 1 );
+
+        if ( isEmpty( startDateString ) || isEmpty( endDateString ) )
+        {
+            return "0";
+        }
+
         LocalDate startDate = null;
         LocalDate endDate = null;
 

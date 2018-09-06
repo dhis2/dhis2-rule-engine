@@ -28,15 +28,20 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.MatcherAssert;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.is;
 
 /**
  * @Author Zubair Asghar.
@@ -45,14 +50,32 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 @RunWith( JUnit4.class )
 public class RuleFunctionConcatenateTests
 {
-    @Test
-    public void evaluateD2Concatenate()
-    {
-        RuleFunction concatenate = RuleFunctionConcatenate.create();
+        @Rule
+        public ExpectedException thrown = ExpectedException.none();
 
-        String concatenatedString = concatenate.evaluate( Arrays.asList( "firstName", "+", "lastName" ),
-                new HashMap<String, RuleVariableValue>(), null);
+        private Map<String, RuleVariableValue> variableValues = new HashMap<>();
 
-        assertThat( concatenatedString ).isEqualTo( "'firstName+lastName'" );
-    }
+        @Test
+        public void evaluateD2Concatenate()
+        {
+                RuleFunction concatenateFunction = RuleFunctionConcatenate.create();
+
+                MatcherAssert.assertThat( concatenateFunction.evaluate( asList( "hello" ), variableValues, null ),
+                    is( "'hello'" ) );
+                MatcherAssert.assertThat( concatenateFunction.evaluate( asList( "hello", null ), variableValues, null ),
+                    is( "'hello'" ) );
+                MatcherAssert.assertThat(
+                    concatenateFunction.evaluate( Arrays.<String>asList( null, null ), variableValues, null ),
+                    is( "''" ) );
+                MatcherAssert.assertThat(
+                    concatenateFunction.evaluate( asList( "hello", " ", "there", "!" ), variableValues, null ),
+                    is( "'hello there!'" ) );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_arguments_is_null()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionConcatenate.create().evaluate( null, variableValues, null );
+        }
 }

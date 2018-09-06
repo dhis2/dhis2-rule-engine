@@ -28,15 +28,21 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.MatcherAssert;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.is;
 
 /**
  * @Author Zubair Asghar.
@@ -45,24 +51,84 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 @RunWith( JUnit4.class )
 public class RuleFunctionSplitTests
 {
-    @Test
-    public void evaluateD2Split()
-    {
-        RuleFunctionSplit functionSplit = RuleFunctionSplit.create();
+        @Rule
+        public ExpectedException thrown = ExpectedException.none();
 
-        String token = functionSplit.evaluate( Arrays.asList( "test-string-for-split", "-", "2" ),
-                new HashMap<String, RuleVariableValue>(), null);
+        private Map<String, RuleVariableValue> variableValues = new HashMap<>();
 
-        assertThat( token ).isEqualTo( "'for'" );
+        @Test
+        public void return_empty_string_for_null_inputs()
+        {
+                RuleFunction splitFunction = RuleFunctionSplit.create();
 
-        token = functionSplit.evaluate( Arrays.asList( "test-string-for-split", "-", "3" ),
-                new HashMap<String, RuleVariableValue>(), null);
+                MatcherAssert.assertThat( splitFunction.evaluate( asList( null, null, "0" ), variableValues, null ), is( "" ) );
+                MatcherAssert.assertThat( splitFunction.evaluate( asList( "", null, "0" ), variableValues, null ), is( "" ) );
+                MatcherAssert.assertThat( splitFunction.evaluate( asList( null, "", "0" ), variableValues, null ), is( "" ) );
+        }
 
-        assertThat( token ).isEqualTo( "'split'" );
+        @Test
+        public void return_the_nth_field_of_the_splited_first_argument()
+        {
+                RuleFunction splitFunction = RuleFunctionSplit.create();
 
-        token = functionSplit.evaluate( Arrays.asList( "test-string-for-split", "-", "4" ),
-                new HashMap<String, RuleVariableValue>(), null);
+                MatcherAssert
+                    .assertThat( splitFunction.evaluate( asList( "a,b,c", ",", "0" ), variableValues, null ), is( "'a'" ) );
+                MatcherAssert
+                    .assertThat( splitFunction.evaluate( asList( "a,b,c", ",", "2" ), variableValues, null ), is( "'c'" ) );
+                MatcherAssert
+                    .assertThat( splitFunction.evaluate( asList( "a,;b,;c", ",;", "1" ), variableValues, null ), is( "'b'" ) );
+        }
 
-        assertThat( token ).isEqualTo( "" );
-    }
+        @Test
+        public void return_empty_string_if_field_index_is_out_of_bounds()
+        {
+                RuleFunction splitFunction = RuleFunctionSplit.create();
+
+                MatcherAssert
+                    .assertThat( splitFunction.evaluate( asList( "a,b,c", ",", "10" ), variableValues, null ), is( "" ) );
+                MatcherAssert
+                    .assertThat( splitFunction.evaluate( asList( "a,b,c", ",", "-1" ), variableValues, null ), is( "" ) );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_if_position_is_a_text()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunction splitFunction = RuleFunctionSplit.create();
+
+                splitFunction.evaluate(
+                    Arrays.asList( "test_variable_one", "variable", "text" ), variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_if_first_parameter_is_empty_list()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunction splitFunction = RuleFunctionSplit.create();
+
+                splitFunction.evaluate( new ArrayList<>(), variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_argument_count_is_greater_than_expected()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionSplit.create().evaluate(
+                    asList( "test_variable_one", ",", "1", "2" ), variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_argument_count_is_lower_than_expected()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionSplit.create().evaluate(
+                    asList( "test_variable_one", "," ), variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_arguments_is_null()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionSplit.create().evaluate( null, variableValues, null );
+        }
 }

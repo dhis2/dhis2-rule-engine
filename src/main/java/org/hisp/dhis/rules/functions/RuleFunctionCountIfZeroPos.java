@@ -37,51 +37,65 @@ import java.util.stream.Collectors;
 
 /**
  * @Author Zubair Asghar.
- *
+ * <p>
  * Counts the number of values that is zero or positive entered for the source field in the argument.
  * The source field parameter is the name of one of the defined source fields in the program.
  */
-public class RuleFunctionCountIfZeroPos extends RuleFunction
+public class RuleFunctionCountIfZeroPos
+    extends RuleFunction
 {
-    public static final String D2_COUNT_IF_ZERO_POS = "d2:countIfZeroPos";
+        public static final String D2_COUNT_IF_ZERO_POS = "d2:countIfZeroPos";
 
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() != 1 )
+        @Nonnull
+        @Override
+        public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
+            Map<String, List<String>> supplementaryData )
         {
-            throw new IllegalArgumentException( "One arguments were expected, " +
-                    arguments.size() + " were supplied" );
+                if ( valueMap == null )
+                {
+                        throw new IllegalArgumentException( "valueMap is expected" );
+                }
+
+                if ( arguments.size() != 1 )
+                {
+                        throw new IllegalArgumentException( "One arguments were expected, " +
+                            arguments.size() + " were supplied" );
+                }
+
+                RuleVariableValue value = valueMap.get( arguments.get( 0 ) );
+
+                if ( value != null )
+                {
+                        List<String> candidates = value.candidates();
+
+                        Integer count = candidates.stream().filter( this::isZeroPos ).collect( Collectors.toList() ).size();
+
+                        return String.valueOf( count );
+                }
+                else
+                {
+                        return "0";
+                }
         }
 
-        RuleVariableValue value = valueMap.get( arguments.get( 0 ) );
-
-        List<String> candidates = value.candidates();
-
-        Integer count = candidates.stream().filter( this::isZeroPos ).collect( Collectors.toList() ).size();
-
-        return String.valueOf( count );
-    }
-
-    public static RuleFunctionCountIfZeroPos create()
-    {
-        return new RuleFunctionCountIfZeroPos();
-    }
-
-    private boolean isZeroPos( String input )
-    {
-        Double value;
-
-        try
+        public static RuleFunctionCountIfZeroPos create()
         {
-            value = Double.parseDouble( input );
-        }
-        catch ( NumberFormatException e )
-        {
-            throw new IllegalArgumentException( "Invalid number format" );
+                return new RuleFunctionCountIfZeroPos();
         }
 
-        return value >= 0;
-    }
+        private boolean isZeroPos( String input )
+        {
+                Double value;
+
+                try
+                {
+                        value = Double.parseDouble( input );
+                }
+                catch ( NumberFormatException e )
+                {
+                        throw new IllegalArgumentException( "Invalid number format" );
+                }
+
+                return value >= 0;
+        }
 }

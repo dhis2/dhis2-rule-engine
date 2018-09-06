@@ -31,28 +31,22 @@ package org.hisp.dhis.rules.functions;
 import org.hamcrest.MatcherAssert;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueBuilder;
-import org.hisp.dhis.rules.models.RuleValueType;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.util.Arrays.asList;
-import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.assertj.core.api.Java6Assertions.fail;
 import static org.hamcrest.CoreMatchers.is;
 
-/**
- * @Author Zubair Asghar.
- */
-
 @RunWith( JUnit4.class )
-public class RuleFunctionCountIfZeroPosTests
+public class RuleFunctionCountIfValueTests
 {
         @Rule
         public ExpectedException thrown = ExpectedException.none();
@@ -62,82 +56,99 @@ public class RuleFunctionCountIfZeroPosTests
         @Test
         public void return_zero_for_non_existing_variable()
         {
-                RuleFunction ifZeroPosFunction = RuleFunctionCountIfZeroPos.create();
+                RuleFunction countIfValueFunction = RuleFunctionCountIfValue.create();
 
                 variableValues = givenAEmptyVariableValues();
 
-                MatcherAssert.assertThat( ifZeroPosFunction.evaluate(
-                    asList( "nonexisting" ), variableValues, null ), is( "0" ) );
+                MatcherAssert.assertThat( countIfValueFunction.evaluate(
+                    asList( "non existing variable", "value" ), variableValues, null ), is( "0" ) );
+        }
+
+        @Test
+        public void return_zero_for_for_empty_value_to_compare()
+        {
+                RuleFunction countIfValueFunction = RuleFunctionCountIfValue.create();
+
+                variableValues = givenAEmptyVariableValues();
+
+                MatcherAssert.assertThat( countIfValueFunction.evaluate(
+                    asList( "var1", null ), variableValues, null ), is( "0" ) );
+
+                MatcherAssert.assertThat( countIfValueFunction.evaluate(
+                    asList( "var1", "" ), variableValues, null ), is( "0" ) );
         }
 
         @Test
         public void return_zero_for_variable_without_values()
         {
-                RuleFunction ifZeroPosFunction = RuleFunctionCountIfZeroPos.create();
+                RuleFunction countIfValueFunction = RuleFunctionCountIfValue.create();
 
                 String variableName = "non_value_var";
 
                 variableValues = givenAVariableValuesAndOneWithoutValue( variableName );
 
-                MatcherAssert.assertThat( ifZeroPosFunction.evaluate(
-                    asList( variableName ), variableValues, null ), is( "0" ) );
+                MatcherAssert.assertThat( countIfValueFunction.evaluate(
+                    asList( variableName, "valueToCompare" ), variableValues, null ), is( "0" ) );
         }
 
         @Test
-        public void return_size_of_zero_or_positive_values_for_variable_with_value_and_candidates()
+        public void return_size_of_matched_values_for_variable_with_value_and_candidates()
         {
-                RuleFunction ifZeroPosFunction = RuleFunctionCountIfZeroPos.create();
+                RuleFunction countIfValueFunction = RuleFunctionCountIfValue.create();
 
                 String variableName = "with_value_var";
+                String value = "valueA";
 
-                variableValues = givenAVariableValuesAndOneWithCandidates(
-                    variableName, Arrays.asList( "0", "-1", "2" ) );
+                variableValues = givenAVariableValuesAndOneWithTwoExpectedCountCandidates(
+                    variableName, value );
 
-                MatcherAssert.assertThat( ifZeroPosFunction.evaluate(
-                    asList( variableName ), variableValues, null ), is( "2" ) );
+                MatcherAssert.assertThat( countIfValueFunction.evaluate(
+                    asList( variableName, value ), variableValues, null ), is( "2" ) );
         }
 
         @Test
-        public void
-        return_zero_for_non_zero_or_positive_values_for_variable_with_value_and_candidates()
+        public void return_zero_for_variable_with_no_matched_value_and_candidates()
         {
-                RuleFunction ifZeroPosFunction = RuleFunctionCountIfZeroPos.create();
+                RuleFunction countIfValueFunction = RuleFunctionCountIfValue.create();
 
                 String variableName = "with_value_var";
+                String value = "valueA";
 
-                variableValues = givenAVariableValuesAndOneWithCandidates(
-                    variableName, Arrays.asList( "-1", "-6" ) );
+                variableValues = givenAVariableValuesAndOneWithTwoExpectedCountCandidates(
+                    variableName, value );
 
-                MatcherAssert.assertThat( ifZeroPosFunction.evaluate(
-                    asList( variableName ), variableValues, null ), is( "0" ) );
+                MatcherAssert.assertThat( countIfValueFunction.evaluate(
+                    asList( variableName, "NoMatchedValue" ), variableValues, null ), is( "0" ) );
         }
 
         @Test
-        public void
-        return_zero_for_non_zero_or_positive_value_for_variable_with_value_and_without_candidates()
+        public void return_zero_for_no_matched_variable_with_value_and_without_candidates()
         {
-                RuleFunction ifZeroPosFunction = RuleFunctionCountIfZeroPos.create();
+                RuleFunction countIfValueFunction = RuleFunctionCountIfValue.create();
 
                 String variableName = "with_value_var";
+                String value = "valueA";
 
-                variableValues = givenAVariableValuesAndOneWithUndefinedCandidates( variableName, "-10" );
+                variableValues = givenAVariableValuesAndOneWithUndefinedCandidates(
+                    variableName, value );
 
-                MatcherAssert.assertThat( ifZeroPosFunction.evaluate(
-                    asList( variableName ), variableValues, null ), is( "0" ) );
+                MatcherAssert.assertThat( countIfValueFunction.evaluate(
+                    asList( variableName, "NoMatchedValue" ), variableValues, null ), is( "0" ) );
         }
 
         @Test
         public void throw_illegal_argument_exception_when_variable_map_is_null()
         {
                 thrown.expect( IllegalArgumentException.class );
-                RuleFunctionCountIfZeroPos.create().evaluate( asList( "variable_name" ), null, null );
+                RuleFunctionCountIfValue.create().evaluate( asList( "variable_name", "Value_to_compare" ),
+                    null, null );
         }
 
         @Test
         public void throw_illegal_argument_exception_when_argument_count_is_greater_than_expected()
         {
                 thrown.expect( IllegalArgumentException.class );
-                RuleFunctionCountIfZeroPos.create().evaluate( asList( "variable_name", "6.8" ),
+                RuleFunctionCountIfValue.create().evaluate( asList( "variable_name", "ded", "5" ),
                     variableValues, null );
         }
 
@@ -145,14 +156,21 @@ public class RuleFunctionCountIfZeroPosTests
         public void throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected()
         {
                 thrown.expect( IllegalArgumentException.class );
-                RuleFunctionCountIfZeroPos.create().evaluate( new ArrayList<String>(), variableValues, null );
+                RuleFunctionCountIfValue.create().evaluate( asList( "variable_name" ), variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_arguments_is_empty()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionCountIfValue.create().evaluate( new ArrayList<String>(), variableValues, null );
         }
 
         @Test
         public void throw_illegal_argument_exception_when_arguments_is_null()
         {
                 thrown.expect( IllegalArgumentException.class );
-                RuleFunctionCountIfZeroPos.create().evaluate( null, variableValues, null );
+                RuleFunctionCountIfValue.create().evaluate( null, variableValues, null );
         }
 
         private Map<String, RuleVariableValue> givenAEmptyVariableValues()
@@ -173,28 +191,28 @@ public class RuleFunctionCountIfZeroPosTests
                 return variableValues;
         }
 
-        private Map<String, RuleVariableValue> givenAVariableValuesAndOneWithCandidates(
-            String variableNameWithValueAndCandidates, List<String> candidates )
+        private Map<String, RuleVariableValue> givenAVariableValuesAndOneWithTwoExpectedCountCandidates(
+            String variableNameWithValueAndCandidates, String valueToCompare )
         {
                 variableValues.put( "test_variable_one", null );
 
                 variableValues.put( variableNameWithValueAndCandidates,
                     RuleVariableValueBuilder.create()
-                        .withValue( candidates.get( 0 ) )
-                        .withCandidates( candidates )
+                        .withValue( valueToCompare )
+                        .withCandidates( Arrays.asList( "one", valueToCompare, valueToCompare ) )
                         .build() );
 
                 return variableValues;
         }
 
         private Map<String, RuleVariableValue> givenAVariableValuesAndOneWithUndefinedCandidates(
-            String variableNameWithValueAndNonCandidates, String value )
+            String variableNameWithValueAndNonCandidates, String valueToCompare )
         {
                 variableValues.put( "test_variable_one", null );
 
                 variableValues.put( variableNameWithValueAndNonCandidates,
                     RuleVariableValueBuilder.create()
-                        .withValue( value )
+                        .withValue( valueToCompare )
                         .build() );
 
                 return variableValues;

@@ -33,27 +33,31 @@ import org.hisp.dhis.rules.RuleVariableValue;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @Author Zubair Asghar.
  */
-public class RuleFunctionConcatenate extends RuleFunction
+public class RuleFunctionConcatenate
+    extends RuleFunction
 {
-    public static final String D2_CONCATENATE = "d2:concatenate";
+        public static final String D2_CONCATENATE = "d2:concatenate";
 
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        StringBuilder builder = new StringBuilder();
+        @Nonnull
+        @Override
+        public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
+            Map<String, List<String>> supplementaryData )
+        {
+                StringBuilder builder = new StringBuilder();
 
-        arguments.forEach( builder::append );
+                arguments.stream().filter( Objects::nonNull ).collect( Collectors.toList() ).forEach( builder::append );
 
-        return wrap( builder.toString() );
-    }
+                return wrap( builder.toString() );
+        }
 
-    public static RuleFunctionConcatenate create()
-    {
-        return new RuleFunctionConcatenate();
-    }
+        public static RuleFunctionConcatenate create()
+        {
+                return new RuleFunctionConcatenate();
+        }
 }

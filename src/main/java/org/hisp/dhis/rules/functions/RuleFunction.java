@@ -101,4 +101,9 @@ public abstract class RuleFunction
 
                 return "'"+input+"'";
         }
+
+        static boolean isEmpty( String input )
+        {
+                return input == null || input.length() == 0;
+        }
 }

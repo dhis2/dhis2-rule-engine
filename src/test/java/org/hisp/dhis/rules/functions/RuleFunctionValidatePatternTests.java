@@ -28,15 +28,20 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.MatcherAssert;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.is;
 
 /**
  * @Author Zubair Asghar.
@@ -45,24 +50,80 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 @RunWith( JUnit4.class )
 public class RuleFunctionValidatePatternTests
 {
-    @Test
-    public void evaluateD2Validate()
-    {
-        RuleFunction validatePattern = RuleFunctionValidatePattern.create();
+        @Rule
+        public ExpectedException thrown = ExpectedException.none();
 
-        String matched = validatePattern.evaluate( Arrays.asList( "4400555666", ".*555.*" ),
-                new HashMap<String, RuleVariableValue>(), null);
+        private Map<String, RuleVariableValue> variableValues = new HashMap<>();
 
-        assertThat( matched ).isEqualTo( "'true'" );
+        @Test
+        public void return_true_if_pattern_match()
+        {
+                RuleFunction validatePattern = RuleFunctionValidatePattern.create();
 
-        matched = validatePattern.evaluate( Arrays.asList( "xman2", "[^\\\\d]*" ),
-                new HashMap<String, RuleVariableValue>(), null);
+                MatcherAssert.assertThat( validatePattern.evaluate(
+                    asList( "123", "123" ), variableValues, null ), is( "'true'" ) );
 
-        assertThat( matched ).isEqualTo( "'true'" );
+                MatcherAssert.assertThat( validatePattern.evaluate(
+                    asList( "27123456789", "27\\d{2}\\d{3}\\d{4}" ), variableValues, null ), is( "'true'" ) );
 
-        matched = validatePattern.evaluate( Arrays.asList( "4400555666", ".*222.*" ),
-                new HashMap<String, RuleVariableValue>(), null);
+                MatcherAssert.assertThat( validatePattern.evaluate(
+                    asList( "27123456789", "27\\d{9}" ), variableValues, null ), is( "'true'" ) );
 
-        assertThat( matched ).isEqualTo( "'false'" );
-    }
+                MatcherAssert.assertThat( validatePattern.evaluate(
+                    asList( "abc123", "abc123" ), variableValues, null ), is( "'true'" ) );
+
+                MatcherAssert.assertThat( validatePattern.evaluate(
+                    asList( "9999/99/9", "\\d{4}/\\d{2}/\\d" ), variableValues, null ), is( "'true'" ) );
+
+                MatcherAssert.assertThat( validatePattern.evaluate(
+                    asList( "9999/99/9", "[0-9]{4}/[0-9]{2}/[0-9]" ), variableValues, null ), is( "'true'" ) );
+        }
+
+        @Test
+        public void return_false_for_non_matching_pairs()
+        {
+                RuleFunction validatePattern = RuleFunctionValidatePattern.create();
+
+                MatcherAssert.assertThat( validatePattern.evaluate(
+                    asList( "1999/99/9", "\\[9]{4}/\\d{2}/\\d" ), variableValues, null ), is( "'false'" ) );
+
+                MatcherAssert.assertThat( validatePattern.evaluate(
+                    asList( "9999/99/", "[0-9]{4}/[0-9]{2}/[0-9]" ), variableValues, null ), is( "'false'" ) );
+
+                MatcherAssert.assertThat( validatePattern.evaluate(
+                    asList( "abc123", "xyz" ), variableValues, null ), is( "'false'" ) );
+
+                MatcherAssert.assertThat( validatePattern.evaluate(
+                    asList( "abc123", "^bc" ), variableValues, null ), is( "'false'" ) );
+
+                MatcherAssert.assertThat( validatePattern.evaluate(
+                    asList( "abc123", "abc12345" ), variableValues, null ), is( "'false'" ) );
+
+                MatcherAssert.assertThat( validatePattern.evaluate(
+                    asList( "123", "567" ), variableValues, null ), is( "'false'" ) );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_argument_count_is_greater_than_expected()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionValidatePattern.create().evaluate(
+                    Arrays.asList( "\\d{4}/\\d{2}/\\d", "9999/99/9", "2016-01-01" ),
+                    variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionValidatePattern.create().evaluate( Arrays.asList( "\\d{4}/\\d{2}/\\d" ),
+                    variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_arguments_is_null()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionValidatePattern.create().evaluate( null, variableValues, null );
+        }
 }

@@ -28,7 +28,6 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hamcrest.MatcherAssert;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.junit.Rule;
 import org.junit.Test;
@@ -42,14 +41,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.core.Is.is;
-
-/**
- * @Author Zubair Asghar.
- */
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith( JUnit4.class )
-public class RuleFunctionOizpTests
+public class RuleFunctionLengthTests
 {
         @Rule
         public ExpectedException thrown = ExpectedException.none();
@@ -57,49 +53,41 @@ public class RuleFunctionOizpTests
         private Map<String, RuleVariableValue> variableValues = new HashMap<>();
 
         @Test
-        public void return_one_for_non_negative_argument()
+        public void return_length_of_argument()
         {
-                RuleFunction oizp = RuleFunctionOizp.create();
+                RuleFunction lengthFunction = RuleFunctionLength.create();
 
-                MatcherAssert.assertThat( oizp.evaluate( asList( "0" ), variableValues, null ), is( "1" ) );
-                MatcherAssert.assertThat( oizp.evaluate( asList( "1" ), variableValues, null ), is( "1" ) );
-                MatcherAssert.assertThat( oizp.evaluate( asList( "10" ), variableValues, null ), is( "1" ) );
+                assertThat( lengthFunction.evaluate( Arrays.asList( "" ), variableValues, null ),
+                    is( "0" ) );
+
+                assertThat( lengthFunction.evaluate( Arrays.asList( "abc" ), variableValues, null ),
+                    is( "3" ) );
+
+                assertThat( lengthFunction.evaluate( Arrays.asList( "abcdef" ), variableValues, null ),
+                    is( "6" ) );
         }
 
         @Test
-        public void return_zero_for_negative_argument()
-        {
-                RuleFunction oizp = RuleFunctionOizp.create();
-
-                MatcherAssert.assertThat( oizp.evaluate( asList( "-1" ), variableValues, null ), is( "0" ) );
-                MatcherAssert.assertThat( oizp.evaluate( asList( "-10" ), variableValues, null ), is( "0" ) );
-        }
-
-        @Test
-        public void throw_illegal_argument_exception_for_non_number_argument()
+        public void throw_illegal_argument_exception_if_first_parameter_is_empty_list()
         {
                 thrown.expect( IllegalArgumentException.class );
-                RuleFunctionOizp.create().evaluate( asList( "non_number" ), variableValues, null );
+                RuleFunction lengthFunction = RuleFunctionLength.create();
+
+                lengthFunction.evaluate( new ArrayList<>(), variableValues, null );
         }
 
         @Test
         public void throw_illegal_argument_exception_when_argument_count_is_greater_than_expected()
         {
                 thrown.expect( IllegalArgumentException.class );
-                RuleFunctionOizp.create().evaluate( asList( "5.9", "6.8" ), variableValues, null );
-        }
-
-        @Test
-        public void throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected()
-        {
-                thrown.expect( IllegalArgumentException.class );
-                RuleFunctionOizp.create().evaluate( new ArrayList<>(), variableValues, null );
+                RuleFunctionLength.create().evaluate(
+                    asList( "cdcdcd", "2" ), variableValues, null );
         }
 
         @Test
         public void throw_illegal_argument_exception_when_arguments_is_null()
         {
                 thrown.expect( IllegalArgumentException.class );
-                RuleFunctionOizp.create().evaluate( null, variableValues, null );
+                RuleFunctionLength.create().evaluate( null, variableValues, null );
         }
 }

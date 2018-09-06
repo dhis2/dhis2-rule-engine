@@ -28,17 +28,20 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.MatcherAssert;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.assertj.core.api.Java6Assertions.fail;
+import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.is;
 
 /**
  * @Author Zubair Asghar.
@@ -47,40 +50,43 @@ import static org.assertj.core.api.Java6Assertions.fail;
 @RunWith( JUnit4.class )
 public class RuleFunctionModulusTests
 {
-    @Test
-    public void evaluateMustReturnModulusValue()
-    {
-        RuleFunctionModulus modulusFunction = RuleFunctionModulus.create();
+        @Rule
+        public ExpectedException thrown = ExpectedException.none();
 
-        String modulusValue = modulusFunction.evaluate( Arrays.asList( "3", "2" ), new HashMap<String, RuleVariableValue>(), null );
+        private Map<String, RuleVariableValue> variableValues = new HashMap<>();
 
-        assertThat( modulusValue ).isEqualTo( "1.0" );
-    }
-
-    @Test
-    public void evaluateMustFailOnWrongArgumentCount()
-    {
-        try
+        @Test
+        public void return_argument_rounded_down_to_nearest_whole_number()
         {
-            RuleFunctionModulus.create().evaluate( Arrays.asList( "5.9"  ),
-                    new HashMap<String, RuleVariableValue>(), null);
-            fail( "IllegalArgumentException was expected, but nothing was thrown." );
-        }
-        catch ( IllegalArgumentException illegalArgumentException )
-        {
-            // noop
+                RuleFunction modulusFunction = RuleFunctionModulus.create();
+
+                MatcherAssert.assertThat( modulusFunction.evaluate( asList( "0", "2" ), variableValues, null ), is( "0.0" ) );
+                MatcherAssert.assertThat( modulusFunction.evaluate( asList( "11", "3" ), variableValues, null ), is( "2.0" ) );
+                MatcherAssert
+                    .assertThat( modulusFunction.evaluate( asList( "-11", "3" ), variableValues, null ), is( "-2.0" ) );
         }
 
-        try
+        @Test
+        public void return_NaN_when_invalid_operations()
         {
-            RuleFunctionModulus.create().evaluate( new ArrayList<String>(),
-                    new HashMap<String, RuleVariableValue>(), null);
-            fail( "IllegalArgumentException was expected, but nothing was thrown." );
-        }
-        catch ( IllegalArgumentException illegalArgumentException )
-        {
-            // noop
-        }
-    }
+                RuleFunction modulusFunction = RuleFunctionModulus.create();
 
+                MatcherAssert.assertThat( modulusFunction.evaluate( asList( "2", "0" ), variableValues, null ), is( "NaN" ) );
+                MatcherAssert.assertThat( modulusFunction.evaluate( asList( "bad number", "bad number" ), variableValues, null ), is( "NaN" ) );
+                MatcherAssert.assertThat( modulusFunction.evaluate( asList( null, null ), variableValues, null ), is( "NaN" ) );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_argument_count_is_greater_than_expected()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionModulus.create().evaluate( asList( "5.9", "6.8", "3.4" ), variableValues, null );
+        }
+
+        @Test
+        public void throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleFunctionModulus.create().evaluate( new ArrayList<>(), variableValues, null );
+        }
 }
