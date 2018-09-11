@@ -52,6 +52,7 @@ class RuleEngineExecution
 
                         try
                         {
+                                log.info( "Evaluating programrule: " + rule );
                                 // send expression to evaluator
                                 if ( Boolean.valueOf( process( rule.condition() ) ) )
                                 {
@@ -142,6 +143,8 @@ class RuleEngineExecution
                 {
                         String expressionWithVariableValues = bindVariableValues( expression );
                         String expressionWithFunctionValues = bindFunctionValues( expressionWithVariableValues );
+
+                        log.info( "Evaluating expression: " + expressionWithFunctionValues );
                         return expressionEvaluator.evaluate( expressionWithFunctionValues );
                 }
 
