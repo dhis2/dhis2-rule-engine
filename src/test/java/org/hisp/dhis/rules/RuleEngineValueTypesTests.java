@@ -21,7 +21,7 @@ public class RuleEngineValueTypesTests
         {
                 RuleAction ruleAction = RuleActionDisplayKeyValuePair
                     .createForFeedback( "test_action_content", "#{test_variable}" );
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
+                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
                 RuleVariable ruleVariable = RuleVariableCurrentEvent
                     .create( "test_variable", "test_data_element", RuleValueType.BOOLEAN );
 
@@ -42,7 +42,7 @@ public class RuleEngineValueTypesTests
         {
                 RuleAction ruleAction = RuleActionDisplayKeyValuePair
                     .createForFeedback( "test_action_content", "#{test_variable}" );
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
+                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
                 RuleVariable ruleVariable = RuleVariableCurrentEvent
                     .create( "test_variable", "test_data_element", RuleValueType.NUMERIC );
 
@@ -63,7 +63,7 @@ public class RuleEngineValueTypesTests
         {
                 RuleAction ruleAction = RuleActionDisplayKeyValuePair
                     .createForFeedback( "test_action_content", "#{test_variable}" );
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ) );
+                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
                 RuleVariable ruleVariable = RuleVariableCurrentEvent
                     .create( "test_variable", "test_data_element", RuleValueType.TEXT );
 

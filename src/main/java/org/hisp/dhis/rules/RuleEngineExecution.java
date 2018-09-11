@@ -52,7 +52,7 @@ class RuleEngineExecution
 
                         try
                         {
-                                log.info( "Evaluating programrule: " + rule );
+                                log.info( "Evaluating programrule: " + rule.name() );
                                 // send expression to evaluator
                                 if ( Boolean.valueOf( process( rule.condition() ) ) )
                                 {

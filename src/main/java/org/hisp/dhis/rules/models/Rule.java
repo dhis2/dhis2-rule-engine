@@ -11,6 +11,8 @@ import java.util.List;
 @AutoValue
 public abstract class Rule
 {
+        @Nullable
+        public abstract String name();
 
         @Nullable
         public abstract String programStage();
@@ -26,9 +28,9 @@ public abstract class Rule
 
         @Nonnull
         public static Rule create( @Nullable String programStage, @Nullable Integer priority,
-            @Nonnull String condition, @Nonnull List<RuleAction> actions )
+                                  @Nonnull String condition, @Nonnull List<RuleAction> actions, @Nullable String name )
         {
-                return new AutoValue_Rule( programStage, priority, condition,
+                return new AutoValue_Rule( name, programStage, priority, condition,
                     Collections.unmodifiableList( new ArrayList<>( actions ) ) );
         }
 }
