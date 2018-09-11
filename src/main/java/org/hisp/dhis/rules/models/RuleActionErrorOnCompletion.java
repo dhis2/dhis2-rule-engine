@@ -11,6 +11,7 @@ public abstract class RuleActionErrorOnCompletion
 {
 
         @Nonnull
+        @SuppressWarnings( "PMD.NPathComplexity" )
         public static RuleActionErrorOnCompletion create( @Nullable String content,
             @Nullable String data, @Nullable String field )
         {
@@ -20,6 +21,7 @@ public abstract class RuleActionErrorOnCompletion
                             " must not be null at the same time" );
                 }
 
-                return new AutoValue_RuleActionErrorOnCompletion( content, data, field );
+                return new AutoValue_RuleActionErrorOnCompletion( content == null ? "" : content,
+                    data == null ? "" : data, field == null ? "" : field );
         }
 }

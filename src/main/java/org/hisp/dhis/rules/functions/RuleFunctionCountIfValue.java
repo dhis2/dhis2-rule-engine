@@ -37,22 +37,32 @@ import java.util.Map;
 
 /**
  * @Author Zubair Asghar.
+ * <p>
+ * Counts the number of matching values that is entered for the source field in the first argument. Only occurrences that matches the second argument is counted.
+ * The source field parameter is the name of one of the defined source fields in the program.
  */
-public class RuleFunctionCountIfValue extends RuleFunction
+public class RuleFunctionCountIfValue
+        extends RuleFunction
 {
     static final String D2_COUNT_IF_VALUE = "d2:countIfValue";
 
     @Nonnull
     @Override
-    public String evaluate(@Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
+                            Map<String, List<String>> supplementaryData )
     {
+        if ( valueMap == null )
+        {
+            throw new IllegalArgumentException( "valueMap is expected" );
+        }
+
         if ( arguments.size() != 2 )
         {
             throw new IllegalArgumentException( "Two arguments were expected, " +
                     arguments.size() + " were supplied" );
         }
 
-        return wrap( countIfValue( arguments, valueMap ) );
+        return countIfValue( arguments, valueMap );
     }
 
     @Nonnull
@@ -64,6 +74,7 @@ public class RuleFunctionCountIfValue extends RuleFunction
     /**
      * Function which will return the count of argument[0].
      * Program rule variable at argument[0] will only be counted if it satisfy to condition which is at argument[1]
+     *
      * @param arguments arguments for this function. First is the name of program rule variable and second is the condition
      * @param valueMap  key value pair containing values for each variable
      * @return count of program rule variable
@@ -74,6 +85,13 @@ public class RuleFunctionCountIfValue extends RuleFunction
 
         RuleVariableValue variableValue = valueMap.get( ruleVariableName );
 
-        return Integer.toString( Collections.frequency( variableValue.candidates(), arguments.get( 1 ) ) );
+        if ( variableValue != null )
+        {
+            return Integer.toString( Collections.frequency( variableValue.candidates(), arguments.get( 1 ) ) );
+        }
+        else
+        {
+            return "0";
+        }
     }
 }

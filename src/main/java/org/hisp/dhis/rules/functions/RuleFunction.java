@@ -34,10 +34,60 @@ public abstract class RuleFunction
                         return RuleFunctionAddDays.create();
                 case RuleFunctionCountIfValue.D2_COUNT_IF_VALUE:
                         return RuleFunctionCountIfValue.create();
+                case RuleFunctionRound.D2_ROUND:
+                        return RuleFunctionRound.create();
+                case RuleFunctionModulus.D2_MODULUS:
+                        return RuleFunctionModulus.create();
+                case RuleFunctionLength.D2_LENGTH:
+                        return RuleFunctionLength.create();
+                case RuleFunctionSplit.D2_SPLIT:
+                        return RuleFunctionSplit.create();
+                case RuleFunctionCount.D2_COUNT:
+                        return RuleFunctionCount.create();
+                case RuleFunctionSubString.D2_SUBSTRING:
+                        return RuleFunctionSubString.create();
+                case RuleFunctionMonthsBetween.D2_MONTHS_BETWEEN:
+                        return RuleFunctionMonthsBetween.create();
+                case RuleFunctionYearsBetween.D2_YEARS_BETWEEN:
+                        return RuleFunctionYearsBetween.create();
+                case RuleFunctionZpvc.D2_ZPVC:
+                        return RuleFunctionZpvc.create();
+                case RuleFunctionZing.D2_ZING:
+                        return RuleFunctionZing.create();
+                case RuleFunctionOizp.D2_OIZP:
+                        return RuleFunctionOizp.create();
+                case RuleFunctionCountIfZeroPos.D2_COUNT_IF_ZERO_POS:
+                        return RuleFunctionCountIfZeroPos.create();
+                case RuleFunctionLeft.D2_LEFT:
+                        return RuleFunctionLeft.create();
+                case RuleFunctionRight.D2_RIGHT:
+                        return RuleFunctionRight.create();
+                case RuleFunctionValidatePattern.D2_VALIDATE_PATTERN:
+                        return RuleFunctionValidatePattern.create();
+                case RuleFunctionConcatenate.D2_CONCATENATE:
+                        return RuleFunctionConcatenate.create();
                 case RuleFunctionInOrgUnitGroup.D2_IN_ORG_UNIT_GROUP:
                         return RuleFunctionInOrgUnitGroup.create();
                 default:
                         return null;
+                }
+        }
+
+        @Nonnull
+        public double toDouble( @Nullable final String str, final double defaultValue )
+        {
+                if ( str == null )
+                {
+                        return defaultValue;
+                }
+
+                try
+                {
+                        return Double.parseDouble( str );
+                }
+                catch ( final NumberFormatException nfe )
+                {
+                        return defaultValue;
                 }
         }
 
@@ -50,5 +100,10 @@ public abstract class RuleFunction
                 }
 
                 return "'"+input+"'";
+        }
+
+        static boolean isEmpty( String input )
+        {
+                return input == null || input.length() == 0;
         }
 }

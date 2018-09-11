@@ -46,6 +46,11 @@ abstract class RuleFunctionDaysBetween
         @SuppressWarnings( "PMD.UnnecessaryWrapperObjectCreation" )
         static Integer daysBetween( String start, String end )
         {
+                if ( isEmpty( start ) || isEmpty( end ) )
+                {
+                        return 0;
+                }
+
                 SimpleDateFormat format = new SimpleDateFormat();
                 format.applyPattern( DATE_PATTERN );
 
