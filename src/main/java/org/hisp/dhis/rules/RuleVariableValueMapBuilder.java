@@ -542,7 +542,6 @@ final class RuleVariableValueMapBuilder
                 }
 
                 RuleVariableValue variableValue;
-
                 if ( calculatedValueMap.containsKey( ruleEnrollment.enrollment() ) )
                 {
                         if ( calculatedValueMap.get( ruleEnrollment.enrollment() ).containsKey( variable.name() ) )

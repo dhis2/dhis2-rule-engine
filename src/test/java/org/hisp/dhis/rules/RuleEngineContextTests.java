@@ -145,17 +145,6 @@ public class RuleEngineContextTests
         }
 
         @Test
-        public void shouldThrowExceptionIfCalculatedValueMapIsNull()
-        {
-                thrown.expect( IllegalArgumentException.class );
-                RuleEngineContext ruleEngineContext = RuleEngineContext.builder( ruleExpressionEvaluator )
-                        .ruleVariables( Arrays.asList( mock( RuleVariable.class ) ) )
-                        .supplementaryData( new HashMap<String, List<String>>() )
-                        .calculatedValueMap( null )
-                        .rules( Arrays.asList( mock( Rule.class ) ) )
-                        .build();
-        }
-        @Test
         public void toEngineBuilderShouldReturnNewInstances()
         {
                 RuleEngineContext ruleEngineContext = RuleEngineContext.builder( ruleExpressionEvaluator )
