@@ -81,6 +81,7 @@ public final class RuleEngine
                     .ruleEnrollment( ruleEnrollment )
                     .triggerEnvironment( triggerEnvironment )
                     .ruleEvents( ruleEvents )
+                    .calculatedValueMap( ruleEngineContext.calculatedValueMap() )
                     .build();
 
                 return new RuleEngineExecution( executionContext().expressionEvaluator(),

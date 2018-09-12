@@ -5,10 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -84,6 +81,8 @@ public class RuleEngineValueTypesTests
                         .builder( new ExpressionEvaluator() )
                         .rules( Arrays.asList( rule ) )
                         .ruleVariables( ruleVariables )
+                        .calculatedValueMap( new HashMap<>( ) )
+                        .supplementaryData( new HashMap<>() )
                         .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
                         .build();
         }

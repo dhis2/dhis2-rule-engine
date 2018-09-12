@@ -61,6 +61,9 @@ final class RuleVariableValueMapBuilder
         private final Map<String, List<RuleDataValue>> allEventsValues;
 
         @Nonnull
+        private final Map<String, Map<String, String>> calculatedValueMap;
+
+        @Nonnull
         private final List<RuleVariable> ruleVariables;
 
         @Nonnull
@@ -85,6 +88,7 @@ final class RuleVariableValueMapBuilder
                 this.allEventsValues = new HashMap<>();
                 this.ruleVariables = new ArrayList<>();
                 this.ruleEvents = new ArrayList<>();
+                this.calculatedValueMap = new HashMap<>();
         }
 
         private RuleVariableValueMapBuilder( @Nonnull RuleEnrollment ruleEnrollment )
@@ -157,6 +161,13 @@ final class RuleVariableValueMapBuilder
                 }
 
                 this.ruleEvents.addAll( ruleEvents );
+                return this;
+        }
+
+        @Nonnull
+        RuleVariableValueMapBuilder calculatedValueMap( @Nonnull Map<String, Map<String, String>> calculatedValueMap )
+        {
+                this.calculatedValueMap.putAll( calculatedValueMap );
                 return this;
         }
 
@@ -376,6 +387,11 @@ final class RuleVariableValueMapBuilder
                                     = (RuleVariableNewestStageEvent) ruleVariable;
                                 createNewestStageEventVariableValue( valueMap, ruleVariableNewestEvent );
                         }
+                        else if ( ruleVariable instanceof  RuleVariableCalculatedValue )
+                        {
+                                RuleVariableCalculatedValue ruleVariableCalculatedValue = (RuleVariableCalculatedValue) ruleVariable;
+                                createCalculatedValueVariable( valueMap, ruleVariableCalculatedValue );
+                        }
                         else
                         {
                                 throw new IllegalArgumentException( "Unsupported RuleVariable type: " +
@@ -514,5 +530,40 @@ final class RuleVariableValueMapBuilder
                         valueMap.put( variable.name(), create( stageRuleDataValues.get( 0 ).value(),
                             variable.dataElementType(), Utils.values( stageRuleDataValues ) ) );
                 }
+        }
+
+        private void  createCalculatedValueVariable(
+                @Nonnull Map<String, RuleVariableValue> valueMap,
+                @Nonnull RuleVariableCalculatedValue variable )
+        {
+                if ( ruleEnrollment == null )
+                {
+                        return;
+                }
+
+                RuleVariableValue variableValue;
+
+                if ( calculatedValueMap.containsKey( ruleEnrollment.enrollment() ) )
+                {
+                        if ( calculatedValueMap.get( ruleEnrollment.enrollment() ).containsKey( variable.name() ) )
+                        {
+                                String value = calculatedValueMap.get( ruleEnrollment.enrollment() ).get( variable.name() );
+
+                                variableValue = create( value, variable.calculatedValueType(),
+                                        Arrays.asList( value ) );
+
+                        }
+                        else
+                        {
+                                variableValue = create( variable.calculatedValueType() );
+                        }
+
+                }
+                else
+                {
+                        variableValue = create( variable.calculatedValueType() );
+                }
+
+                valueMap.put( variable.name(), variableValue );
         }
 }

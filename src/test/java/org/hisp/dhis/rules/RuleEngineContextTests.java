@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules;
 
+import com.google.common.truth.Expect;
 import org.hisp.dhis.rules.RuleEngine;
 import org.hisp.dhis.rules.RuleEngineContext;
 import org.hisp.dhis.rules.RuleExpressionEvaluator;
@@ -7,6 +8,7 @@ import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleVariable;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mock;
@@ -24,6 +26,9 @@ public class RuleEngineContextTests
 
         @Mock
         private RuleExpressionEvaluator ruleExpressionEvaluator;
+
+        @org.junit.Rule
+        public ExpectedException thrown = ExpectedException.none();
 
         @Before
         public void setUp()
@@ -139,6 +144,17 @@ public class RuleEngineContextTests
                 }
         }
 
+        @Test
+        public void shouldThrowExceptionIfCalculatedValueMapIsNull()
+        {
+                thrown.expect( IllegalArgumentException.class );
+                RuleEngineContext ruleEngineContext = RuleEngineContext.builder( ruleExpressionEvaluator )
+                        .ruleVariables( Arrays.asList( mock( RuleVariable.class ) ) )
+                        .supplementaryData( new HashMap<String, List<String>>() )
+                        .calculatedValueMap( null )
+                        .rules( Arrays.asList( mock( Rule.class ) ) )
+                        .build();
+        }
         @Test
         public void toEngineBuilderShouldReturnNewInstances()
         {

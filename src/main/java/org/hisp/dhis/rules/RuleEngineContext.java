@@ -27,13 +27,17 @@ public final class RuleEngineContext
         @Nonnull
         private final Map<String, List<String>> supplementaryData;
 
+        @Nonnull
+        private final Map<String, Map<String, String>> calculatedValueMap;
+
         RuleEngineContext( @Nonnull RuleExpressionEvaluator expressionEvaluator,
-            @Nonnull List<Rule> rules, @Nonnull List<RuleVariable> ruleVariables, Map<String, List<String>> supplementaryData )
+            @Nonnull List<Rule> rules, @Nonnull List<RuleVariable> ruleVariables, Map<String, List<String>> supplementaryData, Map<String, Map<String, String>> calculatedValueMap )
         {
                 this.expressionEvaluator = expressionEvaluator;
                 this.rules = rules;
                 this.ruleVariables = ruleVariables;
                 this.supplementaryData = supplementaryData;
+                this.calculatedValueMap = calculatedValueMap;
         }
 
         @Nonnull
@@ -58,6 +62,12 @@ public final class RuleEngineContext
         public RuleExpressionEvaluator expressionEvaluator()
         {
                 return expressionEvaluator;
+        }
+
+        @Nonnull
+        public Map<String, Map<String, String>> calculatedValueMap()
+        {
+                return calculatedValueMap;
         }
 
         @Nonnull
@@ -91,6 +101,9 @@ public final class RuleEngineContext
 
                 @Nullable
                 private Map<String, List<String>> supplementaryData;
+
+                @Nullable
+                private  Map<String, Map<String, String>> calculatedValueMap;
 
                 Builder( @Nonnull RuleExpressionEvaluator evaluator )
                 {
@@ -133,6 +146,17 @@ public final class RuleEngineContext
                 }
 
                 @Nonnull
+                public Builder calculatedValueMap( Map<String, Map<String, String>> calculatedValueMap )
+                {
+                        if ( calculatedValueMap == null )
+                        {
+                                throw new IllegalArgumentException( "calculatedValueMap == null" );
+                        }
+                        this.calculatedValueMap = calculatedValueMap;
+                        return this;
+                }
+
+                @Nonnull
                 public RuleEngineContext build()
                 {
                         if ( rules == null )
@@ -145,7 +169,7 @@ public final class RuleEngineContext
                                 ruleVariables = unmodifiableList( new ArrayList<RuleVariable>() );
                         }
 
-                        return new RuleEngineContext( evaluator, rules, ruleVariables, supplementaryData );
+                        return new RuleEngineContext( evaluator, rules, ruleVariables, supplementaryData, calculatedValueMap );
                 }
         }
 }

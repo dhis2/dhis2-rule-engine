@@ -124,6 +124,7 @@ public class RuleEngineFunctionTests
                     .rules( Arrays.asList( rule ) )
                     .ruleVariables( Arrays.asList( ruleVariableOne ) )
                     .supplementaryData( supplementaryData )
+                    .calculatedValueMap( new HashMap<>() )
                     .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
                     .build();
 
@@ -648,6 +649,8 @@ public class RuleEngineFunctionTests
                         .builder( new ExpressionEvaluator() )
                         .rules( Arrays.asList( rule ) )
                         .ruleVariables( ruleVariables )
+                        .calculatedValueMap( new HashMap<>( ) )
+                        .supplementaryData( new HashMap<>() )
                         .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
                         .build();
         }
@@ -658,6 +661,8 @@ public class RuleEngineFunctionTests
                         .builder( new ExpressionEvaluator() )
                         .rules( Arrays.asList( rule ) )
                         .ruleVariables( ruleVariables )
+                        .calculatedValueMap( new HashMap<>() )
+                        .supplementaryData( new HashMap<>() )
                         .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );
         }
 }

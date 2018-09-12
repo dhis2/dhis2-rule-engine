@@ -25,7 +25,7 @@ public abstract class RuleActionAssign
         {
                 if ( content == null && field == null )
                 {
-                        throw new IllegalArgumentException( "Either data or field " +
+                        throw new IllegalArgumentException( "Either content or field " +
                             "parameters must be not null." );
                 }
 

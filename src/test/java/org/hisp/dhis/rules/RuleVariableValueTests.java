@@ -1,10 +1,11 @@
 package org.hisp.dhis.rules;
 
-import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.models.RuleDataValue;
 import org.hisp.dhis.rules.models.RuleValueType;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mock;
@@ -21,6 +22,9 @@ public class RuleVariableValueTests
 
         @Mock
         private RuleDataValue ruleDataValue;
+
+        @Rule
+        public ExpectedException thrown = ExpectedException.none();
 
         @Before
         public void setUp()
@@ -88,8 +92,8 @@ public class RuleVariableValueTests
         {
                 try
                 {
+                        thrown.expect( IllegalArgumentException.class );
                         RuleVariableValue.create( "test_value", null );
-                        fail( "NullPointerException was expected, but nothing was thrown" );
                 }
                 catch ( NullPointerException exception )
                 {
@@ -102,8 +106,8 @@ public class RuleVariableValueTests
         {
                 try
                 {
+                        thrown.expect( IllegalArgumentException.class );
                         RuleVariableValue.create( "test_value", RuleValueType.TEXT, null );
-                        fail( "NullPointerException was expected, but nothing was thrown" );
                 }
                 catch ( NullPointerException exception )
                 {

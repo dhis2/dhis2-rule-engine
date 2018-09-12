@@ -27,7 +27,7 @@ abstract class RuleFunctionCall
         public abstract List<String> arguments();
 
         @Nonnull
-        static RuleFunctionCall from( @Nonnull String functionCall )
+        static RuleFunctionCall from( String functionCall )
         {
                 if ( functionCall == null )
                 {

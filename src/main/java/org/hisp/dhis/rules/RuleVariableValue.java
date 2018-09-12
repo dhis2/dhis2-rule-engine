@@ -34,7 +34,10 @@ public abstract class RuleVariableValue
         static RuleVariableValue create( @Nonnull String value,
             @Nonnull RuleValueType ruleValueType )
         {
-
+                if ( ruleValueType == null )
+                {
+                        throw new IllegalArgumentException( "Invalid value type" );
+                }
                 // clean-up the value before processing it
                 String processedValue = value.replace( "'", "" );
 
@@ -52,6 +55,10 @@ public abstract class RuleVariableValue
         static RuleVariableValue create( @Nonnull String value,
             @Nonnull RuleValueType ruleValueType, @Nonnull List<String> candidates )
         {
+                if ( candidates == null )
+                {
+                        throw new IllegalArgumentException( "Candidate cannot be null" );
+                }
                 // clean-up the value before processing it
                 String processedValue = value.replace( "'", "" );
 

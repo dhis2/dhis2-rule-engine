@@ -1,7 +1,5 @@
 package org.hisp.dhis.rules.functions;
 
-import org.hisp.dhis.rules.functions.RuleFunction;
-import org.hisp.dhis.rules.functions.RuleFunctionDaysBetween;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

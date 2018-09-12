@@ -7,6 +7,7 @@ import org.junit.runners.JUnit4;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -128,6 +129,8 @@ public class RuleEngineEffectTypesTests
                 RuleEngine ruleEngine = RuleEngineContext
                         .builder( new ExpressionEvaluator() )
                         .rules( Arrays.asList( rule, rule2 ) )
+                        .calculatedValueMap( new HashMap<>() )
+                        .supplementaryData( new HashMap<>() )
                         .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
                         .build();
 
@@ -322,6 +325,8 @@ public class RuleEngineEffectTypesTests
                 return RuleEngineContext
                         .builder( new ExpressionEvaluator() )
                         .rules( Arrays.asList( rule ) )
+                        .calculatedValueMap( new HashMap<>() )
+                        .supplementaryData( new HashMap<>() )
                         .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
                         .build();
         }

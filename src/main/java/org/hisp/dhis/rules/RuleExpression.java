@@ -45,7 +45,7 @@ abstract class RuleExpression
         }
 
         @Nonnull
-        static RuleExpression from( @Nonnull String expression )
+        static RuleExpression from( String expression )
         {
                 if ( expression == null )
                 {
