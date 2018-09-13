@@ -74,12 +74,11 @@ public class CalculatedValueTests
     @Test
     public void sendMessageMustGetValueFromAssignAction() throws Exception
     {
-        RuleAction ruleAction = RuleActionAssign.create(
-                null, "2", "#{test_calculated_value}" );
-        org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create( null, 4, "true", Arrays.asList( ruleAction ), "test_program_rule1");
+        RuleAction assignAction = RuleActionAssign.create(null, "2+2", "#{test_calculated_value}" );
+        org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create( null, 4, "true", Arrays.asList( assignAction ), "test_program_rule1");
 
-        RuleAction ruleAction2 = RuleActionSendMessage.create( "test_notification", "'2'" );
-        org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule.create( null, 1, "#{test_calculated_value}=='2'", Arrays.asList( ruleAction2 ), "test_program_rule2");
+        RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4" );
+        org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule.create( null, 1, "#{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2");
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule ) );
 
@@ -93,20 +92,25 @@ public class CalculatedValueTests
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "2" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( assignAction );
 
         RuleActionAssign assign = (RuleActionAssign) ruleEffects.get( 0 ).ruleAction();
         Map<String, String> valueMap = new HashMap<>();
-        valueMap.put( "test_calculated_value", assign.data() );
+        valueMap.put( "test_calculated_value", ruleEffects.get( 0 ).data() );
         calculatedValueMap.put( enrollment.enrollment(), valueMap );
 
         RuleEngine ruleEngine2 = getRuleEngine( Arrays.asList( rule, rule2 ) ).enrollment( enrollment ).build();
         List<RuleEffect> ruleEffects2 = ruleEngine2.evaluate( ruleEvent ).call();
 
         assertThat( ruleEffects2.size() ).isEqualTo( 2 );
-        assertThat( ruleEffects2.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
-        assertThat( ruleEffects2.get( 1 ).ruleAction() ).isEqualTo( ruleAction2 );
+        assertThat( ruleEffects2.get( 0 ).ruleAction() ).isEqualTo( assignAction );
+        assertThat( ruleEffects2.get( 1 ).ruleAction() ).isEqualTo( sendMessageAction );
+
+        RuleActionSendMessage actionSendMessage = (RuleActionSendMessage) sendMessageAction;
+
+        assertThat( actionSendMessage.notification() ).isEqualTo( "test_notification" );
+        assertThat( actionSendMessage.data() ).isEqualTo( "4" );
     }
 
     private RuleEngine.Builder getRuleEngine( List<org.hisp.dhis.rules.models.Rule> rules )
