@@ -1,12 +1,13 @@
 package org.hisp.dhis.rules.models;
 
+import org.hisp.dhis.rules.ExpressionEvaluator;
+import org.hisp.dhis.rules.RuleEngine;
+import org.hisp.dhis.rules.RuleEngineContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.Assert.fail;
@@ -87,5 +88,16 @@ public class RuleTests
                 {
                         // noop
                 }
+        }
+        
+        private RuleEngine getRuleEngine( List<Rule> rules )
+        {
+                return RuleEngineContext
+                        .builder( new ExpressionEvaluator() )
+                        .rules( rules )
+                        .calculatedValueMap( new HashMap<>() )
+                        .supplementaryData( new HashMap<>() )
+                        .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
+                        .build();
         }
 }

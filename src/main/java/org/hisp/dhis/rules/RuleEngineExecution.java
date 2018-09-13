@@ -7,11 +7,10 @@ import org.hisp.dhis.rules.functions.RuleFunction;
 import org.hisp.dhis.rules.models.*;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class RuleEngineExecution
     implements Callable<List<RuleEffect>>
@@ -20,11 +19,15 @@ class RuleEngineExecution
 
         private static final Log log = LogFactory.getLog( RuleEngineExecution.class );
 
+        private static final String REGEX = "\\w+";
+
+        private static final Pattern pattern = Pattern.compile( REGEX, Pattern.CASE_INSENSITIVE );
+
         @Nonnull
         private final RuleExpressionEvaluator expressionEvaluator;
 
         @Nonnull
-        private final Map<String, RuleVariableValue> valueMap;
+        private Map<String, RuleVariableValue> valueMap;
 
         @Nonnull
         private final Map<String, List<String>> supplementaryData;
@@ -36,7 +39,7 @@ class RuleEngineExecution
             @Nonnull List<Rule> rules, @Nonnull Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
         {
                 this.expressionEvaluator = expressionEvaluator;
-                this.valueMap = valueMap;
+                this.valueMap = new HashMap<>( valueMap );
                 this.rules = rules;
                 this.supplementaryData = supplementaryData;
         }
@@ -46,10 +49,13 @@ class RuleEngineExecution
         {
                 List<RuleEffect> ruleEffects = new ArrayList<>();
 
-                for ( int i = 0; i < rules.size(); i++ )
-                {
-                        Rule rule = rules.get( i );
+                List<Rule> ruleList = new ArrayList<>( rules );
 
+                ruleList.sort( Comparator.comparing( Rule::priority, Comparator.nullsLast( Comparator.naturalOrder() ) ) );
+
+                for ( int i = 0; i < ruleList.size(); i++ )
+                {
+                        Rule rule = ruleList.get( i );
                         try
                         {
                                 log.info( "Evaluating programrule: " + rule.name() );
@@ -83,8 +89,17 @@ class RuleEngineExecution
                 // contain code to execute.
                 if ( ruleAction instanceof RuleActionAssign )
                 {
-                        return RuleEffect.create( ruleAction,
-                            process( ((RuleActionAssign) ruleAction).data() ) );
+                        String data = process( ((RuleActionAssign) ruleAction).data() );
+                        RuleVariableValue variableValue = RuleVariableValue.create( data, RuleValueType.TEXT, Arrays.asList( data ) );
+                        String field = ((RuleActionAssign) ruleAction).field();
+                        Matcher matcher = pattern.matcher( field );
+                        while ( matcher.find() )
+                        {
+                                field = matcher.group( 0 ).trim();
+                                valueMap.put( field, variableValue );
+                        }
+
+                        return RuleEffect.create( ruleAction, data );
                 }
                 else if ( ruleAction instanceof RuleActionSendMessage )
                 {
