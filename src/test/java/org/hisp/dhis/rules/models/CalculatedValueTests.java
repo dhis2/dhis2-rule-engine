@@ -40,6 +40,7 @@ import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.mock;
@@ -103,14 +104,11 @@ public class CalculatedValueTests
         RuleEngine ruleEngine2 = getRuleEngine( Arrays.asList( rule, rule2 ) ).enrollment( enrollment ).build();
         List<RuleEffect> ruleEffects2 = ruleEngine2.evaluate( ruleEvent ).call();
 
-        assertThat( ruleEffects2.size() ).isEqualTo( 2 );
-        assertThat( ruleEffects2.get( 0 ).ruleAction() ).isEqualTo( assignAction );
-        assertThat( ruleEffects2.get( 1 ).ruleAction() ).isEqualTo( sendMessageAction );
+        List<RuleAction> ruleActions = ruleEffects2.stream().map( RuleEffect::ruleAction ).collect( Collectors.toList() );
 
-        RuleActionSendMessage actionSendMessage = (RuleActionSendMessage) sendMessageAction;
+        assertThat( ruleActions.contains( assignAction ) ).isEqualTo( true );
+        assertThat( ruleActions.contains( sendMessageAction ) ).isEqualTo( true );
 
-        assertThat( actionSendMessage.notification() ).isEqualTo( "test_notification" );
-        assertThat( actionSendMessage.data() ).isEqualTo( "4" );
     }
 
     private RuleEngine.Builder getRuleEngine( List<org.hisp.dhis.rules.models.Rule> rules )

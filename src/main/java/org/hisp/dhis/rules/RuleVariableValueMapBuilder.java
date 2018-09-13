@@ -550,13 +550,11 @@ final class RuleVariableValueMapBuilder
 
                                 variableValue = create( value, variable.calculatedValueType(),
                                         Arrays.asList( value ) );
-
                         }
                         else
                         {
                                 variableValue = create( variable.calculatedValueType() );
                         }
-
                 }
                 else
                 {
