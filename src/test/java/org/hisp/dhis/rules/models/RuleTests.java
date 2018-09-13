@@ -89,15 +89,4 @@ public class RuleTests
                         // noop
                 }
         }
-        
-        private RuleEngine getRuleEngine( List<Rule> rules )
-        {
-                return RuleEngineContext
-                        .builder( new ExpressionEvaluator() )
-                        .rules( rules )
-                        .calculatedValueMap( new HashMap<>() )
-                        .supplementaryData( new HashMap<>() )
-                        .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
-                        .build();
-        }
 }
