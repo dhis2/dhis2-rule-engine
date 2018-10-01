@@ -76,10 +76,10 @@ public class CalculatedValueTests
     public void sendMessageMustGetValueFromAssignAction() throws Exception
     {
         RuleAction assignAction = RuleActionAssign.create(null, "2+2", "#{test_calculated_value}" );
-        org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create( null, 4, "true", Arrays.asList( assignAction ), "test_program_rule1");
+        org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1");
 
         RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4" );
-        org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule.create( null, 1, "#{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2");
+        org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule.create( null, 4, "#{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2");
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule ) );
 
@@ -108,6 +108,33 @@ public class CalculatedValueTests
 
         assertThat( ruleActions.contains( assignAction ) ).isEqualTo( true );
         assertThat( ruleActions.contains( sendMessageAction ) ).isEqualTo( true );
+
+    }
+
+    @Test
+    public void sendMessageMustGetValueFromAssignActionInSingleExecution() throws Exception
+    {
+        RuleAction assignAction = RuleActionAssign.create(null, "2+2", "#{test_calculated_value}" );
+        org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1");
+
+        RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4" );
+        org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule.create( null, 4, "#{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2");
+
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule, rule2 ) );
+
+        RuleEnrollment enrollment = RuleEnrollment.create( "test_enrollment", new Date(), new Date(), RuleEnrollment.Status.ACTIVE, "test_ou", Arrays.asList(), "test_program");
+
+        RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                RuleEvent.Status.ACTIVE, new Date(), new Date(), "",Arrays.asList( RuleDataValue.create(
+                        new Date(), "test_program_stage", "test_data_element", "test_value" ) ), "");
+
+        RuleEngine ruleEngine = ruleEngineBuilder.enrollment( enrollment ).build();
+        List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
+
+        assertThat( ruleEffects.size() ).isEqualTo( 2 );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( assignAction );
+        assertThat( ruleEffects.get( 1 ).ruleAction() ).isEqualTo( sendMessageAction );
 
     }
 
