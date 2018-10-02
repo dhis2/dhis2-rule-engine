@@ -32,6 +32,8 @@ public abstract class RuleFunction
                         return RuleFunctionCeil.create();
                 case RuleFunctionAddDays.D2_ADD_DAYS:
                         return RuleFunctionAddDays.create();
+                case RuleFunctionLastEventDate.D2_LAST_EVENT_DATE:
+                        return RuleFunctionLastEventDate.create();
                 case RuleFunctionCountIfValue.D2_COUNT_IF_VALUE:
                         return RuleFunctionCountIfValue.create();
                 case RuleFunctionRound.D2_ROUND:
