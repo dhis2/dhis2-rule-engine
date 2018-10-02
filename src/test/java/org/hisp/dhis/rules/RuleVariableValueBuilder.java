@@ -3,9 +3,11 @@ package org.hisp.dhis.rules;
 import org.hisp.dhis.rules.models.RuleValueType;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class RuleVariableValueBuilder
 {
@@ -15,6 +17,8 @@ public class RuleVariableValueBuilder
         private RuleValueType type = RuleValueType.TEXT;
 
         private List<String> candidates = new ArrayList<>();
+
+        private String eventDate;
 
         public static RuleVariableValueBuilder create()
         {
@@ -34,10 +38,16 @@ public class RuleVariableValueBuilder
 
                 return this;
         }
+        public RuleVariableValueBuilder withEventDate( @Nullable String eventDate )
+        {
+                this.eventDate = eventDate;
+
+                return this;
+        }
 
         public RuleVariableValue build()
         {
-                RuleVariableValue ruleVariableValue = RuleVariableValue.create( value, type, candidates );
+                RuleVariableValue ruleVariableValue = RuleVariableValue.create( value, type, candidates, eventDate );
 
                 return ruleVariableValue;
         }

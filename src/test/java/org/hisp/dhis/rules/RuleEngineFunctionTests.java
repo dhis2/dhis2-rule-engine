@@ -1,10 +1,12 @@
 package org.hisp.dhis.rules;
 
+import org.assertj.core.util.Sets;
 import org.hisp.dhis.rules.models.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -14,7 +16,11 @@ import static org.junit.Assert.*;
 @RunWith( JUnit4.class )
 public class RuleEngineFunctionTests
 {
-        @Test
+    private static final String DATE_PATTERN = "yyyy-MM-dd";
+
+    private SimpleDateFormat dateFormat = new SimpleDateFormat( DATE_PATTERN, Locale.US );
+
+    @Test
         public void evaluateHasValueFunctionMustReturnTrueIfValueSpecified()
             throws Exception
         {
@@ -641,6 +647,46 @@ public class RuleEngineFunctionTests
                 assertThat( ruleEffects.size() ).isEqualTo( 1 );
                 assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "6" );
                 assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        }
+
+        @Test
+        public void evaluateLastEventDate() throws Exception
+        {
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+
+            Date today = cal.getTime();
+            cal.add( java.util.Calendar.DATE, -1 );
+            Date yesterday = cal.getTime();
+            cal.add( java.util.Calendar.DATE, -1 );
+            Date dayBeforeYesterday = cal.getTime();
+
+            RuleAction ruleAction = RuleActionDisplayText.createForFeedback(
+                    "test_action_content", "d2:lastEventDate('test_var_one')");
+            RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
+                    "test_var_one", "test_data_element_one", RuleValueType.TEXT );
+
+            Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "test_rule" );
+
+            RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
+
+            RuleEvent ruleEvent1 = RuleEvent.create( "test_event1", "test_program_stage1",
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(
+                            RuleDataValue.create( dayBeforeYesterday, "test_program_stage1", "test_data_element_one", "value1" ) ), "" );
+
+            RuleEvent ruleEvent2 = RuleEvent.create( "test_event2", "test_program_stage2",
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(
+                            RuleDataValue.create( yesterday, "test_program_stage2", "test_data_element_one", "value2" ) ), "" );
+
+            RuleEvent ruleEvent3 = RuleEvent.create( "test_event3", "test_program_stage3",
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "", Arrays.asList(
+                            RuleDataValue.create( today, "test_program_stage3", "test_data_element_one", "value3" ) ), "" );
+
+
+            List<RuleEffect> ruleEffects = ruleEngineBuilder.events( Arrays.asList( ruleEvent1, ruleEvent2 ) ).build().evaluate( ruleEvent3 ).call();
+
+            assertThat( ruleEffects.size() ).isEqualTo( 1 );
+            assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+            assertEquals( dateFormat.format( today ), ruleEffects.get( 0 ).data() );
         }
 
         private RuleEngine getRuleEngine( Rule rule, List<RuleVariable> ruleVariables )

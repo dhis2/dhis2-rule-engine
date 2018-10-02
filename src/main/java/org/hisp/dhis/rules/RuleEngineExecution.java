@@ -90,7 +90,7 @@ class RuleEngineExecution
                 if ( ruleAction instanceof RuleActionAssign )
                 {
                         String data = process( ((RuleActionAssign) ruleAction).data() );
-                        RuleVariableValue variableValue = RuleVariableValue.create( data, RuleValueType.TEXT, Arrays.asList( data ) );
+                        RuleVariableValue variableValue = RuleVariableValue.create( data, RuleValueType.TEXT, Arrays.asList( data ), new Date().toString() );
                         String field = ((RuleActionAssign) ruleAction).field();
                         Matcher matcher = pattern.matcher( field );
                         while ( matcher.find() )
