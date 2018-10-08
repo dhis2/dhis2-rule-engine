@@ -70,6 +70,8 @@ public abstract class RuleFunction
                         return RuleFunctionConcatenate.create();
                 case RuleFunctionInOrgUnitGroup.D2_IN_ORG_UNIT_GROUP:
                         return RuleFunctionInOrgUnitGroup.create();
+                case RuleFunctionHasUserRole.D2_HAS_USER_ROLE:
+                        return RuleFunctionHasUserRole.create();
                 default:
                         return null;
                 }
