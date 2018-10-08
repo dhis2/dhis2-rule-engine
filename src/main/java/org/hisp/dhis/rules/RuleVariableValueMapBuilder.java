@@ -507,7 +507,7 @@ final class RuleVariableValueMapBuilder
 
         private String getLastUpdateDate( List<RuleDataValue> ruleDataValues )
         {
-            List<Date> dates = ruleDataValues.stream().map( RuleDataValue::eventDate ).collect( Collectors.toList() );
+            List<Date> dates = ruleDataValues.stream().map( RuleDataValue::eventDate ).filter( d -> !d.after( new Date() ) ).collect( Collectors.toList() );
 
             return dateFormat.format( Collections.max( dates ) );
         }
