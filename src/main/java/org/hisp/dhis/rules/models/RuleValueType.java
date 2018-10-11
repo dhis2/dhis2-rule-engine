@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 public enum RuleValueType
 {
-        TEXT( "''" ), NUMERIC( "0.0" ), BOOLEAN( "false" );
+        TEXT( "''" ), NUMERIC( "0.0" ), BOOLEAN( "" );
 
         @Nonnull
         private final String defaultValue;
