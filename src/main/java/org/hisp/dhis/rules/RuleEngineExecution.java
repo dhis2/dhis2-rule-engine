@@ -71,11 +71,11 @@ class RuleEngineExecution
                         }
                         catch( JexlException jexlException )
                         {
-                                log.error( "Parser exception: " + jexlException.getMessage() );
+                                log.error( "Parser exception in " + rule.name()+ ": " + jexlException.getMessage() );
                         }
                         catch( Exception e )
                         {
-                                log.error( "Exception: " + e.getMessage() );
+                                log.error( "Exception in "+ rule.name() +": " + e.getMessage() );
                         }
                 }
 

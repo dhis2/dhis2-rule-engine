@@ -5,11 +5,13 @@ import org.hisp.dhis.rules.models.RuleValueType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @AutoValue
 public abstract class RuleVariableValue
 {
+        private static final String DATE_PATTERN = "yyyy-MM-dd";
 
         @Nullable
         public abstract String value();
@@ -23,11 +25,13 @@ public abstract class RuleVariableValue
         @Nullable
         public abstract String eventDate();
 
+
+
         @Nonnull
         static RuleVariableValue create( @Nonnull RuleValueType ruleValueType )
         {
                 return new AutoValue_RuleVariableValue( null, ruleValueType,
-                    Collections.unmodifiableList( new ArrayList<String>() ), new Date().toString() );
+                    Collections.unmodifiableList( new ArrayList<String>() ), getFormattedDate( new Date() ) );
         }
 
         @Nonnull
@@ -48,7 +52,7 @@ public abstract class RuleVariableValue
                 }
 
                 return new AutoValue_RuleVariableValue( processedValue, ruleValueType,
-                    Collections.unmodifiableList( new ArrayList<String>() ), new Date().toString() );
+                    Collections.unmodifiableList( new ArrayList<String>() ), getFormattedDate( new Date() ) );
         }
 
         @Nonnull
@@ -70,5 +74,13 @@ public abstract class RuleVariableValue
 
                 return new AutoValue_RuleVariableValue( processedValue, ruleValueType,
                     Collections.unmodifiableList( candidates ), eventDate );
+        }
+
+        private static String getFormattedDate( Date date )
+        {
+                SimpleDateFormat format = new SimpleDateFormat();
+                format.applyPattern( DATE_PATTERN );
+
+                return format.format( date );
         }
 }
