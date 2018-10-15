@@ -58,7 +58,7 @@ class RuleEngineExecution
                         Rule rule = ruleList.get( i );
                         try
                         {
-                                log.info( "Evaluating programrule: " + rule.name() );
+                                log.debug( "Evaluating programrule: " + rule.name() );
                                 // send expression to evaluator
                                 if ( Boolean.valueOf( process( rule.condition() ) ) )
                                 {
@@ -71,11 +71,11 @@ class RuleEngineExecution
                         }
                         catch( JexlException jexlException )
                         {
-                                log.error( "Parser exception: " + jexlException.getMessage() );
+                                log.error( "Parser exception in " + rule.name()+ ": " + jexlException.getMessage() );
                         }
                         catch( Exception e )
                         {
-                                log.error( "Exception: " + e.getMessage() );
+                                log.error( "Exception in "+ rule.name() +": " + e.getMessage() );
                         }
                 }
 
@@ -159,7 +159,7 @@ class RuleEngineExecution
                         String expressionWithVariableValues = bindVariableValues( expression );
                         String expressionWithFunctionValues = bindFunctionValues( expressionWithVariableValues );
 
-                        log.info( "Evaluating expression: " + expressionWithFunctionValues );
+                        log.debug( "Evaluating expression: " + expressionWithFunctionValues );
                         return expressionEvaluator.evaluate( expressionWithFunctionValues );
                 }
 
