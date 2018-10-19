@@ -51,7 +51,18 @@ class RuleEngineExecution
 
                 List<Rule> ruleList = new ArrayList<>( rules );
 
-                ruleList.sort( Comparator.comparing( Rule::priority, Comparator.nullsLast( Comparator.naturalOrder() ) ) );
+                Collections.sort(ruleList, (rule1, rule2) -> {
+                    Integer priority1 = rule1.priority();
+                    Integer priority2 = rule2.priority();
+                        if(priority1!=null && priority2 !=null)
+                                return priority1.compareTo(priority2);
+                        else if(priority1 != null)
+                                return -1;
+                        else if(priority2 != null)
+                                return 1;
+                        else
+                                return 0;
+                });
 
                 for ( int i = 0; i < ruleList.size(); i++ )
                 {
