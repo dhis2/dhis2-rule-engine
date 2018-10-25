@@ -80,6 +80,8 @@ public class CalculatedValueTests
 
         RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4" );
         org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule.create( null, 4, "#{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2");
+        org.hisp.dhis.rules.models.Rule rule3 = org.hisp.dhis.rules.models.Rule.create( null, null, "true", Arrays.asList( sendMessageAction ), "test_program_rule3");
+
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule ) );
 
@@ -101,10 +103,10 @@ public class CalculatedValueTests
         valueMap.put( "test_calculated_value", ruleEffects.get( 0 ).data() );
         calculatedValueMap.put( enrollment.enrollment(), valueMap );
 
-        RuleEngine ruleEngine2 = getRuleEngine( Arrays.asList( rule, rule2 ) ).enrollment( enrollment ).build();
+        RuleEngine ruleEngine2 = getRuleEngine( Arrays.asList( rule2, rule, rule3 ) ).enrollment( enrollment ).build();
         List<RuleEffect> ruleEffects2 = ruleEngine2.evaluate( ruleEvent ).call();
 
-        assertThat( ruleEffects2.size() ).isEqualTo( 2 );
+        assertThat( ruleEffects2.size() ).isEqualTo( 3 );
 
         List<RuleAction> ruleActions = ruleEffects2.stream().map( RuleEffect::ruleAction ).collect( Collectors.toList() );
 
