@@ -19,7 +19,7 @@ class RuleEngineExecution
 
         private static final Log log = LogFactory.getLog( RuleEngineExecution.class );
 
-        private static final String REGEX = "\\w+";
+        private static final String REGEX = "[a-zA-Z0-9]+(?:[\\w -]*[a-zA-Z0-9]+)*";
 
         private static final Pattern pattern = Pattern.compile( REGEX, Pattern.CASE_INSENSITIVE );
 
