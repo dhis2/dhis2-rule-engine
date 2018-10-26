@@ -49,7 +49,7 @@ abstract class RuleExpression
         {
                 if ( expression == null )
                 {
-                        throw new NullPointerException( "expression == null" );
+                        throw new IllegalArgumentException( "expression == null" );
                 }
 
                 Set<String> variables = new HashSet<>();

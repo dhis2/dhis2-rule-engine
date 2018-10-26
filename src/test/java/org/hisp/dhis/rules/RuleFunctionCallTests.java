@@ -1,6 +1,8 @@
 package org.hisp.dhis.rules;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -10,6 +12,8 @@ import static org.assertj.core.api.Java6Assertions.fail;
 @RunWith( JUnit4.class )
 public class RuleFunctionCallTests
 {
+        @Rule
+        public ExpectedException thrown = ExpectedException.none();
 
         @Test
         public void fromMustReturnFunctionCallWithSingleArgument()
@@ -60,30 +64,18 @@ public class RuleFunctionCallTests
         @Test
         public void fromMustThrowOnNullArgument()
         {
-                try
-                {
-                        RuleFunctionCall.from( null );
-                        fail( "NullPointerException was expected, but nothing was thrown." );
-                }
-                catch ( NullPointerException nullPointerException )
-                {
-                        // noop
-                }
+              thrown.expect( IllegalArgumentException.class );
+
+              RuleFunctionCall.from( null );
         }
 
         @Test
         public void fromMustReturnFunctionCallWithImmutableArguments()
         {
+                thrown.expect( UnsupportedOperationException.class );
+
                 RuleFunctionCall ruleFunctionCall = RuleFunctionCall.from( "d2:some()" );
 
-                try
-                {
-                        ruleFunctionCall.arguments().add( "another_argument" );
-                        fail( "UnsupportedOperationException was expected, but nothing was thrown." );
-                }
-                catch ( UnsupportedOperationException unsupportedOperationException )
-                {
-                        // noop
-                }
+                ruleFunctionCall.arguments().add( "another_argument" );
         }
 }

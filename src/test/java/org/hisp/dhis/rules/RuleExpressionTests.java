@@ -1,16 +1,19 @@
 package org.hisp.dhis.rules;
 
-import org.hisp.dhis.rules.RuleExpression;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.assertj.core.api.Java6Assertions.fail;
 
 @RunWith( JUnit4.class )
 public class RuleExpressionTests
 {
+        @Rule
+        public ExpectedException thrown = ExpectedException.none();
+
         @Test
         public void fromShouldReturnExpressionWithDataElementVariables()
         {
@@ -121,47 +124,27 @@ public class RuleExpressionTests
         @Test
         public void fromShouldThrowOnNullExpression()
         {
-                try
-                {
-                        RuleExpression.from( null );
-                        fail( "NullPointerException was expected, but nothing was thrown." );
-                }
-                catch ( NullPointerException nullPointerException )
-                {
-                        // noop
-                }
+               thrown.expect( IllegalArgumentException.class );
+
+               RuleExpression.from( null );
         }
 
         @Test
         public void fromShouldReturnExpressionWithImmutableVariables()
         {
+                thrown.expect( UnsupportedOperationException.class );
                 RuleExpression ruleExpression = RuleExpression.from( "" );
 
-                try
-                {
-                        ruleExpression.variables().add( "another_variable" );
-                        fail( "UnsupportedOperationException was expected, but nothing was thrown." );
-                }
-                catch ( UnsupportedOperationException unsupportedOperationException )
-                {
-                        // noop
-                }
+                ruleExpression.variables().add( "another_variable" );
         }
 
         @Test
         public void fromShouldReturnExpressionWithImmutableFunctions()
         {
+                thrown.expect( UnsupportedOperationException.class );
                 RuleExpression ruleExpression = RuleExpression.from( "" );
 
-                try
-                {
-                        ruleExpression.functions().add( "another_function" );
-                        fail( "UnsupportedOperationException was expected, but nothing was thrown." );
-                }
-                catch ( UnsupportedOperationException unsupportedOperationException )
-                {
-                        // noop
-                }
+                ruleExpression.functions().add( "another_function" );
         }
 
         @Test

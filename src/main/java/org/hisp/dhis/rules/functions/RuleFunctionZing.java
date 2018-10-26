@@ -53,7 +53,7 @@ public class RuleFunctionZing extends RuleFunction
                     arguments.size() + " were supplied" );
         }
 
-        Double value = 0.0;
+        Double value;
 
         try
         {

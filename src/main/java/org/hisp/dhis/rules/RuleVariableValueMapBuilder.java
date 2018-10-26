@@ -6,7 +6,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.hisp.dhis.rules.RuleVariableValue.create;
 
@@ -175,7 +175,7 @@ final class RuleVariableValueMapBuilder
         @Nonnull
         Map<String, RuleVariableValue> build()
         {
-                Map<String, RuleVariableValue> valueMap = new HashMap<>();
+                Map<String, RuleVariableValue> valueMap = new ConcurrentHashMap<>();
 
                 // map tracked entity attributes to values from enrollment
                 buildCurrentEnrollmentValues();
@@ -507,9 +507,18 @@ final class RuleVariableValueMapBuilder
 
         private String getLastUpdateDate( List<RuleDataValue> ruleDataValues )
         {
-            List<Date> dates = ruleDataValues.stream().map( RuleDataValue::eventDate ).filter( d -> !d.after( new Date() ) ).collect( Collectors.toList() );
+                Date today = new Date();
+                List<Date> dates = new ArrayList<>();
+                for ( RuleDataValue date : ruleDataValues )
+                {
+                        Date d = date.eventDate();
+                        if ( !d.after( today ) )
+                        {
+                                dates.add( d );
+                        }
+                }
 
-            return dateFormat.format( Collections.max( dates ) );
+                return dateFormat.format( Collections.max( dates ) );
         }
 
         private void createNewestStageEventVariableValue(

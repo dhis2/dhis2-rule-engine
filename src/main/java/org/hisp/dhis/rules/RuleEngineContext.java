@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Collections.checkedMap;
 import static java.util.Collections.unmodifiableList;
 
 public final class RuleEngineContext

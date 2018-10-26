@@ -52,7 +52,7 @@ public class RuleFunctionHasUserRole extends RuleFunction
             throw new IllegalArgumentException( "Supplementary data needs to be provided" );
         }
 
-        if ( arguments.size() < 1 )
+        if ( arguments.isEmpty() )
         {
             throw new IllegalArgumentException( "One argument was expected but "+ arguments.size() +" found " );
         }

@@ -1,6 +1,7 @@
 package org.hisp.dhis.rules;
 
 import org.apache.commons.jexl2.JexlException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.dhis.rules.functions.RuleFunction;
@@ -154,7 +155,7 @@ class RuleEngineExecution
         private String process( @Nonnull String expression )
         {
                 // we don't want to run empty expression
-                if ( !expression.trim().isEmpty() )
+                if ( StringUtils.isNotBlank( expression.trim() ) )
                 {
                         String expressionWithVariableValues = bindVariableValues( expression );
                         String expressionWithFunctionValues = bindFunctionValues( expressionWithVariableValues );

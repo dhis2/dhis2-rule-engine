@@ -68,8 +68,8 @@ public class RuleFunctionMonthsBetween
                         return "0";
                 }
 
-                LocalDate startDate = null;
-                LocalDate endDate = null;
+                LocalDate startDate;
+                LocalDate endDate;
 
                 try
                 {

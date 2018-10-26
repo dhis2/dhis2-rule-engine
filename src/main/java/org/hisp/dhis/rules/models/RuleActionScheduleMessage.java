@@ -32,7 +32,6 @@ import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Date;
 
 /**
  * Created by zubair@dhis2.org on 07.02.18.

@@ -94,7 +94,7 @@ class RuleFunctionAddDays
                 }
                 catch ( ParseException parseException )
                 {
-                        throw new RuntimeException( parseException );
+                        throw new IllegalArgumentException( parseException );
                 }
         }
 }

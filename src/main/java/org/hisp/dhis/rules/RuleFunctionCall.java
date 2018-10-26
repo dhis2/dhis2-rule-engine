@@ -31,7 +31,7 @@ abstract class RuleFunctionCall
         {
                 if ( functionCall == null )
                 {
-                        throw new NullPointerException( "functionCall == null" );
+                        throw new IllegalArgumentException( "functionCall == null" );
                 }
 
                 Matcher functionNameMatcher = RuleExpression

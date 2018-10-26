@@ -45,7 +45,7 @@ public class RuleFunctionLastEventDate extends RuleFunction
     @Override
     public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
     {
-        if ( arguments.size() < 1 )
+        if ( arguments.isEmpty() )
         {
             throw new IllegalArgumentException( "At least one argument required in LastEventDate function" );
         }
