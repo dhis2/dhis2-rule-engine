@@ -75,7 +75,7 @@ public class CalculatedValueTests
     @Test
     public void sendMessageMustGetValueFromAssignAction() throws Exception
     {
-        RuleAction assignAction = RuleActionAssign.create(null, "2+2", "#{test_calculated_value}" );
+        RuleAction assignAction = RuleActionAssign.create(null, "2+2", "#{test_calculated_value}",false );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1");
 
         RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4" );
