@@ -3,6 +3,8 @@ package org.hisp.dhis.rules.models;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -30,7 +32,7 @@ public abstract class RuleEnrollment
         @Nonnull
         public abstract String organisationUnit();
 
-        @Nonnull
+        @Nullable
         public abstract String organisationUnitCode();
 
         @Nonnull
@@ -43,7 +45,7 @@ public abstract class RuleEnrollment
 
         @Nonnull
         public static RuleEnrollment create(@Nonnull String enrollment, @Nonnull Date incidentDate,
-                                            @Nonnull Date enrollmentDate, @Nonnull Status status, @Nonnull String organisationUnit, @Nonnull String organisationUnitCode,
+                                            @Nonnull Date enrollmentDate, @Nonnull Status status, @Nonnull String organisationUnit, @Nullable String organisationUnitCode,
                                             @Nonnull List<RuleAttributeValue> attributeValues, String programName)
         {
                 return new AutoValue_RuleEnrollment( enrollment, programName, incidentDate, enrollmentDate, status, organisationUnit, organisationUnitCode,

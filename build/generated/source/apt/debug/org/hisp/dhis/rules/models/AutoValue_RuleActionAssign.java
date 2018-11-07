@@ -9,11 +9,13 @@ import javax.annotation.Nonnull;
   private final String content;
   private final String data;
   private final String field;
+  private final Boolean isAttribute;
 
   AutoValue_RuleActionAssign(
       String content,
       String data,
-      String field) {
+      String field,
+      Boolean isAttribute) {
     if (content == null) {
       throw new NullPointerException("Null content");
     }
@@ -26,6 +28,10 @@ import javax.annotation.Nonnull;
       throw new NullPointerException("Null field");
     }
     this.field = field;
+    if (isAttribute == null) {
+      throw new NullPointerException("Null isAttribute");
+    }
+    this.isAttribute = isAttribute;
   }
 
   @Nonnull
@@ -46,12 +52,19 @@ import javax.annotation.Nonnull;
     return field;
   }
 
+  @Nonnull
+  @Override
+  public Boolean isAttribute() {
+    return isAttribute;
+  }
+
   @Override
   public String toString() {
     return "RuleActionAssign{"
         + "content=" + content + ", "
         + "data=" + data + ", "
-        + "field=" + field
+        + "field=" + field + ", "
+        + "isAttribute=" + isAttribute
         + "}";
   }
 
@@ -64,7 +77,8 @@ import javax.annotation.Nonnull;
       RuleActionAssign that = (RuleActionAssign) o;
       return (this.content.equals(that.content()))
            && (this.data.equals(that.data()))
-           && (this.field.equals(that.field()));
+           && (this.field.equals(that.field()))
+           && (this.isAttribute.equals(that.isAttribute()));
     }
     return false;
   }
@@ -78,6 +92,8 @@ import javax.annotation.Nonnull;
     h ^= this.data.hashCode();
     h *= 1000003;
     h ^= this.field.hashCode();
+    h *= 1000003;
+    h ^= this.isAttribute.hashCode();
     return h;
   }
 

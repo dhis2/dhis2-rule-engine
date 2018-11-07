@@ -1,86 +1,82 @@
 package org.hisp.dhis.rules;
 
 import com.google.auto.value.AutoValue;
+
 import org.hisp.dhis.rules.models.RuleValueType;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 @AutoValue
-public abstract class RuleVariableValue
-{
-        private static final String DATE_PATTERN = "yyyy-MM-dd";
+public abstract class RuleVariableValue {
+    private static final String DATE_PATTERN = "yyyy-MM-dd";
 
-        @Nullable
-        public abstract String value();
+    @Nullable
+    public abstract String value();
 
-        @Nonnull
-        public abstract RuleValueType type();
+    @Nonnull
+    public abstract RuleValueType type();
 
-        @Nonnull
-        public abstract List<String> candidates();
+    @Nonnull
+    public abstract List<String> candidates();
 
-        @Nullable
-        public abstract String eventDate();
-
+    @Nullable
+    public abstract String eventDate();
 
 
-        @Nonnull
-        static RuleVariableValue create( @Nonnull RuleValueType ruleValueType )
-        {
-                return new AutoValue_RuleVariableValue( null, ruleValueType,
-                    Collections.unmodifiableList( new ArrayList<String>() ), getFormattedDate( new Date() ) );
+    @Nonnull
+    static RuleVariableValue create(@Nonnull RuleValueType ruleValueType) {
+        return new AutoValue_RuleVariableValue(null, ruleValueType,
+                Collections.unmodifiableList(new ArrayList<String>()), getFormattedDate(new Date()));
+    }
+
+    @Nonnull
+    static RuleVariableValue create(@Nonnull String value,
+                                    @Nonnull RuleValueType ruleValueType) {
+        if (ruleValueType == null) {
+            throw new IllegalArgumentException("Invalid value type");
+        }
+        // clean-up the value before processing it
+        String processedValue = value == null ? null : value.replace("'", "");
+
+        // if text processedValue, wrap it
+        if (RuleValueType.TEXT.equals(ruleValueType)) {
+            processedValue = String.format(Locale.US, "'%s'", processedValue);
         }
 
-        @Nonnull
-        static RuleVariableValue create( @Nonnull String value,
-            @Nonnull RuleValueType ruleValueType )
-        {
-                if ( ruleValueType == null )
-                {
-                        throw new IllegalArgumentException( "Invalid value type" );
-                }
-                // clean-up the value before processing it
-                String processedValue = value.replace( "'", "" );
+        return new AutoValue_RuleVariableValue(processedValue, ruleValueType,
+                Collections.unmodifiableList(new ArrayList<String>()), getFormattedDate(new Date()));
+    }
 
-                // if text processedValue, wrap it
-                if ( RuleValueType.TEXT.equals( ruleValueType ) )
-                {
-                        processedValue = String.format( Locale.US, "'%s'", processedValue );
-                }
+    @Nonnull
+    static RuleVariableValue create(@Nonnull String value,
+                                    @Nonnull RuleValueType ruleValueType, @Nonnull List<String> candidates, @Nonnull String eventDate) {
+        if (candidates == null) {
+            throw new IllegalArgumentException("Candidate cannot be null");
+        }
+        // clean-up the value before processing it
+        String processedValue = value.replace("'", "");
 
-                return new AutoValue_RuleVariableValue( processedValue, ruleValueType,
-                    Collections.unmodifiableList( new ArrayList<String>() ), getFormattedDate( new Date() ) );
+        // if text processedValue, wrap it
+        if (RuleValueType.TEXT.equals(ruleValueType)) {
+            processedValue = String.format(Locale.US, "'%s'", processedValue);
         }
 
-        @Nonnull
-        static RuleVariableValue create( @Nonnull String value,
-            @Nonnull RuleValueType ruleValueType, @Nonnull List<String> candidates, @Nonnull String eventDate )
-        {
-                if ( candidates == null )
-                {
-                        throw new IllegalArgumentException( "Candidate cannot be null" );
-                }
-                // clean-up the value before processing it
-                String processedValue = value.replace( "'", "" );
+        return new AutoValue_RuleVariableValue(processedValue, ruleValueType,
+                Collections.unmodifiableList(candidates), eventDate);
+    }
 
-                // if text processedValue, wrap it
-                if ( RuleValueType.TEXT.equals( ruleValueType ) )
-                {
-                        processedValue = String.format( Locale.US, "'%s'", processedValue );
-                }
+    private static String getFormattedDate(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat();
+        format.applyPattern(DATE_PATTERN);
 
-                return new AutoValue_RuleVariableValue( processedValue, ruleValueType,
-                    Collections.unmodifiableList( candidates ), eventDate );
-        }
-
-        private static String getFormattedDate( Date date )
-        {
-                SimpleDateFormat format = new SimpleDateFormat();
-                format.applyPattern( DATE_PATTERN );
-
-                return format.format( date );
-        }
+        return format.format(date);
+    }
 }
