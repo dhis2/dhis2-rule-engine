@@ -50,8 +50,11 @@ public class RuleFunctionConcatenate
             Map<String, List<String>> supplementaryData )
         {
                 StringBuilder builder = new StringBuilder();
-
-                arguments.stream().filter( Objects::nonNull ).collect( Collectors.toList() ).forEach( builder::append );
+                for(String string : arguments){
+                        if(string != null)
+                                builder.append(string);
+                }
+                /*arguments.stream().filter( Objects::nonNull ).collect( Collectors.toList() ).forEach( builder::append );*/
 
                 return wrap( builder.toString() );
         }
