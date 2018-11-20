@@ -109,12 +109,14 @@ public class RuleFunctionMonthsBetween
 
                 long diffYear = endYear - startYear;
                 long diffMonth = (endMonth - startMonth);
+                diffMonth = diffYear * 12 + diffMonth;
+
                 if(endDay<startDay && diffMonth > 0){
                         diffMonth--;
                 }
                 if(endDay>startDay && diffMonth < 0){
                         diffMonth++;
                 }
-                return diffYear * 12 + diffMonth;
+                return diffMonth;
         }
 }

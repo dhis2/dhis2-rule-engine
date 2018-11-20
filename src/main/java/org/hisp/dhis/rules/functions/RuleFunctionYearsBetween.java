@@ -31,11 +31,17 @@ package org.hisp.dhis.rules.functions;
 import org.hisp.dhis.rules.RuleVariableValue;
 
 import javax.annotation.Nonnull;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -45,7 +51,8 @@ public class RuleFunctionYearsBetween extends RuleFunction
 {
     public static final String D2_YEARS_BETWEEN = "d2:yearsBetween";
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "yyyy-MM-dd" );
+    //private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "yyyy-MM-dd" );
+    private final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     @Nonnull
     @Override
@@ -64,24 +71,50 @@ public class RuleFunctionYearsBetween extends RuleFunction
             return "0";
         }
 
-        LocalDate startDate = null;
-        LocalDate endDate = null;
-
+        /*LocalDate startDate = null;
+        LocalDate endDate = null;*/
+        Date startDate = null;
+        Date endDate = null;
         try
         {
-            startDate = LocalDate.parse( arguments.get( 0 ), formatter );
-            endDate = LocalDate.parse( arguments.get( 1 ), formatter );
+            /*startDate = LocalDate.parse( arguments.get( 0 ), formatter );
+            endDate = LocalDate.parse( arguments.get( 1 ), formatter );*/
+            startDate = formatter.parse(startDateString);
+            endDate = formatter.parse(endDateString);
         }
-        catch ( DateTimeParseException e )
+        //catch ( DateTimeParseException e )
+        catch (ParseException e)
         {
             throw  new IllegalArgumentException( "Date cannot be parsed" );
         }
-
-        return String.valueOf( ChronoUnit.YEARS.between( startDate, endDate ) );
+        long diffYears = yearsBetween(startDate, endDate);
+        //return String.valueOf( ChronoUnit.YEARS.between( startDate, endDate ) );
+        return String.valueOf(diffYears);
     }
 
     public static RuleFunctionYearsBetween create()
     {
         return new RuleFunctionYearsBetween();
+    }
+
+    private long yearsBetween(Date startDate, Date endDate) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+
+        int startYear = calendar.get(Calendar.YEAR);
+        int startMonth = calendar.get(Calendar.MONTH);
+        calendar.setTime(endDate);
+
+        int endYear = calendar.get(Calendar.YEAR);
+        int endMonth = calendar.get(Calendar.MONTH);
+
+        long diffYear = endYear - startYear;
+        if(endMonth<startMonth && diffYear > 0){
+            diffYear--;
+        }
+        if(endMonth>startMonth && diffYear < 0){
+            diffYear++;
+        }
+        return diffYear;
     }
 }
