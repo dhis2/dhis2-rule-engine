@@ -34,7 +34,6 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @Author Zubair Asghar.
@@ -58,7 +57,12 @@ public class RuleFunctionZpvc extends RuleFunction
 
         try
         {
-            list = arguments.stream().map( Double::new ).filter( v -> v >= 0 ).collect( Collectors.toList() );
+            for(String string : arguments){
+                Double value = Double.valueOf(string);
+                if(value>=0)
+                    list.add(value);
+            }
+            //list = arguments.stream().map( Double::new ).filter( v -> v >= 0 ).collect( Collectors.toList() );
         }
         catch ( NumberFormatException e )
         {

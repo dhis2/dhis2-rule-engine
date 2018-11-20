@@ -67,8 +67,12 @@ public class RuleFunctionCountIfZeroPos
                 if ( value != null )
                 {
                         List<String> candidates = value.candidates();
-
-                        Integer count = candidates.stream().filter( this::isZeroPos ).collect( Collectors.toList() ).size();
+                        Integer count = 0;
+                        for (String string : candidates){
+                                if(isZeroPos(string))
+                                        count++;
+                        }
+                        /*Integer count = candidates.stream().filter( this::isZeroPos ).collect( Collectors.toList() ).size();*/
 
                         return String.valueOf( count );
                 }
