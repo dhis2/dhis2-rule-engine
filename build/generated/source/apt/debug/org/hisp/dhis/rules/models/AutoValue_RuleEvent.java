@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
   private final String organisationUnitCode;
   private final List<RuleDataValue> dataValues;
 
-  AutoValue_RuleEvent(
+  private AutoValue_RuleEvent(
       String event,
       String programStage,
       String programStageName,
@@ -29,38 +29,14 @@ import javax.annotation.Nullable;
       String organisationUnit,
       @Nullable String organisationUnitCode,
       List<RuleDataValue> dataValues) {
-    if (event == null) {
-      throw new NullPointerException("Null event");
-    }
     this.event = event;
-    if (programStage == null) {
-      throw new NullPointerException("Null programStage");
-    }
     this.programStage = programStage;
-    if (programStageName == null) {
-      throw new NullPointerException("Null programStageName");
-    }
     this.programStageName = programStageName;
-    if (status == null) {
-      throw new NullPointerException("Null status");
-    }
     this.status = status;
-    if (eventDate == null) {
-      throw new NullPointerException("Null eventDate");
-    }
     this.eventDate = eventDate;
-    if (dueDate == null) {
-      throw new NullPointerException("Null dueDate");
-    }
     this.dueDate = dueDate;
-    if (organisationUnit == null) {
-      throw new NullPointerException("Null organisationUnit");
-    }
     this.organisationUnit = organisationUnit;
     this.organisationUnitCode = organisationUnitCode;
-    if (dataValues == null) {
-      throw new NullPointerException("Null dataValues");
-    }
     this.dataValues = dataValues;
   }
 
@@ -175,6 +151,130 @@ import javax.annotation.Nullable;
     h *= 1000003;
     h ^= this.dataValues.hashCode();
     return h;
+  }
+
+  static final class Builder extends RuleEvent.Builder {
+    private String event;
+    private String programStage;
+    private String programStageName;
+    private RuleEvent.Status status;
+    private Date eventDate;
+    private Date dueDate;
+    private String organisationUnit;
+    private String organisationUnitCode;
+    private List<RuleDataValue> dataValues;
+    Builder() {
+    }
+    @Override
+    public RuleEvent.Builder event(String event) {
+      if (event == null) {
+        throw new NullPointerException("Null event");
+      }
+      this.event = event;
+      return this;
+    }
+    @Override
+    public RuleEvent.Builder programStage(String programStage) {
+      if (programStage == null) {
+        throw new NullPointerException("Null programStage");
+      }
+      this.programStage = programStage;
+      return this;
+    }
+    @Override
+    public RuleEvent.Builder programStageName(String programStageName) {
+      if (programStageName == null) {
+        throw new NullPointerException("Null programStageName");
+      }
+      this.programStageName = programStageName;
+      return this;
+    }
+    @Override
+    public RuleEvent.Builder status(RuleEvent.Status status) {
+      if (status == null) {
+        throw new NullPointerException("Null status");
+      }
+      this.status = status;
+      return this;
+    }
+    @Override
+    public RuleEvent.Builder eventDate(Date eventDate) {
+      if (eventDate == null) {
+        throw new NullPointerException("Null eventDate");
+      }
+      this.eventDate = eventDate;
+      return this;
+    }
+    @Override
+    public RuleEvent.Builder dueDate(Date dueDate) {
+      if (dueDate == null) {
+        throw new NullPointerException("Null dueDate");
+      }
+      this.dueDate = dueDate;
+      return this;
+    }
+    @Override
+    public RuleEvent.Builder organisationUnit(String organisationUnit) {
+      if (organisationUnit == null) {
+        throw new NullPointerException("Null organisationUnit");
+      }
+      this.organisationUnit = organisationUnit;
+      return this;
+    }
+    @Override
+    public RuleEvent.Builder organisationUnitCode(@Nullable String organisationUnitCode) {
+      this.organisationUnitCode = organisationUnitCode;
+      return this;
+    }
+    @Override
+    public RuleEvent.Builder dataValues(List<RuleDataValue> dataValues) {
+      if (dataValues == null) {
+        throw new NullPointerException("Null dataValues");
+      }
+      this.dataValues = dataValues;
+      return this;
+    }
+    @Override
+    public RuleEvent build() {
+      String missing = "";
+      if (this.event == null) {
+        missing += " event";
+      }
+      if (this.programStage == null) {
+        missing += " programStage";
+      }
+      if (this.programStageName == null) {
+        missing += " programStageName";
+      }
+      if (this.status == null) {
+        missing += " status";
+      }
+      if (this.eventDate == null) {
+        missing += " eventDate";
+      }
+      if (this.dueDate == null) {
+        missing += " dueDate";
+      }
+      if (this.organisationUnit == null) {
+        missing += " organisationUnit";
+      }
+      if (this.dataValues == null) {
+        missing += " dataValues";
+      }
+      if (!missing.isEmpty()) {
+        throw new IllegalStateException("Missing required properties:" + missing);
+      }
+      return new AutoValue_RuleEvent(
+          this.event,
+          this.programStage,
+          this.programStageName,
+          this.status,
+          this.eventDate,
+          this.dueDate,
+          this.organisationUnit,
+          this.organisationUnitCode,
+          this.dataValues);
+    }
   }
 
 }

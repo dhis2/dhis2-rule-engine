@@ -32,4 +32,9 @@ coverage
 node_modules
 **/rebel.xml
 ./build
+./gradle
 /build
+.build.gradle
+build/
+.gradke/
+./src/main/AndroidManifest.xml

@@ -54,8 +54,44 @@ public abstract class RuleEvent {
             @Nullable String organisationUnitCode,
             @Nonnull List<RuleDataValue> ruleDataValues,
             @Nonnull String programStageName) {
-        return new AutoValue_RuleEvent(event, programStage, programStageName, status, eventDate, dueDate, organisationUnit,
-                organisationUnitCode, Collections.unmodifiableList(new ArrayList<>(ruleDataValues)));
+        return new AutoValue_RuleEvent.Builder()
+                .event(event)
+                .programStage(programStage)
+                .programStageName(programStageName)
+                .status(status)
+                .eventDate(eventDate)
+                .dueDate(dueDate)
+                .organisationUnit(organisationUnit)
+                .organisationUnitCode(organisationUnitCode)
+                .dataValues(Collections.unmodifiableList(new ArrayList<>(ruleDataValues)))
+                .build();
+    }
+
+    public static Builder builder() {
+        return new AutoValue_RuleEvent.Builder();
+    }
+
+    @AutoValue.Builder
+    public static abstract class Builder {
+        public abstract Builder event(String event);
+
+        public abstract Builder programStage(String programStage);
+
+        public abstract Builder programStageName(String programStageName);
+
+        public abstract Builder status(Status status);
+
+        public abstract Builder eventDate(Date eventDate);
+
+        public abstract Builder dueDate(Date dueDate);
+
+        public abstract Builder organisationUnit(String organisationUnit);
+
+        public abstract Builder organisationUnitCode(String organisationUnitCode);
+
+        public abstract Builder dataValues(List<RuleDataValue> dataValues);
+
+        public abstract RuleEvent build();
     }
 
     public enum Status {
@@ -71,4 +107,6 @@ public abstract class RuleEvent {
             return second.eventDate().compareTo(first.eventDate());
         }
     }
+
+
 }
