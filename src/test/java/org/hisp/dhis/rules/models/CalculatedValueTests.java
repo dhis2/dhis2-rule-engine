@@ -75,7 +75,7 @@ public class CalculatedValueTests
     @Test
     public void sendMessageMustGetValueFromAssignAction() throws Exception
     {
-        RuleAction assignAction = RuleActionAssign.create(null, "2+2", "#{test_calculated_value}",false );
+        RuleAction assignAction = RuleActionAssign.create(null, "2+2", "#{test_calculated_value}" );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1");
 
         RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4" );
@@ -83,11 +83,29 @@ public class CalculatedValueTests
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule ) );
 
-        RuleEnrollment enrollment = RuleEnrollment.create( "test_enrollment", new Date(), new Date(), RuleEnrollment.Status.ACTIVE, "test_ou", Arrays.asList(), "test_program");
+        RuleEnrollment enrollment = RuleEnrollment.builder()
+                .enrollment("test_enrollment")
+                .programName("test_program")
+                .incidentDate(new Date())
+                .enrollmentDate(new Date())
+                .status(RuleEnrollment.Status.ACTIVE)
+                .organisationUnit("test_ou")
+                .organisationUnitCode("test_ou_code")
+                .attributeValues(Arrays.asList())
+                .build();
 
-        RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                RuleEvent.Status.ACTIVE, new Date(), new Date(), "",Arrays.asList( RuleDataValue.create(
-                        new Date(), "test_program_stage", "test_data_element", "test_value" ) ), "");
+        RuleEvent ruleEvent = RuleEvent.builder()
+                .event("test_event")
+                .programStage("test_program_stage")
+                .programStageName("")
+                .status(RuleEvent.Status.ACTIVE)
+                .eventDate(new Date())
+                .dueDate(new Date())
+                .organisationUnit("")
+                .organisationUnitCode("")
+                .dataValues(Arrays.asList(RuleDataValue.create(
+                        new Date(), "test_program_stage", "test_data_element", "test_value")))
+                .build();
 
         RuleEngine ruleEngine = ruleEngineBuilder.enrollment( enrollment ).build();
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
@@ -122,11 +140,29 @@ public class CalculatedValueTests
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule, rule2 ) );
 
-        RuleEnrollment enrollment = RuleEnrollment.create( "test_enrollment", new Date(), new Date(), RuleEnrollment.Status.ACTIVE, "test_ou", Arrays.asList(), "test_program");
+        RuleEnrollment enrollment = RuleEnrollment.builder()
+                .enrollment("test_enrollment")
+                .programName("test_program")
+                .incidentDate(new Date())
+                .enrollmentDate(new Date())
+                .status(RuleEnrollment.Status.ACTIVE)
+                .organisationUnit("test_ou")
+                .organisationUnitCode("test_ou_code")
+                .attributeValues(Arrays.asList())
+                .build();
 
-        RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                RuleEvent.Status.ACTIVE, new Date(), new Date(), "",Arrays.asList( RuleDataValue.create(
-                        new Date(), "test_program_stage", "test_data_element", "test_value" ) ), "");
+        RuleEvent ruleEvent = RuleEvent.builder()
+                .event("test_event")
+                .programStage("test_program_stage")
+                .programStageName("")
+                .status(RuleEvent.Status.ACTIVE)
+                .eventDate(new Date())
+                .dueDate(new Date())
+                .organisationUnit("")
+                .organisationUnitCode("")
+                .dataValues(Arrays.asList(RuleDataValue.create(
+                        new Date(), "test_program_stage", "test_data_element", "test_value")))
+                .build();
 
         RuleEngine ruleEngine = ruleEngineBuilder.enrollment( enrollment ).build();
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();

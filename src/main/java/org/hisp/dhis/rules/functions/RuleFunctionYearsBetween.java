@@ -32,7 +32,6 @@ import org.hisp.dhis.rules.RuleVariableValue;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -99,8 +98,12 @@ public class RuleFunctionYearsBetween extends RuleFunction {
         int endMonth = calendar.get(Calendar.MONTH);
 
         long diffYear = endYear - startYear;
-        long diffMonth = (endMonth - startMonth) / 12;
-
+        if (endMonth < startMonth && diffYear > 0) {
+            diffYear--;
+        }
+        if (endMonth > startMonth && diffYear < 0) {
+            diffYear++;
+        }
         return diffYear;
     }
 }

@@ -42,7 +42,7 @@ import java.util.Map;
  */
 public class RuleFunctionSubString extends RuleFunction
 {
-    public static final String D2_SUBSTRING = "d2:subString";
+    public static final String D2_SUBSTRING = "d2:substring";
 
     @Nonnull
     @Override

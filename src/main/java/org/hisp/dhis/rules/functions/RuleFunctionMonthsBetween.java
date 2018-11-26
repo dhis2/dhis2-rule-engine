@@ -96,13 +96,20 @@ public class RuleFunctionMonthsBetween
         calendar.setTime(startDate);
         int startYear = calendar.get(Calendar.YEAR);
         int startMonth = calendar.get(Calendar.MONTH);
+        int startDay = calendar.get(Calendar.DAY_OF_MONTH);
         calendar.setTime(endDate);
         int endYear = calendar.get(Calendar.YEAR);
         int endMonth = calendar.get(Calendar.MONTH);
-
+        int endDay = calendar.get(Calendar.DAY_OF_MONTH);
         long diffYear = endYear - startYear;
         long diffMonth = (endMonth - startMonth);
-
-        return diffYear * 12 + diffMonth;
+        diffMonth = diffYear * 12 + diffMonth;
+        if (endDay < startDay && diffMonth > 0) {
+            diffMonth--;
+        }
+        if (endDay > startDay && diffMonth < 0) {
+            diffMonth++;
+        }
+        return diffMonth;
     }
 }
