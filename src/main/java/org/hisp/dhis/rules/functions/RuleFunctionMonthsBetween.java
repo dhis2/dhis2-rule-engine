@@ -30,62 +30,86 @@ package org.hisp.dhis.rules.functions;
 
 import org.hisp.dhis.rules.RuleVariableValue;
 
-import javax.annotation.Nonnull;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.temporal.ChronoUnit;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+
+import javax.annotation.Nonnull;
 
 /**
  * @Author Zubair Asghar.
  */
 
 public class RuleFunctionMonthsBetween
-    extends RuleFunction
-{
-        public static final String D2_MONTHS_BETWEEN = "d2:monthsBetween";
+        extends RuleFunction {
+    public static final String D2_MONTHS_BETWEEN = "d2:monthsBetween";
 
-        private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "yyyy-MM-dd" );
+    //        private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "yyyy-MM-dd" );
+    private final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-        @Nonnull
-        @Override
-        public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
-            Map<String, List<String>> supplementaryData )
-        {
-                if ( arguments.size() != 2 )
-                {
-                        throw new IllegalArgumentException(
-                            "Two arguments were expected, " + arguments.size() + " were supplied" );
-                }
-
-                String startDateString = arguments.get( 0 );
-                String endDateString = arguments.get( 1 );
-
-                if ( isEmpty( startDateString ) || isEmpty( endDateString ) )
-                {
-                        return "0";
-                }
-
-                LocalDate startDate = null;
-                LocalDate endDate = null;
-
-                try
-                {
-                        startDate = LocalDate.parse( startDateString, formatter );
-                        endDate = LocalDate.parse( endDateString, formatter );
-                }
-                catch ( DateTimeParseException e )
-                {
-                        throw new IllegalArgumentException( "Date cannot be parsed" );
-                }
-
-                return String.valueOf( ChronoUnit.MONTHS.between( startDate, endDate ) );
+    @Nonnull
+    @Override
+    public String evaluate(@Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
+                           Map<String, List<String>> supplementaryData) {
+        if (arguments.size() != 2) {
+            throw new IllegalArgumentException(
+                    "Two arguments were expected, " + arguments.size() + " were supplied");
         }
 
-        public static RuleFunctionMonthsBetween create()
-        {
-                return new RuleFunctionMonthsBetween();
+        String startDateString = arguments.get(0);
+        String endDateString = arguments.get(1);
+
+        if (isEmpty(startDateString) || isEmpty(endDateString)) {
+            return "0";
         }
+
+                /*LocalDate startDate = null;
+                LocalDate endDate = null;*/
+        Date startDate = null;
+        Date endDate = null;
+
+        try {
+                       /* startDate = LocalDate.parse( startDateString, formatter );
+                        endDate = LocalDate.parse( endDateString, formatter );*/
+            startDate = formatter.parse(startDateString);
+            endDate = formatter.parse(endDateString);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Date cannot be parsed");
+        }
+
+        long monthBetween = monthBetween(startDate, endDate);
+
+//        return String.valueOf(ChronoUnit.MONTHS.between(startDate, endDate));
+        return String.valueOf(monthBetween);
+    }
+
+    public static RuleFunctionMonthsBetween create() {
+        return new RuleFunctionMonthsBetween();
+    }
+
+    private long monthBetween(Date startDate, Date endDate) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        int startYear = calendar.get(Calendar.YEAR);
+        int startMonth = calendar.get(Calendar.MONTH);
+        int startDay = calendar.get(Calendar.DAY_OF_MONTH);
+        calendar.setTime(endDate);
+        int endYear = calendar.get(Calendar.YEAR);
+        int endMonth = calendar.get(Calendar.MONTH);
+        int endDay = calendar.get(Calendar.DAY_OF_MONTH);
+        long diffYear = endYear - startYear;
+        long diffMonth = (endMonth - startMonth);
+        diffMonth = diffYear * 12 + diffMonth;
+        if (endDay < startDay && diffMonth > 0) {
+            diffMonth--;
+        }
+        if (endDay > startDay && diffMonth < 0) {
+            diffMonth++;
+        }
+        return diffMonth;
+    }
 }

@@ -30,58 +30,80 @@ package org.hisp.dhis.rules.functions;
 
 import org.hisp.dhis.rules.RuleVariableValue;
 
-import javax.annotation.Nonnull;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.temporal.ChronoUnit;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+
+import javax.annotation.Nonnull;
 
 /**
  * @Author Zubair Asghar.
  */
-public class RuleFunctionYearsBetween extends RuleFunction
-{
+public class RuleFunctionYearsBetween extends RuleFunction {
     public static final String D2_YEARS_BETWEEN = "d2:yearsBetween";
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "yyyy-MM-dd" );
+    //    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "yyyy-MM-dd" );
+    private final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     @Nonnull
     @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() != 2 )
-        {
-            throw new IllegalArgumentException( "Two arguments were expected, " + arguments.size() + " were supplied" );
+    public String evaluate(@Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData) {
+
+        if (arguments.size() != 2) {
+            throw new IllegalArgumentException("Two arguments were expected, " + arguments.size() + " were supplied");
         }
 
-        String startDateString = arguments.get( 0 );
-        String endDateString = arguments.get( 1 );
+        String startDateString = arguments.get(0);
+        String endDateString = arguments.get(1);
 
-        if ( isEmpty( startDateString ) || isEmpty( endDateString ) )
-        {
+        if (isEmpty(startDateString) || isEmpty(endDateString)) {
             return "0";
         }
 
-        LocalDate startDate = null;
-        LocalDate endDate = null;
+       /* LocalDate startDate = null;
+        LocalDate endDate = null;*/
+        Date startDate = null;
+        Date endDate = null;
 
-        try
-        {
-            startDate = LocalDate.parse( arguments.get( 0 ), formatter );
-            endDate = LocalDate.parse( arguments.get( 1 ), formatter );
-        }
-        catch ( DateTimeParseException e )
-        {
-            throw  new IllegalArgumentException( "Date cannot be parsed" );
+        try {
+           /* startDate = LocalDate.parse( arguments.get( 0 ), formatter );
+            endDate = LocalDate.parse( arguments.get( 1 ), formatter );*/
+            startDate = formatter.parse(arguments.get(0));
+            endDate = formatter.parse(arguments.get(1));
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Date cannot be parsed");
         }
 
-        return String.valueOf( ChronoUnit.YEARS.between( startDate, endDate ) );
+        long yearsBetween = yearsBetween(startDate, endDate);
+
+//        return String.valueOf(ChronoUnit.YEARS.between(startDate, endDate));
+        return String.valueOf(yearsBetween);
     }
 
-    public static RuleFunctionYearsBetween create()
-    {
+    public static RuleFunctionYearsBetween create() {
         return new RuleFunctionYearsBetween();
+    }
+
+    private Long yearsBetween(Date startDate, Date endDate) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        int startYear = calendar.get(Calendar.YEAR);
+        int startMonth = calendar.get(Calendar.MONTH);
+        calendar.setTime(endDate);
+        int endYear = calendar.get(Calendar.YEAR);
+        int endMonth = calendar.get(Calendar.MONTH);
+
+        long diffYear = endYear - startYear;
+        if (endMonth < startMonth && diffYear > 0) {
+            diffYear--;
+        }
+        if (endMonth > startMonth && diffYear < 0) {
+            diffYear++;
+        }
+        return diffYear;
     }
 }

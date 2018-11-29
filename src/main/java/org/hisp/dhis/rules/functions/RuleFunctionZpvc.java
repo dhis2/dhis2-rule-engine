@@ -58,7 +58,13 @@ public class RuleFunctionZpvc extends RuleFunction
 
         try
         {
-            list = arguments.stream().map( Double::new ).filter( v -> v >= 0 ).collect( Collectors.toList() );
+            list = new ArrayList<>();
+            for(String string : arguments){
+                Double value = Double.valueOf(string);
+                if(value>=0)
+                    list.add(value);
+            }
+//            list = arguments.stream().map( Double::new ).filter( v -> v >= 0 ).collect( Collectors.toList() );
         }
         catch ( NumberFormatException e )
         {
