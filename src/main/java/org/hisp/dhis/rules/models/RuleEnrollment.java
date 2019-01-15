@@ -44,6 +44,7 @@ public abstract class RuleEnrollment {
     public static RuleEnrollment create(@Nonnull String enrollment, @Nonnull Date incidentDate,
                                         @Nonnull Date enrollmentDate, @Nonnull Status status, @Nonnull String organisationUnit, @Nullable String organisationUnitCode,
                                         @Nonnull List<RuleAttributeValue> attributeValues, String programName) {
+
         return AutoValue_RuleEnrollment.builder()
                 .enrollment(enrollment)
                 .programName(programName)
