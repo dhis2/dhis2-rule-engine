@@ -97,15 +97,8 @@ public class RuleVariableValueTests
         @Test
         public void createShouldThrowOnNullValueType()
         {
-                try
-                {
-                        thrown.expect( IllegalArgumentException.class );
-                        RuleVariableValue.create( "test_value", null );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
+                thrown.expect( IllegalArgumentException.class );
+                RuleVariableValue.create( "test_value", null );
         }
 
         @Test

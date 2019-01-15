@@ -1,6 +1,8 @@
 package org.hisp.dhis.rules.models;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -16,80 +18,48 @@ import static org.mockito.Mockito.mock;
 @RunWith( JUnit4.class )
 public class RuleEnrollmentTests
 {
+        @Rule
+        public ExpectedException thrown = ExpectedException.none();
 
         @Test
         public void createShouldThrowOnNullEnrollment()
         {
-                try
-                {
-                        RuleEnrollment.create( null, new Date(), new Date(),
-                            RuleEnrollment.Status.ACTIVE, null,null, new ArrayList<RuleAttributeValue>(), "");
-                        fail( "NullPointerException was expected, but nothing was thrown." );
-                }
-                catch ( NullPointerException nullPointerException )
-                {
-                        // noop
-                }
+                thrown.expect( IllegalStateException.class );
+                RuleEnrollment.create( null, new Date(), new Date(),
+                    RuleEnrollment.Status.ACTIVE, null,null, new ArrayList<RuleAttributeValue>(), "");
         }
 
         @Test
         public void createShouldThrowOnNullIncidentDate()
         {
-                try
-                {
-                        RuleEnrollment.create( "test_enrollment", null, new Date(),
-                            RuleEnrollment.Status.ACTIVE,null,null, new ArrayList<RuleAttributeValue>(), "");
-                        fail( "NullPointerException was expected, but nothing was thrown." );
-                }
-                catch ( NullPointerException nullPointerException )
-                {
-                        // noop
-                }
+                thrown.expect( IllegalStateException.class );
+                RuleEnrollment.create("test_enrollment", null, new Date(),
+                        RuleEnrollment.Status.ACTIVE, null, null, new ArrayList<RuleAttributeValue>(), "");
+
         }
 
         @Test
         public void createShouldThrowOnNullEnrollmentDate()
         {
-                try
-                {
-                        RuleEnrollment.create( "test_enrollment", new Date(), null,
-                            RuleEnrollment.Status.ACTIVE,null,null, new ArrayList<RuleAttributeValue>(), "");
-                        fail( "NullPointerException was expected, but nothing was thrown." );
-                }
-                catch ( NullPointerException nullPointerException )
-                {
-                        // noop
-                }
+                thrown.expect( IllegalStateException.class );
+                RuleEnrollment.create( "test_enrollment", new Date(), null,
+                        RuleEnrollment.Status.ACTIVE,null,null, new ArrayList<RuleAttributeValue>(), "");
         }
 
         @Test
         public void createShouldThrowOnNullStatus()
         {
-                try
-                {
-                        RuleEnrollment.create( "test_enrollment", new Date(), new Date(),
-                            null, null,null,new ArrayList<RuleAttributeValue>(), "");
-                        fail( "NullPointerException was expected, but nothing was thrown." );
-                }
-                catch ( NullPointerException nullPointerException )
-                {
-                        // noop
-                }
+                thrown.expect( IllegalStateException.class );
+                RuleEnrollment.create( "test_enrollment", new Date(), new Date(),
+                    null, null,null,new ArrayList<RuleAttributeValue>(), "");
         }
 
         @Test
         public void createShouldThrowOnNullValueList()
         {
-                try
-                {
-                        RuleEnrollment.create( "test_enrollment", new Date(), new Date(),
-                            RuleEnrollment.Status.ACTIVE, null,null,null, "");
-                        fail( "NullPointerException was expected, but nothing was thrown." );
-                }
-                catch ( NullPointerException nullPointerException )
-                {
-                        // noop
-                }
+                thrown.expect( NullPointerException.class );
+                RuleEnrollment.create( "test_enrollment", new Date(), new Date(),
+                    RuleEnrollment.Status.ACTIVE, null,null,null, "");
         }
 
         @Test

@@ -1,6 +1,8 @@
 package org.hisp.dhis.rules.models;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -17,94 +19,57 @@ public class RuleEventTests
 {
         private static final String DATE_PATTERN = "yyyy-MM-dd";
 
+        @Rule
+        public ExpectedException thrown = ExpectedException.none();
+
         @Test
         public void createShouldThrowExceptionIfEventIsNull()
         {
-                try
-                {
-                        RuleEvent.create( null, "test_programstage", RuleEvent.Status.ACTIVE,
-                            new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
-                        fail( "NullPointerException was expected, but nothing was thrown" );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
+                thrown.expect( IllegalStateException.class );
+                RuleEvent.create( null, "test_programstage", RuleEvent.Status.ACTIVE,
+                        new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
         }
 
         @Test
         public void createShouldThrowExceptionIfProgramStageIsNull()
         {
-                try
-                {
-                        RuleEvent.create( "test_event", null, RuleEvent.Status.ACTIVE,
-                            new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
-                        fail( "NullPointerException was expected, but nothing was thrown" );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
+                thrown.expect( IllegalStateException.class );
+                RuleEvent.create( "test_event", null, RuleEvent.Status.ACTIVE,
+                        new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
         }
 
         @Test
         public void createShouldThrowExceptionIfStatusIsNull()
         {
-                try
-                {
-                        RuleEvent.create( "test_event", "test_programstage", null,
-                            new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
-                        fail( "NullPointerException was expected, but nothing was thrown" );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
+                thrown.expect( IllegalStateException.class );
+                RuleEvent.create( "test_event", "test_programstage", null,
+                        new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
         }
 
         @Test
         public void createShouldThrowExceptionIfEventDateIsNull()
         {
-                try
-                {
-                        RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE,
-                            null, new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
-                        fail( "NullPointerException was expected, but nothing was thrown" );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
+                thrown.expect( IllegalStateException.class );
+                RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE,
+                        null, new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
         }
 
         @Test
         public void createShouldThrowExceptionIfDueDateIsNull()
         {
-                try
-                {
-                        RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE,
-                            new Date(), null, null,null,Arrays.<RuleDataValue>asList(), "");
-                        fail( "NullPointerException was expected, but nothing was thrown" );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
+                thrown.expect( IllegalStateException.class );
+                RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE,
+                    new Date(), null, null,null,Arrays.<RuleDataValue>asList(), "");
+
         }
 
         @Test
         public void createShouldThrowExceptionIfListOfDataValuesIsNull()
         {
-                try
-                {
-                        RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE,
-                            new Date(), new Date(), null, null,null, "");
-                        fail( "NullPointerException was expected, but nothing was thrown" );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
+                thrown.expect( NullPointerException.class );
+                RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE, new Date(), new Date(),
+                        null, null,null, "");
+
         }
 
         @Test
