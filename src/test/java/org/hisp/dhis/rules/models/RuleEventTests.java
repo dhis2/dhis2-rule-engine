@@ -23,7 +23,7 @@ public class RuleEventTests
                 try
                 {
                         RuleEvent.create( null, "test_programstage", RuleEvent.Status.ACTIVE,
-                            new Date(), new Date(), null,Arrays.<RuleDataValue>asList(), "");
+                            new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
                         fail( "NullPointerException was expected, but nothing was thrown" );
                 }
                 catch ( NullPointerException exception )
@@ -38,7 +38,7 @@ public class RuleEventTests
                 try
                 {
                         RuleEvent.create( "test_event", null, RuleEvent.Status.ACTIVE,
-                            new Date(), new Date(), null,Arrays.<RuleDataValue>asList(), "");
+                            new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
                         fail( "NullPointerException was expected, but nothing was thrown" );
                 }
                 catch ( NullPointerException exception )
@@ -53,7 +53,7 @@ public class RuleEventTests
                 try
                 {
                         RuleEvent.create( "test_event", "test_programstage", null,
-                            new Date(), new Date(), null,Arrays.<RuleDataValue>asList(), "");
+                            new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
                         fail( "NullPointerException was expected, but nothing was thrown" );
                 }
                 catch ( NullPointerException exception )
@@ -68,7 +68,7 @@ public class RuleEventTests
                 try
                 {
                         RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE,
-                            null, new Date(), null,Arrays.<RuleDataValue>asList(), "");
+                            null, new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
                         fail( "NullPointerException was expected, but nothing was thrown" );
                 }
                 catch ( NullPointerException exception )
@@ -83,7 +83,7 @@ public class RuleEventTests
                 try
                 {
                         RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE,
-                            new Date(), null, null,Arrays.<RuleDataValue>asList(), "");
+                            new Date(), null, null,null,Arrays.<RuleDataValue>asList(), "");
                         fail( "NullPointerException was expected, but nothing was thrown" );
                 }
                 catch ( NullPointerException exception )
@@ -98,7 +98,7 @@ public class RuleEventTests
                 try
                 {
                         RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE,
-                            new Date(), new Date(), null, null, "");
+                            new Date(), new Date(), null, null,null, "");
                         fail( "NullPointerException was expected, but nothing was thrown" );
                 }
                 catch ( NullPointerException exception )
@@ -116,7 +116,7 @@ public class RuleEventTests
                 ruleDataValues.add( ruleDataValue );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event_uid", "test_stage_uid",
-                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "", ruleDataValues, "");
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "", "", ruleDataValues, "");
 
                 // add another data value
                 ruleDataValues.add( ruleDataValue );
@@ -147,7 +147,7 @@ public class RuleEventTests
                 Date dueDate = new Date();
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event_uid", "test_stage_uid",
-                    RuleEvent.Status.ACTIVE, eventDate, dueDate, "",ruleDataValues, "");
+                    RuleEvent.Status.ACTIVE, eventDate, dueDate, "","",ruleDataValues, "");
 
                 assertThat( ruleEvent.event() ).isEqualTo( "test_event_uid" );
                 assertThat( ruleEvent.status() ).isEqualTo( RuleEvent.Status.ACTIVE );
@@ -166,10 +166,10 @@ public class RuleEventTests
                 SimpleDateFormat dateFormat = new SimpleDateFormat( DATE_PATTERN, Locale.US );
                 List<RuleEvent> ruleEvents = Arrays.asList(
                     RuleEvent.create( "test_event_one", "test_program_stage_one", RuleEvent.Status.ACTIVE,
-                        dateFormat.parse( "2014-02-11" ), dateFormat.parse( "2014-02-11" ),"",
+                        dateFormat.parse( "2014-02-11" ), dateFormat.parse( "2014-02-11" ),"",null,
                         new ArrayList<RuleDataValue>(), ""),
                     RuleEvent.create( "test_event_two", "test_program_stage_two", RuleEvent.Status.ACTIVE,
-                        dateFormat.parse( "2017-03-22" ), dateFormat.parse( "2017-03-22" ), "",
+                        dateFormat.parse( "2017-03-22" ), dateFormat.parse( "2017-03-22" ), "",null,
                         new ArrayList<RuleDataValue>(), "") );
 
                 Collections.sort( ruleEvents, RuleEvent.EVENT_DATE_COMPARATOR );

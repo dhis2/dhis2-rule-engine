@@ -2,6 +2,7 @@ package org.hisp.dhis.rules.models;
 
 import com.google.auto.value.AutoValue;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public abstract class RuleEnrollment {
                 .status(status)
                 .organisationUnit(organisationUnit)
                 .organisationUnitCode(organisationUnitCode)
-                .attributeValues(attributeValues)
+                .attributeValues(Collections.unmodifiableList(attributeValues))
                 .build();
     }
 
