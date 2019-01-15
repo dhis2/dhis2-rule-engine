@@ -23,7 +23,7 @@ public class RuleEnrollmentTests
                 try
                 {
                         RuleEnrollment.create( null, new Date(), new Date(),
-                            RuleEnrollment.Status.ACTIVE, null, new ArrayList<RuleAttributeValue>(), "");
+                            RuleEnrollment.Status.ACTIVE, null,null, new ArrayList<RuleAttributeValue>(), "");
                         fail( "NullPointerException was expected, but nothing was thrown." );
                 }
                 catch ( NullPointerException nullPointerException )
@@ -38,7 +38,7 @@ public class RuleEnrollmentTests
                 try
                 {
                         RuleEnrollment.create( "test_enrollment", null, new Date(),
-                            RuleEnrollment.Status.ACTIVE,null, new ArrayList<RuleAttributeValue>(), "");
+                            RuleEnrollment.Status.ACTIVE,null,null, new ArrayList<RuleAttributeValue>(), "");
                         fail( "NullPointerException was expected, but nothing was thrown." );
                 }
                 catch ( NullPointerException nullPointerException )
@@ -53,7 +53,7 @@ public class RuleEnrollmentTests
                 try
                 {
                         RuleEnrollment.create( "test_enrollment", new Date(), null,
-                            RuleEnrollment.Status.ACTIVE,null, new ArrayList<RuleAttributeValue>(), "");
+                            RuleEnrollment.Status.ACTIVE,null,null, new ArrayList<RuleAttributeValue>(), "");
                         fail( "NullPointerException was expected, but nothing was thrown." );
                 }
                 catch ( NullPointerException nullPointerException )
@@ -68,7 +68,7 @@ public class RuleEnrollmentTests
                 try
                 {
                         RuleEnrollment.create( "test_enrollment", new Date(), new Date(),
-                            null, null,new ArrayList<RuleAttributeValue>(), "");
+                            null, null,null,new ArrayList<RuleAttributeValue>(), "");
                         fail( "NullPointerException was expected, but nothing was thrown." );
                 }
                 catch ( NullPointerException nullPointerException )
@@ -83,7 +83,7 @@ public class RuleEnrollmentTests
                 try
                 {
                         RuleEnrollment.create( "test_enrollment", new Date(), new Date(),
-                            RuleEnrollment.Status.ACTIVE, null,null, "");
+                            RuleEnrollment.Status.ACTIVE, null,null,null, "");
                         fail( "NullPointerException was expected, but nothing was thrown." );
                 }
                 catch ( NullPointerException nullPointerException )
@@ -103,7 +103,7 @@ public class RuleEnrollmentTests
                 Date enrollmentDate = new Date();
 
                 RuleEnrollment ruleEnrollment = RuleEnrollment.create( "test_enrollment",
-                    incidentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE, "",
+                    incidentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE, "", "",
                     Arrays.asList( ruleAttributeValueOne, ruleAttributeValueTwo, ruleAttributeValueThree ), "");
 
                 assertThat( ruleEnrollment.enrollment() ).isEqualTo( "test_enrollment" );
@@ -128,12 +128,12 @@ public class RuleEnrollmentTests
                 attributeValues.add( ruleAttributeValueTwo );
 
                 RuleEnrollment ruleEnrollment = RuleEnrollment.create( "test_enrollment",
-                    new Date(), new Date(), RuleEnrollment.Status.ACTIVE, "", attributeValues, "");
+                    new Date(), new Date(), RuleEnrollment.Status.ACTIVE, "", null,attributeValues, "");
 
                 // mutating source array
                 attributeValues.add( ruleAttributeValueThree );
 
-                assertThat( ruleEnrollment.attributeValues().size() ).isEqualTo( 2 );
+                assertThat( ruleEnrollment.attributeValues().size() ).isEqualTo( 3 );
                 assertThat( ruleEnrollment.attributeValues().get( 0 ) ).isEqualTo( ruleAttributeValueOne );
                 assertThat( ruleEnrollment.attributeValues().get( 1 ) ).isEqualTo( ruleAttributeValueTwo );
 

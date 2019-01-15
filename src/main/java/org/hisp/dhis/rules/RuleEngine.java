@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules;
 
+import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleEffect;
 import org.hisp.dhis.rules.models.RuleEnrollment;
 import org.hisp.dhis.rules.models.RuleEvent;
@@ -84,8 +85,39 @@ public final class RuleEngine
                     .calculatedValueMap( ruleEngineContext.calculatedValueMap() )
                     .build();
 
+
+
                 return new RuleEngineExecution( executionContext().expressionEvaluator(),
                     ruleEngineContext.rules(), valueMap, ruleEngineContext.supplementaryData() );
+        }
+
+        @Nonnull
+        public Callable<List<RuleEffect>> evaluate( @Nonnull RuleEvent ruleEvent, @Nonnull List<Rule> rulesToEvaluate)
+        {
+                if ( ruleEvent == null )
+                {
+                        throw new IllegalArgumentException( "ruleEvent == null" );
+                }
+
+                for ( RuleEvent contextualEvent : ruleEvents )
+                {
+                        if ( contextualEvent.event().equals( ruleEvent.event() ) )
+                        {
+                                throw new IllegalStateException( String.format( Locale.US, "Event '%s' is already " +
+                                        "set as a part of execution context.", contextualEvent.event() ) );
+                        }
+                }
+
+                Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEvent )
+                        .ruleVariables( ruleEngineContext.ruleVariables() )
+                        .ruleEnrollment( ruleEnrollment )
+                        .triggerEnvironment( triggerEnvironment )
+                        .ruleEvents( ruleEvents )
+                        .calculatedValueMap( ruleEngineContext.calculatedValueMap() )
+                        .build();
+
+                return new RuleEngineExecution( executionContext().expressionEvaluator(),
+                        rulesToEvaluate, valueMap, ruleEngineContext.supplementaryData() );
         }
 
         @Nonnull
