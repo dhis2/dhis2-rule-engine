@@ -119,6 +119,16 @@ public class RuleFunctionYearsBetweenTests
                     is( "-1" ) );
                 MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2016-06-30", "2010-01-01" ), variableValues, null ),
                     is( "-6" ) );
+
+                MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2017-02-27", "2018-02-26" ), variableValues, null ),
+                    is( "0" ) );
+                MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2017-02-27", "2018-02-27" ), variableValues, null ),
+                    is( "1" ) );
+                MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2017-02-27", "2018-02-28" ), variableValues, null ),
+                    is( "1" ) );
+                MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2015-02-27", "2018-02-27" ), variableValues, null ),
+                    is( "3" ) );
+
         }
 
         @Test

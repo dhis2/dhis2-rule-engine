@@ -93,15 +93,17 @@ public class RuleFunctionYearsBetween extends RuleFunction {
         calendar.setTime(startDate);
         int startYear = calendar.get(Calendar.YEAR);
         int startMonth = calendar.get(Calendar.MONTH);
+        int startDay = calendar.get(Calendar.DAY_OF_MONTH);
         calendar.setTime(endDate);
         int endYear = calendar.get(Calendar.YEAR);
         int endMonth = calendar.get(Calendar.MONTH);
+        int endDay = calendar.get(Calendar.DAY_OF_MONTH);
 
         long diffYear = endYear - startYear;
-        if (endMonth < startMonth && diffYear > 0) {
+        if (endMonth <= startMonth && endDay < startDay && diffYear > 0) {
             diffYear--;
         }
-        if (endMonth > startMonth && diffYear < 0) {
+        if (endMonth >= startMonth && endDay > startDay&& diffYear < 0) {
             diffYear++;
         }
         return diffYear;
