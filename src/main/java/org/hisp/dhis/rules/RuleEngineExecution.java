@@ -76,7 +76,13 @@ class RuleEngineExecution
                                         // process each action for this rule
                                         for ( int j = 0; j < rule.actions().size(); j++ )
                                         {
-                                                ruleEffects.add( create( rule.actions().get( j ) ) );
+                                                RuleEffect ruleEffect = create(rule.actions().get(j));
+                                                //Check if action is assigning value to calculated variable
+                                                if(isAssignToCalculatedValue(rule.actions().get(j)))
+                                                        updateValueMapForCalculatedValue((RuleActionAssign)rule.actions().get(j),
+                                                                RuleVariableValue.create(ruleEffect.data(),RuleValueType.TEXT));
+                                                else
+                                                    ruleEffects.add( create( rule.actions().get( j ) ) );
                                         }
                                 }
                         }
@@ -91,6 +97,15 @@ class RuleEngineExecution
                 }
 
                 return ruleEffects;
+        }
+
+        private Boolean isAssignToCalculatedValue(RuleAction ruleAction) {
+                return ruleAction instanceof RuleActionAssign && ((RuleActionAssign) ruleAction).field().isEmpty();
+        }
+
+        private void updateValueMapForCalculatedValue(RuleActionAssign ruleActionAssign, RuleVariableValue value) {
+                valueMap.put(RuleExpression.unwrapVariableName(ruleActionAssign.content()),
+                        value);
         }
 
         @Nonnull
