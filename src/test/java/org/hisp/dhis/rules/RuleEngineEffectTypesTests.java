@@ -1,24 +1,6 @@
 package org.hisp.dhis.rules;
 
-import org.hisp.dhis.rules.models.Rule;
-import org.hisp.dhis.rules.models.RuleAction;
-import org.hisp.dhis.rules.models.RuleActionAssign;
-import org.hisp.dhis.rules.models.RuleActionCreateEvent;
-import org.hisp.dhis.rules.models.RuleActionDisplayKeyValuePair;
-import org.hisp.dhis.rules.models.RuleActionDisplayText;
-import org.hisp.dhis.rules.models.RuleActionErrorOnCompletion;
-import org.hisp.dhis.rules.models.RuleActionHideField;
-import org.hisp.dhis.rules.models.RuleActionHideProgramStage;
-import org.hisp.dhis.rules.models.RuleActionHideSection;
-import org.hisp.dhis.rules.models.RuleActionScheduleMessage;
-import org.hisp.dhis.rules.models.RuleActionSetMandatoryField;
-import org.hisp.dhis.rules.models.RuleActionShowError;
-import org.hisp.dhis.rules.models.RuleActionShowWarning;
-import org.hisp.dhis.rules.models.RuleActionWarningOnCompletion;
-import org.hisp.dhis.rules.models.RuleDataValue;
-import org.hisp.dhis.rules.models.RuleEffect;
-import org.hisp.dhis.rules.models.RuleEvent;
-import org.hisp.dhis.rules.models.TriggerEnvironment;
+import org.hisp.dhis.rules.models.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -227,6 +209,38 @@ public class RuleEngineEffectTypesTests {
     public void simpleConditionMustResultInHideSectionEffect()
             throws Exception {
         RuleAction ruleAction = RuleActionHideSection.create("test_section");
+        Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
+
+        RuleEngine ruleEngine = getRuleEngine(rule);
+
+
+        List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call();
+
+        assertThat(ruleEffects.size()).isEqualTo(1);
+        assertThat(ruleEffects.get(0).data()).isEqualTo("");
+        assertThat(ruleEffects.get(0).ruleAction()).isEqualTo(ruleAction);
+    }
+
+    @Test
+    public void simpleConditionMustResultInHideOptionEffect()
+            throws Exception {
+        RuleAction ruleAction = RuleActionHideOption.create("test_content", "test_option", "test_field");
+        Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
+
+        RuleEngine ruleEngine = getRuleEngine(rule);
+
+
+        List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call();
+
+        assertThat(ruleEffects.size()).isEqualTo(1);
+        assertThat(ruleEffects.get(0).data()).isEqualTo("");
+        assertThat(ruleEffects.get(0).ruleAction()).isEqualTo(ruleAction);
+    }
+
+    @Test
+    public void simpleConditionMustResultInHideOptionGroupEffect()
+            throws Exception {
+        RuleAction ruleAction = RuleActionHideOptionGroup.create("test_content", "test_option_group");
         Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
 
         RuleEngine ruleEngine = getRuleEngine(rule);
