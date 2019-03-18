@@ -13,7 +13,7 @@ public abstract class RuleActionHideSection
         public abstract String programStageSection();
 
         @Nonnull
-        public static AutoValue_RuleActionHideSection create( @Nonnull String section )
+        public static RuleActionHideSection create( @Nonnull String section )
         {
                 return new AutoValue_RuleActionHideSection( section );
         }
