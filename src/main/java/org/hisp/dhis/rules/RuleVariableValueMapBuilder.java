@@ -85,6 +85,9 @@ final class RuleVariableValueMapBuilder {
     private final Map<String, Map<String, String>> calculatedValueMap;
 
     @Nonnull
+    private final Map<String, String> allConstantValues;
+
+    @Nonnull
     private final List<RuleVariable> ruleVariables;
 
     @Nonnull
@@ -109,6 +112,7 @@ final class RuleVariableValueMapBuilder {
         this.ruleVariables = new ArrayList<>();
         this.ruleEvents = new ArrayList<>();
         this.calculatedValueMap = new HashMap<>();
+        this.allConstantValues = new HashMap<>();
     }
 
     private RuleVariableValueMapBuilder(@Nonnull RuleEnrollment ruleEnrollment) {
@@ -180,6 +184,12 @@ final class RuleVariableValueMapBuilder {
     }
 
     @Nonnull
+    RuleVariableValueMapBuilder constantValueMap(@Nonnull Map<String, String> constantValues){
+        this.allConstantValues.putAll(constantValues);
+        return this;
+    }
+
+    @Nonnull
     Map<String, RuleVariableValue> build() {
         Map<String, RuleVariableValue> valueMap = new HashMap<>();
 
@@ -197,6 +207,9 @@ final class RuleVariableValueMapBuilder {
 
         // set metadata variables
         buildRuleVariableValues(valueMap);
+
+        // set constants value map
+        buildConstantsValues(valueMap);
 
         // do not let outer world to alter variable value map
         return Collections.unmodifiableMap(valueMap);
@@ -265,6 +278,11 @@ final class RuleVariableValueMapBuilder {
                 allEventsValues.get(ruleDataValue.dataElement()).add(ruleDataValue);
             }
         }
+    }
+
+    private void buildConstantsValues(Map<String,RuleVariableValue> valueMap) {
+        for(Map.Entry<String,String> entrySet : allConstantValues.entrySet())
+            valueMap.put(entrySet.getKey(), create(entrySet.getValue(),RuleValueType.NUMERIC));
     }
 
     private void buildEnvironmentVariables(@Nonnull Map<String, RuleVariableValue> valueMap) {

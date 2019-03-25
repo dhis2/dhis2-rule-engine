@@ -83,6 +83,7 @@ public class RuleEngineValueTypesTests
                         .ruleVariables( ruleVariables )
                         .calculatedValueMap( new HashMap<>( ) )
                         .supplementaryData( new HashMap<>() )
+                        .constantsValue( new HashMap<>() )
                         .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
                         .build();
         }

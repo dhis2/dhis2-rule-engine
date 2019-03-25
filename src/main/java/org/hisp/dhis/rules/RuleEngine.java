@@ -83,9 +83,8 @@ public final class RuleEngine
                     .triggerEnvironment( triggerEnvironment )
                     .ruleEvents( ruleEvents )
                     .calculatedValueMap( ruleEngineContext.calculatedValueMap() )
+                    .constantValueMap( ruleEngineContext.constantsValues() )
                     .build();
-
-
 
                 return new RuleEngineExecution( executionContext().expressionEvaluator(),
                     ruleEngineContext.rules(), valueMap, ruleEngineContext.supplementaryData() );
@@ -114,6 +113,7 @@ public final class RuleEngine
                         .triggerEnvironment( triggerEnvironment )
                         .ruleEvents( ruleEvents )
                         .calculatedValueMap( ruleEngineContext.calculatedValueMap() )
+                        .constantValueMap( ruleEngineContext.constantsValues() )
                         .build();
 
                 return new RuleEngineExecution( executionContext().expressionEvaluator(),
@@ -138,6 +138,7 @@ public final class RuleEngine
                     .ruleVariables( ruleEngineContext.ruleVariables() )
                     .triggerEnvironment( triggerEnvironment )
                     .ruleEvents( ruleEvents )
+                    .constantValueMap( ruleEngineContext.constantsValues())
                     .build();
 
                 return new RuleEngineExecution( executionContext().expressionEvaluator(),

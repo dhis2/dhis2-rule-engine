@@ -184,6 +184,7 @@ public class CalculatedValueTests
                 .ruleVariables( Arrays.asList( ruleVariable ) )
                 .calculatedValueMap( calculatedValueMap )
                 .supplementaryData( new HashMap<>() )
+                .constantsValue( new HashMap<>() )
                 .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );
     }
 }
