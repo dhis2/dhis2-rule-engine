@@ -121,7 +121,7 @@ public final class RuleEngine
         }
 
         @Nonnull
-        public Callable<List<RuleEffect>> evaluate( @Nonnull RuleEnrollment ruleEnrollment )
+        public Callable<List<RuleEffect>> evaluate( @Nonnull RuleEnrollment ruleEnrollment, @Nonnull List<Rule> rulesToEvaluate )
         {
                 if ( ruleEnrollment == null )
                 {
@@ -141,7 +141,31 @@ public final class RuleEngine
                     .build();
 
                 return new RuleEngineExecution( executionContext().expressionEvaluator(),
-                    ruleEngineContext.rules(), valueMap, ruleEngineContext.supplementaryData()  );
+                    rulesToEvaluate, valueMap, ruleEngineContext.supplementaryData()  );
+        }
+
+        @Nonnull
+        public Callable<List<RuleEffect>> evaluate( @Nonnull RuleEnrollment ruleEnrollment )
+        {
+                if ( ruleEnrollment == null )
+                {
+                        throw new IllegalArgumentException( "ruleEnrollment == null" );
+                }
+
+                if ( this.ruleEnrollment != null )
+                {
+                        throw new IllegalStateException( String.format( Locale.US, "Enrollment '%s' is already " +
+                                "set as a part of execution context.", this.ruleEnrollment.enrollment() ) );
+                }
+
+                Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEnrollment )
+                        .ruleVariables( ruleEngineContext.ruleVariables() )
+                        .triggerEnvironment( triggerEnvironment )
+                        .ruleEvents( ruleEvents )
+                        .build();
+
+                return new RuleEngineExecution( executionContext().expressionEvaluator(),
+                        ruleEngineContext.rules(), valueMap, ruleEngineContext.supplementaryData()  );
         }
 
         public static class Builder
