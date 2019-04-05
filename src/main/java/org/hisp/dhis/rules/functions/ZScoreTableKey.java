@@ -28,6 +28,8 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.google.common.collect.Sets;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -35,27 +37,33 @@ import java.util.Set;
 /**
  * @Author Zubair Asghar.
  */
-public class ZscoreKeySet
+public class ZScoreTableKey
 {
     private final String gender;
-    private final Integer age;
-    private final Float weight;
+    private final String age;
 
-    public ZscoreKeySet( String gender, Integer age, Float weight )
+    public ZScoreTableKey( String gender, String age )
     {
         this.gender = gender;
         this.age = age;
-        this.weight = weight;
     }
 
-    public static Map<ZscoreKeySet, Set<Float>> getZscoreTableGirl()
+    public static Map<ZScoreTableKey, Set<Float>> getZscoreTableGirl()
     {
-        return new HashMap<>();
+        Map<ZScoreTableKey, Set<Float>> zscoreMap = new HashMap<>();
+
+        zscoreMap.put( new ZScoreTableKey( "female", "1" ), Sets.newHashSet( 2.0f, 2.4f, 2.8f, 3.2f, 3.7f, 4.2f, 4.8f ) );
+
+        return zscoreMap;
     }
 
-    public static Map<ZscoreKeySet, Set<Float>> getZscoreTableBoy()
+    public static Map<ZScoreTableKey, Set<Float>> getZscoreTableBoy()
     {
-        return new HashMap<>();
+        Map<ZScoreTableKey, Set<Float>> zscoreMap = new HashMap<>();
+
+        zscoreMap.put( new ZScoreTableKey( "male", "1" ), Sets.newHashSet( 2.0f, 2.4f, 2.8f, 3.2f, 3.7f, 4.2f, 4.8f ) );
+
+        return zscoreMap;
     }
 
     @Override
@@ -65,9 +73,8 @@ public class ZscoreKeySet
 
         int result = 1;
 
-        result = prime * result + ((gender == null) ? 0 : gender.hashCode());
-        result = prime * result + ((age == null) ? 0 : age.hashCode());
-        result = prime * result + ((weight == null) ? 0 : weight.hashCode());
+        result = prime * result + ( (gender == null) ? 0 : gender.hashCode() );
+        result = prime * result + ( (age == null) ? 0 : age.hashCode());
 
         return result;
     }
@@ -80,13 +87,13 @@ public class ZscoreKeySet
             return true;
         }
 
-        if ( !( obj instanceof ZscoreKeySet) )
+        if ( !( obj instanceof ZScoreTableKey) )
         {
             return false;
         }
 
-        ZscoreKeySet other = (ZscoreKeySet) obj;
+        ZScoreTableKey other = (ZScoreTableKey) obj;
 
-        return this.weight.equals( other.weight ) && this.age.equals( other.age ) && this.gender.equals( other.gender );
+        return this.age.equals( other.age ) && this.gender.equals( other.gender );
     }
 }

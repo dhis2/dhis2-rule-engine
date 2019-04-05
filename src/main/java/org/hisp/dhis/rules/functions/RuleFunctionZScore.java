@@ -42,8 +42,8 @@ import java.util.Set;
  */
 public class RuleFunctionZScore extends RuleFunction
 {
-    private static Map<ZscoreKeySet, Set<Float>> ZSCORE_TABLE_GIRL = ZscoreKeySet.getZscoreTableGirl();
-    private static Map<ZscoreKeySet, Set<Float>> ZSCORE_TABLE_BOY = ZscoreKeySet.getZscoreTableBoy();
+    private static Map<ZScoreTableKey, Set<Float>> ZSCORE_TABLE_GIRL = ZScoreTableKey.getZscoreTableGirl();
+    private static Map<ZScoreTableKey, Set<Float>> ZSCORE_TABLE_BOY = ZScoreTableKey.getZscoreTableBoy();
 
     public static final String D2_ZSCORE = "d2:zScore";
 
