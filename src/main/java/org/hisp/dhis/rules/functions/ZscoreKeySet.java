@@ -28,44 +28,65 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
-
-import javax.annotation.Nonnull;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 /**
  * @Author Zubair Asghar.
  */
-public class RuleFunctionConcatenate
-    extends RuleFunction
+public class ZscoreKeySet
 {
-        public static final String D2_CONCATENATE = "d2:concatenate";
+    private final String gender;
+    private final Integer age;
+    private final Float weight;
 
-        @Nonnull
-        @Override
-        public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
-            Map<String, List<String>> supplementaryData )
+    public ZscoreKeySet( String gender, Integer age, Float weight )
+    {
+        this.gender = gender;
+        this.age = age;
+        this.weight = weight;
+    }
+
+    public static Map<ZscoreKeySet, Set<Float>> getZscoreTableGirl()
+    {
+        return new HashMap<>();
+    }
+
+    public static Map<ZscoreKeySet, Set<Float>> getZscoreTableBoy()
+    {
+        return new HashMap<>();
+    }
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+
+        int result = 1;
+
+        result = prime * result + ((gender == null) ? 0 : gender.hashCode());
+        result = prime * result + ((age == null) ? 0 : age.hashCode());
+        result = prime * result + ((weight == null) ? 0 : weight.hashCode());
+
+        return result;
+    }
+
+    @Override
+    public boolean equals( Object obj )
+    {
+        if ( this == obj )
         {
-                StringBuilder builder = new StringBuilder();
-
-                for( String string : arguments )
-                {
-                        if( string != null )
-                        {
-                                builder.append(string);
-                        }
-                }
-
-//                arguments.stream().filter( Objects::nonNull ).collect( Collectors.toList() ).forEach( builder::append );
-
-                return wrap( builder.toString() );
+            return true;
         }
 
-        public static RuleFunctionConcatenate create()
+        if ( !( obj instanceof ZscoreKeySet) )
         {
-                return new RuleFunctionConcatenate();
+            return false;
         }
+
+        ZscoreKeySet other = (ZscoreKeySet) obj;
+
+        return this.weight.equals( other.weight ) && this.age.equals( other.age ) && this.gender.equals( other.gender );
+    }
 }

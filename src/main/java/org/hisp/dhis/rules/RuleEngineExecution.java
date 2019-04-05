@@ -51,7 +51,8 @@ class RuleEngineExecution
 
                 List<Rule> ruleList = new ArrayList<>( rules );
 
-                Collections.sort(ruleList, (rule1, rule2) -> {
+                Collections.sort(ruleList, (rule1, rule2) ->
+                {
                     Integer priority1 = rule1.priority();
                     Integer priority2 = rule2.priority();
                         if(priority1!=null && priority2 !=null)

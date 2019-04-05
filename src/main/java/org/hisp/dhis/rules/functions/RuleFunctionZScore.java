@@ -33,39 +33,30 @@ import org.hisp.dhis.rules.RuleVariableValue;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 /**
+ * Returns standard deviation based on age, gender and weight
+ *
  * @Author Zubair Asghar.
  */
-public class RuleFunctionConcatenate
-    extends RuleFunction
+public class RuleFunctionZScore extends RuleFunction
 {
-        public static final String D2_CONCATENATE = "d2:concatenate";
+    private static Map<ZscoreKeySet, Set<Float>> ZSCORE_TABLE_GIRL = ZscoreKeySet.getZscoreTableGirl();
+    private static Map<ZscoreKeySet, Set<Float>> ZSCORE_TABLE_BOY = ZscoreKeySet.getZscoreTableBoy();
 
-        @Nonnull
-        @Override
-        public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
-            Map<String, List<String>> supplementaryData )
+    public static final String D2_ZSCORE = "d2:zScore";
+
+    @Nonnull
+    @Override
+    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String,
+        List<String>> supplementaryData )
+    {
+        if ( arguments.size() < 3 )
         {
-                StringBuilder builder = new StringBuilder();
-
-                for( String string : arguments )
-                {
-                        if( string != null )
-                        {
-                                builder.append(string);
-                        }
-                }
-
-//                arguments.stream().filter( Objects::nonNull ).collect( Collectors.toList() ).forEach( builder::append );
-
-                return wrap( builder.toString() );
+            throw new IllegalArgumentException( "At least three arguments required but found: " + arguments.size() );
         }
 
-        public static RuleFunctionConcatenate create()
-        {
-                return new RuleFunctionConcatenate();
-        }
+        return null;
+    }
 }

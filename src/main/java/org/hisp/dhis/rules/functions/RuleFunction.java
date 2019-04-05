@@ -54,6 +54,8 @@ public abstract class RuleFunction
                         return RuleFunctionYearsBetween.create();
                 case RuleFunctionZpvc.D2_ZPVC:
                         return RuleFunctionZpvc.create();
+                case RuleFunctionZScore.D2_ZSCORE:
+                        return RuleFunctionZpvc.create();
                 case RuleFunctionZing.D2_ZING:
                         return RuleFunctionZing.create();
                 case RuleFunctionOizp.D2_OIZP:
