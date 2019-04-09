@@ -41,23 +41,16 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Returns standard deviation based on age, gender and weight
- *
  * @Author Zubair Asghar.
  */
-public class RuleFunctionZScore extends RuleFunction
+public abstract class RuleFunctionZScore extends RuleFunction
 {
-    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_GIRL = ZScoreTable.getZscoreTableGirl();
-    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_BOY = ZScoreTable.getZscoreTableBoy();
-    private static final DecimalFormat format = new DecimalFormat( "###.00" );
     private static final Set<String> GENDER_CODES = Sets.newHashSet( "male", "MALE", "Male","ma", "m", "M", "0", "false" );
-
-    public static final String D2_ZSCORE = "d2:zScore";
+    protected static final DecimalFormat format = new DecimalFormat( "###.00" );
 
     @Nonnull
     @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String,
-        List<String>> supplementaryData )
+    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
     {
         if ( arguments.size() < 3 )
         {
@@ -86,6 +79,10 @@ public class RuleFunctionZScore extends RuleFunction
         return zScore;
     }
 
+    public abstract Map<ZScoreTableKey, Map<Float, Integer>> getTableForGirl();
+
+    public abstract Map<ZScoreTableKey, Map<Float, Integer>> getTableForBoy();
+
     private String getZScore( byte age, float weight, byte gender )
     {
         ZScoreTableKey key = new ZScoreTableKey( gender, age );
@@ -95,12 +92,12 @@ public class RuleFunctionZScore extends RuleFunction
         // Female
         if ( gender == 1 )
         {
-            sdMap = ZSCORE_TABLE_GIRL.get( key );
+            sdMap = getTableForGirl().get( key );
 
         }
         else
         {
-            sdMap = ZSCORE_TABLE_BOY.get( key );
+            sdMap = getTableForBoy().get( key );
         }
 
         int multiplicationFactor = getMultiplicationFactor( sdMap, weight );
@@ -144,7 +141,7 @@ public class RuleFunctionZScore extends RuleFunction
 
         float decimalAddition;
 
-        float result = 0;
+        float result;
 
         if ( weight > findMedian( sdMap ) )
         {
@@ -189,8 +186,8 @@ public class RuleFunctionZScore extends RuleFunction
         return list;
     }
 
-    public static RuleFunctionZScore create()
+    public static RuleFunctionZScoreWFA create()
     {
-        return new RuleFunctionZScore();
+        return new RuleFunctionZScoreWFA();
     }
 }

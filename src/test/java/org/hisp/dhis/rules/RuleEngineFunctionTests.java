@@ -659,7 +659,7 @@ public class RuleEngineFunctionTests
             RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
                     "test_var_two", "test_data_element_two", RuleValueType.TEXT );
 
-            Rule rule = Rule.create( null, null, "d2:zScore(1,#{test_var_one},#{test_var_two}) == 0", Arrays.asList( ruleAction ), "");
+            Rule rule = Rule.create( null, null, "d2:zScoreWFA(1,#{test_var_one},#{test_var_two}) == 0", Arrays.asList( ruleAction ), "");
 
             RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
 

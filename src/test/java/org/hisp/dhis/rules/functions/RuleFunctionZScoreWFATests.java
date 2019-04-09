@@ -44,7 +44,7 @@ import static org.hamcrest.CoreMatchers.is;
  */
 
 @RunWith( JUnit4.class )
-public class RuleFunctionZScoreTests
+public class RuleFunctionZScoreWFATests
 {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -52,7 +52,7 @@ public class RuleFunctionZScoreTests
     @Test
     public void testZscoreAtExactSDValue()
     {
-        RuleFunction zScore = RuleFunctionZScore.create();
+        RuleFunction zScore = RuleFunctionZScoreWFA.create();
 
         MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "1", "4.8", "1" ), null, null ), is( "1" ) );
         MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "1", "3.2", "1" ), null, null ), is( "-2" ) );
@@ -63,7 +63,7 @@ public class RuleFunctionZScoreTests
     @Test
     public void testZscoreBeyond3SD()
     {
-        RuleFunction zScore = RuleFunctionZScore.create();
+        RuleFunction zScore = RuleFunctionZScoreWFA.create();
 
         MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "1", "7.5", "1" ), null, null ), is( "3.5" ) );
     }
@@ -71,7 +71,7 @@ public class RuleFunctionZScoreTests
     @Test
     public void testZscoreBeyondNegative3SD()
     {
-        RuleFunction zScore = RuleFunctionZScore.create();
+        RuleFunction zScore = RuleFunctionZScoreWFA.create();
 
         MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "1", "4.8", "1" ), null, null ), is( "1" ) );
     }
@@ -79,7 +79,7 @@ public class RuleFunctionZScoreTests
     @Test
     public void testZscoreAboveSD0()
     {
-        RuleFunction zScore = RuleFunctionZScore.create();
+        RuleFunction zScore = RuleFunctionZScoreWFA.create();
 
         MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "1", "5.2", "1" ), null, null ), is( "1.57" ) );
         MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "6", "9.5", "1" ), null, null ), is( "2.15" ) );
@@ -89,7 +89,7 @@ public class RuleFunctionZScoreTests
     @Test
     public void testZscoreBelowSD0()
     {
-        RuleFunction zScore = RuleFunctionZScore.create();
+        RuleFunction zScore = RuleFunctionZScoreWFA.create();
 
         MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "1", "2.9", "1" ), null, null ), is( "-2.60" ) );
         MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "12", "7.5", "1" ), null, null ), is( "-1.44" ) );
@@ -101,7 +101,7 @@ public class RuleFunctionZScoreTests
     {
         thrown.expect( IllegalArgumentException.class );
 
-        RuleFunction zScore = RuleFunctionZScore.create();
+        RuleFunction zScore = RuleFunctionZScoreWFA.create();
         MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "1", "2.9" ), null, null ), is( "-2.40" ) );
     }
 
@@ -111,7 +111,7 @@ public class RuleFunctionZScoreTests
         thrown.expect( IllegalArgumentException.class );
         thrown.expectMessage( "Byte parsing failed" );
 
-        RuleFunction zScore = RuleFunctionZScore.create();
+        RuleFunction zScore = RuleFunctionZScoreWFA.create();
         MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "1", "abc", "1" ), null, null ), is( "-2.40" ) );
 
     }
