@@ -49,9 +49,7 @@ public class RuleFunctionZScore extends RuleFunction
 {
     private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_GIRL = ZScoreTable.getZscoreTableGirl();
     private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_BOY = ZScoreTable.getZscoreTableBoy();
-
     private static final DecimalFormat format = new DecimalFormat( "###.00" );
-
     private static final Set<String> GENDER_CODES = Sets.newHashSet( "male", "MALE", "Male","ma", "m", "M", "0", "false" );
 
     public static final String D2_ZSCORE = "d2:zScore";
@@ -90,7 +88,7 @@ public class RuleFunctionZScore extends RuleFunction
 
     private String getZScore( byte age, float weight, byte gender )
     {
-        ZScoreTableKey key = new ZScoreTableKey( (byte) 1, age );
+        ZScoreTableKey key = new ZScoreTableKey( gender, age );
 
         Map<Float, Integer> sdMap = new HashMap<>();
 

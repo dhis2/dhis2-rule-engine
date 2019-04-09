@@ -76,4 +76,24 @@ public class RuleFunctionZScoreTests
         MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "1", "2.9", "1" ), null, null ), is( "-2.40" ) );
         MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "12", "7.5", "1" ), null, null ), is( "-1.56" ) );
     }
+
+    @Test
+    public void testExceptionIfInvalidArgument()
+    {
+        thrown.expect( IllegalArgumentException.class );
+
+        RuleFunction zScore = RuleFunctionZScore.create();
+        MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "1", "2.9" ), null, null ), is( "-2.40" ) );
+    }
+
+    @Test
+    public void testExceptionWeightIsInvalid()
+    {
+        thrown.expect( IllegalArgumentException.class );
+        thrown.expectMessage( "Byte parsing failed" );
+
+        RuleFunction zScore = RuleFunctionZScore.create();
+        MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "1", "abc", "1" ), null, null ), is( "-2.40" ) );
+
+    }
 }

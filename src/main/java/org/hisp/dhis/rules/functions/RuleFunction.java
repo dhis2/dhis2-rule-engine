@@ -55,7 +55,7 @@ public abstract class RuleFunction
                 case RuleFunctionZpvc.D2_ZPVC:
                         return RuleFunctionZpvc.create();
                 case RuleFunctionZScore.D2_ZSCORE:
-                        return RuleFunctionZpvc.create();
+                        return RuleFunctionZScore.create();
                 case RuleFunctionZing.D2_ZING:
                         return RuleFunctionZing.create();
                 case RuleFunctionOizp.D2_OIZP:
