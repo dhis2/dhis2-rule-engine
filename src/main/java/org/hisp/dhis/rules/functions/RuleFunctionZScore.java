@@ -32,7 +32,9 @@ import com.google.common.collect.Sets;
 import org.hisp.dhis.rules.RuleVariableValue;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,14 +67,14 @@ public class RuleFunctionZScore extends RuleFunction
         // 1 = female, 0 = male
         byte age;
         float weight;
-        byte gender = GENDER_CODES.contains( arguments.get( 3 ) ) ? (byte) 0 : (byte) 1;
+        byte gender = GENDER_CODES.contains( arguments.get( 2 ) ) ? (byte) 0 : (byte) 1;
 
         String zScore = "";
 
         try
         {
             age = Byte.parseByte( arguments.get( 0 ) );
-            weight = Byte.parseByte( arguments.get( 1 ) );
+            weight = Float.parseFloat( arguments.get( 1 ) );
         }
         catch ( NumberFormatException ex )
         {
@@ -145,19 +147,24 @@ public class RuleFunctionZScore extends RuleFunction
 
     private float findMedian( Map<Float, Integer> sdMap )
     {
-        Float[] array = sortKeySet( sdMap );
+        List<Float> sortedList = sortKeySet( sdMap );
 
-        return array[3];
+        return sortedList.get( 3 );
     }
 
-    private Float[] sortKeySet( Map<Float, Integer> sdMap )
+    private List<Float> sortKeySet( Map<Float, Integer> sdMap )
     {
         Set<Float> keySet = sdMap.keySet();
 
-        Float[] array = (Float[]) keySet.toArray();
+        List<Float> list = new ArrayList<>( keySet );
 
-        Arrays.sort( array );
+        Collections.sort( list );
 
-        return array;
+        return list;
+    }
+
+    public static RuleFunctionZScore create()
+    {
+        return new RuleFunctionZScore();
     }
 }
