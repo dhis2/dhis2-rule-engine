@@ -114,10 +114,18 @@ public class RuleFunctionZScore extends RuleFunction
         }
 
         // weight is beyond -3SD or 3SD
-
+        if ( weight > Collections.max( sdMap.keySet() ) )
+        {
+            return String.valueOf( 3.5 );
+        }
+        else if ( weight < Collections.min( sdMap.keySet() ) )
+        {
+            return String.valueOf( -3.5 );
+        }
 
         float lowerLimitX = 0, higherLimitY = 0;
 
+        // find the interval
         for ( float f : sortKeySet( sdMap ) )
         {
             if (  weight > f )
