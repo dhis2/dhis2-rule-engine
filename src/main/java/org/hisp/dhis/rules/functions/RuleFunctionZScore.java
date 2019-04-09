@@ -32,8 +32,8 @@ import com.google.common.collect.Sets;
 import org.hisp.dhis.rules.RuleVariableValue;
 
 import javax.annotation.Nonnull;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +49,8 @@ public class RuleFunctionZScore extends RuleFunction
 {
     private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_GIRL = ZScoreTable.getZscoreTableGirl();
     private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_BOY = ZScoreTable.getZscoreTableBoy();
+
+    private static final DecimalFormat format = new DecimalFormat( "###.00" );
 
     private static final Set<String> GENDER_CODES = Sets.newHashSet( "male", "MALE", "Male","ma", "m", "M", "0", "false" );
 
@@ -82,7 +84,6 @@ public class RuleFunctionZScore extends RuleFunction
         }
 
         zScore = getZScore( age, weight, gender );
-
 
         return zScore;
     }
@@ -125,6 +126,7 @@ public class RuleFunctionZScore extends RuleFunction
             }
 
             higherLimitY = f;
+            break;
         }
 
         float distance = lowerLimitX - higherLimitY;
@@ -133,9 +135,20 @@ public class RuleFunctionZScore extends RuleFunction
 
         float decimalAddition = gap / distance;
 
-        float result = sdMap.get( lowerLimitX ) + decimalAddition;
+        float result = 0;
 
-        return String.valueOf( result * multiplicationFactor );
+        if ( weight > findMedian( sdMap ) )
+        {
+            result = sdMap.get( lowerLimitX ) + decimalAddition;
+        }
+        else
+        {
+            result = sdMap.get( higherLimitY ) + decimalAddition;
+        }
+
+        result = result * multiplicationFactor;
+
+        return String.valueOf( format.format( result ) );
     }
 
     private int getMultiplicationFactor( Map<Float, Integer> sdMap, float weight )

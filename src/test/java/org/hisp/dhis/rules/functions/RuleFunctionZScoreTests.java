@@ -36,7 +36,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 
@@ -51,12 +50,30 @@ public class RuleFunctionZScoreTests
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void return_count_of_non_negative_values_in_arguments()
+    public void testZscoreAtExactSDValue()
     {
         RuleFunction zScore = RuleFunctionZScore.create();
 
-        List<String> arguments = Arrays.asList( "1", "4.5", "1" );
+        MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "1", "4.8", "1" ), null, null ), is( "1" ) );
+        MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "1", "3.2", "1" ), null, null ), is( "-2" ) );
+        MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "39", "14.4", "1" ), null, null ), is( "0" ) );
+    }
 
-        MatcherAssert.assertThat( zScore.evaluate( arguments, null, null ), is( "0.15" ) );
+    @Test
+    public void testZscoreAboveSD0()
+    {
+        RuleFunction zScore = RuleFunctionZScore.create();
+
+        MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "1", "5.2", "1" ), null, null ), is( "1.57" ) );
+        MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "6", "9.5", "1" ), null, null ), is( "2.15" ) );
+    }
+
+    @Test
+    public void testZscoreBelowSD0()
+    {
+        RuleFunction zScore = RuleFunctionZScore.create();
+
+        MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "1", "2.9", "1" ), null, null ), is( "-2.40" ) );
+        MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "12", "7.5", "1" ), null, null ), is( "-1.56" ) );
     }
 }
