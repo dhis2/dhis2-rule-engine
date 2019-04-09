@@ -66,6 +66,7 @@ public class RuleFunctionZScoreTests
 
         MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "1", "5.2", "1" ), null, null ), is( "1.57" ) );
         MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "6", "9.5", "1" ), null, null ), is( "2.15" ) );
+        MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "1", "6.0", "1" ), null, null ), is( "2.71" ) );
     }
 
     @Test
@@ -73,8 +74,9 @@ public class RuleFunctionZScoreTests
     {
         RuleFunction zScore = RuleFunctionZScore.create();
 
-        MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "1", "2.9", "1" ), null, null ), is( "-2.40" ) );
-        MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "12", "7.5", "1" ), null, null ), is( "-1.56" ) );
+        MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "1", "2.9", "1" ), null, null ), is( "-2.60" ) );
+        MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "12", "7.5", "1" ), null, null ), is( "-1.44" ) );
+        MatcherAssert.assertThat( zScore.evaluate( Arrays.asList( "1", "2.8", "1" ), null, null ), is( "-2.80" ) );
     }
 
     @Test

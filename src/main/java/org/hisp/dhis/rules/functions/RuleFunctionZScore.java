@@ -113,6 +113,9 @@ public class RuleFunctionZScore extends RuleFunction
             return String.valueOf( sd * multiplicationFactor );
         }
 
+        // weight is beyond -3SD or 3SD
+
+
         float lowerLimitX = 0, higherLimitY = 0;
 
         for ( float f : sortKeySet( sdMap ) )
@@ -127,20 +130,24 @@ public class RuleFunctionZScore extends RuleFunction
             break;
         }
 
-        float distance = lowerLimitX - higherLimitY;
+        float distance = higherLimitY - lowerLimitX;
 
-        float gap = lowerLimitX - weight;
+        float gap;
 
-        float decimalAddition = gap / distance;
+        float decimalAddition;
 
         float result = 0;
 
         if ( weight > findMedian( sdMap ) )
         {
+            gap = weight - lowerLimitX;
+            decimalAddition = gap / distance;
             result = sdMap.get( lowerLimitX ) + decimalAddition;
         }
         else
         {
+            gap = higherLimitY - weight;
+            decimalAddition = gap / distance;
             result = sdMap.get( higherLimitY ) + decimalAddition;
         }
 
