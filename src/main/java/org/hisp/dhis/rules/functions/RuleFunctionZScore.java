@@ -28,9 +28,12 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.google.common.collect.Sets;
 import org.hisp.dhis.rules.RuleVariableValue;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,8 +45,10 @@ import java.util.Set;
  */
 public class RuleFunctionZScore extends RuleFunction
 {
-    private static Map<ZScoreTableKey, Set<Float>> ZSCORE_TABLE_GIRL = ZScoreTableKey.getZscoreTableGirl();
-    private static Map<ZScoreTableKey, Set<Float>> ZSCORE_TABLE_BOY = ZScoreTableKey.getZscoreTableBoy();
+    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_GIRL = ZScoreTable.getZscoreTableGirl();
+    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_BOY = ZScoreTable.getZscoreTableBoy();
+
+    private static final Set<String> GENDER_CODES = Sets.newHashSet( "male", "MALE", "Male","ma", "m", "M", "0", "false" );
 
     public static final String D2_ZSCORE = "d2:zScore";
 
@@ -57,6 +62,102 @@ public class RuleFunctionZScore extends RuleFunction
             throw new IllegalArgumentException( "At least three arguments required but found: " + arguments.size() );
         }
 
-        return null;
+        // 1 = female, 0 = male
+        byte age;
+        float weight;
+        byte gender = GENDER_CODES.contains( arguments.get( 3 ) ) ? (byte) 0 : (byte) 1;
+
+        String zScore = "";
+
+        try
+        {
+            age = Byte.parseByte( arguments.get( 0 ) );
+            weight = Byte.parseByte( arguments.get( 1 ) );
+        }
+        catch ( NumberFormatException ex )
+        {
+            throw new IllegalArgumentException( "Byte parsing failed" );
+        }
+
+        zScore = getZScore( age, weight, gender );
+
+
+        return zScore;
+    }
+
+    private String getZScore( byte age, float weight, byte gender )
+    {
+        ZScoreTableKey key = new ZScoreTableKey( (byte) 1, age );
+
+        Map<Float, Integer> sdMap = new HashMap<>();
+
+        // Female
+        if ( gender == 1 )
+        {
+            sdMap = ZSCORE_TABLE_GIRL.get( key );
+
+        }
+        else
+        {
+            sdMap = ZSCORE_TABLE_BOY.get( key );
+        }
+
+        int multiplicationFactor = getMultiplicationFactor( sdMap, weight );
+
+        // weight exactly matches with any of the SD values
+        if ( sdMap.keySet().contains( weight ) )
+        {
+            int sd = sdMap.get( weight );
+
+            return String.valueOf( sd * multiplicationFactor );
+        }
+
+        float lowerLimitX = 0, higherLimitY = 0;
+
+        for ( float f : sortKeySet( sdMap ) )
+        {
+            if (  weight > f )
+            {
+                lowerLimitX = f;
+                continue;
+            }
+
+            higherLimitY = f;
+        }
+
+        float distance = lowerLimitX - higherLimitY;
+
+        float gap = lowerLimitX - weight;
+
+        float decimalAddition = gap / distance;
+
+        float result = sdMap.get( lowerLimitX ) + decimalAddition;
+
+        return String.valueOf( result * multiplicationFactor );
+    }
+
+    private int getMultiplicationFactor( Map<Float, Integer> sdMap, float weight )
+    {
+        float median = findMedian( sdMap );
+
+        return Float.compare( weight, median );
+    }
+
+    private float findMedian( Map<Float, Integer> sdMap )
+    {
+        Float[] array = sortKeySet( sdMap );
+
+        return array[3];
+    }
+
+    private Float[] sortKeySet( Map<Float, Integer> sdMap )
+    {
+        Set<Float> keySet = sdMap.keySet();
+
+        Float[] array = (Float[]) keySet.toArray();
+
+        Arrays.sort( array );
+
+        return array;
     }
 }

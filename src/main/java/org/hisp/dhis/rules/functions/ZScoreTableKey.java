@@ -26,44 +26,19 @@ package org.hisp.dhis.rules.functions;
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
-import com.google.common.collect.Sets;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @Author Zubair Asghar.
  */
 public class ZScoreTableKey
 {
-    private final String gender;
-    private final String age;
+    private final byte gender;
+    private final byte age;
 
-    public ZScoreTableKey( String gender, String age )
+    public ZScoreTableKey( byte gender, byte age )
     {
         this.gender = gender;
         this.age = age;
-    }
-
-    public static Map<ZScoreTableKey, Set<Float>> getZscoreTableGirl()
-    {
-        Map<ZScoreTableKey, Set<Float>> zscoreMap = new HashMap<>();
-
-        zscoreMap.put( new ZScoreTableKey( "female", "1" ), Sets.newHashSet( 2.0f, 2.4f, 2.8f, 3.2f, 3.7f, 4.2f, 4.8f ) );
-
-        return zscoreMap;
-    }
-
-    public static Map<ZScoreTableKey, Set<Float>> getZscoreTableBoy()
-    {
-        Map<ZScoreTableKey, Set<Float>> zscoreMap = new HashMap<>();
-
-        zscoreMap.put( new ZScoreTableKey( "male", "1" ), Sets.newHashSet( 2.0f, 2.4f, 2.8f, 3.2f, 3.7f, 4.2f, 4.8f ) );
-
-        return zscoreMap;
     }
 
     @Override
@@ -73,8 +48,8 @@ public class ZScoreTableKey
 
         int result = 1;
 
-        result = prime * result + ( (gender == null) ? 0 : gender.hashCode() );
-        result = prime * result + ( (age == null) ? 0 : age.hashCode());
+        result = prime * result +  Byte.hashCode( gender );
+        result = prime * result +  Byte.hashCode( age );
 
         return result;
     }
@@ -94,6 +69,6 @@ public class ZScoreTableKey
 
         ZScoreTableKey other = (ZScoreTableKey) obj;
 
-        return this.age.equals( other.age ) && this.gender.equals( other.gender );
+        return this.age == other.age && this.gender == other.gender;
     }
 }
