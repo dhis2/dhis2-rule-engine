@@ -26,49 +26,36 @@ package org.hisp.dhis.rules.functions;
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+import java.util.Map;
 
 /**
+ * Returns standard deviation based on age, gender and weight
+ *
  * @Author Zubair Asghar.
  */
-public class ZScoreTableKey
+public class RuleFunctionZScoreWFA extends RuleFunctionZScore
 {
-    private final byte gender;
-    private final byte age;
+    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_GIRL = ZScoreTable.getZscoreTableGirl();
+    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_BOY = ZScoreTable.getZscoreTableBoy();
 
-    public ZScoreTableKey( byte gender, byte age )
+    public static final String D2_ZSCORE = "d2:zScoreWFA";
+
+    @Override
+    public Map<ZScoreTableKey, Map<Float, Integer>> getTableForGirl()
     {
-        this.gender = gender;
-        this.age = age;
+        return ZSCORE_TABLE_GIRL;
     }
 
     @Override
-    public int hashCode()
+    public Map<ZScoreTableKey, Map<Float, Integer>> getTableForBoy()
     {
-        final int prime = 31;
-
-        int result = 1;
-
-        result = prime * result +  Byte.hashCode( gender );
-        result = prime * result +  Byte.hashCode( age );
-
-        return result;
+        return ZSCORE_TABLE_BOY;
     }
 
-    @Override
-    public boolean equals( Object obj )
+    public static RuleFunctionZScoreWFA create()
     {
-        if ( this == obj )
-        {
-            return true;
-        }
-
-        if ( !( obj instanceof ZScoreTableKey) )
-        {
-            return false;
-        }
-
-        ZScoreTableKey other = (ZScoreTableKey) obj;
-
-        return this.age == other.age && this.gender == other.gender;
+        return new RuleFunctionZScoreWFA();
     }
 }

@@ -28,35 +28,166 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.google.common.collect.Sets;
 import org.hisp.dhis.rules.RuleVariableValue;
 
 import javax.annotation.Nonnull;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * Returns standard deviation based on age, gender and weight
- *
  * @Author Zubair Asghar.
  */
-public class RuleFunctionZScore extends RuleFunction
+public abstract class RuleFunctionZScore extends RuleFunction
 {
-    private static Map<ZScoreTableKey, Set<Float>> ZSCORE_TABLE_GIRL = ZScoreTableKey.getZscoreTableGirl();
-    private static Map<ZScoreTableKey, Set<Float>> ZSCORE_TABLE_BOY = ZScoreTableKey.getZscoreTableBoy();
-
-    public static final String D2_ZSCORE = "d2:zScore";
+    private static final Set<String> GENDER_CODES = Sets.newHashSet( "male", "MALE", "Male","ma", "m", "M", "0", "false" );
+    protected static final DecimalFormat format = new DecimalFormat( "###.00" );
 
     @Nonnull
     @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String,
-        List<String>> supplementaryData )
+    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
     {
         if ( arguments.size() < 3 )
         {
             throw new IllegalArgumentException( "At least three arguments required but found: " + arguments.size() );
         }
 
-        return null;
+        // 1 = female, 0 = male
+        byte age;
+        float weight;
+        byte gender = GENDER_CODES.contains( arguments.get( 2 ) ) ? (byte) 0 : (byte) 1;
+
+        String zScore = "";
+
+        try
+        {
+            age = Byte.parseByte( arguments.get( 0 ) );
+            weight = Float.parseFloat( arguments.get( 1 ) );
+        }
+        catch ( NumberFormatException ex )
+        {
+            throw new IllegalArgumentException( "Byte parsing failed" );
+        }
+
+        zScore = getZScore( age, weight, gender );
+
+        return zScore;
+    }
+
+    public abstract Map<ZScoreTableKey, Map<Float, Integer>> getTableForGirl();
+
+    public abstract Map<ZScoreTableKey, Map<Float, Integer>> getTableForBoy();
+
+    private String getZScore( byte age, float weight, byte gender )
+    {
+        ZScoreTableKey key = new ZScoreTableKey( gender, age );
+
+        Map<Float, Integer> sdMap = new HashMap<>();
+
+        // Female
+        if ( gender == 1 )
+        {
+            sdMap = getTableForGirl().get( key );
+
+        }
+        else
+        {
+            sdMap = getTableForBoy().get( key );
+        }
+
+        int multiplicationFactor = getMultiplicationFactor( sdMap, weight );
+
+        // weight exactly matches with any of the SD values
+        if ( sdMap.keySet().contains( weight ) )
+        {
+            int sd = sdMap.get( weight );
+
+            return String.valueOf( sd * multiplicationFactor );
+        }
+
+        // weight is beyond -3SD or 3SD
+        if ( weight > Collections.max( sdMap.keySet() ) )
+        {
+            return String.valueOf( 3.5 );
+        }
+        else if ( weight < Collections.min( sdMap.keySet() ) )
+        {
+            return String.valueOf( -3.5 );
+        }
+
+        float lowerLimitX = 0, higherLimitY = 0;
+
+        // find the interval
+        for ( float f : sortKeySet( sdMap ) )
+        {
+            if (  weight > f )
+            {
+                lowerLimitX = f;
+                continue;
+            }
+
+            higherLimitY = f;
+            break;
+        }
+
+        float distance = higherLimitY - lowerLimitX;
+
+        float gap;
+
+        float decimalAddition;
+
+        float result;
+
+        if ( weight > findMedian( sdMap ) )
+        {
+            gap = weight - lowerLimitX;
+            decimalAddition = gap / distance;
+            result = sdMap.get( lowerLimitX ) + decimalAddition;
+        }
+        else
+        {
+            gap = higherLimitY - weight;
+            decimalAddition = gap / distance;
+            result = sdMap.get( higherLimitY ) + decimalAddition;
+        }
+
+        result = result * multiplicationFactor;
+
+        return String.valueOf( format.format( result ) );
+    }
+
+    private int getMultiplicationFactor( Map<Float, Integer> sdMap, float weight )
+    {
+        float median = findMedian( sdMap );
+
+        return Float.compare( weight, median );
+    }
+
+    private float findMedian( Map<Float, Integer> sdMap )
+    {
+        List<Float> sortedList = sortKeySet( sdMap );
+
+        return sortedList.get( 3 );
+    }
+
+    private List<Float> sortKeySet( Map<Float, Integer> sdMap )
+    {
+        Set<Float> keySet = sdMap.keySet();
+
+        List<Float> list = new ArrayList<>( keySet );
+
+        Collections.sort( list );
+
+        return list;
+    }
+
+    public static RuleFunctionZScoreWFA create()
+    {
+        return new RuleFunctionZScoreWFA();
     }
 }
