@@ -184,7 +184,7 @@ final class RuleVariableValueMapBuilder {
     }
 
     @Nonnull
-    RuleVariableValueMapBuilder constantValueMap(@Nonnull Map<String, String> constantValues){
+    RuleVariableValueMapBuilder constantValueMap(@Nonnull Map<String, String> constantValues) {
         this.allConstantValues.putAll(constantValues);
         return this;
     }
@@ -280,9 +280,9 @@ final class RuleVariableValueMapBuilder {
         }
     }
 
-    private void buildConstantsValues(Map<String,RuleVariableValue> valueMap) {
-        for(Map.Entry<String,String> entrySet : allConstantValues.entrySet())
-            valueMap.put(entrySet.getKey(), create(entrySet.getValue(),RuleValueType.NUMERIC));
+    private void buildConstantsValues(Map<String, RuleVariableValue> valueMap) {
+        for (Map.Entry<String, String> entrySet : allConstantValues.entrySet())
+            valueMap.put(entrySet.getKey(), create(entrySet.getValue(), RuleValueType.NUMERIC));
     }
 
     private void buildEnvironmentVariables(@Nonnull Map<String, RuleVariableValue> valueMap) {
@@ -453,7 +453,7 @@ final class RuleVariableValueMapBuilder {
                 // which is assumed to be best candidate.
                 if (ruleEvent.eventDate().compareTo(ruleDataValue.eventDate()) > 0) {
                     variableValue = create(ruleDataValue.value(), variable.dataElementType(),
-                            Utils.values(ruleDataValues), getLastUpdateDate(ruleDataValues));
+                            Utils.values(ruleDataValues), getLastUpdateDateForPrevious(ruleDataValues));
                     break;
                 }
             }
@@ -485,6 +485,17 @@ final class RuleVariableValueMapBuilder {
         for (RuleDataValue date : ruleDataValues) {
             Date d = date.eventDate();
             if (!d.after(new Date())) {
+                dates.add(d);
+            }
+        }
+        return dateFormat.format(Collections.max(dates));
+    }
+
+    private String getLastUpdateDateForPrevious(List<RuleDataValue> ruleDataValues) {
+        List<Date> dates = new ArrayList<>();
+        for (RuleDataValue date : ruleDataValues) {
+            Date d = date.eventDate();
+            if (!d.after(new Date()) && d.before(ruleEvent.eventDate())) {
                 dates.add(d);
             }
         }
