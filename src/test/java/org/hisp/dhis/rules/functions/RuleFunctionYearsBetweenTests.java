@@ -56,16 +56,16 @@ public class RuleFunctionYearsBetweenTests
         private Map<String, RuleVariableValue> variableValues = new HashMap<>();
 
         @Test
-        public void return_zero_if_some_date_is_not_present()
+        public void return_empty_if_some_date_is_not_present()
         {
                 RuleFunction yearsBetween = RuleFunctionYearsBetween.create();
 
                 MatcherAssert.assertThat( yearsBetween.evaluate( asList( null, null ), variableValues, null ),
-                    is( ("0") ) );
+                    is( ("") ) );
                 MatcherAssert.assertThat( yearsBetween.evaluate( asList( null, "" ), variableValues, null ),
-                    is( ("0") ) );
+                    is( ("") ) );
                 MatcherAssert.assertThat( yearsBetween.evaluate( asList( "", null ), variableValues, null ),
-                    is( ("0") ) );
+                    is( ("") ) );
                 MatcherAssert.assertThat( yearsBetween.evaluate( asList( "", "" ), variableValues, null ), is( ("0") ) );
         }
 
