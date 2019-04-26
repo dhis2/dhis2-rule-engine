@@ -61,7 +61,7 @@ public class RuleFunctionYearsBetween extends RuleFunction {
         String endDateString = arguments.get(1);
 
         if (isEmpty(startDateString) || isEmpty(endDateString)) {
-            return "0";
+            return "";
         }
 
        /* LocalDate startDate = null;
