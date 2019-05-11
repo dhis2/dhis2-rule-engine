@@ -68,7 +68,8 @@ class RuleEngineExecution
 
         List<Rule> ruleList = new ArrayList<>(rules);
 
-        Collections.sort(ruleList, (rule1, rule2) -> {
+        Collections.sort(ruleList, (rule1, rule2) ->
+        {
             Integer priority1 = rule1.priority();
             Integer priority2 = rule2.priority();
             if (priority1 != null && priority2 != null)
@@ -80,10 +81,11 @@ class RuleEngineExecution
             else
                 return 0;
         });
-        long currentTime = System.currentTimeMillis();
-        for (int i = 0; i < ruleList.size(); i++) {
+        for (int i = 0; i < ruleList.size(); i++)
+        {
             Rule rule = ruleList.get(i);
-            try {
+            try
+            {
                 log.debug("Evaluating programrule: " + rule.name());
                 // send expression to evaluator
                 if (Boolean.valueOf(process(rule.condition()))) {
@@ -104,9 +106,6 @@ class RuleEngineExecution
                 log.error("Exception in " + rule.name() + ": " + e.getMessage());
             }
         }
-        log.debug("Rules took " + String.valueOf(System.currentTimeMillis() - currentTime));
-        log.info("Rules took " + String.valueOf(System.currentTimeMillis() - currentTime));
-        log.error(ruleList.size() + " rules took " + String.valueOf(System.currentTimeMillis() - currentTime));
         return ruleEffects;
     }
 
