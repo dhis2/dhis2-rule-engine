@@ -26,46 +26,49 @@ package org.hisp.dhis.rules.functions;
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
-import org.hisp.dhis.rules.RuleVariableValue;
-
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @Author Zubair Asghar.
  */
-public class RuleFunctionConcatenate
-    extends RuleFunction
+public class ZScoreTableKey
 {
-        public static final String D2_CONCATENATE = "d2:concatenate";
+    private final byte gender;
+    private final byte age;
 
-        @Nonnull
-        @Override
-        public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
-            Map<String, List<String>> supplementaryData )
+    public ZScoreTableKey( byte gender, byte age )
+    {
+        this.gender = gender;
+        this.age = age;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+
+        int result = 1;
+
+        result = prime * result +  Byte.hashCode( gender );
+        result = prime * result +  Byte.hashCode( age );
+
+        return result;
+    }
+
+    @Override
+    public boolean equals( Object obj )
+    {
+        if ( this == obj )
         {
-                StringBuilder builder = new StringBuilder();
-
-                for( String string : arguments )
-                {
-                        if( string != null )
-                        {
-                                builder.append(string);
-                        }
-                }
-
-//                arguments.stream().filter( Objects::nonNull ).collect( Collectors.toList() ).forEach( builder::append );
-
-                return wrap( builder.toString() );
+            return true;
         }
 
-        public static RuleFunctionConcatenate create()
+        if ( !( obj instanceof ZScoreTableKey) )
         {
-                return new RuleFunctionConcatenate();
+            return false;
         }
+
+        ZScoreTableKey other = (ZScoreTableKey) obj;
+
+        return this.age == other.age && this.gender == other.gender;
+    }
 }
