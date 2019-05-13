@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 @AutoValue
 abstract class RuleExpression
 {
-        static final String VARIABLE_PATTERN = "[A#CV]\\{([\\w\\s]+.?[\\w\\s]*)\\}";
+        static final String VARIABLE_PATTERN = "[A#CV]\\{([\\w -_.]+)\\}";
 
         static final String FUNCTION_PATTERN = "d2:(\\w+.?\\w*)\\( *(([\\d/\\*\\+\\-%\\. ]+)|" +
             "( *'[^']*'))*( *, *(([\\d/\\*\\+\\-%\\. ]+)|'[^']*'))* *\\)";
