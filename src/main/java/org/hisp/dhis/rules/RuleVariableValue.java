@@ -4,6 +4,8 @@ import com.google.auto.value.AutoValue;
 
 import org.hisp.dhis.rules.models.RuleValueType;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,6 +19,7 @@ import javax.annotation.Nullable;
 @AutoValue
 public abstract class RuleVariableValue {
     private static final String DATE_PATTERN = "yyyy-MM-dd";
+    private static final String NUMBER_PATTERN = "0.0";
 
     @Nullable
     public abstract String value();
@@ -51,6 +54,10 @@ public abstract class RuleVariableValue {
             processedValue = String.format(Locale.US, "'%s'", processedValue);
         }
 
+        /*if (RuleValueType.NUMERIC.equals(ruleValueType)) {TODO: UNCOMMENT WHEN VALUE FORMAT IN CLIENT IS READY
+            processedValue = getFormattedNumber(value);
+        }*/
+
         return new AutoValue_RuleVariableValue(processedValue, ruleValueType,
                 Collections.unmodifiableList(new ArrayList<String>()), getFormattedDate(new Date()));
     }
@@ -69,6 +76,10 @@ public abstract class RuleVariableValue {
             processedValue = String.format(Locale.US, "'%s'", processedValue);
         }
 
+       /* if (RuleValueType.NUMERIC.equals(ruleValueType)) {TODO: UNCOMMENT WHEN VALUE FORMAT IN CLIENT IS READY
+            processedValue = getFormattedNumber(value);
+        }*/
+
         return new AutoValue_RuleVariableValue(processedValue, ruleValueType,
                 Collections.unmodifiableList(candidates), eventDate);
     }
@@ -78,5 +89,11 @@ public abstract class RuleVariableValue {
         format.applyPattern(DATE_PATTERN);
 
         return format.format(date);
+    }
+
+    private static String getFormattedNumber(String number) {
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.US);
+        otherSymbols.setDecimalSeparator('.');
+        return new DecimalFormat(NUMBER_PATTERN, otherSymbols).format(Float.valueOf(number));
     }
 }

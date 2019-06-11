@@ -1,6 +1,7 @@
 package org.hisp.dhis.rules;
 
 import org.hisp.dhis.rules.RuleExpression;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -11,6 +12,13 @@ import static org.assertj.core.api.Java6Assertions.fail;
 @RunWith( JUnit4.class )
 public class RuleExpressionTests
 {
+
+        private ExpressionEvaluator evaluator;
+
+        @Before
+        public void setUp(){
+                this.evaluator = new ExpressionEvaluator();
+        }
         @Test
         public void fromShouldReturnExpressionWithDataElementVariables()
         {
@@ -247,4 +255,12 @@ public class RuleExpressionTests
                 assertThat( ruleExpression.functions().size() ).isEqualTo( 1 );
                 assertThat( ruleExpression.functions() ).contains( "d2:hasValue('test_value')" );
         }
+
+        @Test
+        public void mathExpressionTest(){
+                RuleExpression ruleExpression = RuleExpression.from( "1/2" );
+                assertThat(evaluator.evaluate(ruleExpression.expression())).isEqualToIgnoringCase("0.5");
+        }
+
+
 }
