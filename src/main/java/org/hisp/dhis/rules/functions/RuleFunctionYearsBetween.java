@@ -64,14 +64,10 @@ public class RuleFunctionYearsBetween extends RuleFunction {
             return "";
         }
 
-       /* LocalDate startDate = null;
-        LocalDate endDate = null;*/
         Date startDate = null;
         Date endDate = null;
 
         try {
-           /* startDate = LocalDate.parse( arguments.get( 0 ), formatter );
-            endDate = LocalDate.parse( arguments.get( 1 ), formatter );*/
             startDate = formatter.parse(arguments.get(0));
             endDate = formatter.parse(arguments.get(1));
         } catch (ParseException e) {
@@ -80,7 +76,6 @@ public class RuleFunctionYearsBetween extends RuleFunction {
 
         long yearsBetween = yearsBetween(startDate, endDate);
 
-//        return String.valueOf(ChronoUnit.YEARS.between(startDate, endDate));
         return String.valueOf(yearsBetween);
     }
 
@@ -100,12 +95,12 @@ public class RuleFunctionYearsBetween extends RuleFunction {
         int endDay = calendar.get(Calendar.DAY_OF_MONTH);
 
         long diffYear = endYear - startYear;
-        if (endMonth <= startMonth && endDay < startDay && diffYear > 0) {
-            diffYear--;
+        if (diffYear == 1) {
+            if (endMonth == startMonth && endDay < startDay || endMonth < startMonth) return --diffYear;
+            else return diffYear;
         }
-        if (endMonth >= startMonth && endDay > startDay&& diffYear < 0) {
-            diffYear++;
-        }
-        return diffYear;
+        if (endMonth <= startMonth && endDay < startDay && diffYear > 0)
+            return --diffYear;
+        return endMonth >= startMonth && endDay > startDay && diffYear < 0 ? ++diffYear : diffYear;
     }
 }
