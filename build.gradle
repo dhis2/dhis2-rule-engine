@@ -1,6 +1,13 @@
 apply plugin: 'java'
 
 dependencies {
+
+    testImplementation 'junit:junit:4.12'
+    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.11.1'
+    testImplementation group: 'org.mockito', name: 'mockito-all', version: '1.8.4'
+    testCompile "com.google.truth:truth:0.44"
+    testCompile group: 'nl.jqno.equalsverifier', name: 'equalsverifier', version: '3.1.9'
+
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     implementation 'com.google.guava:guava:24.1-android'
     compileOnly "com.google.auto.value:auto-value:1.5.2"
