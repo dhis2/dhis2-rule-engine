@@ -81,11 +81,9 @@ class RuleEngineExecution
             else
                 return 0;
         });
-        for (int i = 0; i < ruleList.size(); i++)
-        {
+        for (int i = 0; i < ruleList.size(); i++) {
             Rule rule = ruleList.get(i);
-            try
-            {
+            try {
                 log.debug("Evaluating programrule: " + rule.name());
                 // send expression to evaluator
                 if (Boolean.valueOf(process(rule.condition()))) {
@@ -167,6 +165,7 @@ class RuleEngineExecution
 
     @Nonnull
     private String process(@Nonnull String expression) {
+        expression = expression.replace("\n", "");
         // we don't want to run empty expression
         if (!expression.trim().isEmpty()) {
             String expressionWithVariableValues = bindVariableValues(expression);
