@@ -56,6 +56,10 @@ public abstract class RuleFunction
                         return RuleFunctionZpvc.create();
                 case RuleFunctionZScoreWFA.D2_ZSCORE:
                         return RuleFunctionZScoreWFA.create();
+                case RuleFunctionMaxValue.D2_MAX_VALUE:
+                        return RuleFunctionMaxValue.create();
+                case RuleFunctionMinValue.D2_MIN_VALUE:
+                        return RuleFunctionMinValue.create();
                 case RuleFunctionZing.D2_ZING:
                         return RuleFunctionZing.create();
                 case RuleFunctionOizp.D2_OIZP:

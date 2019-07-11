@@ -675,6 +675,81 @@ public class RuleEngineFunctionTests
         }
 
         @Test
+        public void evaluateD2MaxValue() throws Exception
+        {
+            RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+                    "test_action_content", "true" );
+            RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
+                    "test_var_one", "test_data_element_one", RuleValueType.NUMERIC );
+
+            RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
+                    "test_var_two", "test_data_element_two", RuleValueType.TEXT );
+
+            Rule rule = Rule.create( null, null, "d2:maxValue('test_var_one') == 8.0", Arrays.asList( ruleAction ), "");
+
+            RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
+
+            RuleEvent ruleEvent1 = RuleEvent.create( "test_event1", "test_program_stage1",
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "",null,Arrays.asList(
+                            RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "5" ),
+                            RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "");
+
+            RuleEvent ruleEvent2 = RuleEvent.create( "test_event2", "test_program_stage2",
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "",null,Arrays.asList(
+                            RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "7" ),
+                            RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "");
+
+            RuleEvent ruleEvent3 = RuleEvent.create( "test_event3", "test_program_stage3",
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "",null,Arrays.asList(
+                            RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "8" ),
+                            RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "");
+
+
+            List<RuleEffect> ruleEffects = ruleEngineBuilder.events( Arrays.asList( ruleEvent1, ruleEvent2 ) ).build().evaluate( ruleEvent3 ).call();
+
+            assertThat( ruleEffects.size() ).isEqualTo( 1 );
+            assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        }
+
+        @Test
+        public void testMinValue() throws Exception
+        {
+            RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+                    "test_action_content", "d2:minValue('test_var_one')" );
+            RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
+                    "test_var_one", "test_data_element_one", RuleValueType.NUMERIC );
+
+            RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
+                    "test_var_two", "test_data_element_two", RuleValueType.TEXT );
+
+            Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+
+            RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
+
+            RuleEvent ruleEvent1 = RuleEvent.create( "test_event1", "test_program_stage1",
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "",null,Arrays.asList(
+                            RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "5" ),
+                            RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "");
+
+            RuleEvent ruleEvent2 = RuleEvent.create( "test_event2", "test_program_stage2",
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "",null,Arrays.asList(
+                            RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "7" ),
+                            RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "");
+
+            RuleEvent ruleEvent3 = RuleEvent.create( "test_event3", "test_program_stage3",
+                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "",null,Arrays.asList(
+                            RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "8" ),
+                            RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "");
+
+
+            List<RuleEffect> ruleEffects = ruleEngineBuilder.events( Arrays.asList( ruleEvent1, ruleEvent2 ) ).build().evaluate( ruleEvent3 ).call();
+
+            assertThat( ruleEffects.size() ).isEqualTo( 1 );
+            assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+            assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "5.0" );
+        }
+
+        @Test
         public void evaluateLastEventDate() throws Exception
         {
             java.util.Calendar cal = java.util.Calendar.getInstance();

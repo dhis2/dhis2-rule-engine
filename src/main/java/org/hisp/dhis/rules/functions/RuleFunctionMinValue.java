@@ -34,63 +34,57 @@ import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Author Zubair Asghar.
  * <p>
- * Counts the number of matching values that is entered for the source field in the first argument. Only occurrences that matches the second argument is counted.
- * The source field parameter is the name of one of the defined source fields in the program.
+ * return minimum value of provided data element present in entire enrollment
  */
-public class RuleFunctionCountIfValue extends RuleFunction
+public class RuleFunctionMinValue extends RuleFunction
 {
-    static final String D2_COUNT_IF_VALUE = "d2:countIfValue";
+    static final String D2_MIN_VALUE = "d2:minValue";
 
     @Nonnull
     @Override
     public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
-                            Map<String, List<String>> supplementaryData )
+        Map<String, List<String>> supplementaryData )
     {
         if ( valueMap == null )
         {
             throw new IllegalArgumentException( "valueMap is expected" );
         }
 
-        if ( arguments.size() != 2 )
+        if ( arguments.size() != 1 )
         {
-            throw new IllegalArgumentException( "Two arguments were expected, " +
+            throw new IllegalArgumentException( "One argument was expected, " +
                     arguments.size() + " were supplied" );
         }
 
-        return countIfValue( arguments, valueMap );
+        return getMinValue( arguments, valueMap );
     }
 
     @Nonnull
-    public static RuleFunctionCountIfValue create()
+    public static RuleFunctionMinValue create()
     {
-        return new RuleFunctionCountIfValue();
+        return new RuleFunctionMinValue();
     }
 
-    /**
-     * Function which will return the count of argument[0].
-     * Program rule variable at argument[0] will only be counted if it satisfy to condition which is at argument[1]
-     *
-     * @param arguments arguments for this function. First is the name of program rule variable and second is the condition
-     * @param valueMap  key value pair containing values for each variable
-     * @return count of program rule variable
-     */
-    private String countIfValue( List<String> arguments, Map<String, RuleVariableValue> valueMap )
+    private String getMinValue( List<String> arguments, Map<String, RuleVariableValue> valueMap )
     {
-        String ruleVariableName = arguments.get( 0 );
+        String dataElement = arguments.get( 0 );
 
-        RuleVariableValue variableValue = valueMap.get( ruleVariableName );
+        if ( valueMap.containsKey( dataElement ) )
+        {
+            RuleVariableValue ruleVariableValue = valueMap.get( dataElement );
 
-        if ( variableValue != null )
-        {
-            return Integer.toString( Collections.frequency( variableValue.candidates(), arguments.get( 1 ) ) );
+            List<String> values = ruleVariableValue.candidates();
+
+            List<Double> doubles = values.stream().map( Double::parseDouble ).collect( Collectors.toList() );
+
+            return Collections.min( doubles ).toString();
         }
-        else
-        {
-            return "0";
-        }
+
+        return "";
     }
 }
