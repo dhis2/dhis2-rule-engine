@@ -24,10 +24,17 @@ public abstract class RuleActionShowOptionGroup
         @Nonnull
         public abstract String optionGroup();
 
+        /**
+         * @return uid of the field of option group to show.
+         *
+         */
+        @Nonnull
+        public abstract String field();
+
         @Nonnull
         public static RuleActionShowOptionGroup create(
-                @Nullable String content, @Nonnull String optionGroup )
+                @Nullable String content, @Nonnull String optionGroup, @Nonnull String field)
         {
-            return new AutoValue_RuleActionShowOptionGroup( content == null ? "" : content, optionGroup );
+            return new AutoValue_RuleActionShowOptionGroup( content == null ? "" : content, optionGroup, field );
         }
 }
