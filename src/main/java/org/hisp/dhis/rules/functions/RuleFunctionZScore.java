@@ -62,7 +62,7 @@ public abstract class RuleFunctionZScore extends RuleFunction
         float weight;
         byte gender = GENDER_CODES.contains( arguments.get( 2 ) ) ? (byte) 0 : (byte) 1;
 
-        String zScore = "";
+        String zScore;
 
         try
         {
