@@ -1,8 +1,8 @@
 language: java
 sudo : false
-dist : trusty
+dist : precise
 jdk:
-- oraclejdk7
+- openjdk7
 addons:
   apt:
     packages:
