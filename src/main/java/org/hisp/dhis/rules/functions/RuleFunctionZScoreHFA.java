@@ -31,16 +31,14 @@ package org.hisp.dhis.rules.functions;
 import java.util.Map;
 
 /**
- * Returns standard deviation based on age, gender and weight
- *
  * @Author Zubair Asghar.
  */
-public class RuleFunctionZScoreWFA extends RuleFunctionZScore
+public class RuleFunctionZScoreHFA extends RuleFunctionZScore
 {
-    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_GIRL = ZScoreTable.getZscoreWFATableGirl();
-    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_BOY = ZScoreTable.getZscoreWFATableBoy();
+    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_GIRL = ZScoreTable.getZscoreHFATableGirl();
+    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_BOY = ZScoreTable.getZscoreHFATableBoy();
 
-    public static final String D2_ZSCOREWFA = "d2:zScoreWFA";
+    public static final String D2_ZSCOREHFA = "d2:zScoreHFA";
 
     @Override
     public Map<ZScoreTableKey, Map<Float, Integer>> getTableForGirl()
@@ -54,8 +52,8 @@ public class RuleFunctionZScoreWFA extends RuleFunctionZScore
         return ZSCORE_TABLE_BOY;
     }
 
-    public static RuleFunctionZScoreWFA create()
+    public static RuleFunctionZScoreHFA create()
     {
-        return new RuleFunctionZScoreWFA();
+        return new RuleFunctionZScoreHFA();
     }
 }

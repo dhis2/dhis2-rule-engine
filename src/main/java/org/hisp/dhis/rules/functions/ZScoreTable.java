@@ -36,7 +36,7 @@ import java.util.Map;
  */
 public class ZScoreTable
 {
-    public static Map<ZScoreTableKey, Map<Float, Integer>> getZscoreTableGirl()
+    public static Map<ZScoreTableKey, Map<Float, Integer>> getZscoreWFATableGirl()
     {
         Map<ZScoreTableKey, Map<Float, Integer>> zscoreMap = new HashMap<>();
 
@@ -102,11 +102,10 @@ public class ZScoreTable
         zscoreMap.put( new ZScoreTableKey( (byte)1, (byte)59 ),  createSDMap( 12.0f,13.6f,15.6f,18.0f,21.0f,24.6f,29.2f ) );
         zscoreMap.put( new ZScoreTableKey( (byte)1, (byte)60 ),  createSDMap( 12.1f,13.7f,15.8f,18.2f,21.2f,24.9f,29.5f ) );
 
-
         return zscoreMap;
     }
 
-    public static Map<ZScoreTableKey, Map<Float, Integer>> getZscoreTableBoy()
+    public static Map<ZScoreTableKey, Map<Float, Integer>> getZscoreWFATableBoy()
     {
         Map<ZScoreTableKey, Map<Float, Integer>> zscoreMap = new HashMap<>();
 
@@ -173,6 +172,26 @@ public class ZScoreTable
         zscoreMap.put( new ZScoreTableKey( (byte)0, (byte)60 ),  createSDMap( 12.4f,14.1f,16.0f,18.3f,21.0f,24.2f,27.9f ) );
 
         return zscoreMap;
+    }
+
+    public static Map<ZScoreTableKey, Map<Float, Integer>> getZscoreHFATableGirl()
+    {
+        return null;
+    }
+
+    public static Map<ZScoreTableKey, Map<Float, Integer>> getZscoreHFATableBoy()
+    {
+        return null;
+    }
+
+    public static Map<ZScoreTableKey, Map<Float, Integer>> getZscoreWFHTableGirl()
+    {
+        return null;
+    }
+
+    public static Map<ZScoreTableKey, Map<Float, Integer>> getZscoreWFHTableBoy()
+    {
+        return null;
     }
 
     private static Map<Float, Integer> createSDMap( Float SD3neg, Float SD2neg, Float	SD1neg, Float SD0, Float SD1, Float	SD2, Float SD3 )
