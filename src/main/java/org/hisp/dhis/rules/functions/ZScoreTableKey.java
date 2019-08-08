@@ -34,11 +34,20 @@ public class ZScoreTableKey
 {
     private final byte gender;
     private final byte age;
+    private final float height;
 
     public ZScoreTableKey( byte gender, byte age )
     {
         this.gender = gender;
         this.age = age;
+        this.height = 0;
+    }
+
+    public ZScoreTableKey( byte gender, float height )
+    {
+        this.gender = gender;
+        this.height = height;
+        this.age = 0;
     }
 
     @Override
@@ -50,6 +59,7 @@ public class ZScoreTableKey
 
         result = prime * result +  Byte.hashCode( gender );
         result = prime * result +  Byte.hashCode( age );
+        result = prime * result +  Byte.hashCode( (byte)height );
 
         return result;
     }
@@ -69,6 +79,6 @@ public class ZScoreTableKey
 
         ZScoreTableKey other = (ZScoreTableKey) obj;
 
-        return this.age == other.age && this.gender == other.gender;
+        return this.age == other.age && this.gender == other.gender && this.height == other.height;
     }
 }
