@@ -58,7 +58,7 @@ public abstract class RuleFunctionZScore extends RuleFunction
         }
 
         // 1 = female, 0 = male
-        byte age;
+        float parameter;
         float weight;
         byte gender = GENDER_CODES.contains( arguments.get( 2 ) ) ? (byte) 0 : (byte) 1;
 
@@ -66,7 +66,7 @@ public abstract class RuleFunctionZScore extends RuleFunction
 
         try
         {
-            age = Byte.parseByte( arguments.get( 0 ) );
+            parameter = Float.parseFloat( arguments.get( 0 ) );
             weight = Float.parseFloat( arguments.get( 1 ) );
         }
         catch ( NumberFormatException ex )
@@ -74,7 +74,7 @@ public abstract class RuleFunctionZScore extends RuleFunction
             throw new IllegalArgumentException( "Byte parsing failed" );
         }
 
-        zScore = getZScore( age, weight, gender );
+        zScore = getZScore( parameter, weight, gender );
 
         return zScore;
     }
@@ -83,9 +83,9 @@ public abstract class RuleFunctionZScore extends RuleFunction
 
     public abstract Map<ZScoreTableKey, Map<Float, Integer>> getTableForBoy();
 
-    private String getZScore( byte age, float weight, byte gender )
+    private String getZScore( float parameter, float weight, byte gender )
     {
-        ZScoreTableKey key = new ZScoreTableKey( gender, age );
+        ZScoreTableKey key = new ZScoreTableKey( gender, parameter );
 
         Map<Float, Integer> sdMap = new HashMap<>();
 
@@ -96,6 +96,7 @@ public abstract class RuleFunctionZScore extends RuleFunction
         }
         else
         {
+            Map<ZScoreTableKey, Map<Float, Integer>> test = getTableForBoy();
             sdMap = getTableForBoy().get( key );
         }
 
