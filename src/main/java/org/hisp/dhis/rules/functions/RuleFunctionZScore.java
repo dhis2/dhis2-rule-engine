@@ -93,7 +93,6 @@ public abstract class RuleFunctionZScore extends RuleFunction
         if ( gender == 1 )
         {
             sdMap = getTableForGirl().get( key );
-
         }
         else
         {
