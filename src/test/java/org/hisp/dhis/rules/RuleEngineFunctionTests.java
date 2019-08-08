@@ -759,6 +759,32 @@ public class RuleEngineFunctionTests
             assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
         }
 
+    @Test
+    public void evaluateD2ZScoreWFHGirl() throws Exception
+    {
+        RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+                "test_action_content", "true" );
+        RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
+                "test_var_one", "test_data_element_one", RuleValueType.TEXT );
+
+        RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
+                "test_var_two", "test_data_element_two", RuleValueType.TEXT );
+
+        Rule rule = Rule.create( null, null, "d2:zScoreWFH(81.5,#{test_var_one},#{test_var_two}) == 2", Arrays.asList( ruleAction ), "");
+
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
+
+        RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                RuleEvent.Status.ACTIVE, new Date(), new Date(), "",null,Arrays.asList(
+                        RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "12.5" ),
+                        RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "1" ) ), "");
+
+        List<RuleEffect> ruleEffects = ruleEngineBuilder.build().evaluate( ruleEvent ).call();
+
+        assertThat( ruleEffects.size() ).isEqualTo( 1 );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+    }
+
 
         @Test
         public void evaluateD2MaxValue() throws Exception
