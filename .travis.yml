@@ -1,0 +1,23 @@
+language: java
+sudo : false
+dist : precise
+jdk:
+- openjdk7
+addons:
+  apt:
+    packages:
+    - oracle-java7-installer
+before_install:
+- rm ~/.m2/settings.xml
+
+jobs: 
+  include:
+    - stage: tests 
+      name: unit
+      script: 
+        - mvn clean install -DskipTests=false -q --update-snapshots 
+        
+branches:
+  only:
+  - master
+  - "/^2\\.[0-9]{1,}/"
