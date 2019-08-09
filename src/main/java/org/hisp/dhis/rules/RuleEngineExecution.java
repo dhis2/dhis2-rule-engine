@@ -70,8 +70,8 @@ class RuleEngineExecution
 
         Collections.sort(ruleList, (rule1, rule2) ->
         {
-            Integer priority1 = rule1.priority();
-            Integer priority2 = rule2.priority();
+            Integer priority1 = rule1.getPriority();
+            Integer priority2 = rule2.getPriority();
             if (priority1 != null && priority2 != null)
                 return priority1.compareTo(priority2);
             else if (priority1 != null)
@@ -84,24 +84,24 @@ class RuleEngineExecution
         for (int i = 0; i < ruleList.size(); i++) {
             Rule rule = ruleList.get(i);
             try {
-                log.debug("Evaluating programrule: " + rule.name());
+                log.debug("Evaluating programrule: " + rule.getName());
                 // send expression to evaluator
-                if (Boolean.valueOf(process(rule.condition()))) {
+                if (Boolean.valueOf(process(rule.getCondition()))) {
                     // process each action for this rule
-                    for (int j = 0; j < rule.actions().size(); j++) {
-                        RuleEffect ruleEffect = create(rule.actions().get(j));
+                    for (int j = 0; j < rule.getActions().size(); j++) {
+                        RuleEffect ruleEffect = create(rule.getActions().get(j));
                         //Check if action is assigning value to calculated variable
-                        if (isAssignToCalculatedValue(rule.actions().get(j)))
-                            updateValueMapForCalculatedValue((RuleActionAssign) rule.actions().get(j),
+                        if (isAssignToCalculatedValue(rule.getActions().get(j)))
+                            updateValueMapForCalculatedValue((RuleActionAssign) rule.getActions().get(j),
                                     RuleVariableValue.create(ruleEffect.data(), RuleValueType.TEXT));
                         else
-                            ruleEffects.add(create(rule.actions().get(j)));
+                            ruleEffects.add(create(rule.getActions().get(j)));
                     }
                 }
             } catch (JexlException jexlException) {
-                log.error("Parser exception in " + rule.name() + ": " + jexlException.getMessage());
+                log.error("Parser exception in " + rule.getName() + ": " + jexlException.getMessage());
             } catch (Exception e) {
-                log.error("Exception in " + rule.name() + ": " + e.getMessage());
+                log.error("Exception in " + rule.getName() + ": " + e.getMessage());
             }
         }
         return ruleEffects;

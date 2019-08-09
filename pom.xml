@@ -55,6 +55,14 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-kotlin-kotlinx</id>
+            <name>bintray</name>
+            <url>https://kotlin.bintray.com/kotlinx</url>
+        </repository>
     </repositories>
 
     <distributionManagement>
@@ -264,6 +272,12 @@
             <artifactId>kotlin-test</artifactId>
             <version>${kotlin.version}</version>
             <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-collections-immutable -->
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-collections-immutable</artifactId>
+            <version>0.2</version>
         </dependency>
 
     </dependencies>
