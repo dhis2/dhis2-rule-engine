@@ -453,7 +453,7 @@ final class RuleVariableValueMapBuilder {
                 // which is assumed to be best candidate.
                 if (ruleEvent.eventDate().compareTo(ruleDataValue.eventDate()) > 0) {
                     variableValue = create(ruleDataValue.value(), variable.dataElementType(),
-                            Utils.values(ruleDataValues), getLastUpdateDateForPrevious(ruleDataValues));
+                            Utils.Companion.values(ruleDataValues), getLastUpdateDateForPrevious(ruleDataValues));
                     break;
                 }
             }
@@ -476,7 +476,7 @@ final class RuleVariableValueMapBuilder {
             valueMap.put(variable.name(), create(variable.dataElementType()));
         } else {
             valueMap.put(variable.name(), create(ruleDataValues.get(0).value(),
-                    variable.dataElementType(), Utils.values(ruleDataValues), getLastUpdateDate(ruleDataValues)));
+                    variable.dataElementType(), Utils.Companion.values(ruleDataValues), getLastUpdateDate(ruleDataValues)));
         }
     }
 
@@ -523,7 +523,7 @@ final class RuleVariableValueMapBuilder {
             valueMap.put(variable.name(), create(variable.dataElementType()));
         } else {
             valueMap.put(variable.name(), create(stageRuleDataValues.get(0).value(),
-                    variable.dataElementType(), Utils.values(stageRuleDataValues), getLastUpdateDate(stageRuleDataValues)));
+                    variable.dataElementType(), Utils.Companion.values(stageRuleDataValues), getLastUpdateDate(stageRuleDataValues)));
         }
     }
 
