@@ -185,9 +185,4 @@ public abstract class RuleFunctionZScore extends RuleFunction
 
         return list;
     }
-
-    public static RuleFunctionZScoreWFA create()
-    {
-        return new RuleFunctionZScoreWFA();
-    }
 }
