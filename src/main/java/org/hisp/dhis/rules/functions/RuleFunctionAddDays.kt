@@ -48,9 +48,7 @@ class RuleFunctionAddDays : RuleFunction() {
         const val D2_ADD_DAYS = "d2:addDays"
 
         @JvmStatic
-        fun create(): RuleFunctionAddDays {
-            return RuleFunctionAddDays()
-        }
+        fun create() = RuleFunctionAddDays()
 
         /**
          * Function which will return the the date after adding/subtracting number of days.
