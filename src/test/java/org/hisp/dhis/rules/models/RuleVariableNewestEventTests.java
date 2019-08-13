@@ -18,7 +18,7 @@ public class RuleVariableNewestEventTests
         {
                 try
                 {
-                        RuleVariableNewestEvent.create( null, "test_dataelement", RuleValueType.TEXT );
+                        RuleVariableNewestEvent.Companion.create( null, "test_dataelement", RuleValueType.TEXT );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
                 catch ( NullPointerException exception )
@@ -32,7 +32,7 @@ public class RuleVariableNewestEventTests
         {
                 try
                 {
-                        RuleVariableNewestEvent.create( "test_variable", null, RuleValueType.TEXT );
+                        RuleVariableNewestEvent.Companion.create( "test_variable", null, RuleValueType.TEXT );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
                 catch ( NullPointerException exception )
@@ -46,7 +46,7 @@ public class RuleVariableNewestEventTests
         {
                 try
                 {
-                        RuleVariableNewestEvent.create( "test_variable", "test_dataelement", null );
+                        RuleVariableNewestEvent.Companion.create( "test_variable", "test_dataelement", null );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
                 catch ( NullPointerException exception )
@@ -58,7 +58,7 @@ public class RuleVariableNewestEventTests
         @Test
         public void createShouldPropagatePropertiesCorrectly()
         {
-                RuleVariableNewestEvent ruleVariableNewestEvent = RuleVariableNewestEvent.create(
+                RuleVariableNewestEvent ruleVariableNewestEvent = RuleVariableNewestEvent.Companion.create(
                     "test_variable", "test_dataelement", RuleValueType.NUMERIC );
 
                 assertThat( ruleVariableNewestEvent.name() ).isEqualTo( "test_variable" );

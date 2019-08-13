@@ -130,37 +130,37 @@ class RuleEngineExecution
                 valueMap.put(field, variableValue);
             }
 
-            return RuleEffect.create(ruleAction, data);
+            return RuleEffect.Companion.create(ruleAction, data);
         } else if (ruleAction instanceof RuleActionSendMessage) {
-            return RuleEffect.create(ruleAction, process(
+            return RuleEffect.Companion.create(ruleAction, process(
                     ((RuleActionSendMessage) ruleAction).data()));
         } else if (ruleAction instanceof RuleActionScheduleMessage) {
-            return RuleEffect.create(ruleAction, process(
+            return RuleEffect.Companion.create(ruleAction, process(
                     ((RuleActionScheduleMessage) ruleAction).data()));
         } else if (ruleAction instanceof RuleActionCreateEvent) {
-            return RuleEffect.create(ruleAction, process(
+            return RuleEffect.Companion.create(ruleAction, process(
                     ((RuleActionCreateEvent) ruleAction).data()));
         } else if (ruleAction instanceof RuleActionDisplayKeyValuePair) {
-            return RuleEffect.create(ruleAction, process(
+            return RuleEffect.Companion.create(ruleAction, process(
                     ((RuleActionDisplayKeyValuePair) ruleAction).data()));
         } else if (ruleAction instanceof RuleActionDisplayText) {
-            return RuleEffect.create(ruleAction, process(
+            return RuleEffect.Companion.create(ruleAction, process(
                     ((RuleActionDisplayText) ruleAction).data()));
         } else if (ruleAction instanceof RuleActionErrorOnCompletion) {
-            return RuleEffect.create(ruleAction, process(
+            return RuleEffect.Companion.create(ruleAction, process(
                     ((RuleActionErrorOnCompletion) ruleAction).data()));
         } else if (ruleAction instanceof RuleActionShowError) {
-            return RuleEffect.create(ruleAction,
+            return RuleEffect.Companion.create(ruleAction,
                     process(((RuleActionShowError) ruleAction).data()));
         } else if (ruleAction instanceof RuleActionShowWarning) {
-            return RuleEffect.create(ruleAction,
+            return RuleEffect.Companion.create(ruleAction,
                     process(((RuleActionShowWarning) ruleAction).data()));
         } else if (ruleAction instanceof RuleActionWarningOnCompletion) {
-            return RuleEffect.create(ruleAction,
+            return RuleEffect.Companion.create(ruleAction,
                     process(((RuleActionWarningOnCompletion) ruleAction).data()));
         }
 
-        return RuleEffect.create(ruleAction);
+        return RuleEffect.Companion.create(ruleAction);
     }
 
     @Nonnull

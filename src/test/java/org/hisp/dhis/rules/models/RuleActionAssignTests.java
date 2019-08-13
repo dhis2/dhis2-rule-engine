@@ -21,9 +21,9 @@ public class RuleActionAssignTests
         @Test
         public void createMustSubstituteEmptyStringsForNullArguments()
         {
-                RuleActionAssign ruleActionAssignNoContent = RuleActionAssign
+                RuleActionAssign ruleActionAssignNoContent = RuleActionAssign.Companion
                     .create( null, "test_data", "test_field" );
-                RuleActionAssign ruleActionAssignNoField = RuleActionAssign
+                RuleActionAssign ruleActionAssignNoField = RuleActionAssign.Companion
                     .create( "test_content", "test_data", null );
 
                 assertThat( ruleActionAssignNoContent.content() ).isEqualTo( "" );
@@ -39,20 +39,20 @@ public class RuleActionAssignTests
         public void createMustThrowWhenContentAndFieldAreNull()
         {
             thrown.expect( IllegalArgumentException.class );
-            RuleActionAssign.create( null, "test_data", null );
+            RuleActionAssign.Companion.create( null, "test_data", null );
         }
 
         @Test
         public void createMustThrowWhenDataIsNull()
         {
             thrown.expect( NullPointerException.class );
-            RuleActionAssign.create( "test_content", null, "test_field" );
+            RuleActionAssign.Companion.create( "test_content", null, "test_field" );
         }
 
         @Test
         public void equalsAndHashcodeFunctionsMustConformToContract()
         {
-                EqualsVerifier.forClass( RuleActionAssign
+                EqualsVerifier.forClass( RuleActionAssign.Companion
                     .create( "test_content", "test_data", "test_field" ).getClass() )
                     .suppress( Warning.NULL_FIELDS )
                     .verify();

@@ -75,15 +75,15 @@ public class CalculatedValueTests
     @Test
     public void sendMessageMustGetValueFromAssignAction() throws Exception
     {
-        RuleAction assignAction = RuleActionAssign.create(null, "2+2", "#{test_calculated_value}" );
+        RuleAction assignAction = RuleActionAssign.Companion.create(null, "2+2", "#{test_calculated_value}" );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1");
 
-        RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4" );
+        RuleAction sendMessageAction = RuleActionSendMessage.Companion.create( "test_notification", "4" );
         org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule.create( null, 4, "#{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2");
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule ) );
 
-        RuleEnrollment enrollment = RuleEnrollment.builder()
+        RuleEnrollment enrollment = RuleEnrollment.Companion.builder()
                 .enrollment("test_enrollment")
                 .programName("test_program")
                 .incidentDate(new Date())
@@ -94,7 +94,7 @@ public class CalculatedValueTests
                 .attributeValues(Arrays.asList())
                 .build();
 
-        RuleEvent ruleEvent = RuleEvent.builder()
+        RuleEvent ruleEvent = RuleEvent.Companion.builder()
                 .event("test_event")
                 .programStage("test_program_stage")
                 .programStageName("")
@@ -103,7 +103,7 @@ public class CalculatedValueTests
                 .dueDate(new Date())
                 .organisationUnit("")
                 .organisationUnitCode("")
-                .dataValues(Arrays.asList(RuleDataValue.create(
+                .dataValues(Arrays.asList(RuleDataValue.Companion.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value")))
                 .build();
 
@@ -132,15 +132,15 @@ public class CalculatedValueTests
     @Test
     public void sendMessageMustGetValueFromAssignActionInSingleExecution() throws Exception
     {
-        RuleAction assignAction = RuleActionAssign.create(null, "2+2", "#{test_calculated_value}" );
+        RuleAction assignAction = RuleActionAssign.Companion.create(null, "2+2", "#{test_calculated_value}" );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1");
 
-        RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4" );
+        RuleAction sendMessageAction = RuleActionSendMessage.Companion.create( "test_notification", "4" );
         org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule.create( null, 4, "#{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2");
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule, rule2 ) );
 
-        RuleEnrollment enrollment = RuleEnrollment.builder()
+        RuleEnrollment enrollment = RuleEnrollment.Companion.builder()
                 .enrollment("test_enrollment")
                 .programName("test_program")
                 .incidentDate(new Date())
@@ -151,7 +151,7 @@ public class CalculatedValueTests
                 .attributeValues(Arrays.asList())
                 .build();
 
-        RuleEvent ruleEvent = RuleEvent.builder()
+        RuleEvent ruleEvent = RuleEvent.Companion.builder()
                 .event("test_event")
                 .programStage("test_program_stage")
                 .programStageName("")
@@ -160,7 +160,7 @@ public class CalculatedValueTests
                 .dueDate(new Date())
                 .organisationUnit("")
                 .organisationUnitCode("")
-                .dataValues(Arrays.asList(RuleDataValue.create(
+                .dataValues(Arrays.asList(RuleDataValue.Companion.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value")))
                 .build();
 
@@ -176,7 +176,7 @@ public class CalculatedValueTests
 
     private RuleEngine.Builder getRuleEngine( List<org.hisp.dhis.rules.models.Rule> rules )
     {
-        RuleVariable ruleVariable = RuleVariableCalculatedValue.create("test_calculated_value", "", RuleValueType.TEXT );
+        RuleVariable ruleVariable = RuleVariableCalculatedValue.Companion.create("test_calculated_value", "", RuleValueType.TEXT );
 
         return RuleEngineContext
                 .builder( new ExpressionEvaluator() )

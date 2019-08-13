@@ -13,10 +13,10 @@ public class RuleActionSendMessageTests
         @Test
         public void substitute_empty_strings_when_create_with_null_arguments()
         {
-                RuleActionSendMessage ruleActionSendMessage = RuleActionSendMessage.create( "notification", "data" );
-                RuleActionSendMessage ruleActionSendMessageNoData = RuleActionSendMessage
+                RuleActionSendMessage ruleActionSendMessage = RuleActionSendMessage.Companion.create( "notification", "data" );
+                RuleActionSendMessage ruleActionSendMessageNoData = RuleActionSendMessage.Companion
                     .create( "notification", null );
-                RuleActionSendMessage ruleActionSendMessageNoNotification = RuleActionSendMessage
+                RuleActionSendMessage ruleActionSendMessageNoNotification = RuleActionSendMessage.Companion
                     .create( null, "data" );
 
                 assertThat( ruleActionSendMessage.notification() ).isEqualTo( "notification" );

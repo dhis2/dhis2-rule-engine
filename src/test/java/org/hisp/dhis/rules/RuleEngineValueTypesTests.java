@@ -16,15 +16,15 @@ public class RuleEngineValueTypesTests
         public void booleanVariableWithoutValueMustFallbackToDefaultBooleanValue()
             throws Exception
         {
-                RuleAction ruleAction = RuleActionDisplayKeyValuePair
+                RuleAction ruleAction = RuleActionDisplayKeyValuePair.Companion
                     .createForFeedback( "test_action_content", "#{test_variable}" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
-                RuleVariable ruleVariable = RuleVariableCurrentEvent
+                RuleVariable ruleVariable = RuleVariableCurrentEvent.Companion
                     .create( "test_variable", "test_data_element", RuleValueType.BOOLEAN );
 
                 RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable ) );
 
-                RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                RuleEvent ruleEvent = RuleEvent.Companion.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "",null, new ArrayList<RuleDataValue>(), "");
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
@@ -37,15 +37,15 @@ public class RuleEngineValueTypesTests
         public void numericVariableWithoutValueMustFallbackToDefaultNumericValue()
             throws Exception
         {
-                RuleAction ruleAction = RuleActionDisplayKeyValuePair
+                RuleAction ruleAction = RuleActionDisplayKeyValuePair.Companion
                     .createForFeedback( "test_action_content", "#{test_variable}" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
-                RuleVariable ruleVariable = RuleVariableCurrentEvent
+                RuleVariable ruleVariable = RuleVariableCurrentEvent.Companion
                     .create( "test_variable", "test_data_element", RuleValueType.NUMERIC );
 
                 RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable ) );
 
-                RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                RuleEvent ruleEvent = RuleEvent.Companion.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null,new ArrayList<RuleDataValue>(), "");
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
@@ -58,15 +58,15 @@ public class RuleEngineValueTypesTests
         public void textVariableWithoutValueMustFallbackToDefaultTextValue()
             throws Exception
         {
-                RuleAction ruleAction = RuleActionDisplayKeyValuePair
+                RuleAction ruleAction = RuleActionDisplayKeyValuePair.Companion
                     .createForFeedback( "test_action_content", "#{test_variable}" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
-                RuleVariable ruleVariable = RuleVariableCurrentEvent
+                RuleVariable ruleVariable = RuleVariableCurrentEvent.Companion
                     .create( "test_variable", "test_data_element", RuleValueType.TEXT );
 
                 RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable ) );
 
-                RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                RuleEvent ruleEvent = RuleEvent.Companion.create( "test_event", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "",null, new ArrayList<RuleDataValue>(), "");
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
