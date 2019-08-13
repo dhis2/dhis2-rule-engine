@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,44 +28,45 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.RuleVariableValue
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
+class RuleFunctionAddDays : RuleFunction() {
 
-/**
- * @Author Zubair Asghar.
- */
-public class RuleFunctionConcatenate
-    extends RuleFunction
-{
-        public static final String D2_CONCATENATE = "d2:concatenate";
-
-        @Nonnull
-        @Override
-        public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
-            Map<String, List<String>> supplementaryData )
-        {
-                StringBuilder builder = new StringBuilder();
-
-                for( String string : arguments )
-                {
-                        if( string != null )
-                        {
-                                builder.append(string);
-                        }
-                }
-
-//                arguments.stream().filter( Objects::nonNull ).collect( Collectors.toList() ).forEach( builder::append );
-
-                return wrap( builder.toString() );
+    override fun evaluate(arguments: List<String>, valueMap: Map<String, RuleVariableValue>,
+                          supplementaryData: Map<String, List<String>>?): String {
+        when {
+            arguments.size != 2 -> throw IllegalArgumentException("Two arguments were expected, ${arguments.size} were supplied")
+            else -> return wrap(addDays(arguments[0], arguments[1]))
         }
 
-        public static RuleFunctionConcatenate create()
-        {
-                return new RuleFunctionConcatenate();
+    }
+
+    companion object {
+        const val D2_ADD_DAYS = "d2:addDays"
+
+        @JvmStatic
+        fun create() = RuleFunctionAddDays()
+
+        /**
+         * Function which will return the the date after adding/subtracting number of days.
+         *
+         * @param inputDate the date to add/subtract from.
+         * @param days  number of days to add/subtract.
+         * @return date after adding/subtracting days.
+         */
+        @JvmStatic
+        fun addDays(inputDate: String, days: String): String {
+            val formatter = DateTimeFormatter.ofPattern(DATE_PATTERN)
+
+            try {
+                val date = LocalDate.parse(inputDate, formatter)
+                return date.plusDays(days.toLong()).toString()
+            } catch (ex: DateTimeParseException) {
+                throw RuntimeException(ex)
+            }
         }
+    }
 }
