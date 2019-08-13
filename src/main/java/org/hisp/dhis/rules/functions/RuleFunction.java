@@ -13,7 +13,7 @@ public abstract class RuleFunction
 
         @Nonnull
         public abstract String evaluate( @Nonnull List<String> arguments,
-            Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData );
+            Map<String, RuleVariableValue> valueMap, @Nullable Map<String, List<String>> supplementaryData );
 
         @Nullable
         public static RuleFunction create( @Nonnull String fun )
