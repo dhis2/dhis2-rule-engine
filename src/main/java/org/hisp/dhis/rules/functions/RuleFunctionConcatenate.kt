@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,44 +28,22 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.RuleVariableValue
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
+class RuleFunctionConcatenate : RuleFunction() {
 
-/**
- * @Author Zubair Asghar.
- */
-public class RuleFunctionConcatenate
-    extends RuleFunction
-{
-        public static final String D2_CONCATENATE = "d2:concatenate";
+    override fun evaluate(arguments: List<String>, valueMap: Map<String, RuleVariableValue>,
+                          supplementaryData: Map<String, List<String>>?): String {
+        val builder = StringBuilder()
+        arguments.filterNot { it.isNullOrEmpty() }.forEach { builder.append(it) }
 
-        @Nonnull
-        @Override
-        public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
-            Map<String, List<String>> supplementaryData )
-        {
-                StringBuilder builder = new StringBuilder();
+        return wrap(builder.toString())
+    }
 
-                for( String string : arguments )
-                {
-                        if( string != null )
-                        {
-                                builder.append(string);
-                        }
-                }
+    companion object {
+        const val D2_CONCATENATE = "d2:concatenate"
 
-//                arguments.stream().filter( Objects::nonNull ).collect( Collectors.toList() ).forEach( builder::append );
-
-                return wrap( builder.toString() );
-        }
-
-        public static RuleFunctionConcatenate create()
-        {
-                return new RuleFunctionConcatenate();
-        }
+        @JvmStatic
+        fun create() = RuleFunctionConcatenate()
+    }
 }
