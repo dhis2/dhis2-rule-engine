@@ -21,7 +21,7 @@ public class RuleVariableAttributeTests
                         RuleVariableAttribute.Companion.create( null, "test_attribute", RuleValueType.TEXT );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
-                catch ( NullPointerException exception )
+                catch ( Exception exception )
                 {
                         // noop
                 }
@@ -35,7 +35,7 @@ public class RuleVariableAttributeTests
                         RuleVariableAttribute.Companion.create( "test_variable", null, RuleValueType.TEXT );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
-                catch ( NullPointerException exception )
+                catch ( Exception exception )
                 {
                         // noop
                 }
@@ -49,7 +49,7 @@ public class RuleVariableAttributeTests
                         RuleVariableAttribute.Companion.create( "test_variable", "test_attribute", null );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
-                catch ( NullPointerException exception )
+                catch ( Exception exception )
                 {
                         // noop
                 }
@@ -61,8 +61,8 @@ public class RuleVariableAttributeTests
                 RuleVariableAttribute ruleVariableAttribute = RuleVariableAttribute.Companion.create(
                     "test_variable", "test_attribute", RuleValueType.NUMERIC );
 
-                assertThat( ruleVariableAttribute.name() ).isEqualTo( "test_variable" );
-                assertThat( ruleVariableAttribute.trackedEntityAttribute() ).isEqualTo( "test_attribute" );
-                assertThat( ruleVariableAttribute.trackedEntityAttributeType() ).isEqualTo( RuleValueType.NUMERIC );
+                assertThat( ruleVariableAttribute.getName() ).isEqualTo( "test_variable" );
+                assertThat( ruleVariableAttribute.getTrackedEntityAttribute() ).isEqualTo( "test_attribute" );
+                assertThat( ruleVariableAttribute.getTrackedEntityAttributeType() ).isEqualTo( RuleValueType.NUMERIC );
         }
 }

@@ -22,13 +22,13 @@ public class RuleActionCreateEventTests
                 RuleActionCreateEvent ruleActionAssignNoField = RuleActionCreateEvent.Companion
                     .create( "test_content", null, "test_program_stage" );
 
-                assertThat( ruleActionAssignNoContent.content() ).isEqualTo( "" );
-                assertThat( ruleActionAssignNoContent.data() ).isEqualTo( "test_data" );
-                assertThat( ruleActionAssignNoContent.programStage() ).isEqualTo( "test_program_stage" );
+                assertThat( ruleActionAssignNoContent.getContent() ).isEqualTo( "" );
+                assertThat( ruleActionAssignNoContent.getData() ).isEqualTo( "test_data" );
+                assertThat( ruleActionAssignNoContent.getProgramStage() ).isEqualTo( "test_program_stage" );
 
-                assertThat( ruleActionAssignNoField.content() ).isEqualTo( "test_content" );
-                assertThat( ruleActionAssignNoField.data() ).isEqualTo( "" );
-                assertThat( ruleActionAssignNoField.programStage() ).isEqualTo( "test_program_stage" );
+                assertThat( ruleActionAssignNoField.getContent() ).isEqualTo( "test_content" );
+                assertThat( ruleActionAssignNoField.getData() ).isEqualTo( "" );
+                assertThat( ruleActionAssignNoField.getProgramStage() ).isEqualTo( "test_program_stage" );
         }
 
         @Test
@@ -39,7 +39,7 @@ public class RuleActionCreateEventTests
                         RuleActionCreateEvent.Companion.create( "test_content", "test_data", null );
                         fail( "NullPointerException was expected, but nothing was thrown." );
                 }
-                catch ( NullPointerException nullPointerException )
+                catch ( Exception nullPointerException )
                 {
                         // noop
                 }

@@ -102,8 +102,8 @@ public class ConstantsValueTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( enrollment ).call();
 
         assertThat( ruleEffects.size() ).isEqualTo(1);
-        assertThat( ruleEffects.get(0).data() ).isEqualTo("3.14");
-        assertThat( ruleEffects.get(0).ruleAction() ).isEqualTo(assignAction);
+        assertThat( ruleEffects.get(0).getData() ).isEqualTo("3.14");
+        assertThat( ruleEffects.get(0).getRuleAction() ).isEqualTo(assignAction);
     }
 
     @Test
@@ -133,8 +133,8 @@ public class ConstantsValueTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
         assertThat( ruleEffects.size() ).isEqualTo(1);
-        assertThat( ruleEffects.get(0).data() ).isEqualTo("3.14");
-        assertThat( ruleEffects.get(0).ruleAction() ).isEqualTo(assignAction);
+        assertThat( ruleEffects.get(0).getData() ).isEqualTo("3.14");
+        assertThat( ruleEffects.get(0).getRuleAction() ).isEqualTo(assignAction);
 
     }
 

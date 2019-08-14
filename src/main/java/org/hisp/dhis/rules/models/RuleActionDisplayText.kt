@@ -1,7 +1,9 @@
 package org.hisp.dhis.rules.models
 
 import com.google.auto.value.AutoValue
+import javax.annotation.concurrent.Immutable
 
+@Immutable
 data class RuleActionDisplayText(override var content: String?, override var data: String?, override var location: String?) : RuleActionText() {
     companion object {
 

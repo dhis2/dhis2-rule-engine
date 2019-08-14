@@ -20,7 +20,7 @@ public class RuleAttributeValueTests
                         RuleAttributeValue.Companion.create( null, "test_value" );
                         fail( "NullPointerException was expected, but nothing was thrown" );
                 }
-                catch ( NullPointerException exception )
+                catch ( Exception exception )
                 {
                         // noop
                 }
@@ -34,7 +34,7 @@ public class RuleAttributeValueTests
                         RuleAttributeValue.Companion.create( "test_tracked_entity_attribute", null );
                         fail( "NullPointerException was expected, but nothing was thrown" );
                 }
-                catch ( NullPointerException exception )
+                catch ( Exception exception )
                 {
                         // noop
                 }
@@ -46,7 +46,7 @@ public class RuleAttributeValueTests
                 RuleAttributeValue ruleAttributeValue = RuleAttributeValue.Companion
                     .create( "test_tracked_entity_attribute", "test_value" );
 
-                assertThat( ruleAttributeValue.trackedEntityAttribute() ).isEqualTo( "test_tracked_entity_attribute" );
-                assertThat( ruleAttributeValue.value() ).isEqualTo( "test_value" );
+                assertThat( ruleAttributeValue.getTrackedEntityAttribute() ).isEqualTo( "test_tracked_entity_attribute" );
+                assertThat( ruleAttributeValue.getValue() ).isEqualTo( "test_value" );
         }
 }

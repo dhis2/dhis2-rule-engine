@@ -20,7 +20,7 @@ public class RuleActionHideFieldTests
                 RuleActionHideField ruleActionHideField =
                     RuleActionHideField.Companion.create( null, "test_field" );
 
-                assertThat( ruleActionHideField.content() ).isEqualTo( "" );
+                assertThat( ruleActionHideField.getContent() ).isEqualTo( "" );
         }
 
         @Test
@@ -31,7 +31,7 @@ public class RuleActionHideFieldTests
                         RuleActionHideField.Companion.create( "test_content", null );
                         fail( "NullPointerException was expected, but nothing was thrown." );
                 }
-                catch ( NullPointerException nullPointerException )
+                catch ( Exception nullPointerException )
                 {
                         // noop
                 }

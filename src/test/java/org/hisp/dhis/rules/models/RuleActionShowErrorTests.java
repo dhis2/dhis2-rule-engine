@@ -22,13 +22,13 @@ public class RuleActionShowErrorTests
                 RuleActionShowError ruleActionAssignNoData = RuleActionShowError.Companion
                     .create( "test_content", null, "test_field" );
 
-                assertThat( ruleActionAssignNoContent.content() ).isEqualTo( "" );
-                assertThat( ruleActionAssignNoContent.data() ).isEqualTo( "test_data" );
-                assertThat( ruleActionAssignNoContent.field() ).isEqualTo( "test_field" );
+                assertThat( ruleActionAssignNoContent.getContent() ).isEqualTo( "" );
+                assertThat( ruleActionAssignNoContent.getData() ).isEqualTo( "test_data" );
+                assertThat( ruleActionAssignNoContent.getField() ).isEqualTo( "test_field" );
 
-                assertThat( ruleActionAssignNoData.content() ).isEqualTo( "test_content" );
-                assertThat( ruleActionAssignNoData.data() ).isEqualTo( "" );
-                assertThat( ruleActionAssignNoData.field() ).isEqualTo( "test_field" );
+                assertThat( ruleActionAssignNoData.getContent() ).isEqualTo( "test_content" );
+                assertThat( ruleActionAssignNoData.getData() ).isEqualTo( "" );
+                assertThat( ruleActionAssignNoData.getField() ).isEqualTo( "test_field" );
         }
 
         @Test
@@ -53,7 +53,7 @@ public class RuleActionShowErrorTests
                         RuleActionShowError.Companion.create( "test_content", "test_data", null );
                         fail( "NullPointerException was expected, but nothing was thrown." );
                 }
-                catch ( NullPointerException nullPointerException )
+                catch ( Exception nullPointerException )
                 {
                         // noop
                 }

@@ -23,20 +23,20 @@ public class RuleActionShowOptionGroupTest
             RuleActionShowOptionGroup ruleActionHideOptionGroup =
                     RuleActionShowOptionGroup.Companion.create( null, "test_option_group", "test_field" );
 
-            assertThat( ruleActionHideOptionGroup.content() ).isEqualTo( "" );
+            assertThat( ruleActionHideOptionGroup.getContent() ).isEqualTo( "" );
         }
 
         @Test
         public void createMustThrowOnNullOptionGroupField()
         {
-            thrown.expect( NullPointerException.class );
+            thrown.expect( Exception.class );
             RuleActionShowOptionGroup.Companion.create(  "test_content", null, "test_field" );
         }
 
         @Test
         public void createMustThrowOnNullField()
         {
-            thrown.expect( NullPointerException.class );
+            thrown.expect( Exception.class );
             RuleActionShowOptionGroup.Companion.create(  "test_content", "test_option_group", null );
         }
 

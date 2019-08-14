@@ -24,7 +24,7 @@ public class RuleEnrollmentTests
         @Test
         public void createShouldThrowOnNullEnrollment()
         {
-                thrown.expect( IllegalStateException.class );
+                thrown.expect( Exception.class );
                 RuleEnrollment.Companion.create( null, new Date(), new Date(),
                     RuleEnrollment.Status.ACTIVE, null,null, new ArrayList<RuleAttributeValue>(), "");
         }
@@ -32,7 +32,7 @@ public class RuleEnrollmentTests
         @Test
         public void createShouldThrowOnNullIncidentDate()
         {
-                thrown.expect( IllegalStateException.class );
+                thrown.expect( Exception.class );
                 RuleEnrollment.Companion.create("test_enrollment", null, new Date(),
                         RuleEnrollment.Status.ACTIVE, null, null, new ArrayList<RuleAttributeValue>(), "");
 
@@ -41,7 +41,7 @@ public class RuleEnrollmentTests
         @Test
         public void createShouldThrowOnNullEnrollmentDate()
         {
-                thrown.expect( IllegalStateException.class );
+                thrown.expect( Exception.class );
                 RuleEnrollment.Companion.create( "test_enrollment", new Date(), null,
                         RuleEnrollment.Status.ACTIVE,null,null, new ArrayList<RuleAttributeValue>(), "");
         }
@@ -49,7 +49,7 @@ public class RuleEnrollmentTests
         @Test
         public void createShouldThrowOnNullStatus()
         {
-                thrown.expect( IllegalStateException.class );
+                thrown.expect( Exception.class );
                 RuleEnrollment.Companion.create( "test_enrollment", new Date(), new Date(),
                     null, null,null,new ArrayList<RuleAttributeValue>(), "");
         }
@@ -57,7 +57,7 @@ public class RuleEnrollmentTests
         @Test
         public void createShouldThrowOnNullValueList()
         {
-                thrown.expect( NullPointerException.class );
+                thrown.expect( Exception.class );
                 RuleEnrollment.Companion.create( "test_enrollment", new Date(), new Date(),
                     RuleEnrollment.Status.ACTIVE, null,null,null, "");
         }
@@ -76,14 +76,14 @@ public class RuleEnrollmentTests
                     incidentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE, "", "",
                     Arrays.asList( ruleAttributeValueOne, ruleAttributeValueTwo, ruleAttributeValueThree ), "");
 
-                assertThat( ruleEnrollment.enrollment() ).isEqualTo( "test_enrollment" );
-                assertThat( ruleEnrollment.incidentDate() ).isEqualTo( incidentDate );
-                assertThat( ruleEnrollment.enrollmentDate() ).isEqualTo( enrollmentDate );
-                assertThat( ruleEnrollment.status() ).isEqualTo( RuleEnrollment.Status.ACTIVE );
-                assertThat( ruleEnrollment.attributeValues().size() ).isEqualTo( 3 );
-                assertThat( ruleEnrollment.attributeValues().get( 0 ) ).isEqualTo( ruleAttributeValueOne );
-                assertThat( ruleEnrollment.attributeValues().get( 1 ) ).isEqualTo( ruleAttributeValueTwo );
-                assertThat( ruleEnrollment.attributeValues().get( 2 ) ).isEqualTo( ruleAttributeValueThree );
+                assertThat( ruleEnrollment.getEnrollment() ).isEqualTo( "test_enrollment" );
+                assertThat( ruleEnrollment.getIncidentDate() ).isEqualTo( incidentDate );
+                assertThat( ruleEnrollment.getEnrollmentDate() ).isEqualTo( enrollmentDate );
+                assertThat( ruleEnrollment.getStatus() ).isEqualTo( RuleEnrollment.Status.ACTIVE );
+                assertThat( ruleEnrollment.getAttributeValues().size() ).isEqualTo( 3 );
+                assertThat( ruleEnrollment.getAttributeValues().get( 0 ) ).isEqualTo( ruleAttributeValueOne );
+                assertThat( ruleEnrollment.getAttributeValues().get( 1 ) ).isEqualTo( ruleAttributeValueTwo );
+                assertThat( ruleEnrollment.getAttributeValues().get( 2 ) ).isEqualTo( ruleAttributeValueThree );
         }
 
         @Test
@@ -103,13 +103,13 @@ public class RuleEnrollmentTests
                 // mutating source array
                 attributeValues.add( ruleAttributeValueThree );
 
-                assertThat( ruleEnrollment.attributeValues().size() ).isEqualTo( 3 );
-                assertThat( ruleEnrollment.attributeValues().get( 0 ) ).isEqualTo( ruleAttributeValueOne );
-                assertThat( ruleEnrollment.attributeValues().get( 1 ) ).isEqualTo( ruleAttributeValueTwo );
+                assertThat( ruleEnrollment.getAttributeValues().size() ).isEqualTo( 3 );
+                assertThat( ruleEnrollment.getAttributeValues().get( 0 ) ).isEqualTo( ruleAttributeValueOne );
+                assertThat( ruleEnrollment.getAttributeValues().get( 1 ) ).isEqualTo( ruleAttributeValueTwo );
 
                 try
                 {
-                        ruleEnrollment.attributeValues().clear();
+                        ruleEnrollment.getAttributeValues().clear();
                         fail( "UnsupportedOperationException was expected, but nothing was thrown." );
                 }
                 catch ( UnsupportedOperationException unsupportedOperationException )

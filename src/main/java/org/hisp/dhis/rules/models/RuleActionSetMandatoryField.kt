@@ -8,7 +8,7 @@ data class RuleActionSetMandatoryField(
 
     companion object {
 
-        fun create(field: String): RuleActionSetMandatoryField {
+        fun create(field: String?): RuleActionSetMandatoryField {
             return RuleActionSetMandatoryField(field)
         }
     }

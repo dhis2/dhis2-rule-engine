@@ -63,17 +63,17 @@ public final class RuleEngine
         @Nonnull
         public Callable<List<RuleEffect>> evaluate( @Nonnull RuleEvent ruleEvent )
         {
-                if ( ruleEvent == null )
+                if (null == ruleEvent)
                 {
                         throw new IllegalArgumentException( "ruleEvent == null" );
                 }
 
                 for ( RuleEvent contextualEvent : ruleEvents )
                 {
-                        if ( contextualEvent.event().equals( ruleEvent.event() ) )
+                        if ( contextualEvent.getEvent().equals( ruleEvent.getEvent() ) )
                         {
                                 throw new IllegalStateException( String.format( Locale.US, "Event '%s' is already " +
-                                    "set as a part of execution context.", contextualEvent.event() ) );
+                                    "set as a part of execution context.", contextualEvent.getEvent() ) );
                         }
                 }
 
@@ -100,10 +100,10 @@ public final class RuleEngine
 
                 for ( RuleEvent contextualEvent : ruleEvents )
                 {
-                        if ( contextualEvent.event().equals( ruleEvent.event() ) )
+                        if ( contextualEvent.getEvent().equals( ruleEvent.getEvent() ) )
                         {
                                 throw new IllegalStateException( String.format( Locale.US, "Event '%s' is already " +
-                                        "set as a part of execution context.", contextualEvent.event() ) );
+                                        "set as a part of execution context.", contextualEvent.getEvent() ) );
                         }
                 }
 
@@ -131,7 +131,7 @@ public final class RuleEngine
                 if ( this.ruleEnrollment != null )
                 {
                         throw new IllegalStateException( String.format( Locale.US, "Enrollment '%s' is already " +
-                            "set as a part of execution context.", this.ruleEnrollment.enrollment() ) );
+                            "set as a part of execution context.", this.ruleEnrollment.getEnrollment() ) );
                 }
 
                 Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEnrollment )
@@ -156,7 +156,7 @@ public final class RuleEngine
                 if ( this.ruleEnrollment != null )
                 {
                         throw new IllegalStateException( String.format( Locale.US, "Enrollment '%s' is already " +
-                                "set as a part of execution context.", this.ruleEnrollment.enrollment() ) );
+                                "set as a part of execution context.", this.ruleEnrollment.getEnrollment() ) );
                 }
 
                 Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEnrollment )

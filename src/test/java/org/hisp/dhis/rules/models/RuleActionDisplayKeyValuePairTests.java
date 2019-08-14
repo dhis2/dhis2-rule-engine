@@ -20,10 +20,10 @@ public class RuleActionDisplayKeyValuePairTests
                 RuleActionDisplayKeyValuePair displayTextAction = RuleActionDisplayKeyValuePair.Companion
                     .createForFeedback( "test_content", "test_data" );
 
-                assertThat( displayTextAction.location() )
-                    .isEqualTo(RuleActionDisplayKeyValuePair.Companion.getLOCATION_FEEDBACK_WIDGET());
-                assertThat( displayTextAction.content() ).isEqualTo( "test_content" );
-                assertThat( displayTextAction.data() ).isEqualTo( "test_data" );
+                assertThat( displayTextAction.getLocation() )
+                    .isEqualTo(RuleActionText.Companion.getLOCATION_FEEDBACK_WIDGET());
+                assertThat( displayTextAction.getContent() ).isEqualTo( "test_content" );
+                assertThat( displayTextAction.getData() ).isEqualTo( "test_data" );
         }
 
         @Test
@@ -32,10 +32,10 @@ public class RuleActionDisplayKeyValuePairTests
                 RuleActionDisplayKeyValuePair displayTextAction = RuleActionDisplayKeyValuePair.Companion
                     .createForIndicators( "test_content", "test_data" );
 
-                assertThat( displayTextAction.location() )
-                    .isEqualTo(RuleActionDisplayKeyValuePair.Companion.getLOCATION_INDICATOR_WIDGET());
-                assertThat( displayTextAction.content() ).isEqualTo( "test_content" );
-                assertThat( displayTextAction.data() ).isEqualTo( "test_data" );
+                assertThat( displayTextAction.getLocation() )
+                    .isEqualTo(RuleActionText.Companion.getLOCATION_INDICATOR_WIDGET());
+                assertThat( displayTextAction.getContent() ).isEqualTo( "test_content" );
+                assertThat( displayTextAction.getData() ).isEqualTo( "test_data" );
         }
 
         @Test
@@ -74,11 +74,11 @@ public class RuleActionDisplayKeyValuePairTests
                 RuleActionDisplayKeyValuePair ruleActionNoData = RuleActionDisplayKeyValuePair.Companion
                     .createForFeedback( "test_content", null );
 
-                assertThat( ruleActionNoContent.content() ).isEqualTo( "" );
-                assertThat( ruleActionNoContent.data() ).isEqualTo( "test_data" );
+                assertThat( ruleActionNoContent.getContent() ).isEqualTo( "" );
+                assertThat( ruleActionNoContent.getData() ).isEqualTo( "test_data" );
 
-                assertThat( ruleActionNoData.content() ).isEqualTo( "test_content" );
-                assertThat( ruleActionNoData.data() ).isEqualTo( "" );
+                assertThat( ruleActionNoData.getContent() ).isEqualTo( "test_content" );
+                assertThat( ruleActionNoData.getData() ).isEqualTo( "" );
         }
 
         @Test
@@ -89,11 +89,11 @@ public class RuleActionDisplayKeyValuePairTests
                 RuleActionDisplayKeyValuePair ruleActionNoData = RuleActionDisplayKeyValuePair.Companion
                     .createForIndicators( "test_content", null );
 
-                assertThat( ruleActionNoContent.content() ).isEqualTo( "" );
-                assertThat( ruleActionNoContent.data() ).isEqualTo( "test_data" );
+                assertThat( ruleActionNoContent.getContent() ).isEqualTo( "" );
+                assertThat( ruleActionNoContent.getData() ).isEqualTo( "test_data" );
 
-                assertThat( ruleActionNoData.content() ).isEqualTo( "test_content" );
-                assertThat( ruleActionNoData.data() ).isEqualTo( "" );
+                assertThat( ruleActionNoData.getContent() ).isEqualTo( "test_content" );
+                assertThat( ruleActionNoData.getData() ).isEqualTo( "" );
         }
 
         @Test

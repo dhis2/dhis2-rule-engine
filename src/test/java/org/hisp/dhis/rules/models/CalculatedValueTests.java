@@ -40,6 +40,8 @@ import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -111,18 +113,18 @@ public class CalculatedValueTests
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( assignAction );
+        assertThat( ruleEffects.get( 0 ).getData() ).isEqualTo( "4" );
+        assertThat( ruleEffects.get( 0 ).getRuleAction() ).isEqualTo( assignAction );
 
-        RuleActionAssign assign = (RuleActionAssign) ruleEffects.get( 0 ).ruleAction();
+        RuleActionAssign assign = (RuleActionAssign) ruleEffects.get( 0 ).getRuleAction();
         Map<String, String> valueMap = new HashMap<>();
-        valueMap.put( "test_calculated_value", ruleEffects.get( 0 ).data() );
-        calculatedValueMap.put( enrollment.enrollment(), valueMap );
+        valueMap.put( "test_calculated_value", ruleEffects.get( 0 ).getData() );
+        calculatedValueMap.put( enrollment.getEnrollment(), valueMap );
 
         RuleEngine ruleEngine2 = getRuleEngine( Arrays.asList( rule, rule2 ) ).enrollment( enrollment ).build();
         List<RuleEffect> ruleEffects2 = ruleEngine2.evaluate( ruleEvent ).call();
 
-        List<RuleAction> ruleActions = ruleEffects2.stream().map( RuleEffect::ruleAction ).collect( Collectors.toList() );
+        List<RuleAction> ruleActions = ruleEffects2.stream().map(ruleEffect -> ruleEffect.getRuleAction()).collect( Collectors.toList() );
 
         assertThat( ruleActions.contains( assignAction ) ).isEqualTo( true );
         assertThat( ruleActions.contains( sendMessageAction ) ).isEqualTo( true );
@@ -165,12 +167,13 @@ public class CalculatedValueTests
                 .build();
 
         RuleEngine ruleEngine = ruleEngineBuilder.enrollment( enrollment ).build();
-        List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
+        Callable<List<RuleEffect>> call =  ruleEngine.evaluate( ruleEvent );
+        List<RuleEffect> ruleEffects = call.call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 2 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( assignAction );
-        assertThat( ruleEffects.get( 1 ).ruleAction() ).isEqualTo( sendMessageAction );
+        assertThat( ruleEffects.get( 0 ).getData() ).isEqualTo( "4" );
+        assertThat( ruleEffects.get( 0 ).getRuleAction() ).isEqualTo( assignAction );
+        assertThat( ruleEffects.get( 1 ).getRuleAction() ).isEqualTo( sendMessageAction );
 
     }
 

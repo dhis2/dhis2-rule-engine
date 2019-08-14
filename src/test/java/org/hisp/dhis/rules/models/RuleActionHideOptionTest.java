@@ -22,13 +22,13 @@ public class RuleActionHideOptionTest
             RuleActionHideOption ruleActionHideOption =
                     RuleActionHideOption.Companion.create( null, "test_option", "test_field" );
 
-            assertThat( ruleActionHideOption.content() ).isEqualTo( "" );
+            assertThat( ruleActionHideOption.getContent() ).isEqualTo( "" );
         }
 
         @Test
         public void createMustThrowOnNullField()
         {
-            thrown.expect( NullPointerException.class );
+            thrown.expect( Exception.class );
             RuleActionHideOption.Companion.create(  "test_content", null, "null" );
         }
 

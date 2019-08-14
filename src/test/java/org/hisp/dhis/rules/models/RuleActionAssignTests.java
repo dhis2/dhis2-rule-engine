@@ -26,13 +26,13 @@ public class RuleActionAssignTests
                 RuleActionAssign ruleActionAssignNoField = RuleActionAssign.Companion
                     .create( "test_content", "test_data", null );
 
-                assertThat( ruleActionAssignNoContent.content() ).isEqualTo( "" );
-                assertThat( ruleActionAssignNoContent.data() ).isEqualTo( "test_data" );
-                assertThat( ruleActionAssignNoContent.field() ).isEqualTo( "test_field" );
+                assertThat( ruleActionAssignNoContent.getContent() ).isEqualTo( "" );
+                assertThat( ruleActionAssignNoContent.getData() ).isEqualTo( "test_data" );
+                assertThat( ruleActionAssignNoContent.getField() ).isEqualTo( "test_field" );
 
-                assertThat( ruleActionAssignNoField.content() ).isEqualTo( "test_content" );
-                assertThat( ruleActionAssignNoField.data() ).isEqualTo( "test_data" );
-                assertThat( ruleActionAssignNoField.field() ).isEqualTo( "" );
+                assertThat( ruleActionAssignNoField.getContent() ).isEqualTo( "test_content" );
+                assertThat( ruleActionAssignNoField.getData() ).isEqualTo( "test_data" );
+                assertThat( ruleActionAssignNoField.getField() ).isEqualTo( "" );
         }
 
         @Test
@@ -45,7 +45,7 @@ public class RuleActionAssignTests
         @Test
         public void createMustThrowWhenDataIsNull()
         {
-            thrown.expect( NullPointerException.class );
+            thrown.expect( Exception.class );
             RuleActionAssign.Companion.create( "test_content", null, "test_field" );
         }
 

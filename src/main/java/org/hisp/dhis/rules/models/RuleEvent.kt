@@ -24,37 +24,37 @@ data class RuleEvent(
         private val ruleEvent = RuleEvent(null, null, null,
                 null, null, null, null, null, null)
 
-        fun event(event: String): Builder {
+        fun event(event: String?): Builder {
             ruleEvent.event = event
             return this
         }
 
-        fun programStage(programStage: String): Builder {
+        fun programStage(programStage: String?): Builder {
             ruleEvent.programStage = programStage
             return this
         }
 
-        fun programStageName(programStageName: String): Builder {
+        fun programStageName(programStageName: String?): Builder {
             ruleEvent.programStageName = programStageName
             return this
         }
 
-        fun status(status: Status): Builder {
+        fun status(status: Status?): Builder {
             ruleEvent.status = status
             return this
         }
 
-        fun eventDate(eventDate: Date): Builder {
+        fun eventDate(eventDate: Date?): Builder {
             ruleEvent.eventDate = eventDate
             return this
         }
 
-        fun dueDate(dueDate: Date): Builder {
+        fun dueDate(dueDate: Date?): Builder {
             ruleEvent.dueDate = dueDate
             return this
         }
 
-        fun organisationUnit(organisationUnit: String): Builder {
+        fun organisationUnit(organisationUnit: String?): Builder {
             ruleEvent.organisationUnit = organisationUnit
             return this
         }
@@ -64,7 +64,7 @@ data class RuleEvent(
             return this
         }
 
-        fun dataValues(dataValues: List<RuleDataValue>): Builder {
+        fun dataValues(dataValues: List<RuleDataValue>?): Builder {
             ruleEvent.dataValues = dataValues
             return this
         }

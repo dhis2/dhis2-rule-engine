@@ -21,7 +21,7 @@ public class RuleActionHideSectionTests
                         RuleActionHideSection.Companion.create( null );
                         fail( "NullPointerException was expected, but nothing was thrown." );
                 }
-                catch ( NullPointerException nullPointerException )
+                catch ( Exception nullPointerException )
                 {
                         // noop
                 }

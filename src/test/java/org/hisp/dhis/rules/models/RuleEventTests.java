@@ -25,7 +25,7 @@ public class RuleEventTests
         @Test
         public void createShouldThrowExceptionIfEventIsNull()
         {
-                thrown.expect( IllegalStateException.class );
+                thrown.expect( Exception.class );
                 RuleEvent.Companion.create( null, "test_programstage", RuleEvent.Status.ACTIVE,
                         new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
         }
@@ -33,7 +33,7 @@ public class RuleEventTests
         @Test
         public void createShouldThrowExceptionIfProgramStageIsNull()
         {
-                thrown.expect( IllegalStateException.class );
+                thrown.expect( Exception.class );
                 RuleEvent.Companion.create( "test_event", null, RuleEvent.Status.ACTIVE,
                         new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
         }
@@ -41,7 +41,7 @@ public class RuleEventTests
         @Test
         public void createShouldThrowExceptionIfStatusIsNull()
         {
-                thrown.expect( IllegalStateException.class );
+                thrown.expect( Exception.class );
                 RuleEvent.Companion.create( "test_event", "test_programstage", null,
                         new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
         }
@@ -49,7 +49,7 @@ public class RuleEventTests
         @Test
         public void createShouldThrowExceptionIfEventDateIsNull()
         {
-                thrown.expect( IllegalStateException.class );
+                thrown.expect( Exception.class );
                 RuleEvent.Companion.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE,
                         null, new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
         }
@@ -57,7 +57,7 @@ public class RuleEventTests
         @Test
         public void createShouldThrowExceptionIfDueDateIsNull()
         {
-                thrown.expect( IllegalStateException.class );
+                thrown.expect( Exception.class );
                 RuleEvent.Companion.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE,
                     new Date(), null, null,null,Arrays.<RuleDataValue>asList(), "");
 
@@ -66,7 +66,7 @@ public class RuleEventTests
         @Test
         public void createShouldThrowExceptionIfListOfDataValuesIsNull()
         {
-                thrown.expect( NullPointerException.class );
+                thrown.expect( Exception.class );
                 RuleEvent.Companion.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE, new Date(), new Date(),
                         null, null,null, "");
 
@@ -86,12 +86,12 @@ public class RuleEventTests
                 // add another data value
                 ruleDataValues.add( ruleDataValue );
 
-                assertThat( ruleEvent.dataValues().size() ).isEqualTo( 1 );
-                assertThat( ruleEvent.dataValues().get( 0 ) ).isEqualTo( ruleDataValue );
+                assertThat( ruleEvent.getDataValues().size() ).isEqualTo( 1 );
+                assertThat( ruleEvent.getDataValues().get( 0 ) ).isEqualTo( ruleDataValue );
 
                 try
                 {
-                        ruleEvent.dataValues().add( ruleDataValue );
+                        ruleEvent.getDataValues().add( ruleDataValue );
                         fail( "UnsupportedOperationException was expected, but nothing was thrown" );
                 }
                 catch ( UnsupportedOperationException exception )
@@ -114,14 +114,14 @@ public class RuleEventTests
                 RuleEvent ruleEvent = RuleEvent.Companion.create( "test_event_uid", "test_stage_uid",
                     RuleEvent.Status.ACTIVE, eventDate, dueDate, "","",ruleDataValues, "");
 
-                assertThat( ruleEvent.event() ).isEqualTo( "test_event_uid" );
-                assertThat( ruleEvent.status() ).isEqualTo( RuleEvent.Status.ACTIVE );
-                assertThat( ruleEvent.programStage() ).isEqualTo( "test_stage_uid" );
-                assertThat( ruleEvent.eventDate() ).isEqualTo( eventDate );
-                assertThat( ruleEvent.dueDate() ).isEqualTo( dueDate );
+                assertThat( ruleEvent.getEvent() ).isEqualTo( "test_event_uid" );
+                assertThat( ruleEvent.getStatus() ).isEqualTo( RuleEvent.Status.ACTIVE );
+                assertThat( ruleEvent.getProgramStage() ).isEqualTo( "test_stage_uid" );
+                assertThat( ruleEvent.getEventDate() ).isEqualTo( eventDate );
+                assertThat( ruleEvent.getDueDate() ).isEqualTo( dueDate );
 
-                assertThat( ruleEvent.dataValues().size() ).isEqualTo( 1 );
-                assertThat( ruleEvent.dataValues().get( 0 ) ).isEqualTo( ruleDataValue );
+                assertThat( ruleEvent.getDataValues().size() ).isEqualTo( 1 );
+                assertThat( ruleEvent.getDataValues().get( 0 ) ).isEqualTo( ruleDataValue );
         }
 
         @Test
@@ -139,7 +139,7 @@ public class RuleEventTests
 
                 Collections.sort( ruleEvents, RuleEvent.Companion.getEVENT_DATE_COMPARATOR());
 
-                assertThat( ruleEvents.get( 0 ).event() ).isEqualTo( "test_event_two" );
-                assertThat( ruleEvents.get( 1 ).event() ).isEqualTo( "test_event_one" );
+                assertThat( ruleEvents.get( 0 ).getEvent() ).isEqualTo( "test_event_two" );
+                assertThat( ruleEvents.get( 1 ).getEvent() ).isEqualTo( "test_event_one" );
         }
 }

@@ -36,13 +36,13 @@ public class RuleVariableValueMapBuilderTests
             throws ParseException
         {
                 RuleEvent ruleEvent = mock( RuleEvent.class );
-                when( ruleEvent.event() ).thenReturn( "test_event_uid" );
-                when( ruleEvent.status() ).thenReturn( RuleEvent.Status.ACTIVE );
-                when( ruleEvent.eventDate() ).thenReturn( dateFormat.parse( "1994-02-03" ) );
-                when( ruleEvent.dueDate() ).thenReturn( dateFormat.parse( "1995-02-03" ) );
-                when( ruleEvent.programStageName() ).thenReturn( "" );
-                when( ruleEvent.programStage() ).thenReturn( "" );
-                when( ruleEvent.organisationUnit() ).thenReturn( "" );
+                when( ruleEvent.getEvent() ).thenReturn( "test_event_uid" );
+                when( ruleEvent.getStatus() ).thenReturn( RuleEvent.Status.ACTIVE );
+                when( ruleEvent.getEventDate() ).thenReturn( dateFormat.parse( "1994-02-03" ) );
+                when( ruleEvent.getDueDate() ).thenReturn( dateFormat.parse( "1995-02-03" ) );
+                when( ruleEvent.getProgramStageName() ).thenReturn( "" );
+                when( ruleEvent.getProgramStage() ).thenReturn( "" );
+                when( ruleEvent.getOrganisationUnit() ).thenReturn( "" );
 
                 try
                 {

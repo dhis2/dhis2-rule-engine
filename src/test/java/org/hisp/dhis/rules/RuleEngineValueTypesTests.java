@@ -29,8 +29,8 @@ public class RuleEngineValueTypesTests
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
                 assertThat( ruleEffects.size() ).isEqualTo( 1 );
-                assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "false" );
-                assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+                assertThat( ruleEffects.get( 0 ).getData() ).isEqualTo( "false" );
+                assertThat( ruleEffects.get( 0 ).getRuleAction() ).isEqualTo( ruleAction );
         }
 
         @Test
@@ -50,8 +50,8 @@ public class RuleEngineValueTypesTests
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
                 assertThat( ruleEffects.size() ).isEqualTo( 1 );
-                assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "0.0" );
-                assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+                assertThat( ruleEffects.get( 0 ).getData() ).isEqualTo( "0.0" );
+                assertThat( ruleEffects.get( 0 ).getRuleAction() ).isEqualTo( ruleAction );
         }
 
         @Test
@@ -71,8 +71,8 @@ public class RuleEngineValueTypesTests
                 List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
                 assertThat( ruleEffects.size() ).isEqualTo( 1 );
-                assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "" );
-                assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+                assertThat( ruleEffects.get( 0 ).getData() ).isEqualTo( "" );
+                assertThat( ruleEffects.get( 0 ).getRuleAction() ).isEqualTo( ruleAction );
         }
 
         private RuleEngine getRuleEngine( Rule rule, List<RuleVariable> ruleVariables )

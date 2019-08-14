@@ -21,7 +21,7 @@ public class RuleVariableNewestEventTests
                         RuleVariableNewestEvent.Companion.create( null, "test_dataelement", RuleValueType.TEXT );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
-                catch ( NullPointerException exception )
+                catch ( Exception exception )
                 {
                         // noop
                 }
@@ -35,7 +35,7 @@ public class RuleVariableNewestEventTests
                         RuleVariableNewestEvent.Companion.create( "test_variable", null, RuleValueType.TEXT );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
-                catch ( NullPointerException exception )
+                catch ( Exception exception )
                 {
                         // noop
                 }
@@ -49,7 +49,7 @@ public class RuleVariableNewestEventTests
                         RuleVariableNewestEvent.Companion.create( "test_variable", "test_dataelement", null );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
-                catch ( NullPointerException exception )
+                catch ( Exception exception )
                 {
                         // noop
                 }
@@ -61,8 +61,8 @@ public class RuleVariableNewestEventTests
                 RuleVariableNewestEvent ruleVariableNewestEvent = RuleVariableNewestEvent.Companion.create(
                     "test_variable", "test_dataelement", RuleValueType.NUMERIC );
 
-                assertThat( ruleVariableNewestEvent.name() ).isEqualTo( "test_variable" );
-                assertThat( ruleVariableNewestEvent.dataElement() ).isEqualTo( "test_dataelement" );
-                assertThat( ruleVariableNewestEvent.dataElementType() ).isEqualTo( RuleValueType.NUMERIC );
+                assertThat( ruleVariableNewestEvent.getName() ).isEqualTo( "test_variable" );
+                assertThat( ruleVariableNewestEvent.getDataElement() ).isEqualTo( "test_dataelement" );
+                assertThat( ruleVariableNewestEvent.getDataElementType() ).isEqualTo( RuleValueType.NUMERIC );
         }
 }

@@ -20,13 +20,13 @@ public class RuleActionScheduleMessageTests
                 RuleActionScheduleMessage ruleActionScheduleMessageNoNotification = RuleActionScheduleMessage.Companion
                     .create( null, "data" );
 
-                assertThat( ruleActionScheduleMessage.notification() ).isEqualTo( "notification" );
-                assertThat( ruleActionScheduleMessage.data() ).isEqualTo( "data" );
+                assertThat( ruleActionScheduleMessage.getNotification() ).isEqualTo( "notification" );
+                assertThat( ruleActionScheduleMessage.getData() ).isEqualTo( "data" );
 
-                assertThat( ruleActionScheduleMessageNoData.notification() ).isEqualTo( "notification" );
-                assertThat( ruleActionScheduleMessageNoData.data() ).isEqualTo( "" );
+                assertThat( ruleActionScheduleMessageNoData.getNotification() ).isEqualTo( "notification" );
+                assertThat( ruleActionScheduleMessageNoData.getData() ).isEqualTo( "" );
 
-                assertThat( ruleActionScheduleMessageNoNotification.notification() ).isEqualTo( "" );
-                assertThat( ruleActionScheduleMessageNoNotification.data() ).isEqualTo( "data" );
+                assertThat( ruleActionScheduleMessageNoNotification.getNotification() ).isEqualTo( "" );
+                assertThat( ruleActionScheduleMessageNoNotification.getData() ).isEqualTo( "data" );
         }
 }
