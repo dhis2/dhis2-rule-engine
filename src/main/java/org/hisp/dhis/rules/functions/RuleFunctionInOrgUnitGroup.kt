@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,45 +28,29 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.RuleVariableValue
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
 
-/**
- * @Author Zubair Asghar.
- */
-public class RuleFunctionInOrgUnitGroup extends RuleFunction
-{
-        static final String D2_IN_ORG_UNIT_GROUP = "d2:inOrgUnitGroup";
+class RuleFunctionInOrgUnitGroup : RuleFunction() {
 
-        @Nonnull
-        @Override
-        public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
-            Map<String, List<String>> supplementaryData )
-        {
-                if ( arguments.size() != 1 )
-                {
-                        throw new IllegalArgumentException( "Two arguments were expected, " +
-                            arguments.size() + " were supplied" );
-                }
+    override fun evaluate(arguments: List<String>, valueMap: Map<String, RuleVariableValue>,
+                          supplementaryData: Map<String, List<String>>?): String {
+        return when {
+            arguments.size != 1 -> throw IllegalArgumentException("Two arguments were expected, ${arguments.size} were supplied")
+            !valueMap.containsKey("org_unit") || !supplementaryData!!.containsKey(arguments[0]) -> false.toString()
+            else -> {
+                val orgUnit = valueMap["org_unit"]?.value()?.replace("'", "")
+                val members = supplementaryData[arguments[0]]
 
-                if ( !valueMap.containsKey( "org_unit" ) || !supplementaryData.containsKey( arguments.get( 0 ) ) )
-                {
-                        return String.valueOf( false );
-                }
-
-                String orgUnit = valueMap.get( "org_unit" ).value().replace( "'", "" );
-
-                List<String> members = supplementaryData.get( arguments.get( 0 ) );
-
-                return String.valueOf( members.contains( orgUnit ) );
+                members?.contains(orgUnit).toString()
+            }
         }
+    }
 
-        @Nonnull
-        public static RuleFunctionInOrgUnitGroup create()
-        {
-                return new RuleFunctionInOrgUnitGroup();
-        }
+    companion object {
+        const val D2_IN_ORG_UNIT_GROUP = "d2:inOrgUnitGroup"
+
+        @JvmStatic
+        fun create() = RuleFunctionInOrgUnitGroup()
+    }
 }
