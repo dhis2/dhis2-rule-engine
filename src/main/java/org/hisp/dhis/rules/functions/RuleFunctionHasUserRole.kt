@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,43 +28,27 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.RuleVariableValue
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+class RuleFunctionHasUserRole : RuleFunction() {
 
-/**
- * @Author Zubair Asghar.
- */
-public class RuleFunctionHasUserRole extends RuleFunction
-{
-    private static final String USER = "USER";
-
-    static final String D2_HAS_USER_ROLE = "d2:hasUserRole";
-
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        if( !supplementaryData.containsKey( USER ) )
-        {
-            throw new IllegalArgumentException( "Supplementary data needs to be provided" );
+    override fun evaluate(arguments: List<String>, valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>?>?): String {
+        return when {
+            !supplementaryData!!.containsKey(USER) -> throw IllegalArgumentException("Supplementary data needs to be provided")
+            arguments.isEmpty() -> throw IllegalArgumentException("One argument was expected but ${arguments.size} found ")
+            else -> {
+                val roles = supplementaryData[USER]
+                (roles?.contains(arguments[0]) ?: false).toString()
+            }
         }
-
-        if ( arguments.size() < 1 )
-        {
-            throw new IllegalArgumentException( "One argument was expected but "+ arguments.size() +" found " );
-        }
-
-        List<String> roles = supplementaryData.get( USER );
-
-        return String.valueOf( roles != null ? roles.contains( arguments.get( 0 ) ) : "false" );
     }
 
-    @Nonnull
-    public static RuleFunctionHasUserRole create()
-    {
-        return new RuleFunctionHasUserRole();
+    companion object {
+        internal const val USER = "USER"
+
+        const val D2_HAS_USER_ROLE = "d2:hasUserRole"
+
+        @JvmStatic
+        fun create() = RuleFunctionHasUserRole()
     }
 }
