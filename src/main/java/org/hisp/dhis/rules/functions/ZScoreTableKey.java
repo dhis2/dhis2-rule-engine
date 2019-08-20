@@ -33,12 +33,12 @@ package org.hisp.dhis.rules.functions;
 public class ZScoreTableKey
 {
     private final byte gender;
-    private final byte age;
+    private final float parameter;
 
-    public ZScoreTableKey( byte gender, byte age )
+    public ZScoreTableKey( byte gender, float parameter )
     {
         this.gender = gender;
-        this.age = age;
+        this.parameter = parameter;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class ZScoreTableKey
         int result = 1;
 
         result = prime * result +  Byte.hashCode( gender );
-        result = prime * result +  Byte.hashCode( age );
+        result = prime * result +  Float.hashCode( parameter );
 
         return result;
     }
@@ -69,6 +69,6 @@ public class ZScoreTableKey
 
         ZScoreTableKey other = (ZScoreTableKey) obj;
 
-        return this.age == other.age && this.gender == other.gender;
+        return this.parameter == other.parameter && this.gender == other.gender;
     }
 }
