@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,46 +28,22 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
-
-import javax.annotation.Nonnull;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import org.hisp.dhis.rules.RuleVariableValue
 
 /**
- * @Author Zubair Asghar.
- * <p>
  * Counts the number of matching values that is entered for the source field in the first argument. Only occurrences that matches the second argument is counted.
  * The source field parameter is the name of one of the defined source fields in the program.
  */
-public class RuleFunctionCountIfValue extends RuleFunction
-{
-    static final String D2_COUNT_IF_VALUE = "d2:countIfValue";
+class RuleFunctionCountIfValue : RuleFunction() {
 
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
-                            Map<String, List<String>> supplementaryData )
-    {
-        if ( valueMap == null )
-        {
-            throw new IllegalArgumentException( "valueMap is expected" );
+    override fun evaluate(arguments: List<String>,
+                          valueMap: Map<String, RuleVariableValue>?,
+                          supplementaryData: Map<String, List<String>>?): String {
+        when {
+            valueMap == null -> throw IllegalArgumentException("valueMap is expected")
+            arguments.size != 2 -> throw IllegalArgumentException("Two arguments were expected, ${arguments.size} were supplied")
+            else -> return countIfValue(arguments, valueMap)
         }
-
-        if ( arguments.size() != 2 )
-        {
-            throw new IllegalArgumentException( "Two arguments were expected, " +
-                    arguments.size() + " were supplied" );
-        }
-
-        return countIfValue( arguments, valueMap );
-    }
-
-    @Nonnull
-    public static RuleFunctionCountIfValue create()
-    {
-        return new RuleFunctionCountIfValue();
     }
 
     /**
@@ -78,19 +54,19 @@ public class RuleFunctionCountIfValue extends RuleFunction
      * @param valueMap  key value pair containing values for each variable
      * @return count of program rule variable
      */
-    private String countIfValue( List<String> arguments, Map<String, RuleVariableValue> valueMap )
-    {
-        String ruleVariableName = arguments.get( 0 );
+    private fun countIfValue(arguments: List<String>, valueMap: Map<String, RuleVariableValue>): String {
+        val variableValue = valueMap[arguments[0]]
 
-        RuleVariableValue variableValue = valueMap.get( ruleVariableName );
+        return when {
+            variableValue != null -> variableValue.candidates().count { it == arguments[1] }.toString()
+            else -> "0"
+        }
+    }
 
-        if ( variableValue != null )
-        {
-            return Integer.toString( Collections.frequency( variableValue.candidates(), arguments.get( 1 ) ) );
-        }
-        else
-        {
-            return "0";
-        }
+    companion object {
+        const val D2_COUNT_IF_VALUE = "d2:countIfValue"
+
+        @JvmStatic
+        fun create() = RuleFunctionCountIfValue()
     }
 }
