@@ -1,7 +1,5 @@
 package org.hisp.dhis.rules.models
 
-import com.google.auto.value.AutoValue
-
 data class RuleActionHideProgramStage(
         val programStage: String?
 ) : RuleAction() {

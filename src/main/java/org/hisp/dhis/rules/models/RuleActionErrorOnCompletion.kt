@@ -1,9 +1,5 @@
 package org.hisp.dhis.rules.models
 
-import com.google.auto.value.AutoValue
-import javax.annotation.concurrent.Immutable
-
-@Immutable
 data class RuleActionErrorOnCompletion(override var content: String?, override var data: String?, override var field: String?) : RuleActionMessage() {
     companion object {
 

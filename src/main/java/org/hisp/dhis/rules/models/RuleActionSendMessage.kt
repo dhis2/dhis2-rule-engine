@@ -28,12 +28,6 @@ package org.hisp.dhis.rules.models
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.google.auto.value.AutoValue
-
-/**
- * Created by zubair@dhis2.org on 24.11.17.
- */
-
 data class RuleActionSendMessage(
         val notification: String?,
         val data: String?

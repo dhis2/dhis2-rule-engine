@@ -1,9 +1,5 @@
 package org.hisp.dhis.rules.models
 
-import com.google.auto.value.AutoValue
-import javax.annotation.concurrent.Immutable
-
-@Immutable
 data class RuleActionDisplayText(override var content: String?, override var data: String?, override var location: String?) : RuleActionText() {
     companion object {
 
@@ -14,7 +10,7 @@ data class RuleActionDisplayText(override var content: String?, override var dat
             }
 
             return RuleActionDisplayText(content ?: "",
-                    data ?: "", RuleActionText.Companion.LOCATION_FEEDBACK_WIDGET)
+                    data ?: "", LOCATION_FEEDBACK_WIDGET)
         }
 
         fun createForIndicators(
@@ -24,7 +20,7 @@ data class RuleActionDisplayText(override var content: String?, override var dat
             }
 
             return RuleActionDisplayText(content ?: "",
-                    data ?: "", RuleActionText.Companion.LOCATION_INDICATOR_WIDGET)
+                    data ?: "", LOCATION_INDICATOR_WIDGET)
         }
     }
 }

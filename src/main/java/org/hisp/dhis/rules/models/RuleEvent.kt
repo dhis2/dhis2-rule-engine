@@ -1,12 +1,10 @@
 package org.hisp.dhis.rules.models
 
-import com.google.auto.value.AutoValue
-
 import java.io.Serializable
-import java.util.ArrayList
-import java.util.Collections
-import java.util.Comparator
-import java.util.Date
+import java.util.*
+import kotlin.Comparator
+import kotlin.collections.ArrayList
+
 
 data class RuleEvent(
         var event: String?,

@@ -28,17 +28,11 @@ package org.hisp.dhis.rules.models
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.google.auto.value.AutoValue
-import java.util.Date
 
-/**
- * Created by zubair@dhis2.org on 07.02.18.
- */
 data class RuleActionScheduleMessage(
         val notification: String?,
         val data: String?
 ) : RuleAction() {
-
 
     companion object {
 

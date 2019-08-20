@@ -28,9 +28,6 @@ package org.hisp.dhis.rules.models
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * @Author Zubair Asghar.
- */
 enum class TriggerEnvironment private constructor(val clientName: String) {
     ANDROIDCLIENT("AndroidClient"),
     SERVER("Server")

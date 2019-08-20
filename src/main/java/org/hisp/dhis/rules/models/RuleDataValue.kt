@@ -1,7 +1,6 @@
 package org.hisp.dhis.rules.models
 
-import com.google.auto.value.AutoValue
-import java.util.Date
+import java.util.*
 
 data class RuleDataValue(
         val eventDate: Date?,

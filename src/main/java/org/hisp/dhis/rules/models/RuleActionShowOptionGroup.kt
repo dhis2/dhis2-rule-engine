@@ -1,7 +1,5 @@
 package org.hisp.dhis.rules.models
 
-import com.google.auto.value.AutoValue
-
 data class RuleActionShowOptionGroup(
         val content: String?,
         val optionGroup: String?,

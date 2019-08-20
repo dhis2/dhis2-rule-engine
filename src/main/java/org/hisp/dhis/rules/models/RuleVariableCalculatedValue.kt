@@ -28,13 +28,6 @@ package org.hisp.dhis.rules.models
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.google.auto.value.AutoValue
-import java.time.temporal.ValueRange
-
-/**
- * @Author Zubair Asghar.
- */
-
 data class RuleVariableCalculatedValue(
         val rName: String?,
         val calculatedValueVariable: String?,

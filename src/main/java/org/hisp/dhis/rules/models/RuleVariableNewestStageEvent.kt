@@ -1,11 +1,9 @@
 package org.hisp.dhis.rules.models
 
-import com.google.auto.value.AutoValue
-import java.lang.annotation.ElementType
-
-data class RuleVariableNewestStageEvent(
-        var nName: String, var element: String, var elementType: RuleValueType, var programStage: String
-) : RuleVariableDataElement(nName, element, elementType) {
+data class RuleVariableNewestStageEvent(var nName: String,
+                                        var element: String,
+                                        var elementType: RuleValueType,
+                                        var programStage: String) : RuleVariableDataElement(nName, element, elementType) {
 
     companion object {
 

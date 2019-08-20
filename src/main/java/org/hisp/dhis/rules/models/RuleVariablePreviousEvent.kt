@@ -1,7 +1,5 @@
 package org.hisp.dhis.rules.models
 
-import com.google.auto.value.AutoValue
-
 data class RuleVariablePreviousEvent(
         var nName: String, var element: String, var elementType: RuleValueType
 ): RuleVariableDataElement(nName, element, elementType) {

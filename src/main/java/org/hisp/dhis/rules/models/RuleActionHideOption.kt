@@ -1,13 +1,10 @@
 package org.hisp.dhis.rules.models
 
-import com.google.auto.value.AutoValue
-
 data class RuleActionHideOption(
         val content: String?,
         val option: String?,
         val field: String?
 ) : RuleAction() {
-
 
     companion object {
 
