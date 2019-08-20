@@ -18,10 +18,10 @@ public class RuleVariableCurrentEventTests
         {
                 try
                 {
-                        RuleVariableCurrentEvent.create( null, "test_dataelement", RuleValueType.TEXT );
+                        RuleVariableCurrentEvent.Companion.create( null, "test_dataelement", RuleValueType.TEXT );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
-                catch ( NullPointerException exception )
+                catch ( Exception exception )
                 {
                         // noop
                 }
@@ -32,10 +32,10 @@ public class RuleVariableCurrentEventTests
         {
                 try
                 {
-                        RuleVariableCurrentEvent.create( "test_variable", null, RuleValueType.TEXT );
+                        RuleVariableCurrentEvent.Companion.create( "test_variable", null, RuleValueType.TEXT );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
-                catch ( NullPointerException exception )
+                catch ( Exception exception )
                 {
                         // noop
                 }
@@ -46,10 +46,10 @@ public class RuleVariableCurrentEventTests
         {
                 try
                 {
-                        RuleVariableCurrentEvent.create( "test_variable", "test_dataelement", null );
+                        RuleVariableCurrentEvent.Companion.create( "test_variable", "test_dataelement", null );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
-                catch ( NullPointerException exception )
+                catch ( Exception exception )
                 {
                         // noop
                 }
@@ -58,11 +58,11 @@ public class RuleVariableCurrentEventTests
         @Test
         public void createShouldPropagatePropertiesCorrectly()
         {
-                RuleVariableCurrentEvent ruleVariableCurrentEvent = RuleVariableCurrentEvent.create(
+                RuleVariableCurrentEvent ruleVariableCurrentEvent = RuleVariableCurrentEvent.Companion.create(
                     "test_variable", "test_dataelement", RuleValueType.NUMERIC );
 
-                assertThat( ruleVariableCurrentEvent.name() ).isEqualTo( "test_variable" );
-                assertThat( ruleVariableCurrentEvent.dataElement() ).isEqualTo( "test_dataelement" );
-                assertThat( ruleVariableCurrentEvent.dataElementType() ).isEqualTo( RuleValueType.NUMERIC );
+                assertThat( ruleVariableCurrentEvent.getName() ).isEqualTo( "test_variable" );
+                assertThat( ruleVariableCurrentEvent.getDataElement() ).isEqualTo( "test_dataelement" );
+                assertThat( ruleVariableCurrentEvent.getDataElementType() ).isEqualTo( RuleValueType.NUMERIC );
         }
 }

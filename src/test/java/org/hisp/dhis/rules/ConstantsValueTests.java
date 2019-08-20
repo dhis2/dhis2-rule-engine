@@ -67,14 +67,14 @@ public class ConstantsValueTests {
     @Test
     public void assignConstantValueFromAssignActionInEnrollment() throws Exception
     {
-        RuleAction assignAction = RuleActionAssign.create(null, "C{test_constant_value}", "test_data_element");
+        RuleAction assignAction = RuleActionAssign.Companion.create(null, "C{test_constant_value}", "test_data_element");
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create(null, 1, "true", Arrays.asList(assignAction), "test_program_rule1");
 
         constantsValueMap.put("test_constant_value", "3.14");
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList(rule));
 
-        RuleEnrollment enrollment = RuleEnrollment.builder()
+        RuleEnrollment enrollment = RuleEnrollment.Companion.builder()
                 .enrollment("test_enrollment")
                 .programName("test_program")
                 .incidentDate(new Date())
@@ -82,10 +82,10 @@ public class ConstantsValueTests {
                 .status(RuleEnrollment.Status.ACTIVE)
                 .organisationUnit("test_ou")
                 .organisationUnitCode("test_ou_code")
-                .attributeValues(Arrays.asList( RuleAttributeValue.create("test_attribute", "test_value")))
+                .attributeValues(Arrays.asList( RuleAttributeValue.Companion.create("test_attribute", "test_value")))
                 .build();
 
-        RuleEvent ruleEvent = RuleEvent.builder()
+        RuleEvent ruleEvent = RuleEvent.Companion.builder()
                 .event("test_event")
                 .programStage("test_program_stage")
                 .programStageName("")
@@ -94,7 +94,7 @@ public class ConstantsValueTests {
                 .dueDate(new Date())
                 .organisationUnit("")
                 .organisationUnitCode("")
-                .dataValues(Arrays.asList(RuleDataValue.create(
+                .dataValues(Arrays.asList(RuleDataValue.Companion.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value")))
                 .build();
 
@@ -102,21 +102,21 @@ public class ConstantsValueTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( enrollment ).call();
 
         assertThat( ruleEffects.size() ).isEqualTo(1);
-        assertThat( ruleEffects.get(0).data() ).isEqualTo("3.14");
-        assertThat( ruleEffects.get(0).ruleAction() ).isEqualTo(assignAction);
+        assertThat( ruleEffects.get(0).getData() ).isEqualTo("3.14");
+        assertThat( ruleEffects.get(0).getRuleAction() ).isEqualTo(assignAction);
     }
 
     @Test
     public void assignConstantValueFromAssignActionInEvent() throws Exception
     {
-        RuleAction assignAction = RuleActionAssign.create(null, "C{test_constant_value}", "test_data_element");
+        RuleAction assignAction = RuleActionAssign.Companion.create(null, "C{test_constant_value}", "test_data_element");
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create(null, 1, "true", Arrays.asList(assignAction), "test_program_rule1");
 
         constantsValueMap.put("test_constant_value", "3.14");
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList(rule));
 
-        RuleEvent ruleEvent = RuleEvent.builder()
+        RuleEvent ruleEvent = RuleEvent.Companion.builder()
                 .event("test_event")
                 .programStage("test_program_stage")
                 .programStageName("")
@@ -125,7 +125,7 @@ public class ConstantsValueTests {
                 .dueDate(new Date())
                 .organisationUnit("")
                 .organisationUnitCode("")
-                .dataValues(Arrays.asList(RuleDataValue.create(
+                .dataValues(Arrays.asList(RuleDataValue.Companion.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value")))
                 .build();
 
@@ -133,8 +133,8 @@ public class ConstantsValueTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
         assertThat( ruleEffects.size() ).isEqualTo(1);
-        assertThat( ruleEffects.get(0).data() ).isEqualTo("3.14");
-        assertThat( ruleEffects.get(0).ruleAction() ).isEqualTo(assignAction);
+        assertThat( ruleEffects.get(0).getData() ).isEqualTo("3.14");
+        assertThat( ruleEffects.get(0).getRuleAction() ).isEqualTo(assignAction);
 
     }
 

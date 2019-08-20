@@ -17,25 +17,25 @@ public class RuleActionDisplayTextTests
         @Test
         public void createForFeedbackMustSubstituteCorrectLocation()
         {
-                RuleActionDisplayText displayTextAction = RuleActionDisplayText
+                RuleActionDisplayText displayTextAction = RuleActionDisplayText.Companion
                     .createForFeedback( "test_content", "test_data" );
 
-                assertThat( displayTextAction.location() )
-                    .isEqualTo( RuleActionDisplayText.LOCATION_FEEDBACK_WIDGET );
-                assertThat( displayTextAction.content() ).isEqualTo( "test_content" );
-                assertThat( displayTextAction.data() ).isEqualTo( "test_data" );
+                assertThat( displayTextAction.getLocation() )
+                    .isEqualTo(RuleActionText.Companion.getLOCATION_FEEDBACK_WIDGET());
+                assertThat( displayTextAction.getContent() ).isEqualTo( "test_content" );
+                assertThat( displayTextAction.getData() ).isEqualTo( "test_data" );
         }
 
         @Test
         public void createForIndicatorsMustSubstituteCorrectLocation()
         {
-                RuleActionDisplayText displayTextAction = RuleActionDisplayText
+                RuleActionDisplayText displayTextAction = RuleActionDisplayText.Companion
                     .createForIndicators( "test_content", "test_data" );
 
-                assertThat( displayTextAction.location() )
-                    .isEqualTo( RuleActionDisplayText.LOCATION_INDICATOR_WIDGET );
-                assertThat( displayTextAction.content() ).isEqualTo( "test_content" );
-                assertThat( displayTextAction.data() ).isEqualTo( "test_data" );
+                assertThat( displayTextAction.getLocation() )
+                    .isEqualTo(RuleActionText.Companion.getLOCATION_INDICATOR_WIDGET());
+                assertThat( displayTextAction.getContent() ).isEqualTo( "test_content" );
+                assertThat( displayTextAction.getData() ).isEqualTo( "test_data" );
         }
 
         @Test
@@ -43,7 +43,7 @@ public class RuleActionDisplayTextTests
         {
                 try
                 {
-                        RuleActionDisplayText.createForFeedback( null, null );
+                        RuleActionDisplayText.Companion.createForFeedback( null, null );
                         fail( "IllegalArgumentException was expected, but nothing was thrown." );
                 }
                 catch ( IllegalArgumentException illegalArgumentException )
@@ -57,7 +57,7 @@ public class RuleActionDisplayTextTests
         {
                 try
                 {
-                        RuleActionDisplayText.createForIndicators( null, null );
+                        RuleActionDisplayText.Companion.createForIndicators( null, null );
                         fail( "IllegalArgumentException was expected, but nothing was thrown." );
                 }
                 catch ( IllegalArgumentException illegalArgumentException )
@@ -69,37 +69,37 @@ public class RuleActionDisplayTextTests
         @Test
         public void createForFeedbackMustSubstituteEmptyStringsForNullArguments()
         {
-                RuleActionDisplayText ruleActionNoContent = RuleActionDisplayText
+                RuleActionDisplayText ruleActionNoContent = RuleActionDisplayText.Companion
                     .createForFeedback( null, "test_data" );
-                RuleActionDisplayText ruleActionNoData = RuleActionDisplayText
+                RuleActionDisplayText ruleActionNoData = RuleActionDisplayText.Companion
                     .createForFeedback( "test_content", null );
 
-                assertThat( ruleActionNoContent.content() ).isEqualTo( "" );
-                assertThat( ruleActionNoContent.data() ).isEqualTo( "test_data" );
+                assertThat( ruleActionNoContent.getContent() ).isEqualTo( "" );
+                assertThat( ruleActionNoContent.getData() ).isEqualTo( "test_data" );
 
-                assertThat( ruleActionNoData.content() ).isEqualTo( "test_content" );
-                assertThat( ruleActionNoData.data() ).isEqualTo( "" );
+                assertThat( ruleActionNoData.getContent() ).isEqualTo( "test_content" );
+                assertThat( ruleActionNoData.getData() ).isEqualTo( "" );
         }
 
         @Test
         public void createForIndicatorsMustSubstituteEmptyStringsForNullArguments()
         {
-                RuleActionDisplayText ruleActionNoContent = RuleActionDisplayText
+                RuleActionDisplayText ruleActionNoContent = RuleActionDisplayText.Companion
                     .createForIndicators( null, "test_data" );
-                RuleActionDisplayText ruleActionNoData = RuleActionDisplayText
+                RuleActionDisplayText ruleActionNoData = RuleActionDisplayText.Companion
                     .createForIndicators( "test_content", null );
 
-                assertThat( ruleActionNoContent.content() ).isEqualTo( "" );
-                assertThat( ruleActionNoContent.data() ).isEqualTo( "test_data" );
+                assertThat( ruleActionNoContent.getContent() ).isEqualTo( "" );
+                assertThat( ruleActionNoContent.getData() ).isEqualTo( "test_data" );
 
-                assertThat( ruleActionNoData.content() ).isEqualTo( "test_content" );
-                assertThat( ruleActionNoData.data() ).isEqualTo( "" );
+                assertThat( ruleActionNoData.getContent() ).isEqualTo( "test_content" );
+                assertThat( ruleActionNoData.getData() ).isEqualTo( "" );
         }
 
         @Test
         public void equalsAndHashcodeFunctionsMustConformToContract()
         {
-                EqualsVerifier.forClass( RuleActionDisplayText.createForFeedback( "", "" ).getClass() )
+                EqualsVerifier.forClass( RuleActionDisplayText.Companion.createForFeedback( "", "" ).getClass() )
                     .suppress( Warning.NULL_FIELDS )
                     .verify();
         }

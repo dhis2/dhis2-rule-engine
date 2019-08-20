@@ -93,7 +93,7 @@ class RuleEngineExecution
                         //Check if action is assigning value to calculated variable
                         if (isAssignToCalculatedValue(rule.getActions().get(j)))
                             updateValueMapForCalculatedValue((RuleActionAssign) rule.getActions().get(j),
-                                    RuleVariableValue.create(ruleEffect.data(), RuleValueType.TEXT));
+                                    RuleVariableValue.create(ruleEffect.getData(), RuleValueType.TEXT));
                         else
                             ruleEffects.add(create(rule.getActions().get(j)));
                     }
@@ -108,11 +108,11 @@ class RuleEngineExecution
     }
 
     private Boolean isAssignToCalculatedValue(RuleAction ruleAction) {
-        return ruleAction instanceof RuleActionAssign && ((RuleActionAssign) ruleAction).field().isEmpty();
+        return ruleAction instanceof RuleActionAssign && ((RuleActionAssign) ruleAction).getField().isEmpty();
     }
 
     private void updateValueMapForCalculatedValue(RuleActionAssign ruleActionAssign, RuleVariableValue value) {
-        valueMap.put(RuleExpression.unwrapVariableName(ruleActionAssign.content()),
+        valueMap.put(RuleExpression.unwrapVariableName(ruleActionAssign.getContent()),
                 value);
     }
 
@@ -121,46 +121,46 @@ class RuleEngineExecution
         // Only certain types of actions might
         // contain code to execute.
         if (ruleAction instanceof RuleActionAssign) {
-            String data = process(((RuleActionAssign) ruleAction).data());
+            String data = process(((RuleActionAssign) ruleAction).getData());
             RuleVariableValue variableValue = RuleVariableValue.create(data, RuleValueType.TEXT, Arrays.asList(data), new Date().toString());
-            String field = ((RuleActionAssign) ruleAction).field();
+            String field = ((RuleActionAssign) ruleAction).getField();
             Matcher matcher = pattern.matcher(field);
             while (matcher.find()) {
                 field = matcher.group(0).trim();
                 valueMap.put(field, variableValue);
             }
 
-            return RuleEffect.create(ruleAction, data);
+            return RuleEffect.Companion.create(ruleAction, data);
         } else if (ruleAction instanceof RuleActionSendMessage) {
-            return RuleEffect.create(ruleAction, process(
-                    ((RuleActionSendMessage) ruleAction).data()));
+            return RuleEffect.Companion.create(ruleAction, process(
+                    ((RuleActionSendMessage) ruleAction).getData()));
         } else if (ruleAction instanceof RuleActionScheduleMessage) {
-            return RuleEffect.create(ruleAction, process(
-                    ((RuleActionScheduleMessage) ruleAction).data()));
+            return RuleEffect.Companion.create(ruleAction, process(
+                    ((RuleActionScheduleMessage) ruleAction).getData()));
         } else if (ruleAction instanceof RuleActionCreateEvent) {
-            return RuleEffect.create(ruleAction, process(
-                    ((RuleActionCreateEvent) ruleAction).data()));
+            return RuleEffect.Companion.create(ruleAction, process(
+                    ((RuleActionCreateEvent) ruleAction).getData()));
         } else if (ruleAction instanceof RuleActionDisplayKeyValuePair) {
-            return RuleEffect.create(ruleAction, process(
-                    ((RuleActionDisplayKeyValuePair) ruleAction).data()));
+            return RuleEffect.Companion.create(ruleAction, process(
+                    ((RuleActionDisplayKeyValuePair) ruleAction).getData()));
         } else if (ruleAction instanceof RuleActionDisplayText) {
-            return RuleEffect.create(ruleAction, process(
-                    ((RuleActionDisplayText) ruleAction).data()));
+            return RuleEffect.Companion.create(ruleAction, process(
+                    ((RuleActionDisplayText) ruleAction).getData()));
         } else if (ruleAction instanceof RuleActionErrorOnCompletion) {
-            return RuleEffect.create(ruleAction, process(
-                    ((RuleActionErrorOnCompletion) ruleAction).data()));
+            return RuleEffect.Companion.create(ruleAction, process(
+                    ((RuleActionErrorOnCompletion) ruleAction).getData()));
         } else if (ruleAction instanceof RuleActionShowError) {
-            return RuleEffect.create(ruleAction,
-                    process(((RuleActionShowError) ruleAction).data()));
+            return RuleEffect.Companion.create(ruleAction,
+                    process(((RuleActionShowError) ruleAction).getData()));
         } else if (ruleAction instanceof RuleActionShowWarning) {
-            return RuleEffect.create(ruleAction,
-                    process(((RuleActionShowWarning) ruleAction).data()));
+            return RuleEffect.Companion.create(ruleAction,
+                    process(((RuleActionShowWarning) ruleAction).getData()));
         } else if (ruleAction instanceof RuleActionWarningOnCompletion) {
-            return RuleEffect.create(ruleAction,
-                    process(((RuleActionWarningOnCompletion) ruleAction).data()));
+            return RuleEffect.Companion.create(ruleAction,
+                    process(((RuleActionWarningOnCompletion) ruleAction).getData()));
         }
 
-        return RuleEffect.create(ruleAction);
+        return RuleEffect.Companion.create(ruleAction);
     }
 
     @Nonnull

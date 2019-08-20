@@ -18,10 +18,10 @@ public class RuleVariablePreviousEventTests
         {
                 try
                 {
-                        RuleVariablePreviousEvent.create( null, "test_dataelement", RuleValueType.TEXT );
+                        RuleVariablePreviousEvent.Companion.create( null, "test_dataelement", RuleValueType.TEXT );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
-                catch ( NullPointerException exception )
+                catch ( Exception exception )
                 {
                         // noop
                 }
@@ -32,10 +32,10 @@ public class RuleVariablePreviousEventTests
         {
                 try
                 {
-                        RuleVariablePreviousEvent.create( "test_variable", null, RuleValueType.TEXT );
+                        RuleVariablePreviousEvent.Companion.create( "test_variable", null, RuleValueType.TEXT );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
-                catch ( NullPointerException exception )
+                catch ( Exception exception )
                 {
                         // noop
                 }
@@ -46,10 +46,10 @@ public class RuleVariablePreviousEventTests
         {
                 try
                 {
-                        RuleVariablePreviousEvent.create( "test_variable", "test_dataelement", null );
+                        RuleVariablePreviousEvent.Companion.create( "test_variable", "test_dataelement", null );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
-                catch ( NullPointerException exception )
+                catch ( Exception exception )
                 {
                         // noop
                 }
@@ -58,11 +58,11 @@ public class RuleVariablePreviousEventTests
         @Test
         public void createShouldPropagatePropertiesCorrectly()
         {
-                RuleVariablePreviousEvent ruleVariablePreviousEvent = RuleVariablePreviousEvent.create(
+                RuleVariablePreviousEvent ruleVariablePreviousEvent = RuleVariablePreviousEvent.Companion.create(
                     "test_variable", "test_dataelement", RuleValueType.NUMERIC );
 
-                assertThat( ruleVariablePreviousEvent.name() ).isEqualTo( "test_variable" );
-                assertThat( ruleVariablePreviousEvent.dataElement() ).isEqualTo( "test_dataelement" );
-                assertThat( ruleVariablePreviousEvent.dataElementType() ).isEqualTo( RuleValueType.NUMERIC );
+                assertThat( ruleVariablePreviousEvent.getName() ).isEqualTo( "test_variable" );
+                assertThat( ruleVariablePreviousEvent.getDataElement() ).isEqualTo( "test_dataelement" );
+                assertThat( ruleVariablePreviousEvent.getDataElementType() ).isEqualTo( RuleValueType.NUMERIC );
         }
 }

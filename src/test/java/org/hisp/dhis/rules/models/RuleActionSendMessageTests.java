@@ -13,19 +13,19 @@ public class RuleActionSendMessageTests
         @Test
         public void substitute_empty_strings_when_create_with_null_arguments()
         {
-                RuleActionSendMessage ruleActionSendMessage = RuleActionSendMessage.create( "notification", "data" );
-                RuleActionSendMessage ruleActionSendMessageNoData = RuleActionSendMessage
+                RuleActionSendMessage ruleActionSendMessage = RuleActionSendMessage.Companion.create( "notification", "data" );
+                RuleActionSendMessage ruleActionSendMessageNoData = RuleActionSendMessage.Companion
                     .create( "notification", null );
-                RuleActionSendMessage ruleActionSendMessageNoNotification = RuleActionSendMessage
+                RuleActionSendMessage ruleActionSendMessageNoNotification = RuleActionSendMessage.Companion
                     .create( null, "data" );
 
-                assertThat( ruleActionSendMessage.notification() ).isEqualTo( "notification" );
-                assertThat( ruleActionSendMessage.data() ).isEqualTo( "data" );
+                assertThat( ruleActionSendMessage.getNotification() ).isEqualTo( "notification" );
+                assertThat( ruleActionSendMessage.getData() ).isEqualTo( "data" );
 
-                assertThat( ruleActionSendMessageNoData.notification() ).isEqualTo( "notification" );
-                assertThat( ruleActionSendMessageNoData.data() ).isEqualTo( "" );
+                assertThat( ruleActionSendMessageNoData.getNotification() ).isEqualTo( "notification" );
+                assertThat( ruleActionSendMessageNoData.getData() ).isEqualTo( "" );
 
-                assertThat( ruleActionSendMessageNoNotification.notification() ).isEqualTo( "" );
-                assertThat( ruleActionSendMessageNoNotification.data() ).isEqualTo( "data" );
+                assertThat( ruleActionSendMessageNoNotification.getNotification() ).isEqualTo( "" );
+                assertThat( ruleActionSendMessageNoNotification.getData() ).isEqualTo( "data" );
         }
 }
