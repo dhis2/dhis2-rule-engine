@@ -16,24 +16,24 @@ public class RuleActionErrorOnCompletionTests
         @Test
         public void createMustSubstituteEmptyStringsForNullArguments()
         {
-                RuleActionErrorOnCompletion ruleActionNoContent = RuleActionErrorOnCompletion
+                RuleActionErrorOnCompletion ruleActionNoContent = RuleActionErrorOnCompletion.Companion
                     .create( null, "test_data", "test_field" );
-                RuleActionErrorOnCompletion ruleActionNoData = RuleActionErrorOnCompletion
+                RuleActionErrorOnCompletion ruleActionNoData = RuleActionErrorOnCompletion.Companion
                     .create( "test_content", null, "test_field" );
-                RuleActionErrorOnCompletion ruleActionNoField = RuleActionErrorOnCompletion
+                RuleActionErrorOnCompletion ruleActionNoField = RuleActionErrorOnCompletion.Companion
                     .create( "test_content", "test_data", null );
 
-                assertThat( ruleActionNoContent.content() ).isEqualTo( "" );
-                assertThat( ruleActionNoContent.data() ).isEqualTo( "test_data" );
-                assertThat( ruleActionNoContent.field() ).isEqualTo( "test_field" );
+                assertThat( ruleActionNoContent.getContent() ).isEqualTo( "" );
+                assertThat( ruleActionNoContent.getData() ).isEqualTo( "test_data" );
+                assertThat( ruleActionNoContent.getField() ).isEqualTo( "test_field" );
 
-                assertThat( ruleActionNoData.content() ).isEqualTo( "test_content" );
-                assertThat( ruleActionNoData.data() ).isEqualTo( "" );
-                assertThat( ruleActionNoData.field() ).isEqualTo( "test_field" );
+                assertThat( ruleActionNoData.getContent() ).isEqualTo( "test_content" );
+                assertThat( ruleActionNoData.getData() ).isEqualTo( "" );
+                assertThat( ruleActionNoData.getField() ).isEqualTo( "test_field" );
 
-                assertThat( ruleActionNoField.content() ).isEqualTo( "test_content" );
-                assertThat( ruleActionNoField.data() ).isEqualTo( "test_data" );
-                assertThat( ruleActionNoField.field() ).isEqualTo( "" );
+                assertThat( ruleActionNoField.getContent() ).isEqualTo( "test_content" );
+                assertThat( ruleActionNoField.getData() ).isEqualTo( "test_data" );
+                assertThat( ruleActionNoField.getField() ).isEqualTo( "" );
         }
 
         @Test
@@ -41,10 +41,10 @@ public class RuleActionErrorOnCompletionTests
         {
                 try
                 {
-                        RuleActionErrorOnCompletion.create( null, null, null );
+                        RuleActionErrorOnCompletion.Companion.create( null, null, null );
                         fail( "IllegalArgumentException was expected, but nothing was thrown." );
                 }
-                catch ( IllegalArgumentException illegalArgumentException )
+                catch ( Exception illegalArgumentException )
                 {
                         // noop
                 }
@@ -53,7 +53,7 @@ public class RuleActionErrorOnCompletionTests
         @Test
         public void equalsAndHashcodeFunctionsMustConformToContract()
         {
-                EqualsVerifier.forClass( RuleActionErrorOnCompletion
+                EqualsVerifier.forClass( RuleActionErrorOnCompletion.Companion
                     .create( "test_content", "test_data", "test_field" ).getClass() )
                     .suppress( Warning.NULL_FIELDS )
                     .verify();

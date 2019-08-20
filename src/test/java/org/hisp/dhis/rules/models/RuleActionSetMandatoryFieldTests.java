@@ -16,7 +16,7 @@ public class RuleActionSetMandatoryFieldTests
         {
                 try
                 {
-                        RuleActionSetMandatoryField.create( null );
+                        RuleActionSetMandatoryField.Companion.create( null );
                 }
                 catch ( NullPointerException nullPointerException )
                 {
@@ -27,7 +27,7 @@ public class RuleActionSetMandatoryFieldTests
         @Test
         public void equalsAndHashcodeMustConformToContract()
         {
-                EqualsVerifier.forClass( RuleActionSetMandatoryField.create( "" ).getClass() )
+                EqualsVerifier.forClass( RuleActionSetMandatoryField.Companion.create( "" ).getClass() )
                     .suppress( Warning.NULL_FIELDS )
                     .verify();
         }

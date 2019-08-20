@@ -18,7 +18,7 @@ import static com.google.common.truth.Truth.assertThat;
 public class RuleEngineEffectTypesTests {
 
     private RuleEvent getTestRuleEvent(RuleEvent.Status status) {
-        return RuleEvent.builder()
+        return RuleEvent.Companion.builder()
                 .event("test_event")
                 .programStage("test_program_stage")
                 .programStageName("")
@@ -27,7 +27,7 @@ public class RuleEngineEffectTypesTests {
                 .dueDate(new Date())
                 .organisationUnit("")
                 .organisationUnitCode("")
-                .dataValues(Arrays.asList(RuleDataValue.create(
+                .dataValues(Arrays.asList(RuleDataValue.Companion.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value")))
                 .build();
     }
@@ -35,7 +35,7 @@ public class RuleEngineEffectTypesTests {
     @Test
     public void simpleConditionMustResultInAssignEffect()
             throws Exception {
-        RuleAction ruleAction = RuleActionAssign.create(
+        RuleAction ruleAction = RuleActionAssign.Companion.create(
                 null, "\'test_string\'", "test_data_element");
         Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
 
@@ -45,14 +45,14 @@ public class RuleEngineEffectTypesTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call();
 
         assertThat(ruleEffects.size()).isEqualTo(1);
-        assertThat(ruleEffects.get(0).data()).isEqualTo("test_string");
-        assertThat(ruleEffects.get(0).ruleAction()).isEqualTo(ruleAction);
+        assertThat(ruleEffects.get(0).getData()).isEqualTo("test_string");
+        assertThat(ruleEffects.get(0).getRuleAction()).isEqualTo(ruleAction);
     }
 
     @Test
     public void simpleConditionMustResultInCreateEventEffect()
             throws Exception {
-        RuleAction ruleAction = RuleActionCreateEvent.create(
+        RuleAction ruleAction = RuleActionCreateEvent.Companion.create(
                 "test_action_content", "'event_uid;test_data_value_one'", "test_program_stage");
         Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
 
@@ -62,14 +62,14 @@ public class RuleEngineEffectTypesTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call();
 
         assertThat(ruleEffects.size()).isEqualTo(1);
-        assertThat(ruleEffects.get(0).data()).isEqualTo("event_uid;test_data_value_one");
-        assertThat(ruleEffects.get(0).ruleAction()).isEqualTo(ruleAction);
+        assertThat(ruleEffects.get(0).getData()).isEqualTo("event_uid;test_data_value_one");
+        assertThat(ruleEffects.get(0).getRuleAction()).isEqualTo(ruleAction);
     }
 
     @Test
     public void simpleConditionMustResultInDisplayKeyValuePairEffect()
             throws Exception {
-        RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+        RuleAction ruleAction = RuleActionDisplayKeyValuePair.Companion.createForFeedback(
                 "test_action_content", "2 + 2");
         Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
 
@@ -79,14 +79,14 @@ public class RuleEngineEffectTypesTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call();
 
         assertThat(ruleEffects.size()).isEqualTo(1);
-        assertThat(ruleEffects.get(0).data()).isEqualTo("4");
-        assertThat(ruleEffects.get(0).ruleAction()).isEqualTo(ruleAction);
+        assertThat(ruleEffects.get(0).getData()).isEqualTo("4");
+        assertThat(ruleEffects.get(0).getRuleAction()).isEqualTo(ruleAction);
     }
 
     @Test
     public void simpleConditionMustResultInDisplayTextEffect()
             throws Exception {
-        RuleAction ruleAction = RuleActionDisplayText.createForFeedback(
+        RuleAction ruleAction = RuleActionDisplayText.Companion.createForFeedback(
                 "test_action_content", "2 + 2");
         Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
 
@@ -96,14 +96,14 @@ public class RuleEngineEffectTypesTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call();
 
         assertThat(ruleEffects.size()).isEqualTo(1);
-        assertThat(ruleEffects.get(0).data()).isEqualTo("4");
-        assertThat(ruleEffects.get(0).ruleAction()).isEqualTo(ruleAction);
+        assertThat(ruleEffects.get(0).getData()).isEqualTo("4");
+        assertThat(ruleEffects.get(0).getRuleAction()).isEqualTo(ruleAction);
     }
 
     @Test
     public void simpleConditionMustResultInErrorOnCompletionEffect()
             throws Exception {
-        RuleAction ruleAction = RuleActionErrorOnCompletion.create(
+        RuleAction ruleAction = RuleActionErrorOnCompletion.Companion.create(
                 "test_action_content", "2 + 2", "test_data_element");
         Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
 
@@ -113,14 +113,14 @@ public class RuleEngineEffectTypesTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call();
 
         assertThat(ruleEffects.size()).isEqualTo(1);
-        assertThat(ruleEffects.get(0).data()).isEqualTo("4");
-        assertThat(ruleEffects.get(0).ruleAction()).isEqualTo(ruleAction);
+        assertThat(ruleEffects.get(0).getData()).isEqualTo("4");
+        assertThat(ruleEffects.get(0).getRuleAction()).isEqualTo(ruleAction);
     }
 
     @Test
     public void simpleConditionMustResultInHideFieldEffect()
             throws Exception {
-        RuleAction ruleAction = RuleActionHideField.create(
+        RuleAction ruleAction = RuleActionHideField.Companion.create(
                 "test_action_content", "test_data_element");
         Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
         Rule rule2 = Rule.create(null, null, "!d2:", Arrays.asList(ruleAction), "");
@@ -138,14 +138,14 @@ public class RuleEngineEffectTypesTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call();
 
         assertThat(ruleEffects.size()).isEqualTo(1);
-        assertThat(ruleEffects.get(0).data()).isEqualTo("");
-        assertThat(ruleEffects.get(0).ruleAction()).isEqualTo(ruleAction);
+        assertThat(ruleEffects.get(0).getData()).isEqualTo("");
+        assertThat(ruleEffects.get(0).getRuleAction()).isEqualTo(ruleAction);
     }
 
     @Test
     public void testEnvironmentVariableExpression()
             throws Exception {
-        RuleAction ruleAction = RuleActionHideField.create(
+        RuleAction ruleAction = RuleActionHideField.Companion.create(
                 "test_action_content", "test_data_element");
         Rule rule = Rule.create(null, null, "V{event_status} =='COMPLETED'", Arrays.asList(ruleAction), "");
 
@@ -154,13 +154,13 @@ public class RuleEngineEffectTypesTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.COMPLETED)).call();
 
         assertThat(ruleEffects.size()).isEqualTo(1);
-        assertThat(ruleEffects.get(0).data()).isEqualTo("");
-        assertThat(ruleEffects.get(0).ruleAction()).isEqualTo(ruleAction);
+        assertThat(ruleEffects.get(0).getData()).isEqualTo("");
+        assertThat(ruleEffects.get(0).getRuleAction()).isEqualTo(ruleAction);
     }
 
     @Test
     public void testTriggerEnvironment() throws Exception {
-        RuleAction ruleAction = RuleActionHideField.create(
+        RuleAction ruleAction = RuleActionHideField.Companion.create(
                 "test_action_content", "test_data_element");
         Rule rule = Rule.create(null, null, "V{environment} =='Server'", Arrays.asList(ruleAction), "");
 
@@ -170,14 +170,14 @@ public class RuleEngineEffectTypesTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call();
 
         assertThat(ruleEffects.size()).isEqualTo(1);
-        assertThat(ruleEffects.get(0).data()).isEqualTo("");
-        assertThat(ruleEffects.get(0).ruleAction()).isEqualTo(ruleAction);
+        assertThat(ruleEffects.get(0).getData()).isEqualTo("");
+        assertThat(ruleEffects.get(0).getRuleAction()).isEqualTo(ruleAction);
     }
 
     @Test
     public void simpleConditionMustResultInHideProgramStageEffect()
             throws Exception {
-        RuleAction ruleAction = RuleActionHideProgramStage.create("test_program_stage");
+        RuleAction ruleAction = RuleActionHideProgramStage.Companion.create("test_program_stage");
         Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
 
         RuleEngine ruleEngine = getRuleEngine(rule);
@@ -186,14 +186,14 @@ public class RuleEngineEffectTypesTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call();
 
         assertThat(ruleEffects.size()).isEqualTo(1);
-        assertThat(ruleEffects.get(0).data()).isEqualTo("");
-        assertThat(ruleEffects.get(0).ruleAction()).isEqualTo(ruleAction);
+        assertThat(ruleEffects.get(0).getData()).isEqualTo("");
+        assertThat(ruleEffects.get(0).getRuleAction()).isEqualTo(ruleAction);
     }
 
     @Test
     public void simpleConditionMustResultInScheduleMessage()
             throws Exception {
-        RuleAction ruleAction = RuleActionScheduleMessage.create("", "'2018-04-24'");
+        RuleAction ruleAction = RuleActionScheduleMessage.Companion.create("", "'2018-04-24'");
         Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
 
         RuleEngine ruleEngine = getRuleEngine(rule);
@@ -202,14 +202,14 @@ public class RuleEngineEffectTypesTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call();
 
         assertThat(ruleEffects.size()).isEqualTo(1);
-        assertThat(ruleEffects.get(0).ruleAction() instanceof RuleActionScheduleMessage);
-        assertThat(ruleEffects.get(0).data()).isEqualTo("2018-04-24");
+        assertThat(ruleEffects.get(0).getRuleAction() instanceof RuleActionScheduleMessage);
+        assertThat(ruleEffects.get(0).getData()).isEqualTo("2018-04-24");
     }
 
     @Test
     public void simpleConditionMustResultInHideSectionEffect()
             throws Exception {
-        RuleAction ruleAction = RuleActionHideSection.create("test_section");
+        RuleAction ruleAction = RuleActionHideSection.Companion.create("test_section");
         Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
 
         RuleEngine ruleEngine = getRuleEngine(rule);
@@ -218,14 +218,14 @@ public class RuleEngineEffectTypesTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call();
 
         assertThat(ruleEffects.size()).isEqualTo(1);
-        assertThat(ruleEffects.get(0).data()).isEqualTo("");
-        assertThat(ruleEffects.get(0).ruleAction()).isEqualTo(ruleAction);
+        assertThat(ruleEffects.get(0).getData()).isEqualTo("");
+        assertThat(ruleEffects.get(0).getRuleAction()).isEqualTo(ruleAction);
     }
 
     @Test
     public void simpleConditionMustResultInHideOptionEffect()
             throws Exception {
-        RuleAction ruleAction = RuleActionHideOption.create("test_content", "test_option", "test_field");
+        RuleAction ruleAction = RuleActionHideOption.Companion.create("test_content", "test_option", "test_field");
         Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
 
         RuleEngine ruleEngine = getRuleEngine(rule);
@@ -234,14 +234,14 @@ public class RuleEngineEffectTypesTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call();
 
         assertThat(ruleEffects.size()).isEqualTo(1);
-        assertThat(ruleEffects.get(0).data()).isEqualTo("");
-        assertThat(ruleEffects.get(0).ruleAction()).isEqualTo(ruleAction);
+        assertThat(ruleEffects.get(0).getData()).isEqualTo("");
+        assertThat(ruleEffects.get(0).getRuleAction()).isEqualTo(ruleAction);
     }
 
     @Test
     public void simpleConditionMustResultInHideOptionGroupEffect()
             throws Exception {
-        RuleAction ruleAction = RuleActionHideOptionGroup.create("test_content", "test_option_group");
+        RuleAction ruleAction = RuleActionHideOptionGroup.Companion.create("test_content", "test_option_group");
         Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
 
         RuleEngine ruleEngine = getRuleEngine(rule);
@@ -250,14 +250,14 @@ public class RuleEngineEffectTypesTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call();
 
         assertThat(ruleEffects.size()).isEqualTo(1);
-        assertThat(ruleEffects.get(0).data()).isEqualTo("");
-        assertThat(ruleEffects.get(0).ruleAction()).isEqualTo(ruleAction);
+        assertThat(ruleEffects.get(0).getData()).isEqualTo("");
+        assertThat(ruleEffects.get(0).getRuleAction()).isEqualTo(ruleAction);
     }
 
     @Test
     public void simpleConditionMustResultInSetMandatoryFieldEffect()
             throws Exception {
-        RuleAction ruleAction = RuleActionSetMandatoryField.create("test_data_element");
+        RuleAction ruleAction = RuleActionSetMandatoryField.Companion.create("test_data_element");
         Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
 
         RuleEngine ruleEngine = getRuleEngine(rule);
@@ -266,14 +266,14 @@ public class RuleEngineEffectTypesTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call();
 
         assertThat(ruleEffects.size()).isEqualTo(1);
-        assertThat(ruleEffects.get(0).data()).isEqualTo("");
-        assertThat(ruleEffects.get(0).ruleAction()).isEqualTo(ruleAction);
+        assertThat(ruleEffects.get(0).getData()).isEqualTo("");
+        assertThat(ruleEffects.get(0).getRuleAction()).isEqualTo(ruleAction);
     }
 
     @Test
     public void simpleConditionMustResultInWarningEffect()
             throws Exception {
-        RuleAction ruleAction = RuleActionShowWarning.create(
+        RuleAction ruleAction = RuleActionShowWarning.Companion.create(
                 "test_warning_message", null, "target_field");
         Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
 
@@ -283,14 +283,14 @@ public class RuleEngineEffectTypesTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call();
 
         assertThat(ruleEffects.size()).isEqualTo(1);
-        assertThat(ruleEffects.get(0).data()).isEqualTo("");
-        assertThat(ruleEffects.get(0).ruleAction()).isEqualTo(ruleAction);
+        assertThat(ruleEffects.get(0).getData()).isEqualTo("");
+        assertThat(ruleEffects.get(0).getRuleAction()).isEqualTo(ruleAction);
     }
 
     @Test
     public void simpleConditionMustResultInErrorEffect()
             throws Exception {
-        RuleAction ruleAction = RuleActionShowError.create(
+        RuleAction ruleAction = RuleActionShowError.Companion.create(
                 "test_error_message", "2 + 2", "target_field");
         Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
 
@@ -300,14 +300,14 @@ public class RuleEngineEffectTypesTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call();
 
         assertThat(ruleEffects.size()).isEqualTo(1);
-        assertThat(ruleEffects.get(0).data()).isEqualTo("4");
-        assertThat(ruleEffects.get(0).ruleAction()).isEqualTo(ruleAction);
+        assertThat(ruleEffects.get(0).getData()).isEqualTo("4");
+        assertThat(ruleEffects.get(0).getRuleAction()).isEqualTo(ruleAction);
     }
 
     @Test
     public void simpleConditionMustResultInOnCompletionWarningEffect()
             throws Exception {
-        RuleAction ruleAction = RuleActionWarningOnCompletion.create(
+        RuleAction ruleAction = RuleActionWarningOnCompletion.Companion.create(
                 "test_warning_message", "2 + 2", "target_field");
         Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
 
@@ -317,8 +317,8 @@ public class RuleEngineEffectTypesTests {
         List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call();
 
         assertThat(ruleEffects.size()).isEqualTo(1);
-        assertThat(ruleEffects.get(0).data()).isEqualTo("4");
-        assertThat(ruleEffects.get(0).ruleAction()).isEqualTo(ruleAction);
+        assertThat(ruleEffects.get(0).getData()).isEqualTo("4");
+        assertThat(ruleEffects.get(0).getRuleAction()).isEqualTo(ruleAction);
     }
 
     private RuleEngine getRuleEngine(Rule rule) {

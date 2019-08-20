@@ -17,25 +17,25 @@ public class RuleActionDisplayKeyValuePairTests
         @Test
         public void createForFeedbackMustSubstituteCorrectLocation()
         {
-                RuleActionDisplayKeyValuePair displayTextAction = RuleActionDisplayKeyValuePair
+                RuleActionDisplayKeyValuePair displayTextAction = RuleActionDisplayKeyValuePair.Companion
                     .createForFeedback( "test_content", "test_data" );
 
-                assertThat( displayTextAction.location() )
-                    .isEqualTo( RuleActionDisplayKeyValuePair.LOCATION_FEEDBACK_WIDGET );
-                assertThat( displayTextAction.content() ).isEqualTo( "test_content" );
-                assertThat( displayTextAction.data() ).isEqualTo( "test_data" );
+                assertThat( displayTextAction.getLocation() )
+                    .isEqualTo(RuleActionText.Companion.getLOCATION_FEEDBACK_WIDGET());
+                assertThat( displayTextAction.getContent() ).isEqualTo( "test_content" );
+                assertThat( displayTextAction.getData() ).isEqualTo( "test_data" );
         }
 
         @Test
         public void createForIndicatorsMustSubstituteCorrectLocation()
         {
-                RuleActionDisplayKeyValuePair displayTextAction = RuleActionDisplayKeyValuePair
+                RuleActionDisplayKeyValuePair displayTextAction = RuleActionDisplayKeyValuePair.Companion
                     .createForIndicators( "test_content", "test_data" );
 
-                assertThat( displayTextAction.location() )
-                    .isEqualTo( RuleActionDisplayKeyValuePair.LOCATION_INDICATOR_WIDGET );
-                assertThat( displayTextAction.content() ).isEqualTo( "test_content" );
-                assertThat( displayTextAction.data() ).isEqualTo( "test_data" );
+                assertThat( displayTextAction.getLocation() )
+                    .isEqualTo(RuleActionText.Companion.getLOCATION_INDICATOR_WIDGET());
+                assertThat( displayTextAction.getContent() ).isEqualTo( "test_content" );
+                assertThat( displayTextAction.getData() ).isEqualTo( "test_data" );
         }
 
         @Test
@@ -43,7 +43,7 @@ public class RuleActionDisplayKeyValuePairTests
         {
                 try
                 {
-                        RuleActionDisplayKeyValuePair.createForFeedback( null, null );
+                        RuleActionDisplayKeyValuePair.Companion.createForFeedback( null, null );
                         fail( "IllegalArgumentException was expected, but nothing was thrown." );
                 }
                 catch ( IllegalArgumentException illegalArgumentException )
@@ -57,7 +57,7 @@ public class RuleActionDisplayKeyValuePairTests
         {
                 try
                 {
-                        RuleActionDisplayKeyValuePair.createForIndicators( null, null );
+                        RuleActionDisplayKeyValuePair.Companion.createForIndicators( null, null );
                         fail( "IllegalArgumentException was expected, but nothing was thrown." );
                 }
                 catch ( IllegalArgumentException illegalArgumentException )
@@ -69,37 +69,37 @@ public class RuleActionDisplayKeyValuePairTests
         @Test
         public void createForFeedbackMustSubstituteEmptyStringsForNullArguments()
         {
-                RuleActionDisplayKeyValuePair ruleActionNoContent = RuleActionDisplayKeyValuePair
+                RuleActionDisplayKeyValuePair ruleActionNoContent = RuleActionDisplayKeyValuePair.Companion
                     .createForFeedback( null, "test_data" );
-                RuleActionDisplayKeyValuePair ruleActionNoData = RuleActionDisplayKeyValuePair
+                RuleActionDisplayKeyValuePair ruleActionNoData = RuleActionDisplayKeyValuePair.Companion
                     .createForFeedback( "test_content", null );
 
-                assertThat( ruleActionNoContent.content() ).isEqualTo( "" );
-                assertThat( ruleActionNoContent.data() ).isEqualTo( "test_data" );
+                assertThat( ruleActionNoContent.getContent() ).isEqualTo( "" );
+                assertThat( ruleActionNoContent.getData() ).isEqualTo( "test_data" );
 
-                assertThat( ruleActionNoData.content() ).isEqualTo( "test_content" );
-                assertThat( ruleActionNoData.data() ).isEqualTo( "" );
+                assertThat( ruleActionNoData.getContent() ).isEqualTo( "test_content" );
+                assertThat( ruleActionNoData.getData() ).isEqualTo( "" );
         }
 
         @Test
         public void createForIndicatorsMustSubstituteEmptyStringsForNullArguments()
         {
-                RuleActionDisplayKeyValuePair ruleActionNoContent = RuleActionDisplayKeyValuePair
+                RuleActionDisplayKeyValuePair ruleActionNoContent = RuleActionDisplayKeyValuePair.Companion
                     .createForIndicators( null, "test_data" );
-                RuleActionDisplayKeyValuePair ruleActionNoData = RuleActionDisplayKeyValuePair
+                RuleActionDisplayKeyValuePair ruleActionNoData = RuleActionDisplayKeyValuePair.Companion
                     .createForIndicators( "test_content", null );
 
-                assertThat( ruleActionNoContent.content() ).isEqualTo( "" );
-                assertThat( ruleActionNoContent.data() ).isEqualTo( "test_data" );
+                assertThat( ruleActionNoContent.getContent() ).isEqualTo( "" );
+                assertThat( ruleActionNoContent.getData() ).isEqualTo( "test_data" );
 
-                assertThat( ruleActionNoData.content() ).isEqualTo( "test_content" );
-                assertThat( ruleActionNoData.data() ).isEqualTo( "" );
+                assertThat( ruleActionNoData.getContent() ).isEqualTo( "test_content" );
+                assertThat( ruleActionNoData.getData() ).isEqualTo( "" );
         }
 
         @Test
         public void equalsAndHashcodeFunctionsMustConformToContract()
         {
-                EqualsVerifier.forClass( RuleActionDisplayKeyValuePair.createForFeedback( "", "" ).getClass() )
+                EqualsVerifier.forClass( RuleActionDisplayKeyValuePair.Companion.createForFeedback( "", "" ).getClass() )
                     .suppress( Warning.NULL_FIELDS )
                     .verify();
         }

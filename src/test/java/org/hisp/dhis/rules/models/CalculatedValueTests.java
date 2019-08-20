@@ -40,6 +40,8 @@ import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -75,15 +77,15 @@ public class CalculatedValueTests
     @Test
     public void sendMessageMustGetValueFromAssignAction() throws Exception
     {
-        RuleAction assignAction = RuleActionAssign.create(null, "2+2", "#{test_calculated_value}" );
+        RuleAction assignAction = RuleActionAssign.Companion.create(null, "2+2", "#{test_calculated_value}" );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1");
 
-        RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4" );
+        RuleAction sendMessageAction = RuleActionSendMessage.Companion.create( "test_notification", "4" );
         org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule.create( null, 4, "#{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2");
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule ) );
 
-        RuleEnrollment enrollment = RuleEnrollment.builder()
+        RuleEnrollment enrollment = RuleEnrollment.Companion.builder()
                 .enrollment("test_enrollment")
                 .programName("test_program")
                 .incidentDate(new Date())
@@ -94,7 +96,7 @@ public class CalculatedValueTests
                 .attributeValues(Arrays.asList())
                 .build();
 
-        RuleEvent ruleEvent = RuleEvent.builder()
+        RuleEvent ruleEvent = RuleEvent.Companion.builder()
                 .event("test_event")
                 .programStage("test_program_stage")
                 .programStageName("")
@@ -103,7 +105,7 @@ public class CalculatedValueTests
                 .dueDate(new Date())
                 .organisationUnit("")
                 .organisationUnitCode("")
-                .dataValues(Arrays.asList(RuleDataValue.create(
+                .dataValues(Arrays.asList(RuleDataValue.Companion.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value")))
                 .build();
 
@@ -111,18 +113,18 @@ public class CalculatedValueTests
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( assignAction );
+        assertThat( ruleEffects.get( 0 ).getData() ).isEqualTo( "4" );
+        assertThat( ruleEffects.get( 0 ).getRuleAction() ).isEqualTo( assignAction );
 
-        RuleActionAssign assign = (RuleActionAssign) ruleEffects.get( 0 ).ruleAction();
+        RuleActionAssign assign = (RuleActionAssign) ruleEffects.get( 0 ).getRuleAction();
         Map<String, String> valueMap = new HashMap<>();
-        valueMap.put( "test_calculated_value", ruleEffects.get( 0 ).data() );
-        calculatedValueMap.put( enrollment.enrollment(), valueMap );
+        valueMap.put( "test_calculated_value", ruleEffects.get( 0 ).getData() );
+        calculatedValueMap.put( enrollment.getEnrollment(), valueMap );
 
         RuleEngine ruleEngine2 = getRuleEngine( Arrays.asList( rule, rule2 ) ).enrollment( enrollment ).build();
         List<RuleEffect> ruleEffects2 = ruleEngine2.evaluate( ruleEvent ).call();
 
-        List<RuleAction> ruleActions = ruleEffects2.stream().map( RuleEffect::ruleAction ).collect( Collectors.toList() );
+        List<RuleAction> ruleActions = ruleEffects2.stream().map(ruleEffect -> ruleEffect.getRuleAction()).collect( Collectors.toList() );
 
         assertThat( ruleActions.contains( assignAction ) ).isEqualTo( true );
         assertThat( ruleActions.contains( sendMessageAction ) ).isEqualTo( true );
@@ -132,15 +134,15 @@ public class CalculatedValueTests
     @Test
     public void sendMessageMustGetValueFromAssignActionInSingleExecution() throws Exception
     {
-        RuleAction assignAction = RuleActionAssign.create(null, "2+2", "#{test_calculated_value}" );
+        RuleAction assignAction = RuleActionAssign.Companion.create(null, "2+2", "#{test_calculated_value}" );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1");
 
-        RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4" );
+        RuleAction sendMessageAction = RuleActionSendMessage.Companion.create( "test_notification", "4" );
         org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule.create( null, 4, "#{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2");
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule, rule2 ) );
 
-        RuleEnrollment enrollment = RuleEnrollment.builder()
+        RuleEnrollment enrollment = RuleEnrollment.Companion.builder()
                 .enrollment("test_enrollment")
                 .programName("test_program")
                 .incidentDate(new Date())
@@ -151,7 +153,7 @@ public class CalculatedValueTests
                 .attributeValues(Arrays.asList())
                 .build();
 
-        RuleEvent ruleEvent = RuleEvent.builder()
+        RuleEvent ruleEvent = RuleEvent.Companion.builder()
                 .event("test_event")
                 .programStage("test_program_stage")
                 .programStageName("")
@@ -160,23 +162,24 @@ public class CalculatedValueTests
                 .dueDate(new Date())
                 .organisationUnit("")
                 .organisationUnitCode("")
-                .dataValues(Arrays.asList(RuleDataValue.create(
+                .dataValues(Arrays.asList(RuleDataValue.Companion.create(
                         new Date(), "test_program_stage", "test_data_element", "test_value")))
                 .build();
 
         RuleEngine ruleEngine = ruleEngineBuilder.enrollment( enrollment ).build();
-        List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
+        Callable<List<RuleEffect>> call =  ruleEngine.evaluate( ruleEvent );
+        List<RuleEffect> ruleEffects = call.call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 2 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( assignAction );
-        assertThat( ruleEffects.get( 1 ).ruleAction() ).isEqualTo( sendMessageAction );
+        assertThat( ruleEffects.get( 0 ).getData() ).isEqualTo( "4" );
+        assertThat( ruleEffects.get( 0 ).getRuleAction() ).isEqualTo( assignAction );
+        assertThat( ruleEffects.get( 1 ).getRuleAction() ).isEqualTo( sendMessageAction );
 
     }
 
     private RuleEngine.Builder getRuleEngine( List<org.hisp.dhis.rules.models.Rule> rules )
     {
-        RuleVariable ruleVariable = RuleVariableCalculatedValue.create("test_calculated_value", "", RuleValueType.TEXT );
+        RuleVariable ruleVariable = RuleVariableCalculatedValue.Companion.create("test_calculated_value", "", RuleValueType.TEXT );
 
         return RuleEngineContext
                 .builder( new ExpressionEvaluator() )
