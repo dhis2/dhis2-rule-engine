@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,34 +28,30 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+import org.hisp.dhis.rules.RuleVariableValue
+import org.hisp.dhis.rules.extSubstring
 
-/**
- * @Author Zubair Asghar.
- */
-public class RuleFunctionLength extends RuleFunction
-{
-    public static final String D2_LENGTH = "d2:length";
+class RuleFunctionLeft : RuleFunction() {
 
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() != 1 )
-        {
-            throw new IllegalArgumentException( "One argument was expected, " +
-                    arguments.size() + " were supplied" );
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+        return when {
+            arguments.size != 2 -> throw IllegalArgumentException("Two argument was expected, ${arguments.size} were supplied")
+            else -> {
+                try {
+                    val chars = arguments[1]?.toInt()
+                    wrap(arguments[0].extSubstring(0, chars))
+                } catch (e: NumberFormatException) {
+                    throw IllegalArgumentException("Number has to be an integer")
+                }
+            }
         }
-        return String.valueOf( arguments.get( 0 ).length() );
     }
 
-    @Nonnull
-    public static RuleFunctionLength create()
-    {
-        return new RuleFunctionLength();
+    companion object {
+        const val D2_LEFT = "d2:left"
+
+        @JvmStatic
+        fun create() = RuleFunctionLeft()
     }
 }

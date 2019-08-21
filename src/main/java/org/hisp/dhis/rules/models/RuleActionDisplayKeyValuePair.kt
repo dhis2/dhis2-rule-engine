@@ -1,27 +1,25 @@
 package org.hisp.dhis.rules.models
 
 
+
 data class RuleActionDisplayKeyValuePair(override var content: String?, override var data: String?, override var location: String?) : RuleActionText() {
+
     companion object {
-
-        fun createForFeedback(
-                content: String?, data: String?): RuleActionDisplayKeyValuePair {
-            if (content == null && data == null) {
-                throw IllegalArgumentException("Both content and data must not be null")
+        @JvmStatic
+        fun createForFeedback(content: String?, data: String?): RuleActionDisplayKeyValuePair {
+            return when {
+                content == null && data == null -> throw IllegalArgumentException("Both content and data must not be null")
+                else -> RuleActionDisplayKeyValuePair(content ?: "", data ?: "", LOCATION_FEEDBACK_WIDGET)
             }
-
-            return RuleActionDisplayKeyValuePair(content ?: "",
-                    data ?: "", LOCATION_FEEDBACK_WIDGET)
         }
 
-        fun createForIndicators(
-                content: String?, data: String?): RuleActionDisplayKeyValuePair {
-            if (content == null && data == null) {
-                throw IllegalArgumentException("Both content and data must not be null")
-            }
 
-            return RuleActionDisplayKeyValuePair(content ?: "",
-                    data ?: "", LOCATION_INDICATOR_WIDGET)
+        @JvmStatic
+        fun createForIndicators(content: String?, data: String?): RuleActionDisplayKeyValuePair {
+            return when {
+                content == null && data == null -> throw IllegalArgumentException("Both content and data must not be null")
+                else -> RuleActionDisplayKeyValuePair(content ?: "", data ?: "", LOCATION_INDICATOR_WIDGET)
+            }
         }
     }
 }

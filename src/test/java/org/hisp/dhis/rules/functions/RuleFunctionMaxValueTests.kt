@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,47 +28,52 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.apache.commons.lang3.StringUtils;
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
+import org.hisp.dhis.rules.RuleVariableValue
+import org.hisp.dhis.rules.RuleVariableValueBuilder
+import org.junit.Test
+import java.util.*
+import kotlin.test.assertFailsWith
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+class RuleFunctionMaxValueTests {
 
-/**
- * @Author Zubair Asghar.
- */
+    private val variableValues = hashMapOf<String, RuleVariableValue>()
 
-public class RuleFunctionLeft extends RuleFunction
-{
-    public static final String D2_LEFT = "d2:left";
+    private val maxValueFunction = RuleFunctionMaxValue.create()
 
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() != 2 )
-        {
-            throw new IllegalArgumentException( "Two argument was expected, " +
-                    arguments.size() + " were supplied" );
+    @Test
+    fun throw_Exception_If_ValueMap_Null() {
+        assertFailsWith<IllegalArgumentException> {
+            maxValueFunction.evaluate(listOf("1"), null, null)
         }
-
-        int chars = 0;
-
-        try
-        {
-            chars = Integer.parseInt( arguments.get( 1 ) );
-        }
-        catch ( NumberFormatException e )
-        {
-            throw new IllegalArgumentException( "Number has to be an integer" );
-        }
-
-        return wrap( StringUtils.substring( arguments.get( 0 ), 0, chars ) );
     }
 
-    public static RuleFunctionLeft create()
-    {
-        return new RuleFunctionLeft();
+    @Test
+    fun throw_Exception_If_Argument_Has_More_Than_One_Element() {
+        assertFailsWith<IllegalArgumentException> {
+            maxValueFunction.evaluate(listOf(), variableValues, null)
+        }
+    }
+
+    @Test
+    fun return_Max_Value() {
+        val variableNameOne = "test_variable_one"
+        val value = "5.0"
+
+        variableValues[variableNameOne] = RuleVariableValueBuilder.create()
+                .withValue(value)
+                .withCandidates(listOf(value, "6", "7"))
+                .withEventDate(Date().toString())
+                .build()
+
+        assertThat(maxValueFunction.evaluate(listOf(variableNameOne), variableValues, null), `is`("7.0"))
+    }
+
+    @Test
+    fun return_Empty_String_If_Value_Absent() {
+        val variableNameOne = "test_variable_one"
+
+        assertThat(maxValueFunction.evaluate(listOf(variableNameOne), variableValues, null), `is`(""))
     }
 }

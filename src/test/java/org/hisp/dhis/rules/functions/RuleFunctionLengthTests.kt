@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,35 +28,47 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
+import org.hisp.dhis.rules.RuleVariableValue
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
+import kotlin.test.assertFailsWith
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+@RunWith(JUnit4::class)
+class RuleFunctionLengthTests {
 
-/**
- * @Author Zubair Asghar.
- */
-public class RuleFunctionModulus extends RuleFunction
-{
-    static final String D2_MODULUS = "d2:modulus";
+    private val variableValues = hashMapOf<String, RuleVariableValue>()
 
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() != 2 )
-        {
-            throw new IllegalArgumentException( "two argument were expected, " +
-                    arguments.size() + " were supplied" );
-        }
+    private val lengthFunction = RuleFunctionLength.create()
 
-        return String.valueOf( toDouble( arguments.get( 0 ), 0.0) % toDouble( arguments.get( 1 ), 0.0) ) ;
+    @Test
+    fun return_length_of_argument() {
+
+        assertThat(lengthFunction.evaluate(listOf(""), variableValues, null), `is`("0"))
+        assertThat(lengthFunction.evaluate(listOf("abc"), variableValues, null), `is`("3"))
+        assertThat(lengthFunction.evaluate(listOf("abcdef"), variableValues, null), `is`("6"))
     }
 
-    @Nonnull
-    public static RuleFunctionModulus create()
-    {
-        return new RuleFunctionModulus();
+    @Test
+    fun throw_illegal_argument_exception_if_first_parameter_is_empty_list() {
+        assertFailsWith<IllegalArgumentException> {
+            lengthFunction.evaluate(listOf(), variableValues, null)
+        }
+    }
+
+    @Test
+    fun throw_illegal_argument_exception_when_argument_count_is_greater_than_expected() {
+        assertFailsWith<IllegalArgumentException> {
+            lengthFunction.evaluate(listOf("cdcdcd", "2"), variableValues, null)
+        }
+    }
+
+    @Test
+    fun throw_null_pointer_exception_when_arguments_is_null() {
+        assertFailsWith<NullPointerException> {
+            lengthFunction.evaluate(null!!, variableValues, null)
+        }
     }
 }

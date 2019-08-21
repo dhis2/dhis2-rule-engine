@@ -6,15 +6,13 @@ data class RuleDataValue(
         val eventDate: Date?,
         val programStage: String?,
         val dataElement: String?,
-        val value: String?
-) {
-
+        val value: String?) {
 
     companion object {
 
-        fun create(eventDate: Date, programStage: String,
-                   dataelement: String, value: String): RuleDataValue {
-            return RuleDataValue(eventDate, programStage, dataelement, value)
-        }
+        @JvmStatic
+        fun create(eventDate: Date, programStage: String, dataelement: String, value: String) =
+                RuleDataValue(eventDate, programStage, dataelement, value)
+
     }
 }

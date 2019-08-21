@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,47 +28,21 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.RuleVariableValue
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+class RuleFunctionLength : RuleFunction() {
 
-/**
- * @Author Zubair Asghar.
- *
- * Evaluates the argument of type number to one if the value is zero or positive, otherwise to zero.
- */
-public class RuleFunctionOizp extends RuleFunction
-{
-    public static final String D2_OIZP = "d2:oizp";
-
-    @Nonnull
-    @Override
-    public String evaluate(@ Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() != 1 )
-        {
-            throw new IllegalArgumentException( "One argument was expected, " +
-                    arguments.size() + " were supplied" );
+    override fun evaluate(arguments: List<String>, valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+        return when {
+            arguments.size != 1 -> throw IllegalArgumentException("One argument was expected, ${arguments.size} were supplied")
+            else -> arguments[0].length.toString()
         }
-
-        Double value = 0.0;
-
-        try
-        {
-            value = Double.parseDouble( arguments.get( 0 ) );
-        }
-        catch ( NumberFormatException e )
-        {
-            throw new IllegalArgumentException( "Invalid number format" );
-        }
-
-        return value >= 0 ? String.valueOf( 1 ) : String.valueOf(  0 );
     }
 
-    public static RuleFunctionOizp create()
-    {
-        return new RuleFunctionOizp();
+    companion object {
+        const val D2_LENGTH = "d2:length"
+
+        @JvmStatic
+        fun create() = RuleFunctionLength()
     }
 }

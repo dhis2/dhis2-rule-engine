@@ -6,70 +6,48 @@ import kotlin.Comparator
 import kotlin.collections.ArrayList
 
 
-data class RuleEvent(
-        var event: String?,
-        var programStage: String?,
-        var programStageName: String?,
-        var status: Status?,
-        var eventDate: Date?,
-        var dueDate: Date?,
-        var organisationUnit: String?,
-        var organisationUnitCode: String?,
-        var dataValues: List<RuleDataValue>?
-) {
+class RuleEvent(
+        val event: String?,
+        val programStage: String?,
+        val programStageName: String?,
+        val status: Status?,
+        val eventDate: Date?,
+        val dueDate: Date?,
+        val organisationUnit: String?,
+        val organisationUnitCode: String?,
+        val dataValues: List<RuleDataValue>?) {
 
-    class Builder {
-        private val ruleEvent = RuleEvent(null, null, null,
-                null, null, null, null, null, null)
+    data class Builder(
+            var event: String?,
+            var programStage: String?,
+            var programStageName: String?,
+            var status: Status?,
+            var eventDate: Date?,
+            var dueDate: Date?,
+            var organisationUnit: String?,
+            var organisationUnitCode: String?,
+            var dataValues: List<RuleDataValue>?) {
 
-        fun event(event: String?): Builder {
-            ruleEvent.event = event
-            return this
-        }
+        fun event(event: String?) = apply { this.event = event }
 
-        fun programStage(programStage: String?): Builder {
-            ruleEvent.programStage = programStage
-            return this
-        }
+        fun programStage(programStage: String?) = apply { this.programStage = programStage }
 
-        fun programStageName(programStageName: String?): Builder {
-            ruleEvent.programStageName = programStageName
-            return this
-        }
+        fun programStageName(programStageName: String?) = apply { this.programStageName = programStageName }
 
-        fun status(status: Status?): Builder {
-            ruleEvent.status = status
-            return this
-        }
+        fun status(status: Status?) = apply { this.status = status }
 
-        fun eventDate(eventDate: Date?): Builder {
-            ruleEvent.eventDate = eventDate
-            return this
-        }
+        fun eventDate(eventDate: Date?) = apply { this.eventDate = eventDate }
 
-        fun dueDate(dueDate: Date?): Builder {
-            ruleEvent.dueDate = dueDate
-            return this
-        }
+        fun dueDate(dueDate: Date?) = apply { this.dueDate = dueDate }
 
-        fun organisationUnit(organisationUnit: String?): Builder {
-            ruleEvent.organisationUnit = organisationUnit
-            return this
-        }
+        fun organisationUnit(organisationUnit: String?) = apply { this.organisationUnit = organisationUnit }
 
-        fun organisationUnitCode(organisationUnitCode: String?): Builder {
-            ruleEvent.organisationUnitCode = organisationUnitCode
-            return this
-        }
+        fun organisationUnitCode(organisationUnitCode: String?) = apply { this.organisationUnitCode = organisationUnitCode }
 
-        fun dataValues(dataValues: List<RuleDataValue>?): Builder {
-            ruleEvent.dataValues = dataValues
-            return this
-        }
+        fun dataValues(dataValues: List<RuleDataValue>?) = apply { this.dataValues = dataValues }
 
-        fun build(): RuleEvent {
-            return ruleEvent
-        }
+        fun build() = RuleEvent(event, programStage, programStageName, status, eventDate,
+                dueDate, organisationUnit, organisationUnitCode, dataValues)
     }
 
     enum class Status {
@@ -88,8 +66,9 @@ data class RuleEvent(
     }
 
     companion object {
-        val EVENT_DATE_COMPARATOR: Comparator<RuleEvent> = EventDateComparator()
+        @JvmField val EVENT_DATE_COMPARATOR: Comparator<RuleEvent> = EventDateComparator()
 
+        @JvmStatic
         fun create(
                 event: String,
                 programStage: String,
@@ -100,7 +79,7 @@ data class RuleEvent(
                 organisationUnitCode: String?,
                 ruleDataValues: List<RuleDataValue>,
                 programStageName: String): RuleEvent {
-            return Builder()
+            return builder()
                     .event(event)
                     .programStage(programStage)
                     .programStageName(programStageName)
@@ -113,10 +92,9 @@ data class RuleEvent(
                     .build()
         }
 
-        fun builder(): Builder {
-            return Builder()
-        }
+        @JvmStatic
+        fun builder() = Builder(null, null, null, null, null,
+                null, null, null, null)
     }
-
 
 }

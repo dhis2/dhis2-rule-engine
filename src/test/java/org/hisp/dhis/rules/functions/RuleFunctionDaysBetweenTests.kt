@@ -50,6 +50,8 @@ class RuleFunctionDaysBetweenTests {
                 `is`("-15"))
         assertThat(daysBetween.evaluate(listOf("2011-01-01", "2010-12-31"), variableValues, null),
                 `is`("-1"))
+        assertThat(daysBetween.evaluate(listOf("2017-01-01", "2017-02-01"), variableValues, null),
+                `is`("31"))
     }
 
     @Test
