@@ -36,28 +36,28 @@ import org.junit.Test
 import java.util.*
 import kotlin.test.assertFailsWith
 
-class RuleFunctionMaxValueTests {
+class RuleFunctionMinValueTests {
 
     private val variableValues = hashMapOf<String, RuleVariableValue>()
 
-    private val maxValueFunction = RuleFunctionMaxValue.create()
+    private val minValueFunction = RuleFunctionMinValue.create()
 
     @Test
     fun throw_Exception_If_ValueMap_Null() {
         assertFailsWith<IllegalArgumentException> {
-            maxValueFunction.evaluate(listOf("1"), null, null)
+            minValueFunction.evaluate(listOf("1"), null, null)
         }
     }
 
     @Test
     fun throw_Exception_If_Argument_Has_More_Than_One_Element() {
         assertFailsWith<IllegalArgumentException> {
-            maxValueFunction.evaluate(listOf(), variableValues, null)
+            minValueFunction.evaluate(listOf(), variableValues, null)
         }
     }
 
     @Test
-    fun return_Max_Value() {
+    fun return_Min_Value() {
         val variableNameOne = "test_variable_one"
         val value = "5.0"
 
@@ -67,13 +67,13 @@ class RuleFunctionMaxValueTests {
                 .withEventDate(Date().toString())
                 .build()
 
-        assertThat(maxValueFunction.evaluate(listOf(variableNameOne), variableValues, null), `is`("7.0"))
+        assertThat(minValueFunction.evaluate(listOf(variableNameOne), variableValues, null), `is`("5.0"))
     }
 
     @Test
     fun return_Empty_String_If_Value_Absent() {
         val variableNameOne = "test_variable_one"
 
-        assertThat(maxValueFunction.evaluate(listOf(variableNameOne), variableValues, null), `is`(""))
+        assertThat(minValueFunction.evaluate(listOf(variableNameOne), variableValues, null), `is`(""))
     }
 }

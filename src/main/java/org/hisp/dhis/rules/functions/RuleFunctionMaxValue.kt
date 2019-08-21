@@ -68,8 +68,6 @@ class RuleFunctionMaxValue : RuleFunction() {
         const val D2_MAX_VALUE = "d2:maxValue"
 
         @JvmStatic
-        fun create(): RuleFunctionMaxValue {
-            return RuleFunctionMaxValue()
-        }
+        fun create() = RuleFunctionMaxValue()
     }
 }
