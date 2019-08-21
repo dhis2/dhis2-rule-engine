@@ -1,8 +1,6 @@
 package org.hisp.dhis.rules.functions
 
 import org.hisp.dhis.rules.RuleVariableValue
-import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -43,7 +41,7 @@ class RuleFunctionDaysBetween : RuleFunction() {
                         val startDate = LocalDate.parse(start, formatter)
                         val endDate = LocalDate.parse(end, formatter)
 
-                        startDate.until(endDate).days
+                        ChronoUnit.DAYS.between(startDate, endDate).toInt()
 
                     } catch (ex: DateTimeParseException) {
                         throw RuntimeException(ex)

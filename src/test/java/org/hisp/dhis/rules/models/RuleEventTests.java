@@ -137,7 +137,7 @@ public class RuleEventTests
                         dateFormat.parse( "2017-03-22" ), dateFormat.parse( "2017-03-22" ), "",null,
                         new ArrayList<RuleDataValue>(), "") );
 
-                Collections.sort( ruleEvents, RuleEvent.Companion.getEVENT_DATE_COMPARATOR());
+                Collections.sort( ruleEvents, RuleEvent.EVENT_DATE_COMPARATOR);
 
                 assertThat( ruleEvents.get( 0 ).getEvent() ).isEqualTo( "test_event_two" );
                 assertThat( ruleEvents.get( 1 ).getEvent() ).isEqualTo( "test_event_one" );

@@ -88,14 +88,28 @@ class RuleEngineExecution
                 // send expression to evaluator
                 if (Boolean.valueOf(process(rule.getCondition()))) {
                     // process each action for this rule
-                    for (int j = 0; j < rule.getActions().size(); j++) {
-                        RuleEffect ruleEffect = create(rule.getActions().get(j));
-                        //Check if action is assigning value to calculated variable
-                        if (isAssignToCalculatedValue(rule.getActions().get(j)))
-                            updateValueMapForCalculatedValue((RuleActionAssign) rule.getActions().get(j),
-                                    RuleVariableValue.create(ruleEffect.getData(), RuleValueType.TEXT));
-                        else
-                            ruleEffects.add(create(rule.getActions().get(j)));
+                    // TODO remove if-else validation to only use rule.getActions, whe all uses of Rule object
+                    //   are migrated to use ImmutableList rather de List of actions
+                    if (rule.getActions().isEmpty()) {
+                        for (int j = 0; j < rule.getActionslist().size(); j++) {
+                            RuleEffect ruleEffect = create(rule.getActionslist().get(j));
+                            //Check if action is assigning value to calculated variable
+                            if (isAssignToCalculatedValue(rule.getActionslist().get(j)))
+                                updateValueMapForCalculatedValue((RuleActionAssign) rule.getActionslist().get(j),
+                                        RuleVariableValue.create(ruleEffect.getData(), RuleValueType.TEXT));
+                            else
+                                ruleEffects.add(create(rule.getActionslist().get(j)));
+                        }
+                    } else {
+                        for (int j = 0; j < rule.getActions().size(); j++) {
+                            RuleEffect ruleEffect = create(rule.getActions().get(j));
+                            //Check if action is assigning value to calculated variable
+                            if (isAssignToCalculatedValue(rule.getActions().get(j)))
+                                updateValueMapForCalculatedValue((RuleActionAssign) rule.getActions().get(j),
+                                        RuleVariableValue.create(ruleEffect.getData(), RuleValueType.TEXT));
+                            else
+                                ruleEffects.add(create(rule.getActions().get(j)));
+                        }
                     }
                 }
             } catch (JexlException jexlException) {
@@ -130,37 +144,37 @@ class RuleEngineExecution
                 valueMap.put(field, variableValue);
             }
 
-            return RuleEffect.Companion.create(ruleAction, data);
+            return RuleEffect.create(ruleAction, data);
         } else if (ruleAction instanceof RuleActionSendMessage) {
-            return RuleEffect.Companion.create(ruleAction, process(
+            return RuleEffect.create(ruleAction, process(
                     ((RuleActionSendMessage) ruleAction).getData()));
         } else if (ruleAction instanceof RuleActionScheduleMessage) {
-            return RuleEffect.Companion.create(ruleAction, process(
+            return RuleEffect.create(ruleAction, process(
                     ((RuleActionScheduleMessage) ruleAction).getData()));
         } else if (ruleAction instanceof RuleActionCreateEvent) {
-            return RuleEffect.Companion.create(ruleAction, process(
+            return RuleEffect.create(ruleAction, process(
                     ((RuleActionCreateEvent) ruleAction).getData()));
         } else if (ruleAction instanceof RuleActionDisplayKeyValuePair) {
-            return RuleEffect.Companion.create(ruleAction, process(
+            return RuleEffect.create(ruleAction, process(
                     ((RuleActionDisplayKeyValuePair) ruleAction).getData()));
         } else if (ruleAction instanceof RuleActionDisplayText) {
-            return RuleEffect.Companion.create(ruleAction, process(
+            return RuleEffect.create(ruleAction, process(
                     ((RuleActionDisplayText) ruleAction).getData()));
         } else if (ruleAction instanceof RuleActionErrorOnCompletion) {
-            return RuleEffect.Companion.create(ruleAction, process(
+            return RuleEffect.create(ruleAction, process(
                     ((RuleActionErrorOnCompletion) ruleAction).getData()));
         } else if (ruleAction instanceof RuleActionShowError) {
-            return RuleEffect.Companion.create(ruleAction,
+            return RuleEffect.create(ruleAction,
                     process(((RuleActionShowError) ruleAction).getData()));
         } else if (ruleAction instanceof RuleActionShowWarning) {
-            return RuleEffect.Companion.create(ruleAction,
+            return RuleEffect.create(ruleAction,
                     process(((RuleActionShowWarning) ruleAction).getData()));
         } else if (ruleAction instanceof RuleActionWarningOnCompletion) {
-            return RuleEffect.Companion.create(ruleAction,
+            return RuleEffect.create(ruleAction,
                     process(((RuleActionWarningOnCompletion) ruleAction).getData()));
         }
 
-        return RuleEffect.Companion.create(ruleAction);
+        return RuleEffect.create(ruleAction);
     }
 
     @Nonnull

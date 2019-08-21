@@ -96,7 +96,7 @@ public class CalculatedValueTests
                 .attributeValues(Arrays.asList())
                 .build();
 
-        RuleEvent ruleEvent = RuleEvent.Companion.builder()
+        RuleEvent ruleEvent = RuleEvent.builder()
                 .event("test_event")
                 .programStage("test_program_stage")
                 .programStageName("")
