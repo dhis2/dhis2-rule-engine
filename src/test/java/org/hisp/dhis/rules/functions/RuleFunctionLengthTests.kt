@@ -28,26 +28,18 @@ package org.hisp.dhis.rules.functions
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.ExpectedException
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
-
-import java.util.ArrayList
-import java.util.Arrays
-import java.util.HashMap
-
-import java.util.Arrays.asList
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
+import org.hisp.dhis.rules.RuleVariableValue
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 import kotlin.test.assertFailsWith
 
 @RunWith(JUnit4::class)
 class RuleFunctionLengthTests {
 
-    private val variableValues = HashMap<String, RuleVariableValue>()
+    private val variableValues = hashMapOf<String, RuleVariableValue>()
 
     private val lengthFunction = RuleFunctionLength.create()
 

@@ -40,7 +40,7 @@ import kotlin.test.assertFailsWith
 @RunWith(JUnit4::class)
 class RuleFunctionLeftTests {
 
-    private val variableValues = HashMap<String, RuleVariableValue>()
+    private val variableValues = hashMapOf<String, RuleVariableValue>()
 
     private val leftFunction = RuleFunctionLeft.create()
 
