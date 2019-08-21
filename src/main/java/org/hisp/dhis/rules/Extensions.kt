@@ -22,3 +22,15 @@ fun String?.extSubstring(start: Int, end: Int?): String? {
 
     return this?.substring(start, end)
 }
+
+
+fun String?.toDouble(defaultValue: Double): Double {
+    return when (this) {
+        null -> defaultValue
+        else -> try {
+            this.toDouble()
+        } catch (nfe: NumberFormatException) {
+            defaultValue
+        }
+    }
+}

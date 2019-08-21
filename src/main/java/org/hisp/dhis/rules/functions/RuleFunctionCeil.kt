@@ -1,6 +1,7 @@
 package org.hisp.dhis.rules.functions
 
 import org.hisp.dhis.rules.RuleVariableValue
+import org.hisp.dhis.rules.toDouble
 import kotlin.math.ceil
 
 class RuleFunctionCeil : RuleFunction() {
@@ -9,7 +10,7 @@ class RuleFunctionCeil : RuleFunction() {
                           valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
         when {
             arguments.size != 1 -> throw IllegalArgumentException("One argument was expected, ${arguments.size} were supplied")
-            else -> return ceil(toDouble(arguments[0], 0.0)).toLong().toString()
+            else -> return ceil(arguments[0].toDouble(0.0)).toLong().toString()
         }
     }
 

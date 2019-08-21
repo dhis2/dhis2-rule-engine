@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,35 +28,22 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.RuleVariableValue
+import org.hisp.dhis.rules.toDouble
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+class RuleFunctionModulus : RuleFunction() {
 
-/**
- * @Author Zubair Asghar.
- */
-public class RuleFunctionModulus extends RuleFunction
-{
-    static final String D2_MODULUS = "d2:modulus";
-
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() != 2 )
-        {
-            throw new IllegalArgumentException( "two argument were expected, " +
-                    arguments.size() + " were supplied" );
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+        return when {
+            arguments.size != 2 -> throw IllegalArgumentException("two argument were expected, ${arguments.size} were supplied")
+            else -> (arguments[0].toDouble(0.0) % arguments[1].toDouble(0.0)).toString()
         }
-
-        return String.valueOf( toDouble( arguments.get( 0 ), 0.0) % toDouble( arguments.get( 1 ), 0.0) ) ;
     }
 
-    @Nonnull
-    public static RuleFunctionModulus create()
-    {
-        return new RuleFunctionModulus();
+    companion object {
+        const val D2_MODULUS = "d2:modulus"
+
+        @JvmStatic
+        fun create() = RuleFunctionModulus()
     }
 }
