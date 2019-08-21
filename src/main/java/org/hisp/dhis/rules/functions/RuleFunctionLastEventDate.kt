@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,41 +28,26 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.RuleVariableValue
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
 
-/**
- * @Author Zubair Asghar.
- */
-public class RuleFunctionLastEventDate extends RuleFunction
-{
-    static final String D2_LAST_EVENT_DATE = "d2:lastEventDate";
+class RuleFunctionLastEventDate : RuleFunction() {
 
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() < 1 )
-        {
-            throw new IllegalArgumentException( "Atleast one argument required in LastEventDate function" );
+    override fun evaluate(arguments: List<String>, valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+        return when {
+            arguments.isEmpty() -> throw IllegalArgumentException("At least one argument required in LastEventDate function")
+            !valueMap.containsKey(arguments[0]) -> ""
+            else -> {
+                val variableValue = valueMap[arguments[0]]
+                wrap(variableValue?.eventDate())
+            }
         }
-
-        if ( !valueMap.containsKey( arguments.get( 0 ) ) )
-        {
-            return "";
-        }
-
-        RuleVariableValue variableValue = valueMap.get( arguments.get( 0 ) );
-
-        return wrap(  variableValue.eventDate() );
     }
 
-    @Nonnull
-    public static RuleFunctionLastEventDate create()
-    {
-        return new RuleFunctionLastEventDate();
+    companion object {
+        const val D2_LAST_EVENT_DATE = "d2:lastEventDate"
+
+        @JvmStatic
+        fun create() = RuleFunctionLastEventDate()
     }
 }
