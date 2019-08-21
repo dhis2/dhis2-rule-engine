@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,63 +28,48 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
 
-import javax.annotation.Nonnull;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import org.hisp.dhis.rules.RuleVariableValue
 
 /**
- * @Author Zubair Asghar.
- * <p>
  * return maximum value of provided data element present in entire enrollment
  */
-public class RuleFunctionMaxValue extends RuleFunction
-{
-    static final String D2_MAX_VALUE = "d2:maxValue";
+class RuleFunctionMaxValue : RuleFunction() {
 
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
-        Map<String, List<String>> supplementaryData )
-    {
-        if ( valueMap == null )
-        {
-            throw new IllegalArgumentException( "valueMap is expected" );
+    override fun evaluate(arguments: List<String>,
+                          valueMap: Map<String, RuleVariableValue>?,
+                          supplementaryData: Map<String, List<String>>?): String {
+        return when {
+            valueMap == null -> throw IllegalArgumentException("valueMap is expected")
+            arguments.size != 1 -> throw IllegalArgumentException("One argument was expected, ${arguments.size} were supplied")
+            else -> getMaxValue(arguments, valueMap)
         }
-
-        if ( arguments.size() != 1 )
-        {
-            throw new IllegalArgumentException( "One argument was expected, " +
-                    arguments.size() + " were supplied" );
-        }
-
-        return getMaxValue( arguments, valueMap );
     }
 
-    @Nonnull
-    public static RuleFunctionMaxValue create()
-    {
-        return new RuleFunctionMaxValue();
-    }
+    private fun getMaxValue(arguments: List<String>, valueMap: Map<String, RuleVariableValue>): String {
+        val dataElement = arguments[0]
 
-    private String getMaxValue( List<String> arguments, Map<String, RuleVariableValue> valueMap )
-    {
-        String dataElement = arguments.get( 0 );
+        return when {
+            valueMap.containsKey(dataElement) -> {
+                val ruleVariableValue = valueMap[dataElement]
 
-        if ( valueMap.containsKey( dataElement ) )
-        {
-            RuleVariableValue ruleVariableValue = valueMap.get( dataElement );
+                val values = ruleVariableValue?.candidates()
 
-            List<String> values = ruleVariableValue.candidates();
+                val doubles = values?.asSequence()?.map { it.toDouble() }
 
-            List<Double> doubles = values.stream().map( Double::parseDouble ).collect( Collectors.toList() );
-
-            return Collections.max( doubles ).toString();
+                doubles?.max().toString()
+            }
+            else -> ""
         }
 
-        return "";
+    }
+
+    companion object {
+        const val D2_MAX_VALUE = "d2:maxValue"
+
+        @JvmStatic
+        fun create(): RuleFunctionMaxValue {
+            return RuleFunctionMaxValue()
+        }
     }
 }
