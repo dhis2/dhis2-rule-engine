@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,55 +28,33 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.apache.commons.lang3.StringUtils;
-import org.hisp.dhis.rules.RuleVariableValue;
-
-import javax.annotation.Nonnull;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import org.hisp.dhis.rules.RuleVariableValue
 
 /**
- * @Author Zubair Asghar.
- *
  * Split the text by delimiter, and keep the nth element(0 is the first).
  */
-public class RuleFunctionSplit extends RuleFunction
-{
-    public static final String D2_SPLIT = "d2:split";
+class RuleFunctionSplit : RuleFunction() {
 
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() != 3 )
-        {
-            throw new IllegalArgumentException( "Three argument were expected, " + arguments.size() + " were supplied" );
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+        return when {
+            arguments.size != 3 -> throw IllegalArgumentException("Three argument were expected, ${arguments.size} were supplied")
+            arguments[0].isNullOrEmpty() || arguments[1].isNullOrEmpty() -> ""
+            else -> {
+                val input = arguments[0]!!
+                val delimiter = arguments[1]!!
+                val index = arguments[2]!!.toInt()
+
+                val tokens = input.split(delimiter)
+
+                if (tokens.size > index && index >= 0) wrap(tokens[index]) else ""
+            }
         }
-
-        String input = arguments.get( 0 );
-        String delimiter = arguments.get( 1 );
-
-        if ( input == null || delimiter == null )
-        {
-            return "";
-        }
-
-        int index = Integer.parseInt( arguments.get( 2 ) );
-
-        List<String> tokens = Arrays.asList( StringUtils.split( input, delimiter ) );
-
-        if ( tokens.size() > index && index >= 0 )
-        {
-            return wrap( tokens.get( index ) );
-        }
-
-        return "";
     }
 
-    @Nonnull
-    public static RuleFunctionSplit create()
-    {
-        return new RuleFunctionSplit();
+    companion object {
+        const val D2_SPLIT = "d2:split"
+
+        @JvmStatic
+        fun create() = RuleFunctionSplit()
     }
 }
