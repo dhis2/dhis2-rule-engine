@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,37 +28,24 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.apache.commons.lang3.StringUtils;
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.RuleVariableValue
+import org.hisp.dhis.rules.toDouble
+import kotlin.math.roundToLong
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+class RuleFunctionRound : RuleFunction() {
 
-/**
- * @Author Zubair Asghar.
- *
- * Evaluates to the part of a string specified by the start and end character number.
- */
-public class RuleFunctionSubString extends RuleFunction
-{
-    public static final String D2_SUBSTRING = "d2:substring";
-
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() != 3 )
-        {
-            throw new IllegalArgumentException( "Three argument was expected, " +
-                arguments.size() + " were supplied" );
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+        return when {
+            arguments.size != 1 -> throw IllegalArgumentException("One argument was expected, ${arguments.size} were supplied")
+            else -> arguments[0].toDouble(0.0).roundToLong().toString()
         }
-
-        return wrap( StringUtils.substring( arguments.get( 0 ), Integer.parseInt( arguments.get( 1 ) ), Integer.parseInt( arguments.get( 2 ) ) ) );
     }
 
-    public static RuleFunctionSubString create()
-    {
-        return new RuleFunctionSubString();
+    companion object {
+        const val D2_ROUND = "d2:round"
+
+        @JvmStatic
+        fun create() = RuleFunctionRound()
+
     }
 }

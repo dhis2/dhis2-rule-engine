@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,37 +28,33 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
-
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+import org.hisp.dhis.rules.RuleVariableValue
 
 /**
- * @Author Zubair Asghar.
+ * Split the text by delimiter, and keep the nth element(0 is the first).
  */
+class RuleFunctionSplit : RuleFunction() {
 
-public class RuleFunctionRound extends RuleFunction
-{
-    static final String D2_ROUND = "d2:round";
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+        return when {
+            arguments.size != 3 -> throw IllegalArgumentException("Three argument were expected, ${arguments.size} were supplied")
+            arguments[0].isNullOrEmpty() || arguments[1].isNullOrEmpty() -> ""
+            else -> {
+                val input = arguments[0]!!
+                val delimiter = arguments[1]!!
+                val index = arguments[2]!!.toInt()
 
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() != 1 )
-        {
-            throw new IllegalArgumentException( "One argument was expected, " +
-                    arguments.size() + " were supplied" );
+                val tokens = input.split(delimiter)
+
+                if (tokens.size > index && index >= 0) wrap(tokens[index]) else ""
+            }
         }
-
-
-        return String.valueOf( Math.round( toDouble( arguments.get( 0 ), 0.0 ) ) );
     }
 
-    @Nonnull
-    public static RuleFunctionRound create()
-    {
-        return new RuleFunctionRound();
+    companion object {
+        const val D2_SPLIT = "d2:split"
+
+        @JvmStatic
+        fun create() = RuleFunctionSplit()
     }
 }

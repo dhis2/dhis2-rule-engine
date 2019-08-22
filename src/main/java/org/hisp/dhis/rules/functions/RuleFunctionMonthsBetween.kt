@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,55 +28,45 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.apache.commons.lang3.StringUtils;
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.RuleVariableValue
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
+import java.time.temporal.ChronoUnit
 
-import javax.annotation.Nonnull;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
-/**
- * @Author Zubair Asghar.
- *
- * Split the text by delimiter, and keep the nth element(0 is the first).
- */
-public class RuleFunctionSplit extends RuleFunction
-{
-    public static final String D2_SPLIT = "d2:split";
+class RuleFunctionMonthsBetween : RuleFunction() {
 
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() != 3 )
-        {
-            throw new IllegalArgumentException( "Three argument were expected, " + arguments.size() + " were supplied" );
+    override fun evaluate(arguments: List<String?>,
+                          valueMap: Map<String, RuleVariableValue>,
+                          supplementaryData: Map<String, List<String>>?): String {
+        return when {
+            arguments.size != 2 -> throw IllegalArgumentException("Two arguments were expected, ${arguments.size} were supplied")
+            arguments[0].isNullOrEmpty() || arguments[1].isNullOrEmpty() -> "0"
+            else -> {
+                val startDate: LocalDate
+                val endDate: LocalDate
+                val formatter = DateTimeFormatter.ofPattern(DATE_PATTERN)
+
+                try {
+                    startDate = LocalDate.parse(arguments[0], formatter)
+                    endDate = LocalDate.parse(arguments[1], formatter)
+
+                } catch (e: DateTimeParseException) {
+                    throw IllegalArgumentException("Date cannot be parsed")
+                }
+
+                ChronoUnit.MONTHS.between(startDate, endDate).toString()
+            }
         }
 
-        String input = arguments.get( 0 );
-        String delimiter = arguments.get( 1 );
-
-        if ( input == null || delimiter == null )
-        {
-            return "";
-        }
-
-        int index = Integer.parseInt( arguments.get( 2 ) );
-
-        List<String> tokens = Arrays.asList( StringUtils.split( input, delimiter ) );
-
-        if ( tokens.size() > index && index >= 0 )
-        {
-            return wrap( tokens.get( index ) );
-        }
-
-        return "";
     }
 
-    @Nonnull
-    public static RuleFunctionSplit create()
-    {
-        return new RuleFunctionSplit();
+
+    companion object {
+        const val D2_MONTHS_BETWEEN = "d2:monthsBetween"
+
+        @JvmStatic
+        fun create() = RuleFunctionMonthsBetween()
     }
 }
