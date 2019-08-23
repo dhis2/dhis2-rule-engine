@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Collections.checkedMap;
 import static java.util.Collections.unmodifiableList;
 
 public final class RuleEngineContext
@@ -30,14 +29,19 @@ public final class RuleEngineContext
         @Nonnull
         private final Map<String, Map<String, String>> calculatedValueMap;
 
+        @Nonnull
+        private final Map<String, String> constantsValues;
+
         RuleEngineContext( @Nonnull RuleExpressionEvaluator expressionEvaluator,
-            @Nonnull List<Rule> rules, @Nonnull List<RuleVariable> ruleVariables, Map<String, List<String>> supplementaryData, Map<String, Map<String, String>> calculatedValueMap )
+            @Nonnull List<Rule> rules, @Nonnull List<RuleVariable> ruleVariables, Map<String, List<String>> supplementaryData,
+                           Map<String, Map<String, String>> calculatedValueMap, Map<String, String> constantsValues )
         {
                 this.expressionEvaluator = expressionEvaluator;
                 this.rules = rules;
                 this.ruleVariables = ruleVariables;
                 this.supplementaryData = supplementaryData;
                 this.calculatedValueMap = calculatedValueMap;
+                this.constantsValues = constantsValues;
         }
 
         @Nonnull
@@ -68,6 +72,12 @@ public final class RuleEngineContext
         public Map<String, Map<String, String>> calculatedValueMap()
         {
                 return calculatedValueMap;
+        }
+
+        @Nonnull
+        public Map<String, String> constantsValues()
+        {
+                return constantsValues;
         }
 
         @Nonnull
@@ -104,6 +114,9 @@ public final class RuleEngineContext
 
                 @Nullable
                 private  Map<String, Map<String, String>> calculatedValueMap;
+
+                @Nullable
+                private Map<String, String> constantsValues;
 
                 Builder( @Nonnull RuleExpressionEvaluator evaluator )
                 {
@@ -157,6 +170,17 @@ public final class RuleEngineContext
                 }
 
                 @Nonnull
+                public Builder constantsValue(Map<String, String> constantsValues )
+                {
+                        if ( constantsValues == null )
+                        {
+                                throw new IllegalArgumentException( "constantsValue == null" );
+                        }
+                        this.constantsValues = constantsValues;
+                        return this;
+                }
+
+                @Nonnull
                 public RuleEngineContext build()
                 {
                         if ( rules == null )
@@ -169,7 +193,7 @@ public final class RuleEngineContext
                                 ruleVariables = unmodifiableList( new ArrayList<RuleVariable>() );
                         }
 
-                        return new RuleEngineContext( evaluator, rules, ruleVariables, supplementaryData, calculatedValueMap );
+                        return new RuleEngineContext( evaluator, rules, ruleVariables, supplementaryData, calculatedValueMap, constantsValues );
                 }
         }
 }

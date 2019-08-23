@@ -56,17 +56,17 @@ public class RuleFunctionYearsBetweenTests
         private Map<String, RuleVariableValue> variableValues = new HashMap<>();
 
         @Test
-        public void return_zero_if_some_date_is_not_present()
+        public void return_empty_if_some_date_is_not_present()
         {
                 RuleFunction yearsBetween = RuleFunctionYearsBetween.create();
 
                 MatcherAssert.assertThat( yearsBetween.evaluate( asList( null, null ), variableValues, null ),
-                    is( ("0") ) );
+                    is( ("") ) );
                 MatcherAssert.assertThat( yearsBetween.evaluate( asList( null, "" ), variableValues, null ),
-                    is( ("0") ) );
+                    is( ("") ) );
                 MatcherAssert.assertThat( yearsBetween.evaluate( asList( "", null ), variableValues, null ),
-                    is( ("0") ) );
-                MatcherAssert.assertThat( yearsBetween.evaluate( asList( "", "" ), variableValues, null ), is( ("0") ) );
+                    is( ("") ) );
+                MatcherAssert.assertThat( yearsBetween.evaluate( asList( "", "" ), variableValues, null ), is( ("") ) );
         }
 
         @Test
@@ -119,6 +119,18 @@ public class RuleFunctionYearsBetweenTests
                     is( "-1" ) );
                 MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2016-06-30", "2010-01-01" ), variableValues, null ),
                     is( "-6" ) );
+
+                MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2017-02-27", "2018-02-26" ), variableValues, null ),
+                    is( "0" ) );
+                MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2017-02-27", "2018-02-27" ), variableValues, null ),
+                    is( "1" ) );
+                MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2017-02-27", "2018-02-28" ), variableValues, null ),
+                    is( "1" ) );
+                MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2015-02-27", "2018-02-27" ), variableValues, null ),
+                    is( "3" ) );
+                MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2018-06-04", "2019-01-04" ), variableValues, null ),
+                        is( "0" ) );
+
         }
 
         @Test

@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 @AutoValue
 abstract class RuleFunctionCall
 {
-        private static final Pattern JUST_PARAMS_PATTERN = Pattern.compile( "(^[^\\(]+\\()|\\)" );
+        private static final Pattern JUST_PARAMS_PATTERN = Pattern.compile( "(^[^\\(]+\\()|\\)$" );
 
         private static final Pattern SPLIT_PARAMS_PATTERN = Pattern.compile( "(('[^']+')|([^,]+))" );
 
