@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,32 +28,20 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import java.util.Map;
-
 /**
- * @Author Zubair Asghar.
+ * Returns standard deviation based on age, gender and weight
+ *
  */
-public class RuleFunctionZScoreWFH extends RuleFunctionZScore
-{
-    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_GIRL = ZScoreTable.getZscoreWFHTableGirl();
-    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_BOY = ZScoreTable.getZscoreWFHTableBoy();
+class RuleFunctionZScoreWFA : RuleFunctionZScore() {
 
-    public static final String D2_ZSCOREWFH = "d2:zScoreWFH";
+    override val tableForGirl = ZScoreTable.zscoreWFATableGirl
 
-    @Override
-    public Map<ZScoreTableKey, Map<Float, Integer>> getTableForGirl()
-    {
-        return ZSCORE_TABLE_GIRL;
-    }
+    override val tableForBoy = ZScoreTable.zscoreWFATableBoy
 
-    @Override
-    public Map<ZScoreTableKey, Map<Float, Integer>> getTableForBoy()
-    {
-        return ZSCORE_TABLE_BOY;
-    }
+    companion object {
+        const val D2_ZSCOREWFA = "d2:zScoreWFA"
 
-    public static RuleFunctionZScoreWFH create()
-    {
-        return new RuleFunctionZScoreWFH();
+        @JvmStatic
+        fun create() = RuleFunctionZScoreWFA()
     }
 }

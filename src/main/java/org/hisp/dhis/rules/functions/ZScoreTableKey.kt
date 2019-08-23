@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -26,49 +26,33 @@ package org.hisp.dhis.rules.functions;
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-/**
- * @Author Zubair Asghar.
  */
-public class ZScoreTableKey
-{
-    private final byte gender;
-    private final float parameter;
 
-    public ZScoreTableKey( byte gender, float parameter )
-    {
-        this.gender = gender;
-        this.parameter = parameter;
+
+class ZScoreTableKey(private val gender: Byte, private val parameter: Float) {
+
+    override fun hashCode(): Int {
+        val prime = 31
+
+        var result = 1
+
+        result = prime * result + gender.hashCode()
+        result = prime * result + parameter.hashCode()
+
+        return result
     }
 
-    @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-
-        int result = 1;
-
-        result = prime * result +  Byte.hashCode( gender );
-        result = prime * result +  Float.hashCode( parameter );
-
-        return result;
-    }
-
-    @Override
-    public boolean equals( Object obj )
-    {
-        if ( this == obj )
-        {
-            return true;
+    override fun equals(obj: Any?): Boolean {
+        if (this === obj) {
+            return true
         }
 
-        if ( !( obj instanceof ZScoreTableKey) )
-        {
-            return false;
+        if (obj !is ZScoreTableKey) {
+            return false
         }
 
-        ZScoreTableKey other = (ZScoreTableKey) obj;
+        val other = obj as ZScoreTableKey?
 
-        return this.parameter == other.parameter && this.gender == other.gender;
+        return this.parameter == other!!.parameter && this.gender == other.gender
     }
 }

@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,32 +28,16 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import java.util.Map;
+class RuleFunctionZScoreWFH : RuleFunctionZScore() {
 
-/**
- * @Author Zubair Asghar.
- */
-public class RuleFunctionZScoreHFA extends RuleFunctionZScore
-{
-    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_GIRL = ZScoreTable.getZscoreHFATableGirl();
-    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_BOY = ZScoreTable.getZscoreHFATableBoy();
+    override val tableForGirl = ZScoreTable.zscoreWFHTableGirl
 
-    public static final String D2_ZSCOREHFA = "d2:zScoreHFA";
+    override val tableForBoy = ZScoreTable.zscoreWFHTableBoy
 
-    @Override
-    public Map<ZScoreTableKey, Map<Float, Integer>> getTableForGirl()
-    {
-        return ZSCORE_TABLE_GIRL;
-    }
+    companion object {
+        const val D2_ZSCOREWFH = "d2:zScoreWFH"
 
-    @Override
-    public Map<ZScoreTableKey, Map<Float, Integer>> getTableForBoy()
-    {
-        return ZSCORE_TABLE_BOY;
-    }
-
-    public static RuleFunctionZScoreHFA create()
-    {
-        return new RuleFunctionZScoreHFA();
+        @JvmStatic
+        fun create() = RuleFunctionZScoreWFH()
     }
 }
