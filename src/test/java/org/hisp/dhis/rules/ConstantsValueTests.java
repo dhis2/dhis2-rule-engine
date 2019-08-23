@@ -34,7 +34,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.mockito.Mock;
 
 import java.util.*;
 
@@ -53,8 +52,7 @@ public class ConstantsValueTests {
     public void shouldThrowExceptionIfConstantsValueMapIsNull()
     {
        exception.expect(IllegalArgumentException.class);
-
-        RuleEngineContext ruleEngineContext = RuleEngineContext.builder(new ExpressionEvaluator())
+       RuleEngineContext.builder(new ExpressionEvaluator())
                 .rules(Arrays.asList(mock(org.hisp.dhis.rules.models.Rule.class)))
                 .ruleVariables(Arrays.asList(mock(RuleVariable.class)))
                 .supplementaryData(new HashMap<>())
@@ -83,19 +81,6 @@ public class ConstantsValueTests {
                 .organisationUnit("test_ou")
                 .organisationUnitCode("test_ou_code")
                 .attributeValues(Arrays.asList( RuleAttributeValue.create("test_attribute", "test_value")))
-                .build();
-
-        RuleEvent ruleEvent = RuleEvent.builder()
-                .event("test_event")
-                .programStage("test_program_stage")
-                .programStageName("")
-                .status(RuleEvent.Status.ACTIVE)
-                .eventDate(new Date())
-                .dueDate(new Date())
-                .organisationUnit("")
-                .organisationUnitCode("")
-                .dataValues(Arrays.asList(RuleDataValue.create(
-                        new Date(), "test_program_stage", "test_data_element", "test_value")))
                 .build();
 
         RuleEngine ruleEngine = ruleEngineBuilder.build();

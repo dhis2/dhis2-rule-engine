@@ -258,7 +258,7 @@ public class RuleExpressionTests
 
         @Test
         public void mathExpressionTest(){
-                RuleExpression ruleExpression = RuleExpression.from( "1/2" );
+                RuleExpression ruleExpression = RuleExpression.from( "1.0 / 2.0" );
                 assertThat(evaluator.evaluate(ruleExpression.expression())).isEqualToIgnoringCase("0.5");
         }
 

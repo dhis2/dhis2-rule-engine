@@ -163,6 +163,7 @@ public final class RuleEngine
                         .ruleVariables( ruleEngineContext.ruleVariables() )
                         .triggerEnvironment( triggerEnvironment )
                         .ruleEvents( ruleEvents )
+                        .constantValueMap( ruleEngineContext.constantsValues() )
                         .build();
 
                 return new RuleEngineExecution( executionContext().expressionEvaluator(),
