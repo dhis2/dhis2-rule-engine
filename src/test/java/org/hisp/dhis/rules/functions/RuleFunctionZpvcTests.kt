@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,54 +28,50 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert
+import org.hisp.dhis.rules.RuleVariableValue
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
+import kotlin.test.assertFailsWith
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+@RunWith(JUnit4::class)
+class RuleFunctionZpvcTests {
 
-/**
- * @Author Zubair Asghar.
- *
- * Returns the number of numeric zero and positive values among the given object arguments. Can be provided with any number of arguments.
- */
-public class RuleFunctionZpvc extends RuleFunction
-{
-    public static final String D2_ZPVC = "d2:zpvc";
+    private val variableValues = HashMap<String, RuleVariableValue>()
 
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() < 1 )
-        {
-            throw new IllegalArgumentException( "At least one argument should be provided" );
-        }
+    private val zpvc = RuleFunctionZpvc.create()
 
-        List<Double> list = new ArrayList<>();
+    @Test
+    fun return_count_of_non_negative_values_in_arguments() {
 
-        try
-        {
-            list = new ArrayList<>();
-            for(String string : arguments){
-                Double value = Double.valueOf(string);
-                if(value>=0)
-                    list.add(value);
-            }
-//            list = arguments.stream().map( Double::new ).filter( v -> v >= 0 ).collect( Collectors.toList() );
-        }
-        catch ( NumberFormatException e )
-        {
-            throw new IllegalArgumentException( "Number has to be an integer" );
-        }
+        val arguments = listOf("0", "1", "-1", "2", "-2", "3")
 
-        return String.valueOf( list.size() );
+        MatcherAssert.assertThat(zpvc.evaluate(arguments, variableValues, null), `is`("4"))
     }
 
-    public static RuleFunctionZpvc create()
-    {
-        return new RuleFunctionZpvc();
+    @Test
+    fun throw_illegal_argument_exception_for_no_number_argument() {
+
+        val arguments = listOf("sxsx", null, "0", "1", "-1", "2", "-2", "3")
+
+        assertFailsWith<IllegalArgumentException> {
+            RuleFunctionZpvc.create().evaluate(arguments, variableValues, null)
+        }
+    }
+
+    @Test
+    fun throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected() {
+        assertFailsWith<IllegalArgumentException> {
+            RuleFunctionZpvc.create().evaluate(ArrayList<String>(), variableValues, null)
+        }
+    }
+
+    @Test
+    fun throw_null_pointer_exception_when_arguments_is_null() {
+        assertFailsWith<NullPointerException> {
+            RuleFunctionZpvc.create().evaluate(null!!, variableValues, null)
+        }
     }
 }
