@@ -25,7 +25,7 @@ public class RuleEventTests
         @Test
         public void createShouldThrowExceptionIfEventIsNull()
         {
-                thrown.expect( NullPointerException.class );
+                thrown.expect( IllegalStateException.class );
                 RuleEvent.create( null, "test_programstage", RuleEvent.Status.ACTIVE,
                         new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
         }
@@ -33,7 +33,7 @@ public class RuleEventTests
         @Test
         public void createShouldThrowExceptionIfProgramStageIsNull()
         {
-                thrown.expect( NullPointerException.class );
+                thrown.expect( IllegalStateException.class );
                 RuleEvent.create( "test_event", null, RuleEvent.Status.ACTIVE,
                         new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
         }
@@ -41,7 +41,7 @@ public class RuleEventTests
         @Test
         public void createShouldThrowExceptionIfStatusIsNull()
         {
-                thrown.expect( NullPointerException.class );
+                thrown.expect( IllegalStateException.class );
                 RuleEvent.create( "test_event", "test_programstage", null,
                         new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
         }
@@ -49,7 +49,7 @@ public class RuleEventTests
         @Test
         public void createShouldThrowExceptionIfEventDateIsNull()
         {
-                thrown.expect( NullPointerException.class );
+                thrown.expect( IllegalStateException.class );
                 RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE,
                         null, new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
         }
@@ -57,7 +57,7 @@ public class RuleEventTests
         @Test
         public void createShouldThrowExceptionIfDueDateIsNull()
         {
-                thrown.expect( NullPointerException.class );
+                thrown.expect( IllegalStateException.class );
                 RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE,
                     new Date(), null, null,null,Arrays.<RuleDataValue>asList(), "");
 

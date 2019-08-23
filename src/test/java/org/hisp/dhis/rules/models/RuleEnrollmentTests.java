@@ -24,7 +24,7 @@ public class RuleEnrollmentTests
         @Test
         public void createShouldThrowOnNullEnrollment()
         {
-                thrown.expect( NullPointerException.class );
+                thrown.expect( IllegalStateException.class );
                 RuleEnrollment.create( null, new Date(), new Date(),
                     RuleEnrollment.Status.ACTIVE, null,null, new ArrayList<RuleAttributeValue>(), "");
         }
@@ -32,7 +32,7 @@ public class RuleEnrollmentTests
         @Test
         public void createShouldThrowOnNullIncidentDate()
         {
-                thrown.expect( NullPointerException.class );
+                thrown.expect( IllegalStateException.class );
                 RuleEnrollment.create("test_enrollment", null, new Date(),
                         RuleEnrollment.Status.ACTIVE, null, null, new ArrayList<RuleAttributeValue>(), "");
 
@@ -41,7 +41,7 @@ public class RuleEnrollmentTests
         @Test
         public void createShouldThrowOnNullEnrollmentDate()
         {
-                thrown.expect( NullPointerException.class );
+                thrown.expect( IllegalStateException.class );
                 RuleEnrollment.create( "test_enrollment", new Date(), null,
                         RuleEnrollment.Status.ACTIVE,null,null, new ArrayList<RuleAttributeValue>(), "");
         }
@@ -49,7 +49,7 @@ public class RuleEnrollmentTests
         @Test
         public void createShouldThrowOnNullStatus()
         {
-                thrown.expect( NullPointerException.class );
+                thrown.expect( IllegalStateException.class );
                 RuleEnrollment.create( "test_enrollment", new Date(), new Date(),
                     null, null,null,new ArrayList<RuleAttributeValue>(), "");
         }
