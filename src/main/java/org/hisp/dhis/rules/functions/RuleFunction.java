@@ -54,8 +54,12 @@ public abstract class RuleFunction
                         return RuleFunctionYearsBetween.create();
                 case RuleFunctionZpvc.D2_ZPVC:
                         return RuleFunctionZpvc.create();
-                case RuleFunctionZScoreWFA.D2_ZSCORE:
+                case RuleFunctionZScoreWFA.D2_ZSCOREWFA:
                         return RuleFunctionZScoreWFA.create();
+                case RuleFunctionZScoreHFA.D2_ZSCOREHFA:
+                        return RuleFunctionZScoreHFA.create();
+                case RuleFunctionZScoreWFH.D2_ZSCOREWFH:
+                        return RuleFunctionZScoreWFH.create();
                 case RuleFunctionMaxValue.D2_MAX_VALUE:
                         return RuleFunctionMaxValue.create();
                 case RuleFunctionMinValue.D2_MIN_VALUE:
