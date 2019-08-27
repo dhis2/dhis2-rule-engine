@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,45 +28,32 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
-
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.hisp.dhis.rules.RuleVariableValue
 
 /**
- * @Author Zubair Asghar.
  *
  * Evaluates to true if the input text is an exact match with the supplied regular expression pattern. The regular expression needs to be escaped.
  */
-public class RuleFunctionValidatePattern extends RuleFunction
-{
-    public static final String D2_VALIDATE_PATTERN = "d2:validatePattern";
+class RuleFunctionValidatePattern : RuleFunction() {
 
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() != 2 )
-        {
-            throw new IllegalArgumentException( "Two arguments were expected, " +
-                    arguments.size() + " were supplied" );
+    override fun evaluate(arguments: List<String>, valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+        return when {
+            arguments.size != 2 -> throw IllegalArgumentException("Two arguments were expected, ${arguments.size} were supplied")
+            else -> {
+                val input = arguments[0]
+                val regex = arguments[1]
+
+                val matcher = regex.toRegex().matches(input).toString()
+
+                wrap(matcher)
+            }
         }
-        
-        String input = arguments.get( 0 );
-        String regex = arguments.get( 1 );
-
-        Pattern pattern = Pattern.compile( regex );
-
-        Matcher matcher = pattern.matcher( input );
-        
-        return wrap( String.valueOf( matcher.matches() ) );
     }
 
-    public static RuleFunctionValidatePattern create()
-    {
-        return new RuleFunctionValidatePattern();
+    companion object {
+        const val D2_VALIDATE_PATTERN = "d2:validatePattern"
+
+        @JvmStatic
+        fun create() = RuleFunctionValidatePattern()
     }
 }
