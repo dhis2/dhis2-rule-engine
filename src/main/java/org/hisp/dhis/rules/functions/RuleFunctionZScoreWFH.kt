@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,54 +28,16 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
+class RuleFunctionZScoreWFH : RuleFunctionZScore() {
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+    override val tableForGirl = ZScoreTable.zscoreWFHTableGirl
 
-/**
- * @Author Zubair Asghar.
- *
- * Returns the number of numeric zero and positive values among the given object arguments. Can be provided with any number of arguments.
- */
-public class RuleFunctionZpvc extends RuleFunction
-{
-    public static final String D2_ZPVC = "d2:zpvc";
+    override val tableForBoy = ZScoreTable.zscoreWFHTableBoy
 
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() < 1 )
-        {
-            throw new IllegalArgumentException( "At least one argument should be provided" );
-        }
+    companion object {
+        const val D2_ZSCOREWFH = "d2:zScoreWFH"
 
-        List<Double> list = new ArrayList<>();
-
-        try
-        {
-            list = new ArrayList<>();
-            for(String string : arguments){
-                Double value = Double.valueOf(string);
-                if(value>=0)
-                    list.add(value);
-            }
-//            list = arguments.stream().map( Double::new ).filter( v -> v >= 0 ).collect( Collectors.toList() );
-        }
-        catch ( NumberFormatException e )
-        {
-            throw new IllegalArgumentException( "Number has to be an integer" );
-        }
-
-        return String.valueOf( list.size() );
-    }
-
-    public static RuleFunctionZpvc create()
-    {
-        return new RuleFunctionZpvc();
+        @JvmStatic
+        fun create() = RuleFunctionZScoreWFH()
     }
 }

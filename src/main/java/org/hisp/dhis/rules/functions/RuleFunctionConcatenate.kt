@@ -29,15 +29,16 @@ package org.hisp.dhis.rules.functions
  */
 
 import org.hisp.dhis.rules.RuleVariableValue
+import org.hisp.dhis.rules.wrap
 
 class RuleFunctionConcatenate : RuleFunction() {
 
-    override fun evaluate(arguments: List<String>, valueMap: Map<String, RuleVariableValue>,
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>?,
                           supplementaryData: Map<String, List<String>>?): String {
         val builder = StringBuilder()
         arguments.filterNot { it.isNullOrEmpty() }.forEach { builder.append(it) }
 
-        return wrap(builder.toString())
+        return builder.toString().wrap()
     }
 
     companion object {

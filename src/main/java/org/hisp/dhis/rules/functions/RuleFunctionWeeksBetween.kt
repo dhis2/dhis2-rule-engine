@@ -7,7 +7,7 @@ import org.hisp.dhis.rules.functions.RuleFunctionDaysBetween.Companion.daysBetwe
 class RuleFunctionWeeksBetween : RuleFunction() {
 
     override fun evaluate(arguments: List<String?>,
-                          valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+                          valueMap: Map<String, RuleVariableValue>?, supplementaryData: Map<String, List<String>>?): String {
         return when {
             arguments.size != 2 -> throw IllegalArgumentException("Two arguments were expected, ${arguments.size} were supplied")
             else -> (daysBetween(arguments[0], arguments[1]) / 7).toString()

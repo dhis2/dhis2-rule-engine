@@ -38,7 +38,7 @@ import java.time.temporal.ChronoUnit
 class RuleFunctionMonthsBetween : RuleFunction() {
 
     override fun evaluate(arguments: List<String?>,
-                          valueMap: Map<String, RuleVariableValue>,
+                          valueMap: Map<String, RuleVariableValue>?,
                           supplementaryData: Map<String, List<String>>?): String {
         return when {
             arguments.size != 2 -> throw IllegalArgumentException("Two arguments were expected, ${arguments.size} were supplied")

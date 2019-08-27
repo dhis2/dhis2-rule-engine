@@ -32,10 +32,10 @@ import org.hisp.dhis.rules.RuleVariableValue
 
 class RuleFunctionLength : RuleFunction() {
 
-    override fun evaluate(arguments: List<String>, valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>?, supplementaryData: Map<String, List<String>>?): String {
         return when {
             arguments.size != 1 -> throw IllegalArgumentException("One argument was expected, ${arguments.size} were supplied")
-            else -> arguments[0].length.toString()
+            else -> arguments[0]?.length.toString()
         }
     }
 

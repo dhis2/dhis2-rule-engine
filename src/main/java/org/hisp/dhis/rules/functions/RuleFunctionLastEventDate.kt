@@ -29,17 +29,18 @@ package org.hisp.dhis.rules.functions
  */
 
 import org.hisp.dhis.rules.RuleVariableValue
+import org.hisp.dhis.rules.wrap
 
 
 class RuleFunctionLastEventDate : RuleFunction() {
 
-    override fun evaluate(arguments: List<String>, valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>?, supplementaryData: Map<String, List<String>>?): String {
         return when {
             arguments.isEmpty() -> throw IllegalArgumentException("At least one argument required in LastEventDate function")
-            !valueMap.containsKey(arguments[0]) -> ""
+            !valueMap!!.containsKey(arguments[0]) -> ""
             else -> {
                 val variableValue = valueMap[arguments[0]]
-                wrap(variableValue?.eventDate())
+                variableValue?.eventDate().wrap()
             }
         }
     }

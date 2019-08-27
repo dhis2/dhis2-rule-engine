@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,32 +28,46 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import java.util.Map;
+import org.hisp.dhis.rules.RuleVariableValue
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
+import java.time.temporal.ChronoUnit
 
-/**
- * @Author Zubair Asghar.
- */
-public class RuleFunctionZScoreHFA extends RuleFunctionZScore
-{
-    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_GIRL = ZScoreTable.getZscoreHFATableGirl();
-    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_BOY = ZScoreTable.getZscoreHFATableBoy();
+class RuleFunctionYearsBetween : RuleFunction() {
 
-    public static final String D2_ZSCOREHFA = "d2:zScoreHFA";
+    override fun evaluate(arguments: List<String?>,
+                          valueMap: Map<String, RuleVariableValue>?,
+                          supplementaryData: Map<String, List<String>>?): String {
 
-    @Override
-    public Map<ZScoreTableKey, Map<Float, Integer>> getTableForGirl()
-    {
-        return ZSCORE_TABLE_GIRL;
+        return when {
+            arguments.size != 2 -> throw IllegalArgumentException("Two arguments were expected, ${arguments.size} were supplied")
+            arguments[0].isNullOrEmpty() || arguments[1].isNullOrEmpty() -> ""
+            else -> {
+                val startDateString = arguments[0]
+                val endDateString = arguments[1]
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+                val startDate: LocalDate
+                val endDate: LocalDate
+
+                try {
+                    startDate = LocalDate.parse(startDateString, formatter)
+                    endDate = LocalDate.parse(endDateString, formatter)
+                } catch (e: DateTimeParseException) {
+                    throw IllegalArgumentException("Date cannot be parsed")
+                }
+
+                ChronoUnit.YEARS.between(startDate, endDate).toString()
+            }
+        }
     }
 
-    @Override
-    public Map<ZScoreTableKey, Map<Float, Integer>> getTableForBoy()
-    {
-        return ZSCORE_TABLE_BOY;
-    }
+    companion object {
+        const val D2_YEARS_BETWEEN = "d2:yearsBetween"
 
-    public static RuleFunctionZScoreHFA create()
-    {
-        return new RuleFunctionZScoreHFA();
+        @JvmStatic
+        fun create() = RuleFunctionYearsBetween()
+
     }
 }

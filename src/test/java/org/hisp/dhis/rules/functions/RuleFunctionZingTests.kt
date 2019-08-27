@@ -28,8 +28,8 @@ package org.hisp.dhis.rules.functions
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.core.Is.`is`
 import org.hisp.dhis.rules.RuleVariableValue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -38,52 +38,56 @@ import kotlin.test.assertFailsWith
 
 
 @RunWith(JUnit4::class)
-class RuleFunctionHasUserRoleTests {
-
-    private val supplementaryData = hashMapOf<String, List<String>>()
+class RuleFunctionZingTests {
 
     private val variableValues = hashMapOf<String, RuleVariableValue>()
 
-    private val arguments = ArrayList<String>()
-
-    private val hasUserRole = RuleFunctionHasUserRole.create()
+    private val zing = RuleFunctionZing.create()
 
     @Test
-    fun throwExceptionWhenSupplementaryDataIsNull() {
+    fun return_same_value_for_non_negative_argument() {
+
+        assertThat(zing.evaluate(listOf("0"), variableValues, null), `is`("0"))
+        assertThat(zing.evaluate(listOf("1"), variableValues, null), `is`("1"))
+        assertThat(zing.evaluate(listOf("5"), variableValues, null), `is`("5"))
+        assertThat(zing.evaluate(listOf("0.1"), variableValues, null), `is`("0.1"))
+        assertThat(zing.evaluate(listOf("1.1"), variableValues, null), `is`("1.1"))
+    }
+
+    @Test
+    fun return_zero_for_negative_argument() {
+
+        assertThat(zing.evaluate(listOf("-0.1"), variableValues, null), `is`("0"))
+        assertThat(zing.evaluate(listOf("-1"), variableValues, null), `is`("0"))
+        assertThat(zing.evaluate(listOf("-10"), variableValues, null), `is`("0"))
+        assertThat(zing.evaluate(listOf("-1.1"), variableValues, null), `is`("0"))
+    }
+
+    @Test
+    fun throw_illegal_argument_exception_for_non_number_argument() {
         assertFailsWith<IllegalArgumentException> {
-            hasUserRole.evaluate(arguments, variableValues, supplementaryData)
+            RuleFunctionZing.create().evaluate(listOf("non_number"), variableValues, null)
         }
     }
 
     @Test
-    fun throwExceptionWhenArgumentListIsLessThanOne() {
+    fun throw_illegal_argument_exception_when_argument_count_is_greater_than_expected() {
         assertFailsWith<IllegalArgumentException> {
-            supplementaryData["USER"] = listOf()
-            hasUserRole.evaluate(arguments, variableValues, supplementaryData)
+            RuleFunctionZing.create().evaluate(listOf("5.9", "6.8"), variableValues, null)
         }
     }
 
     @Test
-    fun returnTrueIfUserHasRole() {
-        supplementaryData["USER"] = listOf("uid1")
-        arguments.add("uid1")
-
-        assertThat(hasUserRole.evaluate(arguments, variableValues, supplementaryData), `is`("true"))
+    fun throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected() {
+        assertFailsWith<IllegalArgumentException> {
+            RuleFunctionZing.create().evaluate(ArrayList(), variableValues, null)
+        }
     }
 
     @Test
-    fun returnFalseIfUserHasNoRole() {
-        supplementaryData["USER"] = listOf("uid1")
-        arguments.add("uid2")
-
-        assertThat(hasUserRole.evaluate(arguments, variableValues, supplementaryData), `is`("false"))
-    }
-
-    @Test
-    fun returnFalseIfRoleListIsNull() {
-        supplementaryData["USER"] = emptyList()
-        arguments.add("uid2")
-
-        assertThat(hasUserRole.evaluate(arguments, variableValues, supplementaryData), `is`("false"))
+    fun throw_null_pointer_exception_when_arguments_is_null() {
+        assertFailsWith<NullPointerException> {
+            RuleFunctionZing.create().evaluate(null!!, variableValues, null)
+        }
     }
 }

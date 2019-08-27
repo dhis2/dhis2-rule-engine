@@ -24,7 +24,7 @@ public class RuleEnrollmentTests
         @Test
         public void createShouldThrowOnNullEnrollment()
         {
-                thrown.expect( Exception.class );
+                thrown.expect( NullPointerException.class );
                 RuleEnrollment.Companion.create( null, new Date(), new Date(),
                     RuleEnrollment.Status.ACTIVE, null,null, new ArrayList<RuleAttributeValue>(), "");
         }
@@ -32,7 +32,7 @@ public class RuleEnrollmentTests
         @Test
         public void createShouldThrowOnNullIncidentDate()
         {
-                thrown.expect( Exception.class );
+                thrown.expect( NullPointerException.class );
                 RuleEnrollment.Companion.create("test_enrollment", null, new Date(),
                         RuleEnrollment.Status.ACTIVE, null, null, new ArrayList<RuleAttributeValue>(), "");
 
@@ -41,7 +41,7 @@ public class RuleEnrollmentTests
         @Test
         public void createShouldThrowOnNullEnrollmentDate()
         {
-                thrown.expect( Exception.class );
+                thrown.expect( NullPointerException.class );
                 RuleEnrollment.Companion.create( "test_enrollment", new Date(), null,
                         RuleEnrollment.Status.ACTIVE,null,null, new ArrayList<RuleAttributeValue>(), "");
         }
@@ -49,7 +49,7 @@ public class RuleEnrollmentTests
         @Test
         public void createShouldThrowOnNullStatus()
         {
-                thrown.expect( Exception.class );
+                thrown.expect( NullPointerException.class );
                 RuleEnrollment.Companion.create( "test_enrollment", new Date(), new Date(),
                     null, null,null,new ArrayList<RuleAttributeValue>(), "");
         }
@@ -57,7 +57,7 @@ public class RuleEnrollmentTests
         @Test
         public void createShouldThrowOnNullValueList()
         {
-                thrown.expect( Exception.class );
+                thrown.expect( NullPointerException.class );
                 RuleEnrollment.Companion.create( "test_enrollment", new Date(), new Date(),
                     RuleEnrollment.Status.ACTIVE, null,null,null, "");
         }

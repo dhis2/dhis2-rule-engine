@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -26,49 +26,18 @@ package org.hisp.dhis.rules.functions;
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-/**
- * @Author Zubair Asghar.
  */
-public class ZScoreTableKey
-{
-    private final byte gender;
-    private final float parameter;
 
-    public ZScoreTableKey( byte gender, float parameter )
-    {
-        this.gender = gender;
-        this.parameter = parameter;
-    }
+class RuleFunctionZScoreHFA : RuleFunctionZScore() {
 
-    @Override
-    public int hashCode()
-    {
-        final int prime = 31;
+    override val tableForGirl = ZScoreTable.zscoreHFATableGirl
 
-        int result = 1;
+    override val tableForBoy = ZScoreTable.zscoreHFATableBoy
 
-        result = prime * result +  Byte.hashCode( gender );
-        result = prime * result +  Float.hashCode( parameter );
+    companion object {
+        const val D2_ZSCOREHFA = "d2:zScoreHFA"
 
-        return result;
-    }
-
-    @Override
-    public boolean equals( Object obj )
-    {
-        if ( this == obj )
-        {
-            return true;
-        }
-
-        if ( !( obj instanceof ZScoreTableKey) )
-        {
-            return false;
-        }
-
-        ZScoreTableKey other = (ZScoreTableKey) obj;
-
-        return this.parameter == other.parameter && this.gender == other.gender;
+        @JvmStatic
+        fun create() = RuleFunctionZScoreHFA()
     }
 }

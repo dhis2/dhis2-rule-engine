@@ -35,17 +35,18 @@ import org.hisp.dhis.rules.RuleVariableValue
  */
 class RuleFunctionOizp : RuleFunction() {
 
-    override fun evaluate(arguments: List<String>, valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>?, supplementaryData: Map<String, List<String>>?): String {
         return when {
             arguments.size != 1 -> throw IllegalArgumentException("One argument was expected, ${arguments.size} were supplied")
+            arguments[0] == null -> throw IllegalArgumentException("Invalid number format")
             else -> {
                 var value: Double?
                 try {
-                    value = arguments[0].toDouble()
+                    value = arguments[0]!!.toDouble()
                 } catch (e: NumberFormatException) {
                     throw IllegalArgumentException("Invalid number format")
                 }
-                val result = if (value >= 0) 1 else 0
+                val result = if (value!! >= 0) 1 else 0
                 result.toString()
             }
         }

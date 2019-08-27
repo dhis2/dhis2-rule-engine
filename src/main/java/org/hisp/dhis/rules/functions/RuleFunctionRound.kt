@@ -34,7 +34,7 @@ import kotlin.math.roundToLong
 
 class RuleFunctionRound : RuleFunction() {
 
-    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>?, supplementaryData: Map<String, List<String>>?): String {
         return when {
             arguments.size != 1 -> throw IllegalArgumentException("One argument was expected, ${arguments.size} were supplied")
             else -> arguments[0].toDouble(0.0).roundToLong().toString()

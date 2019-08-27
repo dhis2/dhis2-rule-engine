@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,32 +28,50 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import java.util.Map;
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert
+import org.hisp.dhis.rules.RuleVariableValue
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
+import kotlin.test.assertFailsWith
 
-/**
- * @Author Zubair Asghar.
- */
-public class RuleFunctionZScoreWFH extends RuleFunctionZScore
-{
-    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_GIRL = ZScoreTable.getZscoreWFHTableGirl();
-    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_BOY = ZScoreTable.getZscoreWFHTableBoy();
+@RunWith(JUnit4::class)
+class RuleFunctionZpvcTests {
 
-    public static final String D2_ZSCOREWFH = "d2:zScoreWFH";
+    private val variableValues = HashMap<String, RuleVariableValue>()
 
-    @Override
-    public Map<ZScoreTableKey, Map<Float, Integer>> getTableForGirl()
-    {
-        return ZSCORE_TABLE_GIRL;
+    private val zpvc = RuleFunctionZpvc.create()
+
+    @Test
+    fun return_count_of_non_negative_values_in_arguments() {
+
+        val arguments = listOf("0", "1", "-1", "2", "-2", "3")
+
+        MatcherAssert.assertThat(zpvc.evaluate(arguments, variableValues, null), `is`("4"))
     }
 
-    @Override
-    public Map<ZScoreTableKey, Map<Float, Integer>> getTableForBoy()
-    {
-        return ZSCORE_TABLE_BOY;
+    @Test
+    fun throw_illegal_argument_exception_for_no_number_argument() {
+
+        val arguments = listOf("sxsx", null, "0", "1", "-1", "2", "-2", "3")
+
+        assertFailsWith<IllegalArgumentException> {
+            RuleFunctionZpvc.create().evaluate(arguments, variableValues, null)
+        }
     }
 
-    public static RuleFunctionZScoreWFH create()
-    {
-        return new RuleFunctionZScoreWFH();
+    @Test
+    fun throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected() {
+        assertFailsWith<IllegalArgumentException> {
+            RuleFunctionZpvc.create().evaluate(ArrayList<String>(), variableValues, null)
+        }
+    }
+
+    @Test
+    fun throw_null_pointer_exception_when_arguments_is_null() {
+        assertFailsWith<NullPointerException> {
+            RuleFunctionZpvc.create().evaluate(null!!, variableValues, null)
+        }
     }
 }

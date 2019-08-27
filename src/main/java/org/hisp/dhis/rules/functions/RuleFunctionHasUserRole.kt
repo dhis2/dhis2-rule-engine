@@ -32,9 +32,9 @@ import org.hisp.dhis.rules.RuleVariableValue
 
 class RuleFunctionHasUserRole : RuleFunction() {
 
-    override fun evaluate(arguments: List<String>, valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>?>?): String {
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>?, supplementaryData: Map<String, List<String>>?): String {
         return when {
-            !supplementaryData!!.containsKey(USER) -> throw IllegalArgumentException("Supplementary data needs to be provided")
+            supplementaryData == null -> throw IllegalArgumentException("Supplementary data needs to be provided")
             arguments.isEmpty() -> throw IllegalArgumentException("One argument was expected but ${arguments.size} found ")
             else -> {
                 val roles = supplementaryData[USER]

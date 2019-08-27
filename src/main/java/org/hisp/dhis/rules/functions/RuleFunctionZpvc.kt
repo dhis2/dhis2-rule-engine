@@ -28,31 +28,39 @@ package org.hisp.dhis.rules.functions
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 import org.hisp.dhis.rules.RuleVariableValue
-import org.hisp.dhis.rules.extSubstring
-import org.hisp.dhis.rules.wrap
+import java.util.ArrayList
+import java.util.stream.Collectors
 
-class RuleFunctionLeft : RuleFunction() {
+/**
+ *
+ * Returns the number of numeric zero and positive values among the given object arguments. Can be provided with any number of arguments.
+ */
+class RuleFunctionZpvc : RuleFunction() {
 
-    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>?, supplementaryData: Map<String, List<String>>?): String {
+    override fun evaluate(arguments: List<String?>,
+                          valueMap: Map<String, RuleVariableValue>?,
+                          supplementaryData: Map<String, List<String>>?): String {
+
         return when {
-            arguments.size != 2 -> throw IllegalArgumentException("Two argument was expected, ${arguments.size} were supplied")
+            arguments.isEmpty() -> throw IllegalArgumentException("At least one argument should be provided")
             else -> {
-                try {
-                    val chars = arguments[1]?.toInt()
-                    arguments[0].extSubstring(0, chars).wrap()
-                } catch (e: NumberFormatException) {
-                    throw IllegalArgumentException("Number has to be an integer")
-                }
+                arguments.map {
+                    try {
+                        it?.toDouble()
+                    } catch (e: NumberFormatException) {
+                        throw IllegalArgumentException("Number has to be an integer")
+                    }
+                }.filter { it!! >= 0 }.size.toString()
             }
         }
     }
 
     companion object {
-        const val D2_LEFT = "d2:left"
+        const val D2_ZPVC = "d2:zpvc"
 
         @JvmStatic
-        fun create() = RuleFunctionLeft()
+        fun create() = RuleFunctionZpvc()
+
     }
 }

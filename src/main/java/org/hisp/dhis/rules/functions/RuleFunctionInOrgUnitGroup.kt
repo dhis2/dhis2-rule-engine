@@ -33,11 +33,11 @@ import org.hisp.dhis.rules.RuleVariableValue
 
 class RuleFunctionInOrgUnitGroup : RuleFunction() {
 
-    override fun evaluate(arguments: List<String>, valueMap: Map<String, RuleVariableValue>,
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>?,
                           supplementaryData: Map<String, List<String>>?): String {
         return when {
             arguments.size != 1 -> throw IllegalArgumentException("Two arguments were expected, ${arguments.size} were supplied")
-            !valueMap.containsKey("org_unit") || !supplementaryData!!.containsKey(arguments[0]) -> false.toString()
+            !valueMap!!.containsKey("org_unit") || !supplementaryData!!.containsKey(arguments[0]) -> false.toString()
             else -> {
                 val orgUnit = valueMap["org_unit"]?.value()?.replace("'", "")
                 val members = supplementaryData[arguments[0]]

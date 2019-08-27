@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,47 +28,31 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+class ZScoreTableKey(private val gender: Byte, private val parameter: Float) {
 
-/**
- * @Author Zubair Asghar.
- *
- * Evaluates the argument of type number to zero if the value is negative, otherwise to the value itself.
- */
-public class RuleFunctionZing extends RuleFunction
-{
-    public static final String D2_ZING = "d2:zing";
+    override fun hashCode(): Int {
+        val prime = 31
 
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() != 1 )
-        {
-            throw new IllegalArgumentException( "One argument was expected, " +
-                    arguments.size() + " were supplied" );
-        }
+        var result = 1
 
-        Double value = 0.0;
+        result = prime * result + gender.hashCode()
+        result = prime * result + parameter.hashCode()
 
-        try
-        {
-            value = Double.parseDouble( arguments.get( 0 ) );
-        }
-        catch ( NumberFormatException e )
-        {
-            throw new IllegalArgumentException( "Invalid number format" );
-        }
-
-        return value < 0 ? String.valueOf( 0 ) : arguments.get( 0 );
+        return result
     }
 
-    public static RuleFunctionZing create()
-    {
-        return new RuleFunctionZing();
+    override fun equals(obj: Any?): Boolean {
+        if (this === obj) {
+            return true
+        }
+
+        if (obj !is ZScoreTableKey) {
+            return false
+        }
+
+        val other = obj as ZScoreTableKey?
+
+        return this.parameter == other!!.parameter && this.gender == other.gender
     }
 }

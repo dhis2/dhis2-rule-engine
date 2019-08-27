@@ -9,7 +9,8 @@ import java.time.temporal.ChronoUnit
 class RuleFunctionDaysBetween : RuleFunction() {
 
     override fun evaluate(arguments: List<String?>,
-                          valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+                          valueMap: Map<String, RuleVariableValue>?,
+                          supplementaryData: Map<String, List<String>>?): String {
         when {
             arguments.size != 2 -> throw IllegalArgumentException("Two arguments were expected, ${arguments.size} were supplied")
             else -> return daysBetween(arguments[0], arguments[1]).toString()

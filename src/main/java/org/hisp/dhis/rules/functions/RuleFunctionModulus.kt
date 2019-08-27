@@ -33,7 +33,7 @@ import org.hisp.dhis.rules.toDouble
 
 class RuleFunctionModulus : RuleFunction() {
 
-    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>?, supplementaryData: Map<String, List<String>>?): String {
         return when {
             arguments.size != 2 -> throw IllegalArgumentException("two argument were expected, ${arguments.size} were supplied")
             else -> (arguments[0].toDouble(0.0) % arguments[1].toDouble(0.0)).toString()

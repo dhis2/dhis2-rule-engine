@@ -36,7 +36,7 @@ import org.hisp.dhis.rules.RuleVariableValue
  */
 class RuleFunctionMaxValue : RuleFunction() {
 
-    override fun evaluate(arguments: List<String>,
+    override fun evaluate(arguments: List<String?>,
                           valueMap: Map<String, RuleVariableValue>?,
                           supplementaryData: Map<String, List<String>>?): String {
         return when {
@@ -46,7 +46,7 @@ class RuleFunctionMaxValue : RuleFunction() {
         }
     }
 
-    private fun getMaxValue(arguments: List<String>, valueMap: Map<String, RuleVariableValue>): String {
+    private fun getMaxValue(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>): String {
         val dataElement = arguments[0]
 
         return when {

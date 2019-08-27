@@ -37,7 +37,9 @@ import org.hisp.dhis.rules.RuleVariableValue
  *
  */
 class RuleFunctionCount : RuleFunction() {
-    override fun evaluate(arguments: List<String>, valueMap: Map<String, RuleVariableValue>?, supplementaryData: Map<String, List<String>>?): String {
+    override fun evaluate(arguments: List<String?>,
+                          valueMap: Map<String, RuleVariableValue>?,
+                          supplementaryData: Map<String, List<String>>?): String {
         when {
             valueMap == null -> throw IllegalArgumentException("valueMap is expected")
             arguments.size != 1 -> throw IllegalArgumentException("One argument was expected, ${arguments.size} were supplied")
@@ -45,7 +47,7 @@ class RuleFunctionCount : RuleFunction() {
         }
     }
 
-    private fun count(arguments: List<String>, valueMap: Map<String, RuleVariableValue>): String {
+    private fun count(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>): String {
         val variableValue = valueMap[arguments[0]]
 
         return when {

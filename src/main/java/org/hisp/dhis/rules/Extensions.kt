@@ -34,3 +34,7 @@ fun String?.toDouble(defaultValue: Double): Double {
         }
     }
 }
+
+fun String?.wrap(): String {
+    return if (this == null) "" else "'$this'"
+}

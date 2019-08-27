@@ -30,16 +30,17 @@ package org.hisp.dhis.rules.functions
 
 import org.hisp.dhis.rules.RuleVariableValue
 import org.hisp.dhis.rules.extSubstring
+import org.hisp.dhis.rules.wrap
 
 /**
  * Evaluates to the part of a string specified by the start and end character number.
  */
 class RuleFunctionSubString : RuleFunction() {
 
-    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>?, supplementaryData: Map<String, List<String>>?): String {
         return when {
             arguments.size != 3 -> throw IllegalArgumentException("Three argument was expected, ${arguments.size} were supplied")
-            else -> wrap(arguments[0].extSubstring(arguments[1]?.toInt() ?: 0, arguments[2]?.toInt()))
+            else -> arguments[0].extSubstring(arguments[1]?.toInt() ?: 0, arguments[2]?.toInt()).wrap()
         }
     }
 

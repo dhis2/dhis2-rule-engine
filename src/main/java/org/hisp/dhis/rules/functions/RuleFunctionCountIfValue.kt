@@ -36,7 +36,7 @@ import org.hisp.dhis.rules.RuleVariableValue
  */
 class RuleFunctionCountIfValue : RuleFunction() {
 
-    override fun evaluate(arguments: List<String>,
+    override fun evaluate(arguments: List<String?>,
                           valueMap: Map<String, RuleVariableValue>?,
                           supplementaryData: Map<String, List<String>>?): String {
         when {
@@ -54,7 +54,7 @@ class RuleFunctionCountIfValue : RuleFunction() {
      * @param valueMap  key value pair containing values for each variable
      * @return count of program rule variable
      */
-    private fun countIfValue(arguments: List<String>, valueMap: Map<String, RuleVariableValue>): String {
+    private fun countIfValue(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>): String {
         val variableValue = valueMap[arguments[0]]
 
         return when {

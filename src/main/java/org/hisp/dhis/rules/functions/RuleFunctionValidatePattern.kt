@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.functions
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -28,34 +28,31 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import java.util.Map;
+import org.hisp.dhis.rules.RuleVariableValue
+import org.hisp.dhis.rules.wrap
 
 /**
- * Returns standard deviation based on age, gender and weight
  *
- * @Author Zubair Asghar.
+ * Evaluates to true if the input text is an exact match with the supplied regular expression pattern. The regular expression needs to be escaped.
  */
-public class RuleFunctionZScoreWFA extends RuleFunctionZScore
-{
-    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_GIRL = ZScoreTable.getZscoreWFATableGirl();
-    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_BOY = ZScoreTable.getZscoreWFATableBoy();
+class RuleFunctionValidatePattern : RuleFunction() {
 
-    public static final String D2_ZSCOREWFA = "d2:zScoreWFA";
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>?, supplementaryData: Map<String, List<String>>?): String {
+        return when {
+            arguments.size != 2 -> throw IllegalArgumentException("Two arguments were expected, ${arguments.size} were supplied")
+            else -> {
+                val input = arguments[0] ?: ""
+                val regex = arguments[1]
 
-    @Override
-    public Map<ZScoreTableKey, Map<Float, Integer>> getTableForGirl()
-    {
-        return ZSCORE_TABLE_GIRL;
+                regex?.toRegex()?.matches(input).toString().wrap()
+            }
+        }
     }
 
-    @Override
-    public Map<ZScoreTableKey, Map<Float, Integer>> getTableForBoy()
-    {
-        return ZSCORE_TABLE_BOY;
-    }
+    companion object {
+        const val D2_VALIDATE_PATTERN = "d2:validatePattern"
 
-    public static RuleFunctionZScoreWFA create()
-    {
-        return new RuleFunctionZScoreWFA();
+        @JvmStatic
+        fun create() = RuleFunctionValidatePattern()
     }
 }

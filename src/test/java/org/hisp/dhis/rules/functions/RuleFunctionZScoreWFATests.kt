@@ -30,7 +30,6 @@ package org.hisp.dhis.rules.functions
 
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
-import org.hisp.dhis.rules.RuleVariableValue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -38,52 +37,59 @@ import kotlin.test.assertFailsWith
 
 
 @RunWith(JUnit4::class)
-class RuleFunctionHasUserRoleTests {
+class RuleFunctionZScoreWFATests {
 
-    private val supplementaryData = hashMapOf<String, List<String>>()
-
-    private val variableValues = hashMapOf<String, RuleVariableValue>()
-
-    private val arguments = ArrayList<String>()
-
-    private val hasUserRole = RuleFunctionHasUserRole.create()
+    private val zScore = RuleFunctionZScoreWFA.create()
 
     @Test
-    fun throwExceptionWhenSupplementaryDataIsNull() {
+    fun testZscoreAtExactSDValue() {
+
+        assertThat(zScore.evaluate(listOf("1", "4.8", "1"), null, null), `is`("1"))
+        assertThat(zScore.evaluate(listOf("1", "3.2", "1"), null, null), `is`("-2"))
+        assertThat(zScore.evaluate(listOf("39", "9.9", "1"), null, null), `is`("-3"))
+        assertThat(zScore.evaluate(listOf("39", "11.5", "1"), null, null), `is`("-1.80"))
+    }
+
+    @Test
+    fun testZscoreBeyond3SD() {
+
+        assertThat(zScore.evaluate(listOf("1", "7.5", "1"), null, null), `is`("3.5"))
+    }
+
+    @Test
+    fun testZscoreBeyondNegative3SD() {
+
+        assertThat(zScore.evaluate(listOf("1", "4.8", "1"), null, null), `is`("1"))
+    }
+
+    @Test
+    fun testZscoreAboveSD0() {
+
+        assertThat(zScore.evaluate(listOf("1", "5.2", "1"), null, null), `is`("1.57"))
+        assertThat(zScore.evaluate(listOf("6", "9.5", "1"), null, null), `is`("2.15"))
+        assertThat(zScore.evaluate(listOf("1", "6.0", "1"), null, null), `is`("2.71"))
+    }
+
+    @Test
+    fun testZscoreBelowSD0() {
+
+        assertThat(zScore.evaluate(listOf("1", "2.9", "1"), null, null), `is`("-2.60"))
+        assertThat(zScore.evaluate(listOf("12", "7.5", "1"), null, null), `is`("-1.44"))
+        assertThat(zScore.evaluate(listOf("1", "2.8", "1"), null, null), `is`("-2.80"))
+    }
+
+    @Test
+    fun testExceptionIfInvalidArgument() {
         assertFailsWith<IllegalArgumentException> {
-            hasUserRole.evaluate(arguments, variableValues, supplementaryData)
+            assertThat(zScore.evaluate(listOf("1", "2.9"), null, null), `is`("-2.40"))
         }
     }
 
     @Test
-    fun throwExceptionWhenArgumentListIsLessThanOne() {
-        assertFailsWith<IllegalArgumentException> {
-            supplementaryData["USER"] = listOf()
-            hasUserRole.evaluate(arguments, variableValues, supplementaryData)
+    fun testExceptionWeightIsInvalid() {
+        val exception = assertFailsWith<IllegalArgumentException>(message = "Byte parsing failed") {
+            assertThat(zScore.evaluate(listOf("1", "abc", "1"), null, null), `is`("-2.40"))
         }
-    }
-
-    @Test
-    fun returnTrueIfUserHasRole() {
-        supplementaryData["USER"] = listOf("uid1")
-        arguments.add("uid1")
-
-        assertThat(hasUserRole.evaluate(arguments, variableValues, supplementaryData), `is`("true"))
-    }
-
-    @Test
-    fun returnFalseIfUserHasNoRole() {
-        supplementaryData["USER"] = listOf("uid1")
-        arguments.add("uid2")
-
-        assertThat(hasUserRole.evaluate(arguments, variableValues, supplementaryData), `is`("false"))
-    }
-
-    @Test
-    fun returnFalseIfRoleListIsNull() {
-        supplementaryData["USER"] = emptyList()
-        arguments.add("uid2")
-
-        assertThat(hasUserRole.evaluate(arguments, variableValues, supplementaryData), `is`("false"))
+        assertThat(exception.message, `is`("Byte parsing failed"))
     }
 }

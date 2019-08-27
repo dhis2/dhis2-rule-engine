@@ -28,31 +28,40 @@ package org.hisp.dhis.rules.functions
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 import org.hisp.dhis.rules.RuleVariableValue
-import org.hisp.dhis.rules.extSubstring
 import org.hisp.dhis.rules.wrap
 
-class RuleFunctionLeft : RuleFunction() {
+/**
+ *
+ * Evaluates the argument of type number to zero if the value is negative, otherwise to the value itself.
+ */
+class RuleFunctionZing : RuleFunction() {
 
-    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>?, supplementaryData: Map<String, List<String>>?): String {
+    override fun evaluate(arguments: List<String?>,
+                          valueMap: Map<String, RuleVariableValue>?,
+                          supplementaryData: Map<String, List<String>>?): String {
         return when {
-            arguments.size != 2 -> throw IllegalArgumentException("Two argument was expected, ${arguments.size} were supplied")
+            arguments.size != 1 -> throw IllegalArgumentException("One argument was expected, ${arguments.size} were supplied")
+            arguments[0] == null -> throw IllegalArgumentException("Invalid number format")
             else -> {
+                val value: Double?
+
                 try {
-                    val chars = arguments[1]?.toInt()
-                    arguments[0].extSubstring(0, chars).wrap()
+                    value = arguments[0]!!.toDouble()
                 } catch (e: NumberFormatException) {
-                    throw IllegalArgumentException("Number has to be an integer")
+                    throw IllegalArgumentException("Invalid number format")
                 }
+
+                if (value < 0) 0.toString() else arguments[0]!!
             }
         }
+
     }
 
     companion object {
-        const val D2_LEFT = "d2:left"
+        const val D2_ZING = "d2:zing"
 
         @JvmStatic
-        fun create() = RuleFunctionLeft()
+        fun create() = RuleFunctionZing()
     }
 }
