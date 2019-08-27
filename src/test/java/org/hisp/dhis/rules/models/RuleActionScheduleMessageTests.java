@@ -13,11 +13,11 @@ public class RuleActionScheduleMessageTests
         @Test
         public void substitute_empty_strings_when_create_with_null_arguments()
         {
-                RuleActionScheduleMessage ruleActionScheduleMessage = RuleActionScheduleMessage.Companion
+                RuleActionScheduleMessage ruleActionScheduleMessage = RuleActionScheduleMessage
                     .create( "notification", "data" );
-                RuleActionScheduleMessage ruleActionScheduleMessageNoData = RuleActionScheduleMessage.Companion
+                RuleActionScheduleMessage ruleActionScheduleMessageNoData = RuleActionScheduleMessage
                     .create( "notification", null );
-                RuleActionScheduleMessage ruleActionScheduleMessageNoNotification = RuleActionScheduleMessage.Companion
+                RuleActionScheduleMessage ruleActionScheduleMessageNoNotification = RuleActionScheduleMessage
                     .create( null, "data" );
 
                 assertThat( ruleActionScheduleMessage.getNotification() ).isEqualTo( "notification" );

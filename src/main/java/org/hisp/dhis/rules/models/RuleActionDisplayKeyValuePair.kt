@@ -1,10 +1,12 @@
 package org.hisp.dhis.rules.models
 
 
-
-data class RuleActionDisplayKeyValuePair(override var content: String?, override var data: String?, override var location: String?) : RuleActionText() {
+data class RuleActionDisplayKeyValuePair(override var content: String?,
+                                         override var data: String?,
+                                         override var location: String?) : RuleActionText() {
 
     companion object {
+
         @JvmStatic
         fun createForFeedback(content: String?, data: String?): RuleActionDisplayKeyValuePair {
             return when {
@@ -12,7 +14,6 @@ data class RuleActionDisplayKeyValuePair(override var content: String?, override
                 else -> RuleActionDisplayKeyValuePair(content ?: "", data ?: "", LOCATION_FEEDBACK_WIDGET)
             }
         }
-
 
         @JvmStatic
         fun createForIndicators(content: String?, data: String?): RuleActionDisplayKeyValuePair {

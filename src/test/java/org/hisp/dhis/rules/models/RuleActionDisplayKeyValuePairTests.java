@@ -17,11 +17,11 @@ public class RuleActionDisplayKeyValuePairTests
         @Test
         public void createForFeedbackMustSubstituteCorrectLocation()
         {
-                RuleActionDisplayKeyValuePair displayTextAction = RuleActionDisplayKeyValuePair.Companion
+                RuleActionDisplayKeyValuePair displayTextAction = RuleActionDisplayKeyValuePair
                     .createForFeedback( "test_content", "test_data" );
 
                 assertThat( displayTextAction.getLocation() )
-                    .isEqualTo(RuleActionText.Companion.getLOCATION_FEEDBACK_WIDGET());
+                    .isEqualTo(RuleActionText.LOCATION_FEEDBACK_WIDGET);
                 assertThat( displayTextAction.getContent() ).isEqualTo( "test_content" );
                 assertThat( displayTextAction.getData() ).isEqualTo( "test_data" );
         }
@@ -29,11 +29,11 @@ public class RuleActionDisplayKeyValuePairTests
         @Test
         public void createForIndicatorsMustSubstituteCorrectLocation()
         {
-                RuleActionDisplayKeyValuePair displayTextAction = RuleActionDisplayKeyValuePair.Companion
+                RuleActionDisplayKeyValuePair displayTextAction = RuleActionDisplayKeyValuePair
                     .createForIndicators( "test_content", "test_data" );
 
                 assertThat( displayTextAction.getLocation() )
-                    .isEqualTo(RuleActionText.Companion.getLOCATION_INDICATOR_WIDGET());
+                    .isEqualTo(RuleActionText.LOCATION_INDICATOR_WIDGET);
                 assertThat( displayTextAction.getContent() ).isEqualTo( "test_content" );
                 assertThat( displayTextAction.getData() ).isEqualTo( "test_data" );
         }
@@ -43,7 +43,7 @@ public class RuleActionDisplayKeyValuePairTests
         {
                 try
                 {
-                        RuleActionDisplayKeyValuePair.Companion.createForFeedback( null, null );
+                        RuleActionDisplayKeyValuePair.createForFeedback( null, null );
                         fail( "IllegalArgumentException was expected, but nothing was thrown." );
                 }
                 catch ( IllegalArgumentException illegalArgumentException )
@@ -57,7 +57,7 @@ public class RuleActionDisplayKeyValuePairTests
         {
                 try
                 {
-                        RuleActionDisplayKeyValuePair.Companion.createForIndicators( null, null );
+                        RuleActionDisplayKeyValuePair.createForIndicators( null, null );
                         fail( "IllegalArgumentException was expected, but nothing was thrown." );
                 }
                 catch ( IllegalArgumentException illegalArgumentException )
@@ -69,9 +69,9 @@ public class RuleActionDisplayKeyValuePairTests
         @Test
         public void createForFeedbackMustSubstituteEmptyStringsForNullArguments()
         {
-                RuleActionDisplayKeyValuePair ruleActionNoContent = RuleActionDisplayKeyValuePair.Companion
+                RuleActionDisplayKeyValuePair ruleActionNoContent = RuleActionDisplayKeyValuePair
                     .createForFeedback( null, "test_data" );
-                RuleActionDisplayKeyValuePair ruleActionNoData = RuleActionDisplayKeyValuePair.Companion
+                RuleActionDisplayKeyValuePair ruleActionNoData = RuleActionDisplayKeyValuePair
                     .createForFeedback( "test_content", null );
 
                 assertThat( ruleActionNoContent.getContent() ).isEqualTo( "" );
@@ -84,9 +84,9 @@ public class RuleActionDisplayKeyValuePairTests
         @Test
         public void createForIndicatorsMustSubstituteEmptyStringsForNullArguments()
         {
-                RuleActionDisplayKeyValuePair ruleActionNoContent = RuleActionDisplayKeyValuePair.Companion
+                RuleActionDisplayKeyValuePair ruleActionNoContent = RuleActionDisplayKeyValuePair
                     .createForIndicators( null, "test_data" );
-                RuleActionDisplayKeyValuePair ruleActionNoData = RuleActionDisplayKeyValuePair.Companion
+                RuleActionDisplayKeyValuePair ruleActionNoData = RuleActionDisplayKeyValuePair
                     .createForIndicators( "test_content", null );
 
                 assertThat( ruleActionNoContent.getContent() ).isEqualTo( "" );
@@ -99,7 +99,7 @@ public class RuleActionDisplayKeyValuePairTests
         @Test
         public void equalsAndHashcodeFunctionsMustConformToContract()
         {
-                EqualsVerifier.forClass( RuleActionDisplayKeyValuePair.Companion.createForFeedback( "", "" ).getClass() )
+                EqualsVerifier.forClass( RuleActionDisplayKeyValuePair.createForFeedback( "", "" ).getClass() )
                     .suppress( Warning.NULL_FIELDS )
                     .verify();
         }

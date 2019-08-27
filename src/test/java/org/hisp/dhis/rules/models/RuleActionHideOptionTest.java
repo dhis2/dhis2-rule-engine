@@ -20,7 +20,7 @@ public class RuleActionHideOptionTest
         public void createMustSubstituteEmptyStringIfArgumentsNull()
         {
             RuleActionHideOption ruleActionHideOption =
-                    RuleActionHideOption.Companion.create( null, "test_option", "test_field" );
+                    RuleActionHideOption.create( null, "test_option", "test_field" );
 
             assertThat( ruleActionHideOption.getContent() ).isEqualTo( "" );
         }
@@ -29,13 +29,13 @@ public class RuleActionHideOptionTest
         public void createMustThrowOnNullField()
         {
             thrown.expect( Exception.class );
-            RuleActionHideOption.Companion.create(  "test_content", null, "null" );
+            RuleActionHideOption.create(  "test_content", null, "null" );
         }
 
         @Test
         public void equalsAndHashCodeFunctionsMustConformContract()
         {
-            EqualsVerifier.forClass( RuleActionHideOption.Companion.create( "test_content", "test_option", "test_field" ).getClass() )
+            EqualsVerifier.forClass( RuleActionHideOption.create( "test_content", "test_option", "test_field" ).getClass() )
                     .suppress( Warning.NULL_FIELDS )
                     .verify();
         }

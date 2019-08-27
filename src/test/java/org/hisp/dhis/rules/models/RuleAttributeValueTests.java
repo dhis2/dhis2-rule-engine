@@ -17,7 +17,7 @@ public class RuleAttributeValueTests
         {
                 try
                 {
-                        RuleAttributeValue.Companion.create( null, "test_value" );
+                        RuleAttributeValue.create( null, "test_value" );
                         fail( "NullPointerException was expected, but nothing was thrown" );
                 }
                 catch ( Exception exception )
@@ -31,7 +31,7 @@ public class RuleAttributeValueTests
         {
                 try
                 {
-                        RuleAttributeValue.Companion.create( "test_tracked_entity_attribute", null );
+                        RuleAttributeValue.create( "test_tracked_entity_attribute", null );
                         fail( "NullPointerException was expected, but nothing was thrown" );
                 }
                 catch ( Exception exception )
@@ -43,7 +43,7 @@ public class RuleAttributeValueTests
         @Test
         public void propertiesShouldBePropagatedCorrectly()
         {
-                RuleAttributeValue ruleAttributeValue = RuleAttributeValue.Companion
+                RuleAttributeValue ruleAttributeValue = RuleAttributeValue
                     .create( "test_tracked_entity_attribute", "test_value" );
 
                 assertThat( ruleAttributeValue.getTrackedEntityAttribute() ).isEqualTo( "test_tracked_entity_attribute" );

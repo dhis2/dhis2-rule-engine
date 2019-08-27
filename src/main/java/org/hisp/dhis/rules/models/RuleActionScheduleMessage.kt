@@ -29,15 +29,13 @@ package org.hisp.dhis.rules.models
  */
 
 
-data class RuleActionScheduleMessage(
-        val notification: String?,
-        val data: String?
-) : RuleAction() {
+data class RuleActionScheduleMessage(val notification: String?, val data: String?) : RuleAction() {
 
     companion object {
 
-        fun create(notification: String?, data: String?): RuleActionScheduleMessage {
-            return RuleActionScheduleMessage(notification ?: "", data ?: "")
-        }
+        @JvmStatic
+        fun create(notification: String?, data: String?) =
+                RuleActionScheduleMessage(notification ?: "", data ?: "")
+
     }
 }

@@ -17,9 +17,9 @@ public class RuleActionCreateEventTests
         @Test
         public void createMustSubstituteEmptyStringsForNullArguments()
         {
-                RuleActionCreateEvent ruleActionAssignNoContent = RuleActionCreateEvent.Companion
+                RuleActionCreateEvent ruleActionAssignNoContent = RuleActionCreateEvent
                     .create( null, "test_data", "test_program_stage" );
-                RuleActionCreateEvent ruleActionAssignNoField = RuleActionCreateEvent.Companion
+                RuleActionCreateEvent ruleActionAssignNoField = RuleActionCreateEvent
                     .create( "test_content", null, "test_program_stage" );
 
                 assertThat( ruleActionAssignNoContent.getContent() ).isEqualTo( "" );
@@ -36,7 +36,7 @@ public class RuleActionCreateEventTests
         {
                 try
                 {
-                        RuleActionCreateEvent.Companion.create( "test_content", "test_data", null );
+                        RuleActionCreateEvent.create( "test_content", "test_data", null );
                         fail( "NullPointerException was expected, but nothing was thrown." );
                 }
                 catch ( Exception nullPointerException )
@@ -48,7 +48,7 @@ public class RuleActionCreateEventTests
         @Test
         public void equalsAndHashcodeFunctionsMustConformToContract()
         {
-                EqualsVerifier.forClass( RuleActionCreateEvent.Companion
+                EqualsVerifier.forClass( RuleActionCreateEvent
                     .create( "test_content", "test_data", "test_field" ).getClass() )
                     .suppress( Warning.NULL_FIELDS )
                     .verify();
