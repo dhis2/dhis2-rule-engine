@@ -39,7 +39,7 @@ import java.util.stream.Collectors
 class RuleFunctionZpvc : RuleFunction() {
 
     override fun evaluate(arguments: List<String?>,
-                          valueMap: Map<String, RuleVariableValue>,
+                          valueMap: Map<String, RuleVariableValue>?,
                           supplementaryData: Map<String, List<String>>?): String {
 
         return when {

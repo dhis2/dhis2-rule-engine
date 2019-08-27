@@ -37,7 +37,7 @@ import java.time.temporal.ChronoUnit
 class RuleFunctionYearsBetween : RuleFunction() {
 
     override fun evaluate(arguments: List<String?>,
-                          valueMap: Map<String, RuleVariableValue>,
+                          valueMap: Map<String, RuleVariableValue>?,
                           supplementaryData: Map<String, List<String>>?): String {
 
         return when {

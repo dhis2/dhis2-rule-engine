@@ -29,6 +29,7 @@ package org.hisp.dhis.rules.functions
  */
 
 import org.hisp.dhis.rules.RuleVariableValue
+import org.hisp.dhis.rules.wrap
 
 /**
  *
@@ -36,21 +37,22 @@ import org.hisp.dhis.rules.RuleVariableValue
  */
 class RuleFunctionZing : RuleFunction() {
 
-    override fun evaluate(arguments: List<String>,
-                          valueMap: Map<String, RuleVariableValue>,
+    override fun evaluate(arguments: List<String?>,
+                          valueMap: Map<String, RuleVariableValue>?,
                           supplementaryData: Map<String, List<String>>?): String {
         return when {
             arguments.size != 1 -> throw IllegalArgumentException("One argument was expected, ${arguments.size} were supplied")
+            arguments[0] == null -> throw IllegalArgumentException("Invalid number format")
             else -> {
                 val value: Double?
 
                 try {
-                    value = arguments[0].toDouble()
+                    value = arguments[0]!!.toDouble()
                 } catch (e: NumberFormatException) {
                     throw IllegalArgumentException("Invalid number format")
                 }
 
-                if (value < 0) 0.toString() else arguments[0]
+                if (value < 0) 0.toString() else arguments[0]!!
             }
         }
 

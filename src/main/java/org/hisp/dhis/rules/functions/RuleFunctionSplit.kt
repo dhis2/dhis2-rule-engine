@@ -29,13 +29,14 @@ package org.hisp.dhis.rules.functions
  */
 
 import org.hisp.dhis.rules.RuleVariableValue
+import org.hisp.dhis.rules.wrap
 
 /**
  * Split the text by delimiter, and keep the nth element(0 is the first).
  */
 class RuleFunctionSplit : RuleFunction() {
 
-    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>?, supplementaryData: Map<String, List<String>>?): String {
         return when {
             arguments.size != 3 -> throw IllegalArgumentException("Three argument were expected, ${arguments.size} were supplied")
             arguments[0].isNullOrEmpty() || arguments[1].isNullOrEmpty() -> ""
@@ -46,7 +47,7 @@ class RuleFunctionSplit : RuleFunction() {
 
                 val tokens = input.split(delimiter)
 
-                if (tokens.size > index && index >= 0) wrap(tokens[index]) else ""
+                if (tokens.size > index && index >= 0) tokens[index].wrap() else ""
             }
         }
     }

@@ -29,6 +29,7 @@ package org.hisp.dhis.rules.functions
  */
 
 import org.hisp.dhis.rules.RuleVariableValue
+import org.hisp.dhis.rules.wrap
 
 /**
  *
@@ -36,16 +37,14 @@ import org.hisp.dhis.rules.RuleVariableValue
  */
 class RuleFunctionValidatePattern : RuleFunction() {
 
-    override fun evaluate(arguments: List<String>, valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>?, supplementaryData: Map<String, List<String>>?): String {
         return when {
             arguments.size != 2 -> throw IllegalArgumentException("Two arguments were expected, ${arguments.size} were supplied")
             else -> {
-                val input = arguments[0]
+                val input = arguments[0] ?: ""
                 val regex = arguments[1]
 
-                val matcher = regex.toRegex().matches(input).toString()
-
-                wrap(matcher)
+                regex?.toRegex()?.matches(input).toString().wrap()
             }
         }
     }

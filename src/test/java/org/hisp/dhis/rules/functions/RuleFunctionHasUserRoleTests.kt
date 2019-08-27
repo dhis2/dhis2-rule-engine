@@ -40,9 +40,9 @@ import kotlin.test.assertFailsWith
 @RunWith(JUnit4::class)
 class RuleFunctionHasUserRoleTests {
 
-    private val supplementaryData = HashMap<String, List<String>?>()
+    private val supplementaryData = hashMapOf<String, List<String>>()
 
-    private val variableValues = HashMap<String, RuleVariableValue>()
+    private val variableValues = hashMapOf<String, RuleVariableValue>()
 
     private val arguments = ArrayList<String>()
 
@@ -81,7 +81,7 @@ class RuleFunctionHasUserRoleTests {
 
     @Test
     fun returnFalseIfRoleListIsNull() {
-        supplementaryData["USER"] = null
+        supplementaryData["USER"] = emptyList()
         arguments.add("uid2")
 
         assertThat(hasUserRole.evaluate(arguments, variableValues, supplementaryData), `is`("false"))

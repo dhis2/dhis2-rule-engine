@@ -38,7 +38,7 @@ import java.util.stream.Collectors
  */
 class RuleFunctionCountIfZeroPos : RuleFunction() {
 
-    override fun evaluate(arguments: List<String>, valueMap: Map<String, RuleVariableValue>?,
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>?,
                           supplementaryData: Map<String, List<String>>?): String {
         return when {
             valueMap == null -> throw IllegalArgumentException("valueMap is expected")

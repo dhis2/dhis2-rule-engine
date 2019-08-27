@@ -29,19 +29,19 @@ package org.hisp.dhis.rules.functions
  */
 
 import org.hisp.dhis.rules.RuleVariableValue
+import org.hisp.dhis.rules.wrap
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
 class RuleFunctionAddDays : RuleFunction() {
 
-    override fun evaluate(arguments: List<String>, valueMap: Map<String, RuleVariableValue>,
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>?,
                           supplementaryData: Map<String, List<String>>?): String {
         when {
             arguments.size != 2 -> throw IllegalArgumentException("Two arguments were expected, ${arguments.size} were supplied")
-            else -> return wrap(addDays(arguments[0], arguments[1]))
+            else -> return addDays(arguments[0], arguments[1]).wrap()
         }
-
     }
 
     companion object {
@@ -58,12 +58,12 @@ class RuleFunctionAddDays : RuleFunction() {
          * @return date after adding/subtracting days.
          */
         @JvmStatic
-        fun addDays(inputDate: String, days: String): String {
+        fun addDays(inputDate: String?, days: String?): String {
             val formatter = DateTimeFormatter.ofPattern(DATE_PATTERN)
 
             try {
                 val date = LocalDate.parse(inputDate, formatter)
-                return date.plusDays(days.toLong()).toString()
+                return date.plusDays(days!!.toLong()).toString()
             } catch (ex: DateTimeParseException) {
                 throw RuntimeException(ex)
             }

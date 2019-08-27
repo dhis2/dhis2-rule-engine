@@ -31,16 +31,17 @@ package org.hisp.dhis.rules.functions
 
 import org.hisp.dhis.rules.RuleVariableValue
 import org.hisp.dhis.rules.extSubstring
+import org.hisp.dhis.rules.wrap
 
 class RuleFunctionLeft : RuleFunction() {
 
-    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>?, supplementaryData: Map<String, List<String>>?): String {
         return when {
             arguments.size != 2 -> throw IllegalArgumentException("Two argument was expected, ${arguments.size} were supplied")
             else -> {
                 try {
                     val chars = arguments[1]?.toInt()
-                    wrap(arguments[0].extSubstring(0, chars))
+                    arguments[0].extSubstring(0, chars).wrap()
                 } catch (e: NumberFormatException) {
                     throw IllegalArgumentException("Number has to be an integer")
                 }

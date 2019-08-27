@@ -6,8 +6,8 @@ import kotlin.math.ceil
 
 class RuleFunctionCeil : RuleFunction() {
 
-    override fun evaluate(arguments: List<String>,
-                          valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+    override fun evaluate(arguments: List<String?>,
+                          valueMap: Map<String, RuleVariableValue>?, supplementaryData: Map<String, List<String>>?): String {
         when {
             arguments.size != 1 -> throw IllegalArgumentException("One argument was expected, ${arguments.size} were supplied")
             else -> return ceil(arguments[0].toDouble(0.0)).toLong().toString()

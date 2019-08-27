@@ -30,11 +30,12 @@ package org.hisp.dhis.rules.functions
 
 import org.hisp.dhis.rules.RuleVariableValue
 import org.hisp.dhis.rules.extSubstring
+import org.hisp.dhis.rules.wrap
 
 
 class RuleFunctionRight : RuleFunction() {
 
-    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>, supplementaryData: Map<String, List<String>>?): String {
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>?, supplementaryData: Map<String, List<String>>?): String {
         return when {
             arguments.size != 2 -> throw IllegalArgumentException("Two argument was expected, ${arguments.size} were supplied")
             else -> {
@@ -45,7 +46,7 @@ class RuleFunctionRight : RuleFunction() {
                     throw IllegalArgumentException("Number has to be an integer")
                 }
 
-                wrap(arguments[0]?.reversed().extSubstring(0, chars)?.reversed())
+                arguments[0]?.reversed().extSubstring(0, chars)?.reversed().wrap()
             }
         }
     }
