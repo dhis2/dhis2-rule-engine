@@ -1,32 +1,32 @@
 package org.hisp.dhis.rules.models
 
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 import java.io.Serializable
 import java.util.*
 import kotlin.Comparator
 import kotlin.collections.ArrayList
 
 
-class RuleEvent(
-        val event: String?,
-        val programStage: String?,
-        val programStageName: String?,
-        val status: Status?,
-        val eventDate: Date?,
-        val dueDate: Date?,
-        val organisationUnit: String?,
-        val organisationUnitCode: String?,
-        val dataValues: List<RuleDataValue>?) {
+class RuleEvent(val event: String?,
+                val programStage: String?,
+                val programStageName: String?,
+                val status: Status?,
+                val eventDate: Date?,
+                val dueDate: Date?,
+                val organisationUnit: String?,
+                val organisationUnitCode: String?,
+                val dataValues: List<RuleDataValue>?) {
 
-    data class Builder(
-            var event: String?,
-            var programStage: String?,
-            var programStageName: String?,
-            var status: Status?,
-            var eventDate: Date?,
-            var dueDate: Date?,
-            var organisationUnit: String?,
-            var organisationUnitCode: String?,
-            var dataValues: List<RuleDataValue>?) {
+    data class Builder(var event: String?,
+                       var programStage: String?,
+                       var programStageName: String?,
+                       var status: Status?,
+                       var eventDate: Date?,
+                       var dueDate: Date?,
+                       var organisationUnit: String?,
+                       var organisationUnitCode: String?,
+                       var dataValues: List<RuleDataValue>?) {
 
         fun event(event: String?) = apply { this.event = event }
 
@@ -44,7 +44,7 @@ class RuleEvent(
 
         fun organisationUnitCode(organisationUnitCode: String?) = apply { this.organisationUnitCode = organisationUnitCode }
 
-        fun dataValues(dataValues: List<RuleDataValue>?) = apply { this.dataValues = dataValues }
+        fun dataValues(dataValues: List<RuleDataValue>?) = apply { this.dataValues = dataValues?.toPersistentList() }
 
         fun build() = RuleEvent(event, programStage, programStageName, status, eventDate,
                 dueDate, organisationUnit, organisationUnitCode, dataValues)
@@ -69,16 +69,15 @@ class RuleEvent(
         @JvmField val EVENT_DATE_COMPARATOR: Comparator<RuleEvent> = EventDateComparator()
 
         @JvmStatic
-        fun create(
-                event: String,
-                programStage: String,
-                status: Status,
-                eventDate: Date,
-                dueDate: Date,
-                organisationUnit: String,
-                organisationUnitCode: String?,
-                ruleDataValues: List<RuleDataValue>,
-                programStageName: String): RuleEvent {
+        fun create(event: String,
+                   programStage: String,
+                   status: Status,
+                   eventDate: Date,
+                   dueDate: Date,
+                   organisationUnit: String,
+                   organisationUnitCode: String?,
+                   ruleDataValues: List<RuleDataValue>,
+                   programStageName: String): RuleEvent {
             return builder()
                     .event(event)
                     .programStage(programStage)
@@ -88,7 +87,7 @@ class RuleEvent(
                     .dueDate(dueDate)
                     .organisationUnit(organisationUnit)
                     .organisationUnitCode(organisationUnitCode)
-                    .dataValues(Collections.unmodifiableList(ArrayList(ruleDataValues)))
+                    .dataValues(ruleDataValues.toPersistentList())
                     .build()
         }
 
@@ -96,5 +95,4 @@ class RuleEvent(
         fun builder() = Builder(null, null, null, null, null,
                 null, null, null, null)
     }
-
 }

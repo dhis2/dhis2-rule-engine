@@ -18,7 +18,7 @@ public class RuleActionHideFieldTests
         public void createMustSubstituteEmptyStringIfArgumentsNull()
         {
                 RuleActionHideField ruleActionHideField =
-                    RuleActionHideField.Companion.create( null, "test_field" );
+                    RuleActionHideField.create( null, "test_field" );
 
                 assertThat( ruleActionHideField.getContent() ).isEqualTo( "" );
         }
@@ -28,7 +28,7 @@ public class RuleActionHideFieldTests
         {
                 try
                 {
-                        RuleActionHideField.Companion.create( "test_content", null );
+                        RuleActionHideField.create( "test_content", null );
                         fail( "NullPointerException was expected, but nothing was thrown." );
                 }
                 catch ( Exception nullPointerException )
@@ -40,7 +40,7 @@ public class RuleActionHideFieldTests
         @Test
         public void equalsAndHashCodeFunctionsMustConformContract()
         {
-                EqualsVerifier.forClass( RuleActionHideField.Companion.create( "test_content", "test_field" ).getClass() )
+                EqualsVerifier.forClass( RuleActionHideField.create( "test_content", "test_field" ).getClass() )
                     .suppress( Warning.NULL_FIELDS )
                     .verify();
         }

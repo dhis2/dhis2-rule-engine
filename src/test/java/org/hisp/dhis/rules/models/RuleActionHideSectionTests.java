@@ -18,7 +18,7 @@ public class RuleActionHideSectionTests
         {
                 try
                 {
-                        RuleActionHideSection.Companion.create( null );
+                        RuleActionHideSection.create( null );
                         fail( "NullPointerException was expected, but nothing was thrown." );
                 }
                 catch ( Exception nullPointerException )
@@ -30,7 +30,7 @@ public class RuleActionHideSectionTests
         @Test
         public void equalsAndHashCodeFunctionsMustConformContract()
         {
-                EqualsVerifier.forClass( RuleActionHideSection.Companion.create( "test_field" ).getClass() )
+                EqualsVerifier.forClass( RuleActionHideSection.create( "test_field" ).getClass() )
                     .suppress( Warning.NULL_FIELDS )
                     .verify();
         }

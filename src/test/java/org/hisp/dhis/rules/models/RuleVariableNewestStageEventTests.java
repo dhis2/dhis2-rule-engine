@@ -18,7 +18,7 @@ public class RuleVariableNewestStageEventTests
         {
                 try
                 {
-                        RuleVariableNewestStageEvent.Companion
+                        RuleVariableNewestStageEvent
                             .create( null, "test_dataelement", "test_programstage", RuleValueType.TEXT );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
@@ -33,7 +33,7 @@ public class RuleVariableNewestStageEventTests
         {
                 try
                 {
-                        RuleVariableNewestStageEvent.Companion
+                        RuleVariableNewestStageEvent
                             .create( "test_variable", null, "test_programstage", RuleValueType.TEXT );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
@@ -48,7 +48,7 @@ public class RuleVariableNewestStageEventTests
         {
                 try
                 {
-                        RuleVariableNewestStageEvent.Companion
+                        RuleVariableNewestStageEvent
                             .create( "test_variable", "test_dataelement", null, RuleValueType.TEXT );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
@@ -63,7 +63,7 @@ public class RuleVariableNewestStageEventTests
         {
                 try
                 {
-                        RuleVariableNewestStageEvent.Companion
+                        RuleVariableNewestStageEvent
                             .create( "test_variable", "test_dataelement", "test_programstage", null );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
@@ -76,7 +76,7 @@ public class RuleVariableNewestStageEventTests
         @Test
         public void createShouldPropagatePropertiesCorrectly()
         {
-                RuleVariableNewestStageEvent ruleVariablePreviousEvent = RuleVariableNewestStageEvent.Companion.create(
+                RuleVariableNewestStageEvent ruleVariablePreviousEvent = RuleVariableNewestStageEvent.create(
                     "test_variable", "test_dataelement", "test_programstage", RuleValueType.NUMERIC );
 
                 assertThat( ruleVariablePreviousEvent.getName() ).isEqualTo( "test_variable" );

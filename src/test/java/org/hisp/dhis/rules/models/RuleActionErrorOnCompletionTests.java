@@ -16,11 +16,11 @@ public class RuleActionErrorOnCompletionTests
         @Test
         public void createMustSubstituteEmptyStringsForNullArguments()
         {
-                RuleActionErrorOnCompletion ruleActionNoContent = RuleActionErrorOnCompletion.Companion
+                RuleActionErrorOnCompletion ruleActionNoContent = RuleActionErrorOnCompletion
                     .create( null, "test_data", "test_field" );
-                RuleActionErrorOnCompletion ruleActionNoData = RuleActionErrorOnCompletion.Companion
+                RuleActionErrorOnCompletion ruleActionNoData = RuleActionErrorOnCompletion
                     .create( "test_content", null, "test_field" );
-                RuleActionErrorOnCompletion ruleActionNoField = RuleActionErrorOnCompletion.Companion
+                RuleActionErrorOnCompletion ruleActionNoField = RuleActionErrorOnCompletion
                     .create( "test_content", "test_data", null );
 
                 assertThat( ruleActionNoContent.getContent() ).isEqualTo( "" );
@@ -41,7 +41,7 @@ public class RuleActionErrorOnCompletionTests
         {
                 try
                 {
-                        RuleActionErrorOnCompletion.Companion.create( null, null, null );
+                        RuleActionErrorOnCompletion.create( null, null, null );
                         fail( "IllegalArgumentException was expected, but nothing was thrown." );
                 }
                 catch ( Exception illegalArgumentException )
@@ -53,7 +53,7 @@ public class RuleActionErrorOnCompletionTests
         @Test
         public void equalsAndHashcodeFunctionsMustConformToContract()
         {
-                EqualsVerifier.forClass( RuleActionErrorOnCompletion.Companion
+                EqualsVerifier.forClass( RuleActionErrorOnCompletion
                     .create( "test_content", "test_data", "test_field" ).getClass() )
                     .suppress( Warning.NULL_FIELDS )
                     .verify();

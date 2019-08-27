@@ -33,7 +33,7 @@ public class RuleDataValueTests
         {
                 try
                 {
-                        RuleDataValue.Companion.create( null, "test_program_stage_uid", "test_field", "test_value" );
+                        RuleDataValue.create( null, "test_program_stage_uid", "test_field", "test_value" );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
                 catch ( Exception exception )
@@ -47,7 +47,7 @@ public class RuleDataValueTests
         {
                 try
                 {
-                        RuleDataValue.Companion.create( new Date(), null, "test_field", "test_value" );
+                        RuleDataValue.create( new Date(), null, "test_field", "test_value" );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
                 catch ( Exception exception )
@@ -61,7 +61,7 @@ public class RuleDataValueTests
         {
                 try
                 {
-                        RuleDataValue.Companion.create( new Date(), "test_program_stage_uid", null, "test_value" );
+                        RuleDataValue.create( new Date(), "test_program_stage_uid", null, "test_value" );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
                 catch ( Exception exception )
@@ -75,7 +75,7 @@ public class RuleDataValueTests
         {
                 try
                 {
-                        RuleDataValue.Companion.create( new Date(), "test_program_stage_uid", "test_dataelement", null );
+                        RuleDataValue.create( new Date(), "test_program_stage_uid", "test_dataelement", null );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
                 catch ( Exception exception )
@@ -88,7 +88,7 @@ public class RuleDataValueTests
         public void createShouldPropagateValuesCorrectly()
         {
                 Date eventDate = new Date();
-                RuleDataValue ruleDataValue = RuleDataValue.Companion.create( eventDate,
+                RuleDataValue ruleDataValue = RuleDataValue.create( eventDate,
                     "test_program_stage_uid", "test_dataelement", "test_value" );
 
                 assertThat( ruleDataValue.getEventDate() ).isEqualTo( eventDate );

@@ -28,17 +28,15 @@ package org.hisp.dhis.rules.models
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-data class RuleVariableCalculatedValue(
-        val rName: String?,
-        val calculatedValueVariable: String?,
-        val calculatedValueType: RuleValueType?
-) : RuleVariable(rName) {
+data class RuleVariableCalculatedValue(val rName: String?,
+                                       val calculatedValueVariable: String?,
+                                       val calculatedValueType: RuleValueType?) : RuleVariable(rName) {
 
     companion object {
 
-        fun create(name: String,
-                   variable: String, variableType: RuleValueType): RuleVariableCalculatedValue {
-            return RuleVariableCalculatedValue(name, variable, variableType)
-        }
+        @JvmStatic
+        fun create(name: String, variable: String, variableType: RuleValueType) =
+                RuleVariableCalculatedValue(name, variable, variableType)
+
     }
 }

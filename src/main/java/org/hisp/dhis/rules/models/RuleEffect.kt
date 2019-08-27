@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules.models
 
+
 data class RuleEffect(val ruleAction: RuleAction?, val data: String?) {
 
     companion object {

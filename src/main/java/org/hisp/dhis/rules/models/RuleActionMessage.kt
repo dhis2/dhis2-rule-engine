@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules.models
 
+
 abstract class RuleActionMessage : RuleAction() {
 
     abstract var content: String?

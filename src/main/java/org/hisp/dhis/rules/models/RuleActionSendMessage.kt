@@ -28,15 +28,13 @@ package org.hisp.dhis.rules.models
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-data class RuleActionSendMessage(
-        val notification: String?,
-        val data: String?
-) : RuleAction() {
+data class RuleActionSendMessage(val notification: String?, val data: String?) : RuleAction() {
 
     companion object {
 
-        fun create(notification: String?, data: String?): RuleActionSendMessage {
-            return RuleActionSendMessage(notification ?: "", data ?: "")
-        }
+        @JvmStatic
+        fun create(notification: String?, data: String?) =
+                RuleActionSendMessage(notification ?: "", data ?: "")
+
     }
 }

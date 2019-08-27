@@ -1,82 +1,64 @@
 package org.hisp.dhis.rules.models
 
-import java.util.Collections
+import kotlinx.collections.immutable.toPersistentList
 import java.util.Date
 
-data class RuleEnrollment(
-        var enrollment: String?,
-        var programName: String?,
-        var incidentDate: Date?,
-        var enrollmentDate: Date?,
-        var status: Status?,
-        var organisationUnit: String?,
-        var organisationUnitCode: String?,
-        var attributeValues: List<RuleAttributeValue>?
-) {
-
+class RuleEnrollment(val enrollment: String?,
+                     val programName: String?,
+                     val incidentDate: Date?,
+                     val enrollmentDate: Date?,
+                     val status: Status?,
+                     val organisationUnit: String?,
+                     val organisationUnitCode: String?,
+                     val attributeValues: List<RuleAttributeValue>?) {
 
     enum class Status {
         ACTIVE, COMPLETED, CANCELLED
     }
 
 
-    class Builder {
-        private val ruleEnrollment = RuleEnrollment(null, null, null,
-                null, null, null, null, null)
+    data class Builder(var enrollment: String?,
+                       var programName: String?,
+                       var incidentDate: Date?,
+                       var enrollmentDate: Date?,
+                       var status: Status?,
+                       var organisationUnit: String?,
+                       var organisationUnitCode: String?,
+                       var attributeValues: List<RuleAttributeValue>?) {
 
+        fun enrollment(enrollment: String?) = apply { this.enrollment = enrollment }
 
-        fun enrollment(enrollment: String): Builder {
-            ruleEnrollment.enrollment = enrollment
-            return this
-        }
+        fun programName(programName: String?) = apply { this.programName = programName }
 
-        fun programName(programName: String): Builder {
-            ruleEnrollment.programName = programName
-            return this
-        }
+        fun incidentDate(incidentDate: Date?) = apply { this.incidentDate = incidentDate }
 
-        fun incidentDate(incidentDate: Date): Builder{
-            ruleEnrollment.incidentDate = incidentDate
-            return this
-        }
+        fun enrollmentDate(enrollmentDate: Date?) = apply { this.enrollmentDate = enrollmentDate }
 
-        fun enrollmentDate(enrollmentDate: Date): Builder {
-            ruleEnrollment.enrollmentDate = enrollmentDate
-            return this
-        }
+        fun status(status: Status?) = apply { this.status = status }
 
-        fun status(status: Status): Builder {
-            ruleEnrollment.status = status
-            return this
-        }
+        fun organisationUnit(organisationUnit: String?) = apply { this.organisationUnit = organisationUnit }
 
-        fun organisationUnit(organisationUnit: String): Builder {
-            ruleEnrollment.organisationUnit = organisationUnit
-            return this
-        }
+        fun organisationUnitCode(organisationUnitCode: String?) = apply { this.organisationUnitCode = organisationUnitCode }
 
-        fun organisationUnitCode(organisationUnitCode: String?): Builder {
-            ruleEnrollment.organisationUnitCode = organisationUnitCode
-            return this
-        }
+        fun attributeValues(attributeValues: List<RuleAttributeValue>?) = apply { this.attributeValues = attributeValues?.toPersistentList() }
 
-        fun attributeValues(attributeValues: List<RuleAttributeValue>): Builder {
-            ruleEnrollment.attributeValues = attributeValues
-            return this
-        }
-
-        fun build(): RuleEnrollment {
-            return ruleEnrollment
-        }
+        fun build() = RuleEnrollment(enrollment, programName, incidentDate, enrollmentDate,
+                status, organisationUnit, organisationUnitCode, attributeValues)
     }
 
     companion object {
 
-        fun create(enrollment: String, incidentDate: Date,
-                   enrollmentDate: Date, status: Status, organisationUnit: String, organisationUnitCode: String?,
-                   attributeValues: List<RuleAttributeValue>, programName: String): RuleEnrollment {
+        @JvmStatic
+        fun create(enrollment: String,
+                   incidentDate: Date,
+                   enrollmentDate: Date,
+                   status: Status,
+                   organisationUnit: String,
+                   organisationUnitCode: String?,
+                   attributeValues: List<RuleAttributeValue>,
+                   programName: String): RuleEnrollment {
 
-            return RuleEnrollment.builder()
+            return builder()
                     .enrollment(enrollment)
                     .programName(programName)
                     .incidentDate(incidentDate)
@@ -84,12 +66,13 @@ data class RuleEnrollment(
                     .status(status)
                     .organisationUnit(organisationUnit)
                     .organisationUnitCode(organisationUnitCode)
-                    .attributeValues(Collections.unmodifiableList(attributeValues))
+                    .attributeValues(attributeValues.toPersistentList())
                     .build()
         }
 
-        fun builder(): Builder {
-            return Builder()
-        }
+        @JvmStatic
+        fun builder() = Builder(null, null, null, null,
+                null, null, null, null)
+
     }
 }

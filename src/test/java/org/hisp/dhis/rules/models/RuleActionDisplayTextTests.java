@@ -17,11 +17,11 @@ public class RuleActionDisplayTextTests
         @Test
         public void createForFeedbackMustSubstituteCorrectLocation()
         {
-                RuleActionDisplayText displayTextAction = RuleActionDisplayText.Companion
+                RuleActionDisplayText displayTextAction = RuleActionDisplayText
                     .createForFeedback( "test_content", "test_data" );
 
                 assertThat( displayTextAction.getLocation() )
-                    .isEqualTo(RuleActionText.Companion.getLOCATION_FEEDBACK_WIDGET());
+                    .isEqualTo(RuleActionText.LOCATION_FEEDBACK_WIDGET);
                 assertThat( displayTextAction.getContent() ).isEqualTo( "test_content" );
                 assertThat( displayTextAction.getData() ).isEqualTo( "test_data" );
         }
@@ -29,11 +29,11 @@ public class RuleActionDisplayTextTests
         @Test
         public void createForIndicatorsMustSubstituteCorrectLocation()
         {
-                RuleActionDisplayText displayTextAction = RuleActionDisplayText.Companion
+                RuleActionDisplayText displayTextAction = RuleActionDisplayText
                     .createForIndicators( "test_content", "test_data" );
 
                 assertThat( displayTextAction.getLocation() )
-                    .isEqualTo(RuleActionText.Companion.getLOCATION_INDICATOR_WIDGET());
+                    .isEqualTo(RuleActionText.LOCATION_INDICATOR_WIDGET);
                 assertThat( displayTextAction.getContent() ).isEqualTo( "test_content" );
                 assertThat( displayTextAction.getData() ).isEqualTo( "test_data" );
         }
@@ -43,7 +43,7 @@ public class RuleActionDisplayTextTests
         {
                 try
                 {
-                        RuleActionDisplayText.Companion.createForFeedback( null, null );
+                        RuleActionDisplayText.createForFeedback( null, null );
                         fail( "IllegalArgumentException was expected, but nothing was thrown." );
                 }
                 catch ( IllegalArgumentException illegalArgumentException )
@@ -57,7 +57,7 @@ public class RuleActionDisplayTextTests
         {
                 try
                 {
-                        RuleActionDisplayText.Companion.createForIndicators( null, null );
+                        RuleActionDisplayText.createForIndicators( null, null );
                         fail( "IllegalArgumentException was expected, but nothing was thrown." );
                 }
                 catch ( IllegalArgumentException illegalArgumentException )
@@ -69,9 +69,9 @@ public class RuleActionDisplayTextTests
         @Test
         public void createForFeedbackMustSubstituteEmptyStringsForNullArguments()
         {
-                RuleActionDisplayText ruleActionNoContent = RuleActionDisplayText.Companion
+                RuleActionDisplayText ruleActionNoContent = RuleActionDisplayText
                     .createForFeedback( null, "test_data" );
-                RuleActionDisplayText ruleActionNoData = RuleActionDisplayText.Companion
+                RuleActionDisplayText ruleActionNoData = RuleActionDisplayText
                     .createForFeedback( "test_content", null );
 
                 assertThat( ruleActionNoContent.getContent() ).isEqualTo( "" );
@@ -84,9 +84,9 @@ public class RuleActionDisplayTextTests
         @Test
         public void createForIndicatorsMustSubstituteEmptyStringsForNullArguments()
         {
-                RuleActionDisplayText ruleActionNoContent = RuleActionDisplayText.Companion
+                RuleActionDisplayText ruleActionNoContent = RuleActionDisplayText
                     .createForIndicators( null, "test_data" );
-                RuleActionDisplayText ruleActionNoData = RuleActionDisplayText.Companion
+                RuleActionDisplayText ruleActionNoData = RuleActionDisplayText
                     .createForIndicators( "test_content", null );
 
                 assertThat( ruleActionNoContent.getContent() ).isEqualTo( "" );
@@ -99,7 +99,7 @@ public class RuleActionDisplayTextTests
         @Test
         public void equalsAndHashcodeFunctionsMustConformToContract()
         {
-                EqualsVerifier.forClass( RuleActionDisplayText.Companion.createForFeedback( "", "" ).getClass() )
+                EqualsVerifier.forClass( RuleActionDisplayText.createForFeedback( "", "" ).getClass() )
                     .suppress( Warning.NULL_FIELDS )
                     .verify();
         }

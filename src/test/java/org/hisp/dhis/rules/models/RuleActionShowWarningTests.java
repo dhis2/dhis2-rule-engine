@@ -17,9 +17,9 @@ public class RuleActionShowWarningTests
         @Test
         public void createMustSubstituteEmptyStringsForNullArguments()
         {
-                RuleActionShowWarning ruleActionAssignNoContent = RuleActionShowWarning.Companion
+                RuleActionShowWarning ruleActionAssignNoContent = RuleActionShowWarning
                     .create( null, "test_data", "test_field" );
-                RuleActionShowWarning ruleActionAssignNoData = RuleActionShowWarning.Companion
+                RuleActionShowWarning ruleActionAssignNoData = RuleActionShowWarning
                     .create( "test_content", null, "test_field" );
 
                 assertThat( ruleActionAssignNoContent.getContent() ).isEqualTo( "" );
@@ -36,7 +36,7 @@ public class RuleActionShowWarningTests
         {
                 try
                 {
-                        RuleActionShowWarning.Companion.create( null, null, "test_field" );
+                        RuleActionShowWarning.create( null, null, "test_field" );
                         fail( "IllegalArgumentException was expected, but nothing was thrown." );
                 }
                 catch ( Exception illegalArgumentException )
@@ -50,7 +50,7 @@ public class RuleActionShowWarningTests
         {
                 try
                 {
-                        RuleActionShowWarning.Companion.create( "test_content", "test_data", null );
+                        RuleActionShowWarning.create( "test_content", "test_data", null );
                         fail( "NullPointerException was expected, but nothing was thrown." );
                 }
                 catch ( Exception nullPointerException )
@@ -62,7 +62,7 @@ public class RuleActionShowWarningTests
         @Test
         public void equalsAndHashcodeFunctionsMustConformToContract()
         {
-                EqualsVerifier.forClass( RuleActionShowWarning.Companion
+                EqualsVerifier.forClass( RuleActionShowWarning
                     .create( "test_content", "test_data", "test_field" ).getClass() )
                     .suppress( Warning.NULL_FIELDS )
                     .verify();

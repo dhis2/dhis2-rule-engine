@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules.models
 
+
 abstract class RuleActionText : RuleAction() {
 
     /**
@@ -22,8 +23,8 @@ abstract class RuleActionText : RuleAction() {
     abstract var location: String?
 
     companion object {
-        val LOCATION_FEEDBACK_WIDGET = "feedback"
+        const val LOCATION_FEEDBACK_WIDGET = "feedback"
 
-        val LOCATION_INDICATOR_WIDGET = "indicators"
+        const val LOCATION_INDICATOR_WIDGET = "indicators"
     }
 }

@@ -18,7 +18,7 @@ public class RuleVariableAttributeTests
         {
                 try
                 {
-                        RuleVariableAttribute.Companion.create( null, "test_attribute", RuleValueType.TEXT );
+                        RuleVariableAttribute.create( null, "test_attribute", RuleValueType.TEXT );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
                 catch ( Exception exception )
@@ -32,7 +32,7 @@ public class RuleVariableAttributeTests
         {
                 try
                 {
-                        RuleVariableAttribute.Companion.create( "test_variable", null, RuleValueType.TEXT );
+                        RuleVariableAttribute.create( "test_variable", null, RuleValueType.TEXT );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
                 catch ( Exception exception )
@@ -46,7 +46,7 @@ public class RuleVariableAttributeTests
         {
                 try
                 {
-                        RuleVariableAttribute.Companion.create( "test_variable", "test_attribute", null );
+                        RuleVariableAttribute.create( "test_variable", "test_attribute", null );
                         fail( "NullPointerException is expected, but nothing was thrown" );
                 }
                 catch ( Exception exception )
@@ -58,7 +58,7 @@ public class RuleVariableAttributeTests
         @Test
         public void createShouldPropagatePropertiesCorrectly()
         {
-                RuleVariableAttribute ruleVariableAttribute = RuleVariableAttribute.Companion.create(
+                RuleVariableAttribute ruleVariableAttribute = RuleVariableAttribute.create(
                     "test_variable", "test_attribute", RuleValueType.NUMERIC );
 
                 assertThat( ruleVariableAttribute.getName() ).isEqualTo( "test_variable" );

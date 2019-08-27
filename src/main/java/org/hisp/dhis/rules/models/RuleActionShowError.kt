@@ -1,16 +1,19 @@
 package org.hisp.dhis.rules.models
 
-data class RuleActionShowError(override var content: String?, override var data: String?, override var field: String?) : RuleActionMessage() {
+
+data class RuleActionShowError(override var content: String?,
+                               override var data: String?,
+                               override var field: String?) : RuleActionMessage() {
+
     companion object {
 
-        fun create(content: String?,
-                   data: String?, field: String): RuleActionShowError {
-            if (content == null && data == null) {
-                throw IllegalArgumentException("Both content and data must not be null")
+        @JvmStatic
+        fun create(content: String?, data: String?, field: String): RuleActionShowError {
+            return when {
+                content == null && data == null -> throw IllegalArgumentException("Both content and data must not be null")
+                else -> RuleActionShowError(content ?: "", data ?: "", field)
             }
-
-            return RuleActionShowError(content ?: "",
-                    data ?: "", field)
         }
+
     }
 }
