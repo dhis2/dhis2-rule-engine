@@ -16,7 +16,7 @@ class RuleEvent(val event: String?,
                 val dueDate: Date?,
                 val organisationUnit: String?,
                 val organisationUnitCode: String?,
-                val dataValues: List<RuleDataValue>?) {
+                val dataValues: PersistentList<RuleDataValue>?) {
 
     data class Builder(var event: String?,
                        var programStage: String?,
@@ -26,7 +26,7 @@ class RuleEvent(val event: String?,
                        var dueDate: Date?,
                        var organisationUnit: String?,
                        var organisationUnitCode: String?,
-                       var dataValues: List<RuleDataValue>?) {
+                       var dataValues: PersistentList<RuleDataValue>?) {
 
         fun event(event: String?) = apply { this.event = event }
 
