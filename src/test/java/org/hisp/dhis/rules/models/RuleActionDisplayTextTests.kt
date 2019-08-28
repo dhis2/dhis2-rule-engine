@@ -3,12 +3,12 @@ package org.hisp.dhis.rules.models
 import nl.jqno.equalsverifier.EqualsVerifier
 import nl.jqno.equalsverifier.Warning
 import org.assertj.core.api.Java6Assertions.assertThat
-import org.assertj.core.api.Java6Assertions.fail
 import org.hisp.dhis.rules.models.RuleActionText.Companion.LOCATION_FEEDBACK_WIDGET
 import org.hisp.dhis.rules.models.RuleActionText.Companion.LOCATION_INDICATOR_WIDGET
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import kotlin.test.assertFailsWith
 
 @RunWith(JUnit4::class)
 class RuleActionDisplayTextTests {
@@ -33,24 +33,16 @@ class RuleActionDisplayTextTests {
 
     @Test
     fun createForFeedbackMustThrowWhenBothArgumentsNull() {
-        try {
+        assertFailsWith<IllegalArgumentException> {
             RuleActionDisplayText.createForFeedback(null, null)
-            fail("IllegalArgumentException was expected, but nothing was thrown.")
-        } catch (illegalArgumentException: IllegalArgumentException) {
-            // noop
         }
-
     }
 
     @Test
     fun createForIndicatorsMustThrowWhenBothArgumentsNull() {
-        try {
+        assertFailsWith<IllegalArgumentException> {
             RuleActionDisplayText.createForIndicators(null, null)
-            fail("IllegalArgumentException was expected, but nothing was thrown.")
-        } catch (illegalArgumentException: IllegalArgumentException) {
-            // noop
         }
-
     }
 
     @Test
