@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules.models
 
+import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 import java.util.Date
 
@@ -10,7 +11,7 @@ class RuleEnrollment(val enrollment: String?,
                      val status: Status?,
                      val organisationUnit: String?,
                      val organisationUnitCode: String?,
-                     val attributeValues: List<RuleAttributeValue>?) {
+                     val attributeValues: PersistentList<RuleAttributeValue>?) {
 
     enum class Status {
         ACTIVE, COMPLETED, CANCELLED
@@ -24,7 +25,7 @@ class RuleEnrollment(val enrollment: String?,
                        var status: Status?,
                        var organisationUnit: String?,
                        var organisationUnitCode: String?,
-                       var attributeValues: List<RuleAttributeValue>?) {
+                       var attributeValues: PersistentList<RuleAttributeValue>?) {
 
         fun enrollment(enrollment: String?) = apply { this.enrollment = enrollment }
 
