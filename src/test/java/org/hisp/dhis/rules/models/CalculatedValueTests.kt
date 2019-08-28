@@ -47,14 +47,9 @@ import kotlin.test.assertFailsWith
 @RunWith(JUnit4::class)
 class CalculatedValueTests {
 
-    @Mock private lateinit var ruleExpressionEvaluator: RuleExpressionEvaluator
+    @Mock private val ruleExpressionEvaluator: RuleExpressionEvaluator = ExpressionEvaluator()
 
     private val calculatedValueMap = HashMap<String, Map<String, String>>()
-
-    @Before
-    fun setUp() {
-        ruleExpressionEvaluator = ExpressionEvaluator()
-    }
 
     @Test
     fun shouldThrowExceptionIfCalculatedValueMapIsNull() {
