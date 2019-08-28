@@ -30,7 +30,6 @@ class RuleActionShowWarningTests {
         assertFailsWith<IllegalArgumentException> {
             RuleActionShowWarning.create(null, null, "test_field")
         }
-
     }
 
     @Test
@@ -38,7 +37,6 @@ class RuleActionShowWarningTests {
         assertFailsWith<NullPointerException> {
             RuleActionShowWarning.create("test_content", "test_data", null!!)
         }
-
     }
 
     @Test
