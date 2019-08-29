@@ -88,7 +88,7 @@ class ConstantsValueTests {
         val assignAction = RuleActionAssign.create(null, "C{test_constant_value}", "test_data_element")
         val rule = Rule.create(null, 1, "true", listOf(assignAction), "test_program_rule1")
 
-        constantsValueMap["test_constant_value"] = "3.145"
+        constantsValueMap["test_constant_value"] = "3.14"
 
         val ruleEngineBuilder = getRuleEngine(listOf(rule))
 
