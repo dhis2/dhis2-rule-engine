@@ -189,8 +189,8 @@ class RuleEngineExecution
                     RuleExpression.unwrapVariableName(variable));
 
             if (variableValue != null) {
-                ruleExpressionBinder.bindVariable(variable, variableValue.value() == null ?
-                        variableValue.type().defaultValue() : variableValue.value());
+                ruleExpressionBinder.bindVariable(variable, variableValue.getValue() == null ?
+                        variableValue.getType().defaultValue() : variableValue.getValue());
             }
         }
 

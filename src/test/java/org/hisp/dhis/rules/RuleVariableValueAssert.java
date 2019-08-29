@@ -25,17 +25,17 @@ final class RuleVariableValueAssert
         @Nonnull
         RuleVariableValueAssert hasValue( @Nullable String value )
         {
-                assertThat( variableValue.value() ).isEqualTo( value );
+                assertThat( variableValue.getValue() ).isEqualTo( value );
                 return this;
         }
 
         @Nonnull
         RuleVariableValueAssert hasCandidates( @Nonnull String... candidates )
         {
-                assertThat( variableValue.candidates().size() ).isEqualTo( candidates.length );
+                assertThat( variableValue.getCandidates().size() ).isEqualTo( candidates.length );
                 for ( int index = 0; index < candidates.length; index++ )
                 {
-                        assertThat( variableValue.candidates().get( index ) ).isEqualTo( candidates[index] );
+                        assertThat( variableValue.getCandidates().get( index ) ).isEqualTo( candidates[index] );
                 }
                 return this;
         }
@@ -43,7 +43,7 @@ final class RuleVariableValueAssert
         @Nonnull
         RuleVariableValueAssert isTypeOf( @Nonnull RuleValueType valueType )
         {
-                assertThat( variableValue.type() ).isEqualTo( valueType );
+                assertThat( variableValue.getType() ).isEqualTo( valueType );
                 return this;
         }
 }

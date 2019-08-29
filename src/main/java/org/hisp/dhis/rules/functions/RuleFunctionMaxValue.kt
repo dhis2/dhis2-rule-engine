@@ -53,7 +53,7 @@ class RuleFunctionMaxValue : RuleFunction() {
             valueMap.containsKey(dataElement) -> {
                 val ruleVariableValue = valueMap[dataElement]
 
-                val values = ruleVariableValue?.candidates()
+                val values = ruleVariableValue?.candidates
 
                 val doubles = values?.asSequence()?.map { it.toDouble() }
 

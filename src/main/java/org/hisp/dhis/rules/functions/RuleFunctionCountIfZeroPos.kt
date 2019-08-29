@@ -46,7 +46,7 @@ class RuleFunctionCountIfZeroPos : RuleFunction() {
             else -> {
                 val value = valueMap[arguments[0]]
                 when {
-                    value != null -> value.candidates().count { isZeroPos(it) }.toString()
+                    value != null -> value.candidates.count { isZeroPos(it) }.toString()
                     else -> "0"
                 }
             }

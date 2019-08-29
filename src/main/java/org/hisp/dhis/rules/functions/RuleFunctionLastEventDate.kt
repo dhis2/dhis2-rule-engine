@@ -40,7 +40,7 @@ class RuleFunctionLastEventDate : RuleFunction() {
             !valueMap!!.containsKey(arguments[0]) -> ""
             else -> {
                 val variableValue = valueMap[arguments[0]]
-                variableValue?.eventDate().wrap()
+                variableValue?.eventDate.wrap()
             }
         }
     }

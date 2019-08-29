@@ -39,7 +39,7 @@ class RuleFunctionInOrgUnitGroup : RuleFunction() {
             arguments.size != 1 -> throw IllegalArgumentException("Two arguments were expected, ${arguments.size} were supplied")
             !valueMap!!.containsKey("org_unit") || !supplementaryData!!.containsKey(arguments[0]) -> false.toString()
             else -> {
-                val orgUnit = valueMap["org_unit"]?.value()?.replace("'", "")
+                val orgUnit = valueMap["org_unit"]?.value?.replace("'", "")
                 val members = supplementaryData[arguments[0]]
 
                 members?.contains(orgUnit).toString()

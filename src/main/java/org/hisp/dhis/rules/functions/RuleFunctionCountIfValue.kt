@@ -58,7 +58,7 @@ class RuleFunctionCountIfValue : RuleFunction() {
         val variableValue = valueMap[arguments[0]]
 
         return when {
-            variableValue != null -> variableValue.candidates().count { it == arguments[1] }.toString()
+            variableValue != null -> variableValue.candidates.count { it == arguments[1] }.toString()
             else -> "0"
         }
     }

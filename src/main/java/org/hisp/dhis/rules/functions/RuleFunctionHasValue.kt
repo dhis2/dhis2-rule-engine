@@ -14,7 +14,7 @@ class RuleFunctionHasValue : RuleFunction() {
             // ToDo: make sure that argument names are actually argument names and not values.
             else -> {
                 val variableName = arguments[0]?.replace("'", "")
-                return (!valueMap[variableName]?.value().isNullOrEmpty()).toString()
+                return (!valueMap[variableName]?.value.isNullOrEmpty()).toString()
             }
         }
     }
