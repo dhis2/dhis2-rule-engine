@@ -6,7 +6,7 @@ import kotlinx.collections.immutable.toPersistentList
 import org.hisp.dhis.rules.models.RuleValueType
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
 import java.util.*
 
 data class RuleVariableValue(val value: String?,
@@ -65,8 +65,12 @@ data class RuleVariableValue(val value: String?,
         }
 
 
-        private fun getFormattedDate(date: Date) =
-                DateTimeFormatter.ofPattern(DATE_PATTERN).toFormat().format(date)
+        private fun getFormattedDate(date: Date): String {
+            val format = SimpleDateFormat()
+            format.applyPattern(DATE_PATTERN)
+
+            return format.format(date)
+        }
 
         private fun getFormattedNumber(number: String): String {
             val otherSymbols = DecimalFormatSymbols(Locale.US)
