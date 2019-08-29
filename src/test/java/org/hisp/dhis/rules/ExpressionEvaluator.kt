@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules;
+package org.hisp.dhis.rules
 
 /*
  * Copyright (c) 2004-2017, University of Oslo
@@ -28,25 +28,18 @@ package org.hisp.dhis.rules;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.apache.commons.jexl2.Expression;
-import org.apache.commons.jexl2.JexlEngine;
+import org.apache.commons.jexl2.JexlEngine
 
-import javax.annotation.Nonnull;
 
-/**
- * Created by zubair@dhis2.org on 24.11.17.
- */
-public class ExpressionEvaluator
-    implements RuleExpressionEvaluator
-{
-        private static final JexlEngine JEXL = new JexlEngine();
+class ExpressionEvaluator : RuleExpressionEvaluator {
 
-        @Nonnull
-        @Override
-        public String evaluate( @Nonnull String expression )
-        {
-                Expression exp = JEXL.createExpression( expression );
+    override fun evaluate(expression: String): String {
+        val exp = JEXL.createExpression(expression)
 
-                return exp.evaluate( null ).toString();
-        }
+        return exp.evaluate(null).toString()
+    }
+
+    companion object {
+        private val JEXL = JexlEngine()
+    }
 }
