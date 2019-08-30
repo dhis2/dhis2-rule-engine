@@ -3,42 +3,28 @@ package org.hisp.dhis.rules
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
-import org.hisp.dhis.rules.models.Rule
-import org.hisp.dhis.rules.models.RuleEffect
-import org.hisp.dhis.rules.models.RuleEnrollment
-import org.hisp.dhis.rules.models.RuleEvent
-import org.hisp.dhis.rules.models.TriggerEnvironment
-import java.util.*
+import org.hisp.dhis.rules.models.*
 import java.util.concurrent.Callable
 
 // ToDo: logging
-class RuleEngine (
-        private val ruleEngineContext: RuleEngineContext,
-        private val ruleEvents: PersistentList<RuleEvent>,
-        private val ruleEnrollment: RuleEnrollment?,
-        private val triggerEnvironment: TriggerEnvironment?) {
-
-    fun events() = ruleEvents
-
-    fun enrollment() = ruleEnrollment
-
-    fun triggerEnvironment() = triggerEnvironment
-
-    fun executionContext() = ruleEngineContext
+class RuleEngine (val executionContext: RuleEngineContext,
+                  val events: PersistentList<RuleEvent>,
+                  val ruleEnrollment: RuleEnrollment?,
+                  val triggerEnvironment: TriggerEnvironment?) {
 
     fun evaluate(ruleEvent: RuleEvent?): Callable<List<RuleEffect>> {
         ruleEvent?.let {
-            ruleEvents.forEach {
+            events.forEach {
                 if (it.event == ruleEvent.event)
                     throw IllegalStateException("Event '${it.event}' is already set as a part of execution context.")
             }
-            return internalEvaluate(ruleEvent, ruleEngineContext.rules())
+            return internalEvaluate(ruleEvent, executionContext.rules)
         } ?: throw IllegalArgumentException("ruleEvent == null")
     }
 
     fun evaluate(ruleEvent: RuleEvent?, rulesToEvaluate: List<Rule>): Callable<List<RuleEffect>> {
         ruleEvent?.let {
-            ruleEvents.forEach {
+            events.forEach {
                 if (it.event == ruleEvent.event)
                     throw IllegalStateException("Event '${it.event}' is already set as a part of execution context.")
             }
@@ -63,39 +49,39 @@ class RuleEngine (
             this.ruleEnrollment != null ->
                 throw IllegalStateException("Enrollment '${this.ruleEnrollment.enrollment}' is already set as a " +
                         "part of execution context.")
-            else -> internalEvaluate(ruleEnrollment, ruleEngineContext.rules())
+            else -> internalEvaluate(ruleEnrollment, executionContext.rules)
         }
     }
 
     private fun internalEvaluate(ruleEvent: RuleEvent, rulesToEvaluate: List<Rule>): RuleEngineExecution {
 
         val valueMap = RuleVariableValueMapBuilder.target(ruleEvent)
-                .ruleVariables(ruleEngineContext.ruleVariables())
+                .ruleVariables(executionContext.ruleVariables)
                 .ruleEnrollment(ruleEnrollment)
                 .triggerEnvironment(triggerEnvironment)
-                .ruleEvents(ruleEvents)
-                .calculatedValueMap(ruleEngineContext.calculatedValueMap())
-                .constantValueMap(ruleEngineContext.constantsValues())
+                .ruleEvents(events)
+                .calculatedValueMap(executionContext.calculatedValueMap)
+                .constantValueMap(executionContext.constantsValues)
                 .build()
 
-        return RuleEngineExecution(executionContext().expressionEvaluator(),
-                rulesToEvaluate, valueMap, ruleEngineContext.supplementaryData())
+        return RuleEngineExecution(executionContext.expressionEvaluator,
+                rulesToEvaluate, valueMap, executionContext.supplementaryData)
     }
 
     private fun internalEvaluate(ruleEnrollment: RuleEnrollment, rulesToEvaluate: List<Rule>): RuleEngineExecution {
 
         val valueMap = RuleVariableValueMapBuilder.target(ruleEnrollment)
-                .ruleVariables(ruleEngineContext.ruleVariables())
+                .ruleVariables(executionContext.ruleVariables)
                 .triggerEnvironment(triggerEnvironment)
-                .ruleEvents(ruleEvents)
-                .constantValueMap(ruleEngineContext.constantsValues())
+                .ruleEvents(events)
+                .constantValueMap(executionContext.constantsValues)
                 .build()
 
-        return RuleEngineExecution(executionContext().expressionEvaluator(),
-                rulesToEvaluate, valueMap, ruleEngineContext.supplementaryData())
+        return RuleEngineExecution(executionContext.expressionEvaluator,
+                rulesToEvaluate, valueMap, executionContext.supplementaryData)
     }
 
-    class Builder (private val ruleEngineContext: RuleEngineContext) {
+    class Builder (private val executionContext: RuleEngineContext) {
 
         private var ruleEvents: PersistentList<RuleEvent>? = null
 
@@ -123,7 +109,7 @@ class RuleEngine (
                 }
 
         fun build() =
-                RuleEngine(ruleEngineContext,
+                RuleEngine(executionContext,
                         ruleEvents ?: persistentListOf(),
                         ruleEnrollment,
                         triggerEnvironment)

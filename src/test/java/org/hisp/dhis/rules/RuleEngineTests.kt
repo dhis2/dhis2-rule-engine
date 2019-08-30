@@ -67,12 +67,12 @@ class RuleEngineTests {
                 .build()
 
         // test immutability
-        ruleEngine.events().add(ruleEventTwo)
+        ruleEngine.events.add(ruleEventTwo)
 
-        assertThat(ruleEngine.events().size).isEqualTo(1)
-        assertThat(ruleEngine.events()[0]).isEqualTo(ruleEventOne)
-        assertThat(ruleEventTwo).isNotIn(ruleEngine.events())
-        assertThat(ruleEngine.events()).isInstanceOf(ImmutableList::class.java)
+        assertThat(ruleEngine.events.size).isEqualTo(1)
+        assertThat(ruleEngine.events[0]).isEqualTo(ruleEventOne)
+        assertThat(ruleEventTwo).isNotIn(ruleEngine.events)
+        assertThat(ruleEngine.events).isInstanceOf(ImmutableList::class.java)
 
     }
 
@@ -80,8 +80,8 @@ class RuleEngineTests {
     fun builderShouldPropagateImmutableEmptyListIfNoEventsProvided() {
         val ruleEngine = ruleEngineContext.toEngineBuilder().build()
 
-        assertThat(ruleEngine.events()).isNotNull
-        assertThat(ruleEngine.events().size).isEqualTo(0)
+        assertThat(ruleEngine.events).isNotNull
+        assertThat(ruleEngine.events.size).isEqualTo(0)
 
     }
 
@@ -89,7 +89,7 @@ class RuleEngineTests {
     fun builderShouldPropagateRuleEngineContext() {
         val ruleEngine = ruleEngineContext.toEngineBuilder().build()
 
-        assertThat(ruleEngine.executionContext()).isEqualTo(ruleEngineContext)
+        assertThat(ruleEngine.executionContext).isEqualTo(ruleEngineContext)
     }
 
     @Test
@@ -150,7 +150,7 @@ class RuleEngineTests {
 
         object : Thread() {
             override fun run() {
-                for (rule in ruleEngine.executionContext().rules()) {
+                for (rule in ruleEngine.executionContext.rules) {
 
                     try {
                         threadTwoLatch.await()
@@ -165,7 +165,7 @@ class RuleEngineTests {
 
         object : Thread() {
             override fun run() {
-                for (rule in ruleEngine.executionContext().rules()) {
+                for (rule in ruleEngine.executionContext.rules) {
                     threadTwoLatch.countDown()
                     try {
                         threadOneLatch.await()
