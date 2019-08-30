@@ -184,7 +184,7 @@ class RuleEngineExecution
         RuleExpressionBinder ruleExpressionBinder = RuleExpressionBinder.from(ruleExpression);
 
         // substitute variable values
-        for (String variable : ruleExpression.variables()) {
+        for (String variable : ruleExpression.getVariable()) {
             RuleVariableValue variableValue = valueMap.get(
                     RuleExpression.unwrapVariableName(variable));
 
@@ -204,7 +204,7 @@ class RuleEngineExecution
         RuleExpression ruleExpression = RuleExpression.from(expression);
         RuleExpressionBinder ruleExpressionBinder = RuleExpressionBinder.from(ruleExpression);
 
-        for (String function : ruleExpression.functions()) {
+        for (String function : ruleExpression.getFunctions()) {
             RuleFunctionCall ruleFunctionCall = RuleFunctionCall.from(function);
 
             List<String> arguments = new ArrayList<>(ruleFunctionCall.arguments());

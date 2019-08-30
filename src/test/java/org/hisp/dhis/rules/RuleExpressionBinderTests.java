@@ -47,9 +47,10 @@ public class RuleExpressionBinderTests
                     "d2:hasValue(4.5)"
                 ) );
 
-                when( ruleExpression.expression() ).thenReturn( expression );
-                when( ruleExpression.variables() ).thenReturn( variables );
-                when( ruleExpression.functions() ).thenReturn( functions );
+                when( ruleExpression.getExpression() ).thenReturn( expression );
+                //TODO uncomment when migrating to Kotlin
+                //when( ruleExpression.getVariable() ).thenReturn( variables );
+                //when( ruleExpression.getFunctions() ).thenReturn( functions );
         }
 
         @Test
@@ -76,7 +77,7 @@ public class RuleExpressionBinderTests
                     "A{test_variable_one} + C{test_variable_two} == 10 && " +
                     "d2:floor(d2:ceil(3.8)) + d2:ceil(3.8) == 6 && " +
                     "d2:hasValue(4.5) && d2:hasValue(4.5)";
-                when( ruleExpression.expression() ).thenReturn( expression );
+                when( ruleExpression.getExpression() ).thenReturn( expression );
 
                 String result = RuleExpressionBinder.from( ruleExpression )
                     .bindVariable( "A{test_variable_one}", "1" )
@@ -94,9 +95,10 @@ public class RuleExpressionBinderTests
         @Test
         public void buildShouldNotFailIfNoVariablesInExpression()
         {
-                when( ruleExpression.expression() ).thenReturn( "1 < 0" );
-                when( ruleExpression.variables() ).thenReturn( new HashSet<String>() );
-                when( ruleExpression.functions() ).thenReturn( new HashSet<String>() );
+                when( ruleExpression.getExpression() ).thenReturn( "1 < 0" );
+                //TODO uncomment when migrating to Kotlin
+                //when( ruleExpression.getFunctions() ).thenReturn( new HashSet<String>() );
+                //when( ruleExpression.getFunctions() ).thenReturn( new HashSet<String>() );
 
                 String expression = RuleExpressionBinder.from( ruleExpression ).build();
                 assertThat( expression ).isEqualTo( "1 < 0" );

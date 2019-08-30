@@ -84,23 +84,23 @@ final class RuleExpressionBinder
         static RuleExpressionBinder from( @Nonnull RuleExpression ruleExpression )
         {
                 Map<String, String> ruleVariablePlaceholders =
-                    new HashMap<>( ruleExpression.variables().size() );
+                    new HashMap<>( ruleExpression.getVariable().size() );
                 Map<String, String> ruleFunctionPlaceholders =
-                    new HashMap<>( ruleExpression.functions().size() );
+                    new HashMap<>( ruleExpression.getFunctions().size() );
 
                 // populate list with placeholders which later will be used as
                 // source values in expression
-                for ( String variable : ruleExpression.variables() )
+                for ( String variable : ruleExpression.getVariable() )
                 {
                         ruleVariablePlaceholders.put( variable, null );
                 }
 
-                for ( String function : ruleExpression.functions() )
+                for ( String function : ruleExpression.getFunctions() )
                 {
                         ruleFunctionPlaceholders.put( function, null );
                 }
 
-                return new RuleExpressionBinder( ruleExpression.expression(),
+                return new RuleExpressionBinder( ruleExpression.getExpression(),
                     ruleVariablePlaceholders, ruleFunctionPlaceholders );
         }
 }
