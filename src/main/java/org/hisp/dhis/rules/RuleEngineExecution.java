@@ -4,33 +4,13 @@ import org.apache.commons.jexl2.JexlException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.dhis.rules.functions.RuleFunction;
-import org.hisp.dhis.rules.models.Rule;
-import org.hisp.dhis.rules.models.RuleAction;
-import org.hisp.dhis.rules.models.RuleActionAssign;
-import org.hisp.dhis.rules.models.RuleActionCreateEvent;
-import org.hisp.dhis.rules.models.RuleActionDisplayKeyValuePair;
-import org.hisp.dhis.rules.models.RuleActionDisplayText;
-import org.hisp.dhis.rules.models.RuleActionErrorOnCompletion;
-import org.hisp.dhis.rules.models.RuleActionScheduleMessage;
-import org.hisp.dhis.rules.models.RuleActionSendMessage;
-import org.hisp.dhis.rules.models.RuleActionShowError;
-import org.hisp.dhis.rules.models.RuleActionShowWarning;
-import org.hisp.dhis.rules.models.RuleActionWarningOnCompletion;
-import org.hisp.dhis.rules.models.RuleEffect;
-import org.hisp.dhis.rules.models.RuleValueType;
+import org.hisp.dhis.rules.models.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.annotation.Nonnull;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.annotation.Nonnull;
 
 class RuleEngineExecution
         implements Callable<List<RuleEffect>> {
@@ -207,13 +187,13 @@ class RuleEngineExecution
         for (String function : ruleExpression.getFunctions()) {
             RuleFunctionCall ruleFunctionCall = RuleFunctionCall.from(function);
 
-            List<String> arguments = new ArrayList<>(ruleFunctionCall.arguments());
+            List<String> arguments = new ArrayList<>(ruleFunctionCall.getArguments());
             for (int j = 0; j < arguments.size(); j++) {
                 arguments.set(j, process(arguments.get(j)));
             }
 
-            ruleExpressionBinder.bindFunction(ruleFunctionCall.functionCall(), RuleFunction
-                    .create(ruleFunctionCall.functionName()).evaluate(arguments, valueMap, supplementaryData));
+            ruleExpressionBinder.bindFunction(ruleFunctionCall.getFunctionCall(), RuleFunction
+                    .create(ruleFunctionCall.getFunctionCall()).evaluate(arguments, valueMap, supplementaryData));
         }
 
         String processedExpression = ruleExpressionBinder.build();
