@@ -1,12 +1,14 @@
 package org.hisp.dhis.rules
 
+import kotlinx.collections.immutable.toPersistentList
 import org.hisp.dhis.rules.models.RuleDataValue
 
-internal class Utils {
+class Utils {
 
     companion object {
-        fun values(ruleDataValues: List<RuleDataValue>): List<String?> {
-            return ruleDataValues.map { it: RuleDataValue -> it.value }
-        }
+
+        @JvmStatic
+        fun values(ruleDataValues: List<RuleDataValue>) = ruleDataValues.map { it.value!! }.toPersistentList()
     }
+
 }
