@@ -2,21 +2,17 @@ package org.hisp.dhis.rules
 
 import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.toPersistentSet
-import java.util.regex.Pattern
 
 class RuleExpression(val expression: String,
                      val variable: PersistentSet<String>,
                      val functions: PersistentSet<String>) {
 
     companion object {
-        private val VARIABLE_PATTERN = "[A#CV]\\{([\\w -_.]+)\\}".toRegex()
+        private val VARIABLE_PATTERN = "[A#CV]\\{([\\w -_.]+)}".toRegex()
 
         val FUNCTION_PATTERN = ("d2:(\\w+.?\\w*)\\( *(([\\d/\\*\\+\\-%\\. ]+)|" +
                 "( *'[^']*'))*( *, *(([\\d/\\*\\+\\-%\\. ]+)|'[^']*'))* *\\)").toRegex()
 
-
-        // TODO remove this when the classes where its called are migrated to Kotlin
-        @JvmField val FUNCTION_PATTERN_COMPILED = Pattern.compile(FUNCTION_PATTERN.toString())!!
 
         @JvmStatic
         fun unwrapVariableName(variable: String): String {
@@ -39,8 +35,8 @@ class RuleExpression(val expression: String,
                 val functionMatcher = FUNCTION_PATTERN.findAll(it)
 
                 // iterate over matched values and aggregate them
-                variableMatcher.asSequence().forEach { result -> variables.add(result.value) }
-                functionMatcher.asSequence().forEach { result -> functions.add(result.value) }
+                variableMatcher.asIterable().map { result -> variables.add(result.groupValues[0]) }
+                functionMatcher.asIterable().map { result -> functions.add(result.groupValues[0]) }
 
 
                 return RuleExpression(it, variables.toPersistentSet(), functions.toPersistentSet())
