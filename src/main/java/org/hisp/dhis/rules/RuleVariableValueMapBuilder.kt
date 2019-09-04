@@ -1,10 +1,12 @@
 package org.hisp.dhis.rules
 
+import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.toPersistentMap
 import org.hisp.dhis.rules.RuleVariableValue.Companion.create
 import org.hisp.dhis.rules.models.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
 class RuleVariableValueMapBuilder() {
 
@@ -85,7 +87,7 @@ class RuleVariableValueMapBuilder() {
             apply { this.allConstantValues.putAll(constantValues) }
 
 
-    fun build(): Map<String, RuleVariableValue> {
+    fun build(): PersistentMap<String, RuleVariableValue> {
         val valueMap = HashMap<String, RuleVariableValue>()
 
         // map tracked entity attributes to values from enrollment

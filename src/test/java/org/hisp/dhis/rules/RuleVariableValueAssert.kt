@@ -1,8 +1,7 @@
 package org.hisp.dhis.rules
 
-import org.hisp.dhis.rules.models.RuleValueType
-
 import org.assertj.core.api.Java6Assertions.assertThat
+import org.hisp.dhis.rules.models.RuleValueType
 
 class RuleVariableValueAssert (private val variableValue: RuleVariableValue) {
 
@@ -20,7 +19,7 @@ class RuleVariableValueAssert (private val variableValue: RuleVariableValue) {
     companion object {
 
         @JvmStatic
-        fun assertThatVariable(variableValue: RuleVariableValue) = RuleVariableValueAssert(variableValue)
+        fun assertThatVariable(variableValue: RuleVariableValue?) = RuleVariableValueAssert(variableValue!!)
 
     }
 }
