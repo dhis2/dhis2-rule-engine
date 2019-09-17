@@ -40,6 +40,10 @@ kotlin {
                 implementation(kotlin("test-junit"))
                 implementation("org.assertj:assertj-core:3.11.1")
                 implementation("org.mockito:mockito-core:2.28.2")
+                implementation("nl.jqno.equalsverifier:equalsverifier:3.1.9")
+                implementation("com.google.truth:truth:0.44"){
+                    exclude("com.google.auto.value", "auto-value-annotations")
+                }
                 implementation("junit:junit:4.12")
             }
         }

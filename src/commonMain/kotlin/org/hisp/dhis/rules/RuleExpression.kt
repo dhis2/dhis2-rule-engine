@@ -7,7 +7,7 @@ class RuleExpression(val expression: String,
                      val functions: Set<String>) {
 
     companion object {
-        private val VARIABLE_PATTERN = "[A#CV]\\{([\\w -_.]+)}".toRegex()
+        private val VARIABLE_PATTERN = "[A#CV]\\{([\\w -_.]+)\\}".toRegex()
 
         val FUNCTION_PATTERN = ("d2:(\\w+.?\\w*)\\( *(([\\d/\\*\\+\\-%\\. ]+)|" +
                 "( *'[^']*'))*( *, *(([\\d/\\*\\+\\-%\\. ]+)|'[^']*'))* *\\)").toRegex()
