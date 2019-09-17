@@ -62,7 +62,7 @@ class RuleFunctionCallTests {
     fun fromMustReturnFunctionCallWithImmutableArguments() {
         val ruleFunctionCall = RuleFunctionCall.from("d2:some()")
 
-        ruleFunctionCall.arguments.add("another_argument")
+        //ruleFunctionCall.arguments.add("another_argument")
 
         assertThat(ruleFunctionCall.arguments.size).isEqualTo(0)
     }

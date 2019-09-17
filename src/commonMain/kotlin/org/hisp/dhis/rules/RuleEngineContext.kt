@@ -1,15 +1,12 @@
 package org.hisp.dhis.rules
 
-import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
 import org.hisp.dhis.rules.models.Rule
 import org.hisp.dhis.rules.models.RuleVariable
 import kotlin.jvm.JvmStatic
 
 data class RuleEngineContext (val expressionEvaluator: RuleExpressionEvaluator,
-                              val rules: PersistentList<Rule>,
-                              val ruleVariables: PersistentList<RuleVariable>,
+                              val rules: List<Rule>,
+                              val ruleVariables: List<RuleVariable>,
                               val supplementaryData: Map<String, List<String>>,
                               val calculatedValueMap: Map<String, Map<String, String>>,
                               val constantsValues: Map<String, String>) {
@@ -20,9 +17,9 @@ data class RuleEngineContext (val expressionEvaluator: RuleExpressionEvaluator,
 
     class Builder constructor(private val evaluator: RuleExpressionEvaluator) {
 
-        private var rules: PersistentList<Rule>? = null
+        private var rules: List<Rule>? = null
 
-        private var ruleVariables: PersistentList<RuleVariable>? = null
+        private var ruleVariables: List<RuleVariable>? = null
 
         private var supplementaryData: Map<String, List<String>>? = null
 
@@ -32,13 +29,13 @@ data class RuleEngineContext (val expressionEvaluator: RuleExpressionEvaluator,
 
         fun rules(rules: List<Rule>?) =
                 apply {
-                    rules?.let { this.rules = rules.toPersistentList() } ?:
+                    rules?.let { this.rules = rules } ?:
                     throw IllegalArgumentException("rules == null")
                 }
 
         fun ruleVariables(ruleVariables: List<RuleVariable>?) =
                 apply {
-                    ruleVariables?.let { this.ruleVariables = ruleVariables.toPersistentList() } ?:
+                    ruleVariables?.let { this.ruleVariables = ruleVariables } ?:
                     throw IllegalArgumentException("ruleVariables == null")
                 }
 
@@ -61,8 +58,8 @@ data class RuleEngineContext (val expressionEvaluator: RuleExpressionEvaluator,
                 }
 
         fun build(): RuleEngineContext {
-            val rules = rules ?: persistentListOf()
-            val ruleVariables = ruleVariables ?: persistentListOf()
+            val rules = rules ?: listOf()
+            val ruleVariables = ruleVariables ?: listOf()
             val supplementaryData = supplementaryData ?: hashMapOf()
             val calculatedValueMap = calculatedValueMap ?: hashMapOf()
             val constantsValues = constantsValues ?: hashMapOf()

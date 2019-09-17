@@ -1,9 +1,7 @@
 package org.hisp.dhis.rules.models
 
-import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.toPersistentList
+
 import org.hisp.dhis.rules.utils.Date
-import org.hisp.dhis.rules.utils.toPersistentList
 import kotlin.jvm.JvmStatic
 
 class RuleEnrollment(val enrollment: String?,
@@ -13,12 +11,11 @@ class RuleEnrollment(val enrollment: String?,
                      val status: Status?,
                      val organisationUnit: String?,
                      val organisationUnitCode: String?,
-                     val attributeValues: PersistentList<RuleAttributeValue>?) {
+                     val attributeValues: List<RuleAttributeValue>?) {
 
     enum class Status {
         ACTIVE, COMPLETED, CANCELLED
     }
-
 
     data class Builder(var enrollment: String?,
                        var programName: String?,
@@ -27,7 +24,7 @@ class RuleEnrollment(val enrollment: String?,
                        var status: Status?,
                        var organisationUnit: String?,
                        var organisationUnitCode: String?,
-                       var attributeValues: PersistentList<RuleAttributeValue>?) {
+                       var attributeValues: List<RuleAttributeValue>?) {
 
         fun enrollment(enrollment: String?) = apply { this.enrollment = enrollment }
 
@@ -43,7 +40,7 @@ class RuleEnrollment(val enrollment: String?,
 
         fun organisationUnitCode(organisationUnitCode: String?) = apply { this.organisationUnitCode = organisationUnitCode }
 
-        fun attributeValues(attributeValues: List<RuleAttributeValue>?) = apply { this.attributeValues = attributeValues?.toPersistentList() }
+        fun attributeValues(attributeValues: List<RuleAttributeValue>?) = apply { this.attributeValues = attributeValues }
 
         fun build() = RuleEnrollment(enrollment, programName, incidentDate, enrollmentDate,
                 status, organisationUnit, organisationUnitCode, attributeValues)
@@ -68,7 +65,7 @@ class RuleEnrollment(val enrollment: String?,
                     .status(status)
                     .organisationUnit(organisationUnit)
                     .organisationUnitCode(organisationUnitCode)
-                    .attributeValues(attributeValues.toPersistentList())
+                    .attributeValues(attributeValues)
                     .build()
         }
 

@@ -28,6 +28,7 @@ package org.hisp.dhis.rules.functions
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hisp.dhis.rules.RuleVariableValue
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -38,8 +39,8 @@ import kotlin.jvm.JvmStatic
 actual class RuleFunctionMonthsBetween : RuleFunction() {
 
     actual override fun evaluate(arguments: List<String?>,
-                          valueMap: Map<String, RuleVariableValue>?,
-                          supplementaryData: Map<String, List<String>>?): String {
+                                 valueMap: Map<String, RuleVariableValue>?,
+                                 supplementaryData: Map<String, List<String>>?): String {
         return when {
             arguments.size != 2 -> throw IllegalArgumentException("Two arguments were expected, ${arguments.size} were supplied")
             arguments[0].isNullOrEmpty() || arguments[1].isNullOrEmpty() -> "0"

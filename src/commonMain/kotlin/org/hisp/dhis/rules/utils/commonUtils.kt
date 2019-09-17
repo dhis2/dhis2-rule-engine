@@ -9,6 +9,11 @@ expect interface Callable<V> {
     fun call() : V
 }
 
-expect class LocalDate() {
+expect class SimpleDateFormat() {
+    fun applyPattern(pattern: String)
+    fun format(date: Date): String
+}
 
+expect class DecimalFormat(pattern: String) {
+    fun format(result: Double): String
 }

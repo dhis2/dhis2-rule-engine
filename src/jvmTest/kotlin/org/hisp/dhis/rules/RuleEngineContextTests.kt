@@ -10,6 +10,7 @@ import org.junit.runners.JUnit4
 import org.mockito.Mock
 import org.mockito.Mockito.mock
 import org.mockito.MockitoAnnotations
+import org.mockito.internal.matchers.Null
 import java.util.*
 import kotlin.test.assertFailsWith
 
@@ -70,7 +71,6 @@ class RuleEngineContextTests {
         assertThat(ruleEngineContext.ruleVariables[0]).isEqualTo(ruleVariableOne)
 
         assertThat(ruleEngineContext.supplementaryData.size).isEqualTo(1)
-        assertThat(ruleEngineContext.supplementaryData["text-key"]).isNotNull
         assertThat(ruleEngineContext.supplementaryData["text-key"]).isEqualTo(members)
 
 
@@ -78,8 +78,8 @@ class RuleEngineContextTests {
         assertThat(ruleEngineContext.rules[0]).isEqualTo(ruleOne)
 
         // Test immutability
-        ruleEngineContext.ruleVariables.add(ruleVariableTwo)
-        ruleEngineContext.rules.add(ruleTwo)
+        //ruleEngineContext.ruleVariables.add(ruleVariableTwo)
+        //ruleEngineContext.rules.add(ruleTwo)
 
         assertThat(ruleEngineContext.rules.size).isEqualTo(1)
         assertThat(ruleEngineContext.ruleVariables.size).isEqualTo(1)

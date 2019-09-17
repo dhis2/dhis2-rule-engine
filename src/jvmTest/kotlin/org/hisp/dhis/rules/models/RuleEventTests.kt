@@ -72,7 +72,7 @@ class RuleEventTests {
                 RuleEvent.Status.ACTIVE, Date(), Date(), "", "", ruleDataValues, "")
 
         // add another data value
-        ruleEvent.dataValues?.add(ruleDataValueTwo)
+        //ruleEvent.dataValues?.add(ruleDataValueTwo)
 
         assertThat(ruleEvent.dataValues?.size).isEqualTo(1)
         assertThat(ruleEvent.dataValues?.get(0)).isEqualTo(ruleDataValue)

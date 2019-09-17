@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules.functions
 
+import org.hisp.dhis.rules.RuleVariableValue
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -9,8 +10,8 @@ import kotlin.jvm.JvmStatic
 actual class RuleFunctionDaysBetween : RuleFunction() {
 
     actual override fun evaluate(arguments: List<String?>,
-                          valueMap: Map<String, RuleVariableValue>?,
-                          supplementaryData: Map<String, List<String>>?): String {
+                                 valueMap: Map<String, RuleVariableValue>?,
+                                 supplementaryData: Map<String, List<String>>?): String {
         when {
             arguments.size != 2 -> throw IllegalArgumentException("Two arguments were expected, ${arguments.size} were supplied")
             else -> return daysBetween(arguments[0], arguments[1]).toString()

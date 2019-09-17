@@ -1,8 +1,8 @@
 package org.hisp.dhis.rules
 
-import kotlinx.collections.immutable.toPersistentMap
 import org.hisp.dhis.rules.RuleVariableValue.Companion.create
 import org.hisp.dhis.rules.models.*
+import org.hisp.dhis.rules.utils.Utils
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -108,7 +108,7 @@ actual class RuleVariableValueMapBuilder actual constructor() {
         buildConstantsValues(valueMap)
 
         // do not let outer world to alter variable value map
-        return valueMap.toPersistentMap()
+        return Collections.unmodifiableMap(valueMap)
     }
 
     private fun buildCurrentEventValues() {

@@ -1,13 +1,11 @@
 package org.hisp.dhis.rules
 
-import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.toPersistentList
 import org.hisp.dhis.rules.RuleExpression.Companion.FUNCTION_PATTERN
 import kotlin.jvm.JvmStatic
 
 class RuleFunctionCall(val functionCall: String,
                        val functionName: String,
-                       val arguments: PersistentList<String>) {
+                       val arguments: List<String>) {
 
     companion object {
         private val JUST_PARAMS_PATTERN ="(^[^(]+\\()|\\)$".toRegex()
@@ -36,7 +34,7 @@ class RuleFunctionCall(val functionCall: String,
                 // aggregate matched parameters into list
                 val params = parametersMatches.asIterable().map { it.groupValues[1].trim() }.filter { it != ""}
 
-                return RuleFunctionCall(functionCall, "d2:$functionName", params.toPersistentList())
+                return RuleFunctionCall(functionCall, "d2:$functionName", params)
             } ?: throw NullPointerException("functionCall == null")
 
         }

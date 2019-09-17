@@ -3,8 +3,6 @@ package org.hisp.dhis.rules.models
 
 import org.hisp.dhis.rules.utils.Date
 import org.hisp.dhis.rules.utils.compareTo
-import java.io.Serializable
-import java.util.*
 import kotlin.jvm.JvmField
 import kotlin.jvm.JvmStatic
 
@@ -16,7 +14,7 @@ class RuleEvent(val event: String?,
                 val dueDate: Date?,
                 val organisationUnit: String?,
                 val organisationUnitCode: String?,
-                val dataValues: PersistentList<RuleDataValue>?) {
+                val dataValues: List<RuleDataValue>?) {
 
     data class Builder(var event: String?,
                        var programStage: String?,
@@ -26,7 +24,7 @@ class RuleEvent(val event: String?,
                        var dueDate: Date?,
                        var organisationUnit: String?,
                        var organisationUnitCode: String?,
-                       var dataValues: PersistentList<RuleDataValue>?) {
+                       var dataValues: List<RuleDataValue>?) {
 
         fun event(event: String?) = apply { this.event = event }
 
@@ -44,7 +42,7 @@ class RuleEvent(val event: String?,
 
         fun organisationUnitCode(organisationUnitCode: String?) = apply { this.organisationUnitCode = organisationUnitCode }
 
-        fun dataValues(dataValues: List<RuleDataValue>?) = apply { this.dataValues = dataValues?.toPersistentList() }
+        fun dataValues(dataValues: List<RuleDataValue>?) = apply { this.dataValues = dataValues }
 
         fun build() = RuleEvent(event, programStage, programStageName, status, eventDate,
                 dueDate, organisationUnit, organisationUnitCode, dataValues)
@@ -86,7 +84,7 @@ class RuleEvent(val event: String?,
                     .dueDate(dueDate)
                     .organisationUnit(organisationUnit)
                     .organisationUnitCode(organisationUnitCode)
-                    .dataValues(ruleDataValues.toPersistentList())
+                    .dataValues(ruleDataValues)
                     .build()
         }
 

@@ -1,4 +1,4 @@
-plugins {
+ plugins {
     kotlin("multiplatform") version "1.3.41"
     java
     `maven-publish`
@@ -6,8 +6,6 @@ plugins {
 
 repositories {
     mavenCentral()
-    mavenLocal()
-    //maven("https://kotlin.bintray.com/kotlinx")
 }
 
 kotlin {
@@ -19,20 +17,12 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(kotlin("stdlib-common"))
-                implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.2")
-
             }
         }
 
         commonTest {
             dependencies {
                 implementation(kotlin ("test-common"))
-                implementation(kotlin ("test-annotations-common"))
-                implementation("nl.jqno.equalsverifier:equalsverifier:3.1.9")
-                implementation("com.google.truth:truth:0.44"){
-                    exclude("com.google.auto.value", "auto-value-annotations")
-                }
-                implementation("junit:junit:4.12")
             }
         }
 

@@ -118,7 +118,7 @@ class RuleExpressionTests {
     fun fromShouldReturnExpressionWithImmutableVariables() {
         val ruleExpression = RuleExpression.from("")
 
-        ruleExpression.variable.add("another_variable")
+        //ruleExpression.variable.add("another_variable")
 
         assertThat(ruleExpression.variable.size).isEqualTo(0)
 
@@ -128,7 +128,7 @@ class RuleExpressionTests {
     fun fromShouldReturnExpressionWithImmutableFunctions() {
         val ruleExpression = RuleExpression.from("")
 
-        ruleExpression.functions.add("another_function")
+        //ruleExpression.functions.add("another_function")
 
         assertThat(ruleExpression.functions.size).isEqualTo(0)
     }

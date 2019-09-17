@@ -1,14 +1,11 @@
 package org.hisp.dhis.rules
 
-import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
 import org.hisp.dhis.rules.models.*
-import java.util.concurrent.Callable
+import org.hisp.dhis.rules.utils.Callable
 
 // ToDo: logging
 expect class RuleEngine (executionContext: RuleEngineContext,
-                         events: PersistentList<RuleEvent>,
+                         events: List<RuleEvent>,
                          ruleEnrollment: RuleEnrollment?,
                          triggerEnvironment: TriggerEnvironment?) {
 

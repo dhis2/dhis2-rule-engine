@@ -1,5 +1,7 @@
 package org.hisp.dhis.rules
 
+import org.apache.commons.jexl2.JexlEngine
+
 /*
  * Copyright (c) 2004-2017, University of Oslo
  * All rights reserved.
@@ -28,7 +30,6 @@ package org.hisp.dhis.rules
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.utils.JexlEngine
 
 
 class ExpressionEvaluator : RuleExpressionEvaluator {

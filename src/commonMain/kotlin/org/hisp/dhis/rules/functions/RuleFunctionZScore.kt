@@ -28,11 +28,8 @@ package org.hisp.dhis.rules.functions
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-
-
 import org.hisp.dhis.rules.RuleVariableValue
-import java.text.DecimalFormat
+import org.hisp.dhis.rules.utils.DecimalFormat
 
 
 abstract class RuleFunctionZScore : RuleFunction() {

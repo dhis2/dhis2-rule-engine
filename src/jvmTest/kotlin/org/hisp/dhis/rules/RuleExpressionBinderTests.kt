@@ -1,6 +1,6 @@
 package org.hisp.dhis.rules
 
-import kotlinx.collections.immutable.persistentSetOf
+
 import org.assertj.core.api.Java6Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -26,14 +26,14 @@ class RuleExpressionBinderTests {
                 "d2:floor(d2:ceil(3.8)) + d2:ceil(3.8) == 6 && " +
                 "d2:hasValue(4.5)"
 
-        val variables = persistentSetOf(
+        val variables = setOf(
                 "A{test_variable_one}",
                 "C{test_variable_two}",
                 "V{test_variable_three}",
                 "#{test_variable_four}"
         )
 
-        val functions = persistentSetOf(
+        val functions = setOf(
                 "d2:ceil(3.8)",
                 "d2:hasValue(4.5)"
         )
@@ -81,8 +81,8 @@ class RuleExpressionBinderTests {
     @Test
     fun buildShouldNotFailIfNoVariablesInExpression() {
         `when`(ruleExpression.expression).thenReturn("1 < 0")
-        `when`( ruleExpression.functions ).thenReturn(persistentSetOf() )
-        `when`( ruleExpression.functions ).thenReturn(  persistentSetOf() )
+        `when`( ruleExpression.functions ).thenReturn(setOf<String>())
+        `when`( ruleExpression.functions ).thenReturn(setOf<String>())
 
         val expression = RuleExpressionBinder.from(ruleExpression).build()
         assertThat(expression).isEqualTo("1 < 0")

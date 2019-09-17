@@ -5,10 +5,11 @@ import org.apache.commons.logging.LogFactory
 import org.hisp.dhis.rules.RuleExpression.Companion.FUNCTION_PATTERN
 import org.hisp.dhis.rules.functions.RuleFunction
 import org.hisp.dhis.rules.models.*
-import org.hisp.dhis.rules.utils.Callable
-import org.hisp.dhis.rules.utils.Date
+import java.util.*
+import java.util.concurrent.Callable
 import kotlin.Comparator
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 actual class RuleEngineExecution actual constructor(
         private val expressionEvaluator: RuleExpressionEvaluator,

@@ -1,15 +1,12 @@
 package org.hisp.dhis.rules.models
 
-
-import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.toPersistentList
 import kotlin.jvm.JvmStatic
 
 data class Rule(val name: String?,
                 val programStage: String?,
                 val priority: Int?,
                 val condition: String,
-                val actions: PersistentList<RuleAction>) {
+                val actions: List<RuleAction>) {
 
     companion object {
 
@@ -18,7 +15,7 @@ data class Rule(val name: String?,
                               condition: String,
                               actions: List<RuleAction>,
                               name: String?) =
-                Rule(name, programStage, priority, condition, actions.toPersistentList())
+                Rule(name, programStage, priority, condition, actions)
 
     }
 }

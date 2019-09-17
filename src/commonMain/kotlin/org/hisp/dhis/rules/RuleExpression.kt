@@ -1,12 +1,10 @@
 package org.hisp.dhis.rules
 
-import kotlinx.collections.immutable.PersistentSet
-import kotlinx.collections.immutable.toPersistentSet
 import kotlin.jvm.JvmStatic
 
 class RuleExpression(val expression: String,
-                     val variable: PersistentSet<String>,
-                     val functions: PersistentSet<String>) {
+                     val variable: Set<String>,
+                     val functions: Set<String>) {
 
     companion object {
         private val VARIABLE_PATTERN = "[A#CV]\\{([\\w -_.]+)}".toRegex()
@@ -38,7 +36,7 @@ class RuleExpression(val expression: String,
                 functionMatcher.asIterable().map { result -> functions.add(result.groupValues[0]) }
 
 
-                return RuleExpression(it, variables.toPersistentSet(), functions.toPersistentSet())
+                return RuleExpression(it, variables.toSet(), functions.toSet())
             } ?: throw NullPointerException("expression == null")
 
         }

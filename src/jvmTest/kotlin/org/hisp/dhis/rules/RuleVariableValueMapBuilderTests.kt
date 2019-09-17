@@ -43,7 +43,7 @@ class RuleVariableValueMapBuilderTests {
 
         assertThat(valueMap.size).isEqualTo(11)
 
-        valueMap.clear()
+        //valueMap.clear()
         assertThat(valueMap.size).isEqualTo(11)
     }
 

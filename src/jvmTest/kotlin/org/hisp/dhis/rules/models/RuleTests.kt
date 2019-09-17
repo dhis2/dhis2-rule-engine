@@ -45,8 +45,8 @@ class RuleTests {
         val actions = mutableListOf(ruleActionOne, ruleActionTwo)
         val rule = Rule.create("test_program_stage", 1, "test_condition", actions, "")
 
-        rule.actions.add(ruleActionThree)
-        rule.actions.clear()
+        //rule.actions.add(ruleActionThree)
+        //rule.actions.clear()
 
         assertThat(rule.actions.size).isEqualTo(2)
         assertThat(rule.actions[0]).isEqualTo(ruleActionOne)

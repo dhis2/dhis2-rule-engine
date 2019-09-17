@@ -1,23 +1,20 @@
 package org.hisp.dhis.rules
 
-import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
 import org.hisp.dhis.rules.models.*
+import java.util.*
 import java.util.concurrent.Callable
 
 // ToDo: logging
 actual class RuleEngine actual constructor(
-        private val executionContext: RuleEngineContext,
-        private val events: PersistentList<RuleEvent>,
-        private val ruleEnrollment: RuleEnrollment?,
-        private val triggerEnvironment: TriggerEnvironment?) {
+        val executionContext: RuleEngineContext,
+        val events: List<RuleEvent>,
+        val ruleEnrollment: RuleEnrollment?,
+        val triggerEnvironment: TriggerEnvironment?) {
 
     actual fun evaluate(ruleEvent: RuleEvent?): Callable<List<RuleEffect>> {
         ruleEvent?.let {
             events.forEach {
-                if (it.event == ruleEvent.event)
-                    throw IllegalStateException("Event '${it.event}' is already set as a part of execution context.")
+                check(it.event != ruleEvent.event) { "Event '${it.event}' is already set as a part of execution context." }
             }
             return internalEvaluate(ruleEvent, executionContext.rules)
         } ?: throw IllegalArgumentException("ruleEvent == null")
@@ -84,7 +81,7 @@ actual class RuleEngine actual constructor(
 
     actual class Builder actual constructor(private val executionContext: RuleEngineContext) {
 
-        private var ruleEvents: PersistentList<RuleEvent>? = null
+        private var ruleEvents: List<RuleEvent>? = null
 
         private var ruleEnrollment: RuleEnrollment? = null
 
@@ -92,7 +89,7 @@ actual class RuleEngine actual constructor(
 
         actual fun events(ruleEvents: List<RuleEvent>?) =
                 apply {
-                    ruleEvents?.let { this.ruleEvents = ruleEvents.toPersistentList() } ?:
+                    ruleEvents?.let { this.ruleEvents = Collections.unmodifiableList(ruleEvents) } ?:
                     throw IllegalArgumentException("ruleEvents == null")
                 }
 
@@ -111,7 +108,7 @@ actual class RuleEngine actual constructor(
 
         actual fun build() =
                 RuleEngine(executionContext,
-                        ruleEvents ?: persistentListOf(),
+                        ruleEvents ?: listOf(),
                         ruleEnrollment,
                         triggerEnvironment)
     }

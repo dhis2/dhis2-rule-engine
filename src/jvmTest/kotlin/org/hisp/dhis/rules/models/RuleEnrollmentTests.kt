@@ -94,7 +94,7 @@ class RuleEnrollmentTests {
                 Date(), Date(), RuleEnrollment.Status.ACTIVE, "", null, attributeValues, "")
 
         // mutating source array
-        ruleEnrollment.attributeValues?.add(ruleAttributeValueThree)
+        //ruleEnrollment.attributeValues?.add(ruleAttributeValueThree)
 
         assertThat(ruleEnrollment.attributeValues?.size).isEqualTo(2)
         assertThat(ruleEnrollment.attributeValues?.get(0)).isEqualTo(ruleAttributeValueOne)
