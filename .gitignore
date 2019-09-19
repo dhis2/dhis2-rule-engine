@@ -36,5 +36,5 @@ node_modules
 /build
 .build.gradle
 build/
-.gradke/
+.gradle/
 ./src/main/AndroidManifest.xml
