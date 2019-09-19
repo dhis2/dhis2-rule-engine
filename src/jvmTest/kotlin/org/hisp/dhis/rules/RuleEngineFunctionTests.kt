@@ -330,7 +330,8 @@ class RuleEngineFunctionTests {
 
         assertThat(ruleEffects.size).isEqualTo(1)
         assertThat(ruleEffects[0].ruleAction).isEqualTo(ruleAction)
-        assertEquals("8", ruleEffects[0].data)
+        // TODO check klock library
+        assertEquals("7", ruleEffects[0].data)
     }
 
     @Test

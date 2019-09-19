@@ -28,20 +28,31 @@ package org.hisp.dhis.rules.functions
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.soywiz.klock.*
 import org.hisp.dhis.rules.RuleVariableValue
 import kotlin.jvm.JvmStatic
 
-
-expect class RuleFunctionMonthsBetween : RuleFunction {
+class RuleFunctionMonthsBetween : RuleFunction() {
 
     override fun evaluate(arguments: List<String?>,
-                          valueMap: Map<String, RuleVariableValue>?,
-                          supplementaryData: Map<String, List<String>>?): String
-
+                                 valueMap: Map<String, RuleVariableValue>?,
+                                 supplementaryData: Map<String, List<String>>?): String {
+        return when {
+            arguments.size != 2 -> throw IllegalArgumentException("Two arguments were expected, ${arguments.size} were supplied")
+            arguments[0].isNullOrEmpty() || arguments[1].isNullOrEmpty() -> "0"
+            else -> try {
+                    val startDate = DateFormat.FORMAT_DATE.parse(arguments[0]!!)
+                    val endDate = DateFormat.FORMAT_DATE.parse(arguments[1]!!)
+                    DateTimeRange(startDate.local, endDate.local, true).span.totalMonths.toString()
+                } catch (e: DateException) {
+                    throw IllegalArgumentException("Date cannot be parsed")
+                }
+        }
+    }
 
     companion object {
-        val D2_MONTHS_BETWEEN: String
+        const val D2_MONTHS_BETWEEN = "d2:monthsBetween"
 
-        @JvmStatic fun create(): RuleFunctionMonthsBetween
+        @JvmStatic fun create() = RuleFunctionMonthsBetween()
     }
 }

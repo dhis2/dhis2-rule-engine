@@ -28,21 +28,42 @@ package org.hisp.dhis.rules.functions
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
+import com.soywiz.klock.DateFormat
+import com.soywiz.klock.DateTime
+import com.soywiz.klock.days
+import com.soywiz.klock.parse
 import org.hisp.dhis.rules.RuleVariableValue
+import org.hisp.dhis.rules.wrap
 import kotlin.jvm.JvmStatic
 
-expect class RuleFunctionAddDays: RuleFunction {
+class RuleFunctionAddDays : RuleFunction() {
 
-    override fun evaluate(arguments: List<String?>,
-                          valueMap: Map<String, RuleVariableValue>?,
-                          supplementaryData: Map<String, List<String>>?): String
+    override fun evaluate(arguments: List<String?>, valueMap: Map<String, RuleVariableValue>?,
+                                 supplementaryData: Map<String, List<String>>?): String {
+        when {
+            arguments.size != 2 -> throw IllegalArgumentException("Two arguments were expected, ${arguments.size} were supplied")
+            else -> return addDays(arguments[0], arguments[1]).wrap()
+        }
+    }
 
     companion object {
-        val D2_ADD_DAYS: String
+        const val D2_ADD_DAYS = "d2:addDays"
 
-        @JvmStatic fun create() : RuleFunctionAddDays
+        @JvmStatic fun create() = RuleFunctionAddDays()
 
-        @JvmStatic fun addDays(inputDate: String?, days: String?): String
+        /**
+         * Function which will return the the date after adding/subtracting number of days.
+         *
+         * @param inputDate the date to add/subtract from.
+         * @param days  number of days to add/subtract.
+         * @return date after adding/subtracting days.
+         */
+        @JvmStatic fun addDays(inputDate: String?, days: String?): String {
+
+            val date = inputDate?.let { DateFormat.FORMAT_DATE.parse(it) } ?: throw RuntimeException()
+            val daysToAdd = days?.toInt() ?: throw RuntimeException()
+
+            return (date + daysToAdd.days).format(DATE_PATTERN)
+        }
     }
 }

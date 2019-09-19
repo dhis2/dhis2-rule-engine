@@ -1,3 +1,4 @@
+
 package org.hisp.dhis.rules
 
 import org.hisp.dhis.rules.RuleVariableValue.Companion.create
@@ -108,7 +109,7 @@ actual class RuleVariableValueMapBuilder actual constructor() {
         buildConstantsValues(valueMap)
 
         // do not let outer world to alter variable value map
-        return valueMap.toMap()
+        return valueMap
     }
 
     private fun buildCurrentEventValues() {
@@ -176,10 +177,10 @@ actual class RuleVariableValueMapBuilder actual constructor() {
                 valueMap[ENV_VAR_ENROLLMENT_COUNT] = create("1", RuleValueType.NUMERIC, listOf("1"), currentDate)
                 valueMap[ENV_VAR_TEI_COUNT] = create("1", RuleValueType.NUMERIC, listOf("1"), currentDate)
 
-                val enrollmentDate = dateFormat.format(enrollmentDate)
+                val enrollmentDate = dateFormat.format(enrollmentDate!!)
                 valueMap[ENV_VAR_ENROLLMENT_DATE] = create(enrollmentDate, RuleValueType.TEXT, listOf(enrollmentDate), currentDate)
 
-                val incidentDate = dateFormat.format(incidentDate)
+                val incidentDate = dateFormat.format(incidentDate!!)
                 valueMap[ENV_VAR_INCIDENT_DATE] = create(incidentDate, RuleValueType.TEXT, listOf(incidentDate), currentDate)
 
                 val status = status!!.toString()
@@ -199,10 +200,10 @@ actual class RuleVariableValueMapBuilder actual constructor() {
 
         ruleEvent?.let { ruleEvent ->
             with(ruleEvent) {
-                val eventDate = dateFormat.format(eventDate)
+                val eventDate = dateFormat.format(eventDate!!)
                 valueMap[ENV_VAR_EVENT_DATE] = create(eventDate, RuleValueType.TEXT, listOf(eventDate), currentDate)
 
-                val dueDate = dateFormat.format(dueDate)
+                val dueDate = dateFormat.format(dueDate!!)
                 valueMap[ENV_VAR_DUE_DATE] = create(dueDate, RuleValueType.TEXT, listOf(dueDate), currentDate)
 
                 // override value of event count
@@ -237,7 +238,7 @@ actual class RuleVariableValueMapBuilder actual constructor() {
                 is RuleVariableNewestEvent -> createNewestEventVariableValue(valueMap, it)
                 is RuleVariableNewestStageEvent -> createNewestStageEventVariableValue(valueMap, it)
                 is RuleVariableCalculatedValue -> createCalculatedValueVariable(valueMap, it)
-                else -> throw IllegalArgumentException("Unsupported RuleVariable type: " + it.javaClass)
+                else -> throw IllegalArgumentException("Unsupported RuleVariable type: " + it::class.js)
             }
         }
     }
@@ -311,7 +312,7 @@ actual class RuleVariableValueMapBuilder actual constructor() {
                 dates.add(it.eventDate)
         }
 
-        return dateFormat.format(dates.max())
+        return dateFormat.format(dates.max()!!)
     }
 
     private fun getLastUpdateDateForPrevious(ruleDataValues: List<RuleDataValue>): String {
@@ -322,7 +323,7 @@ actual class RuleVariableValueMapBuilder actual constructor() {
                 dates.add(it.eventDate)
         }
 
-        return dateFormat.format(dates.max())
+        return dateFormat.format(dates.max()!!)
     }
 
     private fun createNewestStageEventVariableValue(valueMap: MutableMap<String, RuleVariableValue>,
@@ -404,11 +405,11 @@ actual class RuleVariableValueMapBuilder actual constructor() {
 
         private const val ENV_VAR_OU_CODE = "orgunit_code"
 
-        @JvmStatic actual fun target(ruleEnrollment: RuleEnrollment) = RuleVariableValueMapBuilder(ruleEnrollment)
+        actual fun target(ruleEnrollment: RuleEnrollment) = RuleVariableValueMapBuilder(ruleEnrollment)
 
-        @JvmStatic actual fun target(ruleEvent: RuleEvent) = RuleVariableValueMapBuilder(ruleEvent)
+        actual fun target(ruleEvent: RuleEvent) = RuleVariableValueMapBuilder(ruleEvent)
 
-        @JvmStatic private fun isEventInList(ruleEvents: List<RuleEvent>, ruleEvent: RuleEvent?): Boolean {
+        private fun isEventInList(ruleEvents: List<RuleEvent>, ruleEvent: RuleEvent?): Boolean {
             ruleEvent?.let {
                 ruleEvents.forEach { event ->
                     if (event.event == it.event)
@@ -419,3 +420,4 @@ actual class RuleVariableValueMapBuilder actual constructor() {
         }
     }
 }
+

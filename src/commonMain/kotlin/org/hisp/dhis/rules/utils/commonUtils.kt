@@ -1,15 +1,12 @@
 package org.hisp.dhis.rules.utils
 
-
-expect class Date()
-
-expect fun Date.compareTo(date: Date): Int
+expect class Date(): Comparable<Date>
 
 expect interface Callable<V> {
     fun call() : V
 }
 
-expect class SimpleDateFormat() {
+expect class SimpleDateFormat(pattern: String) {
     fun applyPattern(pattern: String)
     fun format(date: Date): String
 }

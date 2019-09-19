@@ -1,15 +1,14 @@
 package org.hisp.dhis.rules
 
 import org.hisp.dhis.rules.models.*
-import java.util.*
-import java.util.concurrent.Callable
+import org.hisp.dhis.rules.utils.Callable
 
 // ToDo: logging
 actual class RuleEngine actual constructor(
-        val executionContext: RuleEngineContext,
-        val events: List<RuleEvent>,
-        val ruleEnrollment: RuleEnrollment?,
-        val triggerEnvironment: TriggerEnvironment?) {
+        private val executionContext: RuleEngineContext,
+        private val events: List<RuleEvent>,
+        private val ruleEnrollment: RuleEnrollment?,
+        private val triggerEnvironment: TriggerEnvironment?) {
 
     actual fun evaluate(ruleEvent: RuleEvent?): Callable<List<RuleEffect>> {
         ruleEvent?.let {
@@ -88,7 +87,7 @@ actual class RuleEngine actual constructor(
 
         actual fun events(ruleEvents: List<RuleEvent>?) =
                 apply {
-                    ruleEvents?.let { this.ruleEvents = Collections.unmodifiableList(ruleEvents) } ?:
+                    ruleEvents?.let { this.ruleEvents = ruleEvents } ?:
                     throw IllegalArgumentException("ruleEvents == null")
                 }
 

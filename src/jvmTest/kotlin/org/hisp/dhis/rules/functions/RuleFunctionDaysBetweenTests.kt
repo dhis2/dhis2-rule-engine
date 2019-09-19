@@ -52,6 +52,11 @@ class RuleFunctionDaysBetweenTests {
                 `is`("-1"))
         assertThat(daysBetween.evaluate(listOf("2017-01-01", "2017-02-01"), variableValues, null),
                 `is`("31"))
+        assertThat(daysBetween.evaluate(listOf("2019-01-01", "2020-01-01"), variableValues, null),
+                `is`("365"))
+        // leap year
+        assertThat(daysBetween.evaluate(listOf("2020-01-01", "2021-01-01"), variableValues, null),
+                `is`("366"))
     }
 
     @Test

@@ -2,7 +2,6 @@ package org.hisp.dhis.rules.models
 
 
 import org.hisp.dhis.rules.utils.Date
-import org.hisp.dhis.rules.utils.compareTo
 import kotlin.jvm.JvmField
 import kotlin.jvm.JvmStatic
 

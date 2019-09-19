@@ -1,8 +1,6 @@
 package org.hisp.dhis.rules
 
 import com.soywiz.klock.DateTime
-import org.apache.commons.jexl2.JexlException
-import org.apache.commons.logging.LogFactory
 import org.hisp.dhis.rules.RuleExpression.Companion.FUNCTION_PATTERN
 import org.hisp.dhis.rules.functions.RuleFunction
 import org.hisp.dhis.rules.models.*
@@ -10,6 +8,7 @@ import org.hisp.dhis.rules.utils.Callable
 import kotlin.Comparator
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+
 
 actual class RuleEngineExecution actual constructor(
         private val expressionEvaluator: RuleExpressionEvaluator,
@@ -39,7 +38,7 @@ actual class RuleEngineExecution actual constructor(
 
         ruleList.forEach {rule ->
             try {
-                log.debug("Evaluating program rule: ${rule.name}")
+                console.log("Evaluating program rule: ${rule.name}")
                 if (process(rule.condition).toBoolean()) {
                     rule.actions.forEach {
                         val ruleEffect = create(it)
@@ -51,10 +50,8 @@ actual class RuleEngineExecution actual constructor(
                         }
                     }
                 }
-            }catch (jexlException: JexlException) {
-                log.error("Parser exception in ${rule.name} : ${jexlException.message}")
             } catch (e: Exception) {
-                log.error("Exception in  ${rule.name} : ${e.message}")
+                console.log("Exception in  ${rule.name} : ${e.message}")
             }
         }
 
@@ -107,7 +104,7 @@ actual class RuleEngineExecution actual constructor(
             val expressionWithVariableValues = bindVariableValues(expression)
             val expressionWithFunctionValues = bindFunctionValues(expressionWithVariableValues)
 
-            log.debug("Evaluating expression: $expressionWithFunctionValues")
+            console.log("Evaluating expression: $expressionWithFunctionValues")
             return expressionEvaluator.evaluate(expressionWithFunctionValues)
         }
 
@@ -154,7 +151,7 @@ actual class RuleEngineExecution actual constructor(
             val functionMatcher = FUNCTION_PATTERN.find(processedExpression)
 
             functionMatcher?.let {result ->
-                if(result.groupValues[1].isNotEmpty())
+                if(result?.groupValues[1].isNotEmpty())
                 // Another recursive call to process rest of
                 // the d2 function calls.
                     processedExpression = bindFunctionValues(processedExpression)
@@ -166,8 +163,6 @@ actual class RuleEngineExecution actual constructor(
 
     companion object {
         private const val D2_FUNCTION_PREFIX = "d2:"
-
-        private val log = LogFactory.getLog(RuleEngineExecution::class.java)
 
         private val REGEX = "[a-zA-Z0-9]+(?:[\\w -]*[a-zA-Z0-9]+)*".toRegex(RegexOption.IGNORE_CASE)
     }

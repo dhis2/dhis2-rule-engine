@@ -6,17 +6,19 @@
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 kotlin {
 
     jvm()
-    //js()
+    js()
 
     sourceSets {
         commonMain {
             dependencies {
                 implementation(kotlin("stdlib-common"))
+                implementation("com.soywiz.korlibs.klock:klock:1.6.0")
             }
         }
 
@@ -30,7 +32,6 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-jdk8"))
                 implementation("org.apache.commons:commons-jexl:2.1.1")
-                implementation("org.apache.commons:commons-lang3:3.8.1")
             }
         }
 
@@ -48,10 +49,9 @@ kotlin {
             }
         }
 
-        /*js().compilations["main"].defaultSourceSet{
+        js().compilations["main"].defaultSourceSet{
             dependencies {
                 implementation(kotlin("stdlib-js"))
-                implementation(npm("jexl", "2.2.1"))
             }
         }
 
@@ -59,7 +59,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("test-js"))
             }
-        }*/
+        }
     }
 }
 
