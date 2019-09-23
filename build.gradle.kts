@@ -18,7 +18,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(kotlin("stdlib-common"))
-                implementation("com.soywiz.korlibs.klock:klock:1.6.0")
+                implementation("com.soywiz.korlibs.klock:klock:1.7.1")
             }
         }
 
