@@ -5,7 +5,9 @@ import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.Date
 import org.hisp.dhis.rules.utils.SimpleDateFormat
 import org.hisp.dhis.rules.utils.Utils
+import java.util.*
 import kotlin.collections.HashMap
+import kotlin.system.measureTimeMillis
 
 actual class RuleVariableValueMapBuilder actual constructor() {
 
@@ -70,10 +72,8 @@ actual class RuleVariableValueMapBuilder actual constructor() {
 
 
     actual fun ruleEvents(ruleEvents: List<RuleEvent>): RuleVariableValueMapBuilder {
-        if (isEventInList(ruleEvents, ruleEvent)) {
-            throw IllegalStateException("ruleEvent ${ruleEvent!!.event} is already set as a target, " +
-                    "but also present in the context: ruleEvents list")
-        }
+        check(!isEventInList(ruleEvents, ruleEvent)) { "ruleEvent ${ruleEvent!!.event} is already set as a target, " +
+                "but also present in the context: ruleEvents list" }
 
         this.ruleEvents.addAll(ruleEvents)
         return this
@@ -88,27 +88,29 @@ actual class RuleVariableValueMapBuilder actual constructor() {
 
     actual fun build(): Map<String, RuleVariableValue> {
         val valueMap = HashMap<String, RuleVariableValue>()
+        val valueBuilderTime = measureTimeMillis {
 
-        // map tracked entity attributes to values from enrollment
-        buildCurrentEnrollmentValues()
+            // map tracked entity attributes to values from enrollment
+            buildCurrentEnrollmentValues()
 
-        // build a map of current event values
-        buildCurrentEventValues()
+            // build a map of current event values
+            buildCurrentEventValues()
 
-        // map data values within all events to data elements
-        buildAllEventValues()
+            // map data values within all events to data elements
+            buildAllEventValues()
 
-        // set environment variables
-        buildEnvironmentVariables(valueMap)
+            // set environment variables
+            buildEnvironmentVariables(valueMap)
 
-        // set metadata variables
-        buildRuleVariableValues(valueMap)
+            // set metadata variables
+            buildRuleVariableValues(valueMap)
 
-        // set constants value map
-        buildConstantsValues(valueMap)
-
+            // set constants value map
+            buildConstantsValues(valueMap)
+        }
+        print("ValueMap Build() method took: $valueBuilderTime milliseconds")
         // do not let outer world to alter variable value map
-        return valueMap.toMap()
+        return Collections.unmodifiableMap(valueMap)
     }
 
     private fun buildCurrentEventValues() {

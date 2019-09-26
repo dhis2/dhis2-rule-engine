@@ -10,6 +10,7 @@ import org.hisp.dhis.rules.utils.Callable
 import kotlin.Comparator
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.system.measureTimeMillis
 
 actual class RuleEngineExecution actual constructor(
         private val expressionEvaluator: RuleExpressionEvaluator,
@@ -28,35 +29,45 @@ actual class RuleEngineExecution actual constructor(
 
         val ruleList = ArrayList(rules)
 
-        ruleList.sortWith(Comparator { rule1, rule2 ->
-            when {
-                rule1.priority != null && rule2.priority != null -> rule1.priority.compareTo(rule2.priority)
-                rule1.priority != null -> -1
-                rule2.priority != null -> 1
-                else -> 0
-            }
-        })
+        print("rule list size is of ${ruleList.size} items \n")
 
-        ruleList.forEach {rule ->
-            try {
-                log.debug("Evaluating program rule: ${rule.name}")
-                if (process(rule.condition).toBoolean()) {
-                    rule.actions.forEach {
-                        val ruleEffect = create(it)
-                        if (isAssignToCalculatedValue(it)) {
-                            updateValueMapForCalculatedValue(it as RuleActionAssign,
-                                    RuleVariableValue.create(ruleEffect.data, RuleValueType.TEXT))
-                        } else {
-                            ruleEffects.add(create(it))
+        val ruleSortElapsed = measureTimeMillis {
+            ruleList.sortWith(Comparator { rule1, rule2 ->
+                when {
+                    rule1.priority != null && rule2.priority != null -> rule1.priority.compareTo(rule2.priority)
+                    rule1.priority != null -> -1
+                    rule2.priority != null -> 1
+                    else -> 0
+                }
+            })
+        }
+
+        print("Sorting rules took: $ruleSortElapsed milliseconds \n")
+
+        val rulesProcessElapsed = measureTimeMillis {
+            ruleList.forEach {rule ->
+                try {
+                    log.debug("Evaluating program rule: ${rule.name}")
+                    if (process(rule.condition).toBoolean()) {
+                        rule.actions.forEach {
+                            val ruleEffect = create(it)
+                            if (isAssignToCalculatedValue(it)) {
+                                updateValueMapForCalculatedValue(it as RuleActionAssign,
+                                        RuleVariableValue.create(ruleEffect.data, RuleValueType.TEXT))
+                            } else {
+                                ruleEffects.add(create(it))
+                            }
                         }
                     }
+                }catch (jexlException: JexlException) {
+                    log.error("Parser exception in ${rule.name} : ${jexlException.message}")
+                } catch (e: Exception) {
+                    log.error("Exception in  ${rule.name} : ${e.message}")
                 }
-            }catch (jexlException: JexlException) {
-                log.error("Parser exception in ${rule.name} : ${jexlException.message}")
-            } catch (e: Exception) {
-                log.error("Exception in  ${rule.name} : ${e.message}")
             }
         }
+
+        print("Processing rules took: $rulesProcessElapsed milliseconds \n")
 
         return ruleEffects
     }

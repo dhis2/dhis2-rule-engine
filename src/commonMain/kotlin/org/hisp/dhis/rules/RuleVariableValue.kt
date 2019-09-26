@@ -63,7 +63,7 @@ data class RuleVariableValue(val value: String?,
 
 
         private fun getFormattedDate(date: Date): String {
-            val format = SimpleDateFormat()
+            val format = SimpleDateFormat(DATE_PATTERN)
             format.applyPattern(DATE_PATTERN)
 
             return format.format(date)
