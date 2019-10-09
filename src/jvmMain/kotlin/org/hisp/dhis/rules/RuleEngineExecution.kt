@@ -46,24 +46,22 @@ actual class RuleEngineExecution actual constructor(
 
         val rulesProcessElapsed = measureTimeMillis {
 
-            ruleList.filter {
+            ruleList.map { rule ->
                 try {
-                    process(it.condition).toBoolean()
+                    if(process(rule.condition).toBoolean()) {
+                        rule.actions.map {
+                            val ruleEffect = create(it)
+                            if (isAssignToCalculatedValue(it))
+                                updateValueMapForCalculatedValue(
+                                        it as RuleActionAssign, RuleVariableValue.create(ruleEffect.data, RuleValueType.TEXT))
+                            else
+                                ruleEffects.add(create(it))
+                        }
+                    }
                 } catch (jexlException: JexlException) {
-                    log.error("Parser exception in ${it.name} : ${jexlException.message}")
-                    false
+                    log.error("Parser exception in ${rule.name} : ${jexlException.message}")
                 } catch (e: Exception) {
-                    log.error("Exception in  ${it.name} : ${e.message}")
-                    false
-                }
-            }.map { rule ->
-                rule.actions.map {
-                    val ruleEffect = create(it)
-                    if (isAssignToCalculatedValue(it))
-                        updateValueMapForCalculatedValue(
-                                it as RuleActionAssign, RuleVariableValue.create(ruleEffect.data, RuleValueType.TEXT))
-                    else
-                        ruleEffects.add(create(it))
+                    log.error("Exception in  ${rule.name} : ${e.message}")
                 }
             }
         }
@@ -128,7 +126,7 @@ actual class RuleEngineExecution actual constructor(
         val ruleExpressionBinder = RuleExpressionBinder.from(ruleExpression)
 
         // substitute variable values
-        ruleExpression.variable.map {
+        ruleExpression.variable.forEach {
             val variableValue = valueMap[RuleExpression.unwrapVariableName(it)]
             variableValue?.let { variable ->
                 ruleExpressionBinder.bindVariable(it, variable.value ?: variable.type.defaultValue())
@@ -143,7 +141,7 @@ actual class RuleEngineExecution actual constructor(
         val ruleExpression = RuleExpression.from(expression)
         val ruleExpressionBinder = RuleExpressionBinder.from(ruleExpression)
 
-        ruleExpression.functions.map { function ->
+        ruleExpression.functions.forEach { function ->
             val ruleFunctionCall = RuleFunctionCall.from(function)
             val arguments = ruleFunctionCall.arguments.map { arg -> process(arg) }
 

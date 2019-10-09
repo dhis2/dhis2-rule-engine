@@ -108,7 +108,7 @@ actual class RuleVariableValueMapBuilder actual constructor() {
             // set constants value map
             buildConstantsValues(valueMap)
         }
-        print("ValueMap Build() method took: $valueBuilderTime milliseconds")
+        print("ValueMap Build() method took: $valueBuilderTime milliseconds \n")
         // do not let outer world to alter variable value map
         return Collections.unmodifiableMap(valueMap)
     }

@@ -28,12 +28,12 @@ package org.hisp.dhis.rules.models
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.google.common.truth.Truth.assertThat
+
+import org.assertj.core.api.Assertions.assertThat
 import org.hisp.dhis.rules.ExpressionEvaluator
 import org.hisp.dhis.rules.RuleEngine
 import org.hisp.dhis.rules.RuleEngineContext
 import org.hisp.dhis.rules.RuleExpressionEvaluator
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
