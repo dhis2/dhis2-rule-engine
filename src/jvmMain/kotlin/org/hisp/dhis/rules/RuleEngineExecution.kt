@@ -16,7 +16,7 @@ actual class RuleEngineExecution actual constructor(
         private val expressionEvaluator: RuleExpressionEvaluator,
         private val rules: List<Rule>,
         valueMap: Map<String, RuleVariableValue>,
-        private val supplementaryData: Map<String, List<String>>): Callable<List<RuleEffect>> {
+        private val supplementaryData: Map<String, List<String>>) : Callable<List<RuleEffect>> {
 
     private val valueMap: MutableMap<String, RuleVariableValue>
 
@@ -45,24 +45,25 @@ actual class RuleEngineExecution actual constructor(
         print("Sorting rules took: $ruleSortElapsed milliseconds \n")
 
         val rulesProcessElapsed = measureTimeMillis {
-            ruleList.forEach {rule ->
+
+            ruleList.filter {
                 try {
-                    log.debug("Evaluating program rule: ${rule.name}")
-                    if (process(rule.condition).toBoolean()) {
-                        rule.actions.forEach {
-                            val ruleEffect = create(it)
-                            if (isAssignToCalculatedValue(it)) {
-                                updateValueMapForCalculatedValue(it as RuleActionAssign,
-                                        RuleVariableValue.create(ruleEffect.data, RuleValueType.TEXT))
-                            } else {
-                                ruleEffects.add(create(it))
-                            }
-                        }
-                    }
-                }catch (jexlException: JexlException) {
-                    log.error("Parser exception in ${rule.name} : ${jexlException.message}")
+                    process(it.condition).toBoolean()
+                } catch (jexlException: JexlException) {
+                    log.error("Parser exception in ${it.name} : ${jexlException.message}")
+                    false
                 } catch (e: Exception) {
-                    log.error("Exception in  ${rule.name} : ${e.message}")
+                    log.error("Exception in  ${it.name} : ${e.message}")
+                    false
+                }
+            }.map { rule ->
+                rule.actions.map {
+                    val ruleEffect = create(it)
+                    if (isAssignToCalculatedValue(it))
+                        updateValueMapForCalculatedValue(
+                                it as RuleActionAssign, RuleVariableValue.create(ruleEffect.data, RuleValueType.TEXT))
+                    else
+                        ruleEffects.add(create(it))
                 }
             }
         }
@@ -89,22 +90,19 @@ actual class RuleEngineExecution actual constructor(
                 val variableValue = RuleVariableValue.create(data, RuleValueType.TEXT, listOf(data), DateTime.now().toString())
                 val field = ruleAction.field
                 val matcher = REGEX.findAll(field!!)
-                matcher.asIterable()
-                        .map { result -> result.groupValues[0].trim() }
+                matcher.map { result -> result.groupValues[0].trim() }
                         .forEach { value -> valueMap[value] = variableValue }
-
-
                 RuleEffect.create(ruleAction, data)
             }
             is RuleActionSendMessage -> RuleEffect.create(ruleAction, process(ruleAction.data!!))
             is RuleActionScheduleMessage -> RuleEffect.create(ruleAction, process(ruleAction.data!!))
             is RuleActionCreateEvent -> RuleEffect.create(ruleAction, process(ruleAction.data!!))
-            is RuleActionDisplayKeyValuePair ->  RuleEffect.create(ruleAction, process(ruleAction.data!!))
-            is RuleActionDisplayText ->  RuleEffect.create(ruleAction, process(ruleAction.data!!))
-            is RuleActionErrorOnCompletion ->  RuleEffect.create(ruleAction, process(ruleAction.data!!))
-            is RuleActionShowError ->  RuleEffect.create(ruleAction, process(ruleAction.data!!))
-            is RuleActionShowWarning ->  RuleEffect.create(ruleAction, process(ruleAction.data!!))
-            is RuleActionWarningOnCompletion ->  RuleEffect.create(ruleAction, process(ruleAction.data!!))
+            is RuleActionDisplayKeyValuePair -> RuleEffect.create(ruleAction, process(ruleAction.data!!))
+            is RuleActionDisplayText -> RuleEffect.create(ruleAction, process(ruleAction.data!!))
+            is RuleActionErrorOnCompletion -> RuleEffect.create(ruleAction, process(ruleAction.data!!))
+            is RuleActionShowError -> RuleEffect.create(ruleAction, process(ruleAction.data!!))
+            is RuleActionShowWarning -> RuleEffect.create(ruleAction, process(ruleAction.data!!))
+            is RuleActionWarningOnCompletion -> RuleEffect.create(ruleAction, process(ruleAction.data!!))
             else -> RuleEffect.create(ruleAction)
         }
 
@@ -130,7 +128,7 @@ actual class RuleEngineExecution actual constructor(
         val ruleExpressionBinder = RuleExpressionBinder.from(ruleExpression)
 
         // substitute variable values
-        ruleExpression.variable.forEach {
+        ruleExpression.variable.map {
             val variableValue = valueMap[RuleExpression.unwrapVariableName(it)]
             variableValue?.let { variable ->
                 ruleExpressionBinder.bindVariable(it, variable.value ?: variable.type.defaultValue())
@@ -145,14 +143,14 @@ actual class RuleEngineExecution actual constructor(
         val ruleExpression = RuleExpression.from(expression)
         val ruleExpressionBinder = RuleExpressionBinder.from(ruleExpression)
 
-        ruleExpression.functions.forEach { function ->
+        ruleExpression.functions.map { function ->
             val ruleFunctionCall = RuleFunctionCall.from(function)
             val arguments = ruleFunctionCall.arguments.map { arg -> process(arg) }
 
             ruleExpressionBinder.bindFunction(
                     ruleFunctionCall.functionCall,
                     RuleFunction.create(ruleFunctionCall.functionName)?.evaluate(
-                            arguments, valueMap,supplementaryData) ?: ""
+                            arguments, valueMap, supplementaryData) ?: ""
             )
         }
 
@@ -164,8 +162,8 @@ actual class RuleEngineExecution actual constructor(
         if (processedExpression.contains(D2_FUNCTION_PREFIX)) {
             val functionMatcher = FUNCTION_PATTERN.find(processedExpression)
 
-            functionMatcher?.let {result ->
-                if(result.groupValues[1].isNotEmpty())
+            functionMatcher?.let { result ->
+                if (result.groupValues[1].isNotEmpty())
                 // Another recursive call to process rest of
                 // the d2 function calls.
                     processedExpression = bindFunctionValues(processedExpression)
