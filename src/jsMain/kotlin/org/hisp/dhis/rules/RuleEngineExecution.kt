@@ -4,8 +4,6 @@ import com.soywiz.klock.DateTime
 import org.hisp.dhis.rules.RuleExpression.Companion.FUNCTION_PATTERN
 import org.hisp.dhis.rules.functions.RuleFunction
 import org.hisp.dhis.rules.models.*
-import org.hisp.dhis.rules.utils.Callable
-import kotlin.Comparator
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -14,7 +12,7 @@ actual class RuleEngineExecution actual constructor(
         private val expressionEvaluator: RuleExpressionEvaluator,
         private val rules: List<Rule>,
         valueMap: Map<String, RuleVariableValue>,
-        private val supplementaryData: Map<String, List<String>>): Callable<List<RuleEffect>> {
+        private val supplementaryData: Map<String, List<String>>) {
 
     private val valueMap: MutableMap<String, RuleVariableValue>
 
@@ -22,7 +20,7 @@ actual class RuleEngineExecution actual constructor(
         this.valueMap = HashMap(valueMap)
     }
 
-    actual override fun call(): List<RuleEffect> {
+    actual fun call(): List<RuleEffect> {
         val ruleEffects = ArrayList<RuleEffect>()
 
         val ruleList = ArrayList(rules)
@@ -36,25 +34,22 @@ actual class RuleEngineExecution actual constructor(
             }
         })
 
-        ruleList.forEach {rule ->
+        ruleList.map { rule ->
             try {
-                console.log("Evaluating program rule: ${rule.name}")
                 if (process(rule.condition).toBoolean()) {
-                    rule.actions.forEach {
+                    rule.actions.map {
                         val ruleEffect = create(it)
-                        if (isAssignToCalculatedValue(it)) {
-                            updateValueMapForCalculatedValue(it as RuleActionAssign,
-                                    RuleVariableValue.create(ruleEffect.data, RuleValueType.TEXT))
-                        } else {
+                        if (isAssignToCalculatedValue(it))
+                            updateValueMapForCalculatedValue(
+                                    it as RuleActionAssign, RuleVariableValue.create(ruleEffect.data, RuleValueType.TEXT))
+                        else
                             ruleEffects.add(create(it))
-                        }
                     }
                 }
             } catch (e: Exception) {
                 console.log("Exception in  ${rule.name} : ${e.message}")
             }
         }
-
         return ruleEffects
     }
 
@@ -85,12 +80,12 @@ actual class RuleEngineExecution actual constructor(
             is RuleActionSendMessage -> RuleEffect.create(ruleAction, process(ruleAction.data!!))
             is RuleActionScheduleMessage -> RuleEffect.create(ruleAction, process(ruleAction.data!!))
             is RuleActionCreateEvent -> RuleEffect.create(ruleAction, process(ruleAction.data!!))
-            is RuleActionDisplayKeyValuePair ->  RuleEffect.create(ruleAction, process(ruleAction.data!!))
-            is RuleActionDisplayText ->  RuleEffect.create(ruleAction, process(ruleAction.data!!))
-            is RuleActionErrorOnCompletion ->  RuleEffect.create(ruleAction, process(ruleAction.data!!))
-            is RuleActionShowError ->  RuleEffect.create(ruleAction, process(ruleAction.data!!))
-            is RuleActionShowWarning ->  RuleEffect.create(ruleAction, process(ruleAction.data!!))
-            is RuleActionWarningOnCompletion ->  RuleEffect.create(ruleAction, process(ruleAction.data!!))
+            is RuleActionDisplayKeyValuePair -> RuleEffect.create(ruleAction, process(ruleAction.data!!))
+            is RuleActionDisplayText -> RuleEffect.create(ruleAction, process(ruleAction.data!!))
+            is RuleActionErrorOnCompletion -> RuleEffect.create(ruleAction, process(ruleAction.data!!))
+            is RuleActionShowError -> RuleEffect.create(ruleAction, process(ruleAction.data!!))
+            is RuleActionShowWarning -> RuleEffect.create(ruleAction, process(ruleAction.data!!))
+            is RuleActionWarningOnCompletion -> RuleEffect.create(ruleAction, process(ruleAction.data!!))
             else -> RuleEffect.create(ruleAction)
         }
 
@@ -138,7 +133,7 @@ actual class RuleEngineExecution actual constructor(
             ruleExpressionBinder.bindFunction(
                     ruleFunctionCall.functionCall,
                     RuleFunction.create(ruleFunctionCall.functionName)?.evaluate(
-                            arguments, valueMap,supplementaryData) ?: ""
+                            arguments, valueMap, supplementaryData) ?: ""
             )
         }
 
@@ -150,8 +145,8 @@ actual class RuleEngineExecution actual constructor(
         if (processedExpression.contains(D2_FUNCTION_PREFIX)) {
             val functionMatcher = FUNCTION_PATTERN.find(processedExpression)
 
-            functionMatcher?.let {result ->
-                if(result?.groupValues[1].isNotEmpty())
+            functionMatcher?.let { result ->
+                if (result?.groupValues[1].isNotEmpty())
                 // Another recursive call to process rest of
                 // the d2 function calls.
                     processedExpression = bindFunctionValues(processedExpression)
