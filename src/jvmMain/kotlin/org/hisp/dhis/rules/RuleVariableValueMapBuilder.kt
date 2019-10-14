@@ -61,19 +61,22 @@ actual class RuleVariableValueMapBuilder actual constructor() {
     actual fun ruleVariables(ruleVariables: List<RuleVariable>) = apply { this.ruleVariables.addAll(ruleVariables) }
 
     actual fun ruleEnrollment(ruleEnrollment: RuleEnrollment?) =
-            this.ruleEnrollment?.let { throw IllegalStateException("It seems that enrollment has been set as target already. " +
-                    "It can't be used as a part of execution context.") } ?:
-            apply { this.ruleEnrollment = ruleEnrollment }
+            this.ruleEnrollment?.let {
+                throw IllegalStateException("It seems that enrollment has been set as target already. " +
+                        "It can't be used as a part of execution context.")
+            } ?: apply { this.ruleEnrollment = ruleEnrollment }
 
 
     actual fun triggerEnvironment(triggerEnvironment: TriggerEnvironment?) =
-            this.triggerEnvironment?.let { throw IllegalStateException("triggerEnvironment == null") } ?:
-            apply { this.triggerEnvironment = triggerEnvironment }
+            this.triggerEnvironment?.let { throw IllegalStateException("triggerEnvironment == null") }
+                    ?: apply { this.triggerEnvironment = triggerEnvironment }
 
 
     actual fun ruleEvents(ruleEvents: List<RuleEvent>): RuleVariableValueMapBuilder {
-        check(!isEventInList(ruleEvents, ruleEvent)) { "ruleEvent ${ruleEvent!!.event} is already set as a target, " +
-                "but also present in the context: ruleEvents list" }
+        check(!isEventInList(ruleEvents, ruleEvent)) {
+            "ruleEvent ${ruleEvent!!.event} is already set as a target, " +
+                    "but also present in the context: ruleEvents list"
+        }
 
         this.ruleEvents.addAll(ruleEvents)
         return this
@@ -82,33 +85,31 @@ actual class RuleVariableValueMapBuilder actual constructor() {
     actual fun calculatedValueMap(calculatedValueMap: Map<String, Map<String, String>>) =
             apply { this.calculatedValueMap.putAll(calculatedValueMap) }
 
-    actual fun constantValueMap(constantValues: Map<String, String>)=
+    actual fun constantValueMap(constantValues: Map<String, String>) =
             apply { this.allConstantValues.putAll(constantValues) }
 
 
     actual fun build(): Map<String, RuleVariableValue> {
         val valueMap = HashMap<String, RuleVariableValue>()
-        val valueBuilderTime = measureTimeMillis {
 
-            // map tracked entity attributes to values from enrollment
-            buildCurrentEnrollmentValues()
+        // map tracked entity attributes to values from enrollment
+        buildCurrentEnrollmentValues()
 
-            // build a map of current event values
-            buildCurrentEventValues()
+        // build a map of current event values
+        buildCurrentEventValues()
 
-            // map data values within all events to data elements
-            buildAllEventValues()
+        // map data values within all events to data elements
+        buildAllEventValues()
 
-            // set environment variables
-            buildEnvironmentVariables(valueMap)
+        // set environment variables
+        buildEnvironmentVariables(valueMap)
 
-            // set metadata variables
-            buildRuleVariableValues(valueMap)
+        // set metadata variables
+        buildRuleVariableValues(valueMap)
 
-            // set constants value map
-            buildConstantsValues(valueMap)
-        }
-        print("ValueMap Build() method took: $valueBuilderTime milliseconds \n")
+        // set constants value map
+        buildConstantsValues(valueMap)
+
         // do not let outer world to alter variable value map
         return Collections.unmodifiableMap(valueMap)
     }
@@ -142,7 +143,7 @@ actual class RuleVariableValueMapBuilder actual constructor() {
             event.dataValues?.map { dataValue ->
 
                 // push new list if it is not there for the given data element
-                if(!allEventsValues.containsKey(dataValue.dataElement))
+                if (!allEventsValues.containsKey(dataValue.dataElement))
                     allEventsValues[dataValue.dataElement!!] = mutableListOf<RuleDataValue>()
                 // append data value to the list
 
@@ -285,7 +286,7 @@ actual class RuleVariableValueMapBuilder actual constructor() {
                     ?.first { dataValue -> ruleEvent?.eventDate!! > dataValue.eventDate!! }
                     .let { ruleDataValue ->
                         variableValue = create(ruleDataValue?.value, variable.dataElementType,
-                            Utils.values(ruleDataValues!!), getLastUpdateDateForPrevious(ruleDataValues))
+                                Utils.values(ruleDataValues!!), getLastUpdateDateForPrevious(ruleDataValues))
                     }
 
             valueMap[variable.name!!] = variableValue ?: create(variable.dataElementType)
@@ -298,7 +299,7 @@ actual class RuleVariableValueMapBuilder actual constructor() {
 
         val ruleDataValues = allEventsValues[variable.dataElement]
 
-        if(ruleDataValues.isNullOrEmpty())
+        if (ruleDataValues.isNullOrEmpty())
             valueMap[variable.name!!] = create(variable.dataElementType)
         else
             valueMap[variable.name!!] = create(ruleDataValues[0].value, variable.dataElementType,
@@ -309,7 +310,7 @@ actual class RuleVariableValueMapBuilder actual constructor() {
         val dates = mutableListOf<Date>()
 
         ruleDataValues.forEach {
-            if(!it.eventDate!!.after(Date()))
+            if (!it.eventDate!!.after(Date()))
                 dates.add(it.eventDate)
         }
 
@@ -320,7 +321,7 @@ actual class RuleVariableValueMapBuilder actual constructor() {
         val dates = mutableListOf<Date>()
 
         ruleDataValues.forEach {
-            if(!it.eventDate!!.after(Date()) && it.eventDate.before(ruleEvent!!.eventDate!!))
+            if (!it.eventDate!!.after(Date()) && it.eventDate.before(ruleEvent!!.eventDate!!))
                 dates.add(it.eventDate)
         }
 
@@ -333,7 +334,7 @@ actual class RuleVariableValueMapBuilder actual constructor() {
         val stageRuleDataValues = mutableListOf<RuleDataValue>()
         val sourceRuleDataValues = allEventsValues[variable.dataElement]
 
-        if(!sourceRuleDataValues.isNullOrEmpty()) {
+        if (!sourceRuleDataValues.isNullOrEmpty()) {
             // filter data values based on program stage
             sourceRuleDataValues
                     .filter { dataValue -> variable.programStage == dataValue.programStage }
@@ -406,11 +407,14 @@ actual class RuleVariableValueMapBuilder actual constructor() {
 
         private const val ENV_VAR_OU_CODE = "orgunit_code"
 
-        @JvmStatic actual fun target(ruleEnrollment: RuleEnrollment) = RuleVariableValueMapBuilder(ruleEnrollment)
+        @JvmStatic
+        actual fun target(ruleEnrollment: RuleEnrollment) = RuleVariableValueMapBuilder(ruleEnrollment)
 
-        @JvmStatic actual fun target(ruleEvent: RuleEvent) = RuleVariableValueMapBuilder(ruleEvent)
+        @JvmStatic
+        actual fun target(ruleEvent: RuleEvent) = RuleVariableValueMapBuilder(ruleEvent)
 
-        @JvmStatic private fun isEventInList(ruleEvents: List<RuleEvent>, ruleEvent: RuleEvent?): Boolean {
+        @JvmStatic
+        private fun isEventInList(ruleEvents: List<RuleEvent>, ruleEvent: RuleEvent?): Boolean {
             ruleEvent?.let {
                 ruleEvents.forEach { event ->
                     if (event.event == it.event)

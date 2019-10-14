@@ -6,17 +6,13 @@ import org.apache.commons.logging.LogFactory
 import org.hisp.dhis.rules.RuleExpression.Companion.FUNCTION_PATTERN
 import org.hisp.dhis.rules.functions.RuleFunction
 import org.hisp.dhis.rules.models.*
-import org.hisp.dhis.rules.utils.Callable
-import kotlin.Comparator
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 import kotlin.system.measureTimeMillis
 
 actual class RuleEngineExecution actual constructor(
         private val expressionEvaluator: RuleExpressionEvaluator,
         private val rules: List<Rule>,
         valueMap: Map<String, RuleVariableValue>,
-        private val supplementaryData: Map<String, List<String>>) : Callable<List<RuleEffect>> {
+        private val supplementaryData: Map<String, List<String>>) {
 
     private val valueMap: MutableMap<String, RuleVariableValue>
 
@@ -24,50 +20,54 @@ actual class RuleEngineExecution actual constructor(
         this.valueMap = HashMap(valueMap)
     }
 
-    actual override fun call(): List<RuleEffect> {
-        val ruleEffects = ArrayList<RuleEffect>()
-
+    actual fun call(): List<RuleEffect> {
         val ruleList = ArrayList(rules)
 
         print("rule list size is of ${ruleList.size} items \n")
 
-        val ruleSortElapsed = measureTimeMillis {
-            ruleList.sortWith(Comparator { rule1, rule2 ->
-                when {
-                    rule1.priority != null && rule2.priority != null -> rule1.priority.compareTo(rule2.priority)
-                    rule1.priority != null -> -1
-                    rule2.priority != null -> 1
-                    else -> 0
-                }
-            })
+        val rulesHashMap: HashMap<Int, MutableList<Rule>> = hashMapOf()
+        ruleList.forEach { rule ->
+            val priority = rule.priority?.let { if (it == 0) Int.MAX_VALUE else it } ?: Int.MAX_VALUE
+            if (!rulesHashMap.containsKey(priority))
+                rulesHashMap[priority] = mutableListOf(rule)
+            else {
+                rulesHashMap[priority]?.add(rule)
+            }
         }
 
-        print("Sorting rules took: $ruleSortElapsed milliseconds \n")
-
+        val effects: MutableList<RuleEffect> = mutableListOf()
         val rulesProcessElapsed = measureTimeMillis {
-
-            ruleList.map { rule ->
-                try {
-                    if(process(rule.condition).toBoolean()) {
-                        rule.actions.map {
-                            val ruleEffect = create(it)
-                            if (isAssignToCalculatedValue(it))
-                                updateValueMapForCalculatedValue(
-                                        it as RuleActionAssign, RuleVariableValue.create(ruleEffect.data, RuleValueType.TEXT))
-                            else
-                                ruleEffects.add(create(it))
-                        }
-                    }
-                } catch (jexlException: JexlException) {
-                    log.error("Parser exception in ${rule.name} : ${jexlException.message}")
-                } catch (e: Exception) {
-                    log.error("Exception in  ${rule.name} : ${e.message}")
-                }
+            rulesHashMap.toSortedMap().forEach {
+                effects.addAll(getRuleEffects(it.value))
             }
         }
 
         print("Processing rules took: $rulesProcessElapsed milliseconds \n")
+        return effects
+    }
 
+    private fun getRuleEffects(rules: List<Rule>): List<RuleEffect> {
+        val ruleEffects = ArrayList<RuleEffect>()
+
+        rules.map { rule ->
+            try {
+                if (process(rule.condition).toBoolean()) {
+                    rule.actions.map {
+                        val ruleEffect = create(it)
+                        if (isAssignToCalculatedValue(it))
+                            updateValueMapForCalculatedValue(
+                                    it as RuleActionAssign,
+                                    RuleVariableValue.create(ruleEffect.data, RuleValueType.TEXT))
+                        else
+                            ruleEffects.add(create(it))
+                    }
+                }
+            } catch (jexlException: JexlException) {
+                log.error("Parser exception in ${rule.name} : ${jexlException.message}")
+            } catch (e: Exception) {
+                log.error("Exception in  ${rule.name} : ${e.message}")
+            }
+        }
         return ruleEffects
     }
 

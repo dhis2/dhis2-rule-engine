@@ -4,8 +4,6 @@ import com.soywiz.klock.DateTime
 import org.hisp.dhis.rules.RuleExpression.Companion.FUNCTION_PATTERN
 import org.hisp.dhis.rules.functions.RuleFunction
 import org.hisp.dhis.rules.models.*
-import org.hisp.dhis.rules.utils.Callable
-import kotlin.Comparator
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -14,7 +12,7 @@ actual class RuleEngineExecution actual constructor(
         private val expressionEvaluator: RuleExpressionEvaluator,
         private val rules: List<Rule>,
         valueMap: Map<String, RuleVariableValue>,
-        private val supplementaryData: Map<String, List<String>>) : Callable<List<RuleEffect>> {
+        private val supplementaryData: Map<String, List<String>>) {
 
     private val valueMap: MutableMap<String, RuleVariableValue>
 
@@ -22,7 +20,7 @@ actual class RuleEngineExecution actual constructor(
         this.valueMap = HashMap(valueMap)
     }
 
-    actual override fun call(): List<RuleEffect> {
+    actual fun call(): List<RuleEffect> {
         val ruleEffects = ArrayList<RuleEffect>()
 
         val ruleList = ArrayList(rules)
