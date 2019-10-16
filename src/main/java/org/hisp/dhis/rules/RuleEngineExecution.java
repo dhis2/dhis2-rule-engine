@@ -4,33 +4,13 @@ import org.apache.commons.jexl2.JexlException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.dhis.rules.functions.RuleFunction;
-import org.hisp.dhis.rules.models.Rule;
-import org.hisp.dhis.rules.models.RuleAction;
-import org.hisp.dhis.rules.models.RuleActionAssign;
-import org.hisp.dhis.rules.models.RuleActionCreateEvent;
-import org.hisp.dhis.rules.models.RuleActionDisplayKeyValuePair;
-import org.hisp.dhis.rules.models.RuleActionDisplayText;
-import org.hisp.dhis.rules.models.RuleActionErrorOnCompletion;
-import org.hisp.dhis.rules.models.RuleActionScheduleMessage;
-import org.hisp.dhis.rules.models.RuleActionSendMessage;
-import org.hisp.dhis.rules.models.RuleActionShowError;
-import org.hisp.dhis.rules.models.RuleActionShowWarning;
-import org.hisp.dhis.rules.models.RuleActionWarningOnCompletion;
-import org.hisp.dhis.rules.models.RuleEffect;
-import org.hisp.dhis.rules.models.RuleValueType;
+import org.hisp.dhis.rules.models.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.annotation.Nonnull;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.annotation.Nonnull;
 
 class RuleEngineExecution
         implements Callable<List<RuleEffect>> {
@@ -146,18 +126,12 @@ class RuleEngineExecution
         } else if (ruleAction instanceof RuleActionDisplayText) {
             return RuleEffect.create(ruleAction, process(
                     ((RuleActionDisplayText) ruleAction).data()));
-        } else if (ruleAction instanceof RuleActionErrorOnCompletion) {
-            return RuleEffect.create(ruleAction, process(
-                    ((RuleActionErrorOnCompletion) ruleAction).data()));
         } else if (ruleAction instanceof RuleActionShowError) {
             return RuleEffect.create(ruleAction,
                     process(((RuleActionShowError) ruleAction).data()));
         } else if (ruleAction instanceof RuleActionShowWarning) {
             return RuleEffect.create(ruleAction,
                     process(((RuleActionShowWarning) ruleAction).data()));
-        } else if (ruleAction instanceof RuleActionWarningOnCompletion) {
-            return RuleEffect.create(ruleAction,
-                    process(((RuleActionWarningOnCompletion) ruleAction).data()));
         }
 
         return RuleEffect.create(ruleAction);

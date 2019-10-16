@@ -101,23 +101,6 @@ public class RuleEngineEffectTypesTests {
     }
 
     @Test
-    public void simpleConditionMustResultInErrorOnCompletionEffect()
-            throws Exception {
-        RuleAction ruleAction = RuleActionErrorOnCompletion.create(
-                "test_action_content", "2 + 2", "test_data_element");
-        Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
-
-        RuleEngine ruleEngine = getRuleEngine(rule);
-
-
-        List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call();
-
-        assertThat(ruleEffects.size()).isEqualTo(1);
-        assertThat(ruleEffects.get(0).data()).isEqualTo("4");
-        assertThat(ruleEffects.get(0).ruleAction()).isEqualTo(ruleAction);
-    }
-
-    @Test
     public void simpleConditionMustResultInHideFieldEffect()
             throws Exception {
         RuleAction ruleAction = RuleActionHideField.create(
@@ -292,23 +275,6 @@ public class RuleEngineEffectTypesTests {
             throws Exception {
         RuleAction ruleAction = RuleActionShowError.create(
                 "test_error_message", "2 + 2", "target_field");
-        Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
-
-        RuleEngine ruleEngine = getRuleEngine(rule);
-
-
-        List<RuleEffect> ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call();
-
-        assertThat(ruleEffects.size()).isEqualTo(1);
-        assertThat(ruleEffects.get(0).data()).isEqualTo("4");
-        assertThat(ruleEffects.get(0).ruleAction()).isEqualTo(ruleAction);
-    }
-
-    @Test
-    public void simpleConditionMustResultInOnCompletionWarningEffect()
-            throws Exception {
-        RuleAction ruleAction = RuleActionWarningOnCompletion.create(
-                "test_warning_message", "2 + 2", "target_field");
         Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
 
         RuleEngine ruleEngine = getRuleEngine(rule);

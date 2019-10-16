@@ -6,7 +6,7 @@
 
     <groupId>org.hisp.dhis.rules</groupId>
     <artifactId>rule-engine</artifactId>
-    <version>1.0.5.1-SNAPSHOT</version>
+    <version>1.0.5.2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>rule-engine</name>
 
