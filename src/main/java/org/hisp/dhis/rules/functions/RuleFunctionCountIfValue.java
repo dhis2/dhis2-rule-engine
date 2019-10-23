@@ -29,11 +29,13 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.models.RuleValueType;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Nonnull;
 
 /**
  * @Author Zubair Asghar.
@@ -84,9 +86,17 @@ public class RuleFunctionCountIfValue extends RuleFunction
 
         RuleVariableValue variableValue = valueMap.get( ruleVariableName );
 
+        String valueToFind = arguments.get(1);
+
         if ( variableValue != null )
         {
-            return Integer.toString( Collections.frequency( variableValue.candidates(), arguments.get( 1 ) ) );
+            if(variableValue.type() == RuleValueType.BOOLEAN){
+                if(valueToFind.equals("1"))
+                    valueToFind = "true";
+                else if(valueToFind.equals("0"))
+                    valueToFind = "false";
+            }
+            return Integer.toString( Collections.frequency( variableValue.candidates(), valueToFind ) );
         }
         else
         {

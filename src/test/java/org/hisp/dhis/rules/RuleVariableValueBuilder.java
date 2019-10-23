@@ -44,6 +44,12 @@ public class RuleVariableValueBuilder
 
                 return this;
         }
+        public RuleVariableValueBuilder withType(@Nonnull RuleValueType valueType)
+        {
+                this.type = valueType;
+
+                return this;
+        }
 
         public RuleVariableValue build()
         {
