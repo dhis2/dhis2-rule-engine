@@ -46,31 +46,41 @@ import javax.annotation.Nonnull;
 /**
  * @Author Zubair Asghar.
  */
-public abstract class RuleFunctionZScore extends RuleFunction {
-    private static final Set<String> GENDER_CODES = Sets.newHashSet("male", "MALE", "Male", "ma", "m", "M", "0", "false");
+public abstract class RuleFunctionZScore
+    extends
+    RuleFunction
+{
+    private static final Set<String> GENDER_CODES = Sets.newHashSet( "male", "MALE", "Male", "ma", "m", "M", "0",
+        "false" );
 
     @Nonnull
     @Override
-    public String evaluate(@Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData) {
-        if (arguments.size() < 3) {
-            throw new IllegalArgumentException("At least three arguments required but found: " + arguments.size());
+    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
+        Map<String, List<String>> supplementaryData )
+    {
+        if ( arguments.size() < 3 )
+        {
+            throw new IllegalArgumentException( "At least three arguments required but found: " + arguments.size() );
         }
 
         // 1 = female, 0 = male
         float parameter;
         float weight;
-        byte gender = GENDER_CODES.contains(arguments.get(2)) ? (byte) 0 : (byte) 1;
+        byte gender = GENDER_CODES.contains( arguments.get( 2 ) ) ? (byte) 0 : (byte) 1;
 
         String zScore;
 
-        try {
-            parameter = Float.parseFloat(arguments.get(0));
-            weight = Float.parseFloat(arguments.get(1));
-        } catch (NumberFormatException ex) {
-            throw new IllegalArgumentException("Byte parsing failed");
+        try
+        {
+            parameter = Float.parseFloat( arguments.get( 0 ) );
+            weight = Float.parseFloat( arguments.get( 1 ) );
+        }
+        catch ( NumberFormatException ex )
+        {
+            throw new IllegalArgumentException( "Byte parsing failed" );
         }
 
-        zScore = getZScore(parameter, weight, gender);
+        zScore = getZScore( parameter, weight, gender );
 
         return zScore;
     }
@@ -79,40 +89,50 @@ public abstract class RuleFunctionZScore extends RuleFunction {
 
     public abstract Map<ZScoreTableKey, Map<Float, Integer>> getTableForBoy();
 
-    private String getZScore(float parameter, float weight, byte gender) {
-        ZScoreTableKey key = new ZScoreTableKey(gender, parameter);
+    private String getZScore( float parameter, float weight, byte gender )
+    {
+        ZScoreTableKey key = new ZScoreTableKey( gender, parameter );
 
         Map<Float, Integer> sdMap = new HashMap<>();
 
         // Female
-        if (gender == 1) {
-            sdMap = getTableForGirl().get(key);
-        } else {
+        if ( gender == 1 )
+        {
+            sdMap = getTableForGirl().get( key );
+        }
+        else
+        {
             Map<ZScoreTableKey, Map<Float, Integer>> test = getTableForBoy();
-            sdMap = getTableForBoy().get(key);
+            sdMap = getTableForBoy().get( key );
         }
 
-        int multiplicationFactor = getMultiplicationFactor(sdMap, weight);
+        int multiplicationFactor = getMultiplicationFactor( sdMap, weight );
 
         // weight exactly matches with any of the SD values
-        if (sdMap.keySet().contains(weight)) {
-            int sd = sdMap.get(weight);
+        if ( sdMap.keySet().contains( weight ) )
+        {
+            int sd = sdMap.get( weight );
 
-            return String.valueOf(sd * multiplicationFactor);
+            return String.valueOf( sd * multiplicationFactor );
         }
 
         // weight is beyond -3SD or 3SD
-        if (weight > Collections.max(sdMap.keySet())) {
-            return String.valueOf(3.5);
-        } else if (weight < Collections.min(sdMap.keySet())) {
-            return String.valueOf(-3.5);
+        if ( weight > Collections.max( sdMap.keySet() ) )
+        {
+            return String.valueOf( 3.5 );
+        }
+        else if ( weight < Collections.min( sdMap.keySet() ) )
+        {
+            return String.valueOf( -3.5 );
         }
 
         float lowerLimitX = 0, higherLimitY = 0;
 
         // find the interval
-        for (float f : sortKeySet(sdMap)) {
-            if (weight > f) {
+        for ( float f : sortKeySet( sdMap ) )
+        {
+            if ( weight > f )
+            {
                 lowerLimitX = f;
                 continue;
             }
@@ -129,46 +149,53 @@ public abstract class RuleFunctionZScore extends RuleFunction {
 
         float result;
 
-        if (weight > findMedian(sdMap)) {
+        if ( weight > findMedian( sdMap ) )
+        {
             gap = weight - lowerLimitX;
             decimalAddition = gap / distance;
-            result = sdMap.get(lowerLimitX) + decimalAddition;
-        } else {
+            result = sdMap.get( lowerLimitX ) + decimalAddition;
+        }
+        else
+        {
             gap = higherLimitY - weight;
             decimalAddition = gap / distance;
-            result = sdMap.get(higherLimitY) + decimalAddition;
+            result = sdMap.get( higherLimitY ) + decimalAddition;
         }
 
         result = result * multiplicationFactor;
 
-        return String.valueOf(getDecimalFormat().format(result));
+        return String.valueOf( getDecimalFormat().format( result ) );
     }
 
-    private int getMultiplicationFactor(Map<Float, Integer> sdMap, float weight) {
-        float median = findMedian(sdMap);
+    private int getMultiplicationFactor( Map<Float, Integer> sdMap, float weight )
+    {
+        float median = findMedian( sdMap );
 
-        return Float.compare(weight, median);
+        return Float.compare( weight, median );
     }
 
-    private float findMedian(Map<Float, Integer> sdMap) {
-        List<Float> sortedList = sortKeySet(sdMap);
+    private float findMedian( Map<Float, Integer> sdMap )
+    {
+        List<Float> sortedList = sortKeySet( sdMap );
 
-        return sortedList.get(3);
+        return sortedList.get( 3 );
     }
 
-    private List<Float> sortKeySet(Map<Float, Integer> sdMap) {
+    private List<Float> sortKeySet( Map<Float, Integer> sdMap )
+    {
         Set<Float> keySet = sdMap.keySet();
 
-        List<Float> list = new ArrayList<>(keySet);
+        List<Float> list = new ArrayList<>( keySet );
 
-        Collections.sort(list);
+        Collections.sort( list );
 
         return list;
     }
 
-    protected static DecimalFormat getDecimalFormat() {
+    protected static DecimalFormat getDecimalFormat()
+    {
         DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance();
-        decimalFormatSymbols.setDecimalSeparator('.');
-        return new DecimalFormat("###.00", decimalFormatSymbols);
+        decimalFormatSymbols.setDecimalSeparator( '.' );
+        return new DecimalFormat( "###.00", decimalFormatSymbols );
     }
 }

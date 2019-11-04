@@ -12,49 +12,51 @@ import javax.annotation.Nullable;
 public class RuleVariableValueBuilder
 {
 
-        private String value;
+    private String value;
 
-        private RuleValueType type = RuleValueType.TEXT;
+    private RuleValueType type = RuleValueType.TEXT;
 
-        private List<String> candidates = new ArrayList<>();
+    private List<String> candidates = new ArrayList<>();
 
-        private String eventDate;
+    private String eventDate;
 
-        public static RuleVariableValueBuilder create()
-        {
-                return new RuleVariableValueBuilder();
-        }
+    public static RuleVariableValueBuilder create()
+    {
+        return new RuleVariableValueBuilder();
+    }
 
-        public RuleVariableValueBuilder withValue( @Nonnull String value )
-        {
-                this.value = value;
+    public RuleVariableValueBuilder withValue( @Nonnull String value )
+    {
+        this.value = value;
 
-                return this;
-        }
+        return this;
+    }
 
-        public RuleVariableValueBuilder withCandidates( @Nonnull List<String> candidates )
-        {
-                this.candidates = candidates;
+    public RuleVariableValueBuilder withCandidates( @Nonnull List<String> candidates )
+    {
+        this.candidates = candidates;
 
-                return this;
-        }
-        public RuleVariableValueBuilder withEventDate( @Nullable String eventDate )
-        {
-                this.eventDate = eventDate;
+        return this;
+    }
 
-                return this;
-        }
-        public RuleVariableValueBuilder withType(@Nonnull RuleValueType valueType)
-        {
-                this.type = valueType;
+    public RuleVariableValueBuilder withEventDate( @Nullable String eventDate )
+    {
+        this.eventDate = eventDate;
 
-                return this;
-        }
+        return this;
+    }
 
-        public RuleVariableValue build()
-        {
-                RuleVariableValue ruleVariableValue = RuleVariableValue.create( value, type, candidates, eventDate );
+    public RuleVariableValueBuilder withType( @Nonnull RuleValueType valueType )
+    {
+        this.type = valueType;
 
-                return ruleVariableValue;
-        }
+        return this;
+    }
+
+    public RuleVariableValue build()
+    {
+        RuleVariableValue ruleVariableValue = RuleVariableValue.create( value, type, candidates, eventDate );
+
+        return ruleVariableValue;
+    }
 }

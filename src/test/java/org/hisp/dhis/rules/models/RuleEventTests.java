@@ -17,129 +17,129 @@ import static org.mockito.Mockito.mock;
 @RunWith( JUnit4.class )
 public class RuleEventTests
 {
-        private static final String DATE_PATTERN = "yyyy-MM-dd";
+    private static final String DATE_PATTERN = "yyyy-MM-dd";
 
-        @Rule
-        public ExpectedException thrown = ExpectedException.none();
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
-        @Test
-        public void createShouldThrowExceptionIfEventIsNull()
+    @Test
+    public void createShouldThrowExceptionIfEventIsNull()
+    {
+        thrown.expect( NullPointerException.class );
+        RuleEvent.create( null, "test_programstage", RuleEvent.Status.ACTIVE, new Date(), new Date(), null, null,
+            Arrays.<RuleDataValue> asList(), "" );
+    }
+
+    @Test
+    public void createShouldThrowExceptionIfProgramStageIsNull()
+    {
+        thrown.expect( NullPointerException.class );
+        RuleEvent.create( "test_event", null, RuleEvent.Status.ACTIVE, new Date(), new Date(), null, null,
+            Arrays.<RuleDataValue> asList(), "" );
+    }
+
+    @Test
+    public void createShouldThrowExceptionIfStatusIsNull()
+    {
+        thrown.expect( NullPointerException.class );
+        RuleEvent.create( "test_event", "test_programstage", null, new Date(), new Date(), null, null,
+            Arrays.<RuleDataValue> asList(), "" );
+    }
+
+    @Test
+    public void createShouldThrowExceptionIfEventDateIsNull()
+    {
+        thrown.expect( NullPointerException.class );
+        RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE, null, new Date(), null, null,
+            Arrays.<RuleDataValue> asList(), "" );
+    }
+
+    @Test
+    public void createShouldThrowExceptionIfDueDateIsNull()
+    {
+        thrown.expect( NullPointerException.class );
+        RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE, new Date(), null, null, null,
+            Arrays.<RuleDataValue> asList(), "" );
+
+    }
+
+    @Test
+    public void createShouldThrowExceptionIfListOfDataValuesIsNull()
+    {
+        thrown.expect( NullPointerException.class );
+        RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE, new Date(), new Date(), null,
+            null, null, "" );
+
+    }
+
+    @Test
+    public void createShouldPropagateImmutableList()
+    {
+        RuleDataValue ruleDataValue = mock( RuleDataValue.class );
+
+        List<RuleDataValue> ruleDataValues = new ArrayList<>();
+        ruleDataValues.add( ruleDataValue );
+
+        RuleEvent ruleEvent = RuleEvent.create( "test_event_uid", "test_stage_uid", RuleEvent.Status.ACTIVE, new Date(),
+            new Date(), "", "", ruleDataValues, "" );
+
+        // add another data value
+        ruleDataValues.add( ruleDataValue );
+
+        assertThat( ruleEvent.dataValues().size() ).isEqualTo( 1 );
+        assertThat( ruleEvent.dataValues().get( 0 ) ).isEqualTo( ruleDataValue );
+
+        try
         {
-                thrown.expect( NullPointerException.class );
-                RuleEvent.create( null, "test_programstage", RuleEvent.Status.ACTIVE,
-                        new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
+            ruleEvent.dataValues().add( ruleDataValue );
+            fail( "UnsupportedOperationException was expected, but nothing was thrown" );
         }
-
-        @Test
-        public void createShouldThrowExceptionIfProgramStageIsNull()
+        catch ( UnsupportedOperationException exception )
         {
-                thrown.expect( NullPointerException.class );
-                RuleEvent.create( "test_event", null, RuleEvent.Status.ACTIVE,
-                        new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
+            // noop
         }
+    }
 
-        @Test
-        public void createShouldThrowExceptionIfStatusIsNull()
-        {
-                thrown.expect( NullPointerException.class );
-                RuleEvent.create( "test_event", "test_programstage", null,
-                        new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
-        }
+    @Test
+    public void createShouldPropagateValuesCorrectly()
+    {
+        RuleDataValue ruleDataValue = mock( RuleDataValue.class );
 
-        @Test
-        public void createShouldThrowExceptionIfEventDateIsNull()
-        {
-                thrown.expect( NullPointerException.class );
-                RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE,
-                        null, new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
-        }
+        List<RuleDataValue> ruleDataValues = new ArrayList<>();
+        ruleDataValues.add( ruleDataValue );
 
-        @Test
-        public void createShouldThrowExceptionIfDueDateIsNull()
-        {
-                thrown.expect( NullPointerException.class );
-                RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE,
-                    new Date(), null, null,null,Arrays.<RuleDataValue>asList(), "");
+        Date eventDate = new Date();
+        Date dueDate = new Date();
 
-        }
+        RuleEvent ruleEvent = RuleEvent.create( "test_event_uid", "test_stage_uid", RuleEvent.Status.ACTIVE, eventDate,
+            dueDate, "", "", ruleDataValues, "" );
 
-        @Test
-        public void createShouldThrowExceptionIfListOfDataValuesIsNull()
-        {
-                thrown.expect( NullPointerException.class );
-                RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE, new Date(), new Date(),
-                        null, null,null, "");
+        assertThat( ruleEvent.event() ).isEqualTo( "test_event_uid" );
+        assertThat( ruleEvent.status() ).isEqualTo( RuleEvent.Status.ACTIVE );
+        assertThat( ruleEvent.programStage() ).isEqualTo( "test_stage_uid" );
+        assertThat( ruleEvent.eventDate() ).isEqualTo( eventDate );
+        assertThat( ruleEvent.dueDate() ).isEqualTo( dueDate );
 
-        }
+        assertThat( ruleEvent.dataValues().size() ).isEqualTo( 1 );
+        assertThat( ruleEvent.dataValues().get( 0 ) ).isEqualTo( ruleDataValue );
+    }
 
-        @Test
-        public void createShouldPropagateImmutableList()
-        {
-                RuleDataValue ruleDataValue = mock( RuleDataValue.class );
+    @Test
+    public void eventDateComparatorTest()
+        throws ParseException
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat( DATE_PATTERN, Locale.US );
+        List<RuleEvent> ruleEvents = Arrays.asList(
+            RuleEvent.create( "test_event_one", "test_program_stage_one", RuleEvent.Status.ACTIVE,
+                dateFormat.parse( "2014-02-11" ), dateFormat.parse( "2014-02-11" ), "", null,
+                new ArrayList<RuleDataValue>(), "" ),
+            RuleEvent.create( "test_event_two", "test_program_stage_two", RuleEvent.Status.ACTIVE,
+                dateFormat.parse( "2017-03-22" ), dateFormat.parse( "2017-03-22" ), "", null,
+                new ArrayList<RuleDataValue>(), "" ) );
 
-                List<RuleDataValue> ruleDataValues = new ArrayList<>();
-                ruleDataValues.add( ruleDataValue );
+        Collections.sort( ruleEvents, RuleEvent.EVENT_DATE_COMPARATOR );
 
-                RuleEvent ruleEvent = RuleEvent.create( "test_event_uid", "test_stage_uid",
-                    RuleEvent.Status.ACTIVE, new Date(), new Date(), "", "", ruleDataValues, "");
-
-                // add another data value
-                ruleDataValues.add( ruleDataValue );
-
-                assertThat( ruleEvent.dataValues().size() ).isEqualTo( 1 );
-                assertThat( ruleEvent.dataValues().get( 0 ) ).isEqualTo( ruleDataValue );
-
-                try
-                {
-                        ruleEvent.dataValues().add( ruleDataValue );
-                        fail( "UnsupportedOperationException was expected, but nothing was thrown" );
-                }
-                catch ( UnsupportedOperationException exception )
-                {
-                        // noop
-                }
-        }
-
-        @Test
-        public void createShouldPropagateValuesCorrectly()
-        {
-                RuleDataValue ruleDataValue = mock( RuleDataValue.class );
-
-                List<RuleDataValue> ruleDataValues = new ArrayList<>();
-                ruleDataValues.add( ruleDataValue );
-
-                Date eventDate = new Date();
-                Date dueDate = new Date();
-
-                RuleEvent ruleEvent = RuleEvent.create( "test_event_uid", "test_stage_uid",
-                    RuleEvent.Status.ACTIVE, eventDate, dueDate, "","",ruleDataValues, "");
-
-                assertThat( ruleEvent.event() ).isEqualTo( "test_event_uid" );
-                assertThat( ruleEvent.status() ).isEqualTo( RuleEvent.Status.ACTIVE );
-                assertThat( ruleEvent.programStage() ).isEqualTo( "test_stage_uid" );
-                assertThat( ruleEvent.eventDate() ).isEqualTo( eventDate );
-                assertThat( ruleEvent.dueDate() ).isEqualTo( dueDate );
-
-                assertThat( ruleEvent.dataValues().size() ).isEqualTo( 1 );
-                assertThat( ruleEvent.dataValues().get( 0 ) ).isEqualTo( ruleDataValue );
-        }
-
-        @Test
-        public void eventDateComparatorTest()
-            throws ParseException
-        {
-                SimpleDateFormat dateFormat = new SimpleDateFormat( DATE_PATTERN, Locale.US );
-                List<RuleEvent> ruleEvents = Arrays.asList(
-                    RuleEvent.create( "test_event_one", "test_program_stage_one", RuleEvent.Status.ACTIVE,
-                        dateFormat.parse( "2014-02-11" ), dateFormat.parse( "2014-02-11" ),"",null,
-                        new ArrayList<RuleDataValue>(), ""),
-                    RuleEvent.create( "test_event_two", "test_program_stage_two", RuleEvent.Status.ACTIVE,
-                        dateFormat.parse( "2017-03-22" ), dateFormat.parse( "2017-03-22" ), "",null,
-                        new ArrayList<RuleDataValue>(), "") );
-
-                Collections.sort( ruleEvents, RuleEvent.EVENT_DATE_COMPARATOR );
-
-                assertThat( ruleEvents.get( 0 ).event() ).isEqualTo( "test_event_two" );
-                assertThat( ruleEvents.get( 1 ).event() ).isEqualTo( "test_event_one" );
-        }
+        assertThat( ruleEvents.get( 0 ).event() ).isEqualTo( "test_event_two" );
+        assertThat( ruleEvents.get( 1 ).event() ).isEqualTo( "test_event_one" );
+    }
 }

@@ -28,29 +28,33 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
-import org.hisp.dhis.rules.models.RuleValueType;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.models.RuleValueType;
+
 /**
  * @Author Zubair Asghar.
- * <p>
- * Counts the number of matching values that is entered for the source field in the first argument. Only occurrences that matches the second argument is counted.
- * The source field parameter is the name of one of the defined source fields in the program.
+ *         <p>
+ *         Counts the number of matching values that is entered for the source
+ *         field in the first argument. Only occurrences that matches the second
+ *         argument is counted. The source field parameter is the name of one of
+ *         the defined source fields in the program.
  */
-public class RuleFunctionCountIfValue extends RuleFunction
+public class RuleFunctionCountIfValue
+    extends
+    RuleFunction
 {
     static final String D2_COUNT_IF_VALUE = "d2:countIfValue";
 
     @Nonnull
     @Override
     public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
-                            Map<String, List<String>> supplementaryData )
+        Map<String, List<String>> supplementaryData )
     {
         if ( valueMap == null )
         {
@@ -59,8 +63,7 @@ public class RuleFunctionCountIfValue extends RuleFunction
 
         if ( arguments.size() != 2 )
         {
-            throw new IllegalArgumentException( "Two arguments were expected, " +
-                    arguments.size() + " were supplied" );
+            throw new IllegalArgumentException( "Two arguments were expected, " + arguments.size() + " were supplied" );
         }
 
         return countIfValue( arguments, valueMap );
@@ -73,11 +76,13 @@ public class RuleFunctionCountIfValue extends RuleFunction
     }
 
     /**
-     * Function which will return the count of argument[0].
-     * Program rule variable at argument[0] will only be counted if it satisfy to condition which is at argument[1]
+     * Function which will return the count of argument[0]. Program rule variable at
+     * argument[0] will only be counted if it satisfy to condition which is at
+     * argument[1]
      *
-     * @param arguments arguments for this function. First is the name of program rule variable and second is the condition
-     * @param valueMap  key value pair containing values for each variable
+     * @param arguments arguments for this function. First is the name of program
+     *        rule variable and second is the condition
+     * @param valueMap key value pair containing values for each variable
      * @return count of program rule variable
      */
     private String countIfValue( List<String> arguments, Map<String, RuleVariableValue> valueMap )
@@ -92,7 +97,7 @@ public class RuleFunctionCountIfValue extends RuleFunction
         {
             if ( variableValue.type() == RuleValueType.BOOLEAN )
             {
-                if( valueToFind.equals( "1" ) )
+                if ( valueToFind.equals( "1" ) )
                 {
                     valueToFind = "true";
                 }
