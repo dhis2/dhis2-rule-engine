@@ -29,10 +29,11 @@ package org.hisp.dhis.rules.functions;
  */
 
 import com.google.common.collect.Sets;
+
 import org.hisp.dhis.rules.RuleVariableValue;
 
-import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -40,17 +41,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 /**
  * @Author Zubair Asghar.
  */
-public abstract class RuleFunctionZScore extends RuleFunction
+public abstract class RuleFunctionZScore
+    extends
+    RuleFunction
 {
-    private static final Set<String> GENDER_CODES = Sets.newHashSet( "male", "MALE", "Male","ma", "m", "M", "0", "false" );
-    protected static final DecimalFormat format = new DecimalFormat( "###.00" );
+    private static final Set<String> GENDER_CODES = Sets.newHashSet( "male", "MALE", "Male", "ma", "m", "M", "0",
+        "false" );
 
     @Nonnull
     @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
+        Map<String, List<String>> supplementaryData )
     {
         if ( arguments.size() < 3 )
         {
@@ -125,7 +131,7 @@ public abstract class RuleFunctionZScore extends RuleFunction
         // find the interval
         for ( float f : sortKeySet( sdMap ) )
         {
-            if (  weight > f )
+            if ( weight > f )
             {
                 lowerLimitX = f;
                 continue;
@@ -158,7 +164,7 @@ public abstract class RuleFunctionZScore extends RuleFunction
 
         result = result * multiplicationFactor;
 
-        return String.valueOf( format.format( result ) );
+        return String.valueOf( getDecimalFormat().format( result ) );
     }
 
     private int getMultiplicationFactor( Map<Float, Integer> sdMap, float weight )
@@ -184,5 +190,12 @@ public abstract class RuleFunctionZScore extends RuleFunction
         Collections.sort( list );
 
         return list;
+    }
+
+    protected static DecimalFormat getDecimalFormat()
+    {
+        DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance();
+        decimalFormatSymbols.setDecimalSeparator( '.' );
+        return new DecimalFormat( "###.00", decimalFormatSymbols );
     }
 }
