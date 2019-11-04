@@ -86,16 +86,22 @@ public class RuleFunctionCountIfValue extends RuleFunction
 
         RuleVariableValue variableValue = valueMap.get( ruleVariableName );
 
-        String valueToFind = arguments.get(1);
+        String valueToFind = arguments.get( 1 );
 
         if ( variableValue != null )
         {
-            if(variableValue.type() == RuleValueType.BOOLEAN){
-                if(valueToFind.equals("1"))
+            if ( variableValue.type() == RuleValueType.BOOLEAN )
+            {
+                if( valueToFind.equals( "1" ) )
+                {
                     valueToFind = "true";
-                else if(valueToFind.equals("0"))
+                }
+                else if ( valueToFind.equals( "0" ) )
+                {
                     valueToFind = "false";
+                }
             }
+
             return Integer.toString( Collections.frequency( variableValue.candidates(), valueToFind ) );
         }
         else
