@@ -48,9 +48,6 @@ public class RuleFunctionYearsBetween
     RuleFunction
 {
     public static final String D2_YEARS_BETWEEN = "d2:yearsBetween";
-
-    // private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
-    // "yyyy-MM-dd" );
     private final SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd", Locale.getDefault() );
 
     @Nonnull
