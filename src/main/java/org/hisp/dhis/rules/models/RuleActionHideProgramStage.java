@@ -3,6 +3,7 @@ package org.hisp.dhis.rules.models;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 @AutoValue
 public abstract class RuleActionHideProgramStage

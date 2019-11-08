@@ -11,8 +11,8 @@ public abstract class RuleActionShowWarning
 {
 
         @Nonnull
-        public static RuleActionShowWarning create( @Nullable String content,
-            @Nullable String data, @Nonnull String field )
+        public static RuleActionShowWarning create(
+            @Nullable String content, @Nullable String data, @Nonnull String field )
         {
                 if ( content == null && data == null )
                 {

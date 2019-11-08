@@ -4,10 +4,21 @@ import org.apache.commons.jexl2.JexlException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.dhis.rules.functions.RuleFunction;
-import org.hisp.dhis.rules.models.*;
+import org.hisp.dhis.rules.models.Rule;
+import org.hisp.dhis.rules.models.RuleAction;
+import org.hisp.dhis.rules.models.RuleActionAssign;
+import org.hisp.dhis.rules.models.RuleActionData;
+import org.hisp.dhis.rules.models.RuleEffect;
+import org.hisp.dhis.rules.models.RuleValueType;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,7 +46,7 @@ class RuleEngineExecution
     private final List<Rule> rules;
 
     RuleEngineExecution(@Nonnull RuleExpressionEvaluator expressionEvaluator,
-                        @Nonnull List<Rule> rules, @Nonnull Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData) {
+                        @Nonnull List<Rule> rules, @Nonnull Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData ) {
         this.expressionEvaluator = expressionEvaluator;
         this.valueMap = new HashMap<>(valueMap);
         this.rules = rules;
@@ -111,27 +122,9 @@ class RuleEngineExecution
             }
 
             return RuleEffect.create(ruleAction, data);
-        } else if (ruleAction instanceof RuleActionSendMessage) {
+        } else if (ruleAction instanceof RuleActionData) {
             return RuleEffect.create(ruleAction, process(
-                    ((RuleActionSendMessage) ruleAction).data()));
-        } else if (ruleAction instanceof RuleActionScheduleMessage) {
-            return RuleEffect.create(ruleAction, process(
-                    ((RuleActionScheduleMessage) ruleAction).data()));
-        } else if (ruleAction instanceof RuleActionCreateEvent) {
-            return RuleEffect.create(ruleAction, process(
-                    ((RuleActionCreateEvent) ruleAction).data()));
-        } else if (ruleAction instanceof RuleActionDisplayKeyValuePair) {
-            return RuleEffect.create(ruleAction, process(
-                    ((RuleActionDisplayKeyValuePair) ruleAction).data()));
-        } else if (ruleAction instanceof RuleActionDisplayText) {
-            return RuleEffect.create(ruleAction, process(
-                    ((RuleActionDisplayText) ruleAction).data()));
-        } else if (ruleAction instanceof RuleActionShowError) {
-            return RuleEffect.create(ruleAction,
-                    process(((RuleActionShowError) ruleAction).data()));
-        } else if (ruleAction instanceof RuleActionShowWarning) {
-            return RuleEffect.create(ruleAction,
-                    process(((RuleActionShowWarning) ruleAction).data()));
+                    ((RuleActionData) ruleAction).data()));
         }
 
         return RuleEffect.create(ruleAction);

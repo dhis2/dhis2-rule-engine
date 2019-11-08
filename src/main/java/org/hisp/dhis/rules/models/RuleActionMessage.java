@@ -3,7 +3,7 @@ package org.hisp.dhis.rules.models;
 import javax.annotation.Nonnull;
 
 abstract class RuleActionMessage
-    extends RuleAction
+    extends RuleActionData
 {
 
         @Nonnull

@@ -11,8 +11,7 @@ public abstract class RuleActionShowError
 {
 
         @Nonnull
-        public static RuleActionShowError create( @Nullable String content,
-            @Nullable String data, @Nonnull String field )
+        public static RuleActionShowError create( @Nullable String content, @Nullable String data, @Nonnull String field )
         {
                 if ( content == null && data == null )
                 {

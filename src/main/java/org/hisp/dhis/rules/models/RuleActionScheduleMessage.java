@@ -39,7 +39,7 @@ import java.util.Date;
  */
 @AutoValue
 public abstract class RuleActionScheduleMessage
-    extends RuleAction
+    extends RuleActionData
 {
         @Nonnull
         public abstract String notification();

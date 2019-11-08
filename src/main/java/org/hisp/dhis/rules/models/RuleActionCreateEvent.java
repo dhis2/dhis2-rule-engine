@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 
 @AutoValue
 public abstract class RuleActionCreateEvent
-    extends RuleAction
+    extends RuleActionData
 {
 
         @Nonnull
@@ -20,8 +20,8 @@ public abstract class RuleActionCreateEvent
         public abstract String programStage();
 
         @Nonnull
-        public static RuleActionCreateEvent create( @Nullable String content,
-            @Nullable String data, @Nonnull String programStage )
+        public static RuleActionCreateEvent create(
+            @Nullable String content, @Nullable String data, @Nonnull String programStage )
         {
                 return new AutoValue_RuleActionCreateEvent( content == null ? "" : content,
                     data == null ? "" : data, programStage );

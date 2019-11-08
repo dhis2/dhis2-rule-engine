@@ -158,10 +158,6 @@ final class RuleVariableValueMapBuilder {
 
     @Nonnull
     RuleVariableValueMapBuilder triggerEnvironment(@Nullable TriggerEnvironment triggerEnvironment) {
-        if (this.triggerEnvironment != null) {
-            throw new IllegalStateException("triggerEnvironment == null");
-        }
-
         this.triggerEnvironment = triggerEnvironment;
         return this;
     }

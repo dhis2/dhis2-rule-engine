@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 
 @AutoValue
 public abstract class RuleActionAssign
-        extends RuleAction {
+        extends RuleActionData {
 
     @Nonnull
     public abstract String content();
@@ -19,14 +19,13 @@ public abstract class RuleActionAssign
     public abstract String field();
 
     @Nonnull
-    public static RuleActionAssign create(@Nullable String content,
-                                          @Nonnull String data, @Nullable String field) {
+    public static RuleActionAssign create( @Nullable String content, @Nonnull String data, @Nullable String field ) {
         if (content == null && field == null) {
             throw new IllegalArgumentException("Either content or field " +
                     "parameters must be not null.");
         }
 
-        return new AutoValue_RuleActionAssign(content == null ? "" : content,
+        return new AutoValue_RuleActionAssign( content == null ? "" : content,
                 data, field == null ? "" : field);
     }
 }

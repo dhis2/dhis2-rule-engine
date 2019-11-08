@@ -1,6 +1,8 @@
 package org.hisp.dhis.rules.models;
 
-public class RuleAction
+import javax.annotation.Nonnull;
+
+public abstract class RuleAction
 {
         protected RuleAction()
         {
