@@ -102,7 +102,6 @@ public abstract class RuleFunctionZScore
         }
         else
         {
-            Map<ZScoreTableKey, Map<Float, Integer>> test = getTableForBoy();
             sdMap = getTableForBoy().get( key );
         }
 
