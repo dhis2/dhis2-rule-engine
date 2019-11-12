@@ -39,6 +39,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
@@ -93,17 +94,21 @@ public abstract class RuleFunctionZScore
     {
         ZScoreTableKey key = new ZScoreTableKey( gender, parameter );
 
-        Map<Float, Integer> sdMap = new HashMap<>();
+        Map<Float, Integer> sdMap;
 
         // Female
         if ( gender == 1 )
         {
-            sdMap = getTableForGirl().get( key );
+            sdMap = getTableForGirl().getOrDefault( key, new HashMap<>() );
         }
         else
         {
-            Map<ZScoreTableKey, Map<Float, Integer>> test = getTableForBoy();
-            sdMap = getTableForBoy().get( key );
+            sdMap = getTableForBoy().getOrDefault( key, new HashMap<>() );
+        }
+
+        if ( sdMap.isEmpty() )
+        {
+            throw new IllegalArgumentException( "No key exist for provided parameters" );
         }
 
         int multiplicationFactor = getMultiplicationFactor( sdMap, weight );
