@@ -69,7 +69,7 @@ public class RuleFunctionCountIfValueTests
 
     @Ignore /* function throws error for empty value map */
     @Test
-    public void return_zero_for_for_empty_value_to_compare()
+    public void return_zero_for_empty_value_to_compare()
     {
         RuleFunction countIfValueFunction = RuleFunctionCountIfValue.create();
 
