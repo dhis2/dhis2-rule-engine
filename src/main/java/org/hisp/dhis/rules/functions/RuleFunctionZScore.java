@@ -99,11 +99,11 @@ public abstract class RuleFunctionZScore
         // Female
         if ( gender == 1 )
         {
-            sdMap = getTableForGirl().getOrDefault( key, new HashMap<>() );
+            sdMap = getTableForGirl().getOrDefault( key, new HashMap<Float, Integer>() );
         }
         else
         {
-            sdMap = getTableForBoy().getOrDefault( key, new HashMap<>() );
+            sdMap = getTableForBoy().getOrDefault( key, new HashMap<Float, Integer>() );
         }
 
         if ( sdMap.isEmpty() )

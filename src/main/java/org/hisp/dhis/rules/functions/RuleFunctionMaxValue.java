@@ -28,6 +28,7 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.google.common.collect.Lists;
 import org.hisp.dhis.rules.RuleVariableValue;
 
 import javax.annotation.Nonnull;
@@ -80,7 +81,12 @@ public class RuleFunctionMaxValue extends RuleFunction
 
             List<String> values = ruleVariableValue.candidates();
 
-            List<Double> doubles = values.stream().map( Double::parseDouble ).collect( Collectors.toList() );
+            List<Double> doubles = Lists.newArrayList();
+
+            for ( String value : values )
+            {
+                doubles.add( Double.parseDouble( value ) );
+            }
 
             return Collections.max( doubles ).toString();
         }
