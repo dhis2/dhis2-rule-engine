@@ -1,12 +1,12 @@
 language: java
 sudo : false
-dist : trusty
+dist : precise
 jdk:
-- openjdk8
+- openjdk7
 addons:
   apt:
     packages:
-    - oracle-java8-installer
+    - oracle-java7-installer
 before_install:
 - rm ~/.m2/settings.xml
 
