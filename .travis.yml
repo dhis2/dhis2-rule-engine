@@ -1,6 +1,6 @@
 language: java
 sudo : false
-dist : xenial
+dist : bionic
 jdk:
 - openjdk7
 addons:
