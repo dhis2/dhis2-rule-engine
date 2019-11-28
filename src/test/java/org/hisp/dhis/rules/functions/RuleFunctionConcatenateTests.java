@@ -61,15 +61,15 @@ public class RuleFunctionConcatenateTests
                 RuleFunction concatenateFunction = RuleFunctionConcatenate.create();
 
                 MatcherAssert.assertThat( concatenateFunction.evaluate( asList( "hello" ), variableValues, null ),
-                    is( "'hello'" ) );
+                    is( "hello" ) );
                 MatcherAssert.assertThat( concatenateFunction.evaluate( asList( "hello", null ), variableValues, null ),
-                    is( "'hello'" ) );
+                    is( "hello" ) );
                 MatcherAssert.assertThat(
                     concatenateFunction.evaluate( Arrays.<String>asList( null, null ), variableValues, null ),
-                    is( "''" ) );
+                    is( "" ) );
                 MatcherAssert.assertThat(
                     concatenateFunction.evaluate( asList( "hello", " ", "there", "!" ), variableValues, null ),
-                    is( "'hello there!'" ) );
+                    is( "hello there!" ) );
         }
 
         @Test

@@ -29,6 +29,7 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.apache.commons.lang3.StringUtils;
+import org.hisp.dhis.parser.expression.ParserUtils;
 import org.hisp.dhis.rules.RuleVariableValue;
 
 import javax.annotation.Nonnull;
@@ -62,7 +63,7 @@ public class RuleFunctionSplit extends RuleFunction
             return "";
         }
 
-        int index = Integer.parseInt( arguments.get( 2 ) );
+        int index = ParserUtils.castDouble( arguments.get( 2 ) ).intValue();
 
         List<String> tokens = Arrays.asList( StringUtils.split( input, delimiter ) );
 

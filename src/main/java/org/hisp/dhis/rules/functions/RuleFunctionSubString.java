@@ -29,6 +29,7 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.apache.commons.lang3.StringUtils;
+import org.hisp.dhis.parser.expression.ParserUtils;
 import org.hisp.dhis.rules.RuleVariableValue;
 
 import javax.annotation.Nonnull;
@@ -54,7 +55,7 @@ public class RuleFunctionSubString extends RuleFunction
                 arguments.size() + " were supplied" );
         }
 
-        return wrap( StringUtils.substring( arguments.get( 0 ), Integer.parseInt( arguments.get( 1 ) ), Integer.parseInt( arguments.get( 2 ) ) ) );
+        return wrap( StringUtils.substring( arguments.get( 0 ), ParserUtils.castDouble( arguments.get( 1 ) ).intValue(), ParserUtils.castDouble( arguments.get( 2 ) ).intValue() ) );
     }
 
     public static RuleFunctionSubString create()

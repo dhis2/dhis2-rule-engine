@@ -89,7 +89,7 @@ final class RuleExpressionBinder
                     new HashMap<>( ruleExpression.functions().size() );
 
                 // populate list with placeholders which later will be used as
-                // source values in expression
+                // source values in org.hisp.dhis.parser.expression
                 for ( String variable : ruleExpression.variables() )
                 {
                         ruleVariablePlaceholders.put( variable, null );

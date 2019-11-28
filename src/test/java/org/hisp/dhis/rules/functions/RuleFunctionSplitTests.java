@@ -29,6 +29,7 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.hamcrest.MatcherAssert;
+import org.hisp.dhis.parser.expression.ParserExceptionWithoutContext;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.junit.Rule;
 import org.junit.Test;
@@ -72,11 +73,11 @@ public class RuleFunctionSplitTests
                 RuleFunction splitFunction = RuleFunctionSplit.create();
 
                 MatcherAssert
-                    .assertThat( splitFunction.evaluate( asList( "a,b,c", ",", "0" ), variableValues, null ), is( "'a'" ) );
+                    .assertThat( splitFunction.evaluate( asList( "a,b,c", ",", "0" ), variableValues, null ), is( "a" ) );
                 MatcherAssert
-                    .assertThat( splitFunction.evaluate( asList( "a,b,c", ",", "2" ), variableValues, null ), is( "'c'" ) );
+                    .assertThat( splitFunction.evaluate( asList( "a,b,c", ",", "2" ), variableValues, null ), is( "c" ) );
                 MatcherAssert
-                    .assertThat( splitFunction.evaluate( asList( "a,;b,;c", ",;", "1" ), variableValues, null ), is( "'b'" ) );
+                    .assertThat( splitFunction.evaluate( asList( "a,;b,;c", ",;", "1" ), variableValues, null ), is( "b" ) );
         }
 
         @Test
@@ -91,9 +92,9 @@ public class RuleFunctionSplitTests
         }
 
         @Test
-        public void throw_illegal_argument_exception_if_position_is_a_text()
+        public void throw_parser_exception_without_context_if_position_is_a_text()
         {
-                thrown.expect( IllegalArgumentException.class );
+                thrown.expect( ParserExceptionWithoutContext.class );
                 RuleFunction splitFunction = RuleFunctionSplit.create();
 
                 splitFunction.evaluate(

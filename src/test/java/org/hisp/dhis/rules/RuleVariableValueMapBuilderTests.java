@@ -129,16 +129,16 @@ public class RuleVariableValueMapBuilderTests
                 assertThatVariable( valueMap.get( "event_count" ) ).hasValue( "3" )
                     .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "3" );
 
-                assertThatVariable( valueMap.get( "event_id" ) ).hasValue( "'test_event_uid'" )
+                assertThatVariable( valueMap.get( "event_id" ) ).hasValue( "test_event_uid" )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_event_uid" );
 
                 assertThatVariable( valueMap.get( "due_date" ) ).hasValue( wrap( dateFormat.format( dueDate ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( dueDate ) );
 
-                assertThatVariable( valueMap.get( "test_variable_one" ) ).hasValue( "'test_value_one'" )
+                assertThatVariable( valueMap.get( "test_variable_one" ) ).hasValue( "test_value_one" )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_value_one" );
 
-                assertThatVariable( valueMap.get( "test_variable_two" ) ).hasValue( "'test_value_two'" )
+                assertThatVariable( valueMap.get( "test_variable_two" ) ).hasValue( "test_value_two" )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_value_two" );
         }
 
@@ -193,17 +193,17 @@ public class RuleVariableValueMapBuilderTests
                 assertThatVariable( valueMap.get( "event_count" ) ).hasValue( "3" )
                     .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "3" );
 
-                assertThatVariable( valueMap.get( "event_id" ) ).hasValue( "'test_event_uid_current'" )
+                assertThatVariable( valueMap.get( "event_id" ) ).hasValue( "test_event_uid_current" )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_event_uid_current" );
 
                 assertThatVariable( valueMap.get( "due_date" ) )
                     .hasValue( wrap( dateFormat.format( currentEventDueDate ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( currentEventDueDate ) );
 
-                assertThatVariable( valueMap.get( "test_variable_one" ) ).hasValue( "'test_value_one_newest'" )
+                assertThatVariable( valueMap.get( "test_variable_one" ) ).hasValue( "test_value_one_newest" )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_value_one_newest",
                     "test_value_one_current", "test_value_one_oldest" );
-                assertThatVariable( valueMap.get( "test_variable_two" ) ).hasValue( "'test_value_two_newest'" )
+                assertThatVariable( valueMap.get( "test_variable_two" ) ).hasValue( "test_value_two_newest" )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_value_two_newest",
                     "test_value_two_current", "test_value_two_oldest" );
         }
@@ -259,7 +259,7 @@ public class RuleVariableValueMapBuilderTests
                 assertThatVariable( valueMap.get( "event_count" ) ).hasValue( "3" )
                     .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "3" );
 
-                assertThatVariable( valueMap.get( "event_id" ) ).hasValue( "'test_event_uid_current'" )
+                assertThatVariable( valueMap.get( "event_id" ) ).hasValue( "test_event_uid_current" )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_event_uid_current" );
 
                 assertThatVariable( valueMap.get( "due_date" ) )
@@ -267,12 +267,12 @@ public class RuleVariableValueMapBuilderTests
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( dateEventDueCurrent ) );
 
                 assertThatVariable( valueMap.get( "test_variable_one" ) )
-                    .hasValue( "'test_value_dataelement_one_current'" )
+                    .hasValue( "test_value_dataelement_one_current" )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_value_dataelement_one_current",
                     "test_value_dataelement_one_second", "test_value_dataelement_one_first" );
 
                 assertThatVariable( valueMap.get( "test_variable_two" ) )
-                    .hasValue( "'test_value_dataelement_two_current'" )
+                    .hasValue( "test_value_dataelement_two_current" )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_value_dataelement_two_current",
                     "test_value_dataelement_two_second", "test_value_dataelement_two_first" );
         }
@@ -325,14 +325,14 @@ public class RuleVariableValueMapBuilderTests
                 assertThatVariable( valueMap.get( "event_count" ) ).hasValue( "4" )
                     .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "4" );
 
-                assertThatVariable( valueMap.get( "event_id" ) ).hasValue( "'test_event_uid_current'" )
+                assertThatVariable( valueMap.get( "event_id" ) ).hasValue( "test_event_uid_current" )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_event_uid_current" );
 
                 assertThatVariable( valueMap.get( "due_date" ) )
                     .hasValue( wrap( dateFormat.format( dateEventDueCurrent ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( dateEventDueCurrent ) );
 
-                assertThatVariable( valueMap.get( "test_variable" ) ).hasValue( "'test_value_one'" )
+                assertThatVariable( valueMap.get( "test_variable" ) ).hasValue( "test_value_one" )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_value_one", "test_value_current" );
         }
 
@@ -372,7 +372,7 @@ public class RuleVariableValueMapBuilderTests
                 assertThatVariable( valueMap.get( "event_count" ) ).hasValue( "2" )
                     .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "2" );
 
-                assertThatVariable( valueMap.get( "event_id" ) ).hasValue( "'test_event_uid_two'" )
+                assertThatVariable( valueMap.get( "event_id" ) ).hasValue( "test_event_uid_two" )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_event_uid_two" );
 
                 assertThatVariable( valueMap.get( "due_date" ) ).hasValue( wrap( dateFormat.format( dateEventTwo ) ) )
@@ -429,14 +429,14 @@ public class RuleVariableValueMapBuilderTests
                 assertThatVariable( valueMap.get( "event_count" ) ).hasValue( "4" )
                     .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "4" );
 
-                assertThatVariable( valueMap.get( "event_id" ) ).hasValue( "'test_event_uid_current'" )
+                assertThatVariable( valueMap.get( "event_id" ) ).hasValue( "test_event_uid_current" )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_event_uid_current" );
 
                 assertThatVariable( valueMap.get( "due_date" ) )
                     .hasValue( wrap( dateFormat.format( dateEventCurrent ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( dateEventCurrent ) );
 
-                assertThatVariable( valueMap.get( "test_variable" ) ).hasValue( "'test_value_two'" )
+                assertThatVariable( valueMap.get( "test_variable" ) ).hasValue( "test_value_two" )
                     .isTypeOf( RuleValueType.TEXT )
                     .hasCandidates( "test_value_three", "test_value_current", "test_value_two", "test_value_one" );
         }
@@ -492,7 +492,7 @@ public class RuleVariableValueMapBuilderTests
                 assertThatVariable( valueMap.get( "event_count" ) ).hasValue( "2" )
                     .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "2" );
 
-                assertThatVariable( valueMap.get( "event_id" ) ).hasValue( "'test_event_uid'" )
+                assertThatVariable( valueMap.get( "event_id" ) ).hasValue( "test_event_uid" )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_event_uid" );
 
                 assertThatVariable( valueMap.get( "due_date" ) ).hasValue( wrap( dateFormat.format( eventDate ) ) )
@@ -505,7 +505,7 @@ public class RuleVariableValueMapBuilderTests
                     .hasValue( wrap( dateFormat.format( enrollmentDate ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( enrollmentDate ) );
 
-                assertThatVariable( valueMap.get( "enrollment_id" ) ).hasValue( "'test_enrollment'" )
+                assertThatVariable( valueMap.get( "enrollment_id" ) ).hasValue( "test_enrollment" )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_enrollment" );
 
                 assertThatVariable( valueMap.get( "enrollment_count" ) ).hasValue( "1" )
@@ -518,9 +518,9 @@ public class RuleVariableValueMapBuilderTests
                 assertThatVariable( valueMap.get( "tei_count" ) ).hasValue( "1" )
                     .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "1" );
 
-                assertThatVariable( valueMap.get( "test_variable_one" ) ).hasValue( "'test_attribute_value_one'" )
+                assertThatVariable( valueMap.get( "test_variable_one" ) ).hasValue( "test_attribute_value_one" )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_attribute_value_one" );
-                assertThatVariable( valueMap.get( "test_variable_two" ) ).hasValue( "'test_attribute_value_two'" )
+                assertThatVariable( valueMap.get( "test_variable_two" ) ).hasValue( "test_attribute_value_two" )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_attribute_value_two" );
         }
 
@@ -567,7 +567,7 @@ public class RuleVariableValueMapBuilderTests
                     .hasValue( wrap( dateFormat.format( enrollmentDate ) ) )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( enrollmentDate ) );
 
-                assertThatVariable( valueMap.get( "enrollment_id" ) ).hasValue( "'test_enrollment'" )
+                assertThatVariable( valueMap.get( "enrollment_id" ) ).hasValue( "test_enrollment" )
                     .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_enrollment" );
 
                 assertThatVariable( valueMap.get( "enrollment_count" ) ).hasValue( "1" )
@@ -584,7 +584,7 @@ public class RuleVariableValueMapBuilderTests
                     .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "test_attribute_value_one" );
 
                 assertThatVariable( valueMap.get( "test_variable_two" ) ).isTypeOf( RuleValueType.TEXT )
-                    .hasValue( "'test_attribute_value_two'" ).hasCandidates( "test_attribute_value_two" );
+                    .hasValue( "test_attribute_value_two" ).hasCandidates( "test_attribute_value_two" );
         }
 
         @Test
@@ -611,6 +611,6 @@ public class RuleVariableValueMapBuilderTests
         @Nonnull
         private static String wrap( @Nonnull String source )
         {
-                return String.format( Locale.US, "'%s'", source );
+                return String.format( Locale.US, "%s", source );
         }
 }

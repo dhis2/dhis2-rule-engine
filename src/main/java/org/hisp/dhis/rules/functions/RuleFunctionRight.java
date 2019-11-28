@@ -29,6 +29,7 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.apache.commons.lang3.StringUtils;
+import org.hisp.dhis.parser.expression.ParserUtils;
 import org.hisp.dhis.rules.RuleVariableValue;
 
 import javax.annotation.Nonnull;
@@ -48,17 +49,13 @@ public class RuleFunctionRight extends RuleFunction
     {
         if ( arguments.size() != 2 )
         {
-            throw new IllegalArgumentException( "Two argument was expected, " +
-                    arguments.size() + " were supplied" );
+            throw new IllegalArgumentException( "Two arguments were expected, " +
+                arguments.size() + " were supplied" );
         }
+        Double doubleValue = ParserUtils.castDouble( arguments.get( 1 ) );
+        int chars = doubleValue.intValue();
 
-        int chars = 0;
-
-        try
-        {
-            chars = Integer.parseInt( arguments.get( 1 ) );
-        }
-        catch ( NumberFormatException e )
+        if ( doubleValue.doubleValue() % 1 != 0 )
         {
             throw new IllegalArgumentException( "Number has to be an integer" );
         }

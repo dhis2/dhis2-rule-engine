@@ -47,7 +47,7 @@ public class RuleVariableValueTests
                     "test_value", RuleValueType.TEXT, Arrays.asList(
                         "test_value_candidate_one", "test_value_candidate_two" ), dateFormat.format( new Date() ) );
 
-                assertThat( variableValue.value() ).isEqualTo( "'test_value'" );
+                assertThat( variableValue.value() ).isEqualTo( "test_value" );
                 assertThat( variableValue.type() ).isEqualTo( RuleValueType.TEXT );
                 assertThat( variableValue.candidates().size() ).isEqualTo( 2 );
                 assertThat( variableValue.candidates().get( 0 ) ).isEqualTo( "test_value_candidate_one" );
@@ -58,10 +58,10 @@ public class RuleVariableValueTests
         public void wrappedTextValuesMustNotBeDoubleWrapped()
         {
                 RuleVariableValue variableValue = RuleVariableValue.create(
-                    "'test_value'", RuleValueType.TEXT, Arrays.asList(
+                    "test_value", RuleValueType.TEXT, Arrays.asList(
                         "test_value_candidate_one", "test_value_candidate_two" ), dateFormat.format( new Date() ) );
 
-                assertThat( variableValue.value() ).isEqualTo( "'test_value'" );
+                assertThat( variableValue.value() ).isEqualTo( "test_value" );
                 assertThat( variableValue.type() ).isEqualTo( RuleValueType.TEXT );
                 assertThat( variableValue.candidates().size() ).isEqualTo( 2 );
                 assertThat( variableValue.candidates().get( 0 ) ).isEqualTo( "test_value_candidate_one" );

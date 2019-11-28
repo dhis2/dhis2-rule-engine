@@ -84,7 +84,7 @@ public class RuleFunctionLastEventDateTests
 
         valueMap = getValueMapWithValue( variableWithValue );
 
-        assertThat( lastEventDateFunction.evaluate( Arrays.asList( variableWithValue ), valueMap, null ), is( "'"+todayDate+"'" ) );
+        assertThat( lastEventDateFunction.evaluate( Arrays.asList( variableWithValue ), valueMap, null ), is( ""+todayDate+"" ) );
     }
 
     private Map<String, RuleVariableValue> getEmptyValueMap()

@@ -29,6 +29,7 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.hamcrest.MatcherAssert;
+import org.hisp.dhis.parser.expression.ParserExceptionWithoutContext;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.junit.Rule;
 import org.junit.Test;
@@ -73,34 +74,34 @@ public class RuleFunctionSubStringTests
                 RuleFunction subStringFunction = RuleFunctionSubString.create();
 
                 MatcherAssert.assertThat( subStringFunction.evaluate(
-                    asList( "abcdef", "0", "0" ), variableValues, null ), is( "''" ) );
+                    asList( "abcdef", "0", "0" ), variableValues, null ), is( "" ) );
 
                 MatcherAssert.assertThat( subStringFunction.evaluate(
-                    asList( "abcdef", "0", "1" ), variableValues, null ), is( "'a'" ) );
+                    asList( "abcdef", "0", "1" ), variableValues, null ), is( "a" ) );
 
                 MatcherAssert.assertThat( subStringFunction.evaluate(
-                    asList( "abcdef", "-10", "1" ), variableValues, null ), is( "'a'" ) );
+                    asList( "abcdef", "-10", "1" ), variableValues, null ), is( "a" ) );
 
                 MatcherAssert.assertThat( subStringFunction.evaluate(
-                    asList( "abcdef", "2", "4" ), variableValues, null ), is( "'cd'" ) );
+                    asList( "abcdef", "2", "4" ), variableValues, null ), is( "cd" ) );
 
                 MatcherAssert.assertThat( subStringFunction.evaluate(
-                    asList( "abcdef", "2", "10" ), variableValues, null ), is( "'cdef'" ) );
+                    asList( "abcdef", "2", "10" ), variableValues, null ), is( "cdef" ) );
         }
 
         @Test
-        public void throw_illegal_argument_exception_if_start_index_is_a_text()
+        public void throw_parser_exception_without_context_if_start_index_is_a_text()
         {
-                thrown.expect( IllegalArgumentException.class );
+                thrown.expect( ParserExceptionWithoutContext.class );
 
                 RuleFunctionSubString.create().evaluate(
                     Arrays.asList( "test_variable_one", "variable", "3" ), variableValues, null );
         }
 
         @Test
-        public void throw_illegal_argument_exception_if_end_index_is_a_text()
+        public void throw_parser_exception_without_context_if_end_index_is_a_text()
         {
-                thrown.expect( IllegalArgumentException.class );
+                thrown.expect( ParserExceptionWithoutContext.class );
 
                 RuleFunctionSubString.create().evaluate(
                     Arrays.asList( "test_variable_one", "3", "ede" ), variableValues, null );

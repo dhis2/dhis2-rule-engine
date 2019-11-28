@@ -112,8 +112,7 @@ public abstract class RuleFunction
                 {
                         return "";
                 }
-
-                return "'"+input+"'";
+                return input;
         }
 
         static boolean isEmpty( String input )

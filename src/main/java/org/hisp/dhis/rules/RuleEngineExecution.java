@@ -1,24 +1,24 @@
 package org.hisp.dhis.rules;
 
+import com.google.common.collect.ImmutableMap;
 import org.apache.commons.jexl2.JexlException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hisp.dhis.rules.functions.RuleFunction;
-import org.hisp.dhis.rules.models.Rule;
-import org.hisp.dhis.rules.models.RuleAction;
-import org.hisp.dhis.rules.models.RuleActionAssign;
-import org.hisp.dhis.rules.models.RuleActionCreateEvent;
-import org.hisp.dhis.rules.models.RuleActionDisplayKeyValuePair;
-import org.hisp.dhis.rules.models.RuleActionDisplayText;
-import org.hisp.dhis.rules.models.RuleActionErrorOnCompletion;
-import org.hisp.dhis.rules.models.RuleActionScheduleMessage;
-import org.hisp.dhis.rules.models.RuleActionSendMessage;
-import org.hisp.dhis.rules.models.RuleActionShowError;
-import org.hisp.dhis.rules.models.RuleActionShowWarning;
-import org.hisp.dhis.rules.models.RuleActionWarningOnCompletion;
-import org.hisp.dhis.rules.models.RuleEffect;
-import org.hisp.dhis.rules.models.RuleValueType;
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.parser.expression.ExprFunction;
+import org.hisp.dhis.parser.expression.ExprItem;
+import org.hisp.dhis.parser.expression.Parser;
+import org.hisp.dhis.parser.expression.function.VectorAvg;
+import org.hisp.dhis.parser.expression.function.VectorCount;
+import org.hisp.dhis.parser.expression.function.VectorMax;
+import org.hisp.dhis.parser.expression.function.VectorMin;
+import org.hisp.dhis.parser.expression.function.VectorStddevSamp;
+import org.hisp.dhis.parser.expression.function.VectorSum;
+import org.hisp.dhis.parser.expression.function.VectorVariance;
+import org.hisp.dhis.parser.expression.item.ItemConstant;
+import org.hisp.dhis.rules.models.*;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,11 +31,45 @@ import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.Nonnull;
+import static org.hisp.dhis.parser.expression.ParserUtils.COMMON_EXPRESSION_FUNCTIONS;
+import static org.hisp.dhis.parser.expression.ParserUtils.FUNCTION_EVALUATE;
+import static org.hisp.dhis.parser.expression.ParserUtils.ITEM_EVALUATE;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.AVG;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.COUNT;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.C_BRACE;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.MAX;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.MIN;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.STDDEV;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.SUM;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.VARIANCE;
 
 class RuleEngineExecution
         implements Callable<List<RuleEffect>> {
-    private static final String D2_FUNCTION_PREFIX = "d2:";
+    public final static ImmutableMap<Integer, ExprItem> PROGRAM_INDICATOR_ITEMS = ImmutableMap.<Integer, ExprItem>builder()
+
+        .put( C_BRACE, new ItemConstant() )
+
+        .build();
+
+    public final static ImmutableMap<Integer, ExprFunction> FUNCTIONS = ImmutableMap.<Integer, ExprFunction>builder()
+
+        // Common functions
+
+        .putAll( COMMON_EXPRESSION_FUNCTIONS )
+
+        // Program functions for custom aggregation
+
+        .put( AVG, new VectorAvg() )
+        .put( COUNT, new VectorCount() )
+        .put( MAX, new VectorMax() )
+        .put( MIN, new VectorMin() )
+        .put( STDDEV, new VectorStddevSamp() )
+        .put( SUM, new VectorSum() )
+        .put( VARIANCE, new VectorVariance() )
+
+        .build();
+
+    private static final String TODAY = new Date().toString();
 
     private static final Log log = LogFactory.getLog(RuleEngineExecution.class);
 
@@ -90,7 +124,7 @@ class RuleEngineExecution
             Rule rule = ruleList.get(i);
             try {
                 log.debug("Evaluating programrule: " + rule.name());
-                // send expression to evaluator
+                // send org.hisp.dhis.parser.expression to evaluator
                 if (Boolean.valueOf(process(rule.condition()))) {
                     // process each action for this rule
                     for (int j = 0; j < rule.actions().size(); j++) {
@@ -106,10 +140,25 @@ class RuleEngineExecution
             } catch (JexlException jexlException) {
                 log.error("Parser exception in " + rule.name() + ": " + jexlException.getMessage());
             } catch (Exception e) {
+                e.printStackTrace();
                 log.error("Exception in " + rule.name() + ": " + e.getMessage());
             }
         }
         return ruleEffects;
+    }
+
+    private String process( String condition )
+    {
+        CommonExpressionVisitor commonExpressionVisitor = CommonExpressionVisitor.newBuilder()
+            .withFunctionMap( FUNCTIONS )
+            .withItemMap( PROGRAM_INDICATOR_ITEMS )
+            .withVariablesMap(valueMap)
+            .withFunctionMethod( FUNCTION_EVALUATE )
+            .withItemMethod( ITEM_EVALUATE )
+            .withSupplementaryData( supplementaryData )
+            .validateCommonProperties();
+
+        return Parser.visit( condition, commonExpressionVisitor ).toString();
     }
 
     private Boolean isAssignToCalculatedValue(RuleAction ruleAction) {
@@ -127,7 +176,8 @@ class RuleEngineExecution
         // contain code to execute.
         if (ruleAction instanceof RuleActionAssign) {
             String data = process(((RuleActionAssign) ruleAction).data());
-            RuleVariableValue variableValue = RuleVariableValue.create(data, RuleValueType.TEXT, Arrays.asList(data), new Date().toString());
+            RuleVariableValue variableValue = RuleVariableValue.create(data, RuleValueType.TEXT, Arrays.asList(data),
+                TODAY );
             String field = ((RuleActionAssign) ruleAction).field();
             Matcher matcher = pattern.matcher(field);
             while (matcher.find()) {
@@ -166,75 +216,5 @@ class RuleEngineExecution
         }
 
         return RuleEffect.create(ruleAction);
-    }
-
-    @Nonnull
-    private String process(@Nonnull String expression) {
-        expression = expression.replace("\n", "");
-        // we don't want to run empty expression
-        if (!expression.trim().isEmpty()) {
-            String expressionWithVariableValues = bindVariableValues(expression);
-            String expressionWithFunctionValues = bindFunctionValues(expressionWithVariableValues);
-
-            log.debug("Evaluating expression: " + expressionWithFunctionValues);
-            return expressionEvaluator.evaluate(expressionWithFunctionValues);
-        }
-
-        return "";
-    }
-
-    @Nonnull
-    private String bindVariableValues(@Nonnull String expression) {
-        RuleExpression ruleExpression = RuleExpression.from(expression);
-        RuleExpressionBinder ruleExpressionBinder = RuleExpressionBinder.from(ruleExpression);
-
-        // substitute variable values
-        for (String variable : ruleExpression.variables()) {
-            RuleVariableValue variableValue = valueMap.get(
-                    RuleExpression.unwrapVariableName(variable));
-
-            if (variableValue != null) {
-                ruleExpressionBinder.bindVariable(variable, variableValue.value() == null ?
-                        variableValue.type().defaultValue() : variableValue.value());
-            }
-        }
-
-        return ruleExpressionBinder.build();
-    }
-
-    @Nonnull
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    private String bindFunctionValues(@Nonnull String expression) {
-
-        RuleExpression ruleExpression = RuleExpression.from(expression);
-        RuleExpressionBinder ruleExpressionBinder = RuleExpressionBinder.from(ruleExpression);
-
-        for (String function : ruleExpression.functions()) {
-            RuleFunctionCall ruleFunctionCall = RuleFunctionCall.from(function);
-
-            List<String> arguments = new ArrayList<>(ruleFunctionCall.arguments());
-            for (int j = 0; j < arguments.size(); j++) {
-                arguments.set(j, process(arguments.get(j)));
-            }
-
-            ruleExpressionBinder.bindFunction(ruleFunctionCall.functionCall(), RuleFunction
-                    .create(ruleFunctionCall.functionName()).evaluate(arguments, valueMap, supplementaryData));
-        }
-
-        String processedExpression = ruleExpressionBinder.build();
-
-        // In case if there are functions which
-        // are not processed completely.
-        if (processedExpression.contains(D2_FUNCTION_PREFIX)) {
-            Matcher functionMatcher = RuleExpression.FUNCTION_PATTERN_COMPILED.matcher(processedExpression);
-
-            if (functionMatcher.find()) {
-                // Another recursive call to process rest of
-                // the d2 function calls.
-                processedExpression = bindFunctionValues(processedExpression);
-            }
-        }
-
-        return processedExpression;
     }
 }

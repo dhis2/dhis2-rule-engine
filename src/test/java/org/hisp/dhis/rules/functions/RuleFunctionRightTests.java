@@ -29,6 +29,7 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.hamcrest.MatcherAssert;
+import org.hisp.dhis.parser.expression.ParserExceptionWithoutContext;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.junit.Rule;
 import org.junit.Test;
@@ -75,22 +76,22 @@ public class RuleFunctionRightTests
                 RuleFunction rightFunction = RuleFunctionRight.create();
 
                 MatcherAssert.assertThat( rightFunction.evaluate(
-                    Arrays.asList( "abcdef", "0" ), variableValues, null ), is( "''" ) );
+                    Arrays.asList( "abcdef", "0" ), variableValues, null ), is( "" ) );
 
                 MatcherAssert.assertThat( rightFunction.evaluate(
-                    Arrays.asList( "abcdef", "-5" ), variableValues, null ), is( "'f'" ) );
+                    Arrays.asList( "abcdef", "-5" ), variableValues, null ), is( "f" ) );
 
                 MatcherAssert.assertThat( rightFunction.evaluate(
-                    Arrays.asList( "abcdef", "2" ), variableValues, null ), is( "'ef'" ) );
+                    Arrays.asList( "abcdef", "2" ), variableValues, null ), is( "ef" ) );
 
                 MatcherAssert.assertThat( rightFunction.evaluate(
-                    Arrays.asList( "abcdef", "30" ), variableValues, null ), is( "'abcdef'" ) );
+                    Arrays.asList( "abcdef", "30" ), variableValues, null ), is( "abcdef" ) );
         }
 
         @Test
-        public void throw_illegal_argument_exception_if_position_is_a_text()
+        public void throw_parser_exception_without_context_if_position_is_a_text()
         {
-                thrown.expect( IllegalArgumentException.class );
+                thrown.expect( ParserExceptionWithoutContext.class );
                 RuleFunction rightFunction = RuleFunctionRight.create();
 
                 rightFunction.evaluate( asList( "test_variable_one", "text" ), variableValues, null );

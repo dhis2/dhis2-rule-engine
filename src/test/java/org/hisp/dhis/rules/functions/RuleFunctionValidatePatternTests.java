@@ -61,22 +61,22 @@ public class RuleFunctionValidatePatternTests
                 RuleFunction validatePattern = RuleFunctionValidatePattern.create();
 
                 MatcherAssert.assertThat( validatePattern.evaluate(
-                    asList( "123", "123" ), variableValues, null ), is( "'true'" ) );
+                    asList( "123", "123" ), variableValues, null ), is( "true" ) );
 
                 MatcherAssert.assertThat( validatePattern.evaluate(
-                    asList( "27123456789", "27\\d{2}\\d{3}\\d{4}" ), variableValues, null ), is( "'true'" ) );
+                    asList( "27123456789", "27\\d{2}\\d{3}\\d{4}" ), variableValues, null ), is( "true" ) );
 
                 MatcherAssert.assertThat( validatePattern.evaluate(
-                    asList( "27123456789", "27\\d{9}" ), variableValues, null ), is( "'true'" ) );
+                    asList( "27123456789", "27\\d{9}" ), variableValues, null ), is( "true" ) );
 
                 MatcherAssert.assertThat( validatePattern.evaluate(
-                    asList( "abc123", "abc123" ), variableValues, null ), is( "'true'" ) );
+                    asList( "abc123", "abc123" ), variableValues, null ), is( "true" ) );
 
                 MatcherAssert.assertThat( validatePattern.evaluate(
-                    asList( "9999/99/9", "\\d{4}/\\d{2}/\\d" ), variableValues, null ), is( "'true'" ) );
+                    asList( "9999/99/9", "\\d{4}/\\d{2}/\\d" ), variableValues, null ), is( "true" ) );
 
                 MatcherAssert.assertThat( validatePattern.evaluate(
-                    asList( "9999/99/9", "[0-9]{4}/[0-9]{2}/[0-9]" ), variableValues, null ), is( "'true'" ) );
+                    asList( "9999/99/9", "[0-9]{4}/[0-9]{2}/[0-9]" ), variableValues, null ), is( "true" ) );
         }
 
         @Test
@@ -85,22 +85,22 @@ public class RuleFunctionValidatePatternTests
                 RuleFunction validatePattern = RuleFunctionValidatePattern.create();
 
                 MatcherAssert.assertThat( validatePattern.evaluate(
-                    asList( "1999/99/9", "\\[9]{4}/\\d{2}/\\d" ), variableValues, null ), is( "'false'" ) );
+                    asList( "1999/99/9", "\\[9]{4}/\\d{2}/\\d" ), variableValues, null ), is( "false" ) );
 
                 MatcherAssert.assertThat( validatePattern.evaluate(
-                    asList( "9999/99/", "[0-9]{4}/[0-9]{2}/[0-9]" ), variableValues, null ), is( "'false'" ) );
+                    asList( "9999/99/", "[0-9]{4}/[0-9]{2}/[0-9]" ), variableValues, null ), is( "false" ) );
 
                 MatcherAssert.assertThat( validatePattern.evaluate(
-                    asList( "abc123", "xyz" ), variableValues, null ), is( "'false'" ) );
+                    asList( "abc123", "xyz" ), variableValues, null ), is( "false" ) );
 
                 MatcherAssert.assertThat( validatePattern.evaluate(
-                    asList( "abc123", "^bc" ), variableValues, null ), is( "'false'" ) );
+                    asList( "abc123", "^bc" ), variableValues, null ), is( "false" ) );
 
                 MatcherAssert.assertThat( validatePattern.evaluate(
-                    asList( "abc123", "abc12345" ), variableValues, null ), is( "'false'" ) );
+                    asList( "abc123", "abc12345" ), variableValues, null ), is( "false" ) );
 
                 MatcherAssert.assertThat( validatePattern.evaluate(
-                    asList( "123", "567" ), variableValues, null ), is( "'false'" ) );
+                    asList( "123", "567" ), variableValues, null ), is( "false" ) );
         }
 
         @Test

@@ -49,7 +49,7 @@ abstract class RuleExpression
         {
                 if ( expression == null )
                 {
-                        throw new NullPointerException( "expression == null" );
+                        throw new NullPointerException( "org.hisp.dhis.parser.expression == null" );
                 }
 
                 Set<String> variables = new HashSet<>();

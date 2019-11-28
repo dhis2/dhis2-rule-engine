@@ -51,7 +51,7 @@ public class RuleFunctionModulus extends RuleFunction
                     arguments.size() + " were supplied" );
         }
 
-        return String.valueOf( toDouble( arguments.get( 0 ), 0.0) % toDouble( arguments.get( 1 ), 0.0) ) ;
+        return String.format( "%.1f", toDouble( arguments.get( 0 ), 0.0) % toDouble( arguments.get( 1 ), 0.0)) ;
     }
 
     @Nonnull

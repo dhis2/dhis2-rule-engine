@@ -29,6 +29,7 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.hamcrest.MatcherAssert;
+import org.hisp.dhis.parser.expression.ParserExceptionWithoutContext;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.junit.Rule;
 import org.junit.Test;
@@ -73,22 +74,22 @@ public class RuleFunctionLeftTests
                 RuleFunction leftFunction = RuleFunctionLeft.create();
 
                 MatcherAssert.assertThat( leftFunction.evaluate(
-                    Arrays.asList( "abcdef", "0" ), variableValues, null ), is( "''" ) );
+                    Arrays.asList( "abcdef", "0" ), variableValues, null ), is( "" ) );
 
                 MatcherAssert.assertThat( leftFunction.evaluate(
-                    Arrays.asList( "abcdef", "-5" ), variableValues, null ), is( "'a'" ) );
+                    Arrays.asList( "abcdef", "-5" ), variableValues, null ), is( "a" ) );
 
                 MatcherAssert.assertThat( leftFunction.evaluate(
-                    Arrays.asList( "abcdef", "2" ), variableValues, null ), is( "'ab'" ) );
+                    Arrays.asList( "abcdef", "2" ), variableValues, null ), is( "ab" ) );
 
                 MatcherAssert.assertThat( leftFunction.evaluate(
-                    Arrays.asList( "abcdef", "30" ), variableValues, null ), is( "'abcdef'" ) );
+                    Arrays.asList( "abcdef", "30" ), variableValues, null ), is( "abcdef" ) );
         }
 
         @Test
-        public void throw_illegal_argument_exception_if_position_is_a_text()
+        public void throw_parser_exception_without_context_if_position_is_a_text()
         {
-                thrown.expect( IllegalArgumentException.class );
+                thrown.expect( ParserExceptionWithoutContext.class );
                 RuleFunction ruleFunction = RuleFunctionLeft.create();
 
                 ruleFunction.evaluate( asList( "test_variable_one", "text" ), variableValues, null );
@@ -126,7 +127,7 @@ public class RuleFunctionLeftTests
         }
 
         @Test
-        public void throw_illegal_argument_exception_when_number_not_an_integer()
+        public void throw_illegal_argument_when_number_not_an_integer()
         {
                 thrown.expect( IllegalArgumentException.class );
                 RuleFunctionLeft.create().evaluate( Arrays.asList( "yyyy-MM-dd", "6.8" ),

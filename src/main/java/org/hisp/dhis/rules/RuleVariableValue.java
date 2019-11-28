@@ -51,7 +51,7 @@ public abstract class RuleVariableValue {
 
         // if text processedValue, wrap it
         if (RuleValueType.TEXT.equals(ruleValueType)) {
-            processedValue = String.format(Locale.US, "'%s'", processedValue);
+            processedValue = String.format(Locale.US, "%s", processedValue);
         }
 
         /*if (RuleValueType.NUMERIC.equals(ruleValueType)) {TODO: UNCOMMENT WHEN VALUE FORMAT IN CLIENT IS READY
@@ -73,7 +73,7 @@ public abstract class RuleVariableValue {
 
         // if text processedValue, wrap it
         if (RuleValueType.TEXT.equals(ruleValueType)) {
-            processedValue = String.format(Locale.US, "'%s'", processedValue);
+            processedValue = String.format(Locale.US, "%s", processedValue);
         }
 
        /* if (RuleValueType.NUMERIC.equals(ruleValueType)) {TODO: UNCOMMENT WHEN VALUE FORMAT IN CLIENT IS READY

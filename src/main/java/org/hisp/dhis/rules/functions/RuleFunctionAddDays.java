@@ -28,6 +28,7 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hisp.dhis.parser.expression.ParserUtils;
 import org.hisp.dhis.rules.RuleVariableValue;
 
 import javax.annotation.Nonnull;
@@ -87,7 +88,7 @@ class RuleFunctionAddDays
                         Date date = format.parse( inputDate );
 
                         calendar.setTime( date );
-                        calendar.add( Calendar.DATE, Integer.parseInt( days ) );
+                        calendar.add( Calendar.DATE, ParserUtils.castDouble( days ).intValue() );
                         Date calculatedDate = calendar.getTime();
 
                         return format.format( calculatedDate );

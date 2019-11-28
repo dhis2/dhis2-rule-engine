@@ -5,6 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import static java.util.Arrays.asList;
 
+import org.hisp.dhis.parser.expression.ParserExceptionWithoutContext;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,13 +32,13 @@ public class RuleFunctionAddDaysTests
                 RuleFunction addDaysFunction = RuleFunctionAddDays.create();
 
                 assertThat( addDaysFunction.evaluate( asList( "2011-01-01", "6" ), variableValues, null ),
-                    is( ("'2011-01-07'") ) );
+                    is( ("2011-01-07") ) );
                 assertThat( addDaysFunction.evaluate( asList( "2010-10-10", "1" ), variableValues, null ),
-                    is( ("'2010-10-11'") ) );
+                    is( ("2010-10-11") ) );
                 assertThat( addDaysFunction.evaluate( asList( "2010-10-31", "1" ), variableValues, null ),
-                    is( ("'2010-11-01'") ) );
+                    is( ("2010-11-01") ) );
                 assertThat( addDaysFunction.evaluate( asList( "2010-12-01", "31" ), variableValues, null ),
-                    is( ("'2011-01-01'") ) );
+                    is( ("2011-01-01") ) );
         }
 
         @Test
@@ -51,9 +52,9 @@ public class RuleFunctionAddDaysTests
         }
 
         @Test
-        public void throw_illegal_argument_exception_if_second_argument_is_invalid()
+        public void throw_parser_exception_without_context_if_second_argument_is_invalid()
         {
-                thrown.expect( IllegalArgumentException.class );
+                thrown.expect( ParserExceptionWithoutContext.class );
 
                 RuleFunction addDaysFunction = RuleFunctionAddDays.create();
 
