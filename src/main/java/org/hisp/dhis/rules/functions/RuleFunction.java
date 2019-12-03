@@ -1,6 +1,9 @@
 package org.hisp.dhis.rules.functions;
 
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.models.TimeInterval;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -85,6 +88,18 @@ public abstract class RuleFunction
                 default:
                         return null;
                 }
+        }
+
+        public TimeInterval getTimeInterval(String start, String end) {
+                if ( isEmpty( start ) || isEmpty( end ) )
+                {
+                        return TimeInterval.empty() ;
+                }
+
+                LocalDate startDate = LocalDate.parse( start, DateTimeFormat.forPattern( DATE_PATTERN ) );
+                LocalDate endDate = LocalDate.parse( end, DateTimeFormat.forPattern( DATE_PATTERN ) );
+
+                return TimeInterval.fromTo( startDate, endDate );
         }
 
         @Nonnull

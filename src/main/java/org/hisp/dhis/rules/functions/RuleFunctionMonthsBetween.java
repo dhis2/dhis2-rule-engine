@@ -29,16 +29,14 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.hisp.dhis.rules.RuleVariableValue;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import org.hisp.dhis.rules.models.TimeInterval;
+import org.joda.time.Months;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author Zubair Asghar.
@@ -47,9 +45,6 @@ import javax.annotation.Nonnull;
 public class RuleFunctionMonthsBetween
         extends RuleFunction {
     public static final String D2_MONTHS_BETWEEN = "d2:monthsBetween";
-
-    //        private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "yyyy-MM-dd" );
-    private final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     @Nonnull
     @Override
@@ -60,56 +55,27 @@ public class RuleFunctionMonthsBetween
                     "Two arguments were expected, " + arguments.size() + " were supplied");
         }
 
-        String startDateString = arguments.get(0);
-        String endDateString = arguments.get(1);
+        return String.valueOf( monthsBetween( arguments.get( 0 ), arguments.get( 1 ) ) );
+    }
 
-        if (isEmpty(startDateString) || isEmpty(endDateString)) {
-            return "0";
+    /**
+     * Function which will return the number of months between the two given dates.
+     *
+     * @param start the start date.
+     * @param end   the end date.
+     * @return number of months between dates.
+     */
+    private Integer monthsBetween( String start, String end ) {
+        TimeInterval interval = getTimeInterval( start, end );
+
+        if (interval.isEmpty()) {
+            return 0;
         }
 
-                /*LocalDate startDate = null;
-                LocalDate endDate = null;*/
-        Date startDate = null;
-        Date endDate = null;
-
-        try {
-                       /* startDate = LocalDate.parse( startDateString, formatter );
-                        endDate = LocalDate.parse( endDateString, formatter );*/
-            startDate = formatter.parse(startDateString);
-            endDate = formatter.parse(endDateString);
-        } catch (ParseException e) {
-            throw new IllegalArgumentException("Date cannot be parsed");
-        }
-
-        long monthBetween = monthBetween(startDate, endDate);
-
-//        return String.valueOf(ChronoUnit.MONTHS.between(startDate, endDate));
-        return String.valueOf(monthBetween);
+        return Months.monthsBetween( interval.getStartDate(), interval.getEndDate()).getMonths();
     }
 
     public static RuleFunctionMonthsBetween create() {
         return new RuleFunctionMonthsBetween();
-    }
-
-    private long monthBetween(Date startDate, Date endDate) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(startDate);
-        int startYear = calendar.get(Calendar.YEAR);
-        int startMonth = calendar.get(Calendar.MONTH);
-        int startDay = calendar.get(Calendar.DAY_OF_MONTH);
-        calendar.setTime(endDate);
-        int endYear = calendar.get(Calendar.YEAR);
-        int endMonth = calendar.get(Calendar.MONTH);
-        int endDay = calendar.get(Calendar.DAY_OF_MONTH);
-        long diffYear = endYear - startYear;
-        long diffMonth = (endMonth - startMonth);
-        diffMonth = diffYear * 12 + diffMonth;
-        if (endDay < startDay && diffMonth > 0) {
-            diffMonth--;
-        }
-        if (endDay > startDay && diffMonth < 0) {
-            diffMonth++;
-        }
-        return diffMonth;
     }
 }

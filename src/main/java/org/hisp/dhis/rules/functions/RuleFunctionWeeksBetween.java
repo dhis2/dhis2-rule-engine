@@ -1,12 +1,12 @@
 package org.hisp.dhis.rules.functions;
 
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.models.TimeInterval;
+import org.joda.time.Weeks;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
-
-import static org.hisp.dhis.rules.functions.RuleFunctionDaysBetween.daysBetween;
 
 final class RuleFunctionWeeksBetween
     extends RuleFunction
@@ -30,6 +30,23 @@ final class RuleFunctionWeeksBetween
                             arguments.size() + " were supplied" );
                 }
 
-                return String.valueOf( daysBetween( arguments.get( 0 ), arguments.get( 1 ) ) / 7 );
+                return String.valueOf( weeksBetween( arguments.get( 0 ), arguments.get( 1 ) ) );
+        }
+
+        /**
+         * Function which will return the number of weeks between the two given dates.
+         *
+         * @param start the start date.
+         * @param end   the end date.
+         * @return number of weeks between dates.
+         */
+        private Integer weeksBetween( String start, String end ) {
+                TimeInterval interval = getTimeInterval( start, end );
+
+                if (interval.isEmpty()) {
+                        return 0;
+                }
+
+                return Weeks.weeksBetween( interval.getStartDate(), interval.getEndDate()).getWeeks();
         }
 }

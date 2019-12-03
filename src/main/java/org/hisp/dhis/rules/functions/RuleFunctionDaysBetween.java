@@ -2,11 +2,10 @@ package org.hisp.dhis.rules.functions;
 
 import com.google.auto.value.AutoValue;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.models.TimeInterval;
+import org.joda.time.Days;
 
 import javax.annotation.Nonnull;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -43,27 +42,15 @@ abstract class RuleFunctionDaysBetween
          * @param end   the end date.
          * @return number of days between dates.
          */
-        @SuppressWarnings( "PMD.UnnecessaryWrapperObjectCreation" )
-        static Integer daysBetween( String start, String end )
+        private Integer daysBetween( String start, String end )
         {
-                if ( isEmpty( start ) || isEmpty( end ) )
-                {
+
+                TimeInterval interval = getTimeInterval( start, end );
+
+                if (interval.isEmpty()) {
                         return 0;
                 }
 
-                SimpleDateFormat format = new SimpleDateFormat();
-                format.applyPattern( DATE_PATTERN );
-
-                try
-                {
-                        Date startDate = format.parse( start );
-                        Date endDate = format.parse( end );
-
-                        return Long.valueOf( (endDate.getTime() - startDate.getTime()) / 86400000 ).intValue();
-                }
-                catch ( ParseException parseException )
-                {
-                        throw new RuntimeException( parseException );
-                }
+                return Days.daysBetween(interval.getStartDate(), interval.getEndDate()).getDays();
         }
 }

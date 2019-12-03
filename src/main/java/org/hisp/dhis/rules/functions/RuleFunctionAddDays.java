@@ -29,12 +29,10 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
 
 import javax.annotation.Nonnull;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -74,27 +72,10 @@ class RuleFunctionAddDays
          * @param days  number of days to add/subtract.
          * @return date after adding/subtracting days.
          */
-        @SuppressWarnings( "PMD.UnnecessaryWrapperObjectCreation" )
         static String addDays( String inputDate, String days )
         {
-                Calendar calendar = Calendar.getInstance();
 
-                SimpleDateFormat format = new SimpleDateFormat();
-                format.applyPattern( DATE_PATTERN );
-
-                try
-                {
-                        Date date = format.parse( inputDate );
-
-                        calendar.setTime( date );
-                        calendar.add( Calendar.DATE, Integer.parseInt( days ) );
-                        Date calculatedDate = calendar.getTime();
-
-                        return format.format( calculatedDate );
-                }
-                catch ( ParseException parseException )
-                {
-                        throw new RuntimeException( parseException );
-                }
+                LocalDate localDate = LocalDate.parse( inputDate, DateTimeFormat.forPattern( DATE_PATTERN ) );
+                return localDate.plusDays( Integer.parseInt( days ) ).toString( DATE_PATTERN );
         }
 }
