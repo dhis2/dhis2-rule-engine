@@ -99,9 +99,9 @@ public abstract class RuleFunctionZScore
         // Female
         if ( gender == 1 )
         {
-            if(getTableForGirl().get(key)!=null)
+            if( getTableForGirl().get( key ) != null )
             {
-                sdMap = getTableForGirl().get(key);
+                sdMap = getTableForGirl().get( key );
             }
             else
             {
@@ -110,9 +110,9 @@ public abstract class RuleFunctionZScore
         }
         else
         {
-            if(getTableForBoy().get(key)!=null)
+            if( getTableForBoy().get( key ) != null )
             {
-                sdMap = getTableForBoy().get(key);
+                sdMap = getTableForBoy().get( key );
             }
             else
             {
