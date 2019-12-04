@@ -28,9 +28,9 @@ package org.hisp.dhis.rules;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.apache.commons.jexl2.Expression;
-import org.apache.commons.jexl2.JexlEngine;
-
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
 import javax.annotation.Nonnull;
 
 /**
@@ -39,14 +39,20 @@ import javax.annotation.Nonnull;
 public class ExpressionEvaluator
     implements RuleExpressionEvaluator
 {
-        private static final JexlEngine JEXL = new JexlEngine();
+        private static final ScriptEngine ENGINE = new ScriptEngineManager().getEngineByName("JavaScript");
 
         @Nonnull
         @Override
         public String evaluate( @Nonnull String expression )
         {
-                Expression exp = JEXL.createExpression( expression );
-
-                return exp.evaluate( null ).toString();
+                try
+                {
+                        return ENGINE.eval(expression).toString();
+                }
+                catch ( ScriptException e )
+                {
+                        e.printStackTrace();
+                        return null;
+                }
         }
 }
