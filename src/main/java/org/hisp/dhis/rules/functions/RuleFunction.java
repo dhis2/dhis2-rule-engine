@@ -90,10 +90,11 @@ public abstract class RuleFunction
                 }
         }
 
-        public TimeInterval getTimeInterval(String start, String end) {
+        public TimeInterval getTimeInterval( String start, String end )
+        {
                 if ( isEmpty( start ) || isEmpty( end ) )
                 {
-                        return TimeInterval.empty() ;
+                        return TimeInterval.empty();
                 }
 
                 LocalDate startDate = LocalDate.parse( start, DateTimeFormat.forPattern( DATE_PATTERN ) );
@@ -123,12 +124,12 @@ public abstract class RuleFunction
         @Nonnull
         public String wrap( String input )
         {
-                if( input == null )
+                if ( input == null )
                 {
                         return "";
                 }
 
-                return "'"+input+"'";
+                return "'" + input + "'";
         }
 
         static boolean isEmpty( String input )

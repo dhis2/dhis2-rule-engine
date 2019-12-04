@@ -33,9 +33,7 @@ import org.hisp.dhis.rules.models.TimeInterval;
 import org.joda.time.Years;
 
 import javax.annotation.Nonnull;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -57,7 +55,7 @@ public class RuleFunctionYearsBetween
             throw new IllegalArgumentException( "Two arguments were expected, " + arguments.size() + " were supplied" );
         }
 
-        return String.valueOf( yearsBetween(arguments.get( 0 ), arguments.get( 1 )) );
+        return String.valueOf( yearsBetween( arguments.get( 0 ), arguments.get( 1 ) ) );
     }
 
     public static RuleFunctionYearsBetween create()
@@ -69,10 +67,11 @@ public class RuleFunctionYearsBetween
     {
         TimeInterval interval = getTimeInterval( start, end );
 
-        if (interval.isEmpty()) {
+        if ( interval.isEmpty() )
+        {
             return 0;
         }
 
-        return Years.yearsBetween( interval.getStartDate(), interval.getEndDate()).getYears();
+        return Years.yearsBetween( interval.getStartDate(), interval.getEndDate() ).getYears();
     }
 }

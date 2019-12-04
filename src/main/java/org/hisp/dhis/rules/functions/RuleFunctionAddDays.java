@@ -41,7 +41,7 @@ import java.util.Map;
  */
 
 class RuleFunctionAddDays
-        extends RuleFunction
+    extends RuleFunction
 {
         static final String D2_ADD_DAYS = "d2:addDays";
 
@@ -69,7 +69,7 @@ class RuleFunctionAddDays
          * Function which will return the the date after adding/subtracting number of days.
          *
          * @param inputDate the date to add/subtract from.
-         * @param days  number of days to add/subtract.
+         * @param days      number of days to add/subtract.
          * @return date after adding/subtracting days.
          */
         static String addDays( String inputDate, String days )

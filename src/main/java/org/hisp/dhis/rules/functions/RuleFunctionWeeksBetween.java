@@ -40,13 +40,15 @@ final class RuleFunctionWeeksBetween
          * @param end   the end date.
          * @return number of weeks between dates.
          */
-        private Integer weeksBetween( String start, String end ) {
+        private Integer weeksBetween( String start, String end )
+        {
                 TimeInterval interval = getTimeInterval( start, end );
 
-                if (interval.isEmpty()) {
+                if ( interval.isEmpty() )
+                {
                         return 0;
                 }
 
-                return Weeks.weeksBetween( interval.getStartDate(), interval.getEndDate()).getWeeks();
+                return Weeks.weeksBetween( interval.getStartDate(), interval.getEndDate() ).getWeeks();
         }
 }

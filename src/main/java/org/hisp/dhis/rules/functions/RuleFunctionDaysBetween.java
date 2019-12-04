@@ -47,10 +47,11 @@ abstract class RuleFunctionDaysBetween
 
                 TimeInterval interval = getTimeInterval( start, end );
 
-                if (interval.isEmpty()) {
+                if ( interval.isEmpty() )
+                {
                         return 0;
                 }
 
-                return Days.daysBetween(interval.getStartDate(), interval.getEndDate()).getDays();
+                return Days.daysBetween( interval.getStartDate(), interval.getEndDate() ).getDays();
         }
 }

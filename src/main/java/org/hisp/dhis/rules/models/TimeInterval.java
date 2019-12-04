@@ -2,8 +2,6 @@ package org.hisp.dhis.rules.models;
 
 import org.joda.time.LocalDate;
 
-import java.sql.Time;
-
 public class TimeInterval
 {
     private final LocalDate startDate;
