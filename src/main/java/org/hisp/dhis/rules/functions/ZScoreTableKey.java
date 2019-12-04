@@ -48,8 +48,8 @@ public class ZScoreTableKey
 
         int result = 1;
 
-        result = prime * result +  Byte.hashCode( gender );
-        result = prime * result +  Float.hashCode( parameter );
+        result = prime * result + gender;
+        result = prime * result +  Float.floatToIntBits( parameter );
 
         return result;
     }
