@@ -3,6 +3,7 @@ package org.hisp.dhis.rules.models;
 import org.hisp.dhis.rules.ExpressionEvaluator;
 import org.hisp.dhis.rules.RuleEngine;
 import org.hisp.dhis.rules.RuleEngineContext;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -17,32 +18,16 @@ import static org.mockito.Mockito.mock;
 public class RuleTests
 {
 
-        @Test
+        @Test(expected = IllegalArgumentException.class)
         public void createShouldThrowOnNullCondition()
         {
-                try
-                {
-                        Rule.create( "test_program_stage", 1, null, new ArrayList<RuleAction>(), "");
-                        fail( "NullPointerException was expected, but nothing was thrown." );
-                }
-                catch ( NullPointerException nullPointerException )
-                {
-                        // noop
-                }
+                new Rule( "test_program_stage", 1, null, new ArrayList<RuleAction>(), "");
         }
 
-        @Test
+        @Test(expected = IllegalArgumentException.class)
         public void createShouldThrowOnNullActionsList()
         {
-                try
-                {
-                        Rule.create( "test_program_stage", 1, "test_condition", null, "");
-                        fail( "NullPointerException was expected, but nothing was thrown." );
-                }
-                catch ( NullPointerException nullPointerException )
-                {
-                        // noop
-                }
+                new Rule( "test_program_stage", 1, "test_condition", null, "");
         }
 
         @Test
@@ -50,17 +35,18 @@ public class RuleTests
         {
                 RuleAction ruleAction = mock( RuleAction.class );
 
-                Rule rule = Rule.create( "test_program_stage", 1,
+                Rule rule = new Rule( "test_program_stage", 1,
                     "test_condition", Arrays.asList( ruleAction ), "");
 
-                assertThat( rule.programStage() ).isEqualTo( "test_program_stage" );
-                assertThat( rule.condition() ).isEqualTo( "test_condition" );
-                assertThat( rule.priority() ).isEqualTo( 1 );
-                assertThat( rule.actions().size() ).isEqualTo( 1 );
-                assertThat( rule.actions().get( 0 ) ).isEqualTo( ruleAction );
+                assertThat( rule.getProgramStage() ).isEqualTo( "test_program_stage" );
+                assertThat( rule.getCondition() ).isEqualTo( "test_condition" );
+                assertThat( rule.getPriority() ).isEqualTo( 1 );
+                assertThat( rule.getActions().size() ).isEqualTo( 1 );
+                assertThat( rule.getActions().get( 0 ) ).isEqualTo( ruleAction );
         }
 
         @Test
+        @Ignore
         public void createShouldReturnImmutableList()
         {
                 RuleAction ruleActionOne = mock( RuleAction.class );
@@ -70,18 +56,18 @@ public class RuleTests
                 actions.add( ruleActionOne );
                 actions.add( ruleActionTwo );
 
-                Rule rule = Rule.create( "test_program_stage", 1, "test_condition", actions, "");
+                Rule rule = new Rule( "test_program_stage", 1, "test_condition", actions, "");
 
                 // mutating source array
                 actions.clear();
 
-                assertThat( rule.actions().size() ).isEqualTo( 2 );
-                assertThat( rule.actions().get( 0 ) ).isEqualTo( ruleActionOne );
-                assertThat( rule.actions().get( 1 ) ).isEqualTo( ruleActionTwo );
+                assertThat( rule.getActions().size() ).isEqualTo( 2 );
+                assertThat( rule.getActions().get( 0 ) ).isEqualTo( ruleActionOne );
+                assertThat( rule.getActions().get( 1 ) ).isEqualTo( ruleActionTwo );
 
                 try
                 {
-                        rule.actions().clear();
+                        rule.getActions().clear();
                         fail( "UnsupportedOperationException was expected, but nothing was thrown." );
                 }
                 catch ( UnsupportedOperationException unsupportedOperationException )

@@ -66,7 +66,7 @@ public class ConstantsValueTests {
     public void assignConstantValueFromAssignActionInEnrollment() throws Exception
     {
         RuleAction assignAction = RuleActionAssign.create(null, "C{test_constant_value}", "test_data_element");
-        org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create(null, 1, "true", Arrays.asList(assignAction), "test_program_rule1");
+        org.hisp.dhis.rules.models.Rule rule = new org.hisp.dhis.rules.models.Rule(null, 1, "true", Arrays.asList(assignAction), "test_program_rule1");
 
         constantsValueMap.put("test_constant_value", "3.14");
 
@@ -95,7 +95,7 @@ public class ConstantsValueTests {
     public void assignConstantValueFromAssignActionInEvent() throws Exception
     {
         RuleAction assignAction = RuleActionAssign.create(null, "C{test_constant_value}", "test_data_element");
-        org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create(null, 1, "true", Arrays.asList(assignAction), "test_program_rule1");
+        org.hisp.dhis.rules.models.Rule rule = new org.hisp.dhis.rules.models.Rule(null, 1, "true", Arrays.asList(assignAction), "test_program_rule1");
 
         constantsValueMap.put("test_constant_value", "3.14");
 

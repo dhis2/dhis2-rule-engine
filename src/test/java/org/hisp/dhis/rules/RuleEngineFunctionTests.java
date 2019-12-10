@@ -27,7 +27,7 @@ public class RuleEngineFunctionTests
                     "test_action_content", "d2:hasValue('test_variable')" );
                 RuleVariable ruleVariable = RuleVariableCurrentEvent.create(
                     "test_variable", "test_data_element", RuleValueType.TEXT );
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable ) );
 
@@ -49,7 +49,7 @@ public class RuleEngineFunctionTests
                     "test_action_content", "d2:hasValue('test_variable')" );
                 RuleVariable ruleVariable = RuleVariableCurrentEvent.create(
                     "test_variable", "test_data_element", RuleValueType.TEXT );
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable ) );
 
@@ -69,7 +69,7 @@ public class RuleEngineFunctionTests
                 RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
                         "test_action_content", "V{program_stage_name}" );
                 RuleVariable ruleVariable = RuleVariableCurrentEvent.create( "variable", "test_data_element", RuleValueType.TEXT );
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable ) );
 
@@ -92,7 +92,7 @@ public class RuleEngineFunctionTests
                     "test_var_one", "test_data_element_one", RuleValueType.TEXT );
                 RuleVariable ruleVariableTwo = RuleVariableCurrentEvent.create(
                     "test_var_two", "test_data_element_two", RuleValueType.TEXT );
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
 
@@ -122,7 +122,7 @@ public class RuleEngineFunctionTests
                 RuleVariable ruleVariableOne = RuleVariableCurrentEvent.create(
                     "test_var_one", "test_data_element_one", RuleValueType.TEXT );
 
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine ruleEngine = RuleEngineContext
                     .builder( new ExpressionEvaluator() )
@@ -155,7 +155,7 @@ public class RuleEngineFunctionTests
                     "test_var_one", "test_data_element_one", RuleValueType.TEXT );
                 RuleVariable ruleVariableTwo = RuleVariableCurrentEvent.create(
                     "test_var_two", "test_data_element_two", RuleValueType.TEXT );
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
 
@@ -190,7 +190,7 @@ public class RuleEngineFunctionTests
                 RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
                         "test_var_one", "test_data_element_one", RuleValueType.TEXT );
 
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
 
@@ -225,7 +225,7 @@ public class RuleEngineFunctionTests
                 RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
                         "test_var_two", "test_data_element_two", RuleValueType.TEXT );
 
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
 
@@ -262,7 +262,7 @@ public class RuleEngineFunctionTests
                 RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
                         "test_var_one", "test_data_element_one", RuleValueType.NUMERIC );
 
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction1 ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction1 ), "");
 
                 RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
 
@@ -286,7 +286,7 @@ public class RuleEngineFunctionTests
                 RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
                         "test_var_one", "test_data_element_one", RuleValueType.NUMERIC );
 
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
 
@@ -309,7 +309,7 @@ public class RuleEngineFunctionTests
                 RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
                         "test_var_one", "test_data_element_one", RuleValueType.TEXT );
 
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
 
@@ -333,7 +333,7 @@ public class RuleEngineFunctionTests
                         "test_var_one", "test_data_element_one", RuleValueType.TEXT );
                 RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
                         "test_var_two", "test_data_element_two", RuleValueType.TEXT );
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
 
@@ -358,7 +358,7 @@ public class RuleEngineFunctionTests
                         "test_var_one", "test_data_element_one", RuleValueType.TEXT );
                 RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
                         "test_var_two", "test_data_element_two", RuleValueType.TEXT );
-                Rule rule = Rule.create( null, null, "d2:yearsBetween('2016-01-01', '2018-09-01') == 2", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "d2:yearsBetween('2016-01-01', '2018-09-01') == 2", Arrays.asList( ruleAction ), "");
 
                 RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
 
@@ -385,7 +385,7 @@ public class RuleEngineFunctionTests
                         "test_var_two", "test_data_element_two", RuleValueType.NUMERIC );
                 RuleVariable ruleVariableThree = RuleVariableNewestEvent.create(
                         "test_var_three", "test_data_element_two", RuleValueType.NUMERIC );
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
 
@@ -405,7 +405,7 @@ public class RuleEngineFunctionTests
                 RuleAction ruleAction = RuleActionDisplayText.createForFeedback(
                         "test_action_content", "d2:zing( '-1' )" );
 
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList() );
 
@@ -425,7 +425,7 @@ public class RuleEngineFunctionTests
                 RuleAction ruleAction = RuleActionDisplayText.createForFeedback(
                         "test_action_content", "d2:oizp( '0' )" );
 
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList() );
 
@@ -447,7 +447,7 @@ public class RuleEngineFunctionTests
                 RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
                         "test_var_one", "test_data_element_one", RuleValueType.NUMERIC );
 
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
 
@@ -478,7 +478,7 @@ public class RuleEngineFunctionTests
                 RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
                         "test_var_one", "test_data_element_one", RuleValueType.TEXT );
 
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
 
@@ -501,7 +501,7 @@ public class RuleEngineFunctionTests
                 RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
                         "test_var_one", "test_data_element_one", RuleValueType.TEXT );
 
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
 
@@ -524,7 +524,7 @@ public class RuleEngineFunctionTests
                 RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
                         "test_var_one", "test_data_element_one", RuleValueType.TEXT );
 
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
 
@@ -547,7 +547,7 @@ public class RuleEngineFunctionTests
                 RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
                         "test_var_one", "test_data_element_one", RuleValueType.TEXT );
 
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
 
@@ -580,7 +580,7 @@ public class RuleEngineFunctionTests
                 RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
                         "test_var_one", "test_data_element_one", RuleValueType.TEXT );
 
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
 
@@ -603,7 +603,7 @@ public class RuleEngineFunctionTests
                 RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
                         "test_var_one", "test_data_element_one", RuleValueType.TEXT );
 
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
 
@@ -633,7 +633,7 @@ public class RuleEngineFunctionTests
                 RuleVariable ruleVariableThree = RuleVariableCurrentEvent.create(
                     "test_var_three", "test_data_element_three", RuleValueType.NUMERIC );
 
-                Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+                Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
                 RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariableOne, ruleVariableTwo, ruleVariableThree ) );
 
@@ -667,7 +667,7 @@ public class RuleEngineFunctionTests
             RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
                     "test_var_two", "test_data_element_two", RuleValueType.TEXT );
 
-            Rule rule = Rule.create( null, null, "d2:zScoreWFA(1,#{test_var_one},#{test_var_two}) == 0", Arrays.asList( ruleAction ), "");
+            Rule rule = new Rule( null, null, "d2:zScoreWFA(1,#{test_var_one},#{test_var_two}) == 0", Arrays.asList( ruleAction ), "");
 
             RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
 
@@ -693,7 +693,7 @@ public class RuleEngineFunctionTests
             RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
                     "test_var_two", "test_data_element_two", RuleValueType.TEXT );
 
-            Rule rule = Rule.create( null, null, "d2:zScoreHFA(12,#{test_var_one},#{test_var_two}) == -3", Arrays.asList( ruleAction ), "");
+            Rule rule = new Rule( null, null, "d2:zScoreHFA(12,#{test_var_one},#{test_var_two}) == -3", Arrays.asList( ruleAction ), "");
 
             RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
 
@@ -719,7 +719,7 @@ public class RuleEngineFunctionTests
             RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
                     "test_var_two", "test_data_element_two", RuleValueType.TEXT );
 
-            Rule rule = Rule.create( null, null, "d2:zScoreHFA(10,#{test_var_one},#{test_var_two}) == -2", Arrays.asList( ruleAction ), "");
+            Rule rule = new Rule( null, null, "d2:zScoreHFA(10,#{test_var_one},#{test_var_two}) == -2", Arrays.asList( ruleAction ), "");
 
             RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
 
@@ -745,7 +745,7 @@ public class RuleEngineFunctionTests
             RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
                     "test_var_two", "test_data_element_two", RuleValueType.TEXT );
 
-            Rule rule = Rule.create( null, null, "d2:zScoreWFH(55,#{test_var_one},#{test_var_two}) == -2", Arrays.asList( ruleAction ), "");
+            Rule rule = new Rule( null, null, "d2:zScoreWFH(55,#{test_var_one},#{test_var_two}) == -2", Arrays.asList( ruleAction ), "");
 
             RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
 
@@ -771,7 +771,7 @@ public class RuleEngineFunctionTests
         RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
                 "test_var_two", "test_data_element_two", RuleValueType.TEXT );
 
-        Rule rule = Rule.create( null, null, "d2:zScoreWFH(81.5,#{test_var_one},#{test_var_two}) == 2", Arrays.asList( ruleAction ), "");
+        Rule rule = new Rule( null, null, "d2:zScoreWFH(81.5,#{test_var_one},#{test_var_two}) == 2", Arrays.asList( ruleAction ), "");
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
 
@@ -798,7 +798,7 @@ public class RuleEngineFunctionTests
             RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
                     "test_var_two", "test_data_element_two", RuleValueType.TEXT );
 
-            Rule rule = Rule.create( null, null, "d2:maxValue('test_var_one') == 8.0", Arrays.asList( ruleAction ), "");
+            Rule rule = new Rule( null, null, "d2:maxValue('test_var_one') == 8.0", Arrays.asList( ruleAction ), "");
 
             RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
 
@@ -835,7 +835,7 @@ public class RuleEngineFunctionTests
             RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
                     "test_var_two", "test_data_element_two", RuleValueType.TEXT );
 
-            Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+            Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "");
 
             RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
 
@@ -883,7 +883,7 @@ public class RuleEngineFunctionTests
             RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
                     "test_var_two", "test_data_element_two", RuleValueType.TEXT );
 
-            Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "test_rule" );
+            Rule rule = new Rule( null, null, "true", Arrays.asList( ruleAction ), "test_rule" );
 
             RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
 

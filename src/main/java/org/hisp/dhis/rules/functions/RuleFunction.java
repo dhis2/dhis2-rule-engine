@@ -7,6 +7,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
+import static org.hisp.dhis.rules.functions.RuleFunctionDaysBetweenKt.D2_DAYS_BETWEEN;
+
 public abstract class RuleFunction
 {
         static final String DATE_PATTERN = "yyyy-MM-dd";
@@ -20,8 +22,8 @@ public abstract class RuleFunction
         {
                 switch ( fun )
                 {
-                case RuleFunctionDaysBetween.D2_DAYS_BETWEEN:
-                        return RuleFunctionDaysBetween.create();
+                case D2_DAYS_BETWEEN:
+                        return new RuleFunctionDaysBetween();
                 case RuleFunctionWeeksBetween.D2_WEEKS_BETWEEN:
                         return RuleFunctionWeeksBetween.create();
                 case RuleFunctionHasValue.D2_HAS_VALUE:
