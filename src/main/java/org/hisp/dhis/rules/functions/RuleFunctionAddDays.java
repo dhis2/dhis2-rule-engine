@@ -29,12 +29,10 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
 
 import javax.annotation.Nonnull;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -43,58 +41,41 @@ import java.util.Map;
  */
 
 class RuleFunctionAddDays
-        extends RuleFunction
+    extends RuleFunction
 {
-        static final String D2_ADD_DAYS = "d2:addDays";
+    static final String D2_ADD_DAYS = "d2:addDays";
 
-        @Nonnull
-        @Override
-        public String evaluate( @Nonnull List<String> arguments, @Nonnull Map<String, RuleVariableValue> valueMap,
-            Map<String, List<String>> supplementaryData )
+    @Nonnull
+    @Override
+    public String evaluate( @Nonnull List<String> arguments, @Nonnull Map<String, RuleVariableValue> valueMap,
+        Map<String, List<String>> supplementaryData )
+    {
+        if ( arguments.size() != 2 )
         {
-                if ( arguments.size() != 2 )
-                {
-                        throw new IllegalArgumentException( "Two arguments were expected, " +
-                            arguments.size() + " were supplied" );
-                }
-
-                return wrap( addDays( arguments.get( 0 ), arguments.get( 1 ) ) );
+            throw new IllegalArgumentException( "Two arguments were expected, " +
+                arguments.size() + " were supplied" );
         }
 
-        @Nonnull
-        public static RuleFunctionAddDays create()
-        {
-                return new RuleFunctionAddDays();
-        }
+        return wrap( addDays( arguments.get( 0 ), arguments.get( 1 ) ) );
+    }
 
-        /**
-         * Function which will return the the date after adding/subtracting number of days.
-         *
-         * @param inputDate the date to add/subtract from.
-         * @param days  number of days to add/subtract.
-         * @return date after adding/subtracting days.
-         */
-        @SuppressWarnings( "PMD.UnnecessaryWrapperObjectCreation" )
-        static String addDays( String inputDate, String days )
-        {
-                Calendar calendar = Calendar.getInstance();
+    @Nonnull
+    public static RuleFunctionAddDays create()
+    {
+        return new RuleFunctionAddDays();
+    }
 
-                SimpleDateFormat format = new SimpleDateFormat();
-                format.applyPattern( DATE_PATTERN );
+    /**
+     * Function which will return the the date after adding/subtracting number of days.
+     *
+     * @param inputDate the date to add/subtract from.
+     * @param days      number of days to add/subtract.
+     * @return date after adding/subtracting days.
+     */
+    static String addDays( String inputDate, String days )
+    {
 
-                try
-                {
-                        Date date = format.parse( inputDate );
-
-                        calendar.setTime( date );
-                        calendar.add( Calendar.DATE, Integer.parseInt( days ) );
-                        Date calculatedDate = calendar.getTime();
-
-                        return format.format( calculatedDate );
-                }
-                catch ( ParseException parseException )
-                {
-                        throw new RuntimeException( parseException );
-                }
-        }
+        LocalDate localDate = LocalDate.parse( inputDate, DateTimeFormat.forPattern( DATE_PATTERN ) );
+        return localDate.plusDays( Integer.parseInt( days ) ).toString( DATE_PATTERN );
+    }
 }

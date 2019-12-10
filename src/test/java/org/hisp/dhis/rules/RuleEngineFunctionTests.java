@@ -108,6 +108,32 @@ public class RuleEngineFunctionTests
                 assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
         }
 
+    @Test
+    public void evaluateDaysBetweenWithSingleQuotedDateMustReturnCorrectDiff()
+        throws Exception
+    {
+        RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+            "test_action_content", "d2:daysBetween(#{test_var_one}, '2018-01-01')" );
+        RuleVariable ruleVariableOne = RuleVariableCurrentEvent.create(
+            "test_var_one", "test_data_element_one", RuleValueType.TEXT );
+        RuleVariable ruleVariableTwo = RuleVariableCurrentEvent.create(
+            "test_var_two", "test_data_element_two", RuleValueType.TEXT );
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
+
+        RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
+
+        RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "",null,Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "2017-01-01" ),
+                RuleDataValue
+                    .create( new Date(), "test_program_stage", "test_data_element_two", "2017-02-01" ) ), "");
+        List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
+
+        assertThat( ruleEffects.size() ).isEqualTo( 1 );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "365" );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+    }
+
         @Test
         public void evaluateD2InOrgUnitGroup()
             throws Exception

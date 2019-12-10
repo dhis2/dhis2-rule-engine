@@ -60,10 +60,10 @@ public class RuleFunctionYearsBetweenTests
     {
         RuleFunction yearsBetween = RuleFunctionYearsBetween.create();
 
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( null, null ), variableValues, null ), is( ("") ) );
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( null, "" ), variableValues, null ), is( ("") ) );
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "", null ), variableValues, null ), is( ("") ) );
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "", "" ), variableValues, null ), is( ("") ) );
+        MatcherAssert.assertThat( yearsBetween.evaluate( asList( null, null ), variableValues, null ), is( ("0") ) );
+        MatcherAssert.assertThat( yearsBetween.evaluate( asList( null, "" ), variableValues, null ), is( ("0") ) );
+        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "", null ), variableValues, null ), is( ("0") ) );
+        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "", "" ), variableValues, null ), is( ("0") ) );
     }
 
     @Test
