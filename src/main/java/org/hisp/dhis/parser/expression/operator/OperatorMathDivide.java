@@ -28,13 +28,11 @@ package org.hisp.dhis.parser.expression.operator;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.parser.expression.function.ComputeFunction;
 
 import java.util.List;
 
 import static org.hisp.dhis.parser.expression.ParserUtils.castDouble;
-import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
  * Math operator: Divide
