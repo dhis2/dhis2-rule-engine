@@ -18,16 +18,16 @@ import static org.mockito.Mockito.mock;
 public class RuleTests
 {
 
-        @Test(expected = IllegalArgumentException.class)
+        @Test(expected = NullPointerException.class)
         public void createShouldThrowOnNullCondition()
         {
-                new Rule( "test_program_stage", 1, null, new ArrayList<RuleAction>(), "");
+                Rule.create( "test_program_stage", 1, null, new ArrayList<RuleAction>(), "");
         }
 
-        @Test(expected = IllegalArgumentException.class)
+        @Test(expected = NullPointerException.class)
         public void createShouldThrowOnNullActionsList()
         {
-                new Rule( "test_program_stage", 1, "test_condition", null, "");
+                Rule.create( "test_program_stage", 1, "test_condition", null, "");
         }
 
         @Test
@@ -35,14 +35,14 @@ public class RuleTests
         {
                 RuleAction ruleAction = mock( RuleAction.class );
 
-                Rule rule = new Rule( "test_program_stage", 1,
+                Rule rule = Rule.create( "test_program_stage", 1,
                     "test_condition", Arrays.asList( ruleAction ), "");
 
-                assertThat( rule.getProgramStage() ).isEqualTo( "test_program_stage" );
-                assertThat( rule.getCondition() ).isEqualTo( "test_condition" );
-                assertThat( rule.getPriority() ).isEqualTo( 1 );
-                assertThat( rule.getActions().size() ).isEqualTo( 1 );
-                assertThat( rule.getActions().get( 0 ) ).isEqualTo( ruleAction );
+                assertThat( rule.programStage() ).isEqualTo( "test_program_stage" );
+                assertThat( rule.condition() ).isEqualTo( "test_condition" );
+                assertThat( rule.priority() ).isEqualTo( 1 );
+                assertThat( rule.actions().size() ).isEqualTo( 1 );
+                assertThat( rule.actions().get( 0 ) ).isEqualTo( ruleAction );
         }
 
         @Test
@@ -56,18 +56,18 @@ public class RuleTests
                 actions.add( ruleActionOne );
                 actions.add( ruleActionTwo );
 
-                Rule rule = new Rule( "test_program_stage", 1, "test_condition", actions, "");
+                Rule rule = Rule.create( "test_program_stage", 1, "test_condition", actions, "");
 
                 // mutating source array
                 actions.clear();
 
-                assertThat( rule.getActions().size() ).isEqualTo( 2 );
-                assertThat( rule.getActions().get( 0 ) ).isEqualTo( ruleActionOne );
-                assertThat( rule.getActions().get( 1 ) ).isEqualTo( ruleActionTwo );
+                assertThat( rule.actions().size() ).isEqualTo( 2 );
+                assertThat( rule.actions().get( 0 ) ).isEqualTo( ruleActionOne );
+                assertThat( rule.actions().get( 1 ) ).isEqualTo( ruleActionTwo );
 
                 try
                 {
-                        rule.getActions().clear();
+                        rule.actions().clear();
                         fail( "UnsupportedOperationException was expected, but nothing was thrown." );
                 }
                 catch ( UnsupportedOperationException unsupportedOperationException )

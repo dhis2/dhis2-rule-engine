@@ -1,29 +1,30 @@
 package org.hisp.dhis.rules.functions;
 
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.models.TimeInterval;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-import static org.hisp.dhis.rules.functions.RuleFunctionDaysBetweenKt.D2_DAYS_BETWEEN;
-
 public abstract class RuleFunction
 {
-        static final String DATE_PATTERN = "yyyy-MM-dd";
+    static final String DATE_PATTERN = "yyyy-MM-dd";
 
-        @Nonnull
-        public abstract String evaluate( @Nonnull List<String> arguments,
-            Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData );
+    @Nonnull
+    public abstract String evaluate( @Nonnull List<String> arguments,
+        Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData );
 
         @Nullable
         public static RuleFunction create( @Nonnull String fun )
         {
                 switch ( fun )
                 {
-                case D2_DAYS_BETWEEN:
-                        return new RuleFunctionDaysBetween();
+                case RuleFunctionDaysBetween.D2_DAYS_BETWEEN:
+                        return RuleFunctionDaysBetween.create();
                 case RuleFunctionWeeksBetween.D2_WEEKS_BETWEEN:
                         return RuleFunctionWeeksBetween.create();
                 case RuleFunctionHasValue.D2_HAS_VALUE:
@@ -89,23 +90,36 @@ public abstract class RuleFunction
                 }
         }
 
-        @Nonnull
-        public double toDouble( @Nullable final String str, final double defaultValue )
+    public TimeInterval getTimeInterval( String start, String end )
+    {
+        if ( isEmpty( start ) || isEmpty( end ) )
         {
-                if ( str == null )
-                {
-                        return defaultValue;
-                }
-
-                try
-                {
-                        return Double.parseDouble( str );
-                }
-                catch ( final NumberFormatException nfe )
-                {
-                        return defaultValue;
-                }
+            return TimeInterval.empty();
         }
+
+        LocalDate startDate = LocalDate.parse( start, DateTimeFormat.forPattern( DATE_PATTERN ) );
+        LocalDate endDate = LocalDate.parse( end, DateTimeFormat.forPattern( DATE_PATTERN ) );
+
+        return TimeInterval.fromTo( startDate, endDate );
+    }
+
+    @Nonnull
+    public double toDouble( @Nullable final String str, final double defaultValue )
+    {
+        if ( str == null )
+        {
+            return defaultValue;
+        }
+
+        try
+        {
+            return Double.parseDouble( str );
+        }
+        catch ( final NumberFormatException nfe )
+        {
+            return defaultValue;
+        }
+    }
 
         @Nonnull
         public String wrap( String input )
@@ -117,8 +131,8 @@ public abstract class RuleFunction
                 return input;
         }
 
-        static boolean isEmpty( String input )
-        {
-                return input == null || input.length() == 0;
-        }
+    static boolean isEmpty( String input )
+    {
+        return input == null || input.length() == 0;
+    }
 }

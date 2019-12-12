@@ -52,9 +52,9 @@ public class RuleFunctionAddDaysTests
         }
 
         @Test
-        public void throw_parser_exception_without_context_if_second_argument_is_invalid()
+        public void throw_illegal_argument_exception_if_second_argument_is_invali()
         {
-                thrown.expect( ParserExceptionWithoutContext.class );
+                thrown.expect( IllegalArgumentException.class );
 
                 RuleFunction addDaysFunction = RuleFunctionAddDays.create();
 

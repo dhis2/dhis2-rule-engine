@@ -28,17 +28,13 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.models.TimeInterval;
+import org.joda.time.Years;
 
 import javax.annotation.Nonnull;
-
-import org.hisp.dhis.rules.RuleVariableValue;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author Zubair Asghar.
@@ -48,43 +44,18 @@ public class RuleFunctionYearsBetween
     RuleFunction
 {
     public static final String D2_YEARS_BETWEEN = "d2:yearsBetween";
-    private final SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd", Locale.getDefault() );
 
     @Nonnull
     @Override
     public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
         Map<String, List<String>> supplementaryData )
     {
-
         if ( arguments.size() != 2 )
         {
             throw new IllegalArgumentException( "Two arguments were expected, " + arguments.size() + " were supplied" );
         }
 
-        String startDateString = arguments.get( 0 );
-        String endDateString = arguments.get( 1 );
-
-        if ( isEmpty( startDateString ) || isEmpty( endDateString ) )
-        {
-            return "";
-        }
-
-        Date startDate;
-        Date endDate;
-
-        try
-        {
-            startDate = formatter.parse( arguments.get( 0 ) );
-            endDate = formatter.parse( arguments.get( 1 ) );
-        }
-        catch ( ParseException e )
-        {
-            throw new IllegalArgumentException( "Date cannot be parsed" );
-        }
-
-        long yearsBetween = yearsBetween( startDate, endDate );
-
-        return String.valueOf( yearsBetween );
+        return String.valueOf( yearsBetween( arguments.get( 0 ), arguments.get( 1 ) ) );
     }
 
     public static RuleFunctionYearsBetween create()
@@ -92,50 +63,15 @@ public class RuleFunctionYearsBetween
         return new RuleFunctionYearsBetween();
     }
 
-    private Long yearsBetween( Date startDate, Date endDate )
+    private Integer yearsBetween( String start, String end )
     {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime( startDate );
-        int startYear = calendar.get( Calendar.YEAR );
-        int startMonth = calendar.get( Calendar.MONTH );
-        int startDay = calendar.get( Calendar.DAY_OF_MONTH );
-        calendar.setTime( endDate );
-        int endYear = calendar.get( Calendar.YEAR );
-        int endMonth = calendar.get( Calendar.MONTH );
-        int endDay = calendar.get( Calendar.DAY_OF_MONTH );
+        TimeInterval interval = getTimeInterval( start, end );
 
-        long diffYear = endYear - startYear;
+        if ( interval.isEmpty() )
+        {
+            return 0;
+        }
 
-        if ( diffYear > 0 )
-        {
-            if ( endMonth > startMonth )
-            {
-                return diffYear;
-            }
-            else if ( endMonth < startMonth )
-            {
-                return --diffYear;
-            }
-            else if ( endDay > startDay )
-            {
-                return diffYear;
-            }
-            else if ( endDay < startDay )
-            {
-                return --diffYear;
-            }
-            else
-            {
-                return diffYear;
-            }
-        }
-        else if ( diffYear < 0 )
-        {
-            return -yearsBetween( endDate, startDate );
-        }
-        else
-        {
-            return diffYear;
-        }
+        return Years.yearsBetween( interval.getStartDate(), interval.getEndDate() ).getYears();
     }
 }

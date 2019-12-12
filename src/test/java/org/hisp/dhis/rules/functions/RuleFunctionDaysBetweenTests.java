@@ -26,7 +26,7 @@ public class RuleFunctionDaysBetweenTests
         @Test
         public void return_zero_if_some_date_is_not_present()
         {
-                RuleFunction daysBetween = new RuleFunctionDaysBetween();
+                RuleFunction daysBetween = RuleFunctionDaysBetween.create();
 
                 MatcherAssert.assertThat(daysBetween.evaluate(Arrays.<String>asList(null, null), variableValues, null),
                     is(("0")));
@@ -40,7 +40,7 @@ public class RuleFunctionDaysBetweenTests
         {
                 thrown.expect(RuntimeException.class);
 
-                RuleFunction daysBetween = new RuleFunctionDaysBetween();
+                RuleFunction daysBetween = RuleFunctionDaysBetween.create();
 
                 daysBetween.evaluate(asList("bad date", "2010-01-01"), variableValues, null);
         }
@@ -50,7 +50,7 @@ public class RuleFunctionDaysBetweenTests
         {
                 thrown.expect(RuntimeException.class);
 
-                RuleFunction daysBetween = new RuleFunctionDaysBetween();
+                RuleFunction daysBetween = RuleFunctionDaysBetween.create();
 
                 daysBetween.evaluate(asList("2010-01-01", "bad date"), variableValues, null);
         }
@@ -59,14 +59,14 @@ public class RuleFunctionDaysBetweenTests
         public void throw_illegal_argument_exception_if_first_and_second_date_is_invalid()
         {
                 thrown.expect(RuntimeException.class);
-                new RuleFunctionDaysBetween().evaluate(asList("bad date", "bad date"),
+                RuleFunctionDaysBetween.create().evaluate(asList("bad date", "bad date"),
                     new HashMap<String, RuleVariableValue>(), null);
         }
 
         @Test
         public void evaluate_correct_number_of_days()
         {
-                RuleFunction daysBetween = new RuleFunctionDaysBetween();
+                RuleFunction daysBetween = RuleFunctionDaysBetween.create();
 
                 MatcherAssert.assertThat(daysBetween.evaluate(asList("2010-10-15", "2010-10-20"), variableValues, null),
                     is(("5")));
@@ -87,7 +87,7 @@ public class RuleFunctionDaysBetweenTests
         public void throw_illegal_argument_exception_when_argument_count_is_greater_than_expected()
         {
                 thrown.expect( IllegalArgumentException.class );
-                new RuleFunctionDaysBetween().evaluate(
+                RuleFunctionDaysBetween.create().evaluate(
                     Arrays.asList("2016-01-01", "2016-01-01", "2016-01-01"),
                     variableValues, null);
         }
@@ -96,12 +96,12 @@ public class RuleFunctionDaysBetweenTests
         public void throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected()
         {
                 thrown.expect( IllegalArgumentException.class );
-                new RuleFunctionDaysBetween().evaluate(Arrays.asList("2016-01-01"), variableValues, null);
+                RuleFunctionDaysBetween.create().evaluate(Arrays.asList("2016-01-01"), variableValues, null);
         }
 
-        @Test(expected = IllegalArgumentException.class)
+        @Test(expected = NullPointerException.class)
         public void throw_illegal_argument_exception_when_arguments_is_null()
         {
-                new RuleFunctionDaysBetween().evaluate(null, variableValues, null);
+                RuleFunctionDaysBetween.create().evaluate(null, variableValues, null);
         }
 }

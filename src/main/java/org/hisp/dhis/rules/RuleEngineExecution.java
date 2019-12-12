@@ -108,8 +108,8 @@ class RuleEngineExecution
             @Override
             public int compare( Rule rule1, Rule rule2 )
             {
-                Integer priority1 = rule1.getPriority();
-                Integer priority2 = rule2.getPriority();
+                Integer priority1 = rule1.priority();
+                Integer priority2 = rule2.priority();
                 if ( priority1 != null && priority2 != null )
                     return priority1.compareTo( priority2 );
                 else if ( priority1 != null )
@@ -123,25 +123,25 @@ class RuleEngineExecution
         for (int i = 0; i < ruleList.size(); i++) {
             Rule rule = ruleList.get(i);
             try {
-                log.debug("Evaluating programrule: " + rule.getName());
+                log.debug("Evaluating programrule: " + rule.name());
                 // send org.hisp.dhis.parser.expression to evaluator
-                if (Boolean.valueOf(process(rule.getCondition()))) {
+                if (Boolean.valueOf(process(rule.condition()))) {
                     // process each action for this rule
-                    for (int j = 0; j < rule.getActions().size(); j++) {
-                        RuleEffect ruleEffect = create(rule.getActions().get(j));
+                    for (int j = 0; j < rule.actions().size(); j++) {
+                        RuleEffect ruleEffect = create(rule.actions().get(j));
                         //Check if action is assigning value to calculated variable
-                        if (isAssignToCalculatedValue(rule.getActions().get(j)))
-                            updateValueMapForCalculatedValue((RuleActionAssign) rule.getActions().get(j),
+                        if (isAssignToCalculatedValue(rule.actions().get(j)))
+                            updateValueMapForCalculatedValue((RuleActionAssign) rule.actions().get(j),
                                     RuleVariableValue.create(ruleEffect.data(), RuleValueType.TEXT));
                         else
-                            ruleEffects.add(create(rule.getActions().get(j)));
+                            ruleEffects.add(create(rule.actions().get(j)));
                     }
                 }
             } catch (JexlException jexlException) {
-                log.error("Parser exception in " + rule.getName() + ": " + jexlException.getMessage());
+                log.error("Parser exception in " + rule.name() + ": " + jexlException.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
-                log.error("Exception in " + rule.getName() + ": " + e.getMessage());
+                log.error("Exception in " + rule.name() + ": " + e.getMessage());
             }
         }
         return ruleEffects;
