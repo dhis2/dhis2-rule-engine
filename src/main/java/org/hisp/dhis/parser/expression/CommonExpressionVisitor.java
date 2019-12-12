@@ -32,7 +32,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.apache.commons.lang3.Validate;
-import org.hisp.dhis.common.DimensionalItemId;
 import org.hisp.dhis.parser.expression.antlr.ExpressionBaseVisitor;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.parser.expression.literal.DefaultLiteral;
@@ -110,16 +109,6 @@ public class CommonExpressionVisitor
      * Constants to use in evaluating an org.hisp.dhis.parser.expression.
      */
     private Map<String, Double> constantMap = new HashMap<>();
-
-    /**
-     * Used to collect the dimensional item ids in the expression.
-     */
-    private Set<DimensionalItemId> itemIds = new HashSet<>();
-
-    /**
-     * Used to collect the sampled dimensional item ids in the expression.
-     */
-    private Set<DimensionalItemId> sampleItemIds = new HashSet<>();
 
     /**
      * Used to collect the organisation unit group ids in the org.hisp.dhis.parser.expression.
@@ -478,36 +467,6 @@ public class CommonExpressionVisitor
     public void setConstantMap( Map<String, Double> constantMap )
     {
         this.constantMap = constantMap;
-    }
-
-    public boolean getReplaceNulls()
-    {
-        return replaceNulls;
-    }
-
-    public void setExpressionLiteral( ExprLiteral expressionLiteral )
-    {
-        this.expressionLiteral = expressionLiteral;
-    }
-
-    public Set<DimensionalItemId> getItemIds()
-    {
-        return itemIds;
-    }
-
-    public void setItemIds(Set<DimensionalItemId> itemIds )
-    {
-        this.itemIds = itemIds;
-    }
-
-    public Set<DimensionalItemId> getSampleItemIds()
-    {
-        return sampleItemIds;
-    }
-
-    public void setSampleItemIds(Set<DimensionalItemId> sampleItemIds )
-    {
-        this.sampleItemIds = sampleItemIds;
     }
 
     public Set<String> getOrgUnitGroupIds()

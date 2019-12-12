@@ -31,17 +31,13 @@ package org.hisp.dhis.parser.expression;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.hisp.dhis.parser.expression.function.*;
 import org.hisp.dhis.parser.expression.operator.*;
-import org.hisp.dhis.period.Period;
-import org.hisp.dhis.period.PeriodType;
 
 import java.util.Date;
-import java.util.List;
 
 import static org.apache.commons.lang3.ObjectUtils.anyNotNull;
+import static org.apache.commons.lang3.time.DateUtils.parseDate;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.*;
-import static org.hisp.dhis.util.DateUtils.parseDate;
 
 /**
  * Utilities for ANTLR parsing
@@ -80,15 +76,6 @@ public class ParserUtils
         .put( LT, new OperatorCompareLessThan() )
         .put( GEQ, new OperatorCompareGreaterThanOrEqual() )
         .put( LEQ, new OperatorCompareLessThanOrEqual() )
-
-        // Functions
-
-        .put( FIRST_NON_NULL, new FunctionFirstNonNull() )
-        .put( GREATEST, new FunctionGreatest() )
-        .put( IF, new FunctionIf() )
-        .put( IS_NOT_NULL, new FunctionIsNotNull() )
-        .put( IS_NULL, new FunctionIsNull() )
-        .put( LEAST, new FunctionLeast() )
 
         .build();
 
@@ -163,12 +150,6 @@ public class ParserUtils
         }
     };
 
-    /**
-     * Used for syntax checking when we don't have a list of actual
-     * periods for collecting samples.
-     */
-    public final static List<Period> DEFAULT_SAMPLE_PERIODS =
-        Lists.newArrayList( PeriodType.getPeriodFromIsoString( "20010101" ) );
 
     /**
      * Does an item of the form #{...} have the syntax of a

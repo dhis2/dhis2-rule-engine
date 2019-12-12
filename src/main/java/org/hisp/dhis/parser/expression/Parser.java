@@ -33,8 +33,8 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.hisp.dhis.cache.Cache;
-import org.hisp.dhis.cache.SimpleCacheBuilder;
+//import org.hisp.dhis.cache.Cache;
+//import org.hisp.dhis.cache.SimpleCacheBuilder;
 import org.hisp.dhis.parser.expression.antlr.ExpressionBaseListener;
 import org.hisp.dhis.parser.expression.antlr.ExpressionBaseVisitor;
 import org.hisp.dhis.parser.expression.antlr.ExpressionLexer;
@@ -50,11 +50,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class Parser
 {
-    private static Cache<ParseTree> EXPRESSION_PARSE_TREES = new SimpleCacheBuilder<ParseTree>().forRegion( "expressionParseTrees" )
-        .expireAfterAccess( 10, TimeUnit.MINUTES )
-        .withInitialCapacity( 10000 )
-        .withMaximumSize( 50000 )
-        .build();
+//    private static Cache<ParseTree> EXPRESSION_PARSE_TREES = new SimpleCacheBuilder<ParseTree>().forRegion( "expressionParseTrees" )
+//        .expireAfterAccess( 10, TimeUnit.MINUTES )
+//        .withInitialCapacity( 10000 )
+//        .withMaximumSize( 50000 )
+//        .build();
 
     // -------------------------------------------------------------------------
     // Logic
@@ -104,7 +104,8 @@ public class Parser
      */
     private static ParseTree getParseTree( String expr )
     {
-        return EXPRESSION_PARSE_TREES.get( expr, e -> createParseTree( e ) ).orElse( null );
+        return createParseTree( expr );
+        //return EXPRESSION_PARSE_TREES.get( expr, e -> createParseTree( e ) ).orElse( null );
     }
 
     /**

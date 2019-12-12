@@ -8,14 +8,6 @@ import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.parser.expression.ExprFunction;
 import org.hisp.dhis.parser.expression.ExprItem;
 import org.hisp.dhis.parser.expression.Parser;
-import org.hisp.dhis.parser.expression.function.VectorAvg;
-import org.hisp.dhis.parser.expression.function.VectorCount;
-import org.hisp.dhis.parser.expression.function.VectorMax;
-import org.hisp.dhis.parser.expression.function.VectorMin;
-import org.hisp.dhis.parser.expression.function.VectorStddevSamp;
-import org.hisp.dhis.parser.expression.function.VectorSum;
-import org.hisp.dhis.parser.expression.function.VectorVariance;
-import org.hisp.dhis.parser.expression.item.ItemConstant;
 import org.hisp.dhis.rules.models.*;
 
 import javax.annotation.Nonnull;
@@ -34,20 +26,11 @@ import java.util.regex.Pattern;
 import static org.hisp.dhis.parser.expression.ParserUtils.COMMON_EXPRESSION_FUNCTIONS;
 import static org.hisp.dhis.parser.expression.ParserUtils.FUNCTION_EVALUATE;
 import static org.hisp.dhis.parser.expression.ParserUtils.ITEM_EVALUATE;
-import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.AVG;
-import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.COUNT;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.C_BRACE;
-import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.MAX;
-import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.MIN;
-import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.STDDEV;
-import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.SUM;
-import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.VARIANCE;
 
 class RuleEngineExecution
         implements Callable<List<RuleEffect>> {
     public final static ImmutableMap<Integer, ExprItem> PROGRAM_INDICATOR_ITEMS = ImmutableMap.<Integer, ExprItem>builder()
-
-        .put( C_BRACE, new ItemConstant() )
 
         .build();
 
@@ -56,16 +39,6 @@ class RuleEngineExecution
         // Common functions
 
         .putAll( COMMON_EXPRESSION_FUNCTIONS )
-
-        // Program functions for custom aggregation
-
-        .put( AVG, new VectorAvg() )
-        .put( COUNT, new VectorCount() )
-        .put( MAX, new VectorMax() )
-        .put( MIN, new VectorMin() )
-        .put( STDDEV, new VectorStddevSamp() )
-        .put( SUM, new VectorSum() )
-        .put( VARIANCE, new VectorVariance() )
 
         .build();
 
