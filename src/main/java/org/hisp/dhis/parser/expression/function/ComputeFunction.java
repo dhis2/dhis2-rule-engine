@@ -29,6 +29,7 @@ package org.hisp.dhis.parser.expression.function;
  */
 
 import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.parser.expression.ExprFunction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +42,7 @@ import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext
  *
  * @author Jim Grace
  */
-public abstract class ComputeFunction
-    extends SimpleScalarFunction
+public abstract class ComputeFunction extends ScalarFunction
 {
     @Override
     public final Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )

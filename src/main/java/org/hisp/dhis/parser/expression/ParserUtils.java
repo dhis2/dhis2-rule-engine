@@ -43,6 +43,7 @@ import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.*;
  * Utilities for ANTLR parsing
  *
  * @author Jim Grace
+ * @author Enrico Colasante
  */
 public class ParserUtils
 {
@@ -79,15 +80,6 @@ public class ParserUtils
 
         .build();
 
-    public final static ExprFunctionMethod FUNCTION_GET_IDS = new ExprFunctionMethod()
-    {
-        @Override
-        public Object apply( ExprFunction exprFunction, ExprContext ctx, CommonExpressionVisitor visitor )
-        {
-            return exprFunction
-                .getItemId( ctx, visitor );
-        }
-    };
     public final static ExprFunctionMethod FUNCTION_EVALUATE = new ExprFunctionMethod()
     {
         @Override
@@ -97,113 +89,6 @@ public class ParserUtils
                 .evaluate( ctx, visitor );
         }
     };
-    public final static ExprFunctionMethod FUNCTION_EVALUATE_ALL_PATHS = new ExprFunctionMethod()
-    {
-        @Override
-        public Object apply( ExprFunction exprFunction, ExprContext ctx, CommonExpressionVisitor visitor )
-        {
-            return exprFunction
-                .evaluateAllPaths( ctx, visitor );
-        }
-    };
-
-    public final static ExprItemMethod ITEM_GET_IDS = new ExprItemMethod()
-    {
-        @Override
-        public Object apply( ExprItem exprItem, ItemContext ctx, CommonExpressionVisitor visitor )
-        {
-            return exprItem.getItemId( ctx, visitor );
-        }
-    };
-    public final static ExprItemMethod ITEM_GET_ORG_UNIT_GROUPS = new ExprItemMethod()
-    {
-        @Override
-        public Object apply( ExprItem exprItem, ItemContext ctx, CommonExpressionVisitor visitor )
-        {
-            return exprItem
-                .getOrgUnitGroup( ctx, visitor );
-        }
-    };
-    public final static ExprItemMethod ITEM_EVALUATE = new ExprItemMethod()
-    {
-        @Override
-        public Object apply( ExprItem exprItem, ItemContext ctx, CommonExpressionVisitor visitor )
-        {
-            return exprItem.evaluate( ctx, visitor );
-        }
-    };
-    public final static ExprItemMethod ITEM_GET_SQL = new ExprItemMethod()
-    {
-        @Override
-        public Object apply( ExprItem exprItem, ItemContext ctx, CommonExpressionVisitor visitor )
-        {
-            return exprItem.getSql( ctx, visitor );
-        }
-    };
-    public final static ExprItemMethod ITEM_REGENERATE = new ExprItemMethod()
-    {
-        @Override
-        public Object apply( ExprItem exprItem, ItemContext ctx, CommonExpressionVisitor visitor )
-        {
-            return exprItem
-                .regenerate( ctx, visitor );
-        }
-    };
-
-
-    /**
-     * Does an item of the form #{...} have the syntax of a
-     * data element operand (as opposed to a data element)?
-     *
-     * @param ctx the item context
-     * @return true if data element operand syntax
-     */
-    public static boolean isDataElementOperandSyntax( ItemContext ctx )
-    {
-        return anyNotNull( ctx.uid1, ctx.uid2 );
-    }
-
-    /**
-     * Assume that an item of the form #{...} has a syntax that could be used
-     * in a program indicator org.hisp.dhis.parser.expression for #{programStageUid.dataElementUid}
-     *
-     * @param ctx the item context
-     */
-    public static void assumeStageElementSyntax( ItemContext ctx )
-    {
-        if ( ctx.uid1 == null || ctx.uid2 != null || ctx.wild2 != null )
-        {
-            throw new ParserExceptionWithoutContext( "Invalid Program Stage / DataElement syntax: " + ctx.getText() );
-        }
-    }
-
-    /**
-     * Assume that an item of the form A{...} has a syntax that could be used
-     * in an org.hisp.dhis.parser.expression for A{progamUid.attributeUid}
-     *
-     * @param ctx the item context
-     */
-    public static void assumeExpressionProgramAttribute( ItemContext ctx )
-    {
-        if ( ctx.uid1 == null )
-        {
-            throw new ParserExceptionWithoutContext( "Program attribute must have two UIDs: " + ctx.getText() );
-        }
-    }
-
-    /**
-     * Assume that an item of the form A{...} has a syntax that could be used
-     * be used in an program org.hisp.dhis.parser.expression for A{attributeUid}
-     *
-     * @param ctx the item context
-     */
-    public static void assumeProgramExpressionProgramAttribute( ItemContext ctx )
-    {
-        if ( ctx.uid1 != null )
-        {
-            throw new ParserExceptionWithoutContext( "Program attribute must have one UID: " + ctx.getText() );
-        }
-    }
 
     /**
      * Trim quotes from the first and last characters of a string.

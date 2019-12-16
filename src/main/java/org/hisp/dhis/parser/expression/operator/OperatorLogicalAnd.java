@@ -29,7 +29,7 @@ package org.hisp.dhis.parser.expression.operator;
  */
 
 import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.function.ScalarFunction;
+import org.hisp.dhis.parser.expression.ExprFunction;
 
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
@@ -57,7 +57,7 @@ import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext
  * @author Jim Grace
  */
 public class OperatorLogicalAnd
-    extends ScalarFunction
+    implements ExprFunction
 {
     @Override
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
@@ -70,14 +70,5 @@ public class OperatorLogicalAnd
         }
 
         return value;
-    }
-
-    @Override
-    public Object evaluateAllPaths( ExprContext ctx, CommonExpressionVisitor visitor )
-    {
-        Boolean value0 = visitor.castBooleanVisit( ctx.expr( 0 ) );
-        Boolean value1 = visitor.castBooleanVisit( ctx.expr( 1 ) );
-
-        return value0 != null && value0 ? value1 : true;
     }
 }

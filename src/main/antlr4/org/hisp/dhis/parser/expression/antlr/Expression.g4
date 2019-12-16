@@ -33,8 +33,8 @@ expr
     |   fun='firstNonNull(' WS* itemNumStringLiteral WS* (',' WS* itemNumStringLiteral WS* )* ')'
     |   fun='greatest(' expr (',' expr )* ')'
     |   fun='if(' expr ',' expr ',' expr ')'
-    |   fun='isNotNull(' WS* item WS* ')'
-    |   fun='isNull(' WS* item WS* ')'
+//    |   fun='isNotNull(' WS* item WS* ')'
+//    |   fun='isNull(' WS* item WS* ')'
     |   fun='least(' expr (',' expr )* ')'
 
     //  Aggergation functions (alphabetical)
@@ -75,27 +75,10 @@ expr
 
     //  Program functions (alphabetical)
     |   d2Function
-    |   fun='d2:condition(' WS* stringLiteral WS* ',' expr ',' expr ')'
-    |   fun='d2:count(' WS* stageDataElement WS* ')'
-    |   fun='d2:countIfCondition(' WS* stageDataElement ',' WS* stringLiteral WS* ')'
-    |   fun='d2:countIfValue(' WS* stageDataElement WS* ',' WS* numStringLiteral WS*  ')'
-    |   fun='d2:daysBetween(' compareDate ',' compareDate ')'
-    |   fun='d2:hasValue(' item ')'
-    |   fun='d2:maxValue(' ( item | compareDate ) ')'
-    |   fun='d2:minutesBetween(' compareDate ',' compareDate ')'
-    |   fun='d2:minValue(' ( item | compareDate ) ')'
-    |   fun='d2:monthsBetween(' compareDate ',' compareDate ')'
-    |   fun='d2:oizp(' expr ')'
-    |   fun='d2:relationshipCount(' WS* QUOTED_UID? WS* ')'
-    |   fun='d2:weeksBetween(' compareDate ',' compareDate ')'
-    |   fun='d2:yearsBetween(' compareDate ',' compareDate ')'
-    |   fun='d2:zing(' expr ')'
-    |   fun='d2:zpvc(' item (',' item )* ')'
-    |   fun='d2:validatePattern(' expr ',' expr ')'
 
     //  Other
 
-    |   item
+//    |   item
     |   variable
     |   numericLiteral
     |   stringLiteral
@@ -111,22 +94,22 @@ arguments
     : expr ( ',' expr )*
     ;
 
-item
-    :   it='#{' uid0=UID ('.*')? '}'
-    |   it='#{' uid0=UID '.' uid1=UID '}'
-    |   it='#{' uid0=UID '.' uid1=UID wild2='.*' '}'
-    |   it='#{' uid0=UID '.*.' uid2=UID '}'
-    |   it='#{' uid0=UID '.' uid1=UID '.' uid2=UID '}'
-    |   it='A{' uid0=UID '.' uid1=UID '}' // Program attribute in expressions (indicator, etc.)
-    |   it='A{' uid0=UID '}' // Program attribute in program indicator expressions
-    |   it='C{' uid0=UID '}'
-    |   it='D{' uid0=UID '.' uid1=UID '}'
-    |   it='I{' uid0=UID '}'
-    |   it='N{' uid0=UID '}' // Indicator
-    |   it='OUG{' uid0=UID '}'
-    |   it='R{' uid0=UID '.' REPORTING_RATE_TYPE '}'
-    |   it='[days]'
-    ;
+//item
+//    :   it='#{' uid0=UID ('.*')? '}'
+//    |   it='#{' uid0=UID '.' uid1=UID '}'
+//    |   it='#{' uid0=UID '.' uid1=UID wild2='.*' '}'
+//    |   it='#{' uid0=UID '.*.' uid2=UID '}'
+//    |   it='#{' uid0=UID '.' uid1=UID '.' uid2=UID '}'
+//    |   it='A{' uid0=UID '.' uid1=UID '}' // Program attribute in expressions (indicator, etc.)
+//    |   it='A{' uid0=UID '}' // Program attribute in program indicator expressions
+//    |   it='C{' uid0=UID '}'
+//    |   it='D{' uid0=UID '.' uid1=UID '}'
+//    |   it='I{' uid0=UID '}'
+//    |   it='N{' uid0=UID '}' // Indicator
+//    |   it='OUG{' uid0=UID '}'
+//    |   it='R{' uid0=UID '.' REPORTING_RATE_TYPE '}'
+//    |   it='[days]'
+//    ;
 
 variable
     : var='V{' string=variableName '}'
@@ -147,8 +130,8 @@ compareDate
     ;
 
 itemNumStringLiteral
-    :   item
-    |   numStringLiteral
+    :   numStringLiteral
+//    |   item
     ;
 
 numStringLiteral
@@ -251,23 +234,23 @@ VARIANCE        : 'variance(';
 // Program functions (alphabetical)
 
 ID                      : 'd2:' [a-zA-Z0-9_]* '(';
-D2_CONDITION            : 'd2:condition(';
-D2_COUNT                : 'd2:count(';
-D2_COUNT_IF_CONDITION   : 'd2:countIfCondition(';
-D2_COUNT_IF_VALUE       : 'd2:countIfValue(';
-D2_DAYS_BETWEEN         : 'd2:daysBetween(';
-D2_HAS_VALUE            : 'd2:hasValue(';
-D2_MAX_VALUE            : 'd2:maxValue(';
-D2_MINUTES_BETWEEN      : 'd2:minutesBetween(';
-D2_MIN_VALUE            : 'd2:minValue(';
-D2_MONTHS_BETWEEN       : 'd2:monthsBetween(';
-D2_OIZP                 : 'd2:oizp(';
-D2_RELATIONSHIP_COUNT   : 'd2:relationshipCount(';
-D2_WEEKS_BETWEEN        : 'd2:weeksBetween(';
-D2_YEARS_BETWEEN        : 'd2:yearsBetween(';
-D2_ZING                 : 'd2:zing(';
-D2_ZPVC                 : 'd2:zpvc(';
-D2_VALIDATE_PATTERN     : 'd2:validatePattern(';
+//D2_CONDITION            : 'd2:condition(';
+//D2_COUNT                : 'd2:count(';
+//D2_COUNT_IF_CONDITION   : 'd2:countIfCondition(';
+//D2_COUNT_IF_VALUE       : 'd2:countIfValue(';
+//D2_DAYS_BETWEEN         : 'd2:daysBetween(';
+//D2_HAS_VALUE            : 'd2:hasValue(';
+//D2_MAX_VALUE            : 'd2:maxValue(';
+//D2_MINUTES_BETWEEN      : 'd2:minutesBetween(';
+//D2_MIN_VALUE            : 'd2:minValue(';
+//D2_MONTHS_BETWEEN       : 'd2:monthsBetween(';
+//D2_OIZP                 : 'd2:oizp(';
+//D2_RELATIONSHIP_COUNT   : 'd2:relationshipCount(';
+//D2_WEEKS_BETWEEN        : 'd2:weeksBetween(';
+//D2_YEARS_BETWEEN        : 'd2:yearsBetween(';
+//D2_ZING                 : 'd2:zing(';
+//D2_ZPVC                 : 'd2:zpvc(';
+//D2_VALIDATE_PATTERN     : 'd2:validatePattern(';
 
 // Items (alphabetical by symbol)
 

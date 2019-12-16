@@ -29,7 +29,7 @@ package org.hisp.dhis.parser.expression.operator;
  */
 
 import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.function.SimpleScalarFunction;
+import org.hisp.dhis.parser.expression.function.ScalarFunction;
 
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
@@ -49,7 +49,7 @@ import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext
  * @author Jim Grace
  */
 public class OperatorLogicalNot
-    extends SimpleScalarFunction
+    extends ScalarFunction
 {
     @Override
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )

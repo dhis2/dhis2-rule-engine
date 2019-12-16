@@ -39,25 +39,15 @@ import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.functions.RuleFunction;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import static org.hisp.dhis.parser.expression.ParserUtils.DOUBLE_VALUE_IF_NULL;
-import static org.hisp.dhis.parser.expression.ParserUtils.ITEM_REGENERATE;
 import static org.hisp.dhis.parser.expression.ParserUtils.castBoolean;
 import static org.hisp.dhis.parser.expression.ParserUtils.castDouble;
 import static org.hisp.dhis.parser.expression.ParserUtils.castString;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.BooleanLiteralContext;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExpressionContext;
-import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ItemContext;
-import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ItemNumStringLiteralContext;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.NumericLiteralContext;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.StringLiteralContext;
 
@@ -76,19 +66,9 @@ public class CommonExpressionVisitor
     private Map<Integer, ExprFunction> functionMap;
 
     /**
-     * Map of ExprItem instances to call for each org.hisp.dhis.parser.expression item
-     */
-    private Map<Integer, ExprItem> itemMap;
-
-    /**
      * Method to call within the ExprFunction instance
      */
     private ExprFunctionMethod functionMethod;
-
-    /**
-     * Method to call within the ExprItem instance
-     */
-    private ExprItemMethod itemMethod;
 
     /**
      * Instance to call for each literal
@@ -101,34 +81,9 @@ public class CommonExpressionVisitor
     private boolean replaceNulls = true;
 
     /**
-     * Used to collect the string replacements to build a description.
-     */
-    private Map<String, String> itemDescriptions = new HashMap<>();
-
-    /**
-     * Constants to use in evaluating an org.hisp.dhis.parser.expression.
-     */
-    private Map<String, Double> constantMap = new HashMap<>();
-
-    /**
-     * Used to collect the organisation unit group ids in the org.hisp.dhis.parser.expression.
-     */
-    private Set<String> orgUnitGroupIds = new HashSet<>();
-
-    /**
-     * Organisation unit group counts to use in evaluating an org.hisp.dhis.parser.expression.
-     */
-    Map<String, Integer> orgUnitCountMap = new HashMap<>();
-
-    /**
      * Count of days in period to use in evaluating an org.hisp.dhis.parser.expression.
      */
     private Double days = null;
-
-    /**
-     * Values to use for dimensional items in evaluating an org.hisp.dhis.parser.expression.
-     */
-    private Map<String, Double> itemValueMap;
 
     /**
      * Values to use for variables in evaluating an org.hisp.dhis.parser.expression.
@@ -139,31 +94,6 @@ public class CommonExpressionVisitor
      * Supplementary data for users and org units
      */
     private Map<String, List<String>> supplementaryData;
-
-    /**
-     * Count of dimension items found.
-     */
-    private int itemsFound = 0;
-
-    /**
-     * Count of dimension item values found.
-     */
-    private int itemValuesFound = 0;
-
-    /**
-     * Reporting start date.
-     */
-    private Date reportingStartDate;
-
-    /**
-     * Reporting end date.
-     */
-    private Date reportingEndDate;
-
-    /**
-     * Idenfitiers of DataElements and Attribuetes in org.hisp.dhis.parser.expression.
-     */
-    private Set<String> dataElementAndAttributeIdentifiers;
 
     /**
      * Default value for data type double.
@@ -206,11 +136,6 @@ public class CommonExpressionVisitor
     @Override
     public Object visitExpr( ExprContext ctx )
     {
-        if ( itemMethod == ITEM_REGENERATE )
-        {
-            return regenerateAllChildren( ctx );
-        }
-
         if ( ctx.d2Function() != null )
         {
             List<String> arguments = new ArrayList<>();
@@ -247,19 +172,6 @@ public class CommonExpressionVisitor
         }
 
         return visit( ctx.getChild( 0 ) ); // All others: visit first child.
-    }
-
-    @Override
-    public Object visitItem( ItemContext ctx )
-    {
-        ExprItem item = itemMap.get( ctx.it.getType() );
-
-        if ( item == null )
-        {
-            throw new ParserExceptionWithoutContext( "Item " + ctx.it.getText() + " not supported for this type of org.hisp.dhis.parser.expression" );
-        }
-
-        return itemMethod.apply( item, ctx, this );
     }
 
     @Override
@@ -364,130 +276,9 @@ public class CommonExpressionVisitor
         return result;
     }
 
-    /**
-     * Gets the value of an item or numeric string literal
-     *
-     * If an item, gets the value while allowing nulls.
-     *
-     * @param ctx item or numeric string literal context
-     * @return the value of the item or numeric string literal
-     */
-    public Object getItemNumStringLiteral( ItemNumStringLiteralContext ctx )
-    {
-        if ( ctx.item() != null )
-        {
-            return visitAllowingNulls( ctx.item() );
-        }
-        else if ( ctx.numStringLiteral().stringLiteral() != null )
-        {
-            return expressionLiteral.getStringLiteral( ctx.numStringLiteral().stringLiteral() );
-        }
-
-        return ctx.getText();
-    }
-
-    /**
-     * Handles nulls and missing values.
-     * <p/>
-     * If we should replace nulls with the default value, then do so, and
-     * remember how many items found, and how many of them had values, for
-     * subsequent MissingValueStrategy analysis.
-     * <p/>
-     * If we should not replace nulls with the default value, then don't,
-     * as this is likely for some function that is testing for nulls, and
-     * a missing value should not count towards the MissingValueStrategy.
-     *
-     * @param value the (possibly null) value
-     * @return the value we should return.
-     */
-    public Object handleNulls( Object value )
-    {
-        if ( replaceNulls )
-        {
-            itemsFound++;
-
-            if ( value == null )
-            {
-                return DOUBLE_VALUE_IF_NULL;
-            }
-            else
-            {
-                itemValuesFound++;
-            }
-        }
-
-        return value;
-    }
-
     // -------------------------------------------------------------------------
     // Getters and setters
     // -------------------------------------------------------------------------
-
-    public Date getReportingStartDate()
-    {
-        return reportingStartDate;
-    }
-
-    public void setReportingStartDate( Date reportingStartDate )
-    {
-        this.reportingStartDate = reportingStartDate;
-    }
-
-    public Date getReportingEndDate()
-    {
-        return reportingEndDate;
-    }
-
-    public void setReportingEndDate( Date reportingEndDate )
-    {
-        this.reportingEndDate = reportingEndDate;
-    }
-
-    public Set<String> getDataElementAndAttributeIdentifiers()
-    {
-        return dataElementAndAttributeIdentifiers;
-    }
-
-    public void setDataElementAndAttributeIdentifiers(
-        Set<String> dataElementAndAttributeIdentifiers )
-    {
-        this.dataElementAndAttributeIdentifiers = dataElementAndAttributeIdentifiers;
-    }
-
-    public Map<String, String> getItemDescriptions()
-    {
-        return itemDescriptions;
-    }
-
-    public Map<String, Double> getConstantMap()
-    {
-        return constantMap;
-    }
-
-    public void setConstantMap( Map<String, Double> constantMap )
-    {
-        this.constantMap = constantMap;
-    }
-
-    public Set<String> getOrgUnitGroupIds()
-    {
-        return orgUnitGroupIds;
-    }
-
-    public Map<String, Integer> getOrgUnitCountMap()
-    {
-        return orgUnitCountMap;
-    }
-
-    public void setOrgUnitCountMap( Map<String, Integer> orgUnitCountMap )
-    {
-        this.orgUnitCountMap = orgUnitCountMap;
-    }
-
-    public Map<String, Double> getItemValueMap()
-    {
-        return itemValueMap;
-    }
 
     public void setValueMap( Map<String, RuleVariableValue> valueMap )
     {
@@ -500,11 +291,6 @@ public class CommonExpressionVisitor
         return valueMap;
     }
 
-    public void setItemValueMap( Map<String, Double> itemValueMap )
-    {
-        this.itemValueMap = itemValueMap;
-    }
-
     public Double getDays()
     {
         return days;
@@ -513,16 +299,6 @@ public class CommonExpressionVisitor
     public void setDays( Double days )
     {
         this.days = days;
-    }
-
-    public int getItemsFound()
-    {
-        return itemsFound;
-    }
-
-    public int getItemValuesFound()
-    {
-        return itemValuesFound;
     }
 
     // -------------------------------------------------------------------------
@@ -547,21 +323,9 @@ public class CommonExpressionVisitor
             return this;
         }
 
-        public Builder withItemMap( Map<Integer, ExprItem> itemMap )
-        {
-            this.visitor.itemMap = itemMap;
-            return this;
-        }
-
         public Builder withFunctionMethod( ExprFunctionMethod functionMethod )
         {
             this.visitor.functionMethod = functionMethod;
-            return this;
-        }
-
-        public Builder withItemMethod( ExprItemMethod itemMethod )
-        {
-            this.visitor.itemMethod = itemMethod;
             return this;
         }
 
@@ -577,42 +341,12 @@ public class CommonExpressionVisitor
             return this;
         }
 
-        private String getValue( RuleVariableValue variableValue )
-        {
-            return variableValue.value() == null ?
-                variableValue.type().defaultValue() : variableValue.value();
-        }
-
         public CommonExpressionVisitor validateCommonProperties()
         {
             Validate.notNull( this.visitor.functionMap, "Missing required property 'functionMap'" );
-            Validate.notNull( this.visitor.itemMap, "Missing required property 'itemMap'" );
             Validate.notNull( this.visitor.functionMethod, "Missing required property 'functionMethod'" );
-            Validate.notNull( this.visitor.itemMethod, "Missing required property 'itemMethod'" );
 
             return visitor;
         }
-    }
-
-    // -------------------------------------------------------------------------
-    // Supportive Methods
-    // -------------------------------------------------------------------------
-
-    /**
-     * Regenerates an org.hisp.dhis.parser.expression by visiting all the children of the
-     * org.hisp.dhis.parser.expression node (including any terminal nodes).
-     *
-     * @param ctx the org.hisp.dhis.parser.expression context
-     * @return the regenerated org.hisp.dhis.parser.expression (as a String)
-     */
-    private Object regenerateAllChildren( ExprContext ctx )
-    {
-        StringBuilder stringBuilder = new StringBuilder();
-        for ( ParseTree child : ctx.children )
-        {
-            stringBuilder.append( this.castStringVisit( child ) );
-        }
-
-        return stringBuilder.toString();
     }
 }

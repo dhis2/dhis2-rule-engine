@@ -13,10 +13,6 @@ import static java.util.Collections.unmodifiableList;
 
 public final class RuleEngineContext
 {
-
-        @Nonnull
-        private final RuleExpressionEvaluator expressionEvaluator;
-
         @Nonnull
         private final List<Rule> rules;
 
@@ -32,11 +28,10 @@ public final class RuleEngineContext
         @Nonnull
         private final Map<String, String> constantsValues;
 
-        RuleEngineContext( @Nonnull RuleExpressionEvaluator expressionEvaluator,
-            @Nonnull List<Rule> rules, @Nonnull List<RuleVariable> ruleVariables, Map<String, List<String>> supplementaryData,
-                           Map<String, Map<String, String>> calculatedValueMap, Map<String, String> constantsValues )
+        RuleEngineContext( @Nonnull List<Rule> rules, @Nonnull List<RuleVariable> ruleVariables,
+                                Map<String, List<String>> supplementaryData,
+                                Map<String, Map<String, String>> calculatedValueMap, Map<String, String> constantsValues )
         {
-                this.expressionEvaluator = expressionEvaluator;
                 this.rules = rules;
                 this.ruleVariables = ruleVariables;
                 this.supplementaryData = supplementaryData;
@@ -63,12 +58,6 @@ public final class RuleEngineContext
         }
 
         @Nonnull
-        public RuleExpressionEvaluator expressionEvaluator()
-        {
-                return expressionEvaluator;
-        }
-
-        @Nonnull
         public Map<String, Map<String, String>> calculatedValueMap()
         {
                 return calculatedValueMap;
@@ -87,13 +76,9 @@ public final class RuleEngineContext
         }
 
         @Nonnull
+        @Deprecated
         public static Builder builder( @Nonnull RuleExpressionEvaluator evaluator )
         {
-                if ( evaluator == null )
-                {
-                        throw new IllegalArgumentException( "evaluator == null" );
-                }
-
                 return new Builder( evaluator );
         }
 
@@ -193,7 +178,7 @@ public final class RuleEngineContext
                                 ruleVariables = unmodifiableList( new ArrayList<RuleVariable>() );
                         }
 
-                        return new RuleEngineContext( evaluator, rules, ruleVariables, supplementaryData, calculatedValueMap, constantsValues );
+                        return new RuleEngineContext( rules, ruleVariables, supplementaryData, calculatedValueMap, constantsValues );
                 }
         }
 }

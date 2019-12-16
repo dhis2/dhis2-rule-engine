@@ -76,6 +76,17 @@ public class Parser
     }
 
     /**
+     * Validate an org.hisp.dhis.parser.expression.
+     *
+     * @param expr the org.hisp.dhis.parser.expression to validate
+     * @return the error message
+     */
+    public static String validate( String expr )
+    {
+        return validateExpression( expr );
+    }
+
+    /**
      * Parses an org.hisp.dhis.parser.expression and listens while ANTLR4 walks through the parsed
      * nodes using the listener pattern.
      *
@@ -116,6 +127,31 @@ public class Parser
      */
     private static ParseTree createParseTree( String expr )
     {
+        return getExpressionParseTree(expr).expression();
+    }
+
+    /**
+     * Validate org.hisp.dhis.parser.expression's syntax.
+     *
+     * @param expr the org.hisp.dhis.parser.expression text to parse.
+     * @return the validation error message.
+     */
+    private static String validateExpression( String expr )
+    {
+
+        ExpressionParser expressionParseTree = getExpressionParseTree(expr);
+        expressionParseTree.setBuildParseTree(false);
+
+        try {
+            expressionParseTree.expression();
+        } catch ( ParserException e) {
+            return e.getMessage();
+        }
+
+        return "";
+    }
+
+    private static ExpressionParser getExpressionParseTree(String expr) {
         ParserErrorListener errorListener = new ParserErrorListener(); // Custom error listener.
 
         CharStream input = CharStreams.fromString( expr ); // Form an ANTLR lexer input stream.
@@ -131,7 +167,6 @@ public class Parser
 
         parser.removeErrorListeners(); // Remove the default parser error listener (prints to console).
         parser.addErrorListener( errorListener ); // Add custom error listener to throw any errors.
-
-        return parser.expression(); // Parse the org.hisp.dhis.parser.expression and return the parse tree.
+        return parser;
     }
 }

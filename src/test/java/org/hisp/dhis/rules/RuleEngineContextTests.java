@@ -38,20 +38,6 @@ public class RuleEngineContextTests
         }
 
         @Test
-        public void builderShouldThrowOnNullExpressionEvaluator()
-        {
-                try
-                {
-                        RuleEngineContext.builder( null );
-                        fail( "IllegalArgumentException was expected, but nothing was thrown." );
-                }
-                catch ( IllegalArgumentException illegalArgumentException )
-                {
-                        // noop
-                }
-        }
-
-        @Test
         public void builderShouldThrowOnNullVariableList()
         {
                 try
@@ -111,7 +97,6 @@ public class RuleEngineContextTests
                 ruleVariables.add( ruleVariableTwo );
                 rules.add( ruleTwo );
 
-                assertThat( ruleEngineContext.expressionEvaluator() ).isEqualTo( ruleExpressionEvaluator );
                 assertThat( ruleEngineContext.ruleVariables().size() ).isEqualTo( 1 );
                 assertThat( ruleEngineContext.ruleVariables().get( 0 ) ).isEqualTo( ruleVariableOne );
 

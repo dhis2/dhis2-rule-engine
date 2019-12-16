@@ -61,6 +61,12 @@ public final class RuleEngine
         }
 
         @Nonnull
+        public static String validate( @Nonnull String expression )
+        {
+                return RuleEngineExecution.validate(expression);
+        }
+
+        @Nonnull
         public Callable<List<RuleEffect>> evaluate( @Nonnull RuleEvent ruleEvent )
         {
                 if ( ruleEvent == null )
@@ -86,8 +92,7 @@ public final class RuleEngine
                     .constantValueMap( ruleEngineContext.constantsValues() )
                     .build();
 
-                return new RuleEngineExecution( executionContext().expressionEvaluator(),
-                    ruleEngineContext.rules(), valueMap, ruleEngineContext.supplementaryData() );
+                return new RuleEngineExecution( ruleEngineContext.rules(), valueMap, ruleEngineContext.supplementaryData() );
         }
 
         @Nonnull
@@ -116,8 +121,7 @@ public final class RuleEngine
                         .constantValueMap( ruleEngineContext.constantsValues() )
                         .build();
 
-                return new RuleEngineExecution( executionContext().expressionEvaluator(),
-                        rulesToEvaluate, valueMap, ruleEngineContext.supplementaryData() );
+                return new RuleEngineExecution( rulesToEvaluate, valueMap, ruleEngineContext.supplementaryData() );
         }
 
         @Nonnull
@@ -141,8 +145,7 @@ public final class RuleEngine
                     .constantValueMap( ruleEngineContext.constantsValues())
                     .build();
 
-                return new RuleEngineExecution( executionContext().expressionEvaluator(),
-                    rulesToEvaluate, valueMap, ruleEngineContext.supplementaryData()  );
+                return new RuleEngineExecution( rulesToEvaluate, valueMap, ruleEngineContext.supplementaryData()  );
         }
 
         @Nonnull
@@ -166,8 +169,8 @@ public final class RuleEngine
                         .constantValueMap( ruleEngineContext.constantsValues() )
                         .build();
 
-                return new RuleEngineExecution( executionContext().expressionEvaluator(),
-                        ruleEngineContext.rules(), valueMap, ruleEngineContext.supplementaryData()  );
+                return new RuleEngineExecution( ruleEngineContext.rules(),
+                    valueMap, ruleEngineContext.supplementaryData()  );
         }
 
         public static class Builder

@@ -1,12 +1,10 @@
 package org.hisp.dhis.rules;
 
 import com.google.common.collect.ImmutableMap;
-import org.apache.commons.jexl2.JexlException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.parser.expression.ExprFunction;
-import org.hisp.dhis.parser.expression.ExprItem;
 import org.hisp.dhis.parser.expression.Parser;
 import org.hisp.dhis.rules.models.*;
 
@@ -25,15 +23,9 @@ import java.util.regex.Pattern;
 
 import static org.hisp.dhis.parser.expression.ParserUtils.COMMON_EXPRESSION_FUNCTIONS;
 import static org.hisp.dhis.parser.expression.ParserUtils.FUNCTION_EVALUATE;
-import static org.hisp.dhis.parser.expression.ParserUtils.ITEM_EVALUATE;
-import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.C_BRACE;
 
 class RuleEngineExecution
         implements Callable<List<RuleEffect>> {
-    public final static ImmutableMap<Integer, ExprItem> PROGRAM_INDICATOR_ITEMS = ImmutableMap.<Integer, ExprItem>builder()
-
-        .build();
-
     public final static ImmutableMap<Integer, ExprFunction> FUNCTIONS = ImmutableMap.<Integer, ExprFunction>builder()
 
         // Common functions
@@ -51,9 +43,6 @@ class RuleEngineExecution
     private static final Pattern pattern = Pattern.compile(REGEX, Pattern.CASE_INSENSITIVE);
 
     @Nonnull
-    private final RuleExpressionEvaluator expressionEvaluator;
-
-    @Nonnull
     private Map<String, RuleVariableValue> valueMap;
 
     @Nonnull
@@ -62,9 +51,8 @@ class RuleEngineExecution
     @Nonnull
     private final List<Rule> rules;
 
-    RuleEngineExecution(@Nonnull RuleExpressionEvaluator expressionEvaluator,
-                        @Nonnull List<Rule> rules, @Nonnull Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData) {
-        this.expressionEvaluator = expressionEvaluator;
+    RuleEngineExecution( @Nonnull List<Rule> rules,
+                        @Nonnull Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData) {
         this.valueMap = new HashMap<>(valueMap);
         this.rules = rules;
         this.supplementaryData = supplementaryData;
@@ -110,8 +98,6 @@ class RuleEngineExecution
                             ruleEffects.add(create(rule.actions().get(j)));
                     }
                 }
-            } catch (JexlException jexlException) {
-                log.error("Parser exception in " + rule.name() + ": " + jexlException.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error("Exception in " + rule.name() + ": " + e.getMessage());
@@ -120,14 +106,17 @@ class RuleEngineExecution
         return ruleEffects;
     }
 
+    public static String validate( String condition )
+    {
+        return Parser.validate( condition );
+    }
+
     private String process( String condition )
     {
         CommonExpressionVisitor commonExpressionVisitor = CommonExpressionVisitor.newBuilder()
             .withFunctionMap( FUNCTIONS )
-            .withItemMap( PROGRAM_INDICATOR_ITEMS )
             .withVariablesMap(valueMap)
             .withFunctionMethod( FUNCTION_EVALUATE )
-            .withItemMethod( ITEM_EVALUATE )
             .withSupplementaryData( supplementaryData )
             .validateCommonProperties();
 

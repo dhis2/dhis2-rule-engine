@@ -38,17 +38,6 @@ import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext
 public interface ExprFunction
 {
     /**
-     * Collects item ids inside the function for later database lookup.
-     * This is the same as the evaluate method for most functions, but for
-     * aggregation functions, it collects item ids as aggregation item ids.
-     *
-     * @param ctx the org.hisp.dhis.parser.expression context
-     * @param visitor the tree visitor
-     * @return a dummy value for the item
-     */
-    Object getItemId( ExprContext ctx, CommonExpressionVisitor visitor );
-
-    /**
      * Finds the value of an org.hisp.dhis.parser.expression function, evaluating arguments only
      * when necessary (e.g., if, and, or, firstNonNull).
      *
@@ -57,15 +46,4 @@ public interface ExprFunction
      * @return the value of the function, evaluating necessary args
      */
     Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor );
-
-    /**
-     * Finds the value of an org.hisp.dhis.parser.expression function, evaluating all
-     * the arguments of logical functions (e.g. if, and, or, firstNonNull).
-     * Otherwise, this is the same as the evaluate method.
-     *
-     * @param ctx the org.hisp.dhis.parser.expression context
-     * @param visitor the tree visitor
-     * @return the value of the function, evaluating all args
-     */
-    Object evaluateAllPaths( ExprContext ctx, CommonExpressionVisitor visitor );
 }

@@ -14,21 +14,10 @@ abstract class RuleExpression
 {
         static final String VARIABLE_PATTERN = "[A#CV]\\{([\\w -_.]+)\\}";
 
-        static final String FUNCTION_PATTERN = "d2:(\\w+.?\\w*)\\( *(([\\d/\\*\\+\\-%\\. ]+)|" +
-            "( *'[^']*'))*( *, *(([\\d/\\*\\+\\-%\\. ]+)|'[^']*'))* *\\)";
-
         static final Pattern VARIABLE_PATTERN_COMPILED = Pattern.compile( VARIABLE_PATTERN );
-
-        static final Pattern FUNCTION_PATTERN_COMPILED = Pattern.compile( FUNCTION_PATTERN );
-
-        @Nonnull
-        public abstract String expression();
 
         @Nonnull
         public abstract Set<String> variables();
-
-        @Nonnull
-        public abstract Set<String> functions();
 
         @Nonnull
         static String unwrapVariableName( @Nonnull String variable )
@@ -42,34 +31,5 @@ abstract class RuleExpression
                 }
 
                 throw new IllegalArgumentException( "Malformed variable: " + variable );
-        }
-
-        @Nonnull
-        static RuleExpression from( String expression )
-        {
-                if ( expression == null )
-                {
-                        throw new NullPointerException( "org.hisp.dhis.parser.expression == null" );
-                }
-
-                Set<String> variables = new HashSet<>();
-                Set<String> functions = new HashSet<>();
-
-                Matcher variableMatcher = VARIABLE_PATTERN_COMPILED.matcher( expression );
-                Matcher functionMatcher = FUNCTION_PATTERN_COMPILED.matcher( expression );
-
-                // iterate over matched values and aggregate them
-                while ( variableMatcher.find() )
-                {
-                        variables.add( variableMatcher.group() );
-                }
-
-                while ( functionMatcher.find() )
-                {
-                        functions.add( functionMatcher.group() );
-                }
-
-                return new AutoValue_RuleExpression( expression, Collections.unmodifiableSet( variables ),
-                    Collections.unmodifiableSet( functions ) );
         }
 }
