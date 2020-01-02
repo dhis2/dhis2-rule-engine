@@ -29,9 +29,11 @@ package org.hisp.dhis.rules.functions;
  */
 
 import com.google.common.collect.Lists;
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.RuleVariableValue;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -41,39 +43,11 @@ import java.util.Map;
  * <p>
  * return maximum value of provided data element present in entire enrollment
  */
-public class RuleFunctionMaxValue extends RuleFunction
+public class RuleFunctionMaxValue
+    extends SimpleNoSqlFunction
 {
-    static final String D2_MAX_VALUE = "d2:maxValue";
-
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
-        Map<String, List<String>> supplementaryData )
+    private String getMaxValue( String dataElement, Map<String, RuleVariableValue> valueMap )
     {
-        if ( valueMap == null )
-        {
-            throw new IllegalArgumentException( "valueMap is expected" );
-        }
-
-        if ( arguments.size() != 1 )
-        {
-            throw new IllegalArgumentException( "One argument was expected, " +
-                    arguments.size() + " were supplied" );
-        }
-
-        return getMaxValue( arguments, valueMap );
-    }
-
-    @Nonnull
-    public static RuleFunctionMaxValue create()
-    {
-        return new RuleFunctionMaxValue();
-    }
-
-    private String getMaxValue( List<String> arguments, Map<String, RuleVariableValue> valueMap )
-    {
-        String dataElement = arguments.get( 0 );
-
         if ( valueMap.containsKey( dataElement ) )
         {
             RuleVariableValue ruleVariableValue = valueMap.get( dataElement );
@@ -91,5 +65,11 @@ public class RuleFunctionMaxValue extends RuleFunction
         }
 
         return "";
+    }
+
+    @Override
+    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return getMaxValue( visitor.castStringVisit( ctx.expr( 0 ) ), visitor.getValueMap() );
     }
 }

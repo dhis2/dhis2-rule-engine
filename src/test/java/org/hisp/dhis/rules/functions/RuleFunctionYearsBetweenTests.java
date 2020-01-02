@@ -28,129 +28,97 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import static org.mockito.Mockito.when;
 
 import org.hamcrest.MatcherAssert;
-import org.hisp.dhis.rules.RuleVariableValue;
-import org.junit.Rule;
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 /**
  * @Author Zubair Asghar.
  */
 
-@RunWith( JUnit4.class )
+@RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionYearsBetweenTests
 {
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    @Mock
+    private ExpressionParser.ExprContext context;
 
-    private Map<String, RuleVariableValue> variableValues = new HashMap<>();
+    @Mock
+    private CommonExpressionVisitor visitor;
+
+    @Mock
+    private ExpressionParser.CompareDateContext mockedFirstExpr;
+
+    @Mock
+    private ExpressionParser.CompareDateContext mockedSecondExpr;
+
+    private RuleFunctionYearsBetween functionToTest = new RuleFunctionYearsBetween();
+
+    @Before
+    public void setUp() {
+        when(context.compareDate(0)).thenReturn( mockedFirstExpr );
+        when(context.compareDate(1)).thenReturn( mockedSecondExpr );
+    }
 
     @Test
     public void return_empty_if_some_date_is_not_present()
     {
-        RuleFunction yearsBetween = RuleFunctionYearsBetween.create();
-
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( null, null ), variableValues, null ), is( ("0") ) );
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( null, "" ), variableValues, null ), is( ("0") ) );
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "", null ), variableValues, null ), is( ("0") ) );
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "", "" ), variableValues, null ), is( ("0") ) );
+        assertYearsBetween( null, null, "0" );
+        assertYearsBetween( null, "", "0");
+        assertYearsBetween( "", null,"0");
+        assertYearsBetween( "", "", "0");
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void throw_illegal_argument_exception_if_first_date_is_invalid()
     {
-        thrown.expect( IllegalArgumentException.class );
-
-        RuleFunction yearsBetween = RuleFunctionYearsBetween.create();
-
-        yearsBetween.evaluate( asList( "bad date", "2010-01-01" ), variableValues, null );
+        assertYearsBetween( "bad date", "2010-01-01", null );
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void throw_illegal_argument_exception_if_second_date_is_invalid()
     {
-        thrown.expect( IllegalArgumentException.class );
-
-        RuleFunction yearsBetween = RuleFunctionYearsBetween.create();
-
-        yearsBetween.evaluate( asList( "2010-01-01", "bad date" ), variableValues, null );
+        assertYearsBetween( "2010-01-01", "bad date", null );
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void throw_illegal_argument_exception_if_first_and_second_date_is_invalid()
     {
-        thrown.expect( RuntimeException.class );
-        RuleFunctionYearsBetween.create().evaluate( asList( "bad date", "bad date" ), new HashMap<>(), null );
+        assertYearsBetween(  "bad date", "bad date", null );
     }
 
     @Test
     public void return_difference_of_years_of_two_dates()
     {
-        RuleFunction yearsBetween = RuleFunctionYearsBetween.create();
+        assertYearsBetween(  "2010-10-15", "2010-10-22", "0" );
+        assertYearsBetween(  "2010-09-30", "2011-10-31", "1" );
+        assertYearsBetween(  "2015-01-01", "2016-06-30", "1" );
+        assertYearsBetween(  "2010-01-01", "2016-06-30", "6" );
 
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2010-10-15", "2010-10-22" ), variableValues, null ),
-            is( "0" ) );
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2010-09-30", "2011-10-31" ), variableValues, null ),
-            is( "1" ) );
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2015-01-01", "2016-06-30" ), variableValues, null ),
-            is( "1" ) );
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2010-01-01", "2016-06-30" ), variableValues, null ),
-            is( "6" ) );
+        assertYearsBetween(  "2010-10-22", "2010-10-15", "0" );
+        assertYearsBetween(  "2011-10-31", "2010-09-30", "-1" );
+        assertYearsBetween(  "2016-06-30", "2015-01-01", "-1" );
+        assertYearsBetween(  "2016-06-30", "2010-01-01", "-6" );
 
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2010-10-22", "2010-10-15" ), variableValues, null ),
-            is( "0" ) );
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2011-10-31", "2010-09-30" ), variableValues, null ),
-            is( "-1" ) );
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2016-06-30", "2015-01-01" ), variableValues, null ),
-            is( "-1" ) );
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2016-06-30", "2010-01-01" ), variableValues, null ),
-            is( "-6" ) );
-
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2017-02-27", "2018-02-26" ), variableValues, null ),
-            is( "0" ) );
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2017-02-27", "2018-02-27" ), variableValues, null ),
-            is( "1" ) );
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2017-02-27", "2018-02-28" ), variableValues, null ),
-            is( "1" ) );
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2015-02-27", "2018-02-27" ), variableValues, null ),
-            is( "3" ) );
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2018-06-04", "2019-01-04" ), variableValues, null ),
-            is( "0" ) );
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "2019-10-10", "1995-11-02" ), variableValues, null ),
-            is( "-23" ) );
-        MatcherAssert.assertThat( yearsBetween.evaluate( asList( "1995-11-02", "2019-10-10" ), variableValues, null ),
-            is( "23" ) );
+        assertYearsBetween(  "2017-02-27", "2018-02-26", "0" );
+        assertYearsBetween(  "2017-02-27", "2018-02-27", "1" );
+        assertYearsBetween(  "2017-02-27", "2018-02-28", "1" );
+        assertYearsBetween(  "2015-02-27", "2018-02-27", "3" );
+        assertYearsBetween(  "2018-06-04", "2019-01-04", "0" );
+        assertYearsBetween(  "2019-10-10", "1995-11-02", "-23" );
+        assertYearsBetween(  "1995-11-02", "2019-10-10", "23" );
     }
 
-    @Test
-    public void throw_illegal_argument_exception_when_argument_count_is_greater_than_expected()
-    {
-        thrown.expect( IllegalArgumentException.class );
-        RuleFunctionYearsBetween.create().evaluate( Arrays.asList( "2016-01-01", "2016-01-01", "2016-01-01" ),
-            variableValues, null );
-    }
-
-    @Test
-    public void throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected()
-    {
-        thrown.expect( IllegalArgumentException.class );
-        RuleFunctionYearsBetween.create().evaluate( Arrays.asList( "2016-01-01" ), variableValues, null );
-    }
-
-    @Test
-    public void throw_null_pointer_exception_when_arguments_is_null()
-    {
-        thrown.expect( NullPointerException.class );
-        RuleFunctionYearsBetween.create().evaluate( null, variableValues, null );
+    private void assertYearsBetween( String startDate, String endDate, String yearsBetween ) {
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( startDate );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( endDate );
+        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), is( (yearsBetween) ) );
     }
 }

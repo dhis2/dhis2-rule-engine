@@ -28,85 +28,89 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import java.util.*;
+import static org.mockito.Mockito.when;
 
 /**
  * @Author Zubair Asghar.
  */
 
-@RunWith( JUnit4.class )
+@RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionHasUserRoleTests
 {
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    @Mock
+    private ExpressionParser.ExprContext context;
 
-    private Map<String, List<String>> supplementaryData = new HashMap<>();
+    @Mock
+    private CommonExpressionVisitor visitor;
 
-    private Map<String, RuleVariableValue> variableValues = new HashMap<>();
+    @Mock
+    private ExpressionParser.ExprContext mockedFirstExpr;
 
-    private List<String> arguments = new ArrayList<>();
+    private RuleFunctionHasUserRole functionToTest = new RuleFunctionHasUserRole();
 
-    @Test
-    public void throwExceptionWhenSupplementaryDataIsNull()
-    {
-        thrown.expect( IllegalArgumentException.class );
-
-        RuleFunctionHasUserRole hasUserRole = RuleFunctionHasUserRole.create();
-
-        hasUserRole.evaluate( arguments, variableValues, supplementaryData );
+    @Before
+    public void setUp() {
+        when(context.expr(0)).thenReturn( mockedFirstExpr );
     }
 
-    @Test
-    public void throwExceptionWhenArgumentListIsLessThanOne()
+    @Test(expected = IllegalArgumentException.class)
+    public void throwExceptionWhenSupplementaryDataIsNull()
     {
-        thrown.expect( IllegalArgumentException.class );
-
-        RuleFunctionHasUserRole hasUserRole = RuleFunctionHasUserRole.create();
-
-        supplementaryData.put( "USER", Arrays.asList() );
-
-        hasUserRole.evaluate( arguments, variableValues, supplementaryData );
+        assertHasUserRole( "uid1", new HashMap<>(), "true" );
     }
 
     @Test
     public void returnTrueIfUserHasRole()
     {
-        RuleFunctionHasUserRole hasUserRole = RuleFunctionHasUserRole.create();
-
+        Map<String, List<String>> supplementaryData = new HashMap<>();
         supplementaryData.put( "USER", Arrays.asList( "uid1" ) );
-        arguments.add( "uid1" );
 
-        assertThat( hasUserRole.evaluate( arguments, variableValues, supplementaryData ), is( "true" ) );
+        assertHasUserRole( "uid1", supplementaryData, "true" );
     }
 
     @Test
     public void returnFalseIfUserHasNoRole()
     {
-        RuleFunctionHasUserRole hasUserRole = RuleFunctionHasUserRole.create();
-
+        Map<String, List<String>> supplementaryData = new HashMap<>();
         supplementaryData.put( "USER", Arrays.asList( "uid1" ) );
-        arguments.add( "uid2" );
 
-        assertThat( hasUserRole.evaluate( arguments, variableValues, supplementaryData ), is( "false" ) );
+        assertHasUserRole( "uid2", supplementaryData, "false" );
     }
 
     @Test
     public void returnFalseIfRoleListIsNull()
     {
-        RuleFunctionHasUserRole hasUserRole = RuleFunctionHasUserRole.create();
-
+        Map<String, List<String>> supplementaryData = new HashMap<>();
         supplementaryData.put( "USER", null );
-        arguments.add( "uid2" );
 
-        assertThat( hasUserRole.evaluate( arguments, variableValues, supplementaryData ), is( "false" ) );
+        assertHasUserRole( "uid2", supplementaryData, "false" );
+    }
+
+    private void assertHasUserRole( String value, Map<String, List<String>> supplementaryData, String hasUserRole )
+    {
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( value );
+        when( visitor.getSupplementaryData() ).thenReturn( supplementaryData );
+        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.is( (hasUserRole) ) );
     }
 }

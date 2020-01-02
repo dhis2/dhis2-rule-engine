@@ -76,6 +76,12 @@ public final class RuleEngineContext
         }
 
         @Nonnull
+        public static Builder builder( )
+        {
+                return new Builder();
+        }
+
+        @Nonnull
         @Deprecated
         public static Builder builder( @Nonnull RuleExpressionEvaluator evaluator )
         {
@@ -84,9 +90,6 @@ public final class RuleEngineContext
 
         public static class Builder
         {
-
-                @Nonnull
-                private final RuleExpressionEvaluator evaluator;
 
                 @Nullable
                 private List<Rule> rules;
@@ -105,7 +108,10 @@ public final class RuleEngineContext
 
                 Builder( @Nonnull RuleExpressionEvaluator evaluator )
                 {
-                        this.evaluator = evaluator;
+                }
+
+                Builder()
+                {
                 }
 
                 @Nonnull

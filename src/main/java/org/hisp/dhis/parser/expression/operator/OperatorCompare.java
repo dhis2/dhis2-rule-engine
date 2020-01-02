@@ -33,7 +33,6 @@ import org.hisp.dhis.parser.expression.function.ComputeFunction;
 
 import java.util.List;
 
-import static org.hisp.dhis.parser.expression.ParserUtils.*;
 import static org.hisp.dhis.parser.expression.ParserUtils.castBoolean;
 import static org.hisp.dhis.parser.expression.ParserUtils.castDouble;
 import static org.hisp.dhis.parser.expression.ParserUtils.castString;

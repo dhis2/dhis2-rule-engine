@@ -29,31 +29,22 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.apache.commons.lang3.StringUtils;
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
 import org.hisp.dhis.parser.expression.ParserUtils;
-import org.hisp.dhis.rules.RuleVariableValue;
-
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 
 /**
  * @Author Zubair Asghar.
  */
 
-public class RuleFunctionLeft extends RuleFunction
+public class RuleFunctionLeft
+    extends SimpleNoSqlFunction
 {
-    public static final String D2_LEFT = "d2:left";
-
-    @Nonnull
     @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        if ( arguments.size() != 2 )
-        {
-            throw new IllegalArgumentException( "Two arguments were expected, " +
-                arguments.size() + " were supplied" );
-        }
-        Double doubleValue = ParserUtils.castDouble( arguments.get( 1 ) );
+        Double doubleValue = ParserUtils.castDouble( visitor.castStringVisit( ctx.expr(1) ) );
         int chars = doubleValue.intValue();
 
         if ( doubleValue.doubleValue() % 1 != 0 )
@@ -61,11 +52,6 @@ public class RuleFunctionLeft extends RuleFunction
             throw new IllegalArgumentException( "Number has to be an integer" );
         }
 
-        return wrap( StringUtils.substring( arguments.get( 0 ), 0, chars ) );
-    }
-
-    public static RuleFunctionLeft create()
-    {
-        return new RuleFunctionLeft();
+        return RuleFunction.wrap( StringUtils.substring( visitor.castStringVisit( ctx.expr(0) ), 0, chars ) );
     }
 }

@@ -28,61 +28,68 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.google.common.collect.Lists;
 import org.hamcrest.MatcherAssert;
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.*;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @Author Zubair Asghar.
  */
 
-@RunWith( JUnit4.class )
+@RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionZpvcTests
 {
-        @Rule
-        public ExpectedException thrown = ExpectedException.none();
+        @Mock
+        private ExpressionParser.ExprContext context;
 
-        private Map<String, RuleVariableValue> variableValues = new HashMap<>();
+        @Mock
+        private CommonExpressionVisitor visitor;
+
+        private RuleFunctionZpvc functionToTest = new RuleFunctionZpvc();
 
         @Test
         public void return_count_of_non_negative_values_in_arguments()
         {
-                RuleFunction zpvc = RuleFunctionZpvc.create();
+                ExpressionParser.ExprContext mockNegative = mock( ExpressionParser.ExprContext.class );
+                ExpressionParser.ExprContext mockZero = mock( ExpressionParser.ExprContext.class );
+                ExpressionParser.ExprContext mockPositive = mock( ExpressionParser.ExprContext.class );
 
-                List<String> arguments = Arrays.asList( "0", "1", "-1", "2", "-2", "3" );
+                when(context.expr()).thenReturn( Lists.newArrayList(mockNegative, mockZero, mockPositive) );
+                when( visitor.castStringVisit( mockNegative ) ).thenReturn( "-1" );
+                when( visitor.castStringVisit( mockZero ) ).thenReturn( "0" );
+                when( visitor.castStringVisit( mockPositive ) ).thenReturn( "2" );
 
-                MatcherAssert.assertThat( zpvc.evaluate( arguments, variableValues, null ), is( "4" ) );
+                MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), is( "2" ) );
         }
 
-        @Test
+        @Test(expected = IllegalArgumentException.class)
         public void throw_illegal_argument_exception_for_no_number_argument()
         {
-                thrown.expect( IllegalArgumentException.class );
+                ExpressionParser.ExprContext mockText = mock( ExpressionParser.ExprContext.class );
+                ExpressionParser.ExprContext mockNull = mock( ExpressionParser.ExprContext.class );
+                ExpressionParser.ExprContext mockNumber = mock( ExpressionParser.ExprContext.class );
 
-                List<String> arguments = Arrays.asList( "sxsx", null, "0", "1", "-1", "2", "-2", "3" );
+                when(context.expr()).thenReturn( Lists.newArrayList(mockText, mockNull, mockNumber) );
+                when( visitor.castStringVisit( mockText ) ).thenReturn( "sxsx" );
+                when( visitor.castStringVisit( mockNull ) ).thenReturn( null );
+                when( visitor.castStringVisit( mockNumber ) ).thenReturn( "2" );
 
-                RuleFunctionZpvc.create().evaluate( arguments, variableValues, null );
-        }
-
-        @Test
-        public void throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected()
-        {
-                thrown.expect( IllegalArgumentException.class );
-                RuleFunctionZpvc.create().evaluate( new ArrayList<>(), variableValues, null );
-        }
-
-        @Test
-        public void throw_null_pointer_exception_when_arguments_is_null()
-        {
-                thrown.expect( NullPointerException.class );
-                RuleFunctionZpvc.create().evaluate( null, variableValues, null );
+                functionToTest.evaluate( context, visitor );
         }
 }

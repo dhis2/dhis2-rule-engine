@@ -1,115 +1,85 @@
 package org.hisp.dhis.rules.functions;
 
 import org.hamcrest.MatcherAssert;
-import org.hisp.dhis.rules.RuleVariableValue;
-import org.junit.Rule;
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.when;
 
-@RunWith( JUnit4.class )
+@RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionWeeksBetweenTests
 {
 
-        @Rule
-        public ExpectedException thrown = ExpectedException.none();
+        @Mock
+        private ExpressionParser.ExprContext context;
 
-        private Map<String, RuleVariableValue> variableValues = new HashMap<>();
+        @Mock
+        private CommonExpressionVisitor visitor;
+
+        @Mock
+        private ExpressionParser.CompareDateContext mockedFirstExpr;
+
+        @Mock
+        private ExpressionParser.CompareDateContext mockedSecondExpr;
+
+        private RuleFunctionWeeksBetween functionToTest = new RuleFunctionWeeksBetween();
+
+        @Before
+        public void setUp() {
+                when(context.compareDate(0)).thenReturn( mockedFirstExpr );
+                when(context.compareDate(1)).thenReturn( mockedSecondExpr );
+        }
 
         @Test
         public void return_zero_if_some_date_is_not_present()
         {
-                RuleFunction weeksBetween = RuleFunctionWeeksBetween.create();
-
-                MatcherAssert.assertThat( weeksBetween.evaluate( asList( null, null ), variableValues, null ),
-                    is( ("0") ) );
-                MatcherAssert.assertThat( weeksBetween.evaluate( asList( null, "" ), variableValues, null ),
-                    is( ("0") ) );
-                MatcherAssert.assertThat( weeksBetween.evaluate( asList( "", null ), variableValues, null ),
-                    is( ("0") ) );
-                MatcherAssert.assertThat( weeksBetween.evaluate( asList( "", "" ), variableValues, null ), is( ("0") ) );
+                assertWeeksBetween( null, null,"0");
+                assertWeeksBetween( null, "" , "0");
+                assertWeeksBetween( "", null, "0");
+                assertWeeksBetween( "", "" , "0");
         }
 
         @Test
         public void return_difference_of_weeks_of_two_dates()
         {
-                RuleFunction weeksBetween = RuleFunctionWeeksBetween.create();
+                assertWeeksBetween( "2010-10-15", "2010-10-22", "1" );
+                assertWeeksBetween( "2010-09-30", "2010-10-15", "2" );
+                assertWeeksBetween( "2016-01-01", "2016-01-31", "4" );
+                assertWeeksBetween( "2010-12-31", "2011-01-01", "0" );
 
-                MatcherAssert.assertThat( weeksBetween.evaluate( asList( "2010-10-15", "2010-10-22" ), variableValues, null ),
-                    is( "1" ) );
-                MatcherAssert.assertThat( weeksBetween.evaluate( asList( "2010-09-30", "2010-10-15" ), variableValues, null ),
-                    is( "2" ) );
-                MatcherAssert.assertThat( weeksBetween.evaluate( asList( "2016-01-01", "2016-01-31" ), variableValues, null ),
-                    is( "4" ) );
-                MatcherAssert.assertThat( weeksBetween.evaluate( asList( "2010-12-31", "2011-01-01" ), variableValues, null ),
-                    is( "0" ) );
-
-                MatcherAssert.assertThat( weeksBetween.evaluate( asList( "2010-10-22", "2010-10-15" ), variableValues, null ),
-                    is( "-1" ) );
-                MatcherAssert.assertThat( weeksBetween.evaluate( asList( "2010-10-15", "2010-09-30" ), variableValues, null ),
-                    is( "-2" ) );
-                MatcherAssert.assertThat( weeksBetween.evaluate( asList( "2016-01-31", "2016-01-01" ), variableValues, null ),
-                    is( "-4" ) );
-                MatcherAssert.assertThat( weeksBetween.evaluate( asList( "2011-01-01", "2010-12-31" ), variableValues, null ),
-                    is( "0" ) );
+                assertWeeksBetween( "2010-10-22", "2010-10-15", "-1" );
+                assertWeeksBetween( "2010-10-15", "2010-09-30", "-2" );
+                assertWeeksBetween( "2016-01-31", "2016-01-01", "-4" );
+                assertWeeksBetween( "2011-01-01", "2010-12-31", "0" );
         }
 
-        @Test
+        @Test(expected = IllegalArgumentException.class)
         public void throw_illegal_argument_exception_if_first_date_is_invalid()
         {
-                thrown.expect( RuntimeException.class );
-
-                RuleFunction weeksBetween = RuleFunctionWeeksBetween.create();
-
-                weeksBetween.evaluate( asList( "bad date", "2010-01-01" ), variableValues, null );
+                assertWeeksBetween( "bad date", "2010-01-01", null );
         }
 
-        @Test
+        @Test(expected = IllegalArgumentException.class)
         public void throw_illegal_argument_exception_if_second_date_is_invalid()
         {
-                thrown.expect( RuntimeException.class );
-
-                RuleFunction weeksBetween = RuleFunctionWeeksBetween.create();
-
-                weeksBetween.evaluate( asList( "2010-01-01", "bad date" ), variableValues, null );
+                assertWeeksBetween( "2010-01-01", "bad date", null );
         }
 
-        @Test
+        @Test(expected = IllegalArgumentException.class)
         public void throw_illegal_argument_exception_if_first_and_second_date_is_invalid()
         {
-                thrown.expect( RuntimeException.class );
-                RuleFunctionWeeksBetween.create().evaluate( asList( "bad date", "bad date" ),
-                    new HashMap<>(), null );
+                assertWeeksBetween( "bad date", "bad date" , null );
         }
 
-        @Test
-        public void throw_illegal_argument_exception_when_argument_count_is_greater_than_expected()
-        {
-                thrown.expect( IllegalArgumentException.class );
-                RuleFunctionWeeksBetween.create().evaluate(
-                    Arrays.asList( "2016-01-01", "2016-01-01", "2016-01-01" ),
-                    variableValues, null );
-        }
-
-        @Test
-        public void throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected()
-        {
-                thrown.expect( IllegalArgumentException.class );
-                RuleFunctionWeeksBetween.create().evaluate( Arrays.asList( "2016-01-01" ), variableValues, null );
-        }
-
-        @Test
-        public void throw_null_pointer_exception_when_arguments_is_null()
-        {
-                thrown.expect( NullPointerException.class );
-                RuleFunctionWeeksBetween.create().evaluate( null, variableValues, null );
+        private void assertWeeksBetween( String startDate, String endDate, String weeksBetween ) {
+                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( startDate );
+                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( endDate );
+                MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), is( (weeksBetween) ) );
         }
 }

@@ -17,7 +17,7 @@ public class RuleEngineValueTypesTests
             throws Exception
         {
                 RuleAction ruleAction = RuleActionDisplayKeyValuePair
-                    .createForFeedback( "test_action_content", "#{test_variable}" );
+                    .createForFeedback( "test_action_content", "X{test_variable}" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
                 RuleVariable ruleVariable = RuleVariableCurrentEvent
                     .create( "test_variable", "test_data_element", RuleValueType.BOOLEAN );
@@ -38,7 +38,7 @@ public class RuleEngineValueTypesTests
             throws Exception
         {
                 RuleAction ruleAction = RuleActionDisplayKeyValuePair
-                    .createForFeedback( "test_action_content", "#{test_variable}" );
+                    .createForFeedback( "test_action_content", "X{test_variable}" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
                 RuleVariable ruleVariable = RuleVariableCurrentEvent
                     .create( "test_variable", "test_data_element", RuleValueType.NUMERIC );
@@ -59,7 +59,7 @@ public class RuleEngineValueTypesTests
             throws Exception
         {
                 RuleAction ruleAction = RuleActionDisplayKeyValuePair
-                    .createForFeedback( "test_action_content", "#{test_variable}" );
+                    .createForFeedback( "test_action_content", "X{test_variable}" );
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
                 RuleVariable ruleVariable = RuleVariableCurrentEvent
                     .create( "test_variable", "test_data_element", RuleValueType.TEXT );
@@ -78,7 +78,7 @@ public class RuleEngineValueTypesTests
         private RuleEngine getRuleEngine( Rule rule, List<RuleVariable> ruleVariables )
         {
                 return RuleEngineContext
-                        .builder( new ExpressionEvaluator() )
+                        .builder(  )
                         .rules( Arrays.asList( rule ) )
                         .ruleVariables( ruleVariables )
                         .calculatedValueMap( new HashMap<>( ) )

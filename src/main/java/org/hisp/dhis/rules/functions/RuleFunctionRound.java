@@ -28,37 +28,22 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+import static org.apache.commons.lang3.math.NumberUtils.toDouble;
 
 /**
  * @Author Zubair Asghar.
  */
 
-public class RuleFunctionRound extends RuleFunction
+public class RuleFunctionRound
+    extends SimpleNoSqlFunction
 {
-    static final String D2_ROUND = "d2:round";
-
-    @Nonnull
     @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        if ( arguments.size() != 1 )
-        {
-            throw new IllegalArgumentException( "One argument was expected, " +
-                    arguments.size() + " were supplied" );
-        }
-
-
-        return String.valueOf( Math.round( toDouble( arguments.get( 0 ), 0.0 ) ) );
-    }
-
-    @Nonnull
-    public static RuleFunctionRound create()
-    {
-        return new RuleFunctionRound();
+        return String.valueOf( Math.round( toDouble( visitor.castStringVisit( ctx.expr( 0 ) ), 0.0 ) ) );
     }
 }

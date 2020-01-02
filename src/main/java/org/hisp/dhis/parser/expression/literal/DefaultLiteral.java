@@ -45,7 +45,7 @@ public class DefaultLiteral
     @Override
     public Object getNumericLiteral( ExpressionParser.NumericLiteralContext ctx )
     {
-        return Double.valueOf( ctx.getText() ).toString();
+        return Double.valueOf( ctx.getText() );
     }
 
     @Override
@@ -57,6 +57,6 @@ public class DefaultLiteral
     @Override
     public Object getBooleanLiteral( BooleanLiteralContext ctx )
     {
-        return Boolean.valueOf( ctx.getText() ).toString();
+        return Boolean.valueOf( ctx.getText() );
     }
 }

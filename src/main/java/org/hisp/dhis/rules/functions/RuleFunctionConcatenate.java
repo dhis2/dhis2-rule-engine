@@ -28,42 +28,31 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
-
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
 
 /**
  * @Author Zubair Asghar.
  */
 public class RuleFunctionConcatenate
-    extends RuleFunction
+    extends SimpleNoSqlFunction
 {
-        public static final String D2_CONCATENATE = "d2:concatenate";
-
-        @Nonnull
         @Override
-        public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
-            Map<String, List<String>> supplementaryData )
+        public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
         {
                 StringBuilder builder = new StringBuilder();
 
-                for( String string : arguments )
+                for( ExpressionParser.ExprContext string : ctx.expr() )
                 {
-                        if( string != null )
+                        String visitedString = visitor.castStringVisit( string );
+                        if( visitedString != null )
                         {
-                                builder.append(string);
+                                builder.append( visitedString );
                         }
                 }
 
-//                arguments.stream().filter( Objects::nonNull ).collect( Collectors.toList() ).forEach( builder::append );
-
-                return wrap( builder.toString() );
-        }
-
-        public static RuleFunctionConcatenate create()
-        {
-                return new RuleFunctionConcatenate();
+                return builder.toString();
         }
 }

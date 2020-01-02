@@ -29,21 +29,19 @@ package org.hisp.dhis.parser.expression;
  */
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.hisp.dhis.parser.expression.operator.*;
 
 import java.util.Date;
 
 import static org.apache.commons.lang3.ObjectUtils.anyNotNull;
-import static org.apache.commons.lang3.time.DateUtils.parseDate;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.*;
 
 /**
  * Utilities for ANTLR parsing
  *
  * @author Jim Grace
- * @author Enrico Colasante
  */
 public class ParserUtils
 {
@@ -80,15 +78,64 @@ public class ParserUtils
 
         .build();
 
-    public final static ExprFunctionMethod FUNCTION_EVALUATE = new ExprFunctionMethod()
+    public final static ExprFunctionMethod FUNCTION_GET_IDS = ExprFunction::getItemId;
+    public final static ExprFunctionMethod FUNCTION_EVALUATE = ExprFunction::evaluate;
+    public final static ExprFunctionMethod FUNCTION_EVALUATE_ALL_PATHS = ExprFunction::evaluateAllPaths;
+    public final static ExprFunctionMethod FUNCTION_GET_SQL = ExprFunction::getSql;
+
+    /**
+     * Does an item of the form #{...} have the syntax of a
+     * data element operand (as opposed to a data element)?
+     *
+     * @param ctx the item context
+     * @return true if data element operand syntax
+     */
+    public static boolean isDataElementOperandSyntax( ItemContext ctx )
     {
-        @Override
-        public Object apply( ExprFunction exprFunction, ExprContext ctx, CommonExpressionVisitor visitor )
+        return anyNotNull( ctx.uid1, ctx.uid2 );
+    }
+
+    /**
+     * Assume that an item of the form #{...} has a syntax that could be used
+     * in a program indicator expression for #{programStageUid.dataElementUid}
+     *
+     * @param ctx the item context
+     */
+    public static void assumeStageElementSyntax( ItemContext ctx )
+    {
+        if ( ctx.uid1 == null || ctx.uid2 != null || ctx.wild2 != null )
         {
-            return exprFunction
-                .evaluate( ctx, visitor );
+            throw new ParserExceptionWithoutContext( "Invalid Program Stage / DataElement syntax: " + ctx.getText() );
         }
-    };
+    }
+
+    /**
+     * Assume that an item of the form A{...} has a syntax that could be used
+     * in an expression for A{progamUid.attributeUid}
+     *
+     * @param ctx the item context
+     */
+    public static void assumeExpressionProgramAttribute( ItemContext ctx )
+    {
+        if ( ctx.uid1 == null )
+        {
+            throw new ParserExceptionWithoutContext( "Program attribute must have two UIDs: " + ctx.getText() );
+        }
+    }
+
+    /**
+     * Assume that an item of the form A{...} has a syntax that could be used
+     * be used in an program expression for A{attributeUid}
+     *
+     * @param ctx the item context
+     */
+    public static void assumeProgramExpressionProgramAttribute( ItemContext ctx )
+    {
+        if ( ctx.uid1 != null )
+        {
+            throw new ParserExceptionWithoutContext( "Program attribute must have one UID: " + ctx.getText() );
+        }
+    }
 
     /**
      * Trim quotes from the first and last characters of a string.
@@ -203,6 +250,11 @@ public class ParserUtils
         {
             if ( clazz == String.class )
             {
+                Double doubleNumber = (Double) object;
+                if ( doubleNumber == Math.floor(doubleNumber) )
+                {
+                    return Long.toString( Double.valueOf( doubleNumber ).longValue() );
+                }
                 return object.toString();
             }
             else if ( clazz != Double.class )
@@ -217,7 +269,7 @@ public class ParserUtils
             {
                 try
                 {
-                    return parseDate( (String) object );
+                    return DateUtils.parseDate( (String) object );
                 }
                 catch ( Exception e )
                 {
@@ -239,10 +291,17 @@ public class ParserUtils
             {
                 try
                 {
-                    if (NumberUtils.isCreatable( (String ) object ) ) {
-                        return Double.toString( Double.parseDouble( (String) object ));
+                    if ( NumberUtils.isCreatable( (String) object ) )
+                    {
+                        double doubleNumber = Double.parseDouble( (String) object );
+                        if ( doubleNumber == Math.floor(doubleNumber) )
+                        {
+                            return Long.toString( Double.valueOf( doubleNumber ).longValue() );
+                        }
+                        return Double.toString( doubleNumber );
                     }
-                    else {
+                    else
+                    {
                         return object;
                     }
                 }

@@ -6,12 +6,12 @@ grammar Expression;
 // Parser rules
 // -----------------------------------------------------------------------------
 
-expression  // The org.hisp.dhis.parser.expression must last until the end of the string
+expression  // The expression must last until the end of the string
     :   expr EOF
     ;
 
 expr
-    // Allow whitespace on either side of any org.hisp.dhis.parser.expression
+    // Allow whitespace on either side of any expression
 
     :   WS+ expr
     |   expr WS+
@@ -24,7 +24,7 @@ expr
     |   expr fun=('*' | '/' | '%') expr
     |   expr fun=('+' | '-') expr
     |   expr fun=('<' | '>' | '<=' | '>=') expr
-    |   expr  fun=('==' | '!=') expr
+    |   expr fun=('==' | '!=') expr
     |   expr fun=('&&' | 'and') expr
     |   expr fun=('||' | 'or') expr
 
@@ -33,8 +33,8 @@ expr
     |   fun='firstNonNull(' WS* itemNumStringLiteral WS* (',' WS* itemNumStringLiteral WS* )* ')'
     |   fun='greatest(' expr (',' expr )* ')'
     |   fun='if(' expr ',' expr ',' expr ')'
-//    |   fun='isNotNull(' WS* item WS* ')'
-//    |   fun='isNull(' WS* item WS* ')'
+    |   fun='isNotNull(' WS* item WS* ')'
+    |   fun='isNull(' WS* item WS* ')'
     |   fun='least(' expr (',' expr )* ')'
 
     //  Aggergation functions (alphabetical)
@@ -53,68 +53,103 @@ expr
 
     //  Program variables (alphabtical)
 
-//    |   'V{' fun='analytics_period_end' '}'
-//    |   'V{' fun='analytics_period_start' '}'
-//    |   'V{' fun='creation_date' '}'
-//    |   'V{' fun='current_date' '}'
-//    |   'V{' fun='due_date' '}'
-//    |   'V{' fun='enrollment_count' '}'
-//    |   'V{' fun='enrollment_date' '}'
-//    |   'V{' fun='enrollment_status' '}'
-//    |   'V{' fun='event_count' '}'
-//    |   'V{' fun='event_date' '}'
-//    |   'V{' fun='execution_date' '}'
-//    |   'V{' fun='incident_date' '}'
-//    |   'V{' fun='org_unit_count' '}'
-//    |   'V{' fun='program_stage_id' '}'
-//    |   'V{' fun='program_stage_name' '}'
-//    |   'V{' fun='sync_date' '}'
-//    |   'V{' fun='tei_count' '}'
-//    |   'V{' fun='value_count' '}'
-//    |   'V{' fun='zero_pos_value_count' '}'
+    |   'V{' fun='analytics_period_end' '}'
+    |   'V{' fun='analytics_period_start' '}'
+    |   'V{' fun='creation_date' '}'
+    |   'V{' fun='current_date' '}'
+    |   'V{' fun='due_date' '}'
+    |   'V{' fun='enrollment_count' '}'
+    |   'V{' fun='enrollment_date' '}'
+    |   'V{' fun='enrollment_id' '}'
+    |   'V{' fun='enrollment_status' '}'
+    |   'V{' fun='environment' '}'
+    |   'V{' fun='event_count' '}'
+    |   'V{' fun='event_date' '}'
+    |   'V{' fun='event_id' '}'
+    |   'V{' fun='event_status' '}'
+    |   'V{' fun='execution_date' '}'
+    |   'V{' fun='incident_date' '}'
+    |   'V{' fun='org_unit_count' '}'
+    |   'V{' fun='org_unit' '}'
+    |   'V{' fun='orgunit_code' '}'
+    |   'V{' fun='program_name' '}'
+    |   'V{' fun='program_stage_id' '}'
+    |   'V{' fun='program_stage_name' '}'
+    |   'V{' fun='sync_date' '}'
+    |   'V{' fun='tei_count' '}'
+    |   'V{' fun='value_count' '}'
+    |   'V{' fun='zero_pos_value_count' '}'
 
     //  Program functions (alphabetical)
-    |   d2Function
+    |   fun='d2:ceil(' expr ')'
+    |   fun='d2:floor(' expr ')'
+    |   fun='d2:addDays(' expr ',' expr ')'
+    |   fun='d2:concatenate(' expr ',' expr * ')'
+    |   fun='d2:countIfZeroPos(' expr ')'
+    |   fun='d2:substring(' expr ',' expr ',' expr ')'
+    |   fun='d2:length(' expr ')'
+    |   fun='d2:left(' expr ',' expr ')'
+    |   fun='d2:right(' expr ',' expr ')'
+    |   fun='d2:modulus(' expr ',' expr ')'
+    |   fun='d2:round(' expr ')'
+    |   fun='d2:condition(' WS* stringLiteral WS* ',' expr ',' expr ')'
+    |   fun='d2:zScoreHFA(' expr ',' expr ',' expr ')'
+    |   fun='d2:zScoreWFA(' expr ',' expr ',' expr ')'
+    |   fun='d2:zScoreWFH(' expr ',' expr ',' expr ')'
+    |   fun='d2:split(' expr ',' expr ',' expr ')'
+    |   fun='d2:count(' ( WS* stageDataElement WS* | expr ) ')'
+    |   fun='d2:countIfCondition(' WS* stageDataElement ',' WS* stringLiteral WS* ')'
+    |   fun='d2:countIfValue(' ( WS* stageDataElement WS* | expr ) ',' ( WS* numStringLiteral WS* | expr ) ')'
+    |   fun='d2:daysBetween(' compareDate ',' compareDate ')'
+    |   fun='d2:hasValue(' ( WS* item WS* | expr ) ')'
+    |   fun='d2:maxValue(' ( item | expr | compareDate ) ')'
+    |   fun='d2:minutesBetween(' compareDate ',' compareDate ')'
+    |   fun='d2:minValue(' ( item | expr | compareDate ) ')'
+    |   fun='d2:monthsBetween(' compareDate ',' compareDate ')'
+    |   fun='d2:oizp(' expr ')'
+    |   fun='d2:relationshipCount(' WS* QUOTED_UID? WS* ')'
+    |   fun='d2:weeksBetween(' compareDate ',' compareDate ')'
+    |   fun='d2:yearsBetween(' compareDate ',' compareDate ')'
+    |   fun='d2:zing(' expr ')'
+    |   fun='d2:zpvc(' ( WS* item WS* | expr) (',' ( WS* item WS* | expr ) )* ')'
+    |   fun='d2:validatePattern(' expr ',' expr ')'
+    |   fun='d2:hasUserRole(' expr ')'
+    |   fun='d2:inOrgUnitGroup(' expr ')'
+    |   fun='d2:lastEventDate(' expr ')'
 
     //  Other
 
-//    |   item
-    |   variable
+    |   item
+    |   programRuleVariable
+    |   constantValue
     |   numericLiteral
     |   stringLiteral
     |   booleanLiteral
     |   empty
     ;
 
-d2Function
-    : id=ID arguments? ')'
+item
+    :   it='#{' uid0=UID ('.*')? '}'
+    |   it='#{' uid0=UID '.' uid1=UID '}'
+    |   it='#{' uid0=UID '.' uid1=UID wild2='.*' '}'
+    |   it='#{' uid0=UID '.*.' uid2=UID '}'
+    |   it='#{' uid0=UID '.' uid1=UID '.' uid2=UID '}'
+    |   it='A{' uid0=UID '.' uid1=UID '}' // Program attribute in expressions (indicator, etc.)
+    |   it='A{' uid0=UID '}' // Program attribute in program indicator expressions
+    |   it='C{' uid0=UID '}'
+    |   it='D{' uid0=UID '.' uid1=UID '}'
+    |   it='I{' uid0=UID '}'
+    |   it='N{' uid0=UID '}' // Indicator
+    |   it='OUG{' uid0=UID '}'
+    |   it='R{' uid0=UID '.' REPORTING_RATE_TYPE '}'
+    |   it='[days]'
     ;
 
-arguments
-    : expr ( ',' expr )*
-    ;
+programRuleVariable
+    : var='X{' string=variableName '}';
 
-//item
-//    :   it='#{' uid0=UID ('.*')? '}'
-//    |   it='#{' uid0=UID '.' uid1=UID '}'
-//    |   it='#{' uid0=UID '.' uid1=UID wild2='.*' '}'
-//    |   it='#{' uid0=UID '.*.' uid2=UID '}'
-//    |   it='#{' uid0=UID '.' uid1=UID '.' uid2=UID '}'
-//    |   it='A{' uid0=UID '.' uid1=UID '}' // Program attribute in expressions (indicator, etc.)
-//    |   it='A{' uid0=UID '}' // Program attribute in program indicator expressions
-//    |   it='C{' uid0=UID '}'
-//    |   it='D{' uid0=UID '.' uid1=UID '}'
-//    |   it='I{' uid0=UID '}'
-//    |   it='N{' uid0=UID '}' // Indicator
-//    |   it='OUG{' uid0=UID '}'
-//    |   it='R{' uid0=UID '.' REPORTING_RATE_TYPE '}'
-//    |   it='[days]'
-//    ;
-
-variable
-    : var='V{' string=variableName '}'
-    | var='#{' string=variableName '}'
-    | var='C{' string=variableName '}';
+constantValue
+    : var='C{' string=variableName '}';
 
 stageDataElement
     :   '#{' uid0=UID '.' uid1=UID '}'
@@ -130,8 +165,8 @@ compareDate
     ;
 
 itemNumStringLiteral
-    :   numStringLiteral
-//    |   item
+    :   item
+    |   numStringLiteral
     ;
 
 numStringLiteral
@@ -211,46 +246,72 @@ VARIANCE        : 'variance(';
 
 // Program variables (alphabetical)
 
-//V_ANALYTICS_PERIOD_END  : 'analytics_period_end';
-//V_ANALYTICS_PERIOD_START: 'analytics_period_start';
-//V_CREATION_DATE         : 'creation_date';
-//V_CURRENT_DATE          : 'current_date';
-//V_DUE_DATE              : 'due_date';
-//V_ENROLLMENT_COUNT      : 'enrollment_count';
-//V_ENROLLMENT_DATE       : 'enrollment_date';
-//V_ENROLLMENT_STATUS     : 'enrollment_status';
-//V_EVENT_COUNT           : 'event_count';
-//V_EVENT_DATE            : 'event_date';
-//V_EXECUTION_DATE        : 'execution_date';
-//V_INCIDENT_DATE         : 'incident_date';
-//V_ORG_UNIT_COUNT        : 'org_unit_count';
-//V_PROGRAM_STAGE_ID      : 'program_stage_id';
-//V_PROGRAM_STAGE_NAME    : 'program_stage_name';
-//V_SYNC_DATE             : 'sync_date';
-//V_TEI_COUNT             : 'tei_count';
-//V_VALUE_COUNT           : 'value_count';
-//V_ZERO_POS_VALUE_COUNT  : 'zero_pos_value_count';
+V_ANALYTICS_PERIOD_END  : 'analytics_period_end';
+V_ANALYTICS_PERIOD_START: 'analytics_period_start';
+V_CREATION_DATE         : 'creation_date';
+V_CURRENT_DATE          : 'current_date';
+V_DUE_DATE              : 'due_date';
+V_ENROLLMENT_COUNT      : 'enrollment_count';
+V_ENROLLMENT_DATE       : 'enrollment_date';
+V_ENROLLMENT_ID         : 'enrollment_id';
+V_ENROLLMENT_STATUS     : 'enrollment_status';
+V_ENVIRONMENT           : 'environment';
+V_EVENT_COUNT           : 'event_count';
+V_EVENT_DATE            : 'event_date';
+V_EVENT_ID              : 'event_id';
+V_EVENT_STATUS          : 'event_status';
+V_EXECUTION_DATE        : 'execution_date';
+V_INCIDENT_DATE         : 'incident_date';
+V_ORG_UNIT_COUNT        : 'org_unit_count';
+V_OU                    : 'org_unit';
+V_OU_CODE               : 'orgunit_code';
+V_PROGRAM_NAME          : 'program_name';
+V_PROGRAM_STAGE_ID      : 'program_stage_id';
+V_PROGRAM_STAGE_NAME    : 'program_stage_name';
+V_SYNC_DATE             : 'sync_date';
+V_TEI_COUNT             : 'tei_count';
+V_VALUE_COUNT           : 'value_count';
+V_ZERO_POS_VALUE_COUNT  : 'zero_pos_value_count';
 
 // Program functions (alphabetical)
 
-ID                      : 'd2:' [a-zA-Z0-9_]* '(';
-//D2_CONDITION            : 'd2:condition(';
-//D2_COUNT                : 'd2:count(';
-//D2_COUNT_IF_CONDITION   : 'd2:countIfCondition(';
-//D2_COUNT_IF_VALUE       : 'd2:countIfValue(';
-//D2_DAYS_BETWEEN         : 'd2:daysBetween(';
-//D2_HAS_VALUE            : 'd2:hasValue(';
-//D2_MAX_VALUE            : 'd2:maxValue(';
-//D2_MINUTES_BETWEEN      : 'd2:minutesBetween(';
-//D2_MIN_VALUE            : 'd2:minValue(';
-//D2_MONTHS_BETWEEN       : 'd2:monthsBetween(';
-//D2_OIZP                 : 'd2:oizp(';
-//D2_RELATIONSHIP_COUNT   : 'd2:relationshipCount(';
-//D2_WEEKS_BETWEEN        : 'd2:weeksBetween(';
-//D2_YEARS_BETWEEN        : 'd2:yearsBetween(';
-//D2_ZING                 : 'd2:zing(';
-//D2_ZPVC                 : 'd2:zpvc(';
-//D2_VALIDATE_PATTERN     : 'd2:validatePattern(';
+D2_ADD_DAYS             : 'd2:addDays(';
+D2_CEIL                 : 'd2:ceil(';
+D2_CONCATENATE          : 'd2:concatenate(';
+D2_CONDITION            : 'd2:condition(';
+D2_COUNT                : 'd2:count(';
+D2_COUNT_IF_CONDITION   : 'd2:countIfCondition(';
+D2_COUNT_IF_VALUE       : 'd2:countIfValue(';
+D2_COUNT_IF_ZERO_POS    : 'd2:countIfZeroPos(';
+D2_DAYS_BETWEEN         : 'd2:daysBetween(';
+D2_FLOOR                : 'd2:floor(';
+D2_HAS_USER_ROLE        : 'd2:hasUserRole(';
+D2_HAS_VALUE            : 'd2:hasValue(';
+D2_IN_ORG_UNIT_GROUP    : 'd2:inOrgUnitGroup(';
+D2_LAST_EVENT_DATE      : 'd2:lastEventDate(';
+D2_LEFT                 : 'd2:left(';
+D2_LENGTH               : 'd2:length(';
+D2_MAX_VALUE            : 'd2:maxValue(';
+D2_MINUTES_BETWEEN      : 'd2:minutesBetween(';
+D2_MIN_VALUE            : 'd2:minValue(';
+D2_MODULUS              : 'd2:modulus(';
+D2_MONTHS_BETWEEN       : 'd2:monthsBetween(';
+D2_OIZP                 : 'd2:oizp(';
+D2_RELATIONSHIP_COUNT   : 'd2:relationshipCount(';
+D2_RIGHT                : 'd2:right(';
+D2_ROUND                : 'd2:round(';
+D2_SPLIT                : 'd2:split(';
+D2_SUBSTRING            : 'd2:substring(';
+D2_VALIDATE_PATTERN     : 'd2:validatePattern(';
+D2_WEEKS_BETWEEN        : 'd2:weeksBetween(';
+D2_YEARS_BETWEEN        : 'd2:yearsBetween(';
+D2_ZING                 : 'd2:zing(';
+D2_ZPVC                 : 'd2:zpvc(';
+D2_ZSCOREHFA            : 'd2:zScoreHFA(';
+D2_ZSCOREWFA            : 'd2:zScoreWFA(';
+D2_ZSCOREWFH            : 'd2:zScoreWFH(';
+
+
 
 // Items (alphabetical by symbol)
 
@@ -262,14 +323,14 @@ I_BRACE     : 'I{';
 N_BRACE     : 'N{';
 OUG_BRACE   : 'OUG{';
 R_BRACE     : 'R{';
-V_BRACE     : 'V{';
+X_BRACE     : 'X{';
 DAYS        : '[days]';
 
 // -----------------------------------------------------------------------------
 // Lexer rules
 //
-// Some org.hisp.dhis.parser.expression characters are grouped into lexer tokens before parsing.
-// If a sequence of characters from the org.hisp.dhis.parser.expression matches more than one
+// Some expression characters are grouped into lexer tokens before parsing.
+// If a sequence of characters from the expression matches more than one
 // lexer rule, the first lexer rule is used.
 // -----------------------------------------------------------------------------
 

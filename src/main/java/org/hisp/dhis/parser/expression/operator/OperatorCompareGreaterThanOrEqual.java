@@ -28,7 +28,11 @@ package org.hisp.dhis.parser.expression.operator;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+
 import java.util.List;
+
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
  * Compare operator: greater than or equal
@@ -42,5 +46,12 @@ public class OperatorCompareGreaterThanOrEqual
     public Object compute( List<Object> values )
     {
         return compare( values ) >= 0;
+    }
+
+    @Override
+    public Object getSql( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return visitor.castStringVisit( ctx.expr( 0 ) )
+            + " >= " + visitor.castStringVisit( ctx.expr( 1 ) );
     }
 }

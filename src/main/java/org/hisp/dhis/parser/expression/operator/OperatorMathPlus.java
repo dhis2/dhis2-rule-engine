@@ -28,11 +28,13 @@ package org.hisp.dhis.parser.expression.operator;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.parser.expression.function.ComputeFunction;
 
 import java.util.List;
 
 import static org.hisp.dhis.parser.expression.ParserUtils.castDouble;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
  * Expression math operator: Plus
@@ -54,5 +56,19 @@ public class OperatorMathPlus
 
         return castDouble( values.get( 0 ) )
             + castDouble( values.get( 1 ) );
+    }
+
+    @Override
+    public Object getSql( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        if ( ctx.expr().size() == 1 ) // Unary plus operator
+        {
+            return "+ " + visitor.castStringVisit( ctx.expr( 0 ) );
+        }
+        else // Addition operator
+        {
+            return visitor.castStringVisit( ctx.expr( 0 ) ) +
+                " + " + visitor.castStringVisit( ctx.expr( 1 ) );
+        }
     }
 }

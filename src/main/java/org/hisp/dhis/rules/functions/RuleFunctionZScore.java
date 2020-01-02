@@ -30,7 +30,9 @@ package org.hisp.dhis.rules.functions;
 
 import com.google.common.collect.Sets;
 
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -39,42 +41,38 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
-
-import javax.annotation.Nonnull;
 
 /**
  * @Author Zubair Asghar.
  */
 public abstract class RuleFunctionZScore
-    extends
-    RuleFunction
+    extends SimpleNoSqlFunction
 {
     private static final Set<String> GENDER_CODES = Sets.newHashSet( "male", "MALE", "Male", "ma", "m", "M", "0",
         "false" );
 
-    @Nonnull
     @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
-        Map<String, List<String>> supplementaryData )
+    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        if ( arguments.size() < 3 )
-        {
-            throw new IllegalArgumentException( "At least three arguments required but found: " + arguments.size() );
-        }
 
         // 1 = female, 0 = male
         float parameter;
         float weight;
-        byte gender = GENDER_CODES.contains( arguments.get( 2 ) ) ? (byte) 0 : (byte) 1;
+        String genderParameter = visitor.castStringVisit( ctx.expr( 2 ) );
+
+        if (genderParameter == null) {
+            throw new IllegalArgumentException( "Gender cannot be null" );
+        }
+
+        byte gender = GENDER_CODES.contains( genderParameter ) ? (byte) 0 : (byte) 1;
 
         String zScore;
 
         try
         {
-            parameter = Float.parseFloat( arguments.get( 0 ) );
-            weight = Float.parseFloat( arguments.get( 1 ) );
+            parameter = Float.parseFloat( visitor.castStringVisit( ctx.expr( 0 ) ) );
+            weight = Float.parseFloat( visitor.castStringVisit( ctx.expr( 1 ) ) );
         }
         catch ( NumberFormatException ex )
         {

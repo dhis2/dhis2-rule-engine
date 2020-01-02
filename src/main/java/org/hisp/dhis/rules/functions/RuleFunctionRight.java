@@ -29,30 +29,23 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.apache.commons.lang3.StringUtils;
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
 import org.hisp.dhis.parser.expression.ParserUtils;
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+import static org.hisp.dhis.rules.functions.RuleFunction.wrap;
 
 /**
  * @Author Zubair Asghar.
  */
-public class RuleFunctionRight extends RuleFunction
+public class RuleFunctionRight
+    extends SimpleNoSqlFunction
 {
-    public static final String D2_RIGHT = "d2:right";
-
-    @Nonnull
     @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        if ( arguments.size() != 2 )
-        {
-            throw new IllegalArgumentException( "Two arguments were expected, " +
-                arguments.size() + " were supplied" );
-        }
-        Double doubleValue = ParserUtils.castDouble( arguments.get( 1 ) );
+        Double doubleValue = ParserUtils.castDouble( visitor.castStringVisit( ctx.expr(1) ) );
         int chars = doubleValue.intValue();
 
         if ( doubleValue.doubleValue() % 1 != 0 )
@@ -60,11 +53,7 @@ public class RuleFunctionRight extends RuleFunction
             throw new IllegalArgumentException( "Number has to be an integer" );
         }
 
-        return wrap( StringUtils.reverse( StringUtils.substring( StringUtils.reverse( arguments.get( 0 ) ), 0, chars ) ) );
-    }
-
-    public static RuleFunctionRight create()
-    {
-        return new RuleFunctionRight();
+        return wrap( StringUtils.reverse(
+            StringUtils.substring( StringUtils.reverse( visitor.castStringVisit( ctx.expr(0) ) ), 0, chars ) ) );
     }
 }

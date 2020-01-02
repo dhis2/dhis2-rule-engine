@@ -1,7 +1,7 @@
-package org.hisp.dhis.rules;
+package org.hisp.dhis.parser.expression.function;
 
 /*
- * Copyright (c) 2004-2017, University of Oslo
+ * Copyright (c) 2004-2019, University of Oslo
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,25 +28,22 @@ package org.hisp.dhis.rules;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.apache.commons.jexl2.Expression;
-import org.apache.commons.jexl2.JexlEngine;
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
 
-import javax.annotation.Nonnull;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
- * Created by zubair@dhis2.org on 24.11.17.
+ * Simple, scalar function for which evaluateAllPaths returns the same
+ * as evalutate.
+ *
+ * @author Jim Grace
  */
-public class ExpressionEvaluator
-    implements RuleExpressionEvaluator
+public abstract class SimpleScalarFunction
+    extends ScalarFunction
 {
-        private static final JexlEngine JEXL = new JexlEngine();
-
-        @Nonnull
-        @Override
-        public String evaluate( @Nonnull String expression )
-        {
-                Expression exp = JEXL.createExpression( expression );
-
-                return exp.evaluate( null ).toString();
-        }
+    @Override
+    public final Object evaluateAllPaths( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return evaluate( ctx, visitor );
+    }
 }

@@ -29,55 +29,42 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.apache.commons.lang3.StringUtils;
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
 import org.hisp.dhis.parser.expression.ParserUtils;
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author Zubair Asghar.
  *
  * Split the text by delimiter, and keep the nth element(0 is the first).
  */
-public class RuleFunctionSplit extends RuleFunction
+public class RuleFunctionSplit
+    extends SimpleNoSqlFunction
 {
-    public static final String D2_SPLIT = "d2:split";
-
-    @Nonnull
     @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        if ( arguments.size() != 3 )
-        {
-            throw new IllegalArgumentException( "Three argument were expected, " + arguments.size() + " were supplied" );
-        }
-
-        String input = arguments.get( 0 );
-        String delimiter = arguments.get( 1 );
+        String input = visitor.castStringVisit( ctx.expr( 0 ) );
+        String delimiter = visitor.castStringVisit( ctx.expr( 1 ) );
 
         if ( input == null || delimiter == null )
         {
             return "";
         }
 
-        int index = ParserUtils.castDouble( arguments.get( 2 ) ).intValue();
+        int index = ParserUtils.castDouble( visitor.castStringVisit( ctx.expr( 2 ) ) ).intValue();
 
         List<String> tokens = Arrays.asList( StringUtils.split( input, delimiter ) );
 
         if ( tokens.size() > index && index >= 0 )
         {
-            return wrap( tokens.get( index ) );
+            return RuleFunction.wrap( tokens.get( index ) );
         }
 
         return "";
-    }
-
-    @Nonnull
-    public static RuleFunctionSplit create()
-    {
-        return new RuleFunctionSplit();
     }
 }

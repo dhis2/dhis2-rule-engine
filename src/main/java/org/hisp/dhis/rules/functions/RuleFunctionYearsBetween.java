@@ -28,44 +28,22 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.models.TimeInterval;
 import org.joda.time.Years;
-
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @Author Zubair Asghar.
  */
 public class RuleFunctionYearsBetween
-    extends
-    RuleFunction
+    extends SimpleNoSqlFunction
+
 {
-    public static final String D2_YEARS_BETWEEN = "d2:yearsBetween";
-
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
-        Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() != 2 )
-        {
-            throw new IllegalArgumentException( "Two arguments were expected, " + arguments.size() + " were supplied" );
-        }
-
-        return String.valueOf( yearsBetween( arguments.get( 0 ), arguments.get( 1 ) ) );
-    }
-
-    public static RuleFunctionYearsBetween create()
-    {
-        return new RuleFunctionYearsBetween();
-    }
-
     private Integer yearsBetween( String start, String end )
     {
-        TimeInterval interval = getTimeInterval( start, end );
+        TimeInterval interval = RuleFunction.getTimeInterval( start, end );
 
         if ( interval.isEmpty() )
         {
@@ -73,5 +51,11 @@ public class RuleFunctionYearsBetween
         }
 
         return Years.yearsBetween( interval.getStartDate(), interval.getEndDate() ).getYears();
+    }
+
+    @Override
+    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return String.valueOf( yearsBetween( visitor.castStringVisit( ctx.compareDate( 0 ) ), visitor.castStringVisit( ctx.compareDate( 1 ) ) ) );
     }
 }

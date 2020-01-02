@@ -28,13 +28,19 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,63 +49,55 @@ import java.util.Map;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.Mockito.when;
 
 /**
  * @Author Zubair Asghar.
  */
 
-@RunWith( JUnit4.class )
+@RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionOizpTests
 {
-        @Rule
-        public ExpectedException thrown = ExpectedException.none();
+        @Mock
+        private ExpressionParser.ExprContext context;
 
-        private Map<String, RuleVariableValue> variableValues = new HashMap<>();
+        @Mock
+        private CommonExpressionVisitor visitor;
+
+        @Mock
+        private ExpressionParser.ExprContext mockedFirstExpr;
+
+        private RuleFunctionOizp functionToTest = new RuleFunctionOizp();
+
+        @Before
+        public void setUp() {
+                when(context.expr(0)).thenReturn( mockedFirstExpr );
+        }
 
         @Test
         public void return_one_for_non_negative_argument()
         {
-                RuleFunction oizp = RuleFunctionOizp.create();
-
-                MatcherAssert.assertThat( oizp.evaluate( asList( "0" ), variableValues, null ), is( "1" ) );
-                MatcherAssert.assertThat( oizp.evaluate( asList( "1" ), variableValues, null ), is( "1" ) );
-                MatcherAssert.assertThat( oizp.evaluate( asList( "10" ), variableValues, null ), is( "1" ) );
+                assertOizp( "0","1" );
+                assertOizp( "1","1" );
+                assertOizp( "10","1" );
         }
 
         @Test
         public void return_zero_for_negative_argument()
         {
-                RuleFunction oizp = RuleFunctionOizp.create();
-
-                MatcherAssert.assertThat( oizp.evaluate( asList( "-1" ), variableValues, null ), is( "0" ) );
-                MatcherAssert.assertThat( oizp.evaluate( asList( "-10" ), variableValues, null ), is( "0" ) );
+                assertOizp( "-1","0" );
+                assertOizp( "-10","0" );
         }
 
-        @Test
+        @Test(expected = IllegalArgumentException.class)
         public void throw_illegal_argument_exception_for_non_number_argument()
         {
-                thrown.expect( IllegalArgumentException.class );
-                RuleFunctionOizp.create().evaluate( asList( "non_number" ), variableValues, null );
+                assertOizp( "non_number", null );
         }
 
-        @Test
-        public void throw_illegal_argument_exception_when_argument_count_is_greater_than_expected()
+        private void assertOizp( String value, String monthsBetween )
         {
-                thrown.expect( IllegalArgumentException.class );
-                RuleFunctionOizp.create().evaluate( asList( "5.9", "6.8" ), variableValues, null );
-        }
-
-        @Test
-        public void throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected()
-        {
-                thrown.expect( IllegalArgumentException.class );
-                RuleFunctionOizp.create().evaluate( new ArrayList<>(), variableValues, null );
-        }
-
-        @Test
-        public void throw_null_pointer_exception_when_arguments_is_null()
-        {
-                thrown.expect( NullPointerException.class );
-                RuleFunctionOizp.create().evaluate( null, variableValues, null );
+                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( value );
+                MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.is( (monthsBetween) ) );
         }
 }

@@ -28,35 +28,23 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+import static org.apache.commons.lang3.math.NumberUtils.toDouble;
 
 /**
  * @Author Zubair Asghar.
  */
-public class RuleFunctionModulus extends RuleFunction
+public class RuleFunctionModulus
+    extends SimpleNoSqlFunction
 {
-    static final String D2_MODULUS = "d2:modulus";
-
-    @Nonnull
     @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        if ( arguments.size() != 2 )
-        {
-            throw new IllegalArgumentException( "two argument were expected, " +
-                    arguments.size() + " were supplied" );
-        }
-
-        return String.format( "%.1f", toDouble( arguments.get( 0 ), 0.0) % toDouble( arguments.get( 1 ), 0.0)) ;
-    }
-
-    @Nonnull
-    public static RuleFunctionModulus create()
-    {
-        return new RuleFunctionModulus();
+        return String.format( "%.1f",
+            toDouble( visitor.castStringVisit( ctx.expr( 0 ) ), 0.0) %
+                toDouble( visitor.castStringVisit( ctx.expr( 1 ) ), 0.0)) ;
     }
 }

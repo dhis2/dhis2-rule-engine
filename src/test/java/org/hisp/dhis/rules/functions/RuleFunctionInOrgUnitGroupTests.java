@@ -28,6 +28,7 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.google.common.collect.Lists;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
 import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
@@ -35,32 +36,25 @@ import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueBuilder;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static org.mockito.Mockito.when;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
-
 /**
- * @Author Zubair Asghar.
+ * @Author Enrico Colasante.
  */
+
 @RunWith( MockitoJUnitRunner.class )
-public class RuleFunctionLastEventDateTests
+public class RuleFunctionInOrgUnitGroupTests
 {
-    private static final String DATE_PATTERN = "yyyy-MM-dd";
-
-    private SimpleDateFormat dateFormat = new SimpleDateFormat( DATE_PATTERN, Locale.US );
-
-    private String todayDate = dateFormat.format( new Date() );
-
     @Mock
     private ExpressionParser.ExprContext context;
 
@@ -70,7 +64,7 @@ public class RuleFunctionLastEventDateTests
     @Mock
     private ExpressionParser.ExprContext mockedFirstExpr;
 
-    private RuleFunctionLastEventDate functionToTest = new RuleFunctionLastEventDate();
+    private RuleFunctionInOrgUnitGroup functionToTest = new RuleFunctionInOrgUnitGroup();
 
     @Before
     public void setUp() {
@@ -78,44 +72,51 @@ public class RuleFunctionLastEventDateTests
     }
 
     @Test
-    public void returnNothingWhenValueMapDoesNotHaveValue()
+    public void returnFalseWhenValueMapAndDataAreEmpty()
     {
-        Map<String, RuleVariableValue> valueMap = getEmptyValueMap();
-
-        assertLastEventDate( "test_variable" , valueMap,"" );
+        assertInOrgUnitGroup( "uid1", new HashMap<>(), new HashMap<>(), "false" );
     }
 
     @Test
-    public void returnLastestDateWhenValueExist()
+    public void returnFalseIfMemberIsNotInData()
     {
-        String variableWithValue = "test_variable_one";
+        Map<String, List<String>> supplementaryData = new HashMap<>();
+        Map<String, RuleVariableValue> valueMap = givenAVariableValuesAndOneWithTwoCandidates( "location1" );
 
-        Map<String, RuleVariableValue> valueMap = getValueMapWithValue( variableWithValue );
-
-        assertLastEventDate( variableWithValue, valueMap,""+todayDate+"" );
+        assertInOrgUnitGroup( "value", supplementaryData, valueMap,"false" );
     }
 
-    private Map<String, RuleVariableValue> getEmptyValueMap()
+    @Test
+    public void returnTrueIfMemberIsInData()
     {
-        return new HashMap<>();
+        String value = "value";
+        String location = "location1";
+        Map<String, List<String>> supplementaryData = new HashMap<>();
+        supplementaryData.put( value, Lists.newArrayList(location) );
+        Map<String, RuleVariableValue> valueMap = givenAVariableValuesAndOneWithTwoCandidates( location );
+
+        assertInOrgUnitGroup( value, supplementaryData, valueMap,"true" );
     }
 
-    private Map<String, RuleVariableValue> getValueMapWithValue( String variableNameWithValue )
+    private Map<String, RuleVariableValue> givenAVariableValuesAndOneWithTwoCandidates( String locationValue )
     {
-        Map<String, RuleVariableValue> valueMap = new HashMap<>();
-        valueMap.put( variableNameWithValue, RuleVariableValueBuilder
-                .create()
-                .withValue( "value" )
-                .withCandidates( Arrays.asList() )
-                .withEventDate( todayDate ).build() );
+        Map<String, RuleVariableValue> variableValues = new HashMap<>();
 
-        return valueMap;
+        variableValues.put("org_unit",
+            new RuleVariableValueBuilder()
+                .withValue(locationValue)
+                .withCandidates(Arrays.asList(locationValue, "two"))
+                .build());
+
+        return variableValues;
     }
 
-    private void assertLastEventDate( String value, Map<String, RuleVariableValue> valueMap, String lastEventDate )
+    private void assertInOrgUnitGroup( String value, Map<String, List<String>> supplementaryData,
+        Map<String, RuleVariableValue> valueMap, String inOrgUnitGroup )
     {
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( value );
         when( visitor.getValueMap() ).thenReturn( valueMap );
-        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.is( (lastEventDate) ) );
+        when( visitor.getSupplementaryData() ).thenReturn( supplementaryData );
+        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.is( (inOrgUnitGroup) ) );
     }
 }

@@ -28,53 +28,31 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author Zubair Asghar.
  *
  * Returns the number of numeric zero and positive values among the given object arguments. Can be provided with any number of arguments.
  */
-public class RuleFunctionZpvc extends RuleFunction
+public class RuleFunctionZpvc
+    extends SimpleNoSqlFunction
 {
-    public static final String D2_ZPVC = "d2:zpvc";
-
-    @Nonnull
     @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        if ( arguments.size() < 1 )
-        {
-            throw new IllegalArgumentException( "At least one argument should be provided" );
+        List<Double> list  = new ArrayList<>();
+        for(ExpressionParser.ExprContext expr : ctx.expr()){
+            Double value = Double.valueOf(visitor.castStringVisit( expr ));
+            if(value>=0)
+                list.add(value);
         }
-
-        List<Double> list = new ArrayList<>();
-
-        try
-        {
-            list = new ArrayList<>();
-            for(String string : arguments){
-                Double value = Double.valueOf(string);
-                if(value>=0)
-                    list.add(value);
-            }
 //            list = arguments.stream().map( Double::new ).filter( v -> v >= 0 ).collect( Collectors.toList() );
-        }
-        catch ( NumberFormatException e )
-        {
-            throw new IllegalArgumentException( "Number has to be an integer" );
-        }
-
         return String.valueOf( list.size() );
-    }
-
-    public static RuleFunctionZpvc create()
-    {
-        return new RuleFunctionZpvc();
     }
 }

@@ -28,47 +28,25 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
-
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 
 /**
  * @Author Zubair Asghar.
  *
  * Evaluates the argument of type number to zero if the value is negative, otherwise to the value itself.
  */
-public class RuleFunctionZing extends RuleFunction
+public class RuleFunctionZing
+    extends SimpleNoSqlFunction
 {
-    public static final String D2_ZING = "d2:zing";
-
-    @Nonnull
     @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        if ( arguments.size() != 1 )
-        {
-            throw new IllegalArgumentException( "One argument was expected, " +
-                    arguments.size() + " were supplied" );
-        }
+        String argument = visitor.castStringVisit( ctx.expr( 0 ) );
 
-        Double value = 0.0;
+        Double value = Double.parseDouble( argument );
 
-        try
-        {
-            value = Double.parseDouble( arguments.get( 0 ) );
-        }
-        catch ( NumberFormatException e )
-        {
-            throw new IllegalArgumentException( "Invalid number format" );
-        }
-
-        return value < 0 ? String.valueOf( 0 ) : arguments.get( 0 );
-    }
-
-    public static RuleFunctionZing create()
-    {
-        return new RuleFunctionZing();
+        return value < 0 ? String.valueOf( 0 ) : argument;
     }
 }

@@ -29,9 +29,7 @@ package org.hisp.dhis.rules;
  */
 
 import org.hisp.dhis.rules.models.*;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -43,16 +41,11 @@ import static org.mockito.Mockito.mock;
 @RunWith(JUnit4.class)
 public class ConstantsValueTests {
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
 
-    private Map<String, String> constantsValueMap = new HashMap<>();
-
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionIfConstantsValueMapIsNull()
     {
-       exception.expect(IllegalArgumentException.class);
-       RuleEngineContext.builder(new ExpressionEvaluator())
+       RuleEngineContext.builder()
                 .rules(Arrays.asList(mock(org.hisp.dhis.rules.models.Rule.class)))
                 .ruleVariables(Arrays.asList(mock(RuleVariable.class)))
                 .supplementaryData(new HashMap<>())
@@ -68,9 +61,10 @@ public class ConstantsValueTests {
         RuleAction assignAction = RuleActionAssign.create(null, "C{test_constant_value}", "test_data_element");
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create(null, 1, "true", Arrays.asList(assignAction), "test_program_rule1");
 
+        Map<String, String> constantsValueMap = new HashMap<>();
         constantsValueMap.put("test_constant_value", "3.14");
 
-        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList(rule));
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList(rule), constantsValueMap);
 
         RuleEnrollment enrollment = RuleEnrollment.builder()
                 .enrollment("test_enrollment")
@@ -97,9 +91,10 @@ public class ConstantsValueTests {
         RuleAction assignAction = RuleActionAssign.create(null, "C{test_constant_value}", "test_data_element");
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create(null, 1, "true", Arrays.asList(assignAction), "test_program_rule1");
 
+        Map<String, String> constantsValueMap = new HashMap<>();
         constantsValueMap.put("test_constant_value", "3.14");
 
-        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList(rule));
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList(rule), constantsValueMap );
 
         RuleEvent ruleEvent = RuleEvent.builder()
                 .event("test_event")
@@ -123,10 +118,11 @@ public class ConstantsValueTests {
 
     }
 
-    private RuleEngine.Builder getRuleEngine( List<org.hisp.dhis.rules.models.Rule> rules )
+    private RuleEngine.Builder getRuleEngine( List<Rule> rules,
+        Map<String, String> constantsValueMap )
     {
         return RuleEngineContext
-                .builder( new ExpressionEvaluator() )
+                .builder()
                 .rules( rules )
                 .ruleVariables( Arrays.asList() )
                 .calculatedValueMap( new HashMap<>() )

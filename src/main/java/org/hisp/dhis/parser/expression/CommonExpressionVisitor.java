@@ -28,7 +28,6 @@ package org.hisp.dhis.parser.expression;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.apache.commons.lang3.Validate;
@@ -36,9 +35,8 @@ import org.hisp.dhis.parser.expression.antlr.ExpressionBaseVisitor;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.parser.expression.literal.DefaultLiteral;
 import org.hisp.dhis.rules.RuleVariableValue;
-import org.hisp.dhis.rules.functions.RuleFunction;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -81,29 +79,14 @@ public class CommonExpressionVisitor
     private boolean replaceNulls = true;
 
     /**
-     * Count of days in period to use in evaluating an org.hisp.dhis.parser.expression.
-     */
-    private Double days = null;
-
-    /**
      * Values to use for variables in evaluating an org.hisp.dhis.parser.expression.
      */
-    private Map<String, RuleVariableValue> valueMap;
+    private Map<String, RuleVariableValue> valueMap = new HashMap<>();
 
     /**
      * Supplementary data for users and org units
      */
-    private Map<String, List<String>> supplementaryData;
-
-    /**
-     * Default value for data type double.
-     */
-    public static final double DEFAULT_DOUBLE_VALUE = 1d;
-
-    /**
-     * Default value for data type date.
-     */
-    public static final String DEFAULT_DATE_VALUE = "2017-07-08";
+    private Map<String, List<String>> supplementaryData = new HashMap<>();
 
     // -------------------------------------------------------------------------
     // Constructors
@@ -136,24 +119,6 @@ public class CommonExpressionVisitor
     @Override
     public Object visitExpr( ExprContext ctx )
     {
-        if ( ctx.d2Function() != null )
-        {
-            List<String> arguments = new ArrayList<>();
-            for ( ExprContext exprContext : ctx.d2Function().arguments().expr() )
-            {
-                arguments.add( visit( exprContext ).toString() );
-            }
-
-            RuleFunction function = RuleFunction.create( ctx.d2Function().ID().getText().substring( 0, ctx.d2Function().ID().getText().length() - 1 ) );
-
-            if ( function == null )
-            {
-                throw new ParserExceptionWithoutContext( "Function " + ctx.d2Function().getText() + " not supported" );
-            }
-
-            return function.evaluate( arguments, valueMap, supplementaryData );
-        }
-
         if ( ctx.fun != null )
         {
             ExprFunction function = functionMap.get( ctx.fun.getType() );
@@ -175,7 +140,7 @@ public class CommonExpressionVisitor
     }
 
     @Override
-    public Object visitVariable( ExpressionParser.VariableContext ctx )
+    public Object visitProgramRuleVariable( ExpressionParser.ProgramRuleVariableContext ctx )
     {
         RuleVariableValue variableValue = valueMap.get( ctx.string.getText() );
         String variable = variableValue.value() == null ?
@@ -184,6 +149,21 @@ public class CommonExpressionVisitor
         if ( variable == null )
         {
             throw new ParserExceptionWithoutContext( "Variable " + ctx.var.getText() + " not present" );
+        }
+
+        return variable;
+    }
+
+    @Override
+    public Object visitConstantValue( ExpressionParser.ConstantValueContext ctx )
+    {
+        RuleVariableValue variableValue = valueMap.get( ctx.string.getText() );
+        String variable = variableValue.value() == null ?
+            variableValue.type().defaultValue() : variableValue.value();
+
+        if ( variable == null )
+        {
+            throw new ParserExceptionWithoutContext( "Constant " + ctx.var.getText() + " not present" );
         }
 
         return variable;
@@ -256,25 +236,6 @@ public class CommonExpressionVisitor
         return castBoolean( visit( ctx ) );
     }
 
-    /**
-     * Visits a context while allowing null values (not replacing them
-     * with 0 or ''), even if we would otherwise be replacing them.
-     *
-     * @param ctx any context
-     * @return the value while allowing nulls
-     */
-    public Object visitAllowingNulls( ParserRuleContext ctx )
-    {
-        boolean savedReplaceNulls = replaceNulls;
-
-        replaceNulls = false;
-
-        Object result = visit( ctx );
-
-        replaceNulls = savedReplaceNulls;
-
-        return result;
-    }
 
     // -------------------------------------------------------------------------
     // Getters and setters
@@ -291,14 +252,9 @@ public class CommonExpressionVisitor
         return valueMap;
     }
 
-    public Double getDays()
+    public Map<String, List<String>> getSupplementaryData()
     {
-        return days;
-    }
-
-    public void setDays( Double days )
-    {
-        this.days = days;
+        return supplementaryData;
     }
 
     // -------------------------------------------------------------------------

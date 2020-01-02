@@ -5,8 +5,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.parser.expression.ExprFunction;
+import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
 import org.hisp.dhis.parser.expression.Parser;
+import org.hisp.dhis.rules.functions.*;
 import org.hisp.dhis.rules.models.*;
+import org.hisp.dhis.rules.variables.ProgramStageNameVariable;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -23,12 +26,47 @@ import java.util.regex.Pattern;
 
 import static org.hisp.dhis.parser.expression.ParserUtils.COMMON_EXPRESSION_FUNCTIONS;
 import static org.hisp.dhis.parser.expression.ParserUtils.FUNCTION_EVALUATE;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.*;
 
 class RuleEngineExecution
         implements Callable<List<RuleEffect>> {
     public final static ImmutableMap<Integer, ExprFunction> FUNCTIONS = ImmutableMap.<Integer, ExprFunction>builder()
 
-        // Common functions
+        .put( D2_CEIL, new RuleFunctionCeil() )
+        .put( D2_ADD_DAYS, new RuleFunctionAddDays() )
+        .put( D2_CONCATENATE, new RuleFunctionConcatenate() )
+        .put( D2_FLOOR, new RuleFunctionFloor() )
+        .put( D2_SUBSTRING, new RuleFunctionSubString() )
+        .put( D2_LENGTH, new RuleFunctionLength() )
+        .put( D2_LEFT, new RuleFunctionLeft() )
+        .put( D2_RIGHT, new RuleFunctionRight() )
+        .put( D2_MODULUS, new RuleFunctionModulus() )
+        .put( D2_ROUND, new RuleFunctionRound() )
+        .put( D2_YEARS_BETWEEN, new RuleFunctionYearsBetween() )
+        .put( D2_MONTHS_BETWEEN, new RuleFunctionMonthsBetween() )
+        .put( D2_WEEKS_BETWEEN, new RuleFunctionWeeksBetween() )
+        .put( D2_DAYS_BETWEEN, new RuleFunctionDaysBetween() )
+        .put( D2_ZSCOREWFH, new RuleFunctionZScoreWFH() )
+        .put( D2_ZSCOREWFA, new RuleFunctionZScoreWFA() )
+        .put( D2_ZSCOREHFA, new RuleFunctionZScoreHFA() )
+        .put( D2_SPLIT, new RuleFunctionSplit() )
+        .put( D2_OIZP, new RuleFunctionOizp() )
+        .put( D2_ZING, new RuleFunctionZing() )
+        .put( D2_ZPVC, new RuleFunctionZpvc() )
+        .put( D2_VALIDATE_PATTERN, new RuleFunctionValidatePattern() )
+        .put( D2_MAX_VALUE, new RuleFunctionMaxValue() )
+        .put( D2_MIN_VALUE, new RuleFunctionMinValue() )
+        .put( D2_COUNT, new RuleFunctionCount() )
+        .put( D2_COUNT_IF_VALUE, new RuleFunctionCountIfValue() )
+        .put( D2_HAS_USER_ROLE, new RuleFunctionHasUserRole() )
+        .put( D2_HAS_VALUE, new RuleFunctionHasValue() )
+        .put( D2_IN_ORG_UNIT_GROUP, new RuleFunctionInOrgUnitGroup() )
+        .put( D2_LAST_EVENT_DATE, new RuleFunctionLastEventDate() )
+        .put( D2_COUNT_IF_ZERO_POS, new RuleFunctionCountIfZeroPos() )
+
+        .put( V_PROGRAM_STAGE_NAME, new ProgramStageNameVariable() )
+        .put( V_EVENT_STATUS, new ProgramStageNameVariable() )
+        .put( V_ENVIRONMENT, new ProgramStageNameVariable() )
 
         .putAll( COMMON_EXPRESSION_FUNCTIONS )
 
@@ -115,7 +153,7 @@ class RuleEngineExecution
     {
         CommonExpressionVisitor commonExpressionVisitor = CommonExpressionVisitor.newBuilder()
             .withFunctionMap( FUNCTIONS )
-            .withVariablesMap(valueMap)
+            .withVariablesMap( valueMap )
             .withFunctionMethod( FUNCTION_EVALUATE )
             .withSupplementaryData( supplementaryData )
             .validateCommonProperties();

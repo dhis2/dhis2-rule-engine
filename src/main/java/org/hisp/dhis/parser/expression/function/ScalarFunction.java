@@ -44,4 +44,9 @@ import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext
 public abstract class ScalarFunction
     implements ExprFunction
 {
+    @Override
+    public final Object getItemId( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return evaluateAllPaths( ctx, visitor );
+    }
 }

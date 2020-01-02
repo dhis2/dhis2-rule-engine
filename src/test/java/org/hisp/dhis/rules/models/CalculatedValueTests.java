@@ -29,7 +29,6 @@ package org.hisp.dhis.rules.models;
  */
 
 import com.google.common.collect.Lists;
-import org.hisp.dhis.rules.ExpressionEvaluator;
 import org.hisp.dhis.rules.RuleEngine;
 import org.hisp.dhis.rules.RuleEngineContext;
 import org.hisp.dhis.rules.RuleExpressionEvaluator;
@@ -76,7 +75,7 @@ public class CalculatedValueTests
     @Test
     public void evaluate2MillionsRuleTest() throws Exception
     {
-        int i = 1000000;
+        int i = 1000;
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( createRules(i) );
 
         RuleEnrollment enrollment = RuleEnrollment.builder()
@@ -112,11 +111,11 @@ public class CalculatedValueTests
     @Test
     public void sendMessageMustGetValueFromAssignAction() throws Exception
     {
-        RuleAction assignAction = RuleActionAssign.create(null, "2+2", "#{test_calculated_value}" );
+        RuleAction assignAction = RuleActionAssign.create(null, "2+2", "X{test_calculated_value}" );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1");
 
         RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4" );
-        org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule.create( null, 4, "#{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2");
+        org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule.create( null, 4, "X{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2");
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Lists.newArrayList(rule) );
 
@@ -167,11 +166,11 @@ public class CalculatedValueTests
     private List<org.hisp.dhis.rules.models.Rule> createRules( int i )
     {
         ArrayList<org.hisp.dhis.rules.models.Rule> rules = Lists.newArrayList();
-        RuleAction assignAction = RuleActionAssign.create(null, "2+2", "#{test_calculated_value}" );
+        RuleAction assignAction = RuleActionAssign.create(null, "2+2", "X{test_calculated_value}" );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1");
 
         RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4" );
-        org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule.create( null, 4, "#{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2");
+        org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule.create( null, 4, "X{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2");
         for (int j=0;j<i;j++) {
             rules.add( rule );
             rules.add( rule2 );
@@ -182,11 +181,11 @@ public class CalculatedValueTests
     @Test
     public void sendMessageMustGetValueFromAssignActionInSingleExecution() throws Exception
     {
-        RuleAction assignAction = RuleActionAssign.create(null, "2+2", "#{test_calculated_value}" );
+        RuleAction assignAction = RuleActionAssign.create(null, "2+2", "X{test_calculated_value}" );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1");
 
         RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4" );
-        org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule.create( null, 4, "#{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2");
+        org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule.create( null, 4, "X{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2");
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule, rule2 ) );
 
@@ -229,7 +228,7 @@ public class CalculatedValueTests
         RuleVariable ruleVariable = RuleVariableCalculatedValue.create("test_calculated_value", "", RuleValueType.TEXT );
 
         return RuleEngineContext
-                .builder( new ExpressionEvaluator() )
+                .builder()
                 .rules( rules )
                 .ruleVariables( Arrays.asList( ruleVariable ) )
                 .calculatedValueMap( calculatedValueMap )

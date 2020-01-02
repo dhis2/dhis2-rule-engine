@@ -126,7 +126,7 @@ public class RuleEngineEffectTypesTests {
         Rule rule2 = Rule.create(null, null, "!d2:", Arrays.asList(ruleAction), "");
 
         RuleEngine ruleEngine = RuleEngineContext
-                .builder(new ExpressionEvaluator())
+                .builder()
                 .rules(Arrays.asList(rule, rule2))
                 .calculatedValueMap(new HashMap<>())
                 .supplementaryData(new HashMap<>())
@@ -323,7 +323,7 @@ public class RuleEngineEffectTypesTests {
 
     private RuleEngine getRuleEngine(Rule rule) {
         return RuleEngineContext
-                .builder(new ExpressionEvaluator())
+                .builder()
                 .rules(Arrays.asList(rule))
                 .calculatedValueMap(new HashMap<>())
                 .supplementaryData(new HashMap<>())

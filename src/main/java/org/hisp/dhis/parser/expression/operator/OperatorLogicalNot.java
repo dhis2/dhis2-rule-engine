@@ -29,7 +29,7 @@ package org.hisp.dhis.parser.expression.operator;
  */
 
 import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.function.ScalarFunction;
+import org.hisp.dhis.parser.expression.function.SimpleScalarFunction;
 
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
@@ -49,7 +49,7 @@ import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext
  * @author Jim Grace
  */
 public class OperatorLogicalNot
-    extends ScalarFunction
+    extends SimpleScalarFunction
 {
     @Override
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
@@ -57,5 +57,11 @@ public class OperatorLogicalNot
         Boolean value = visitor.castBooleanVisit( ctx.expr( 0 ) );
 
         return value == null ? null : !value;
+    }
+
+    @Override
+    public Object getSql( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return "not " + visitor.castStringVisit( ctx.expr( 0 ) );
     }
 }

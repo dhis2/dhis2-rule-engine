@@ -28,43 +28,20 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
-
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @Author Zubair Asghar.
  */
 
-class RuleFunctionAddDays
-    extends RuleFunction
+public class RuleFunctionAddDays
+    extends SimpleNoSqlFunction
 {
-    static final String D2_ADD_DAYS = "d2:addDays";
-
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, @Nonnull Map<String, RuleVariableValue> valueMap,
-        Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() != 2 )
-        {
-            throw new IllegalArgumentException( "Two arguments were expected, " +
-                arguments.size() + " were supplied" );
-        }
-
-        return wrap( addDays( arguments.get( 0 ), arguments.get( 1 ) ) );
-    }
-
-    @Nonnull
-    public static RuleFunctionAddDays create()
-    {
-        return new RuleFunctionAddDays();
-    }
-
     /**
      * Function which will return the the date after adding/subtracting number of days.
      *
@@ -72,10 +49,16 @@ class RuleFunctionAddDays
      * @param days      number of days to add/subtract.
      * @return date after adding/subtracting days.
      */
-    static String addDays( String inputDate, String days )
+    private String addDays( String inputDate, String days )
     {
 
-        LocalDate localDate = LocalDate.parse( inputDate, DateTimeFormat.forPattern( DATE_PATTERN ) );
-        return localDate.plusDays( Integer.parseInt( days ) ).toString( DATE_PATTERN );
+        LocalDate localDate = LocalDate.parse( inputDate, DateTimeFormat.forPattern( RuleFunction.DATE_PATTERN ) );
+        return localDate.plusDays( Double.valueOf( days ).intValue() ).toString( RuleFunction.DATE_PATTERN );
+    }
+
+    @Override
+    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return addDays( visitor.castStringVisit( ctx.expr( 0 ) ), visitor.castStringVisit(ctx.expr( 1 ) ) );
     }
 }
