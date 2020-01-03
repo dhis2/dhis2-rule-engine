@@ -2,13 +2,11 @@ package org.hisp.dhis.rules.models;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import org.hisp.dhis.rules.models.RuleActionDisplayText;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.assertj.core.api.Java6Assertions.fail;
 
 @RunWith( JUnit4.class )
 public class RuleActionDisplayTextTests
@@ -38,32 +36,16 @@ public class RuleActionDisplayTextTests
                 assertThat( displayTextAction.data() ).isEqualTo( "test_data" );
         }
 
-        @Test
+        @Test(expected = IllegalArgumentException.class)
         public void createForFeedbackMustThrowWhenBothArgumentsNull()
         {
-                try
-                {
-                        RuleActionDisplayText.createForFeedback( null, null );
-                        fail( "IllegalArgumentException was expected, but nothing was thrown." );
-                }
-                catch ( IllegalArgumentException illegalArgumentException )
-                {
-                        // noop
-                }
+                RuleActionDisplayText.createForFeedback( null, null );
         }
 
-        @Test
+        @Test(expected = IllegalArgumentException.class)
         public void createForIndicatorsMustThrowWhenBothArgumentsNull()
         {
-                try
-                {
-                        RuleActionDisplayText.createForIndicators( null, null );
-                        fail( "IllegalArgumentException was expected, but nothing was thrown." );
-                }
-                catch ( IllegalArgumentException illegalArgumentException )
-                {
-                        // noop
-                }
+                RuleActionDisplayText.createForIndicators( null, null );
         }
 
         @Test

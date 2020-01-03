@@ -9,9 +9,12 @@ import org.junit.runners.JUnit4;
 import javax.annotation.Nonnull;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Map;
 
-import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.hisp.dhis.rules.RuleVariableValueAssert.assertThatVariable;
 import static org.mockito.Mockito.mock;
@@ -26,12 +29,11 @@ public class RuleVariableValueMapBuilderTests
 
         @Before
         public void setUp()
-            throws Exception
         {
                 dateFormat = new SimpleDateFormat( DATE_PATTERN, Locale.US );
         }
 
-        @Test
+        @Test(expected = UnsupportedOperationException.class)
         public void buildShouldReturnImmutableMap()
             throws ParseException
         {
@@ -44,35 +46,19 @@ public class RuleVariableValueMapBuilderTests
                 when( ruleEvent.programStage() ).thenReturn( "" );
                 when( ruleEvent.organisationUnit() ).thenReturn( "" );
 
-                try
-                {
-                        RuleVariableValueMapBuilder.target( ruleEvent )
-                            .ruleVariables( new ArrayList<RuleVariable>() )
-                            .triggerEnvironment( TriggerEnvironment.SERVER )
-                            .build().clear();
-                        fail( "UnsupportedOperationException expected, but nothing was thrown" );
-                }
-                catch ( UnsupportedOperationException exception )
-                {
-                        // noop
-                }
+                RuleVariableValueMapBuilder.target( ruleEvent )
+                    .ruleVariables( new ArrayList<RuleVariable>() )
+                    .triggerEnvironment( TriggerEnvironment.SERVER )
+                    .build().clear();
         }
 
-        @Test
+        @Test(expected = IllegalStateException.class)
         public void ruleEnrollmentShouldThrowIfTargetEnrollmentIsAlreadySet()
         {
-                try
-                {
-                        RuleEnrollment ruleEnrollment = mock( RuleEnrollment.class );
-                        RuleVariableValueMapBuilder.target( ruleEnrollment )
-                            .ruleEnrollment( ruleEnrollment )
-                            .build();
-                        fail( "IllegalStateException was expected, but nothing was thrown." );
-                }
-                catch ( IllegalStateException illegalStateException )
-                {
-                        // noop
-                }
+                RuleEnrollment ruleEnrollment = mock( RuleEnrollment.class );
+                RuleVariableValueMapBuilder.target( ruleEnrollment )
+                    .ruleEnrollment( ruleEnrollment )
+                    .build();
         }
 
         @Test
@@ -587,25 +573,16 @@ public class RuleVariableValueMapBuilderTests
                     .hasValue( "test_attribute_value_two" ).hasCandidates( "test_attribute_value_two" );
         }
 
-        @Test
+        @Test(expected = IllegalStateException.class)
         public void buildShouldThrowOnDuplicateEvent()
         {
                 RuleEvent ruleEvent = RuleEvent.create( "test_event_two", "test_program_stage",
                     RuleEvent.Status.ACTIVE, new Date(), new Date(), "",null,new ArrayList<RuleDataValue>(), "");
 
-                try
-                {
-                        RuleVariableValueMapBuilder.target( ruleEvent )
-                            .ruleVariables( new ArrayList<RuleVariable>() )
-                            .ruleEvents( Arrays.asList( ruleEvent ) )
-                            .build();
-
-                        fail( "IllegalStateException was expected, but nothing was thrown." );
-                }
-                catch ( IllegalStateException illegalStateException )
-                {
-                        // noop
-                }
+                RuleVariableValueMapBuilder.target( ruleEvent )
+                    .ruleVariables( new ArrayList<RuleVariable>() )
+                    .ruleEvents( Arrays.asList( ruleEvent ) )
+                    .build();
         }
 
         @Nonnull

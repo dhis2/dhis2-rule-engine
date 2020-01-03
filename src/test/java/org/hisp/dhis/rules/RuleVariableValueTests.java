@@ -1,23 +1,15 @@
 package org.hisp.dhis.rules;
 
-import org.hisp.dhis.rules.models.RuleDataValue;
 import org.hisp.dhis.rules.models.RuleValueType;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
-import java.util.SimpleTimeZone;
 
-import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 @RunWith( JUnit4.class )
@@ -25,20 +17,7 @@ public class RuleVariableValueTests
 {
         private static final String DATE_PATTERN = "yyyy-MM-dd";
 
-        @Mock
-        private RuleDataValue ruleDataValue;
-
-        @Rule
-        public ExpectedException thrown = ExpectedException.none();
-
         private SimpleDateFormat dateFormat = new SimpleDateFormat( DATE_PATTERN, Locale.US );
-
-        @Before
-        public void setUp()
-            throws Exception
-        {
-                MockitoAnnotations.initMocks( this );
-        }
 
         @Test
         public void textValuesMostBeWrapped()
@@ -94,24 +73,15 @@ public class RuleVariableValueTests
                 assertThat( variableValue.candidates().get( 1 ) ).isEqualTo( "false" );
         }
 
-        @Test
+        @Test(expected = IllegalArgumentException.class )
         public void createShouldThrowOnNullValueType()
         {
-                thrown.expect( IllegalArgumentException.class );
                 RuleVariableValue.create( "test_value", null );
         }
 
-        @Test
+        @Test(expected = IllegalArgumentException.class )
         public void createShouldThrowOnNullCandidateList()
         {
-                try
-                {
-                        thrown.expect( IllegalArgumentException.class );
-                        RuleVariableValue.create( "test_value", RuleValueType.TEXT, null, dateFormat.format( new Date() ) );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
+                RuleVariableValue.create( "test_value", RuleValueType.TEXT, null, dateFormat.format( new Date() ) );
         }
 }

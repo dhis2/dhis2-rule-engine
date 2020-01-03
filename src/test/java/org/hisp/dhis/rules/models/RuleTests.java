@@ -1,6 +1,5 @@
 package org.hisp.dhis.rules.models;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -10,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
 @RunWith( JUnit4.class )
@@ -44,8 +42,7 @@ public class RuleTests
                 assertThat( rule.actions().get( 0 ) ).isEqualTo( ruleAction );
         }
 
-        @Test
-        @Ignore
+        @Test(expected = UnsupportedOperationException.class )
         public void createShouldReturnImmutableList()
         {
                 RuleAction ruleActionOne = mock( RuleAction.class );
@@ -64,14 +61,6 @@ public class RuleTests
                 assertThat( rule.actions().get( 0 ) ).isEqualTo( ruleActionOne );
                 assertThat( rule.actions().get( 1 ) ).isEqualTo( ruleActionTwo );
 
-                try
-                {
-                        rule.actions().clear();
-                        fail( "UnsupportedOperationException was expected, but nothing was thrown." );
-                }
-                catch ( UnsupportedOperationException unsupportedOperationException )
-                {
-                        // noop
-                }
+                rule.actions().clear();
         }
 }

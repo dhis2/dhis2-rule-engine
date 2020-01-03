@@ -1,12 +1,14 @@
 package org.hisp.dhis.rules;
 
-import org.hisp.dhis.rules.models.*;
+import org.hisp.dhis.rules.models.Rule;
+import org.hisp.dhis.rules.models.RuleDataValue;
+import org.hisp.dhis.rules.models.RuleEnrollment;
+import org.hisp.dhis.rules.models.RuleEvent;
+import org.hisp.dhis.rules.models.RuleVariable;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,75 +17,42 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 @RunWith( JUnit4.class )
 public class RuleEngineTests
 {
-
-        @Mock
-        private RuleExpressionEvaluator evaluator;
-
-        @Mock
-        private Rule rule;
-
-        @Mock
-        private RuleVariable ruleVariable;
-
-        @Mock
-        private RuleEvent ruleEvent;
-
         private RuleEngineContext ruleEngineContext;
 
         @Before
         public void setUp()
-            throws Exception
         {
-                MockitoAnnotations.initMocks( this );
-
-                ruleEngineContext = RuleEngineContext.builder( evaluator )
+                ruleEngineContext = RuleEngineContext.builder()
                     .ruleVariables( Arrays.asList( mock( RuleVariable.class ) ) )
                     .rules( Arrays.asList( mock( Rule.class ) ) )
                     .build();
         }
 
-        @Test
+        @Test(expected = IllegalArgumentException.class)
         public void builderShouldThrowOnNullEnrollment()
         {
-                try
-                {
-                        ruleEngineContext.toEngineBuilder()
-                            .enrollment( null )
-                            .events( new ArrayList<RuleEvent>() )
-                            .build();
-                        fail( "IllegalArgumentException was expected, but nothing was thrown." );
-                }
-                catch ( IllegalArgumentException illegalArgumentException )
-                {
-                        // noop
-                }
+                ruleEngineContext.toEngineBuilder()
+                    .enrollment( null )
+                    .events( new ArrayList<RuleEvent>() )
+                    .build();
         }
 
-        @Test
+        @Test(expected = IllegalArgumentException.class)
         public void builderShouldThrowOnNullEvents()
         {
-                try
-                {
-                        ruleEngineContext.toEngineBuilder()
-                            .enrollment( null )
-                            .events( null )
-                            .build();
-                        fail( "IllegalArgumentException was expected, but nothing was thrown." );
-                }
-                catch ( IllegalArgumentException illegalArgumentException )
-                {
-                        // noop
-                }
+                ruleEngineContext.toEngineBuilder()
+                    .enrollment( null )
+                    .events( null )
+                    .build();
         }
 
-        @Test
+        @Test(expected = UnsupportedOperationException.class)
         public void builderShouldPropagateImmutableEventsList()
         {
                 RuleEvent ruleEventOne = mock( RuleEvent.class );
@@ -101,33 +70,17 @@ public class RuleEngineTests
                 assertThat( ruleEngine.events().size() ).isEqualTo( 1 );
                 assertThat( ruleEngine.events().get( 0 ) ).isEqualTo( ruleEventOne );
 
-                try
-                {
-                        ruleEngine.events().clear();
-                        fail( "UnsupportedOperationException was expected, but nothing was thrown." );
-                }
-                catch ( UnsupportedOperationException unsupportedOperationException )
-                {
-                        // noop
-                }
+                ruleEngine.events().clear();
         }
 
-        @Test
+        @Test(expected = UnsupportedOperationException.class)
         public void builderShouldPropagateImmutableEmptyListIfNoEventsProvided()
         {
                 RuleEngine ruleEngine = ruleEngineContext.toEngineBuilder().build();
 
                 assertThat( ruleEngine.events().size() ).isEqualTo( 0 );
 
-                try
-                {
-                        ruleEngine.events().clear();
-                        fail( "UnsupportedOperationException was expected, but nothing was thrown." );
-                }
-                catch ( UnsupportedOperationException unsupportedOperationException )
-                {
-                        // noop
-                }
+                ruleEngine.events().clear();
         }
 
         @Test
@@ -137,22 +90,15 @@ public class RuleEngineTests
                 assertThat( ruleEngine.executionContext() ).isEqualTo( ruleEngineContext );
         }
 
-        @Test
+        @Test(expected = IllegalArgumentException.class)
         public void evaluateShouldThrowOnNullEvent()
         {
-                try
-                {
-                        RuleEvent ruleEvent = null;
-                        ruleEngineContext.toEngineBuilder().build().evaluate( ruleEvent );
-                        fail( "IllegalArgumentException was expected, but nothing was thrown." );
-                }
-                catch ( IllegalArgumentException illegalArgumentException )
-                {
-                        // noop
-                }
+
+                RuleEvent ruleEvent = null;
+                ruleEngineContext.toEngineBuilder().build().evaluate( ruleEvent );
         }
 
-        @Test
+        @Test(expected = IllegalStateException.class)
         public void evaluateShouldThrowIfEventIsAlreadyInContext()
         {
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_programstage",
@@ -165,18 +111,10 @@ public class RuleEngineTests
                     .events( ruleEvents )
                     .build();
 
-                try
-                {
-                        ruleEngine.evaluate( ruleEvent );
-                        fail( "IllegalStateException was expected, but nothing was thrown." );
-                }
-                catch ( IllegalStateException illegalStateException )
-                {
-                        // noop
-                }
+                ruleEngine.evaluate( ruleEvent );
         }
 
-        @Test
+        @Test(expected = IllegalStateException.class)
         public void evaluateShouldThrowIfEnrollmentIsAlreadyInContext()
         {
                 RuleEnrollment ruleEnrollment = mock( RuleEnrollment.class );
@@ -185,30 +123,14 @@ public class RuleEngineTests
                     .enrollment( ruleEnrollment )
                     .build();
 
-                try
-                {
-                        ruleEngine.evaluate( ruleEnrollment );
-                        fail( "IllegalStateException was expected, but nothing was thrown." );
-                }
-                catch ( IllegalStateException illegalStateException )
-                {
-                        // noop
-                }
+                ruleEngine.evaluate( ruleEnrollment );
         }
 
-        @Test
+        @Test(expected = IllegalArgumentException.class)
         public void evaluateShouldThrowOnNullEnrollment()
         {
-                try
-                {
-                        RuleEnrollment ruleEnrollment = null;
-                        ruleEngineContext.toEngineBuilder().build().evaluate( ruleEnrollment );
-                        fail( "IllegalArgumentException was expected, but nothing was thrown." );
-                }
-                catch ( IllegalArgumentException illegalArgumentException )
-                {
-                        // noop
-                }
+                RuleEnrollment ruleEnrollment = null;
+                ruleEngineContext.toEngineBuilder().build().evaluate( ruleEnrollment );
         }
 
         @Test

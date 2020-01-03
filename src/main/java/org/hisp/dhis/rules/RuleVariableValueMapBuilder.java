@@ -1,19 +1,9 @@
 package org.hisp.dhis.rules;
 
-import org.hisp.dhis.rules.models.RuleAttributeValue;
-import org.hisp.dhis.rules.models.RuleDataValue;
-import org.hisp.dhis.rules.models.RuleEnrollment;
-import org.hisp.dhis.rules.models.RuleEvent;
-import org.hisp.dhis.rules.models.RuleValueType;
-import org.hisp.dhis.rules.models.RuleVariable;
-import org.hisp.dhis.rules.models.RuleVariableAttribute;
-import org.hisp.dhis.rules.models.RuleVariableCalculatedValue;
-import org.hisp.dhis.rules.models.RuleVariableCurrentEvent;
-import org.hisp.dhis.rules.models.RuleVariableNewestEvent;
-import org.hisp.dhis.rules.models.RuleVariableNewestStageEvent;
-import org.hisp.dhis.rules.models.RuleVariablePreviousEvent;
-import org.hisp.dhis.rules.models.TriggerEnvironment;
+import org.hisp.dhis.rules.models.*;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,9 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import static org.hisp.dhis.rules.RuleVariableValue.create;
 

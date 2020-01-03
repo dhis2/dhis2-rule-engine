@@ -2,22 +2,15 @@ package org.hisp.dhis.rules.models;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import org.hisp.dhis.rules.models.RuleActionAssign;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.assertj.core.api.Java6Assertions.fail;
 
 @RunWith( JUnit4.class )
 public class RuleActionAssignTests
 {
-        @Rule
-        public ExpectedException thrown = ExpectedException.none();
-
         @Test
         public void createMustSubstituteEmptyStringsForNullArguments()
         {
@@ -35,17 +28,15 @@ public class RuleActionAssignTests
                 assertThat( ruleActionAssignNoField.field() ).isEqualTo( "" );
         }
 
-        @Test
+        @Test(expected = IllegalArgumentException.class)
         public void createMustThrowWhenContentAndFieldAreNull()
         {
-            thrown.expect( IllegalArgumentException.class );
             RuleActionAssign.create( null, "test_data", null );
         }
 
-        @Test
+        @Test(expected = NullPointerException.class)
         public void createMustThrowWhenDataIsNull()
         {
-            thrown.expect( NullPointerException.class );
             RuleActionAssign.create( "test_content", null, "test_field" );
         }
 

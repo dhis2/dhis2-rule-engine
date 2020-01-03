@@ -1,58 +1,31 @@
 package org.hisp.dhis.rules.models;
 
-import org.hisp.dhis.rules.models.RuleValueType;
-import org.hisp.dhis.rules.models.RuleVariableCurrentEvent;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 @RunWith( JUnit4.class )
 public class RuleVariableCurrentEventTests
 {
 
-        @Test
+        @Test(expected = NullPointerException.class )
         public void createShouldThrowOnNullName()
         {
-                try
-                {
-                        RuleVariableCurrentEvent.create( null, "test_dataelement", RuleValueType.TEXT );
-                        fail( "NullPointerException is expected, but nothing was thrown" );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
+                RuleVariableCurrentEvent.create( null, "test_dataelement", RuleValueType.TEXT );
         }
 
-        @Test
+        @Test(expected = NullPointerException.class )
         public void createShouldThrowOnNullDataElement()
         {
-                try
-                {
-                        RuleVariableCurrentEvent.create( "test_variable", null, RuleValueType.TEXT );
-                        fail( "NullPointerException is expected, but nothing was thrown" );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
+                RuleVariableCurrentEvent.create( "test_variable", null, RuleValueType.TEXT );
         }
 
-        @Test
+        @Test(expected = NullPointerException.class )
         public void createShouldThrowOnNullDataElementType()
         {
-                try
-                {
-                        RuleVariableCurrentEvent.create( "test_variable", "test_dataelement", null );
-                        fail( "NullPointerException is expected, but nothing was thrown" );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
+                RuleVariableCurrentEvent.create( "test_variable", "test_dataelement", null );
         }
 
         @Test

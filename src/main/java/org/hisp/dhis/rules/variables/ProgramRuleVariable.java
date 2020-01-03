@@ -1,12 +1,12 @@
 package org.hisp.dhis.rules.variables;
 
 import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
 import org.hisp.dhis.parser.expression.ParserExceptionWithoutContext;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
 import org.hisp.dhis.rules.RuleVariableValue;
 
-public class ProgramStageNameVariable
+public class ProgramRuleVariable
     extends SimpleNoSqlFunction
 {
     @Override

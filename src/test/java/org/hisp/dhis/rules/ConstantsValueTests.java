@@ -33,7 +33,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.mock;
@@ -58,7 +62,7 @@ public class ConstantsValueTests {
     @Test
     public void assignConstantValueFromAssignActionInEnrollment() throws Exception
     {
-        RuleAction assignAction = RuleActionAssign.create(null, "C{test_constant_value}", "test_data_element");
+        RuleAction assignAction = RuleActionAssign.create(null, "C{test_constant_value}", "X{test_data_element}");
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create(null, 1, "true", Arrays.asList(assignAction), "test_program_rule1");
 
         Map<String, String> constantsValueMap = new HashMap<>();
@@ -88,7 +92,7 @@ public class ConstantsValueTests {
     @Test
     public void assignConstantValueFromAssignActionInEvent() throws Exception
     {
-        RuleAction assignAction = RuleActionAssign.create(null, "C{test_constant_value}", "test_data_element");
+        RuleAction assignAction = RuleActionAssign.create(null, "C{test_constant_value}", "X{test_data_element}");
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create(null, 1, "true", Arrays.asList(assignAction), "test_program_rule1");
 
         Map<String, String> constantsValueMap = new HashMap<>();

@@ -7,7 +7,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.assertj.core.api.Java6Assertions.fail;
 
 @RunWith( JUnit4.class )
 public class RuleActionWarningOnCompletionTests
@@ -36,18 +35,10 @@ public class RuleActionWarningOnCompletionTests
                 assertThat( ruleActionNoField.field() ).isEqualTo( "" );
         }
 
-        @Test
+        @Test(expected = IllegalArgumentException.class )
         public void createMustThrowWhenContentDataFieldAreNull()
         {
-                try
-                {
-                        RuleActionWarningOnCompletion.create( null, null, null );
-                        fail( "IllegalArgumentException was expected, but nothing was thrown." );
-                }
-                catch ( IllegalArgumentException illegalArgumentException )
-                {
-                        // noop
-                }
+                RuleActionWarningOnCompletion.create( null, null, null );
         }
 
         @Test

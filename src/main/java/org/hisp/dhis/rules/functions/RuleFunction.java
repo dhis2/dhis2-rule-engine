@@ -1,14 +1,11 @@
 package org.hisp.dhis.rules.functions;
 
-import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.models.TimeInterval;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Map;
 
 public abstract class RuleFunction
 {

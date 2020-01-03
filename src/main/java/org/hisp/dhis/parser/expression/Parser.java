@@ -33,14 +33,13 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-//import org.hisp.dhis.cache.Cache;
-//import org.hisp.dhis.cache.SimpleCacheBuilder;
 import org.hisp.dhis.parser.expression.antlr.ExpressionBaseListener;
 import org.hisp.dhis.parser.expression.antlr.ExpressionBaseVisitor;
 import org.hisp.dhis.parser.expression.antlr.ExpressionLexer;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 
-import java.util.concurrent.TimeUnit;
+//import org.hisp.dhis.cache.Cache;
+//import org.hisp.dhis.cache.SimpleCacheBuilder;
 
 /**
  * Parses an org.hisp.dhis.parser.expression parser using the ANTLR4 parser, and traverses the

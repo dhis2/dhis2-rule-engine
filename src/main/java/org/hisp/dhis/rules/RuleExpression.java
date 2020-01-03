@@ -3,8 +3,6 @@ package org.hisp.dhis.rules;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nonnull;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,5 +29,16 @@ abstract class RuleExpression
                 }
 
                 throw new IllegalArgumentException( "Malformed variable: " + variable );
+        }
+
+        @Nonnull
+        static String unwrapVariableNameOrReturnOriginal( @Nonnull String variable )
+        {
+                try
+                {
+                        return unwrapVariableName( variable );
+                } catch ( IllegalArgumentException e ) {
+                        return variable;
+                }
         }
 }

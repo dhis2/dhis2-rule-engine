@@ -2,13 +2,11 @@ package org.hisp.dhis.rules.models;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import org.hisp.dhis.rules.models.RuleActionHideField;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.assertj.core.api.Java6Assertions.fail;
 
 @RunWith( JUnit4.class )
 public class RuleActionHideFieldTests
@@ -23,18 +21,10 @@ public class RuleActionHideFieldTests
                 assertThat( ruleActionHideField.content() ).isEqualTo( "" );
         }
 
-        @Test
+        @Test(expected = NullPointerException.class )
         public void createMustThrowOnNullField()
         {
-                try
-                {
-                        RuleActionHideField.create( "test_content", null );
-                        fail( "NullPointerException was expected, but nothing was thrown." );
-                }
-                catch ( NullPointerException nullPointerException )
-                {
-                        // noop
-                }
+                RuleActionHideField.create( "test_content", null );
         }
 
         @Test

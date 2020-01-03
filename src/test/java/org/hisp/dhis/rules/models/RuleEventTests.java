@@ -1,16 +1,18 @@
 package org.hisp.dhis.rules.models;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
-import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -19,60 +21,51 @@ public class RuleEventTests
 {
         private static final String DATE_PATTERN = "yyyy-MM-dd";
 
-        @Rule
-        public ExpectedException thrown = ExpectedException.none();
-
-        @Test
+        @Test(expected = IllegalStateException.class )
         public void createShouldThrowExceptionIfEventIsNull()
         {
-                thrown.expect( IllegalStateException.class );
                 RuleEvent.create( null, "test_programstage", RuleEvent.Status.ACTIVE,
                         new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
         }
 
-        @Test
+        @Test(expected = IllegalStateException.class )
         public void createShouldThrowExceptionIfProgramStageIsNull()
         {
-                thrown.expect( IllegalStateException.class );
                 RuleEvent.create( "test_event", null, RuleEvent.Status.ACTIVE,
                         new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
         }
 
-        @Test
+        @Test(expected = IllegalStateException.class )
         public void createShouldThrowExceptionIfStatusIsNull()
         {
-                thrown.expect( IllegalStateException.class );
                 RuleEvent.create( "test_event", "test_programstage", null,
                         new Date(), new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
         }
 
-        @Test
+        @Test(expected = IllegalStateException.class )
         public void createShouldThrowExceptionIfEventDateIsNull()
         {
-                thrown.expect( IllegalStateException.class );
                 RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE,
                         null, new Date(), null,null,Arrays.<RuleDataValue>asList(), "");
         }
 
-        @Test
+        @Test(expected = IllegalStateException.class )
         public void createShouldThrowExceptionIfDueDateIsNull()
         {
-                thrown.expect( IllegalStateException.class );
                 RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE,
                     new Date(), null, null,null,Arrays.<RuleDataValue>asList(), "");
 
         }
 
-        @Test
+        @Test(expected = NullPointerException.class )
         public void createShouldThrowExceptionIfListOfDataValuesIsNull()
         {
-                thrown.expect( NullPointerException.class );
                 RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE, new Date(), new Date(),
                         null, null,null, "");
 
         }
 
-        @Test
+        @Test(expected = UnsupportedOperationException.class )
         public void createShouldPropagateImmutableList()
         {
                 RuleDataValue ruleDataValue = mock( RuleDataValue.class );
@@ -89,15 +82,7 @@ public class RuleEventTests
                 assertThat( ruleEvent.dataValues().size() ).isEqualTo( 1 );
                 assertThat( ruleEvent.dataValues().get( 0 ) ).isEqualTo( ruleDataValue );
 
-                try
-                {
-                        ruleEvent.dataValues().add( ruleDataValue );
-                        fail( "UnsupportedOperationException was expected, but nothing was thrown" );
-                }
-                catch ( UnsupportedOperationException exception )
-                {
-                        // noop
-                }
+                ruleEvent.dataValues().add( ruleDataValue );
         }
 
         @Test

@@ -1,43 +1,25 @@
 package org.hisp.dhis.rules.models;
 
-import org.hisp.dhis.rules.models.RuleAttributeValue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 @RunWith( JUnit4.class )
 public class RuleAttributeValueTests
 {
 
-        @Test
+        @Test(expected = NullPointerException.class )
         public void shouldThrowOnNullTrackedEntityAttribute()
         {
-                try
-                {
-                        RuleAttributeValue.create( null, "test_value" );
-                        fail( "NullPointerException was expected, but nothing was thrown" );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
+                RuleAttributeValue.create( null, "test_value" );
         }
 
-        @Test
+        @Test(expected = NullPointerException.class )
         public void shouldThrowOnNullValue()
         {
-                try
-                {
-                        RuleAttributeValue.create( "test_tracked_entity_attribute", null );
-                        fail( "NullPointerException was expected, but nothing was thrown" );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
+                RuleAttributeValue.create( "test_tracked_entity_attribute", null );
         }
 
         @Test

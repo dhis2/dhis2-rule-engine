@@ -2,13 +2,11 @@ package org.hisp.dhis.rules.models;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import org.hisp.dhis.rules.models.RuleActionShowWarning;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.assertj.core.api.Java6Assertions.fail;
 
 @RunWith( JUnit4.class )
 public class RuleActionShowWarningTests
@@ -31,32 +29,16 @@ public class RuleActionShowWarningTests
                 assertThat( ruleActionAssignNoData.field() ).isEqualTo( "test_field" );
         }
 
-        @Test
+        @Test(expected = IllegalArgumentException.class )
         public void createMustThrowWhenContentAndDataAreNull()
         {
-                try
-                {
-                        RuleActionShowWarning.create( null, null, "test_field" );
-                        fail( "IllegalArgumentException was expected, but nothing was thrown." );
-                }
-                catch ( IllegalArgumentException illegalArgumentException )
-                {
-                        // noop
-                }
+                RuleActionShowWarning.create( null, null, "test_field" );
         }
 
-        @Test
+        @Test(expected = NullPointerException.class )
         public void createMustThrowWhenFieldIsNull()
         {
-                try
-                {
-                        RuleActionShowWarning.create( "test_content", "test_data", null );
-                        fail( "NullPointerException was expected, but nothing was thrown." );
-                }
-                catch ( NullPointerException nullPointerException )
-                {
-                        // noop
-                }
+                RuleActionShowWarning.create( "test_content", "test_data", null );
         }
 
         @Test

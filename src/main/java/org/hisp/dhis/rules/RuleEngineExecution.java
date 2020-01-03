@@ -5,11 +5,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.parser.expression.ExprFunction;
-import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
 import org.hisp.dhis.parser.expression.Parser;
 import org.hisp.dhis.rules.functions.*;
 import org.hisp.dhis.rules.models.*;
-import org.hisp.dhis.rules.variables.ProgramStageNameVariable;
+import org.hisp.dhis.rules.variables.ProgramRuleVariable;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -64,9 +63,24 @@ class RuleEngineExecution
         .put( D2_LAST_EVENT_DATE, new RuleFunctionLastEventDate() )
         .put( D2_COUNT_IF_ZERO_POS, new RuleFunctionCountIfZeroPos() )
 
-        .put( V_PROGRAM_STAGE_NAME, new ProgramStageNameVariable() )
-        .put( V_EVENT_STATUS, new ProgramStageNameVariable() )
-        .put( V_ENVIRONMENT, new ProgramStageNameVariable() )
+        .put(V_CURRENT_DATE, new ProgramRuleVariable())
+        .put(V_DUE_DATE, new ProgramRuleVariable())
+        .put(V_ENROLLMENT_COUNT, new ProgramRuleVariable())
+        .put(V_ENROLLMENT_DATE, new ProgramRuleVariable())
+        .put(V_ENROLLMENT_ID, new ProgramRuleVariable())
+        .put(V_ENROLLMENT_STATUS, new ProgramRuleVariable())
+        .put(V_ENVIRONMENT, new ProgramRuleVariable())
+        .put(V_EVENT_COUNT, new ProgramRuleVariable())
+        .put(V_EVENT_DATE, new ProgramRuleVariable())
+        .put(V_EVENT_ID, new ProgramRuleVariable())
+        .put(V_EVENT_STATUS, new ProgramRuleVariable())
+        .put(V_INCIDENT_DATE, new ProgramRuleVariable())
+        .put(V_OU, new ProgramRuleVariable())
+        .put(V_OU_CODE, new ProgramRuleVariable())
+        .put(V_PROGRAM_NAME, new ProgramRuleVariable())
+        .put(V_PROGRAM_STAGE_ID, new ProgramRuleVariable())
+        .put(V_PROGRAM_STAGE_NAME, new ProgramRuleVariable())
+        .put(V_TEI_COUNT, new ProgramRuleVariable())
 
         .putAll( COMMON_EXPRESSION_FUNCTIONS )
 
@@ -179,12 +193,7 @@ class RuleEngineExecution
             RuleVariableValue variableValue = RuleVariableValue.create(data, RuleValueType.TEXT, Arrays.asList(data),
                 TODAY );
             String field = ((RuleActionAssign) ruleAction).field();
-            Matcher matcher = pattern.matcher(field);
-            while (matcher.find()) {
-                field = matcher.group(0).trim();
-                valueMap.put(field, variableValue);
-            }
-
+            valueMap.put(RuleExpression.unwrapVariableName( field ), variableValue);
             return RuleEffect.create(ruleAction, data);
         } else if (ruleAction instanceof RuleActionSendMessage) {
             return RuleEffect.create(ruleAction, process(

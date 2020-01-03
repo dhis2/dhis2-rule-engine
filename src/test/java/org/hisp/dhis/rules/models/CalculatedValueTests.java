@@ -33,13 +33,16 @@ import org.hisp.dhis.rules.RuleEngine;
 import org.hisp.dhis.rules.RuleEngineContext;
 import org.hisp.dhis.rules.RuleExpressionEvaluator;
 import org.junit.Test;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -52,19 +55,15 @@ import static org.mockito.Mockito.mock;
 @RunWith( JUnit4.class )
 public class CalculatedValueTests
 {
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
     @Mock
     private RuleExpressionEvaluator ruleExpressionEvaluator;
 
     private Map<String, Map<String, String>> calculatedValueMap = new HashMap<>();
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionIfCalculatedValueMapIsNull()
     {
-        thrown.expect( IllegalArgumentException.class );
-        RuleEngineContext ruleEngineContext = RuleEngineContext.builder( ruleExpressionEvaluator )
+        RuleEngineContext.builder( ruleExpressionEvaluator )
                 .ruleVariables( Arrays.asList( mock( RuleVariable.class ) ) )
                 .supplementaryData( new HashMap<String, List<String>>() )
                 .calculatedValueMap( null )

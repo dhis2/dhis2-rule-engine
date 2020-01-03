@@ -29,10 +29,9 @@ package org.hisp.dhis.rules.functions;
  */
 
 import com.google.common.collect.Sets;
-
 import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;

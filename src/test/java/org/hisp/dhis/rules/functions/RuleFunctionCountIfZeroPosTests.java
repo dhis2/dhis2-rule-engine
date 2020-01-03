@@ -28,7 +28,6 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
@@ -36,25 +35,21 @@ import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueBuilder;
-import org.hisp.dhis.rules.models.RuleValueType;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static java.util.Arrays.asList;
+import static org.mockito.Mockito.when;
+
 //import static org.assertj.core.api.Java6Assertions.assertThat;
 //import static org.assertj.core.api.Java6Assertions.fail;
-import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.Mockito.when;
 
 /**
  * @Author Zubair Asghar.

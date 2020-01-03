@@ -2,15 +2,14 @@ package org.hisp.dhis.rules.models;
 
 import com.google.auto.value.AutoValue;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 @AutoValue
 public abstract class RuleEvent {

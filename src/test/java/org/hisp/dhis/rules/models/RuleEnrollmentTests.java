@@ -1,8 +1,6 @@
 package org.hisp.dhis.rules.models;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -12,52 +10,42 @@ import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
 @RunWith( JUnit4.class )
 public class RuleEnrollmentTests
 {
-        @Rule
-        public ExpectedException thrown = ExpectedException.none();
-
-        @Test
+        @Test(expected = IllegalStateException.class )
         public void createShouldThrowOnNullEnrollment()
         {
-                thrown.expect( IllegalStateException.class );
                 RuleEnrollment.create( null, new Date(), new Date(),
                     RuleEnrollment.Status.ACTIVE, null,null, new ArrayList<RuleAttributeValue>(), "");
         }
 
-        @Test
+        @Test(expected = IllegalStateException.class )
         public void createShouldThrowOnNullIncidentDate()
         {
-                thrown.expect( IllegalStateException.class );
                 RuleEnrollment.create("test_enrollment", null, new Date(),
                         RuleEnrollment.Status.ACTIVE, null, null, new ArrayList<RuleAttributeValue>(), "");
-
         }
 
-        @Test
+        @Test(expected = IllegalStateException.class )
         public void createShouldThrowOnNullEnrollmentDate()
         {
-                thrown.expect( IllegalStateException.class );
                 RuleEnrollment.create( "test_enrollment", new Date(), null,
                         RuleEnrollment.Status.ACTIVE,null,null, new ArrayList<RuleAttributeValue>(), "");
         }
 
-        @Test
+        @Test(expected = IllegalStateException.class )
         public void createShouldThrowOnNullStatus()
         {
-                thrown.expect( IllegalStateException.class );
                 RuleEnrollment.create( "test_enrollment", new Date(), new Date(),
                     null, null,null,new ArrayList<RuleAttributeValue>(), "");
         }
 
-        @Test
+        @Test(expected = NullPointerException.class )
         public void createShouldThrowOnNullValueList()
         {
-                thrown.expect( NullPointerException.class );
                 RuleEnrollment.create( "test_enrollment", new Date(), new Date(),
                     RuleEnrollment.Status.ACTIVE, null,null,null, "");
         }
@@ -86,7 +74,7 @@ public class RuleEnrollmentTests
                 assertThat( ruleEnrollment.attributeValues().get( 2 ) ).isEqualTo( ruleAttributeValueThree );
         }
 
-        @Test
+        @Test(expected = UnsupportedOperationException.class )
         public void createShouldReturnImmutableList()
         {
                 RuleAttributeValue ruleAttributeValueOne = mock( RuleAttributeValue.class );
@@ -107,14 +95,6 @@ public class RuleEnrollmentTests
                 assertThat( ruleEnrollment.attributeValues().get( 0 ) ).isEqualTo( ruleAttributeValueOne );
                 assertThat( ruleEnrollment.attributeValues().get( 1 ) ).isEqualTo( ruleAttributeValueTwo );
 
-                try
-                {
-                        ruleEnrollment.attributeValues().clear();
-                        fail( "UnsupportedOperationException was expected, but nothing was thrown." );
-                }
-                catch ( UnsupportedOperationException unsupportedOperationException )
-                {
-                        // noop
-                }
+                ruleEnrollment.attributeValues().clear();
         }
 }

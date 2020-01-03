@@ -1,9 +1,10 @@
 package org.hisp.dhis.rules;
 
 import com.google.auto.value.AutoValue;
-
 import org.hisp.dhis.rules.models.RuleValueType;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
@@ -12,9 +13,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 @AutoValue
 public abstract class RuleVariableValue {

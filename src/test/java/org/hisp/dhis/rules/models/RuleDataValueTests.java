@@ -1,87 +1,38 @@
 package org.hisp.dhis.rules.models;
 
-import org.hisp.dhis.rules.models.RuleDataValue;
-import org.hisp.dhis.rules.models.RuleEvent;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import java.util.Date;
 
-import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 @RunWith( JUnit4.class )
 public class RuleDataValueTests
 {
-
-        @Mock
-        private RuleEvent ruleEvent;
-
-        @Before
-        public void setUp()
-            throws Exception
-        {
-                MockitoAnnotations.initMocks( this );
-        }
-
-        @Test
+        @Test(expected = NullPointerException.class )
         public void createShouldThrowOnNullDate()
         {
-                try
-                {
-                        RuleDataValue.create( null, "test_program_stage_uid", "test_field", "test_value" );
-                        fail( "NullPointerException is expected, but nothing was thrown" );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
+               RuleDataValue.create( null, "test_program_stage_uid", "test_field", "test_value" );
         }
 
-        @Test
+        @Test(expected = NullPointerException.class )
         public void createShouldThrowOnNullEvent()
         {
-                try
-                {
-                        RuleDataValue.create( new Date(), null, "test_field", "test_value" );
-                        fail( "NullPointerException is expected, but nothing was thrown" );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
+                RuleDataValue.create( new Date(), null, "test_field", "test_value" );
         }
 
-        @Test
+        @Test(expected = NullPointerException.class )
         public void createShouldThrowOnNullDataElement()
         {
-                try
-                {
-                        RuleDataValue.create( new Date(), "test_program_stage_uid", null, "test_value" );
-                        fail( "NullPointerException is expected, but nothing was thrown" );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
+                RuleDataValue.create( new Date(), "test_program_stage_uid", null, "test_value" );
         }
 
-        @Test
+        @Test(expected = NullPointerException.class )
         public void createShouldThrowOnNullValue()
         {
-                try
-                {
-                        RuleDataValue.create( new Date(), "test_program_stage_uid", "test_dataelement", null );
-                        fail( "NullPointerException is expected, but nothing was thrown" );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
+                RuleDataValue.create( new Date(), "test_program_stage_uid", "test_dataelement", null );
         }
 
         @Test

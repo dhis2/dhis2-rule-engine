@@ -28,7 +28,9 @@ package org.hisp.dhis.parser.expression;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.*;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.BooleanLiteralContext;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.NumericLiteralContext;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.StringLiteralContext;
 
 /**
  * Fetches literal values from an ANTLR4 org.hisp.dhis.parser.expression parse tree

@@ -1,20 +1,18 @@
 package org.hisp.dhis.rules;
 
-import com.google.common.truth.Expect;
-import org.hisp.dhis.rules.RuleEngine;
-import org.hisp.dhis.rules.RuleEngineContext;
-import org.hisp.dhis.rules.RuleExpressionEvaluator;
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleVariable;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Java6Assertions.assertThat;
@@ -23,13 +21,6 @@ import static org.mockito.Mockito.mock;
 @RunWith( JUnit4.class )
 public class RuleEngineContextTests
 {
-
-        @Mock
-        private RuleExpressionEvaluator ruleExpressionEvaluator;
-
-        @org.junit.Rule
-        public ExpectedException thrown = ExpectedException.none();
-
         @Before
         public void setUp()
             throws Exception
@@ -37,36 +28,20 @@ public class RuleEngineContextTests
                 MockitoAnnotations.initMocks( this );
         }
 
-        @Test
+        @Test(expected = IllegalArgumentException.class)
         public void builderShouldThrowOnNullVariableList()
         {
-                try
-                {
-                        RuleEngineContext.builder( ruleExpressionEvaluator )
-                            .rules( new ArrayList<Rule>() )
-                            .ruleVariables( null );
-                        fail( "IllegalArgumentException was expected, but nothing was thrown." );
-                }
-                catch ( IllegalArgumentException illegalArgumentException )
-                {
-                        // noop
-                }
+                RuleEngineContext.builder()
+                    .rules( new ArrayList<Rule>() )
+                    .ruleVariables( null );
         }
 
-        @Test
+        @Test(expected = IllegalArgumentException.class)
         public void builderShouldThrowOnNullRulesList()
         {
-                try
-                {
-                        RuleEngineContext.builder( ruleExpressionEvaluator )
-                            .ruleVariables( new ArrayList<RuleVariable>() )
-                            .ruleVariables( null );
-                        fail( "IllegalArgumentException was expected, but nothing was thrown." );
-                }
-                catch ( IllegalArgumentException illegalArgumentException )
-                {
-                        // noop
-                }
+                RuleEngineContext.builder()
+                    .ruleVariables( new ArrayList<RuleVariable>() )
+                    .ruleVariables( null );
         }
 
         @Test
@@ -88,7 +63,7 @@ public class RuleEngineContextTests
                 ruleVariables.add( ruleVariableOne );
                 rules.add( ruleOne );
 
-                RuleEngineContext ruleEngineContext = RuleEngineContext.builder( ruleExpressionEvaluator )
+                RuleEngineContext ruleEngineContext = RuleEngineContext.builder()
                     .ruleVariables( ruleVariables )
                     .supplementaryData( supplementaryData )
                     .rules( rules )
@@ -132,7 +107,7 @@ public class RuleEngineContextTests
         @Test
         public void toEngineBuilderShouldReturnNewInstances()
         {
-                RuleEngineContext ruleEngineContext = RuleEngineContext.builder( ruleExpressionEvaluator )
+                RuleEngineContext ruleEngineContext = RuleEngineContext.builder()
                     .ruleVariables( Arrays.asList( mock( RuleVariable.class ) ) )
                     .supplementaryData( new HashMap<String, List<String>>() )
                     .rules( Arrays.asList( mock( Rule.class ) ) )
