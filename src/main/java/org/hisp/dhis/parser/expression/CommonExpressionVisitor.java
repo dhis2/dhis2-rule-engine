@@ -142,28 +142,13 @@ public class CommonExpressionVisitor
     @Override
     public Object visitProgramRuleVariable( ExpressionParser.ProgramRuleVariableContext ctx )
     {
-        RuleVariableValue variableValue = valueMap.get( ctx.string.getText() );
+        RuleVariableValue variableValue = valueMap.get( ctx.uid0.getText() );
         String variable = variableValue.value() == null ?
             variableValue.type().defaultValue() : variableValue.value();
 
         if ( variable == null )
         {
             throw new ParserExceptionWithoutContext( "Variable " + ctx.var.getText() + " not present" );
-        }
-
-        return variable;
-    }
-
-    @Override
-    public Object visitConstantValue( ExpressionParser.ConstantValueContext ctx )
-    {
-        RuleVariableValue variableValue = valueMap.get( ctx.string.getText() );
-        String variable = variableValue.value() == null ?
-            variableValue.type().defaultValue() : variableValue.value();
-
-        if ( variable == null )
-        {
-            throw new ParserExceptionWithoutContext( "Constant " + ctx.var.getText() + " not present" );
         }
 
         return variable;
