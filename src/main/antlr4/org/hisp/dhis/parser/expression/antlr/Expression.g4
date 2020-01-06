@@ -121,7 +121,6 @@ expr
 
     |   item
     |   programRuleVariable
-    |   constantValue
     |   numericLiteral
     |   stringLiteral
     |   booleanLiteral
@@ -146,10 +145,10 @@ item
     ;
 
 programRuleVariable
-    : var='X{' string=variableName '}';
-
-constantValue
-    : var='C{' string=variableName '}';
+    : var='X{' uid0=variableName '}'
+    | var='C{' uid0=variableName '}'
+    | var='${' uid0=variableName '}'
+    | var='A{' uid0=variableName '}';
 
 stageDataElement
     :   '#{' uid0=UID '.' uid1=UID '}'
@@ -385,7 +384,7 @@ EMPTY
     : EOF;
 
 UNQUOTED_STRING
-    :   [a-zA-Z_]+;
+    :   [a-zA-Z0-9_]+;
 
 WS  :   [ \t\n\r]+
     ;

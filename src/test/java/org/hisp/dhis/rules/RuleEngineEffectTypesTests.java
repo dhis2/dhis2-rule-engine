@@ -36,7 +36,7 @@ public class RuleEngineEffectTypesTests {
     public void simpleConditionMustResultInAssignEffect()
             throws Exception {
         RuleAction ruleAction = RuleActionAssign.create(
-                null, "\'test_string\'", "X{test_data_element}");
+                null, "\'test_string\'", "${test_data_element}");
         Rule rule = Rule.create(null, null, "true", Arrays.asList(ruleAction), "");
 
         RuleEngine ruleEngine = getRuleEngine(rule);

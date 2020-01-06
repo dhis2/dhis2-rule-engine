@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 @AutoValue
 abstract class RuleExpression
 {
-        static final String VARIABLE_PATTERN = "[AXCV]\\{([\\w -_.]+)\\}";
+        static final String VARIABLE_PATTERN = "[AXCV$]\\{([\\w -_.]+)\\}";
 
         static final Pattern VARIABLE_PATTERN_COMPILED = Pattern.compile( VARIABLE_PATTERN );
 
@@ -29,16 +29,5 @@ abstract class RuleExpression
                 }
 
                 throw new IllegalArgumentException( "Malformed variable: " + variable );
-        }
-
-        @Nonnull
-        static String unwrapVariableNameOrReturnOriginal( @Nonnull String variable )
-        {
-                try
-                {
-                        return unwrapVariableName( variable );
-                } catch ( IllegalArgumentException e ) {
-                        return variable;
-                }
         }
 }
