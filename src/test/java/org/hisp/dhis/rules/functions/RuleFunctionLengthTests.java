@@ -28,16 +28,16 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+ import org.hamcrest.CoreMatchers;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith( MockitoJUnitRunner.class )
@@ -63,13 +63,13 @@ public class RuleFunctionLengthTests
                 RuleFunctionLength lengthFunction = new RuleFunctionLength();
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "" );
 
-                assertThat( lengthFunction.evaluate( context, visitor ), is( "0" ) );
+                assertThat( lengthFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0" ) );
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abc" );
-                assertThat( lengthFunction.evaluate( context, visitor ), is( "3" ) );
+                assertThat( lengthFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "3" ) );
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
-                assertThat( lengthFunction.evaluate( context, visitor ), is( "6" ) );
+                assertThat( lengthFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "6" ) );
         }
 
         @Test(expected = NullPointerException.class)

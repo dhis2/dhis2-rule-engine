@@ -29,14 +29,15 @@ package org.hisp.dhis.rules.functions;
  */
 
 import com.google.common.collect.Lists;
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
-import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
  * @Author Zubair Asghar.
@@ -44,7 +45,7 @@ import java.util.Map;
  * return maximum value of provided data element present in entire enrollment
  */
 public class RuleFunctionMaxValue
-    extends SimpleNoSqlFunction
+    extends ScalarFunctionToEvaluate
 {
     private String getMaxValue( String dataElement, Map<String, RuleVariableValue> valueMap )
     {
@@ -68,7 +69,7 @@ public class RuleFunctionMaxValue
     }
 
     @Override
-    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
         return getMaxValue( visitor.castStringVisit( ctx.expr( 0 ) ), visitor.getValueMap() );
     }

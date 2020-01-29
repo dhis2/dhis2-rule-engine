@@ -29,10 +29,11 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.apache.commons.lang3.StringUtils;
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.ParserUtils;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
-import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
+
+import static org.hisp.dhis.antlr.AntlrParserUtils.castDouble;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
  * @Author Zubair Asghar.
@@ -40,15 +41,15 @@ import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
  * Evaluates to the part of a string specified by the start and end character number.
  */
 public class RuleFunctionSubString
-    extends SimpleNoSqlFunction
+    extends ScalarFunctionToEvaluate
 {
     @Override
-    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
         String originalString = visitor.castStringVisit( ctx.expr( 0 ) );
         return StringUtils.substring(
             originalString == null ? "" : originalString,
-            ParserUtils.castDouble( visitor.castStringVisit( ctx.expr(1) ) ).intValue(),
-            ParserUtils.castDouble( visitor.castStringVisit( ctx.expr(2) ) ).intValue() );
+            castDouble( visitor.castStringVisit( ctx.expr(1) ) ).intValue(),
+            castDouble( visitor.castStringVisit( ctx.expr(2) ) ).intValue() );
     }
 }

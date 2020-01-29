@@ -29,15 +29,15 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.hamcrest.MatcherAssert;
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.hamcrest.CoreMatchers.is;
+ import org.hamcrest.CoreMatchers;
 import static org.mockito.Mockito.when;
 
 /**
@@ -72,15 +72,15 @@ public class RuleFunctionModulusTests
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0" );
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "2" );
-                MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), is( "0.0" ) );
+                MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0.0" ) );
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "11" );
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "3" );
-                MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), is( "2.0" ) );
+                MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "2.0" ) );
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "-11" );
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "3" );
-                MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), is( "-2.0" ) );
+                MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "-2.0" ) );
         }
 
         @Test
@@ -90,14 +90,14 @@ public class RuleFunctionModulusTests
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "2" );
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "0" );
-                MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), is( "NaN" ) );
+                MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "NaN" ) );
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "bad number" );
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "bad number" );
-                MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), is( "NaN" ) );
+                MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "NaN" ) );
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( null );
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( null );
-                MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), is( "NaN" ) );
+                MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "NaN" ) );
         }
 }

@@ -28,24 +28,23 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
-import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
 import java.util.Map;
 
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 import static org.hisp.dhis.rules.functions.RuleFunction.wrap;
 
 /**
  * @Author Zubair Asghar.
  */
 public class RuleFunctionLastEventDate
-    extends SimpleNoSqlFunction
+    extends ScalarFunctionToEvaluate
 {
-    static final String D2_LAST_EVENT_DATE = "d2:lastEventDate";
     @Override
-    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
         Map<String, RuleVariableValue> valueMap = visitor.getValueMap();
 

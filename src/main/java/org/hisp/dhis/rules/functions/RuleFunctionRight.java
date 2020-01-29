@@ -29,23 +29,23 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.apache.commons.lang3.StringUtils;
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.ParserUtils;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
-import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
+import static org.hisp.dhis.antlr.AntlrParserUtils.castDouble;
 import static org.hisp.dhis.rules.functions.RuleFunction.wrap;
 
 /**
  * @Author Zubair Asghar.
  */
 public class RuleFunctionRight
-    extends SimpleNoSqlFunction
+    extends ScalarFunctionToEvaluate
 {
     @Override
-    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        Double doubleValue = ParserUtils.castDouble( visitor.castStringVisit( ctx.expr(1) ) );
+        Double doubleValue = castDouble( visitor.castStringVisit( ctx.expr(1) ) );
         int chars = doubleValue.intValue();
 
         if ( doubleValue.doubleValue() % 1 != 0 )

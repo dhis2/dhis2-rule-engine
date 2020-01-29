@@ -28,17 +28,17 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
-import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 import org.hisp.dhis.rules.models.TimeInterval;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 import org.joda.time.Years;
 
 /**
  * @Author Zubair Asghar.
  */
 public class RuleFunctionYearsBetween
-    extends SimpleNoSqlFunction
+    extends ScalarFunctionToEvaluate
 
 {
     private Integer yearsBetween( String start, String end )
@@ -54,7 +54,7 @@ public class RuleFunctionYearsBetween
     }
 
     @Override
-    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
         return String.valueOf( yearsBetween( visitor.castStringVisit( ctx.compareDate( 0 ) ), visitor.castStringVisit( ctx.compareDate( 1 ) ) ) );
     }

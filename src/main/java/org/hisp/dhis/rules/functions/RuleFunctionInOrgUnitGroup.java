@@ -28,10 +28,10 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
-import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
 import java.util.List;
 import java.util.Map;
@@ -40,10 +40,10 @@ import java.util.Map;
  * @Author Zubair Asghar.
  */
 public class RuleFunctionInOrgUnitGroup
-    extends SimpleNoSqlFunction
+    extends ScalarFunctionToEvaluate
 {
         @Override
-        public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+        public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
         {
                 Map<String, RuleVariableValue> valueMap = visitor.getValueMap();
                 Map<String, List<String>> supplementaryData = visitor.getSupplementaryData();

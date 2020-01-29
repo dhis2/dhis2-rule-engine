@@ -1,15 +1,17 @@
 package org.hisp.dhis.rules.functions;
 
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
+import org.hamcrest.CoreMatchers;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+ import org.hamcrest.CoreMatchers;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith( MockitoJUnitRunner.class )
@@ -40,19 +42,19 @@ public class RuleFunctionAddDaysTests
 
                 when( visitor.castStringVisit( mockedDateExpr ) ).thenReturn( "2011-01-01" );
                 when( visitor.castStringVisit( mockedIntExpr ) ).thenReturn( "6" );
-                assertThat( addDaysFunction.evaluate( context, visitor), is( ("2011-01-07") ) );
+                assertThat( addDaysFunction.evaluate( context, visitor), CoreMatchers.<Object>is( ("2011-01-07") ) );
 
                 when( visitor.castStringVisit( mockedDateExpr ) ).thenReturn( "2010-10-10" );
                 when( visitor.castStringVisit( mockedIntExpr ) ).thenReturn( "1" );
-                assertThat( addDaysFunction.evaluate( context, visitor), is( ("2010-10-11") ) );
+                assertThat( addDaysFunction.evaluate( context, visitor), CoreMatchers.<Object>is( ("2010-10-11") ) );
 
                 when( visitor.castStringVisit( mockedDateExpr ) ).thenReturn( "2010-10-31" );
                 when( visitor.castStringVisit( mockedIntExpr ) ).thenReturn( "1" );
-                assertThat( addDaysFunction.evaluate( context, visitor), is( ("2010-11-01") ) );
+                assertThat( addDaysFunction.evaluate( context, visitor), CoreMatchers.<Object>is( ("2010-11-01") ) );
 
                 when( visitor.castStringVisit( mockedDateExpr ) ).thenReturn( "2010-12-01" );
                 when( visitor.castStringVisit( mockedIntExpr ) ).thenReturn( "31" );
-                assertThat( addDaysFunction.evaluate( context, visitor), is( ("2011-01-01") ) );
+                assertThat( addDaysFunction.evaluate( context, visitor), CoreMatchers.<Object>is( ("2011-01-01") ) );
         }
 
         @Test(expected = IllegalArgumentException.class)

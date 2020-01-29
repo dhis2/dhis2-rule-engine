@@ -43,7 +43,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.mock;
@@ -156,7 +155,12 @@ public class CalculatedValueTests
         RuleEngine ruleEngine2 = getRuleEngine( Arrays.asList( rule, rule2 ) ).enrollment( enrollment ).build();
         List<RuleEffect> ruleEffects2 = ruleEngine2.evaluate( ruleEvent ).call();
 
-        List<RuleAction> ruleActions = ruleEffects2.stream().map( RuleEffect::ruleAction ).collect( Collectors.toList() );
+        List<RuleAction> ruleActions = new ArrayList<>();
+
+        for ( RuleEffect ruleEffect : ruleEffects2 )
+        {
+            ruleActions.add( ruleEffect.ruleAction() );
+        }
 
         assertThat( ruleActions.contains( assignAction ) ).isEqualTo( true );
         assertThat( ruleActions.contains( sendMessageAction ) ).isEqualTo( true );
@@ -183,8 +187,8 @@ public class CalculatedValueTests
         RuleAction assignAction = RuleActionAssign.create(null, "2+2", "X{test_calculated_value}" );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1");
 
-        RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4" );
-        org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule.create( null, 4, "X{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2");
+        RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4.0" );
+        org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule.create( null, 4, "X{test_calculated_value}==4.0", Arrays.asList( sendMessageAction ), "test_program_rule2");
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule, rule2 ) );
 

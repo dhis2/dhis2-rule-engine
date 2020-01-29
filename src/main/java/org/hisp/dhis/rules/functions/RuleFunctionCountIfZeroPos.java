@@ -28,12 +28,13 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
-import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
 import java.util.List;
+
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
  * @Author Zubair Asghar.
@@ -42,7 +43,7 @@ import java.util.List;
  * The source field parameter is the name of one of the defined source fields in the program.
  */
 public class RuleFunctionCountIfZeroPos
-    extends SimpleNoSqlFunction
+    extends ScalarFunctionToEvaluate
 {
         private boolean isZeroPos( String input )
         {
@@ -61,7 +62,7 @@ public class RuleFunctionCountIfZeroPos
         }
 
         @Override
-        public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+        public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
         {
                 RuleVariableValue value = visitor.getValueMap().get( visitor.castStringVisit( ctx.expr( 0 ) ) );
 

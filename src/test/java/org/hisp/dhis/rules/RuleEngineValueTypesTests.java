@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -85,9 +86,9 @@ public class RuleEngineValueTypesTests
                         .builder(  )
                         .rules( Arrays.asList( rule ) )
                         .ruleVariables( ruleVariables )
-                        .calculatedValueMap( new HashMap<>( ) )
-                        .supplementaryData( new HashMap<>() )
-                        .constantsValue( new HashMap<>() )
+                        .calculatedValueMap( new HashMap<String, Map<String, String>>( ) )
+                        .supplementaryData( new HashMap<String, List<String>>() )
+                        .constantsValue( new HashMap<String, String>() )
                         .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
                         .build();
         }

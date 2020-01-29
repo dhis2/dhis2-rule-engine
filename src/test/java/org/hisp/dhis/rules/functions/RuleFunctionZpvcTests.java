@@ -30,14 +30,14 @@ package org.hisp.dhis.rules.functions;
 
 import com.google.common.collect.Lists;
 import org.hamcrest.MatcherAssert;
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.hamcrest.CoreMatchers.is;
+ import org.hamcrest.CoreMatchers;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -68,7 +68,7 @@ public class RuleFunctionZpvcTests
                 when( visitor.castStringVisit( mockZero ) ).thenReturn( "0" );
                 when( visitor.castStringVisit( mockPositive ) ).thenReturn( "2" );
 
-                MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), is( "2" ) );
+                MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( "2" ) );
         }
 
         @Test(expected = IllegalArgumentException.class)

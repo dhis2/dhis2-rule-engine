@@ -8,6 +8,7 @@ import org.junit.runners.JUnit4;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -161,8 +162,8 @@ public class RuleEngineFunctionTests
                     .rules( Arrays.asList( rule ) )
                     .ruleVariables( Arrays.asList( ruleVariableOne ) )
                     .supplementaryData( supplementaryData )
-                    .calculatedValueMap( new HashMap<>() )
-                    .constantsValue( new HashMap<>() )
+                    .calculatedValueMap( new HashMap<String, Map<String, String>>() )
+                    .constantsValue( new HashMap<String, String>() )
                     .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
                     .build();
 
@@ -198,8 +199,8 @@ public class RuleEngineFunctionTests
                 .rules( Arrays.asList( rule ) )
                 .ruleVariables( Arrays.asList( ruleVariableOne ) )
                 .supplementaryData( supplementaryData )
-                .calculatedValueMap( new HashMap<>() )
-                .constantsValue( new HashMap<>() )
+                .calculatedValueMap( new HashMap<String, Map<String, String>>() )
+                .constantsValue( new HashMap<String, String>() )
                 .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
                 .build();
 
@@ -484,7 +485,7 @@ public class RuleEngineFunctionTests
                 RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                        RuleEvent.Status.ACTIVE, new Date(), new Date(), "",null,Arrays.asList(), "");
+                        RuleEvent.Status.ACTIVE, new Date(), new Date(), "",null, Arrays.<RuleDataValue>asList(), "");
 
                 List<RuleEffect> ruleEffects = ruleEngineBuilder.build().evaluate( ruleEvent ).call();
 
@@ -501,10 +502,10 @@ public class RuleEngineFunctionTests
 
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
 
-                RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList() );
+                RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.<RuleVariable>asList() );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                        RuleEvent.Status.ACTIVE, new Date(), new Date(), "",null,Arrays.asList(), "");
+                        RuleEvent.Status.ACTIVE, new Date(), new Date(), "",null, Arrays.<RuleDataValue>asList(), "");
 
                 List<RuleEffect> ruleEffects = ruleEngineBuilder.build().evaluate( ruleEvent ).call();
 
@@ -521,10 +522,10 @@ public class RuleEngineFunctionTests
 
                 Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "");
 
-                RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList() );
+                RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.<RuleVariable>asList() );
 
                 RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                        RuleEvent.Status.ACTIVE, new Date(), new Date(), "",null,Arrays.asList(), "");
+                        RuleEvent.Status.ACTIVE, new Date(), new Date(), "",null, Arrays.<RuleDataValue>asList(), "");
 
                 List<RuleEffect> ruleEffects = ruleEngineBuilder.build().evaluate( ruleEvent ).call();
 
@@ -1003,14 +1004,7 @@ public class RuleEngineFunctionTests
 
         private RuleEngine getRuleEngine( Rule rule, List<RuleVariable> ruleVariables )
         {
-                return RuleEngineContext
-                        .builder(  )
-                        .rules( Arrays.asList( rule ) )
-                        .ruleVariables( ruleVariables )
-                        .calculatedValueMap( new HashMap<>( ) )
-                        .supplementaryData( new HashMap<>() )
-                        .constantsValue( new HashMap<>() )
-                        .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
+                return getRuleEngineBuilder(rule, ruleVariables)
                         .build();
         }
 
@@ -1020,9 +1014,9 @@ public class RuleEngineFunctionTests
                         .builder(  )
                         .rules( Arrays.asList( rule ) )
                         .ruleVariables( ruleVariables )
-                        .calculatedValueMap( new HashMap<>() )
-                        .supplementaryData( new HashMap<>() )
-                        .constantsValue( new HashMap<>() )
+                        .calculatedValueMap( new HashMap<String, Map<String, String>>() )
+                        .supplementaryData( new HashMap<String, List<String>>() )
+                        .constantsValue( new HashMap<String, String>() )
                         .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );
         }
 }

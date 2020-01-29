@@ -29,16 +29,16 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.hamcrest.MatcherAssert;
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.ParserExceptionWithoutContext;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.hamcrest.CoreMatchers.is;
+ import org.hamcrest.CoreMatchers;
 import static org.mockito.Mockito.when;
 
 /**
@@ -73,15 +73,15 @@ public class RuleFunctionRightTests
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( null );
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "0" );
-                MatcherAssert.assertThat( rightFunction.evaluate( context, visitor ), is( "" ) );
+                MatcherAssert.assertThat( rightFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( null );
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "10" );
-                MatcherAssert.assertThat( rightFunction.evaluate( context, visitor ), is( "" ) );
+                MatcherAssert.assertThat( rightFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( null );
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "-10" );
-                MatcherAssert.assertThat( rightFunction.evaluate( context, visitor ), is( "" ) );
+                MatcherAssert.assertThat( rightFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
         }
 
         @Test
@@ -91,19 +91,19 @@ public class RuleFunctionRightTests
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "0" );
-                MatcherAssert.assertThat( rightFunction.evaluate( context, visitor ), is( "" ) );
+                MatcherAssert.assertThat( rightFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "-5" );
-                MatcherAssert.assertThat( rightFunction.evaluate( context, visitor ), is( "f" ) );
+                MatcherAssert.assertThat( rightFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "f" ) );
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "2" );
-                MatcherAssert.assertThat( rightFunction.evaluate( context, visitor ), is( "ef" ) );
+                MatcherAssert.assertThat( rightFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "ef" ) );
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "30" );
-                MatcherAssert.assertThat( rightFunction.evaluate( context, visitor ), is( "abcdef" ) );
+                MatcherAssert.assertThat( rightFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "abcdef" ) );
         }
 
         @Test(expected = ParserExceptionWithoutContext.class)

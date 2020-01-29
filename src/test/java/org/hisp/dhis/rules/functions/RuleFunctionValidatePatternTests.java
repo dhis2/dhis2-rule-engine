@@ -29,15 +29,15 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.hamcrest.MatcherAssert;
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.hamcrest.CoreMatchers.is;
+ import org.hamcrest.CoreMatchers;
 import static org.mockito.Mockito.when;
 
 /**
@@ -92,6 +92,6 @@ public class RuleFunctionValidatePatternTests
         private void assertValidatePattern( String input, String regex, String isPatternValid ) {
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( input );
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( regex );
-                MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), is( (isPatternValid) ) );
+                MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (isPatternValid) ) );
         }
 }

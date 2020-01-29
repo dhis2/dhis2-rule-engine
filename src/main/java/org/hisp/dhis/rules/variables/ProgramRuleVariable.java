@@ -1,16 +1,17 @@
 package org.hisp.dhis.rules.variables;
 
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.ParserExceptionWithoutContext;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
-import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
+import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
+
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 public class ProgramRuleVariable
-    extends SimpleNoSqlFunction
+    extends ScalarFunctionToEvaluate
 {
     @Override
-    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
         RuleVariableValue variableValue = visitor.getValueMap().get( ctx.fun.getText() );
         String variable = variableValue.value() == null ?

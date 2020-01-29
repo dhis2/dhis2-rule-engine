@@ -28,17 +28,17 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.ParserExceptionWithoutContext;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+ import org.hamcrest.CoreMatchers;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
@@ -79,10 +79,10 @@ public class RuleFunctionSubStringTests
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "0" );
                 when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "0" );
 
-                assertThat( subStringFunction.evaluate( context, visitor ), is( "" ) );
+                assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
 
                 when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "10" );
-                assertThat( subStringFunction.evaluate( context, visitor ), is( "" ) );
+                assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
         }
 
         @Test
@@ -94,27 +94,27 @@ public class RuleFunctionSubStringTests
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "0" );
                 when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "0" );
 
-                assertThat( subStringFunction.evaluate( context, visitor ), is( "" ) );
+                assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "0" );
                 when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "1" );
-                assertThat( subStringFunction.evaluate( context, visitor ), is( "a" ) );
+                assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "a" ) );
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "-10" );
                 when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "1" );
-                assertThat( subStringFunction.evaluate( context, visitor ), is( "a" ) );
+                assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "a" ) );
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "2" );
                 when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "4" );
-                assertThat( subStringFunction.evaluate( context, visitor ), is( "cd" ) );
+                assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "cd" ) );
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "2" );
                 when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "10" );
-                assertThat( subStringFunction.evaluate( context, visitor ), is( "cdef" ) );
+                assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "cdef" ) );
         }
 
         @Test(expected = ParserExceptionWithoutContext.class)

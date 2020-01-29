@@ -52,8 +52,8 @@ public class ConstantsValueTests {
        RuleEngineContext.builder()
                 .rules(Arrays.asList(mock(org.hisp.dhis.rules.models.Rule.class)))
                 .ruleVariables(Arrays.asList(mock(RuleVariable.class)))
-                .supplementaryData(new HashMap<>())
-                .calculatedValueMap(new HashMap<>())
+                .supplementaryData(new HashMap<String, List<String>>())
+                .calculatedValueMap(new HashMap<String, Map<String, String>>())
                 .constantsValue(null)
                 .build();
 
@@ -128,9 +128,9 @@ public class ConstantsValueTests {
         return RuleEngineContext
                 .builder()
                 .rules( rules )
-                .ruleVariables( Arrays.asList() )
-                .calculatedValueMap( new HashMap<>() )
-                .supplementaryData( new HashMap<>() )
+                .ruleVariables( Arrays.<RuleVariable>asList() )
+                .calculatedValueMap( new HashMap<String, Map<String, String>>() )
+                .supplementaryData( new HashMap<String, List<String>>() )
                 .constantsValue( constantsValueMap )
                 .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );
     }

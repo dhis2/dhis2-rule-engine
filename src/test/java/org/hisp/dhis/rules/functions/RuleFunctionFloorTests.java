@@ -1,16 +1,17 @@
 package org.hisp.dhis.rules.functions;
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
-import org.hisp.dhis.parser.expression.function.ScalarFunction;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.hamcrest.CoreMatchers.is;
+ import org.hamcrest.CoreMatchers;
 import static org.mockito.Mockito.when;
 
 
@@ -39,22 +40,22 @@ public class RuleFunctionFloorTests
                 RuleFunctionFloor floor = new RuleFunctionFloor();
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "4.1" );
-                MatcherAssert.assertThat(floor.evaluate(context, visitor), is("4"));
+                MatcherAssert.assertThat(floor.evaluate(context, visitor), CoreMatchers.<Object>is("4"));
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.8" );
-                MatcherAssert.assertThat(floor.evaluate(context, visitor), is("0"));
+                MatcherAssert.assertThat(floor.evaluate(context, visitor), CoreMatchers.<Object>is("0"));
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "5.1" );
-                MatcherAssert.assertThat(floor.evaluate(context, visitor), is("5"));
+                MatcherAssert.assertThat(floor.evaluate(context, visitor), CoreMatchers.<Object>is("5"));
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "1.0" );
-                MatcherAssert.assertThat(floor.evaluate(context, visitor), is("1"));
+                MatcherAssert.assertThat(floor.evaluate(context, visitor), CoreMatchers.<Object>is("1"));
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "-9.3" );
-                MatcherAssert.assertThat(floor.evaluate(context, visitor), is("-10"));
+                MatcherAssert.assertThat(floor.evaluate(context, visitor), CoreMatchers.<Object>is("-10"));
 
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "-5.9" );
-                MatcherAssert.assertThat(floor.evaluate(context, visitor), is("-6"));
+                MatcherAssert.assertThat(floor.evaluate(context, visitor), CoreMatchers.<Object>is("-6"));
         }
 
         @Test
@@ -62,8 +63,8 @@ public class RuleFunctionFloorTests
         {
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "not a number" );
 
-                ScalarFunction floor = new RuleFunctionFloor();
+                RuleFunctionFloor floor = new RuleFunctionFloor();
 
-                MatcherAssert.assertThat( floor.evaluate( context, visitor ), is("0") );
+                MatcherAssert.assertThat( floor.evaluate( context, visitor ), CoreMatchers.<Object>is("0") );
         }
 }

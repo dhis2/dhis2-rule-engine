@@ -31,11 +31,11 @@ package org.hisp.dhis.rules.functions;
 import com.google.common.collect.Lists;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueBuilder;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -74,7 +74,7 @@ public class RuleFunctionInOrgUnitGroupTests
     @Test
     public void returnFalseWhenValueMapAndDataAreEmpty()
     {
-        assertInOrgUnitGroup( "uid1", new HashMap<>(), new HashMap<>(), "false" );
+        assertInOrgUnitGroup( "uid1", new HashMap<String, List<String>>(), new HashMap<String, RuleVariableValue>(), "false" );
     }
 
     @Test
@@ -117,6 +117,6 @@ public class RuleFunctionInOrgUnitGroupTests
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( value );
         when( visitor.getValueMap() ).thenReturn( valueMap );
         when( visitor.getSupplementaryData() ).thenReturn( supplementaryData );
-        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.is( (inOrgUnitGroup) ) );
+        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (inOrgUnitGroup) ) );
     }
 }

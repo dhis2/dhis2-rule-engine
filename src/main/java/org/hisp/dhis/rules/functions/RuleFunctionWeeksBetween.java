@@ -1,13 +1,14 @@
 package org.hisp.dhis.rules.functions;
 
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
-import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
 import org.hisp.dhis.rules.models.TimeInterval;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 import org.joda.time.Weeks;
 
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
+
 public class RuleFunctionWeeksBetween
-    extends SimpleNoSqlFunction
+    extends ScalarFunctionToEvaluate
 {
     /**
      * Function which will return the number of weeks between the two given dates.
@@ -29,7 +30,7 @@ public class RuleFunctionWeeksBetween
     }
 
     @Override
-    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
         return String.valueOf(
             weeksBetween( visitor.castStringVisit( ctx.compareDate( 0 ) ),

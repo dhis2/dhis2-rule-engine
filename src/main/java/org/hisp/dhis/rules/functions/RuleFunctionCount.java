@@ -28,12 +28,13 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
-import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
 import java.util.Map;
+
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
  * @Author Zubair Asghar.
@@ -42,7 +43,7 @@ import java.util.Map;
  * The source field parameter is the name of one of the defined source fields in the program
  */
 public class RuleFunctionCount
-    extends SimpleNoSqlFunction
+    extends ScalarFunctionToEvaluate
 {
         private String count( String ruleVariableName, Map<String, RuleVariableValue> valueMap )
         {
@@ -59,7 +60,7 @@ public class RuleFunctionCount
         }
 
         @Override
-        public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+        public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
         {
                 return count( visitor.castStringVisit( ctx.expr( 0 ) ), visitor.getValueMap() );
         }

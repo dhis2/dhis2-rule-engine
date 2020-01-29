@@ -28,14 +28,7 @@ package org.hisp.dhis.rules;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.models.Rule;
-import org.hisp.dhis.rules.models.RuleAction;
-import org.hisp.dhis.rules.models.RuleActionAssign;
-import org.hisp.dhis.rules.models.RuleAttributeValue;
-import org.hisp.dhis.rules.models.RuleEffect;
-import org.hisp.dhis.rules.models.RuleEnrollment;
-import org.hisp.dhis.rules.models.RuleEvent;
-import org.hisp.dhis.rules.models.TriggerEnvironment;
+import org.hisp.dhis.rules.models.*;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,6 +41,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -289,7 +283,7 @@ public class ProgramRuleVariableTest {
             .dueDate(DUE_DATE)
             .organisationUnit(ORGANISATION_UNIT)
             .organisationUnitCode(ORGANISATION_UNIT_CODE)
-            .dataValues( new ArrayList<>() )
+            .dataValues( new ArrayList<RuleDataValue>() )
             .build();
 
         RuleEngine ruleEngine = ruleEngineBuilder.enrollment( getEnrollment() ).build();
@@ -314,10 +308,10 @@ public class ProgramRuleVariableTest {
         return RuleEngineContext
             .builder()
             .rules( rules )
-            .ruleVariables( Arrays.asList() )
-            .calculatedValueMap( new HashMap<>() )
-            .supplementaryData( new HashMap<>() )
-            .constantsValue( new HashMap<>() )
+            .ruleVariables( Arrays.<RuleVariable>asList() )
+            .calculatedValueMap( new HashMap<String, Map<String, String>>() )
+            .supplementaryData( new HashMap<String, List<String>>() )
+            .constantsValue( new HashMap<String, String>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );
     }
 }

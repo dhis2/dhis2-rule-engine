@@ -30,11 +30,11 @@ package org.hisp.dhis.rules.functions;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueBuilder;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -120,6 +120,7 @@ public class RuleFunctionCountTests
         {
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( value );
                 when( visitor.getValueMap() ).thenReturn( valueMap );
-                MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.is( (countValue) ) );
+                MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ),
+                    CoreMatchers.<Object>is( (countValue) ) );
         }
 }

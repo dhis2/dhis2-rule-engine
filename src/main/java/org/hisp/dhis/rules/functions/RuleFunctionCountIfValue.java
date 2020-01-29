@@ -28,16 +28,16 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
-import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.models.RuleValueType;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
 import java.util.Collections;
 import java.util.Map;
 
-import static org.hisp.dhis.parser.expression.ParserUtils.trimQuotes;
+import static org.hisp.dhis.antlr.AntlrParserUtils.trimQuotes;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
  * @Author Zubair Asghar.
@@ -48,7 +48,7 @@ import static org.hisp.dhis.parser.expression.ParserUtils.trimQuotes;
  *         the defined source fields in the program.
  */
 public class RuleFunctionCountIfValue
-    extends SimpleNoSqlFunction
+    extends ScalarFunctionToEvaluate
 {
     /**
      * Function which will return the count of argument[0]. Program rule variable at
@@ -87,7 +87,7 @@ public class RuleFunctionCountIfValue
     }
 
     @Override
-    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
         String valueToFind = ctx.numStringLiteral() != null
             ? trimQuotes( ctx.numStringLiteral().getText() )

@@ -65,12 +65,6 @@ public final class RuleEngine
         }
 
         @Nonnull
-        public static String validate( @Nonnull String expression )
-        {
-                return RuleEngineExecution.validate(expression);
-        }
-
-        @Nonnull
         public Callable<List<RuleEffect>> evaluate( @Nonnull RuleEvent ruleEvent )
         {
                 if ( ruleEvent == null )

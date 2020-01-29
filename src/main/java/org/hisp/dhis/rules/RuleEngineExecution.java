@@ -1,13 +1,14 @@
 package org.hisp.dhis.rules;
 
 import com.google.common.collect.ImmutableMap;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.ExprFunction;
-import org.hisp.dhis.parser.expression.Parser;
+import org.hisp.dhis.antlr.AntlrExprFunction;
+import org.hisp.dhis.antlr.Parser;
 import org.hisp.dhis.rules.functions.*;
 import org.hisp.dhis.rules.models.*;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.rules.variables.ProgramRuleVariable;
 
 import javax.annotation.Nonnull;
@@ -20,16 +21,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.hisp.dhis.parser.expression.ParserUtils.COMMON_EXPRESSION_FUNCTIONS;
-import static org.hisp.dhis.parser.expression.ParserUtils.FUNCTION_EVALUATE;
+import static org.hisp.dhis.antlr.AntlrParserUtils.COMMON_EXPRESSION_FUNCTIONS;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.*;
+import static org.hisp.dhis.rules.parser.expression.ParserUtils.FUNCTION_EVALUATE;
 
 class RuleEngineExecution
         implements Callable<List<RuleEffect>> {
-    public final static ImmutableMap<Integer, ExprFunction> FUNCTIONS = ImmutableMap.<Integer, ExprFunction>builder()
+    public final static ImmutableMap<Integer, AntlrExprFunction> FUNCTIONS = ImmutableMap.<Integer, AntlrExprFunction>builder()
 
         .put( D2_CEIL, new RuleFunctionCeil() )
         .put( D2_ADD_DAYS, new RuleFunctionAddDays() )
@@ -137,7 +137,7 @@ class RuleEngineExecution
             Rule rule = ruleList.get(i);
             try {
                 log.debug("Evaluating programrule: " + rule.name());
-                // send org.hisp.dhis.parser.expression to evaluator
+                // send org.hisp.dhis.rules.parser.expression to evaluator
                 if (Boolean.valueOf(process(rule.condition()))) {
                     // process each action for this rule
                     for (int j = 0; j < rule.actions().size(); j++) {
@@ -158,13 +158,11 @@ class RuleEngineExecution
         return ruleEffects;
     }
 
-    public static String validate( String condition )
-    {
-        return Parser.validate( condition );
-    }
-
     private String process( String condition )
     {
+        if(condition.isEmpty()) {
+            return "";
+        }
         CommonExpressionVisitor commonExpressionVisitor = CommonExpressionVisitor.newBuilder()
             .withFunctionMap( FUNCTIONS )
             .withVariablesMap( valueMap )

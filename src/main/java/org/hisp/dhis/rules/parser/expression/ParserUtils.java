@@ -1,4 +1,4 @@
-package org.hisp.dhis.parser.expression.operator;
+package org.hisp.dhis.rules.parser.expression;
 
 /*
  * Copyright (c) 2004-2019, University of Oslo
@@ -28,28 +28,23 @@ package org.hisp.dhis.parser.expression.operator;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.function.SimpleScalarFunction;
-
-import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
+import org.hisp.dhis.antlr.AntlrExprFunction;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 
 /**
- * Operator to group using parentheses
+ * Utilities for ANTLR parsing
  *
- * @author Jim Grace
  */
-public class OperatorGroupingParentheses
-    extends SimpleScalarFunction
+public class ParserUtils
 {
-    @Override
-    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
-    {
-        return visitor.visit( ctx.expr( 0 ) );
-    }
 
-    @Override
-    public Object getSql( ExprContext ctx, CommonExpressionVisitor visitor )
+    public final static ExprFunctionMethod FUNCTION_EVALUATE = new ExprFunctionMethod()
     {
-        return "(" + visitor.castStringVisit( ctx.expr( 0 ) ) + ")";
-    }
+        @Override
+        public Object apply( AntlrExprFunction antlrExprFunction, ExpressionParser.ExprContext exprContext, CommonExpressionVisitor antlrExpressionVisitor )
+        {
+            return antlrExprFunction
+                .evaluate( exprContext, antlrExpressionVisitor );
+        }
+    };
 }

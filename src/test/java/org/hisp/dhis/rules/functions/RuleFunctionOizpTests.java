@@ -30,9 +30,9 @@ package org.hisp.dhis.rules.functions;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -87,6 +87,6 @@ public class RuleFunctionOizpTests
         private void assertOizp( String value, String monthsBetween )
         {
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( value );
-                MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.is( (monthsBetween) ) );
+                MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (monthsBetween) ) );
         }
 }

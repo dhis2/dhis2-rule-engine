@@ -29,9 +29,8 @@ package org.hisp.dhis.rules.functions;
  */
 
 import com.google.common.collect.Sets;
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
-import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -42,17 +41,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
+
 /**
  * @Author Zubair Asghar.
  */
 public abstract class RuleFunctionZScore
-    extends SimpleNoSqlFunction
+    extends ScalarFunctionToEvaluate
 {
     private static final Set<String> GENDER_CODES = Sets.newHashSet( "male", "MALE", "Male", "ma", "m", "M", "0",
         "false" );
 
     @Override
-    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
 
         // 1 = female, 0 = male

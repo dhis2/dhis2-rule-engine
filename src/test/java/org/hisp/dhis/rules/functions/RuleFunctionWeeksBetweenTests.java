@@ -1,15 +1,16 @@
 package org.hisp.dhis.rules.functions;
 
 import org.hamcrest.MatcherAssert;
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.hamcrest.CoreMatchers.is;
+ import org.hamcrest.CoreMatchers;
 import static org.mockito.Mockito.when;
 
 @RunWith( MockitoJUnitRunner.class )
@@ -80,6 +81,6 @@ public class RuleFunctionWeeksBetweenTests
         private void assertWeeksBetween( String startDate, String endDate, String weeksBetween ) {
                 when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( startDate );
                 when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( endDate );
-                MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), is( (weeksBetween) ) );
+                MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (weeksBetween) ) );
         }
 }

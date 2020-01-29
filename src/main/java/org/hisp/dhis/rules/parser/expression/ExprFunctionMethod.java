@@ -1,4 +1,4 @@
-package org.hisp.dhis.parser.expression.function;
+package org.hisp.dhis.rules.parser.expression;
 
 /*
  * Copyright (c) 2004-2019, University of Oslo
@@ -28,47 +28,22 @@ package org.hisp.dhis.parser.expression.function;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.hisp.dhis.antlr.AntlrExprFunction;
 
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
- * A function that computes the result from the arguments, where if any
- * of the arguments are null, then the result is null.
- *
- * @author Jim Grace
+ * Applies a method in an ExprFunction.
  */
-public abstract class ComputeFunction
-    extends SimpleScalarFunction
+//@FunctionalInterface
+public interface ExprFunctionMethod
 {
-    @Override
-    public final Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
-    {
-        List<Object> values = new ArrayList<>();
-
-        for ( ExprContext expr : ctx.expr() )
-        {
-            Object value = visitor.visit( expr );
-
-            if ( value == null )
-            {
-                return null;
-            }
-
-            values.add( value );
-        }
-
-        return compute( values );
-    }
-
     /**
-     * Computes the result from non-null values.
+     * Invokes a method in an org.hisp.dhis.rules.parser.expression function
      *
-     * @param values the values to use.
-     * @return the computed value.
+     * @param function the function to evaluate
+     * @param ctx the org.hisp.dhis.rules.parser.expression context
+     * @return the function result
      */
-    public abstract Object compute( List<Object> values );
+    Object apply( AntlrExprFunction function, ExprContext ctx, CommonExpressionVisitor visitor );
 }

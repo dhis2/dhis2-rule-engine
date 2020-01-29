@@ -3,6 +3,7 @@ package org.hisp.dhis.rules;
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleVariable;
 import org.junit.Before;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

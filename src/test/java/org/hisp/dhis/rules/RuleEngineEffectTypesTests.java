@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -128,9 +129,9 @@ public class RuleEngineEffectTypesTests {
         RuleEngine ruleEngine = RuleEngineContext
                 .builder()
                 .rules(Arrays.asList(rule, rule2))
-                .calculatedValueMap(new HashMap<>())
-                .supplementaryData(new HashMap<>())
-                .constantsValue(new HashMap<>())
+                .calculatedValueMap(new HashMap<String, Map<String, String>>())
+                .supplementaryData(new HashMap<String, List<String>>())
+                .constantsValue(new HashMap<String, String>())
                 .build().toEngineBuilder().triggerEnvironment(TriggerEnvironment.SERVER)
                 .build();
 
@@ -325,9 +326,9 @@ public class RuleEngineEffectTypesTests {
         return RuleEngineContext
                 .builder()
                 .rules(Arrays.asList(rule))
-                .calculatedValueMap(new HashMap<>())
-                .supplementaryData(new HashMap<>())
-                .constantsValue(new HashMap<>())
+                .calculatedValueMap(new HashMap<String, Map<String, String>>())
+                .supplementaryData(new HashMap<String, List<String>>())
+                .constantsValue(new HashMap<String, String>())
                 .build().toEngineBuilder().triggerEnvironment(TriggerEnvironment.SERVER)
                 .build();
     }

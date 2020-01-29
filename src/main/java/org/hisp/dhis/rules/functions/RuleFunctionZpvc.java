@@ -28,9 +28,9 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
-import org.hisp.dhis.parser.expression.function.SimpleNoSqlFunction;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,18 +41,17 @@ import java.util.List;
  * Returns the number of numeric zero and positive values among the given object arguments. Can be provided with any number of arguments.
  */
 public class RuleFunctionZpvc
-    extends SimpleNoSqlFunction
+    extends ScalarFunctionToEvaluate
 {
     @Override
-    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
         List<Double> list  = new ArrayList<>();
-        for(ExpressionParser.ExprContext expr : ctx.expr()){
+        for( ExprContext expr : ctx.expr()){
             Double value = Double.valueOf(visitor.castStringVisit( expr ));
             if(value>=0)
                 list.add(value);
         }
-//            list = arguments.stream().map( Double::new ).filter( v -> v >= 0 ).collect( Collectors.toList() );
         return String.valueOf( list.size() );
     }
 }
