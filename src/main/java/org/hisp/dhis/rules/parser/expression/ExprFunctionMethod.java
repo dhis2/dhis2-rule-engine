@@ -28,7 +28,7 @@ package org.hisp.dhis.rules.parser.expression;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.antlr.AntlrExprFunction;
+import org.hisp.dhis.antlr.AntlrExprItem;
 
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
@@ -45,5 +45,5 @@ public interface ExprFunctionMethod
      * @param ctx the org.hisp.dhis.rules.parser.expression context
      * @return the function result
      */
-    Object apply( AntlrExprFunction function, ExprContext ctx, CommonExpressionVisitor visitor );
+    Object apply( AntlrExprItem function, ExprContext ctx, CommonExpressionVisitor visitor );
 }

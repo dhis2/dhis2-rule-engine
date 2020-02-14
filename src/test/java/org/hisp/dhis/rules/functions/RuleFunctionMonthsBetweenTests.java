@@ -54,17 +54,17 @@ public class RuleFunctionMonthsBetweenTests
         private CommonExpressionVisitor visitor;
 
         @Mock
-        private ExpressionParser.CompareDateContext mockedFirstExpr;
+        private ExpressionParser.ExprContext mockedFirstExpr;
 
         @Mock
-        private ExpressionParser.CompareDateContext mockedSecondExpr;
+        private ExpressionParser.ExprContext mockedSecondExpr;
 
         private RuleFunctionMonthsBetween functionToTest = new RuleFunctionMonthsBetween();
 
         @Before
         public void setUp() {
-                when(context.compareDate(0)).thenReturn( mockedFirstExpr );
-                when(context.compareDate(1)).thenReturn( mockedSecondExpr );
+                when(context.expr(0)).thenReturn( mockedFirstExpr );
+                when(context.expr(1)).thenReturn( mockedSecondExpr );
         }
 
         @Test

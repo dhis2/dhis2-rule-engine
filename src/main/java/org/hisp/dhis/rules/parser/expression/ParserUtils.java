@@ -28,7 +28,7 @@ package org.hisp.dhis.rules.parser.expression;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.antlr.AntlrExprFunction;
+import org.hisp.dhis.antlr.AntlrExprItem;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 
 /**
@@ -41,9 +41,9 @@ public class ParserUtils
     public final static ExprFunctionMethod FUNCTION_EVALUATE = new ExprFunctionMethod()
     {
         @Override
-        public Object apply( AntlrExprFunction antlrExprFunction, ExpressionParser.ExprContext exprContext, CommonExpressionVisitor antlrExpressionVisitor )
+        public Object apply( AntlrExprItem AntlrExprItem, ExpressionParser.ExprContext exprContext, CommonExpressionVisitor antlrExpressionVisitor )
         {
-            return antlrExprFunction
+            return AntlrExprItem
                 .evaluate( exprContext, antlrExpressionVisitor );
         }
     };

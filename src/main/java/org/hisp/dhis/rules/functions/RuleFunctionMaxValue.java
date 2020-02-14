@@ -71,6 +71,6 @@ public class RuleFunctionMaxValue
     @Override
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return getMaxValue( visitor.castStringVisit( ctx.expr( 0 ) ), visitor.getValueMap() );
+        return getMaxValue( ctx.variableName().getText(), visitor.getValueMap() );
     }
 }

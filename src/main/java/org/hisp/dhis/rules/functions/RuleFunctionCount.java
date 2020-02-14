@@ -62,6 +62,6 @@ public class RuleFunctionCount
         @Override
         public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
         {
-                return count( visitor.castStringVisit( ctx.expr( 0 ) ), visitor.getValueMap() );
+                return count( ctx.variableName().getText(), visitor.getValueMap() );
         }
 }

@@ -7,19 +7,19 @@ import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
-public class ProgramRuleVariable
+public class ProgramRuleConstant
     extends ScalarFunctionToEvaluate
 {
     @Override
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        RuleVariableValue variableValue = visitor.getValueMap().get( ctx.programVariable().getText() );
+        RuleVariableValue variableValue = visitor.getValueMap().get( ctx.uid0.getText() );
         String variable = variableValue.value() == null ?
             variableValue.type().defaultValue() : variableValue.value();
 
         if ( variable == null )
         {
-            throw new ParserExceptionWithoutContext( "Variable " + ctx.programVariable().getText() + " not present" );
+            throw new ParserExceptionWithoutContext( "Variable " + ctx.uid0.getText() + " not present" );
         }
 
         return variable;

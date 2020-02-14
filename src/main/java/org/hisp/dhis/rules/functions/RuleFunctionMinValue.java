@@ -71,6 +71,6 @@ public class RuleFunctionMinValue
     @Override
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return getMinValue( visitor.castStringVisit( ctx.expr( 0 ) ), visitor.getValueMap() );
+        return getMinValue( ctx.variableName().getText(), visitor.getValueMap() );
     }
 }

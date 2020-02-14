@@ -60,13 +60,13 @@ public class RuleFunctionMinValueTests
     private CommonExpressionVisitor visitor;
 
     @Mock
-    private ExpressionParser.ExprContext mockedFirstExpr;
+    private ExpressionParser.VariableNameContext mockedVariableName;
 
     private RuleFunctionMinValue functionToTest = new RuleFunctionMinValue();
 
     @Before
     public void setUp() {
-        when(context.expr(0)).thenReturn( mockedFirstExpr );
+        when(context.variableName()).thenReturn( mockedVariableName );
     }
 
 
@@ -96,7 +96,7 @@ public class RuleFunctionMinValueTests
 
     private void assertMinValue( String value, Map<String, RuleVariableValue> valueMap, String minValue )
     {
-        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( value );
+        when( mockedVariableName.getText() ).thenReturn( value );
         when( visitor.getValueMap() ).thenReturn( valueMap );
         MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (minValue) ) );
     }

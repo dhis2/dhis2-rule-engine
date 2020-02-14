@@ -18,7 +18,7 @@ public class RuleExpressionTests {
                     .isEqualTo( "test_variable_two" );
                 assertThat( RuleExpression.unwrapVariableName( "V{test_variable_three}" ) )
                     .isEqualTo( "test_variable_three" );
-                assertThat( RuleExpression.unwrapVariableName( "X{test_variable_four}" ) )
+                assertThat( RuleExpression.unwrapVariableName( "#{test_variable_four}" ) )
                     .isEqualTo( "test_variable_four" );
         }
 }

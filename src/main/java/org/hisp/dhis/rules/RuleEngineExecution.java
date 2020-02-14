@@ -4,12 +4,15 @@ import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hisp.dhis.antlr.AntlrExprFunction;
+import org.hisp.dhis.antlr.AntlrExprItem;
 import org.hisp.dhis.antlr.Parser;
 import org.hisp.dhis.rules.functions.*;
 import org.hisp.dhis.rules.models.*;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.variables.ProgramRuleConstant;
+import org.hisp.dhis.rules.variables.ProgramRuleCustomVariable;
 import org.hisp.dhis.rules.variables.ProgramRuleVariable;
+import org.hisp.dhis.rules.variables.Variable;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -23,13 +26,13 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
 
-import static org.hisp.dhis.antlr.AntlrParserUtils.COMMON_EXPRESSION_FUNCTIONS;
+import static org.hisp.dhis.antlr.AntlrParserUtils.ANTLR_EXPRESSION_ITEMS;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.*;
 import static org.hisp.dhis.rules.parser.expression.ParserUtils.FUNCTION_EVALUATE;
 
 class RuleEngineExecution
         implements Callable<List<RuleEffect>> {
-    public final static ImmutableMap<Integer, AntlrExprFunction> FUNCTIONS = ImmutableMap.<Integer, AntlrExprFunction>builder()
+    public final static ImmutableMap<Integer, AntlrExprItem> FUNCTIONS = ImmutableMap.<Integer, AntlrExprItem>builder()
 
         .put( D2_CEIL, new RuleFunctionCeil() )
         .put( D2_ADD_DAYS, new RuleFunctionAddDays() )
@@ -63,26 +66,12 @@ class RuleEngineExecution
         .put( D2_LAST_EVENT_DATE, new RuleFunctionLastEventDate() )
         .put( D2_COUNT_IF_ZERO_POS, new RuleFunctionCountIfZeroPos() )
 
-        .put(V_CURRENT_DATE, new ProgramRuleVariable())
-        .put(V_DUE_DATE, new ProgramRuleVariable())
-        .put(V_ENROLLMENT_COUNT, new ProgramRuleVariable())
-        .put(V_ENROLLMENT_DATE, new ProgramRuleVariable())
-        .put(V_ENROLLMENT_ID, new ProgramRuleVariable())
-        .put(V_ENROLLMENT_STATUS, new ProgramRuleVariable())
-        .put(V_ENVIRONMENT, new ProgramRuleVariable())
-        .put(V_EVENT_COUNT, new ProgramRuleVariable())
-        .put(V_EVENT_DATE, new ProgramRuleVariable())
-        .put(V_EVENT_ID, new ProgramRuleVariable())
-        .put(V_EVENT_STATUS, new ProgramRuleVariable())
-        .put(V_INCIDENT_DATE, new ProgramRuleVariable())
-        .put(V_OU, new ProgramRuleVariable())
-        .put(V_OU_CODE, new ProgramRuleVariable())
-        .put(V_PROGRAM_NAME, new ProgramRuleVariable())
-        .put(V_PROGRAM_STAGE_ID, new ProgramRuleVariable())
-        .put(V_PROGRAM_STAGE_NAME, new ProgramRuleVariable())
-        .put(V_TEI_COUNT, new ProgramRuleVariable())
+        .put(V_BRACE, new ProgramRuleVariable())
+        .put(HASH_BRACE, new Variable() )
+        .put( C_BRACE, new ProgramRuleConstant() )
+        .put( X_BRACE, new ProgramRuleCustomVariable() )
 
-        .putAll( COMMON_EXPRESSION_FUNCTIONS )
+        .putAll( ANTLR_EXPRESSION_ITEMS )
 
         .build();
 

@@ -56,13 +56,13 @@ public class RuleFunctionCountTests
         private CommonExpressionVisitor visitor;
 
         @Mock
-        private ExpressionParser.ExprContext mockedFirstExpr;
+        private ExpressionParser.VariableNameContext mockedVariableName;
 
         private RuleFunctionCount functionToTest = new RuleFunctionCount();
 
         @Before
         public void setUp() {
-                when(context.expr(0)).thenReturn( mockedFirstExpr );
+                when(context.variableName()).thenReturn( mockedVariableName );
         }
 
         @Test
@@ -118,7 +118,7 @@ public class RuleFunctionCountTests
 
         private void assertCountValue( String value, Map<String, RuleVariableValue> valueMap, String countValue )
         {
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( value );
+                when( mockedVariableName.getText() ).thenReturn( value );
                 when( visitor.getValueMap() ).thenReturn( valueMap );
                 MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ),
                     CoreMatchers.<Object>is( (countValue) ) );

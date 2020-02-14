@@ -57,17 +57,17 @@ public class RuleFunctionCountIfValueTests
     private CommonExpressionVisitor visitor;
 
     @Mock
-    private ExpressionParser.ExprContext mockedFirstExpr;
+    private ExpressionParser.ExprContext mockedExpr;
 
     @Mock
-    private ExpressionParser.ExprContext mockedSecondExpr;
+    private ExpressionParser.VariableNameContext mockedVariableName;
 
     private RuleFunctionCountIfValue functionToTest = new RuleFunctionCountIfValue();
 
     @Before
     public void setUp() {
-        when(context.expr(0)).thenReturn( mockedFirstExpr );
-        when(context.expr(1)).thenReturn( mockedSecondExpr );
+        when(context.expr(0)).thenReturn( mockedExpr );
+        when(context.variableName()).thenReturn( mockedVariableName );
     }
     @Test
     public void return_zero_for_non_existing_variable()
@@ -191,8 +191,8 @@ public class RuleFunctionCountIfValueTests
 
     private void assertCountIfValue( String variableName, String valueToFind, Map<String, RuleVariableValue> valueMap, String countIfValue )
     {
-        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( variableName );
-        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( valueToFind );
+        when( mockedVariableName.getText() ).thenReturn( variableName );
+        when( visitor.castStringVisit( mockedExpr ) ).thenReturn( valueToFind );
         when( visitor.getValueMap() ).thenReturn( valueMap );
         MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ),
             CoreMatchers.<Object>is( (countIfValue) ) );

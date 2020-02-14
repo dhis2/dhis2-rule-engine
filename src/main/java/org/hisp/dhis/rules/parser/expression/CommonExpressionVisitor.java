@@ -29,10 +29,10 @@ package org.hisp.dhis.rules.parser.expression;
  */
 
 import org.apache.commons.lang3.Validate;
-import org.hisp.dhis.antlr.AntlrExprFunction;
+import org.hisp.dhis.antlr.AntlrExprItem;
 import org.hisp.dhis.antlr.AntlrExpressionVisitor;
+import org.hisp.dhis.antlr.AntlrParserUtils;
 import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 import org.hisp.dhis.rules.RuleVariableValue;
 
@@ -52,7 +52,7 @@ public class CommonExpressionVisitor
     /**
      * Map of ExprFunction instances to call for each org.hisp.dhis.rules.parser.expression function
      */
-    private Map<Integer, AntlrExprFunction> functionMap;
+    private Map<Integer, AntlrExprItem> itemMap;
 
     /**
      * Method to call within the ExprFunction instance
@@ -99,17 +99,32 @@ public class CommonExpressionVisitor
     @Override
     public Object visitExpr( ExprContext ctx )
     {
-        if ( ctx.fun != null )
-        {
-            AntlrExprFunction function = functionMap.get( ctx.fun.getType() );
 
-            if ( function == null )
+        if ( ctx.it != null )
+        {
+            AntlrExprItem item = itemMap.get( ctx.it.getType() );
+
+            if ( item == null )
             {
-                throw new ParserExceptionWithoutContext( "Function " + ctx.fun.getText() + " not supported for this type of expression" );
+                throw new ParserExceptionWithoutContext(
+                    "Item " + ctx.it.getText() + " not supported for this type of expression" );
             }
 
-            return functionMethod.apply( function, ctx, this );
+            return functionMethod.apply( item, ctx, this );
         }
+
+//        if (ctx.variableName() != null) {
+//            RuleVariableValue variableValue = valueMap.get( ctx.uid0.getText() );
+//            String variable = variableValue.value() == null ?
+//                variableValue.type().defaultValue() : variableValue.value();
+//
+//            if ( variable == null )
+//            {
+//                throw new ParserExceptionWithoutContext( "Variable " + ctx.variableName().getText() + " not present" );
+//            }
+//
+//            return variable;
+//        }
 
         if ( ctx.expr().size() > 0 ) // If there's an expr, visit the expr
         {
@@ -117,21 +132,6 @@ public class CommonExpressionVisitor
         }
 
         return visit( ctx.getChild( 0 ) ); // All others: visit first child.
-    }
-
-    @Override
-    public Object visitProgramRuleVariable( ExpressionParser.ProgramRuleVariableContext ctx )
-    {
-        RuleVariableValue variableValue = valueMap.get( ctx.uid0.getText() );
-        String variable = variableValue.value() == null ?
-            variableValue.type().defaultValue() : variableValue.value();
-
-        if ( variable == null )
-        {
-            throw new ParserExceptionWithoutContext( "Variable " + ctx.var.getText() + " not present" );
-        }
-
-        return variable;
     }
 
     // -------------------------------------------------------------------------
@@ -170,9 +170,9 @@ public class CommonExpressionVisitor
             this.visitor = new CommonExpressionVisitor();
         }
 
-        public Builder withFunctionMap( Map<Integer, AntlrExprFunction> functionMap )
+        public Builder withFunctionMap( Map<Integer, AntlrExprItem> functionMap )
         {
-            this.visitor.functionMap = functionMap;
+            this.visitor.itemMap = functionMap;
             return this;
         }
 
@@ -196,7 +196,7 @@ public class CommonExpressionVisitor
 
         public CommonExpressionVisitor validateCommonProperties()
         {
-            Validate.notNull( this.visitor.functionMap, "Missing required property 'functionMap'" );
+            Validate.notNull( this.visitor.itemMap, "Missing required property 'functionMap'" );
             Validate.notNull( this.visitor.functionMethod, "Missing required property 'functionMethod'" );
 
             return visitor;

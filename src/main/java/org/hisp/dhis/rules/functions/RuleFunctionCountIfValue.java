@@ -89,11 +89,9 @@ public class RuleFunctionCountIfValue
     @Override
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        String valueToFind = ctx.numStringLiteral() != null
-            ? trimQuotes( ctx.numStringLiteral().getText() )
-            : visitor.castStringVisit( ctx.expr( 1 ) );
+        String valueToFind = visitor.castStringVisit( ctx.expr( 0 ) );
 
-        return countIfValue( visitor.castStringVisit( ctx.expr( 0 ) ),
+        return countIfValue( ctx.variableName().getText(),
             valueToFind,
             visitor.getValueMap() );
     }

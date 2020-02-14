@@ -64,7 +64,7 @@ public class RuleFunctionCountIfZeroPos
         @Override
         public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
         {
-                RuleVariableValue value = visitor.getValueMap().get( visitor.castStringVisit( ctx.expr( 0 ) ) );
+                RuleVariableValue value = visitor.getValueMap().get( ctx.variableName().getText() );
 
                 if ( value != null )
                 {

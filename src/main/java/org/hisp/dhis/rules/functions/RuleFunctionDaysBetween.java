@@ -34,7 +34,7 @@ public class RuleFunctionDaysBetween
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
         return String.valueOf( daysBetween(
-            visitor.castStringVisit( ctx.compareDate( 0 ) ),
-            visitor.castStringVisit( ctx.compareDate( 1 ) ) ) );
+            visitor.castStringVisit( ctx.expr( 0 ) ),
+            visitor.castStringVisit( ctx.expr( 1 ) ) ) );
     }
 }

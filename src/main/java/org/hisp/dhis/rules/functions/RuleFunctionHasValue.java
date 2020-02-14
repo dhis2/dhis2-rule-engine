@@ -16,7 +16,7 @@ public class RuleFunctionHasValue
         {
                 Map<String, RuleVariableValue> valueMap = visitor.getValueMap();
 
-                String variableName = visitor.castStringVisit( ctx.expr( 0 ) ).replace( "'", "" );
+                String variableName = ctx.variableName().getText();
                 RuleVariableValue variableValue = valueMap.get( variableName );
 
                 if ( variableValue == null )

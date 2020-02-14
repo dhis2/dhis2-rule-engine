@@ -1,6 +1,7 @@
 package org.hisp.dhis.rules.parser.expression.function;
 
-import org.hisp.dhis.antlr.AntlrExprFunction;
+import org.hisp.dhis.antlr.AntlrExprItem;
+import org.hisp.dhis.antlr.AntlrExprItem;
 import org.hisp.dhis.antlr.AntlrExpressionVisitor;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 
@@ -12,7 +13,7 @@ import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext
  * @author Enrico Colasante
  */
 public abstract class ScalarFunctionToEvaluate
-    implements AntlrExprFunction
+    implements AntlrExprItem
 {
     /**
      * Finds the value of an expression function, evaluating arguments only

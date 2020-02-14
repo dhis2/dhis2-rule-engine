@@ -33,7 +33,7 @@ public class RuleFunctionWeeksBetween
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
         return String.valueOf(
-            weeksBetween( visitor.castStringVisit( ctx.compareDate( 0 ) ),
-                visitor.castStringVisit( ctx.compareDate( 1 ) ) ) );
+            weeksBetween( visitor.castStringVisit( ctx.expr( 0 ) ),
+                visitor.castStringVisit( ctx.expr( 1 ) ) ) );
     }
 }

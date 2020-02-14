@@ -60,13 +60,13 @@ public class RuleFunctionMaxValueTests
     private CommonExpressionVisitor visitor;
 
     @Mock
-    private ExpressionParser.ExprContext mockedFirstExpr;
+    private ExpressionParser.VariableNameContext mockedVariableName;
 
     private RuleFunctionMaxValue functionToTest = new RuleFunctionMaxValue();
 
     @Before
     public void setUp() {
-        when(context.expr(0)).thenReturn( mockedFirstExpr );
+        when(context.variableName()).thenReturn( mockedVariableName );
     }
 
     @Test
@@ -95,7 +95,7 @@ public class RuleFunctionMaxValueTests
 
     private void assertMaxValue( String value, Map<String, RuleVariableValue> valueMap, String maxValue )
     {
-        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( value );
+        when( mockedVariableName.getText() ).thenReturn( value );
         when( visitor.getValueMap() ).thenReturn( valueMap );
         MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (maxValue) ) );
     }

@@ -27,13 +27,13 @@ public class RuleFunctionHasValueTests
         private CommonExpressionVisitor visitor;
 
         @Mock
-        private ExpressionParser.ExprContext mockedFirstExpr;
+        private ExpressionParser.VariableNameContext mockedVariableName;
 
         private RuleFunctionHasValue functionToTest = new RuleFunctionHasValue();
 
         @Before
         public void setUp() {
-                when(context.expr(0)).thenReturn( mockedFirstExpr );
+                when(context.variableName()).thenReturn( mockedVariableName );
         }
 
         @Test
@@ -101,7 +101,7 @@ public class RuleFunctionHasValueTests
 
         private void assertHasValue( String value, Map<String, RuleVariableValue> valueMap, String hasValue )
         {
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( value );
+                when( mockedVariableName.getText() ).thenReturn( value );
                 when( visitor.getValueMap() ).thenReturn( valueMap );
                 MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (hasValue) ) );
         }

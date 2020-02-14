@@ -69,7 +69,7 @@ public class RuleFunctionMonthsBetween
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
         return String.valueOf(
-            monthsBetween( visitor.castStringVisit( ctx.compareDate( 0 ) ),
-            visitor.castStringVisit( ctx.compareDate( 1 ) )) );
+            monthsBetween( visitor.castStringVisit( ctx.expr( 0 ) ),
+            visitor.castStringVisit( ctx.expr( 1 ) )) );
     }
 }

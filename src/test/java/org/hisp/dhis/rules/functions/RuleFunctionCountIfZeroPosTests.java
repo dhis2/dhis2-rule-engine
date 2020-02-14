@@ -65,13 +65,13 @@ public class RuleFunctionCountIfZeroPosTests
         private CommonExpressionVisitor visitor;
 
         @Mock
-        private ExpressionParser.ExprContext mockedFirstExpr;
+        private ExpressionParser.VariableNameContext mockedVariableName;
 
         private RuleFunctionCountIfZeroPos functionToTest = new RuleFunctionCountIfZeroPos();
 
         @Before
         public void setUp() {
-                when(context.expr(0)).thenReturn( mockedFirstExpr );
+                when(context.variableName()).thenReturn( mockedVariableName );
         }
 
         @Test
@@ -98,7 +98,7 @@ public class RuleFunctionCountIfZeroPosTests
                 Map<String, RuleVariableValue> variableValues = givenAVariableValuesAndOneWithCandidates(
                     variableName, Arrays.asList( "0", "-1", "2" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( variableName );
+                when( mockedVariableName.getText() ).thenReturn( variableName );
 
                 assertCountValue( variableName, variableValues,"2" );
         }
@@ -123,7 +123,7 @@ public class RuleFunctionCountIfZeroPosTests
 
                 Map<String, RuleVariableValue> variableValues = givenAVariableValuesAndOneWithUndefinedCandidates( variableName, "-10" );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( variableName );
+                when( mockedVariableName.getText() ).thenReturn( variableName );
 
                 assertCountValue( variableName, variableValues,"0" );
         }
@@ -181,7 +181,7 @@ public class RuleFunctionCountIfZeroPosTests
 
         private void assertCountValue( String value, Map<String, RuleVariableValue> valueMap, String countValue )
         {
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( value );
+                when( mockedVariableName.getText() ).thenReturn( value );
                 when( visitor.getValueMap() ).thenReturn( valueMap );
                 MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ),
                     CoreMatchers.<Object>is( (countValue) ) );
