@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules.functions;
 
+import org.hisp.dhis.rules.RuleExpression;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
@@ -16,7 +17,7 @@ public class RuleFunctionHasValue
         {
                 Map<String, RuleVariableValue> valueMap = visitor.getValueMap();
 
-                String variableName = ctx.variableName().getText();
+                String variableName = RuleExpression.getProgramRuleVariable(ctx);
                 RuleVariableValue variableValue = valueMap.get( variableName );
 
                 if ( variableValue == null )

@@ -60,14 +60,14 @@ public class RuleFunctionCountIfValueTests
     private ExpressionParser.ExprContext mockedExpr;
 
     @Mock
-    private ExpressionParser.VariableNameContext mockedVariableName;
+    private ExpressionParser.ProgramRuleVariableNameContext mockedVariableName;
 
     private RuleFunctionCountIfValue functionToTest = new RuleFunctionCountIfValue();
 
     @Before
     public void setUp() {
         when(context.expr(0)).thenReturn( mockedExpr );
-        when(context.variableName()).thenReturn( mockedVariableName );
+        when(context.programRuleVariableName()).thenReturn( mockedVariableName );
     }
     @Test
     public void return_zero_for_non_existing_variable()

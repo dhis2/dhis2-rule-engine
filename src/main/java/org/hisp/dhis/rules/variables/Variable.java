@@ -13,13 +13,13 @@ public class Variable
     @Override
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        RuleVariableValue variableValue = visitor.getValueMap().get( ctx.variableName().getText() );
+        RuleVariableValue variableValue = visitor.getValueMap().get( ctx.programRuleVariableName().getText() );
         String variable = variableValue.value() == null ?
             variableValue.type().defaultValue() : variableValue.value();
 
         if ( variable == null )
         {
-            throw new ParserExceptionWithoutContext( "Variable " + ctx.variableName().getText() + " not present" );
+            throw new ParserExceptionWithoutContext( "Variable " + ctx.programRuleVariableName().getText() + " not present" );
         }
 
         return variable;

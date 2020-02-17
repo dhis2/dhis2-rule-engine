@@ -28,6 +28,7 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hisp.dhis.rules.RuleExpression;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.models.RuleValueType;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
@@ -91,7 +92,7 @@ public class RuleFunctionCountIfValue
     {
         String valueToFind = visitor.castStringVisit( ctx.expr( 0 ) );
 
-        return countIfValue( ctx.variableName().getText(),
+        return countIfValue( RuleExpression.getProgramRuleVariable(ctx),
             valueToFind,
             visitor.getValueMap() );
     }

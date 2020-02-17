@@ -29,6 +29,7 @@ package org.hisp.dhis.rules.functions;
  */
 
 import com.google.common.collect.Lists;
+import org.hisp.dhis.rules.RuleExpression;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
@@ -71,6 +72,6 @@ public class RuleFunctionMinValue
     @Override
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return getMinValue( ctx.variableName().getText(), visitor.getValueMap() );
+        return getMinValue( RuleExpression.getProgramRuleVariable(ctx), visitor.getValueMap() );
     }
 }

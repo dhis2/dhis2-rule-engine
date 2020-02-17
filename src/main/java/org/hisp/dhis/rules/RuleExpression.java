@@ -1,6 +1,7 @@
 package org.hisp.dhis.rules;
 
 import com.google.auto.value.AutoValue;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
@@ -8,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @AutoValue
-abstract class RuleExpression
+public abstract class RuleExpression
 {
         static final String VARIABLE_PATTERN = "[A#CV$]\\{([\\w -_.]+)\\}";
 
@@ -29,5 +30,13 @@ abstract class RuleExpression
                 }
 
                 throw new IllegalArgumentException( "Malformed variable: " + variable );
+        }
+
+        @Nonnull
+        public static String getProgramRuleVariable( ExpressionParser.ExprContext ctx )
+        {
+                return ctx.programRuleVariableName() != null
+                    ? ctx.programRuleVariableName().getText()
+                    : ctx.uid0.getText() + "." + ctx.uid1.getText();
         }
 }

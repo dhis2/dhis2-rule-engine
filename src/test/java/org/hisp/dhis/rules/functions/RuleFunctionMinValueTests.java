@@ -28,6 +28,7 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
 import org.hisp.dhis.rules.RuleVariableValue;
@@ -60,13 +61,13 @@ public class RuleFunctionMinValueTests
     private CommonExpressionVisitor visitor;
 
     @Mock
-    private ExpressionParser.VariableNameContext mockedVariableName;
+    private ExpressionParser.ProgramRuleVariableNameContext mockedVariableName;
 
     private RuleFunctionMinValue functionToTest = new RuleFunctionMinValue();
 
     @Before
     public void setUp() {
-        when(context.variableName()).thenReturn( mockedVariableName );
+        when(context.programRuleVariableName()).thenReturn( mockedVariableName );
     }
 
 

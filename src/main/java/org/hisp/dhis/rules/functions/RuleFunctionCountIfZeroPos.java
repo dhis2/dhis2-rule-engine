@@ -28,6 +28,7 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hisp.dhis.rules.RuleExpression;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
@@ -64,7 +65,7 @@ public class RuleFunctionCountIfZeroPos
         @Override
         public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
         {
-                RuleVariableValue value = visitor.getValueMap().get( ctx.variableName().getText() );
+                RuleVariableValue value = visitor.getValueMap().get( RuleExpression.getProgramRuleVariable(ctx) );
 
                 if ( value != null )
                 {

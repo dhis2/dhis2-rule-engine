@@ -29,6 +29,7 @@ package org.hisp.dhis.rules.functions;
  */
 
 import com.google.common.collect.Maps;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
 import org.hisp.dhis.rules.RuleVariableValue;
@@ -65,13 +66,13 @@ public class RuleFunctionCountIfZeroPosTests
         private CommonExpressionVisitor visitor;
 
         @Mock
-        private ExpressionParser.VariableNameContext mockedVariableName;
+        private ExpressionParser.ProgramRuleVariableNameContext mockedVariableName;
 
         private RuleFunctionCountIfZeroPos functionToTest = new RuleFunctionCountIfZeroPos();
 
         @Before
         public void setUp() {
-                when(context.variableName()).thenReturn( mockedVariableName );
+                when(context.programRuleVariableName()).thenReturn( mockedVariableName );
         }
 
         @Test
