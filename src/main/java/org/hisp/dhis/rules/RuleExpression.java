@@ -32,11 +32,37 @@ public abstract class RuleExpression
                 throw new IllegalArgumentException( "Malformed variable: " + variable );
         }
 
+        /* This method should probably be removed creating a new prefix for program rule variables that is
+        *  not shared with indicators.*/
         @Nonnull
         public static String getProgramRuleVariable( ExpressionParser.ExprContext ctx )
         {
                 return ctx.programRuleVariableName() != null
                     ? ctx.programRuleVariableName().getText()
-                    : ctx.uid0.getText() + "." + ctx.uid1.getText();
+                    : ctx.uid0.getText() + secondPart(ctx) + thirdPart(ctx);
+        }
+
+        private static String secondPart( ExpressionParser.ExprContext ctx )
+        {
+                if(ctx.uid1 != null)
+                {
+                        return "." + ctx.uid1.getText();
+                } else if (ctx.wild1 != null) {
+                        return ctx.wild1.getText();
+                }
+                return "";
+        }
+
+        private static String thirdPart( ExpressionParser.ExprContext ctx )
+        {
+                if(ctx.uid2 != null && ctx.uid1 == null)
+                {
+                        return ".*." + ctx.uid2.getText();
+                } else if(ctx.uid2 != null){
+                        return "." + ctx.uid2.getText();
+                } else if (ctx.wild2 != null) {
+                        return ctx.wild2.getText();
+                }
+                return "";
         }
 }

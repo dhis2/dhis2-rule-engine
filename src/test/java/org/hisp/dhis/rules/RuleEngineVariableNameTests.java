@@ -18,9 +18,87 @@ import static org.junit.Assert.assertTrue;
 @RunWith( JUnit4.class )
 public class RuleEngineVariableNameTests
 {
-    private final static String UID01 = "Aabcde12345.Babcde12345";
+    private final static String UID0 = "Aabcde12345";
+    private final static String UID0WILD = "Babcde12345.*";
+    private final static String UID01 = "Cabcde12345.Dabcde12345";
+    private final static String UID01WILD = "Eabcde12345.Fabcde12345.*";
+    private final static String UID012 = "Gabcde12345.Habcde12345.Iabcde12345";
+    private final static String UID0WILD2 = "Labcde12345.*.Mabcde12345";
 
     private final static String VARIABLE_NAME = "Variable.name_3_4-1";
+
+    @Test
+    public void evaluateD2Round()
+        throws Exception
+    {
+        RuleAction ruleAction1 = RuleActionDisplayKeyValuePair.createForFeedback(
+            "test_action_content", "d2:round(#{" + UID01 + "})" );
+        RuleAction ruleAction2 = RuleActionDisplayKeyValuePair.createForFeedback(
+            "test_action_content", "d2:round(#{" + VARIABLE_NAME + "})" );
+        RuleAction ruleAction3 = RuleActionDisplayKeyValuePair.createForFeedback(
+            "test_action_content", "d2:round(#{" + UID0 + "})" );
+        RuleAction ruleAction4 = RuleActionDisplayKeyValuePair.createForFeedback(
+            "test_action_content", "d2:round(#{" + UID0WILD + "})" );
+        RuleAction ruleAction5 = RuleActionDisplayKeyValuePair.createForFeedback(
+            "test_action_content", "d2:round(#{" + UID01WILD + "})" );
+        RuleAction ruleAction6 = RuleActionDisplayKeyValuePair.createForFeedback(
+            "test_action_content", "d2:round(#{" + UID012 + "})" );
+        RuleAction ruleAction7 = RuleActionDisplayKeyValuePair.createForFeedback(
+            "test_action_content", "d2:round(#{" + UID0WILD2 + "})" );
+        RuleVariable ruleVariable1 = RuleVariableNewestEvent.create(
+            UID01, "test_data_element1", RuleValueType.NUMERIC );
+        RuleVariable ruleVariable2 = RuleVariableNewestEvent.create(
+            VARIABLE_NAME, "test_data_element2", RuleValueType.NUMERIC );
+        RuleVariable ruleVariable3 = RuleVariableNewestEvent.create(
+            UID0, "test_data_element3", RuleValueType.NUMERIC );
+        RuleVariable ruleVariable4 = RuleVariableNewestEvent.create(
+            UID0WILD, "test_data_element4", RuleValueType.NUMERIC );
+        RuleVariable ruleVariable5 = RuleVariableNewestEvent.create(
+            UID01WILD, "test_data_element5", RuleValueType.NUMERIC );
+        RuleVariable ruleVariable6 = RuleVariableNewestEvent.create(
+            UID012, "test_data_element6", RuleValueType.NUMERIC );
+        RuleVariable ruleVariable7 = RuleVariableNewestEvent.create(
+            UID0WILD2, "test_data_element7", RuleValueType.NUMERIC );
+
+        List<RuleAction> actions = Arrays
+            .asList( ruleAction1, ruleAction2, ruleAction3, ruleAction4, ruleAction5, ruleAction6, ruleAction7 );
+        Rule rule = Rule.create( null, null, "true",
+            actions, "");
+
+        List<RuleVariable> ruleVariables = Arrays
+            .asList( ruleVariable1, ruleVariable2, ruleVariable3, ruleVariable4, ruleVariable5, ruleVariable6, ruleVariable7 );
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule,
+            ruleVariables );
+
+        RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "",null,Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element1", "2.6" ),
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element2", "2.6" ),
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element3", "2.6" ),
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element4", "2.6" ),
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element5", "2.6" ),
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element6", "2.6" ),
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element7", "2.6" )
+                ), "");
+
+        List<RuleEffect> ruleEffects = ruleEngineBuilder.build().evaluate( ruleEvent ).call();
+
+        assertThat( ruleEffects.size() ).isEqualTo( 7 );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction1 );
+        assertEquals( "3", ruleEffects.get( 0 ).data() );
+        assertThat( ruleEffects.get( 1 ).ruleAction() ).isEqualTo( ruleAction2 );
+        assertEquals( "3", ruleEffects.get( 1 ).data() );
+        assertThat( ruleEffects.get( 2 ).ruleAction() ).isEqualTo( ruleAction3 );
+        assertEquals( "3", ruleEffects.get( 2 ).data() );
+        assertThat( ruleEffects.get( 3 ).ruleAction() ).isEqualTo( ruleAction4 );
+        assertEquals( "3", ruleEffects.get( 3 ).data() );
+        assertThat( ruleEffects.get( 4 ).ruleAction()).isEqualTo( ruleAction5 );
+        assertEquals( "3", ruleEffects.get( 4 ).data() );
+        assertThat( ruleEffects.get( 5 ).ruleAction() ).isEqualTo( ruleAction6 );
+        assertEquals( "3", ruleEffects.get( 5 ).data() );
+        assertThat( ruleEffects.get( 6 ).ruleAction() ).isEqualTo( ruleAction7 );
+        assertEquals( "3", ruleEffects.get( 6 ).data() );
+    }
 
     @Test
     public void evaluateHasValueFunctionMustReturnTrueIfVariableIsComposedUIDs()
