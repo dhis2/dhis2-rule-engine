@@ -69,6 +69,7 @@ class RuleEngineExecution
         .put(V_BRACE, new ProgramRuleVariable())
         .put(HASH_BRACE, new Variable() )
         .put( C_BRACE, new ProgramRuleConstant() )
+        .put( A_BRACE, new Variable() )
         .put( X_BRACE, new ProgramRuleCustomVariable() )
 
         .putAll( ANTLR_EXPRESSION_ITEMS )

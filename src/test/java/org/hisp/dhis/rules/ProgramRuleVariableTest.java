@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.google.common.truth.Truth.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith( JUnit4.class)
 public class ProgramRuleVariableTest {
@@ -58,7 +58,6 @@ public class ProgramRuleVariableTest {
     private final static Date EVENT_DATE = LocalDate.parse( EVENT_DATE_STRING ).toDate();
     private final static String INCIDENT_DATE_STRING = "2020-01-01";
     private final static Date INCIDENT_DATE = LocalDate.parse( INCIDENT_DATE_STRING ).toDate();
-    private static final String EVENT_NAME = "event name";
     private static final String PROGRAM_STAGE = "program stage";
     private static final String PROGRAM_STAGE_NAME = "program stage name";
     private static final RuleEvent.Status RULE_EVENT_STATUS = RuleEvent.Status.ACTIVE;

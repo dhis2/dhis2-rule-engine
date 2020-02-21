@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.truth.Truth.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 // ToDo: function tests (check that function invocations are producing expected values; check nested function invocation)
 // ToDo: various source type tests (referencing variables from different events)

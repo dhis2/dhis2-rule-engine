@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.truth.Truth.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -45,6 +45,12 @@ public class RuleEngineVariableNameTests
             "test_action_content", "d2:round(#{" + UID012 + "})" );
         RuleAction ruleAction7 = RuleActionDisplayKeyValuePair.createForFeedback(
             "test_action_content", "d2:round(#{" + UID0WILD2 + "})" );
+        RuleAction ruleAction8 = RuleActionDisplayKeyValuePair.createForFeedback(
+            "test_action_content", "d2:round(A{" + UID0 + "})" );
+        RuleAction ruleAction9 = RuleActionDisplayKeyValuePair.createForFeedback(
+            "test_action_content", "d2:round(A{" + UID01 + "})" );
+        RuleAction ruleAction10 = RuleActionDisplayKeyValuePair.createForFeedback(
+            "test_action_content", "d2:round(A{" + VARIABLE_NAME + "})" );
         RuleVariable ruleVariable1 = RuleVariableNewestEvent.create(
             UID01, "test_data_element1", RuleValueType.NUMERIC );
         RuleVariable ruleVariable2 = RuleVariableNewestEvent.create(
@@ -61,7 +67,7 @@ public class RuleEngineVariableNameTests
             UID0WILD2, "test_data_element7", RuleValueType.NUMERIC );
 
         List<RuleAction> actions = Arrays
-            .asList( ruleAction1, ruleAction2, ruleAction3, ruleAction4, ruleAction5, ruleAction6, ruleAction7 );
+            .asList( ruleAction1, ruleAction2, ruleAction3, ruleAction4, ruleAction5, ruleAction6, ruleAction7, ruleAction8, ruleAction9, ruleAction10 );
         Rule rule = Rule.create( null, null, "true",
             actions, "");
 
@@ -78,12 +84,15 @@ public class RuleEngineVariableNameTests
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element4", "2.6" ),
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element5", "2.6" ),
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element6", "2.6" ),
-                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element7", "2.6" )
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element7", "2.6" ),
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element8", "2.6" ),
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element9", "2.6" ),
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element10", "2.6" )
                 ), "");
 
         List<RuleEffect> ruleEffects = ruleEngineBuilder.build().evaluate( ruleEvent ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 7 );
+        assertThat( ruleEffects.size() ).isEqualTo( 10 );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction1 );
         assertEquals( "3", ruleEffects.get( 0 ).data() );
         assertThat( ruleEffects.get( 1 ).ruleAction() ).isEqualTo( ruleAction2 );
@@ -98,6 +107,12 @@ public class RuleEngineVariableNameTests
         assertEquals( "3", ruleEffects.get( 5 ).data() );
         assertThat( ruleEffects.get( 6 ).ruleAction() ).isEqualTo( ruleAction7 );
         assertEquals( "3", ruleEffects.get( 6 ).data() );
+        assertThat( ruleEffects.get( 7 ).ruleAction() ).isEqualTo( ruleAction8 );
+        assertEquals( "3", ruleEffects.get( 7 ).data() );
+        assertThat( ruleEffects.get( 8 ).ruleAction() ).isEqualTo( ruleAction9 );
+        assertEquals( "3", ruleEffects.get( 8 ).data() );
+        assertThat( ruleEffects.get( 9 ).ruleAction() ).isEqualTo( ruleAction10 );
+        assertEquals( "3", ruleEffects.get( 9 ).data() );
     }
 
     @Test
