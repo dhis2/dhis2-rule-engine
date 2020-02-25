@@ -858,7 +858,7 @@ public class RuleEngineFunctionTests
     public void evaluateD2ZScoreWFHGirl() throws Exception
     {
         RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
-                "test_action_content", "d2:zScoreWFH(81.5,3.8,'female') == 2" );
+                "test_action_content", "d2:zScoreWFH(81.5,9.6,'female') == 2" );
         RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
                 "test_var_one", "test_data_element_one", RuleValueType.TEXT );
 

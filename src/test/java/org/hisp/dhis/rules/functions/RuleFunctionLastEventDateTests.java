@@ -92,7 +92,7 @@ public class RuleFunctionLastEventDateTests
 
         Map<String, RuleVariableValue> valueMap = getValueMapWithValue( variableWithValue );
 
-        assertLastEventDate( variableWithValue, valueMap,""+todayDate+"" );
+        assertLastEventDate( variableWithValue, valueMap, todayDate );
     }
 
     private Map<String, RuleVariableValue> getEmptyValueMap()
