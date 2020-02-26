@@ -29,17 +29,34 @@ package org.hisp.dhis.rules.models;
  */
 
 import com.google.auto.value.AutoValue;
+import com.google.common.collect.Maps;
+import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.RuleVariableValueMapBuilder;
 
 import javax.annotation.Nonnull;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import static org.hisp.dhis.rules.RuleVariableValue.create;
+import static org.hisp.dhis.rules.Utils.dateFormat;
 
 /**
  * @Author Zubair Asghar.
  */
 
 @AutoValue
-public abstract class RuleVariableCalculatedValue
-    extends RuleVariable
+public abstract class RuleVariableCalculatedValue extends RuleVariable
 {
+    @Nonnull
+    public abstract String calculatedValueVariable();
+
+    @Nonnull
+    public abstract RuleValueType calculatedValueType();
+
     @Nonnull
     public static RuleVariableCalculatedValue create( @Nonnull String name,
         @Nonnull String variable, @Nonnull RuleValueType variableType )
@@ -47,9 +64,31 @@ public abstract class RuleVariableCalculatedValue
         return new AutoValue_RuleVariableCalculatedValue( name, variable, variableType );
     }
 
-    @Nonnull
-    public abstract String calculatedValueVariable();
+    @Override
+    public Map<String, RuleVariableValue> createValues( RuleVariableValueMapBuilder builder,
+        Map<String, List<RuleDataValue>> allEventValues,
+        Map<String, RuleAttributeValue> currentEnrollmentValues,
+        Map<String, RuleDataValue> currentEventValues ) {
+        Map<String, RuleVariableValue> valueMap = Maps.newHashMap();
+        if (builder.ruleEnrollment == null) {
+            return valueMap;
+        }
 
-    @Nonnull
-    public abstract RuleValueType calculatedValueType();
+        RuleVariableValue variableValue;
+        if (builder.calculatedValueMap.containsKey(builder.ruleEnrollment.enrollment())) {
+            if (builder.calculatedValueMap.get(builder.ruleEnrollment.enrollment()).containsKey(this.name())) {
+                String value = builder.calculatedValueMap.get(builder.ruleEnrollment.enrollment()).get(this.name());
+
+                variableValue = RuleVariableValue.create(value, this.calculatedValueType(),
+                    Arrays.asList(value), dateFormat.format(new Date()));
+            } else {
+                variableValue = RuleVariableValue.create(this.calculatedValueType());
+            }
+        } else {
+            variableValue = RuleVariableValue.create(this.calculatedValueType());
+        }
+
+        valueMap.put(this.name(), variableValue);
+        return valueMap;
+    }
 }
