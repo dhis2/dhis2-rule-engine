@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 @AutoValue
 public abstract class RuleExpression
 {
-        static final String VARIABLE_PATTERN = "[A#CV$]\\{([\\w -_.]+)\\}";
+        static final String VARIABLE_PATTERN = "[#]\\{([\\w -_.]+)\\}";
 
         static final Pattern VARIABLE_PATTERN_COMPILED = Pattern.compile( VARIABLE_PATTERN );
 

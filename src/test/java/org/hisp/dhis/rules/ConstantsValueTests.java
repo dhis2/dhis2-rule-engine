@@ -62,7 +62,7 @@ public class ConstantsValueTests {
     @Test
     public void assignConstantValueFromAssignActionInEnrollment() throws Exception
     {
-        RuleAction assignAction = RuleActionAssign.create(null, "C{A1234567890}", "A{test_attribute}");
+        RuleAction assignAction = RuleActionAssign.create(null, "C{A1234567890}", "#{test_attribute}");
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create(null, 1, "true", Arrays.asList(assignAction), "test_program_rule1");
 
         Map<String, String> constantsValueMap = new HashMap<>();
@@ -92,7 +92,7 @@ public class ConstantsValueTests {
     @Test
     public void assignConstantValueFromAssignActionInEvent() throws Exception
     {
-        RuleAction assignAction = RuleActionAssign.create(null, "C{A1234567890}", "${test_data_element}");
+        RuleAction assignAction = RuleActionAssign.create(null, "C{A1234567890}", "#{test_data_element}");
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create(null, 1, "true", Arrays.asList(assignAction), "test_program_rule1");
 
         Map<String, String> constantsValueMap = new HashMap<>();

@@ -12,13 +12,7 @@ public class RuleExpressionTests {
         @Test
         public void unwrapMustReturnVariableName()
         {
-                assertThat( RuleExpression.unwrapVariableName( "A{test_variable_one}" ) )
+                assertThat( RuleExpression.unwrapVariableName( "#{test_variable_one}" ) )
                     .isEqualTo( "test_variable_one" );
-                assertThat( RuleExpression.unwrapVariableName( "C{test_variable_two}" ) )
-                    .isEqualTo( "test_variable_two" );
-                assertThat( RuleExpression.unwrapVariableName( "V{test_variable_three}" ) )
-                    .isEqualTo( "test_variable_three" );
-                assertThat( RuleExpression.unwrapVariableName( "#{test_variable_four}" ) )
-                    .isEqualTo( "test_variable_four" );
         }
 }
