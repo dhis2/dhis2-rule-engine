@@ -10,32 +10,32 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 public class RuleVariableNewestEventTests
 {
 
-        @Test(expected = NullPointerException.class )
-        public void createShouldThrowOnNullName()
-        {
-                RuleVariableNewestEvent.create( null, "test_dataelement", RuleValueType.TEXT );
-        }
+    @Test( expected = NullPointerException.class )
+    public void createShouldThrowOnNullName()
+    {
+        RuleVariableNewestEvent.create( null, "test_dataelement", RuleValueType.TEXT );
+    }
 
-        @Test(expected = NullPointerException.class )
-        public void createShouldThrowOnNullDataElement()
-        {
-                RuleVariableNewestEvent.create( "test_variable", null, RuleValueType.TEXT );
-        }
+    @Test( expected = NullPointerException.class )
+    public void createShouldThrowOnNullDataElement()
+    {
+        RuleVariableNewestEvent.create( "test_variable", null, RuleValueType.TEXT );
+    }
 
-        @Test(expected = NullPointerException.class )
-        public void createShouldThrowOnNullDataElementType()
-        {
-                RuleVariableNewestEvent.create( "test_variable", "test_dataelement", null );
-        }
+    @Test( expected = NullPointerException.class )
+    public void createShouldThrowOnNullDataElementType()
+    {
+        RuleVariableNewestEvent.create( "test_variable", "test_dataelement", null );
+    }
 
-        @Test
-        public void createShouldPropagatePropertiesCorrectly()
-        {
-                RuleVariableNewestEvent ruleVariableNewestEvent = RuleVariableNewestEvent.create(
-                    "test_variable", "test_dataelement", RuleValueType.NUMERIC );
+    @Test
+    public void createShouldPropagatePropertiesCorrectly()
+    {
+        RuleVariableNewestEvent ruleVariableNewestEvent = RuleVariableNewestEvent.create(
+            "test_variable", "test_dataelement", RuleValueType.NUMERIC );
 
-                assertThat( ruleVariableNewestEvent.name() ).isEqualTo( "test_variable" );
-                assertThat( ruleVariableNewestEvent.dataElement() ).isEqualTo( "test_dataelement" );
-                assertThat( ruleVariableNewestEvent.dataElementType() ).isEqualTo( RuleValueType.NUMERIC );
-        }
+        assertThat( ruleVariableNewestEvent.name() ).isEqualTo( "test_variable" );
+        assertThat( ruleVariableNewestEvent.dataElement() ).isEqualTo( "test_dataelement" );
+        assertThat( ruleVariableNewestEvent.dataElementType() ).isEqualTo( RuleValueType.NUMERIC );
+    }
 }

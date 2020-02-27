@@ -11,58 +11,64 @@ import java.util.regex.Pattern;
 @AutoValue
 public abstract class RuleExpression
 {
-        static final String VARIABLE_PATTERN = "[#]\\{([\\w -_.]+)\\}";
+    static final String VARIABLE_PATTERN = "[#]\\{([\\w -_.]+)\\}";
 
-        static final Pattern VARIABLE_PATTERN_COMPILED = Pattern.compile( VARIABLE_PATTERN );
+    static final Pattern VARIABLE_PATTERN_COMPILED = Pattern.compile( VARIABLE_PATTERN );
 
-        @Nonnull
-        public abstract Set<String> variables();
+    @Nonnull
+    static String unwrapVariableName( @Nonnull String variable )
+    {
+        Matcher variableNameMatcher = VARIABLE_PATTERN_COMPILED.matcher( variable );
 
-        @Nonnull
-        static String unwrapVariableName( @Nonnull String variable )
+        // extract variable name
+        if ( variableNameMatcher.find() )
         {
-                Matcher variableNameMatcher = VARIABLE_PATTERN_COMPILED.matcher( variable );
-
-                // extract variable name
-                if ( variableNameMatcher.find() )
-                {
-                        return variableNameMatcher.group( 1 );
-                }
-
-                throw new IllegalArgumentException( "Malformed variable: " + variable );
+            return variableNameMatcher.group( 1 );
         }
 
-        /* This method should probably be removed creating a new prefix for program rule variables that is
-        *  not shared with indicators.*/
-        @Nonnull
-        public static String getProgramRuleVariable( ExpressionParser.ExprContext ctx )
-        {
-                return ctx.programRuleVariableName() != null
-                    ? ctx.programRuleVariableName().getText()
-                    : ctx.uid0.getText() + secondPart(ctx) + thirdPart(ctx);
-        }
+        throw new IllegalArgumentException( "Malformed variable: " + variable );
+    }
 
-        private static String secondPart( ExpressionParser.ExprContext ctx )
-        {
-                if(ctx.uid1 != null)
-                {
-                        return "." + ctx.uid1.getText();
-                } else if (ctx.wild1 != null) {
-                        return ctx.wild1.getText();
-                }
-                return "";
-        }
+    /* This method should probably be removed creating a new prefix for program rule variables that is
+     *  not shared with indicators.*/
+    @Nonnull
+    public static String getProgramRuleVariable( ExpressionParser.ExprContext ctx )
+    {
+        return ctx.programRuleVariableName() != null
+            ? ctx.programRuleVariableName().getText()
+            : ctx.uid0.getText() + secondPart( ctx ) + thirdPart( ctx );
+    }
 
-        private static String thirdPart( ExpressionParser.ExprContext ctx )
+    private static String secondPart( ExpressionParser.ExprContext ctx )
+    {
+        if ( ctx.uid1 != null )
         {
-                if(ctx.uid2 != null && ctx.uid1 == null)
-                {
-                        return ".*." + ctx.uid2.getText();
-                } else if(ctx.uid2 != null){
-                        return "." + ctx.uid2.getText();
-                } else if (ctx.wild2 != null) {
-                        return ctx.wild2.getText();
-                }
-                return "";
+            return "." + ctx.uid1.getText();
         }
+        else if ( ctx.wild1 != null )
+        {
+            return ctx.wild1.getText();
+        }
+        return "";
+    }
+
+    private static String thirdPart( ExpressionParser.ExprContext ctx )
+    {
+        if ( ctx.uid2 != null && ctx.uid1 == null )
+        {
+            return ".*." + ctx.uid2.getText();
+        }
+        else if ( ctx.uid2 != null )
+        {
+            return "." + ctx.uid2.getText();
+        }
+        else if ( ctx.wild2 != null )
+        {
+            return ctx.wild2.getText();
+        }
+        return "";
+    }
+
+    @Nonnull
+    public abstract Set<String> variables();
 }

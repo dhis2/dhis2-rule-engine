@@ -45,7 +45,7 @@ public class RuleFunctionLeft
     @Override
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        Double doubleValue = castDouble( visitor.castStringVisit( ctx.expr(1) ) );
+        Double doubleValue = castDouble( visitor.castStringVisit( ctx.expr( 1 ) ) );
         int chars = doubleValue.intValue();
 
         if ( doubleValue.doubleValue() % 1 != 0 )
@@ -53,6 +53,6 @@ public class RuleFunctionLeft
             throw new IllegalArgumentException( "Number has to be an integer" );
         }
 
-        return RuleFunction.wrap( StringUtils.substring( visitor.castStringVisit( ctx.expr(0) ), 0, chars ) );
+        return RuleFunction.wrap( StringUtils.substring( visitor.castStringVisit( ctx.expr( 0 ) ), 0, chars ) );
     }
 }

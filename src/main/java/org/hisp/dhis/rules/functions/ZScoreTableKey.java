@@ -33,6 +33,7 @@ package org.hisp.dhis.rules.functions;
 public class ZScoreTableKey
 {
     private final byte gender;
+
     private final float parameter;
 
     public ZScoreTableKey( byte gender, float parameter )
@@ -49,7 +50,7 @@ public class ZScoreTableKey
         int result = 1;
 
         result = prime * result + gender;
-        result = prime * result +  Float.floatToIntBits( parameter );
+        result = prime * result + Float.floatToIntBits( parameter );
 
         return result;
     }
@@ -62,7 +63,7 @@ public class ZScoreTableKey
             return true;
         }
 
-        if ( !( obj instanceof ZScoreTableKey) )
+        if ( !(obj instanceof ZScoreTableKey) )
         {
             return false;
         }

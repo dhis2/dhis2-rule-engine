@@ -33,7 +33,6 @@ import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 
 /**
  * Utilities for ANTLR parsing
- *
  */
 public class ParserUtils
 {
@@ -41,7 +40,8 @@ public class ParserUtils
     public final static ExprFunctionMethod FUNCTION_EVALUATE = new ExprFunctionMethod()
     {
         @Override
-        public Object apply( AntlrExprItem AntlrExprItem, ExpressionParser.ExprContext exprContext, CommonExpressionVisitor antlrExpressionVisitor )
+        public Object apply( AntlrExprItem AntlrExprItem, ExpressionParser.ExprContext exprContext,
+            CommonExpressionVisitor antlrExpressionVisitor )
         {
             return AntlrExprItem
                 .evaluate( exprContext, antlrExpressionVisitor );

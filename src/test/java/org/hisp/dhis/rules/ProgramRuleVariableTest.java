@@ -45,31 +45,50 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith( JUnit4.class)
-public class ProgramRuleVariableTest {
+@RunWith( JUnit4.class )
+public class ProgramRuleVariableTest
+{
     private static final String DATE_PATTERN = "yyyy-MM-dd";
 
-    private final static String CURRENT_DATE = new SimpleDateFormat(DATE_PATTERN, Locale.US).format(new Date());
+    private final static String CURRENT_DATE = new SimpleDateFormat( DATE_PATTERN, Locale.US ).format( new Date() );
+
     private final static String DUE_DATE_STRING = "2020-06-01";
+
     private final static Date DUE_DATE = LocalDate.parse( DUE_DATE_STRING ).toDate();
+
     private final static String ENROLLMENT_DATE_STRING = "2019-01-01";
+
     private final static Date ENROLLMENT_DATE = LocalDate.parse( ENROLLMENT_DATE_STRING ).toDate();
+
     private final static String EVENT_DATE_STRING = "2019-02-02";
+
     private final static Date EVENT_DATE = LocalDate.parse( EVENT_DATE_STRING ).toDate();
+
     private final static String INCIDENT_DATE_STRING = "2020-01-01";
+
     private final static Date INCIDENT_DATE = LocalDate.parse( INCIDENT_DATE_STRING ).toDate();
+
     private static final String PROGRAM_STAGE = "program stage";
+
     private static final String PROGRAM_STAGE_NAME = "program stage name";
+
     private static final RuleEvent.Status RULE_EVENT_STATUS = RuleEvent.Status.ACTIVE;
+
     private static final String ORGANISATION_UNIT = "organisation unit";
+
     private static final String ORGANISATION_UNIT_CODE = "organisation unit code";
+
     private static final String ENROLLMENT_ID = "enrollment id";
+
     private static final RuleEnrollment.Status ENROLLMENT_STATUS = RuleEnrollment.Status.ACTIVE;
+
     private static final String EVENT_ID = "event id";
+
     private static final String PROGRAM_NAME = "program name";
 
     @Test
-    public void testCurrentDateProgramVariableIsAssigned() throws Exception
+    public void testCurrentDateProgramVariableIsAssigned()
+        throws Exception
     {
         org.hisp.dhis.rules.models.Rule rule = getRule( "V{current_date}" );
 
@@ -79,7 +98,8 @@ public class ProgramRuleVariableTest {
     }
 
     @Test
-    public void testDueDateProgramVariableIsAssigned() throws Exception
+    public void testDueDateProgramVariableIsAssigned()
+        throws Exception
     {
         org.hisp.dhis.rules.models.Rule rule = getRule( "V{due_date}" );
 
@@ -89,7 +109,8 @@ public class ProgramRuleVariableTest {
     }
 
     @Test
-    public void testEnrollmentCountProgramVariableIsAssigned() throws Exception
+    public void testEnrollmentCountProgramVariableIsAssigned()
+        throws Exception
     {
         org.hisp.dhis.rules.models.Rule rule = getRule( "V{enrollment_count}" );
 
@@ -99,7 +120,8 @@ public class ProgramRuleVariableTest {
     }
 
     @Test
-    public void testEnrollmentDateProgramVariableIsAssigned() throws Exception
+    public void testEnrollmentDateProgramVariableIsAssigned()
+        throws Exception
     {
         Rule rule = getRule( "V{enrollment_date}" );
 
@@ -109,7 +131,8 @@ public class ProgramRuleVariableTest {
     }
 
     @Test
-    public void testEnrollmentIdProgramVariableIsAssigned() throws Exception
+    public void testEnrollmentIdProgramVariableIsAssigned()
+        throws Exception
     {
         Rule rule = getRule( "V{enrollment_id}" );
 
@@ -119,7 +142,8 @@ public class ProgramRuleVariableTest {
     }
 
     @Test
-    public void testEnrollmentStatusProgramVariableIsAssigned() throws Exception
+    public void testEnrollmentStatusProgramVariableIsAssigned()
+        throws Exception
     {
         Rule rule = getRule( "V{enrollment_status}" );
 
@@ -129,7 +153,8 @@ public class ProgramRuleVariableTest {
     }
 
     @Test
-    public void testEnvironmentProgramVariableIsAssigned() throws Exception
+    public void testEnvironmentProgramVariableIsAssigned()
+        throws Exception
     {
         org.hisp.dhis.rules.models.Rule rule = getRule( "V{environment}" );
 
@@ -139,7 +164,8 @@ public class ProgramRuleVariableTest {
     }
 
     @Test
-    public void testEventCountProgramVariableIsAssigned() throws Exception
+    public void testEventCountProgramVariableIsAssigned()
+        throws Exception
     {
         org.hisp.dhis.rules.models.Rule rule = getRule( "V{event_count}" );
 
@@ -149,7 +175,8 @@ public class ProgramRuleVariableTest {
     }
 
     @Test
-    public void testEventDateProgramVariableIsAssigned() throws Exception
+    public void testEventDateProgramVariableIsAssigned()
+        throws Exception
     {
         org.hisp.dhis.rules.models.Rule rule = getRule( "V{event_date}" );
 
@@ -159,7 +186,8 @@ public class ProgramRuleVariableTest {
     }
 
     @Test
-    public void testEventIdProgramVariableIsAssigned() throws Exception
+    public void testEventIdProgramVariableIsAssigned()
+        throws Exception
     {
         org.hisp.dhis.rules.models.Rule rule = getRule( "V{event_id}" );
 
@@ -169,7 +197,8 @@ public class ProgramRuleVariableTest {
     }
 
     @Test
-    public void testEventStatusProgramVariableIsAssigned() throws Exception
+    public void testEventStatusProgramVariableIsAssigned()
+        throws Exception
     {
         org.hisp.dhis.rules.models.Rule rule = getRule( "V{event_status}" );
 
@@ -179,7 +208,8 @@ public class ProgramRuleVariableTest {
     }
 
     @Test
-    public void testIncidentDateProgramVariableIsAssigned() throws Exception
+    public void testIncidentDateProgramVariableIsAssigned()
+        throws Exception
     {
         org.hisp.dhis.rules.models.Rule rule = getRule( "V{incident_date}" );
 
@@ -189,80 +219,89 @@ public class ProgramRuleVariableTest {
     }
 
     @Test
-    public void testOrganisationUnitProgramVariableIsAssigned() throws Exception
+    public void testOrganisationUnitProgramVariableIsAssigned()
+        throws Exception
     {
         org.hisp.dhis.rules.models.Rule rule = getRule( "V{org_unit}" );
 
         List<RuleEffect> ruleEffects = callEnrollmentRuleEngine( rule );
 
-        assertProgramRuleVariableAssignment( ruleEffects, rule,  ORGANISATION_UNIT);
+        assertProgramRuleVariableAssignment( ruleEffects, rule, ORGANISATION_UNIT );
     }
 
     @Test
-    public void testOrganisationUnitCodeProgramVariableIsAssigned() throws Exception
+    public void testOrganisationUnitCodeProgramVariableIsAssigned()
+        throws Exception
     {
         org.hisp.dhis.rules.models.Rule rule = getRule( "V{orgunit_code}" );
 
         List<RuleEffect> ruleEffects = callEventRuleEngine( rule );
 
-        assertProgramRuleVariableAssignment( ruleEffects, rule,  ORGANISATION_UNIT_CODE);
+        assertProgramRuleVariableAssignment( ruleEffects, rule, ORGANISATION_UNIT_CODE );
     }
 
     @Test
-    public void testProgramNameProgramVariableIsAssigned() throws Exception
+    public void testProgramNameProgramVariableIsAssigned()
+        throws Exception
     {
         org.hisp.dhis.rules.models.Rule rule = getRule( "V{program_name}" );
 
         List<RuleEffect> ruleEffects = callEnrollmentRuleEngine( rule );
 
-        assertProgramRuleVariableAssignment( ruleEffects, rule,  PROGRAM_NAME);
+        assertProgramRuleVariableAssignment( ruleEffects, rule, PROGRAM_NAME );
     }
 
     @Test
-    public void testProgramStageIdProgramVariableIsAssigned() throws Exception
+    public void testProgramStageIdProgramVariableIsAssigned()
+        throws Exception
     {
         org.hisp.dhis.rules.models.Rule rule = getRule( "V{program_stage_id}" );
 
         List<RuleEffect> ruleEffects = callEventRuleEngine( rule );
 
-        assertProgramRuleVariableAssignment( ruleEffects, rule,  PROGRAM_STAGE);
+        assertProgramRuleVariableAssignment( ruleEffects, rule, PROGRAM_STAGE );
     }
 
     @Test
-    public void testProgramStageNameProgramVariableIsAssigned() throws Exception
+    public void testProgramStageNameProgramVariableIsAssigned()
+        throws Exception
     {
         org.hisp.dhis.rules.models.Rule rule = getRule( "V{program_stage_name}" );
 
         List<RuleEffect> ruleEffects = callEventRuleEngine( rule );
 
-        assertProgramRuleVariableAssignment( ruleEffects, rule,  PROGRAM_STAGE_NAME);
+        assertProgramRuleVariableAssignment( ruleEffects, rule, PROGRAM_STAGE_NAME );
     }
 
     @Test
-    public void testTEICountProgramVariableIsAssigned() throws Exception
+    public void testTEICountProgramVariableIsAssigned()
+        throws Exception
     {
         org.hisp.dhis.rules.models.Rule rule = getRule( "V{tei_count}" );
 
         List<RuleEffect> ruleEffects = callEnrollmentRuleEngine( rule );
 
-        assertProgramRuleVariableAssignment( ruleEffects, rule,  "1");
+        assertProgramRuleVariableAssignment( ruleEffects, rule, "1" );
     }
 
-    private org.hisp.dhis.rules.models.Rule getRule(String variable) {
-        RuleAction assignAction = RuleActionAssign.create(null, variable, "#{test_data_element}");
-        return org.hisp.dhis.rules.models.Rule.create(null, 1, "true", Arrays.asList(assignAction), "test_program_rule1");
+    private org.hisp.dhis.rules.models.Rule getRule( String variable )
+    {
+        RuleAction assignAction = RuleActionAssign.create( null, variable, "#{test_data_element}" );
+        return org.hisp.dhis.rules.models.Rule
+            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1" );
     }
 
-    private void assertProgramRuleVariableAssignment(List<RuleEffect> ruleEffects, Rule rule, String variableValue) {
-        assertThat( ruleEffects.size() ).isEqualTo(1);
-        assertThat( ruleEffects.get(0).data() ).isEqualTo(variableValue);
-        assertThat( ruleEffects.get(0).ruleAction() ).isEqualTo(rule.actions().get( 0 ));
+    private void assertProgramRuleVariableAssignment( List<RuleEffect> ruleEffects, Rule rule, String variableValue )
+    {
+        assertThat( ruleEffects.size() ).isEqualTo( 1 );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( variableValue );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( rule.actions().get( 0 ) );
     }
 
     private List<RuleEffect> callEnrollmentRuleEngine( Rule rule )
         throws Exception
     {
-        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList(rule));
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule ) );
 
         RuleEngine ruleEngine = ruleEngineBuilder.build();
         return ruleEngine.evaluate( getEnrollment() ).call();
@@ -271,17 +310,17 @@ public class ProgramRuleVariableTest {
     private List<RuleEffect> callEventRuleEngine( Rule rule )
         throws Exception
     {
-        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList(rule));
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule ) );
 
         RuleEvent event = RuleEvent.builder()
-            .event(EVENT_ID)
-            .programStage(PROGRAM_STAGE)
-            .programStageName(PROGRAM_STAGE_NAME)
-            .status(RULE_EVENT_STATUS)
-            .eventDate(EVENT_DATE)
-            .dueDate(DUE_DATE)
-            .organisationUnit(ORGANISATION_UNIT)
-            .organisationUnitCode(ORGANISATION_UNIT_CODE)
+            .event( EVENT_ID )
+            .programStage( PROGRAM_STAGE )
+            .programStageName( PROGRAM_STAGE_NAME )
+            .status( RULE_EVENT_STATUS )
+            .eventDate( EVENT_DATE )
+            .dueDate( DUE_DATE )
+            .organisationUnit( ORGANISATION_UNIT )
+            .organisationUnitCode( ORGANISATION_UNIT_CODE )
             .dataValues( new ArrayList<RuleDataValue>() )
             .build();
 
@@ -289,16 +328,17 @@ public class ProgramRuleVariableTest {
         return ruleEngine.evaluate( event ).call();
     }
 
-    private RuleEnrollment getEnrollment() {
+    private RuleEnrollment getEnrollment()
+    {
         return RuleEnrollment.builder()
-            .enrollment(ENROLLMENT_ID)
-            .programName(PROGRAM_NAME)
-            .incidentDate(INCIDENT_DATE)
-            .enrollmentDate(ENROLLMENT_DATE)
-            .status(RuleEnrollment.Status.ACTIVE)
-            .organisationUnit(ORGANISATION_UNIT)
-            .organisationUnitCode(ORGANISATION_UNIT_CODE)
-            .attributeValues(Arrays.asList( RuleAttributeValue.create("test_attribute", "test_value")))
+            .enrollment( ENROLLMENT_ID )
+            .programName( PROGRAM_NAME )
+            .incidentDate( INCIDENT_DATE )
+            .enrollmentDate( ENROLLMENT_DATE )
+            .status( RuleEnrollment.Status.ACTIVE )
+            .organisationUnit( ORGANISATION_UNIT )
+            .organisationUnitCode( ORGANISATION_UNIT_CODE )
+            .attributeValues( Arrays.asList( RuleAttributeValue.create( "test_attribute", "test_value" ) ) )
             .build();
     }
 

@@ -31,7 +31,6 @@ package org.hisp.dhis.rules.parser.expression;
 import org.apache.commons.lang3.Validate;
 import org.hisp.dhis.antlr.AntlrExprItem;
 import org.hisp.dhis.antlr.AntlrExpressionVisitor;
-import org.hisp.dhis.antlr.AntlrParserUtils;
 import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 import org.hisp.dhis.rules.RuleVariableValue;
@@ -138,15 +137,15 @@ public class CommonExpressionVisitor
     // Getters and setters
     // -------------------------------------------------------------------------
 
+    public Map<String, RuleVariableValue> getValueMap()
+    {
+        return valueMap;
+    }
+
     public void setValueMap( Map<String, RuleVariableValue> valueMap )
     {
 
         this.valueMap = valueMap;
-    }
-
-    public Map<String, RuleVariableValue> getValueMap()
-    {
-        return valueMap;
     }
 
     public Map<String, List<String>> getSupplementaryData()

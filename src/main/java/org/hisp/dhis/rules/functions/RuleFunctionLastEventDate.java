@@ -55,6 +55,6 @@ public class RuleFunctionLastEventDate
 
         RuleVariableValue variableValue = valueMap.get( visitor.castStringVisit( ctx.expr( 0 ) ) );
 
-        return wrap(  variableValue.eventDate() );
+        return wrap( variableValue.eventDate() );
     }
 }

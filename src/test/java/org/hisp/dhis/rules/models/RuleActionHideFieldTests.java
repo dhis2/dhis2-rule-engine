@@ -12,26 +12,26 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 public class RuleActionHideFieldTests
 {
 
-        @Test
-        public void createMustSubstituteEmptyStringIfArgumentsNull()
-        {
-                RuleActionHideField ruleActionHideField =
-                    RuleActionHideField.create( null, "test_field" );
+    @Test
+    public void createMustSubstituteEmptyStringIfArgumentsNull()
+    {
+        RuleActionHideField ruleActionHideField =
+            RuleActionHideField.create( null, "test_field" );
 
-                assertThat( ruleActionHideField.content() ).isEqualTo( "" );
-        }
+        assertThat( ruleActionHideField.content() ).isEqualTo( "" );
+    }
 
-        @Test(expected = NullPointerException.class )
-        public void createMustThrowOnNullField()
-        {
-                RuleActionHideField.create( "test_content", null );
-        }
+    @Test( expected = NullPointerException.class )
+    public void createMustThrowOnNullField()
+    {
+        RuleActionHideField.create( "test_content", null );
+    }
 
-        @Test
-        public void equalsAndHashCodeFunctionsMustConformContract()
-        {
-                EqualsVerifier.forClass( RuleActionHideField.create( "test_content", "test_field" ).getClass() )
-                    .suppress( Warning.NULL_FIELDS )
-                    .verify();
-        }
+    @Test
+    public void equalsAndHashCodeFunctionsMustConformContract()
+    {
+        EqualsVerifier.forClass( RuleActionHideField.create( "test_content", "test_field" ).getClass() )
+            .suppress( Warning.NULL_FIELDS )
+            .verify();
+    }
 }

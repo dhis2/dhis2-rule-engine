@@ -49,7 +49,7 @@ public class RuleFunctionHasUserRole
     {
         Map<String, List<String>> supplementaryData = visitor.getSupplementaryData();
 
-        if( !supplementaryData.containsKey( USER ) )
+        if ( !supplementaryData.containsKey( USER ) )
         {
             throw new IllegalArgumentException( "Supplementary data needs to be provided" );
         }

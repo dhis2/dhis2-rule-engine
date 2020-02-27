@@ -59,6 +59,6 @@ public class RuleFunctionAddDays
     @Override
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return addDays( visitor.castStringVisit( ctx.expr( 0 ) ), visitor.castStringVisit(ctx.expr( 1 ) ) );
+        return addDays( visitor.castStringVisit( ctx.expr( 0 ) ), visitor.castStringVisit( ctx.expr( 1 ) ) );
     }
 }

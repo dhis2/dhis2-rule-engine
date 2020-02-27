@@ -28,16 +28,16 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
- import org.hamcrest.CoreMatchers;
 import static org.mockito.Mockito.when;
 
 /**
@@ -47,51 +47,54 @@ import static org.mockito.Mockito.when;
 @RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionValidatePatternTests
 {
-        @Mock
-        private ExpressionParser.ExprContext context;
+    @Mock
+    private ExpressionParser.ExprContext context;
 
-        @Mock
-        private CommonExpressionVisitor visitor;
+    @Mock
+    private CommonExpressionVisitor visitor;
 
-        @Mock
-        private ExpressionParser.ExprContext mockedFirstExpr;
+    @Mock
+    private ExpressionParser.ExprContext mockedFirstExpr;
 
-        @Mock
-        private ExpressionParser.ExprContext mockedSecondExpr;
+    @Mock
+    private ExpressionParser.ExprContext mockedSecondExpr;
 
-        private RuleFunctionValidatePattern functionToTest = new RuleFunctionValidatePattern();
+    private RuleFunctionValidatePattern functionToTest = new RuleFunctionValidatePattern();
 
-        @Before
-        public void setUp() {
-                when(context.expr(0)).thenReturn( mockedFirstExpr );
-                when(context.expr(1)).thenReturn( mockedSecondExpr );
-        }
+    @Before
+    public void setUp()
+    {
+        when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
+        when( context.expr( 1 ) ).thenReturn( mockedSecondExpr );
+    }
 
-        @Test
-        public void return_true_if_pattern_match()
-        {
-                assertValidatePattern( "123", "123","true" );
-                assertValidatePattern( "27123456789", "27\\d{2}\\d{3}\\d{4}","true" );
-                assertValidatePattern( "27123456789", "27\\d{9}","true" );
-                assertValidatePattern( "abc123", "abc123","true" );
-                assertValidatePattern( "9999/99/9", "\\d{4}/\\d{2}/\\d","true" );
-                assertValidatePattern( "9999/99/9", "[0-9]{4}/[0-9]{2}/[0-9]","true" );
-        }
+    @Test
+    public void return_true_if_pattern_match()
+    {
+        assertValidatePattern( "123", "123", "true" );
+        assertValidatePattern( "27123456789", "27\\d{2}\\d{3}\\d{4}", "true" );
+        assertValidatePattern( "27123456789", "27\\d{9}", "true" );
+        assertValidatePattern( "abc123", "abc123", "true" );
+        assertValidatePattern( "9999/99/9", "\\d{4}/\\d{2}/\\d", "true" );
+        assertValidatePattern( "9999/99/9", "[0-9]{4}/[0-9]{2}/[0-9]", "true" );
+    }
 
-        @Test
-        public void return_false_for_non_matching_pairs()
-        {
-                assertValidatePattern( "1999/99/9", "\\[9]{4}/\\d{2}/\\d","false" );
-                assertValidatePattern( "9999/99/", "[0-9]{4}/[0-9]{2}/[0-9]","false" );
-                assertValidatePattern( "abc123", "xyz","false" );
-                assertValidatePattern( "abc123", "^bc","false" );
-                assertValidatePattern( "abc123", "abc12345","false" );
-                assertValidatePattern( "123", "567","false" );
-        }
+    @Test
+    public void return_false_for_non_matching_pairs()
+    {
+        assertValidatePattern( "1999/99/9", "\\[9]{4}/\\d{2}/\\d", "false" );
+        assertValidatePattern( "9999/99/", "[0-9]{4}/[0-9]{2}/[0-9]", "false" );
+        assertValidatePattern( "abc123", "xyz", "false" );
+        assertValidatePattern( "abc123", "^bc", "false" );
+        assertValidatePattern( "abc123", "abc12345", "false" );
+        assertValidatePattern( "123", "567", "false" );
+    }
 
-        private void assertValidatePattern( String input, String regex, String isPatternValid ) {
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( input );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( regex );
-                MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (isPatternValid) ) );
-        }
+    private void assertValidatePattern( String input, String regex, String isPatternValid )
+    {
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( input );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( regex );
+        MatcherAssert
+            .assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (isPatternValid) ) );
+    }
 }

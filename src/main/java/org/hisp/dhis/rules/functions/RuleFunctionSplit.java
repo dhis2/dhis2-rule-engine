@@ -40,7 +40,7 @@ import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext
 
 /**
  * @Author Zubair Asghar.
- *
+ * <p>
  * Split the text by delimiter, and keep the nth element(0 is the first).
  */
 public class RuleFunctionSplit

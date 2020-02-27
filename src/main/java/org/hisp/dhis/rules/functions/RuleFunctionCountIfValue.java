@@ -37,16 +37,15 @@ import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 import java.util.Collections;
 import java.util.Map;
 
-import static org.hisp.dhis.antlr.AntlrParserUtils.trimQuotes;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
  * @Author Zubair Asghar.
- *         <p>
- *         Counts the number of matching values that is entered for the source
- *         field in the first argument. Only occurrences that matches the second
- *         argument is counted. The source field parameter is the name of one of
- *         the defined source fields in the program.
+ * <p>
+ * Counts the number of matching values that is entered for the source
+ * field in the first argument. Only occurrences that matches the second
+ * argument is counted. The source field parameter is the name of one of
+ * the defined source fields in the program.
  */
 public class RuleFunctionCountIfValue
     extends ScalarFunctionToEvaluate
@@ -57,8 +56,8 @@ public class RuleFunctionCountIfValue
      * argument[1]
      *
      * @param ruleVariableName is the name of program rule variable
-     * @param valueToFind is the condition
-     * @param valueMap key value pair containing values for each variable
+     * @param valueToFind      is the condition
+     * @param valueMap         key value pair containing values for each variable
      * @return count of program rule variable
      */
     private String countIfValue( String ruleVariableName, String valueToFind, Map<String, RuleVariableValue> valueMap )
@@ -92,7 +91,7 @@ public class RuleFunctionCountIfValue
     {
         String valueToFind = visitor.castStringVisit( ctx.expr( 0 ) );
 
-        return countIfValue( RuleExpression.getProgramRuleVariable(ctx),
+        return countIfValue( RuleExpression.getProgramRuleVariable( ctx ),
             valueToFind,
             visitor.getValueMap() );
     }

@@ -12,77 +12,77 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 public class RuleActionDisplayKeyValuePairTests
 {
 
-        @Test
-        public void createForFeedbackMustSubstituteCorrectLocation()
-        {
-                RuleActionDisplayKeyValuePair displayTextAction = RuleActionDisplayKeyValuePair
-                    .createForFeedback( "test_content", "test_data" );
+    @Test
+    public void createForFeedbackMustSubstituteCorrectLocation()
+    {
+        RuleActionDisplayKeyValuePair displayTextAction = RuleActionDisplayKeyValuePair
+            .createForFeedback( "test_content", "test_data" );
 
-                assertThat( displayTextAction.location() )
-                    .isEqualTo( RuleActionDisplayKeyValuePair.LOCATION_FEEDBACK_WIDGET );
-                assertThat( displayTextAction.content() ).isEqualTo( "test_content" );
-                assertThat( displayTextAction.data() ).isEqualTo( "test_data" );
-        }
+        assertThat( displayTextAction.location() )
+            .isEqualTo( RuleActionDisplayKeyValuePair.LOCATION_FEEDBACK_WIDGET );
+        assertThat( displayTextAction.content() ).isEqualTo( "test_content" );
+        assertThat( displayTextAction.data() ).isEqualTo( "test_data" );
+    }
 
-        @Test
-        public void createForIndicatorsMustSubstituteCorrectLocation()
-        {
-                RuleActionDisplayKeyValuePair displayTextAction = RuleActionDisplayKeyValuePair
-                    .createForIndicators( "test_content", "test_data" );
+    @Test
+    public void createForIndicatorsMustSubstituteCorrectLocation()
+    {
+        RuleActionDisplayKeyValuePair displayTextAction = RuleActionDisplayKeyValuePair
+            .createForIndicators( "test_content", "test_data" );
 
-                assertThat( displayTextAction.location() )
-                    .isEqualTo( RuleActionDisplayKeyValuePair.LOCATION_INDICATOR_WIDGET );
-                assertThat( displayTextAction.content() ).isEqualTo( "test_content" );
-                assertThat( displayTextAction.data() ).isEqualTo( "test_data" );
-        }
+        assertThat( displayTextAction.location() )
+            .isEqualTo( RuleActionDisplayKeyValuePair.LOCATION_INDICATOR_WIDGET );
+        assertThat( displayTextAction.content() ).isEqualTo( "test_content" );
+        assertThat( displayTextAction.data() ).isEqualTo( "test_data" );
+    }
 
-        @Test(expected = IllegalArgumentException.class)
-        public void createForFeedbackMustThrowWhenBothArgumentsNull()
-        {
-                RuleActionDisplayKeyValuePair.createForFeedback( null, null );
-        }
+    @Test( expected = IllegalArgumentException.class )
+    public void createForFeedbackMustThrowWhenBothArgumentsNull()
+    {
+        RuleActionDisplayKeyValuePair.createForFeedback( null, null );
+    }
 
-        @Test(expected = IllegalArgumentException.class)
-        public void createForIndicatorsMustThrowWhenBothArgumentsNull()
-        {
-                RuleActionDisplayKeyValuePair.createForIndicators( null, null );
-        }
+    @Test( expected = IllegalArgumentException.class )
+    public void createForIndicatorsMustThrowWhenBothArgumentsNull()
+    {
+        RuleActionDisplayKeyValuePair.createForIndicators( null, null );
+    }
 
-        @Test
-        public void createForFeedbackMustSubstituteEmptyStringsForNullArguments()
-        {
-                RuleActionDisplayKeyValuePair ruleActionNoContent = RuleActionDisplayKeyValuePair
-                    .createForFeedback( null, "test_data" );
-                RuleActionDisplayKeyValuePair ruleActionNoData = RuleActionDisplayKeyValuePair
-                    .createForFeedback( "test_content", null );
+    @Test
+    public void createForFeedbackMustSubstituteEmptyStringsForNullArguments()
+    {
+        RuleActionDisplayKeyValuePair ruleActionNoContent = RuleActionDisplayKeyValuePair
+            .createForFeedback( null, "test_data" );
+        RuleActionDisplayKeyValuePair ruleActionNoData = RuleActionDisplayKeyValuePair
+            .createForFeedback( "test_content", null );
 
-                assertThat( ruleActionNoContent.content() ).isEqualTo( "" );
-                assertThat( ruleActionNoContent.data() ).isEqualTo( "test_data" );
+        assertThat( ruleActionNoContent.content() ).isEqualTo( "" );
+        assertThat( ruleActionNoContent.data() ).isEqualTo( "test_data" );
 
-                assertThat( ruleActionNoData.content() ).isEqualTo( "test_content" );
-                assertThat( ruleActionNoData.data() ).isEqualTo( "" );
-        }
+        assertThat( ruleActionNoData.content() ).isEqualTo( "test_content" );
+        assertThat( ruleActionNoData.data() ).isEqualTo( "" );
+    }
 
-        @Test
-        public void createForIndicatorsMustSubstituteEmptyStringsForNullArguments()
-        {
-                RuleActionDisplayKeyValuePair ruleActionNoContent = RuleActionDisplayKeyValuePair
-                    .createForIndicators( null, "test_data" );
-                RuleActionDisplayKeyValuePair ruleActionNoData = RuleActionDisplayKeyValuePair
-                    .createForIndicators( "test_content", null );
+    @Test
+    public void createForIndicatorsMustSubstituteEmptyStringsForNullArguments()
+    {
+        RuleActionDisplayKeyValuePair ruleActionNoContent = RuleActionDisplayKeyValuePair
+            .createForIndicators( null, "test_data" );
+        RuleActionDisplayKeyValuePair ruleActionNoData = RuleActionDisplayKeyValuePair
+            .createForIndicators( "test_content", null );
 
-                assertThat( ruleActionNoContent.content() ).isEqualTo( "" );
-                assertThat( ruleActionNoContent.data() ).isEqualTo( "test_data" );
+        assertThat( ruleActionNoContent.content() ).isEqualTo( "" );
+        assertThat( ruleActionNoContent.data() ).isEqualTo( "test_data" );
 
-                assertThat( ruleActionNoData.content() ).isEqualTo( "test_content" );
-                assertThat( ruleActionNoData.data() ).isEqualTo( "" );
-        }
+        assertThat( ruleActionNoData.content() ).isEqualTo( "test_content" );
+        assertThat( ruleActionNoData.data() ).isEqualTo( "" );
+    }
 
-        @Test
-        public void equalsAndHashcodeFunctionsMustConformToContract()
-        {
-                EqualsVerifier.forClass( RuleActionDisplayKeyValuePair.createForFeedback( "", "" ).getClass() )
-                    .suppress( Warning.NULL_FIELDS )
-                    .verify();
-        }
+    @Test
+    public void equalsAndHashcodeFunctionsMustConformToContract()
+    {
+        EqualsVerifier.forClass( RuleActionDisplayKeyValuePair.createForFeedback( "", "" ).getClass() )
+            .suppress( Warning.NULL_FIELDS )
+            .verify();
+    }
 }

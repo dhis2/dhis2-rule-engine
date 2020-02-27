@@ -19,7 +19,8 @@ public class ProgramRuleCustomVariable
 
         if ( variable == null )
         {
-            throw new ParserExceptionWithoutContext( "Variable " + ctx.programRuleVariableName().getText() + " not present" );
+            throw new ParserExceptionWithoutContext(
+                "Variable " + ctx.programRuleVariableName().getText() + " not present" );
         }
 
         return variable;

@@ -28,54 +28,55 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.CoreMatchers;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
- import org.hamcrest.CoreMatchers;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionLengthTests
 {
-        @Mock
-        private ExpressionParser.ExprContext context;
+    @Mock
+    private ExpressionParser.ExprContext context;
 
-        @Mock
-        private CommonExpressionVisitor visitor;
+    @Mock
+    private CommonExpressionVisitor visitor;
 
-        @Mock
-        private ExpressionParser.ExprContext mockedFirstExpr;
+    @Mock
+    private ExpressionParser.ExprContext mockedFirstExpr;
 
-        @Before
-        public void setUp() {
-                when(context.expr(0)).thenReturn( mockedFirstExpr );
-        }
+    @Before
+    public void setUp()
+    {
+        when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
+    }
 
-        @Test
-        public void return_length_of_argument()
-        {
-                RuleFunctionLength lengthFunction = new RuleFunctionLength();
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "" );
+    @Test
+    public void return_length_of_argument()
+    {
+        RuleFunctionLength lengthFunction = new RuleFunctionLength();
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "" );
 
-                assertThat( lengthFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0" ) );
+        assertThat( lengthFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abc" );
-                assertThat( lengthFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "3" ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abc" );
+        assertThat( lengthFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "3" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
-                assertThat( lengthFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "6" ) );
-        }
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
+        assertThat( lengthFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "6" ) );
+    }
 
-        @Test(expected = NullPointerException.class)
-        public void throw_null_pointer_exception_when_arguments_is_null()
-        {
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( null );
-                new RuleFunctionLength().evaluate( context, visitor );
-        }
+    @Test( expected = NullPointerException.class )
+    public void throw_null_pointer_exception_when_arguments_is_null()
+    {
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( null );
+        new RuleFunctionLength().evaluate( context, visitor );
+    }
 }

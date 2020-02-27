@@ -41,6 +41,11 @@ import org.joda.time.Months;
 public class RuleFunctionMonthsBetween
     extends ScalarFunctionToEvaluate
 {
+    public static RuleFunctionMonthsBetween create()
+    {
+        return new RuleFunctionMonthsBetween();
+    }
+
     /**
      * Function which will return the number of months between the two given dates.
      *
@@ -60,16 +65,11 @@ public class RuleFunctionMonthsBetween
         return Months.monthsBetween( interval.getStartDate(), interval.getEndDate() ).getMonths();
     }
 
-    public static RuleFunctionMonthsBetween create()
-    {
-        return new RuleFunctionMonthsBetween();
-    }
-
     @Override
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
         return String.valueOf(
             monthsBetween( visitor.castStringVisit( ctx.expr( 0 ) ),
-            visitor.castStringVisit( ctx.expr( 1 ) )) );
+                visitor.castStringVisit( ctx.expr( 1 ) ) ) );
     }
 }

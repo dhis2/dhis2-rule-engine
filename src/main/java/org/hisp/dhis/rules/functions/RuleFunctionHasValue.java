@@ -12,19 +12,19 @@ import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext
 public class RuleFunctionHasValue
     extends ScalarFunctionToEvaluate
 {
-        @Override
-        public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
+    @Override
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        Map<String, RuleVariableValue> valueMap = visitor.getValueMap();
+
+        String variableName = RuleExpression.getProgramRuleVariable( ctx );
+        RuleVariableValue variableValue = valueMap.get( variableName );
+
+        if ( variableValue == null )
         {
-                Map<String, RuleVariableValue> valueMap = visitor.getValueMap();
-
-                String variableName = RuleExpression.getProgramRuleVariable(ctx);
-                RuleVariableValue variableValue = valueMap.get( variableName );
-
-                if ( variableValue == null )
-                {
-                        return String.valueOf( false );
-                }
-
-                return String.valueOf( valueMap.get( variableName ).value() != null );
+            return String.valueOf( false );
         }
+
+        return String.valueOf( valueMap.get( variableName ).value() != null );
+    }
 }

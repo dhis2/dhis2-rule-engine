@@ -52,6 +52,13 @@ public abstract class RuleFunctionZScore
     private static final Set<String> GENDER_CODES = Sets.newHashSet( "male", "MALE", "Male", "ma", "m", "M", "0",
         "false" );
 
+    protected static DecimalFormat getDecimalFormat()
+    {
+        DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance();
+        decimalFormatSymbols.setDecimalSeparator( '.' );
+        return new DecimalFormat( "###.00", decimalFormatSymbols );
+    }
+
     @Override
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
@@ -61,7 +68,8 @@ public abstract class RuleFunctionZScore
         float weight;
         String genderParameter = visitor.castStringVisit( ctx.expr( 2 ) );
 
-        if (genderParameter == null) {
+        if ( genderParameter == null )
+        {
             throw new IllegalArgumentException( "Gender cannot be null" );
         }
 
@@ -97,7 +105,7 @@ public abstract class RuleFunctionZScore
         // Female
         if ( gender == 1 )
         {
-            if( getTableForGirl().get( key ) != null )
+            if ( getTableForGirl().get( key ) != null )
             {
                 sdMap = getTableForGirl().get( key );
             }
@@ -108,7 +116,7 @@ public abstract class RuleFunctionZScore
         }
         else
         {
-            if( getTableForBoy().get( key ) != null )
+            if ( getTableForBoy().get( key ) != null )
             {
                 sdMap = getTableForBoy().get( key );
             }
@@ -126,7 +134,7 @@ public abstract class RuleFunctionZScore
         int multiplicationFactor = getMultiplicationFactor( sdMap, weight );
 
         // weight exactly matches with any of the SD values
-        if ( sdMap.keySet().contains( weight ) )
+        if ( sdMap.containsKey( weight ) )
         {
             int sd = sdMap.get( weight );
 
@@ -207,12 +215,5 @@ public abstract class RuleFunctionZScore
         Collections.sort( list );
 
         return list;
-    }
-
-    protected static DecimalFormat getDecimalFormat()
-    {
-        DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance();
-        decimalFormatSymbols.setDecimalSeparator( '.' );
-        return new DecimalFormat( "###.00", decimalFormatSymbols );
     }
 }

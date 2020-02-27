@@ -31,11 +31,11 @@ package org.hisp.dhis.rules.functions;
 import com.google.common.collect.Lists;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueBuilder;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -67,14 +67,16 @@ public class RuleFunctionInOrgUnitGroupTests
     private RuleFunctionInOrgUnitGroup functionToTest = new RuleFunctionInOrgUnitGroup();
 
     @Before
-    public void setUp() {
-        when(context.expr(0)).thenReturn( mockedFirstExpr );
+    public void setUp()
+    {
+        when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
     }
 
     @Test
     public void returnFalseWhenValueMapAndDataAreEmpty()
     {
-        assertInOrgUnitGroup( "uid1", new HashMap<String, List<String>>(), new HashMap<String, RuleVariableValue>(), "false" );
+        assertInOrgUnitGroup( "uid1", new HashMap<String, List<String>>(), new HashMap<String, RuleVariableValue>(),
+            "false" );
     }
 
     @Test
@@ -83,7 +85,7 @@ public class RuleFunctionInOrgUnitGroupTests
         Map<String, List<String>> supplementaryData = new HashMap<>();
         Map<String, RuleVariableValue> valueMap = givenAVariableValuesAndOneWithTwoCandidates( "location1" );
 
-        assertInOrgUnitGroup( "value", supplementaryData, valueMap,"false" );
+        assertInOrgUnitGroup( "value", supplementaryData, valueMap, "false" );
     }
 
     @Test
@@ -92,21 +94,21 @@ public class RuleFunctionInOrgUnitGroupTests
         String value = "value";
         String location = "location1";
         Map<String, List<String>> supplementaryData = new HashMap<>();
-        supplementaryData.put( value, Lists.newArrayList(location) );
+        supplementaryData.put( value, Lists.newArrayList( location ) );
         Map<String, RuleVariableValue> valueMap = givenAVariableValuesAndOneWithTwoCandidates( location );
 
-        assertInOrgUnitGroup( value, supplementaryData, valueMap,"true" );
+        assertInOrgUnitGroup( value, supplementaryData, valueMap, "true" );
     }
 
     private Map<String, RuleVariableValue> givenAVariableValuesAndOneWithTwoCandidates( String locationValue )
     {
         Map<String, RuleVariableValue> variableValues = new HashMap<>();
 
-        variableValues.put("org_unit",
+        variableValues.put( "org_unit",
             new RuleVariableValueBuilder()
-                .withValue(locationValue)
-                .withCandidates(Arrays.asList(locationValue, "two"))
-                .build());
+                .withValue( locationValue )
+                .withCandidates( Arrays.asList( locationValue, "two" ) )
+                .build() );
 
         return variableValues;
     }
@@ -117,6 +119,7 @@ public class RuleFunctionInOrgUnitGroupTests
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( value );
         when( visitor.getValueMap() ).thenReturn( valueMap );
         when( visitor.getSupplementaryData() ).thenReturn( supplementaryData );
-        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (inOrgUnitGroup) ) );
+        MatcherAssert
+            .assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (inOrgUnitGroup) ) );
     }
 }

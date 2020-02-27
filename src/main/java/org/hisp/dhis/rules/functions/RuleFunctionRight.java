@@ -45,7 +45,7 @@ public class RuleFunctionRight
     @Override
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        Double doubleValue = castDouble( visitor.castStringVisit( ctx.expr(1) ) );
+        Double doubleValue = castDouble( visitor.castStringVisit( ctx.expr( 1 ) ) );
         int chars = doubleValue.intValue();
 
         if ( doubleValue.doubleValue() % 1 != 0 )
@@ -54,6 +54,6 @@ public class RuleFunctionRight
         }
 
         return wrap( StringUtils.reverse(
-            StringUtils.substring( StringUtils.reverse( visitor.castStringVisit( ctx.expr(0) ) ), 0, chars ) ) );
+            StringUtils.substring( StringUtils.reverse( visitor.castStringVisit( ctx.expr( 0 ) ) ), 0, chars ) ) );
     }
 }

@@ -39,20 +39,20 @@ import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext
 public class RuleFunctionConcatenate
     extends ScalarFunctionToEvaluate
 {
-        @Override
-        public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
+    @Override
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        StringBuilder builder = new StringBuilder();
+
+        for ( ExprContext string : ctx.expr() )
         {
-                StringBuilder builder = new StringBuilder();
-
-                for( ExprContext string : ctx.expr() )
-                {
-                        String visitedString = visitor.castStringVisit( string );
-                        if( visitedString != null )
-                        {
-                                builder.append( visitedString );
-                        }
-                }
-
-                return builder.toString();
+            String visitedString = visitor.castStringVisit( string );
+            if ( visitedString != null )
+            {
+                builder.append( visitedString );
+            }
         }
+
+        return builder.toString();
+    }
 }

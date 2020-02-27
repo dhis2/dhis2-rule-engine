@@ -42,22 +42,22 @@ import java.util.Map;
 public class RuleFunctionInOrgUnitGroup
     extends ScalarFunctionToEvaluate
 {
-        @Override
-        public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
+    @Override
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        Map<String, RuleVariableValue> valueMap = visitor.getValueMap();
+        Map<String, List<String>> supplementaryData = visitor.getSupplementaryData();
+
+        String value = visitor.castStringVisit( ctx.expr( 0 ) );
+        if ( !valueMap.containsKey( "org_unit" ) || !supplementaryData.containsKey( value ) )
         {
-                Map<String, RuleVariableValue> valueMap = visitor.getValueMap();
-                Map<String, List<String>> supplementaryData = visitor.getSupplementaryData();
-
-                String value = visitor.castStringVisit( ctx.expr( 0 ) );
-                if ( !valueMap.containsKey( "org_unit" ) || !supplementaryData.containsKey( value ) )
-                {
-                        return String.valueOf( false );
-                }
-
-                String orgUnit = valueMap.get( "org_unit" ).value().replace( "'", "" );
-
-                List<String> members = supplementaryData.get( value );
-
-                return String.valueOf( members.contains( orgUnit ) );
+            return String.valueOf( false );
         }
+
+        String orgUnit = valueMap.get( "org_unit" ).value().replace( "'", "" );
+
+        List<String> members = supplementaryData.get( value );
+
+        return String.valueOf( members.contains( orgUnit ) );
+    }
 }

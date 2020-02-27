@@ -28,16 +28,16 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
- import org.hamcrest.CoreMatchers;
 import static org.mockito.Mockito.when;
 
 /**
@@ -62,63 +62,66 @@ public class RuleFunctionYearsBetweenTests
     private RuleFunctionYearsBetween functionToTest = new RuleFunctionYearsBetween();
 
     @Before
-    public void setUp() {
-        when(context.expr(0)).thenReturn( mockedFirstExpr );
-        when(context.expr(1)).thenReturn( mockedSecondExpr );
+    public void setUp()
+    {
+        when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
+        when( context.expr( 1 ) ).thenReturn( mockedSecondExpr );
     }
 
     @Test
     public void return_empty_if_some_date_is_not_present()
     {
         assertYearsBetween( null, null, "0" );
-        assertYearsBetween( null, "", "0");
-        assertYearsBetween( "", null,"0");
-        assertYearsBetween( "", "", "0");
+        assertYearsBetween( null, "", "0" );
+        assertYearsBetween( "", null, "0" );
+        assertYearsBetween( "", "", "0" );
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test( expected = IllegalArgumentException.class )
     public void throw_illegal_argument_exception_if_first_date_is_invalid()
     {
         assertYearsBetween( "bad date", "2010-01-01", null );
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test( expected = IllegalArgumentException.class )
     public void throw_illegal_argument_exception_if_second_date_is_invalid()
     {
         assertYearsBetween( "2010-01-01", "bad date", null );
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test( expected = IllegalArgumentException.class )
     public void throw_illegal_argument_exception_if_first_and_second_date_is_invalid()
     {
-        assertYearsBetween(  "bad date", "bad date", null );
+        assertYearsBetween( "bad date", "bad date", null );
     }
 
     @Test
     public void return_difference_of_years_of_two_dates()
     {
-        assertYearsBetween(  "2010-10-15", "2010-10-22", "0" );
-        assertYearsBetween(  "2010-09-30", "2011-10-31", "1" );
-        assertYearsBetween(  "2015-01-01", "2016-06-30", "1" );
-        assertYearsBetween(  "2010-01-01", "2016-06-30", "6" );
+        assertYearsBetween( "2010-10-15", "2010-10-22", "0" );
+        assertYearsBetween( "2010-09-30", "2011-10-31", "1" );
+        assertYearsBetween( "2015-01-01", "2016-06-30", "1" );
+        assertYearsBetween( "2010-01-01", "2016-06-30", "6" );
 
-        assertYearsBetween(  "2010-10-22", "2010-10-15", "0" );
-        assertYearsBetween(  "2011-10-31", "2010-09-30", "-1" );
-        assertYearsBetween(  "2016-06-30", "2015-01-01", "-1" );
-        assertYearsBetween(  "2016-06-30", "2010-01-01", "-6" );
+        assertYearsBetween( "2010-10-22", "2010-10-15", "0" );
+        assertYearsBetween( "2011-10-31", "2010-09-30", "-1" );
+        assertYearsBetween( "2016-06-30", "2015-01-01", "-1" );
+        assertYearsBetween( "2016-06-30", "2010-01-01", "-6" );
 
-        assertYearsBetween(  "2017-02-27", "2018-02-26", "0" );
-        assertYearsBetween(  "2017-02-27", "2018-02-27", "1" );
-        assertYearsBetween(  "2017-02-27", "2018-02-28", "1" );
-        assertYearsBetween(  "2015-02-27", "2018-02-27", "3" );
-        assertYearsBetween(  "2018-06-04", "2019-01-04", "0" );
-        assertYearsBetween(  "2019-10-10", "1995-11-02", "-23" );
-        assertYearsBetween(  "1995-11-02", "2019-10-10", "23" );
+        assertYearsBetween( "2017-02-27", "2018-02-26", "0" );
+        assertYearsBetween( "2017-02-27", "2018-02-27", "1" );
+        assertYearsBetween( "2017-02-27", "2018-02-28", "1" );
+        assertYearsBetween( "2015-02-27", "2018-02-27", "3" );
+        assertYearsBetween( "2018-06-04", "2019-01-04", "0" );
+        assertYearsBetween( "2019-10-10", "1995-11-02", "-23" );
+        assertYearsBetween( "1995-11-02", "2019-10-10", "23" );
     }
 
-    private void assertYearsBetween( String startDate, String endDate, String yearsBetween ) {
+    private void assertYearsBetween( String startDate, String endDate, String yearsBetween )
+    {
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( startDate );
         when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( endDate );
-        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (yearsBetween) ) );
+        MatcherAssert
+            .assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (yearsBetween) ) );
     }
 }

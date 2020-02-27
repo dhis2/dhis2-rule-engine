@@ -30,9 +30,9 @@ package org.hisp.dhis.rules.functions;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -64,11 +64,12 @@ public class RuleFunctionHasUserRoleTests
     private RuleFunctionHasUserRole functionToTest = new RuleFunctionHasUserRole();
 
     @Before
-    public void setUp() {
-        when(context.expr(0)).thenReturn( mockedFirstExpr );
+    public void setUp()
+    {
+        when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test( expected = IllegalArgumentException.class )
     public void throwExceptionWhenSupplementaryDataIsNull()
     {
         assertHasUserRole( "uid1", new HashMap<String, List<String>>(), "true" );

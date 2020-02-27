@@ -46,44 +46,47 @@ import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext
 public class RuleFunctionCountIfZeroPos
     extends ScalarFunctionToEvaluate
 {
-        private boolean isZeroPos( String input )
+    private boolean isZeroPos( String input )
+    {
+        Double value;
+
+        try
         {
-                Double value;
-
-                try
-                {
-                        value = Double.parseDouble( input );
-                }
-                catch ( NumberFormatException e )
-                {
-                        throw new IllegalArgumentException( "Invalid number format" );
-                }
-
-                return value >= 0;
+            value = Double.parseDouble( input );
+        }
+        catch ( NumberFormatException e )
+        {
+            throw new IllegalArgumentException( "Invalid number format" );
         }
 
-        @Override
-        public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
+        return value >= 0;
+    }
+
+    @Override
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        RuleVariableValue value = visitor.getValueMap().get( RuleExpression.getProgramRuleVariable( ctx ) );
+
+        if ( value != null )
         {
-                RuleVariableValue value = visitor.getValueMap().get( RuleExpression.getProgramRuleVariable(ctx) );
+            List<String> candidates = value.candidates();
 
-                if ( value != null )
-                {
-                        List<String> candidates = value.candidates();
-
-                        Integer count = 0;
-                        for (String string : candidates){
-                                if(isZeroPos(string))
-                                        count++;
-                        }
+            Integer count = 0;
+            for ( String string : candidates )
+            {
+                    if ( isZeroPos( string ) )
+                    {
+                            count++;
+                    }
+            }
 
 //                        Integer count = candidates.stream().filter( this::isZeroPos ).collect( Collectors.toList() ).size();
 
-                        return String.valueOf( count );
-                }
-                else
-                {
-                        return "0";
-                }
+            return String.valueOf( count );
         }
+        else
+        {
+            return "0";
+        }
+    }
 }

@@ -56,6 +56,7 @@ public class RuleFunctionYearsBetween
     @Override
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return String.valueOf( yearsBetween( visitor.castStringVisit( ctx.expr( 0 ) ), visitor.castStringVisit( ctx.expr( 1 ) ) ) );
+        return String.valueOf(
+            yearsBetween( visitor.castStringVisit( ctx.expr( 0 ) ), visitor.castStringVisit( ctx.expr( 1 ) ) ) );
     }
 }

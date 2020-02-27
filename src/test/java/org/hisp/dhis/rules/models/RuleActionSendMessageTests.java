@@ -10,22 +10,22 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 public class RuleActionSendMessageTests
 {
 
-        @Test
-        public void substitute_empty_strings_when_create_with_null_arguments()
-        {
-                RuleActionSendMessage ruleActionSendMessage = RuleActionSendMessage.create( "notification", "data" );
-                RuleActionSendMessage ruleActionSendMessageNoData = RuleActionSendMessage
-                    .create( "notification", null );
-                RuleActionSendMessage ruleActionSendMessageNoNotification = RuleActionSendMessage
-                    .create( null, "data" );
+    @Test
+    public void substitute_empty_strings_when_create_with_null_arguments()
+    {
+        RuleActionSendMessage ruleActionSendMessage = RuleActionSendMessage.create( "notification", "data" );
+        RuleActionSendMessage ruleActionSendMessageNoData = RuleActionSendMessage
+            .create( "notification", null );
+        RuleActionSendMessage ruleActionSendMessageNoNotification = RuleActionSendMessage
+            .create( null, "data" );
 
-                assertThat( ruleActionSendMessage.notification() ).isEqualTo( "notification" );
-                assertThat( ruleActionSendMessage.data() ).isEqualTo( "data" );
+        assertThat( ruleActionSendMessage.notification() ).isEqualTo( "notification" );
+        assertThat( ruleActionSendMessage.data() ).isEqualTo( "data" );
 
-                assertThat( ruleActionSendMessageNoData.notification() ).isEqualTo( "notification" );
-                assertThat( ruleActionSendMessageNoData.data() ).isEqualTo( "" );
+        assertThat( ruleActionSendMessageNoData.notification() ).isEqualTo( "notification" );
+        assertThat( ruleActionSendMessageNoData.data() ).isEqualTo( "" );
 
-                assertThat( ruleActionSendMessageNoNotification.notification() ).isEqualTo( "" );
-                assertThat( ruleActionSendMessageNoNotification.data() ).isEqualTo( "data" );
-        }
+        assertThat( ruleActionSendMessageNoNotification.notification() ).isEqualTo( "" );
+        assertThat( ruleActionSendMessageNoNotification.data() ).isEqualTo( "data" );
+    }
 }

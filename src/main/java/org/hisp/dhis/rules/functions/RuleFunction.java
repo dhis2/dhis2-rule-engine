@@ -24,6 +24,20 @@ public abstract class RuleFunction
         return TimeInterval.fromTo( startDate, endDate );
     }
 
+    static public String wrap( String input )
+    {
+        if ( input == null )
+        {
+            return "";
+        }
+        return input;
+    }
+
+    static boolean isEmpty( String input )
+    {
+        return input == null || input.length() == 0;
+    }
+
     @Nonnull
     public double toDouble( @Nullable final String str, final double defaultValue )
     {
@@ -40,19 +54,5 @@ public abstract class RuleFunction
         {
             return defaultValue;
         }
-    }
-
-    static public String wrap( String input )
-    {
-            if( input == null )
-            {
-                    return "";
-            }
-            return input;
-    }
-
-    static boolean isEmpty( String input )
-    {
-        return input == null || input.length() == 0;
     }
 }

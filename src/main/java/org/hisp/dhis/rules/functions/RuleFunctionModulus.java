@@ -44,7 +44,7 @@ public class RuleFunctionModulus
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
         return String.format( "%.1f",
-            toDouble( visitor.castStringVisit( ctx.expr( 0 ) ), 0.0) %
-                toDouble( visitor.castStringVisit( ctx.expr( 1 ) ), 0.0)) ;
+            toDouble( visitor.castStringVisit( ctx.expr( 0 ) ), 0.0 ) %
+                toDouble( visitor.castStringVisit( ctx.expr( 1 ) ), 0.0 ) );
     }
 }

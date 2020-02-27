@@ -46,23 +46,23 @@ import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext
 public class RuleFunctionCount
     extends ScalarFunctionToEvaluate
 {
-        private String count( String ruleVariableName, Map<String, RuleVariableValue> valueMap )
-        {
-                RuleVariableValue variableValue = valueMap.get( ruleVariableName );
+    private String count( String ruleVariableName, Map<String, RuleVariableValue> valueMap )
+    {
+        RuleVariableValue variableValue = valueMap.get( ruleVariableName );
 
-                if ( variableValue != null)
-                {
-                        return Integer.toString( variableValue.candidates().size() );
-                }
-                else
-                {
-                        return "0";
-                }
-        }
-
-        @Override
-        public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
+        if ( variableValue != null )
         {
-                return count( RuleExpression.getProgramRuleVariable(ctx), visitor.getValueMap() );
+            return Integer.toString( variableValue.candidates().size() );
         }
+        else
+        {
+            return "0";
+        }
+    }
+
+    @Override
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return count( RuleExpression.getProgramRuleVariable( ctx ), visitor.getValueMap() );
+    }
 }

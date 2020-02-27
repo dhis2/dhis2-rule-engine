@@ -12,35 +12,35 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 public class RuleActionCreateEventTests
 {
 
-        @Test
-        public void createMustSubstituteEmptyStringsForNullArguments()
-        {
-                RuleActionCreateEvent ruleActionAssignNoContent = RuleActionCreateEvent
-                    .create( null, "test_data", "test_program_stage" );
-                RuleActionCreateEvent ruleActionAssignNoField = RuleActionCreateEvent
-                    .create( "test_content", null, "test_program_stage" );
+    @Test
+    public void createMustSubstituteEmptyStringsForNullArguments()
+    {
+        RuleActionCreateEvent ruleActionAssignNoContent = RuleActionCreateEvent
+            .create( null, "test_data", "test_program_stage" );
+        RuleActionCreateEvent ruleActionAssignNoField = RuleActionCreateEvent
+            .create( "test_content", null, "test_program_stage" );
 
-                assertThat( ruleActionAssignNoContent.content() ).isEqualTo( "" );
-                assertThat( ruleActionAssignNoContent.data() ).isEqualTo( "test_data" );
-                assertThat( ruleActionAssignNoContent.programStage() ).isEqualTo( "test_program_stage" );
+        assertThat( ruleActionAssignNoContent.content() ).isEqualTo( "" );
+        assertThat( ruleActionAssignNoContent.data() ).isEqualTo( "test_data" );
+        assertThat( ruleActionAssignNoContent.programStage() ).isEqualTo( "test_program_stage" );
 
-                assertThat( ruleActionAssignNoField.content() ).isEqualTo( "test_content" );
-                assertThat( ruleActionAssignNoField.data() ).isEqualTo( "" );
-                assertThat( ruleActionAssignNoField.programStage() ).isEqualTo( "test_program_stage" );
-        }
+        assertThat( ruleActionAssignNoField.content() ).isEqualTo( "test_content" );
+        assertThat( ruleActionAssignNoField.data() ).isEqualTo( "" );
+        assertThat( ruleActionAssignNoField.programStage() ).isEqualTo( "test_program_stage" );
+    }
 
-        @Test(expected = NullPointerException.class )
-        public void createMustThrowWhenFieldIsNull()
-        {
-                RuleActionCreateEvent.create( "test_content", "test_data", null );
-        }
+    @Test( expected = NullPointerException.class )
+    public void createMustThrowWhenFieldIsNull()
+    {
+        RuleActionCreateEvent.create( "test_content", "test_data", null );
+    }
 
-        @Test
-        public void equalsAndHashcodeFunctionsMustConformToContract()
-        {
-                EqualsVerifier.forClass( RuleActionCreateEvent
-                    .create( "test_content", "test_data", "test_field" ).getClass() )
-                    .suppress( Warning.NULL_FIELDS )
-                    .verify();
-        }
+    @Test
+    public void equalsAndHashcodeFunctionsMustConformToContract()
+    {
+        EqualsVerifier.forClass( RuleActionCreateEvent
+            .create( "test_content", "test_data", "test_field" ).getClass() )
+            .suppress( Warning.NULL_FIELDS )
+            .verify();
+    }
 }

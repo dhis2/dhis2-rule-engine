@@ -42,83 +42,87 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-@RunWith(JUnit4.class)
-public class ConstantsValueTests {
+@RunWith( JUnit4.class )
+public class ConstantsValueTests
+{
 
-
-    @Test(expected = IllegalArgumentException.class)
+    @Test( expected = IllegalArgumentException.class )
     public void shouldThrowExceptionIfConstantsValueMapIsNull()
     {
-       RuleEngineContext.builder()
-                .rules(Arrays.asList(mock(org.hisp.dhis.rules.models.Rule.class)))
-                .ruleVariables(Arrays.asList(mock(RuleVariable.class)))
-                .supplementaryData(new HashMap<String, List<String>>())
-                .calculatedValueMap(new HashMap<String, Map<String, String>>())
-                .constantsValue(null)
-                .build();
+        RuleEngineContext.builder()
+            .rules( Arrays.asList( mock( org.hisp.dhis.rules.models.Rule.class ) ) )
+            .ruleVariables( Arrays.asList( mock( RuleVariable.class ) ) )
+            .supplementaryData( new HashMap<String, List<String>>() )
+            .calculatedValueMap( new HashMap<String, Map<String, String>>() )
+            .constantsValue( null )
+            .build();
 
     }
 
     @Test
-    public void assignConstantValueFromAssignActionInEnrollment() throws Exception
+    public void assignConstantValueFromAssignActionInEnrollment()
+        throws Exception
     {
-        RuleAction assignAction = RuleActionAssign.create(null, "C{A1234567890}", "#{test_attribute}");
-        org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create(null, 1, "true", Arrays.asList(assignAction), "test_program_rule1");
+        RuleAction assignAction = RuleActionAssign.create( null, "C{A1234567890}", "#{test_attribute}" );
+        org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
+            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1" );
 
         Map<String, String> constantsValueMap = new HashMap<>();
-        constantsValueMap.put("A1234567890", "3.14");
+        constantsValueMap.put( "A1234567890", "3.14" );
 
-        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList(rule), constantsValueMap);
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule ), constantsValueMap );
 
         RuleEnrollment enrollment = RuleEnrollment.builder()
-                .enrollment("test_enrollment")
-                .programName("test_program")
-                .incidentDate(new Date())
-                .enrollmentDate(new Date())
-                .status(RuleEnrollment.Status.ACTIVE)
-                .organisationUnit("test_ou")
-                .organisationUnitCode("test_ou_code")
-                .attributeValues(Arrays.asList( RuleAttributeValue.create("test_attribute", "test_value")))
-                .build();
+            .enrollment( "test_enrollment" )
+            .programName( "test_program" )
+            .incidentDate( new Date() )
+            .enrollmentDate( new Date() )
+            .status( RuleEnrollment.Status.ACTIVE )
+            .organisationUnit( "test_ou" )
+            .organisationUnitCode( "test_ou_code" )
+            .attributeValues( Arrays.asList( RuleAttributeValue.create( "test_attribute", "test_value" ) ) )
+            .build();
 
         RuleEngine ruleEngine = ruleEngineBuilder.build();
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( enrollment ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo(1);
-        assertThat( ruleEffects.get(0).data() ).isEqualTo("3.14");
-        assertThat( ruleEffects.get(0).ruleAction() ).isEqualTo(assignAction);
+        assertThat( ruleEffects.size() ).isEqualTo( 1 );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "3.14" );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( assignAction );
     }
 
     @Test
-    public void assignConstantValueFromAssignActionInEvent() throws Exception
+    public void assignConstantValueFromAssignActionInEvent()
+        throws Exception
     {
-        RuleAction assignAction = RuleActionAssign.create(null, "C{A1234567890}", "#{test_data_element}");
-        org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule.create(null, 1, "true", Arrays.asList(assignAction), "test_program_rule1");
+        RuleAction assignAction = RuleActionAssign.create( null, "C{A1234567890}", "#{test_data_element}" );
+        org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
+            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1" );
 
         Map<String, String> constantsValueMap = new HashMap<>();
-        constantsValueMap.put("A1234567890", "3.14");
+        constantsValueMap.put( "A1234567890", "3.14" );
 
-        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList(rule), constantsValueMap );
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule ), constantsValueMap );
 
         RuleEvent ruleEvent = RuleEvent.builder()
-                .event("test_event")
-                .programStage("test_program_stage")
-                .programStageName("")
-                .status(RuleEvent.Status.ACTIVE)
-                .eventDate(new Date())
-                .dueDate(new Date())
-                .organisationUnit("")
-                .organisationUnitCode("")
-                .dataValues(Arrays.asList(RuleDataValue.create(
-                        new Date(), "test_program_stage", "test_data_element", "test_value")))
-                .build();
+            .event( "test_event" )
+            .programStage( "test_program_stage" )
+            .programStageName( "" )
+            .status( RuleEvent.Status.ACTIVE )
+            .eventDate( new Date() )
+            .dueDate( new Date() )
+            .organisationUnit( "" )
+            .organisationUnitCode( "" )
+            .dataValues( Arrays.asList( RuleDataValue.create(
+                new Date(), "test_program_stage", "test_data_element", "test_value" ) ) )
+            .build();
 
         RuleEngine ruleEngine = ruleEngineBuilder.build();
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo(1);
-        assertThat( ruleEffects.get(0).data() ).isEqualTo("3.14");
-        assertThat( ruleEffects.get(0).ruleAction() ).isEqualTo(assignAction);
+        assertThat( ruleEffects.size() ).isEqualTo( 1 );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "3.14" );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( assignAction );
 
     }
 
@@ -126,13 +130,13 @@ public class ConstantsValueTests {
         Map<String, String> constantsValueMap )
     {
         return RuleEngineContext
-                .builder()
-                .rules( rules )
-                .ruleVariables( Arrays.<RuleVariable>asList() )
-                .calculatedValueMap( new HashMap<String, Map<String, String>>() )
-                .supplementaryData( new HashMap<String, List<String>>() )
-                .constantsValue( constantsValueMap )
-                .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );
+            .builder()
+            .rules( rules )
+            .ruleVariables( Arrays.<RuleVariable>asList() )
+            .calculatedValueMap( new HashMap<String, Map<String, String>>() )
+            .supplementaryData( new HashMap<String, List<String>>() )
+            .constantsValue( constantsValueMap )
+            .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );
     }
 
 }

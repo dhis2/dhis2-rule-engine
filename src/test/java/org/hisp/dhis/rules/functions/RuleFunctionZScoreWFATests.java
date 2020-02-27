@@ -28,16 +28,16 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
- import org.hamcrest.CoreMatchers;
 import static org.mockito.Mockito.when;
 
 /**
@@ -65,62 +65,64 @@ public class RuleFunctionZScoreWFATests
     private RuleFunctionZScoreWFA functionToTest = new RuleFunctionZScoreWFA();
 
     @Before
-    public void setUp() {
-        when(context.expr(0)).thenReturn( mockedFirstExpr );
-        when(context.expr(1)).thenReturn( mockedSecondExpr );
-        when(context.expr(2)).thenReturn( mockedThirdExpr );
+    public void setUp()
+    {
+        when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
+        when( context.expr( 1 ) ).thenReturn( mockedSecondExpr );
+        when( context.expr( 2 ) ).thenReturn( mockedThirdExpr );
     }
 
     @Test
     public void testZscoreAtExactSDValue()
     {
-        assertZScore( "1", "4.8", "1","1" );
-        assertZScore( "1", "3.2", "1","-2" );
-        assertZScore( "39", "9.9", "1","-3" );
-        assertZScore( "39", "11.5", "1","-1.80" );
+        assertZScore( "1", "4.8", "1", "1" );
+        assertZScore( "1", "3.2", "1", "-2" );
+        assertZScore( "39", "9.9", "1", "-3" );
+        assertZScore( "39", "11.5", "1", "-1.80" );
     }
 
     @Test
     public void testZscoreBeyond3SD()
     {
-        assertZScore( "1", "7.5", "1","3.5" );
+        assertZScore( "1", "7.5", "1", "3.5" );
     }
 
     @Test
     public void testZscoreBeyondNegative3SD()
     {
-        assertZScore( "1", "4.8", "1","1" );
+        assertZScore( "1", "4.8", "1", "1" );
     }
 
     @Test
     public void testZscoreAboveSD0()
     {
-        assertZScore( "1", "5.2", "1","1.57" );
-        assertZScore( "6", "9.5", "1","2.15" );
-        assertZScore( "1", "6.0", "1","2.71" );
+        assertZScore( "1", "5.2", "1", "1.57" );
+        assertZScore( "6", "9.5", "1", "2.15" );
+        assertZScore( "1", "6.0", "1", "2.71" );
     }
 
     @Test
     public void testZscoreBelowSD0()
     {
-        assertZScore( "1", "2.9", "1","-2.60" );
-        assertZScore( "12", "7.5", "1","-1.44" );
-        assertZScore( "1", "2.8", "1","-2.80" );
+        assertZScore( "1", "2.9", "1", "-2.60" );
+        assertZScore( "12", "7.5", "1", "-1.44" );
+        assertZScore( "1", "2.8", "1", "-2.80" );
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test( expected = IllegalArgumentException.class )
     public void testExceptionIfInvalidArgument()
     {
-        assertZScore( "1", "2.9", null,"0" );
+        assertZScore( "1", "2.9", null, "0" );
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test( expected = IllegalArgumentException.class )
     public void testExceptionWeightIsInvalid()
     {
-        assertZScore( "1", "abc", "1","2.40" );
+        assertZScore( "1", "abc", "1", "2.40" );
     }
 
-    private void assertZScore( String parameter, String weight, String gender, String zScore ) {
+    private void assertZScore( String parameter, String weight, String gender, String zScore )
+    {
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( parameter );
         when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( weight );
         when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( gender );

@@ -9,9 +9,9 @@ import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext
 public class RuleFunctionCeil
     extends ScalarFunctionToEvaluate
 {
-        @Override
-        public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
-        {
-                return String.valueOf( (long) Math.ceil( toDouble( visitor.castStringVisit( ctx.expr( 0 ) ), 0.0 ) ) );
-        }
+    @Override
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return String.valueOf( (long) Math.ceil( toDouble( visitor.castStringVisit( ctx.expr( 0 ) ), 0.0 ) ) );
+    }
 }

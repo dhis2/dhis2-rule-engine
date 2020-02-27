@@ -28,16 +28,16 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
- import org.hamcrest.CoreMatchers;
 import static org.mockito.Mockito.when;
 
 /**
@@ -47,51 +47,52 @@ import static org.mockito.Mockito.when;
 @RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionRoundTests
 {
-        @Mock
-        private ExpressionParser.ExprContext context;
+    @Mock
+    private ExpressionParser.ExprContext context;
 
-        @Mock
-        private CommonExpressionVisitor visitor;
+    @Mock
+    private CommonExpressionVisitor visitor;
 
-        @Mock
-        private ExpressionParser.ExprContext mockedFirstExpr;
+    @Mock
+    private ExpressionParser.ExprContext mockedFirstExpr;
 
-        @Before
-        public void setUp() {
-                when(context.expr(0)).thenReturn( mockedFirstExpr );
-        }
+    @Before
+    public void setUp()
+    {
+        when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
+    }
 
-        @Test
-        public void return_argument_rounded_up_to_nearest_whole_number()
-        {
-                RuleFunctionRound roundFunction = new RuleFunctionRound();
+    @Test
+    public void return_argument_rounded_up_to_nearest_whole_number()
+    {
+        RuleFunctionRound roundFunction = new RuleFunctionRound();
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0" );
-                MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0" ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0" );
+        MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.8" );
-                MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "1" ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.8" );
+        MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "1" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.4999" );
-                MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0" ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.4999" );
+        MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.5001" );
-                MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "1" ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.5001" );
+        MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "1" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "-9.3" );
-                MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "-9" ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "-9.3" );
+        MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "-9" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "-9.8" );
-                MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "-10" ) );
-        }
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "-9.8" );
+        MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "-10" ) );
+    }
 
-        @Test
-        public void return_zero_when_number_is_invalid()
-        {
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "not a number" );
+    @Test
+    public void return_zero_when_number_is_invalid()
+    {
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "not a number" );
 
-                RuleFunctionRound roundFunction = new RuleFunctionRound();
+        RuleFunctionRound roundFunction = new RuleFunctionRound();
 
-                MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is("0") );
-        }
+        MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0" ) );
+    }
 }

@@ -9,12 +9,12 @@ public abstract class RuleActionSetMandatoryField
     extends RuleAction
 {
 
-        @Nonnull
-        public abstract String field();
+    @Nonnull
+    public static RuleActionSetMandatoryField create( @Nonnull String field )
+    {
+        return new AutoValue_RuleActionSetMandatoryField( field );
+    }
 
-        @Nonnull
-        public static RuleActionSetMandatoryField create( @Nonnull String field )
-        {
-                return new AutoValue_RuleActionSetMandatoryField( field );
-        }
+    @Nonnull
+    public abstract String field();
 }

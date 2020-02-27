@@ -28,17 +28,17 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
 import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
- import org.hamcrest.CoreMatchers;
 import static org.mockito.Mockito.when;
 
 /**
@@ -48,63 +48,65 @@ import static org.mockito.Mockito.when;
 @RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionSplitTests
 {
-        @Mock
-        private ExpressionParser.ExprContext context;
+    @Mock
+    private ExpressionParser.ExprContext context;
 
-        @Mock
-        private CommonExpressionVisitor visitor;
+    @Mock
+    private CommonExpressionVisitor visitor;
 
-        @Mock
-        private ExpressionParser.ExprContext mockedFirstExpr;
+    @Mock
+    private ExpressionParser.ExprContext mockedFirstExpr;
 
-        @Mock
-        private ExpressionParser.ExprContext mockedSecondExpr;
+    @Mock
+    private ExpressionParser.ExprContext mockedSecondExpr;
 
-        @Mock
-        private ExpressionParser.ExprContext mockedThirdExpr;
+    @Mock
+    private ExpressionParser.ExprContext mockedThirdExpr;
 
-        private RuleFunctionSplit functionToTest = new RuleFunctionSplit();
+    private RuleFunctionSplit functionToTest = new RuleFunctionSplit();
 
-        @Before
-        public void setUp() {
-                when(context.expr(0)).thenReturn( mockedFirstExpr );
-                when(context.expr(1)).thenReturn( mockedSecondExpr );
-                when(context.expr(2)).thenReturn( mockedThirdExpr );
-        }
+    @Before
+    public void setUp()
+    {
+        when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
+        when( context.expr( 1 ) ).thenReturn( mockedSecondExpr );
+        when( context.expr( 2 ) ).thenReturn( mockedThirdExpr );
+    }
 
-        @Test
-        public void return_empty_string_for_null_inputs()
-        {
-                assertSplit( null, null, "0","" );
-                assertSplit( "", null, "0","" );
-                assertSplit( null, "", "0","" );
-        }
+    @Test
+    public void return_empty_string_for_null_inputs()
+    {
+        assertSplit( null, null, "0", "" );
+        assertSplit( "", null, "0", "" );
+        assertSplit( null, "", "0", "" );
+    }
 
-        @Test
-        public void return_the_nth_field_of_the_splited_first_argument()
-        {
-                assertSplit( "a,b,c", ",", "0", "a" );
-                assertSplit( "a,b,c", ",", "2","c" );
-                assertSplit( "a,;b,;c", ",;", "1","b" );
-        }
+    @Test
+    public void return_the_nth_field_of_the_splited_first_argument()
+    {
+        assertSplit( "a,b,c", ",", "0", "a" );
+        assertSplit( "a,b,c", ",", "2", "c" );
+        assertSplit( "a,;b,;c", ",;", "1", "b" );
+    }
 
-        @Test
-        public void return_empty_string_if_field_index_is_out_of_bounds()
-        {
-                assertSplit( "a,b,c", ",", "10", "" );
-                assertSplit( "a,b,c", ",", "-1","" );
-        }
+    @Test
+    public void return_empty_string_if_field_index_is_out_of_bounds()
+    {
+        assertSplit( "a,b,c", ",", "10", "" );
+        assertSplit( "a,b,c", ",", "-1", "" );
+    }
 
-        @Test(expected = ParserExceptionWithoutContext.class)
-        public void throw_parser_exception_without_context_if_position_is_a_text()
-        {
-                assertSplit( "test_variable_one", "variable", "text", null );
-        }
+    @Test( expected = ParserExceptionWithoutContext.class )
+    public void throw_parser_exception_without_context_if_position_is_a_text()
+    {
+        assertSplit( "test_variable_one", "variable", "text", null );
+    }
 
-        private void assertSplit( String input, String delimiter, String index, String zScore ) {
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( input );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( delimiter );
-                when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( index );
-                MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (zScore) ) );
-        }
+    private void assertSplit( String input, String delimiter, String index, String zScore )
+    {
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( input );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( delimiter );
+        when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( index );
+        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (zScore) ) );
+    }
 }

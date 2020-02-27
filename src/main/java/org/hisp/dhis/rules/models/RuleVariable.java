@@ -10,10 +10,10 @@ import javax.annotation.Nonnull;
 public abstract class RuleVariable
 {
 
-        /**
-         * @return Name of the variable. Something what users refer to
-         * when building program rules.
-         */
-        @Nonnull
-        public abstract String name();
+    /**
+     * @return Name of the variable. Something what users refer to
+     * when building program rules.
+     */
+    @Nonnull
+    public abstract String name();
 }

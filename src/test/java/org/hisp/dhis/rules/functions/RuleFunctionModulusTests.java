@@ -28,16 +28,16 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
- import org.hamcrest.CoreMatchers;
 import static org.mockito.Mockito.when;
 
 /**
@@ -47,57 +47,58 @@ import static org.mockito.Mockito.when;
 @RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionModulusTests
 {
-        @Mock
-        private ExpressionParser.ExprContext context;
+    @Mock
+    private ExpressionParser.ExprContext context;
 
-        @Mock
-        private CommonExpressionVisitor visitor;
+    @Mock
+    private CommonExpressionVisitor visitor;
 
-        @Mock
-        private ExpressionParser.ExprContext mockedFirstExpr;
+    @Mock
+    private ExpressionParser.ExprContext mockedFirstExpr;
 
-        @Mock
-        private ExpressionParser.ExprContext mockedSecondExpr;
+    @Mock
+    private ExpressionParser.ExprContext mockedSecondExpr;
 
-        @Before
-        public void setUp() {
-                when(context.expr(0)).thenReturn( mockedFirstExpr );
-                when(context.expr(1)).thenReturn( mockedSecondExpr );
-        }
+    @Before
+    public void setUp()
+    {
+        when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
+        when( context.expr( 1 ) ).thenReturn( mockedSecondExpr );
+    }
 
-        @Test
-        public void return_argument_rounded_down_to_nearest_whole_number()
-        {
-                RuleFunctionModulus modulusFunction = new RuleFunctionModulus();
+    @Test
+    public void return_argument_rounded_down_to_nearest_whole_number()
+    {
+        RuleFunctionModulus modulusFunction = new RuleFunctionModulus();
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0" );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "2" );
-                MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0.0" ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "2" );
+        MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0.0" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "11" );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "3" );
-                MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "2.0" ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "11" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "3" );
+        MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "2.0" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "-11" );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "3" );
-                MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "-2.0" ) );
-        }
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "-11" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "3" );
+        MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "-2.0" ) );
+    }
 
-        @Test
-        public void return_NaN_when_invalid_operations()
-        {
-                RuleFunctionModulus modulusFunction = new RuleFunctionModulus();
+    @Test
+    public void return_NaN_when_invalid_operations()
+    {
+        RuleFunctionModulus modulusFunction = new RuleFunctionModulus();
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "2" );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "0" );
-                MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "NaN" ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "2" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "0" );
+        MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "NaN" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "bad number" );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "bad number" );
-                MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "NaN" ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "bad number" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "bad number" );
+        MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "NaN" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( null );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( null );
-                MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "NaN" ) );
-        }
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( null );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( null );
+        MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "NaN" ) );
+    }
 }

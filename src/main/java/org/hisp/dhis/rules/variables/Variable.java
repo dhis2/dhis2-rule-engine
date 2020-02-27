@@ -20,7 +20,8 @@ public class Variable
 
         if ( variable == null )
         {
-            throw new ParserExceptionWithoutContext( "Variable " + RuleExpression.getProgramRuleVariable( ctx ) + " not present" );
+            throw new ParserExceptionWithoutContext(
+                "Variable " + RuleExpression.getProgramRuleVariable( ctx ) + " not present" );
         }
 
         return variable;

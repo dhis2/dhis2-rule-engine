@@ -30,9 +30,9 @@ package org.hisp.dhis.rules.functions;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -47,46 +47,48 @@ import static org.mockito.Mockito.when;
 @RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionOizpTests
 {
-        @Mock
-        private ExpressionParser.ExprContext context;
+    @Mock
+    private ExpressionParser.ExprContext context;
 
-        @Mock
-        private CommonExpressionVisitor visitor;
+    @Mock
+    private CommonExpressionVisitor visitor;
 
-        @Mock
-        private ExpressionParser.ExprContext mockedFirstExpr;
+    @Mock
+    private ExpressionParser.ExprContext mockedFirstExpr;
 
-        private RuleFunctionOizp functionToTest = new RuleFunctionOizp();
+    private RuleFunctionOizp functionToTest = new RuleFunctionOizp();
 
-        @Before
-        public void setUp() {
-                when(context.expr(0)).thenReturn( mockedFirstExpr );
-        }
+    @Before
+    public void setUp()
+    {
+        when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
+    }
 
-        @Test
-        public void return_one_for_non_negative_argument()
-        {
-                assertOizp( "0","1" );
-                assertOizp( "1","1" );
-                assertOizp( "10","1" );
-        }
+    @Test
+    public void return_one_for_non_negative_argument()
+    {
+        assertOizp( "0", "1" );
+        assertOizp( "1", "1" );
+        assertOizp( "10", "1" );
+    }
 
-        @Test
-        public void return_zero_for_negative_argument()
-        {
-                assertOizp( "-1","0" );
-                assertOizp( "-10","0" );
-        }
+    @Test
+    public void return_zero_for_negative_argument()
+    {
+        assertOizp( "-1", "0" );
+        assertOizp( "-10", "0" );
+    }
 
-        @Test(expected = IllegalArgumentException.class)
-        public void throw_illegal_argument_exception_for_non_number_argument()
-        {
-                assertOizp( "non_number", null );
-        }
+    @Test( expected = IllegalArgumentException.class )
+    public void throw_illegal_argument_exception_for_non_number_argument()
+    {
+        assertOizp( "non_number", null );
+    }
 
-        private void assertOizp( String value, String monthsBetween )
-        {
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( value );
-                MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (monthsBetween) ) );
-        }
+    private void assertOizp( String value, String monthsBetween )
+    {
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( value );
+        MatcherAssert
+            .assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (monthsBetween) ) );
+    }
 }

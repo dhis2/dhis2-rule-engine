@@ -10,17 +10,17 @@ import org.junit.runners.JUnit4;
 public class RuleActionSetMandatoryFieldTests
 {
 
-        @Test(expected = NullPointerException.class )
-        public void createMustThrowOnNullArgument()
-        {
-                RuleActionSetMandatoryField.create( null );
-        }
+    @Test( expected = NullPointerException.class )
+    public void createMustThrowOnNullArgument()
+    {
+        RuleActionSetMandatoryField.create( null );
+    }
 
-        @Test
-        public void equalsAndHashcodeMustConformToContract()
-        {
-                EqualsVerifier.forClass( RuleActionSetMandatoryField.create( "" ).getClass() )
-                    .suppress( Warning.NULL_FIELDS )
-                    .verify();
-        }
+    @Test
+    public void equalsAndHashcodeMustConformToContract()
+    {
+        EqualsVerifier.forClass( RuleActionSetMandatoryField.create( "" ).getClass() )
+            .suppress( Warning.NULL_FIELDS )
+            .verify();
+    }
 }

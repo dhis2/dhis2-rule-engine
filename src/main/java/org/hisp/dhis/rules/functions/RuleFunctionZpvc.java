@@ -37,7 +37,7 @@ import java.util.List;
 
 /**
  * @Author Zubair Asghar.
- *
+ * <p>
  * Returns the number of numeric zero and positive values among the given object arguments. Can be provided with any number of arguments.
  */
 public class RuleFunctionZpvc
@@ -46,11 +46,14 @@ public class RuleFunctionZpvc
     @Override
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        List<Double> list  = new ArrayList<>();
-        for( ExprContext expr : ctx.expr()){
-            Double value = Double.valueOf(visitor.castStringVisit( expr ));
-            if(value>=0)
-                list.add(value);
+        List<Double> list = new ArrayList<>();
+        for ( ExprContext expr : ctx.expr() )
+        {
+            Double value = Double.valueOf( visitor.castStringVisit( expr ) );
+            if ( value >= 0 )
+            {
+                list.add( value );
+            }
         }
         return String.valueOf( list.size() );
     }

@@ -9,12 +9,12 @@ public abstract class RuleActionHideSection
     extends RuleAction
 {
 
-        @Nonnull
-        public abstract String programStageSection();
+    @Nonnull
+    public static RuleActionHideSection create( @Nonnull String section )
+    {
+        return new AutoValue_RuleActionHideSection( section );
+    }
 
-        @Nonnull
-        public static RuleActionHideSection create( @Nonnull String section )
-        {
-                return new AutoValue_RuleActionHideSection( section );
-        }
+    @Nonnull
+    public abstract String programStageSection();
 }

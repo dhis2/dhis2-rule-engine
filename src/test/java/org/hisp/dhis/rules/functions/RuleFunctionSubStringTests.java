@@ -28,16 +28,16 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.CoreMatchers;
 import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
- import org.hamcrest.CoreMatchers;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -48,97 +48,98 @@ import static org.mockito.Mockito.when;
 @RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionSubStringTests
 {
-        @Mock
-        private ExpressionParser.ExprContext context;
+    @Mock
+    private ExpressionParser.ExprContext context;
 
-        @Mock
-        private CommonExpressionVisitor visitor;
+    @Mock
+    private CommonExpressionVisitor visitor;
 
-        @Mock
-        private ExpressionParser.ExprContext mockedFirstExpr;
+    @Mock
+    private ExpressionParser.ExprContext mockedFirstExpr;
 
-        @Mock
-        private ExpressionParser.ExprContext mockedSecondExpr;
+    @Mock
+    private ExpressionParser.ExprContext mockedSecondExpr;
 
-        @Mock
-        private ExpressionParser.ExprContext mockedThirdExpr;
+    @Mock
+    private ExpressionParser.ExprContext mockedThirdExpr;
 
-        @Before
-        public void setUp() {
-                when(context.expr(0)).thenReturn( mockedFirstExpr );
-                when(context.expr(1)).thenReturn( mockedSecondExpr );
-                when(context.expr(2)).thenReturn( mockedThirdExpr );
-        }
+    @Before
+    public void setUp()
+    {
+        when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
+        when( context.expr( 1 ) ).thenReturn( mockedSecondExpr );
+        when( context.expr( 2 ) ).thenReturn( mockedThirdExpr );
+    }
 
-        @Test
-        public void return_empty_string_for_null_inputs()
-        {
-                RuleFunctionSubString subStringFunction = new RuleFunctionSubString();
+    @Test
+    public void return_empty_string_for_null_inputs()
+    {
+        RuleFunctionSubString subStringFunction = new RuleFunctionSubString();
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( null );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "0" );
-                when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "0" );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( null );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "0" );
+        when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "0" );
 
-                assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
+        assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
 
-                when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "10" );
-                assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
-        }
+        when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "10" );
+        assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
+    }
 
-        @Test
-        public void return_substring_from_start_index_to_end_index_of_input_string()
-        {
-                RuleFunctionSubString subStringFunction = new RuleFunctionSubString();
+    @Test
+    public void return_substring_from_start_index_to_end_index_of_input_string()
+    {
+        RuleFunctionSubString subStringFunction = new RuleFunctionSubString();
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "0" );
-                when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "0" );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "0" );
+        when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "0" );
 
-                assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
+        assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "0" );
-                when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "1" );
-                assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "a" ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "0" );
+        when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "1" );
+        assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "a" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "-10" );
-                when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "1" );
-                assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "a" ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "-10" );
+        when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "1" );
+        assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "a" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "2" );
-                when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "4" );
-                assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "cd" ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "2" );
+        when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "4" );
+        assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "cd" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "2" );
-                when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "10" );
-                assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "cdef" ) );
-        }
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "2" );
+        when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "10" );
+        assertThat( subStringFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "cdef" ) );
+    }
 
-        @Test(expected = ParserExceptionWithoutContext.class)
-        public void throw_parser_exception_without_context_if_start_index_is_a_text()
-        {
+    @Test( expected = ParserExceptionWithoutContext.class )
+    public void throw_parser_exception_without_context_if_start_index_is_a_text()
+    {
 
-                RuleFunctionSubString subStringFunction = new RuleFunctionSubString();
+        RuleFunctionSubString subStringFunction = new RuleFunctionSubString();
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "test_variable_one" );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "variable" );
-                when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "3" );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "test_variable_one" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "variable" );
+        when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "3" );
 
-                subStringFunction.evaluate( context, visitor );
-        }
+        subStringFunction.evaluate( context, visitor );
+    }
 
-        @Test(expected = ParserExceptionWithoutContext.class)
-        public void throw_parser_exception_without_context_if_end_index_is_a_text()
-        {
-                RuleFunctionSubString subStringFunction = new RuleFunctionSubString();
+    @Test( expected = ParserExceptionWithoutContext.class )
+    public void throw_parser_exception_without_context_if_end_index_is_a_text()
+    {
+        RuleFunctionSubString subStringFunction = new RuleFunctionSubString();
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "test_variable_one" );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "3" );
-                when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "ede" );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "test_variable_one" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "3" );
+        when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "ede" );
 
-                subStringFunction.evaluate( context, visitor );
-        }
+        subStringFunction.evaluate( context, visitor );
+    }
 }

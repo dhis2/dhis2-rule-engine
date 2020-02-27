@@ -34,7 +34,7 @@ import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
 /**
  * @Author Zubair Asghar.
- *
+ * <p>
  * Evaluates the argument of type number to one if the value is zero or positive, otherwise to zero.
  */
 public class RuleFunctionOizp
@@ -45,6 +45,6 @@ public class RuleFunctionOizp
     {
         Double value = Double.parseDouble( visitor.castStringVisit( ctx.expr( 0 ) ) );
 
-        return value >= 0 ? String.valueOf( 1 ) : String.valueOf(  0 );
+        return value >= 0 ? String.valueOf( 1 ) : String.valueOf( 0 );
     }
 }

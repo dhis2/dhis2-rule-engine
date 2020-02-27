@@ -28,17 +28,17 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
 import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
- import org.hamcrest.CoreMatchers;
 import static org.mockito.Mockito.when;
 
 /**
@@ -48,77 +48,78 @@ import static org.mockito.Mockito.when;
 @RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionLeftTests
 {
-        @Mock
-        private ExpressionParser.ExprContext context;
+    @Mock
+    private ExpressionParser.ExprContext context;
 
-        @Mock
-        private CommonExpressionVisitor visitor;
+    @Mock
+    private CommonExpressionVisitor visitor;
 
-        @Mock
-        private ExpressionParser.ExprContext mockedFirstExpr;
+    @Mock
+    private ExpressionParser.ExprContext mockedFirstExpr;
 
-        @Mock
-        private ExpressionParser.ExprContext mockedSecondExpr;
+    @Mock
+    private ExpressionParser.ExprContext mockedSecondExpr;
 
-        @Before
-        public void setUp() {
-                when(context.expr(0)).thenReturn( mockedFirstExpr );
-                when(context.expr(1)).thenReturn( mockedSecondExpr );
-        }
+    @Before
+    public void setUp()
+    {
+        when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
+        when( context.expr( 1 ) ).thenReturn( mockedSecondExpr );
+    }
 
-        @Test
-        public void return_empty_string_for_null_input()
-        {
-                RuleFunctionLeft leftFunction = new RuleFunctionLeft();
+    @Test
+    public void return_empty_string_for_null_input()
+    {
+        RuleFunctionLeft leftFunction = new RuleFunctionLeft();
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( null );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "0" );
-                MatcherAssert.assertThat( leftFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( null );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "0" );
+        MatcherAssert.assertThat( leftFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( null );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "10" );
-                MatcherAssert.assertThat( leftFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( null );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "10" );
+        MatcherAssert.assertThat( leftFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( null );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "-10" );
-                MatcherAssert.assertThat( leftFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
-        }
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( null );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "-10" );
+        MatcherAssert.assertThat( leftFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
+    }
 
-        @Test
-        public void return_substring_of_first_argument_from_the_beginning()
-        {
-                RuleFunctionLeft leftFunction = new RuleFunctionLeft();
+    @Test
+    public void return_substring_of_first_argument_from_the_beginning()
+    {
+        RuleFunctionLeft leftFunction = new RuleFunctionLeft();
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "0" );
-                MatcherAssert.assertThat( leftFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "0" );
+        MatcherAssert.assertThat( leftFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "-5" );
-                MatcherAssert.assertThat( leftFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "a" ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "-5" );
+        MatcherAssert.assertThat( leftFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "a" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "2" );
-                MatcherAssert.assertThat( leftFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "ab" ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "2" );
+        MatcherAssert.assertThat( leftFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "ab" ) );
 
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "30" );
-                MatcherAssert.assertThat( leftFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "abcdef" ) );
-        }
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "30" );
+        MatcherAssert.assertThat( leftFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "abcdef" ) );
+    }
 
-        @Test(expected = ParserExceptionWithoutContext.class)
-        public void throw_parser_exception_without_context_if_position_is_a_text()
-        {
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "test_variable_one" );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "text" );
-                new RuleFunctionLeft().evaluate( context, visitor );
-        }
+    @Test( expected = ParserExceptionWithoutContext.class )
+    public void throw_parser_exception_without_context_if_position_is_a_text()
+    {
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "test_variable_one" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "text" );
+        new RuleFunctionLeft().evaluate( context, visitor );
+    }
 
-        @Test(expected = IllegalArgumentException.class)
-        public void throw_illegal_argument_when_number_not_an_integer()
-        {
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "yyyy-MM-dd" );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "6.8" );
-                new RuleFunctionLeft().evaluate( context, visitor );
-        }
+    @Test( expected = IllegalArgumentException.class )
+    public void throw_illegal_argument_when_number_not_an_integer()
+    {
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "yyyy-MM-dd" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "6.8" );
+        new RuleFunctionLeft().evaluate( context, visitor );
+    }
 }

@@ -10,17 +10,17 @@ import org.junit.runners.JUnit4;
 public class RuleActionHideSectionTests
 {
 
-        @Test(expected = NullPointerException.class )
-        public void createMustThrowOnNullField()
-        {
-                RuleActionHideSection.create( null );
-        }
+    @Test( expected = NullPointerException.class )
+    public void createMustThrowOnNullField()
+    {
+        RuleActionHideSection.create( null );
+    }
 
-        @Test
-        public void equalsAndHashCodeFunctionsMustConformContract()
-        {
-                EqualsVerifier.forClass( RuleActionHideSection.create( "test_field" ).getClass() )
-                    .suppress( Warning.NULL_FIELDS )
-                    .verify();
-        }
+    @Test
+    public void equalsAndHashCodeFunctionsMustConformContract()
+    {
+        EqualsVerifier.forClass( RuleActionHideSection.create( "test_field" ).getClass() )
+            .suppress( Warning.NULL_FIELDS )
+            .verify();
+    }
 }

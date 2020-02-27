@@ -42,7 +42,7 @@ public interface ExprFunctionMethod
      * Invokes a method in an org.hisp.dhis.rules.parser.expression function
      *
      * @param function the function to evaluate
-     * @param ctx the org.hisp.dhis.rules.parser.expression context
+     * @param ctx      the org.hisp.dhis.rules.parser.expression context
      * @return the function result
      */
     Object apply( AntlrExprItem function, ExprContext ctx, CommonExpressionVisitor visitor );

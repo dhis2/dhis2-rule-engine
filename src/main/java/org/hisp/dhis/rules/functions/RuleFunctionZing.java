@@ -34,7 +34,7 @@ import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
 /**
  * @Author Zubair Asghar.
- *
+ * <p>
  * Evaluates the argument of type number to zero if the value is negative, otherwise to the value itself.
  */
 public class RuleFunctionZing

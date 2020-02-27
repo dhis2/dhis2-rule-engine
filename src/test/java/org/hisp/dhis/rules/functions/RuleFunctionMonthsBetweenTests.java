@@ -28,16 +28,16 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
- import org.hamcrest.CoreMatchers;
 import static org.mockito.Mockito.when;
 
 /**
@@ -47,73 +47,75 @@ import static org.mockito.Mockito.when;
 @RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionMonthsBetweenTests
 {
-        @Mock
-        private ExpressionParser.ExprContext context;
+    @Mock
+    private ExpressionParser.ExprContext context;
 
-        @Mock
-        private CommonExpressionVisitor visitor;
+    @Mock
+    private CommonExpressionVisitor visitor;
 
-        @Mock
-        private ExpressionParser.ExprContext mockedFirstExpr;
+    @Mock
+    private ExpressionParser.ExprContext mockedFirstExpr;
 
-        @Mock
-        private ExpressionParser.ExprContext mockedSecondExpr;
+    @Mock
+    private ExpressionParser.ExprContext mockedSecondExpr;
 
-        private RuleFunctionMonthsBetween functionToTest = new RuleFunctionMonthsBetween();
+    private RuleFunctionMonthsBetween functionToTest = new RuleFunctionMonthsBetween();
 
-        @Before
-        public void setUp() {
-                when(context.expr(0)).thenReturn( mockedFirstExpr );
-                when(context.expr(1)).thenReturn( mockedSecondExpr );
-        }
+    @Before
+    public void setUp()
+    {
+        when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
+        when( context.expr( 1 ) ).thenReturn( mockedSecondExpr );
+    }
 
-        @Test
-        public void return_zero_if_some_date_is_not_present()
-        {
-                assertMonthsBetween( null, null, "0" );
-                assertMonthsBetween( null, "", "0");
-                assertMonthsBetween( "", null,"0");
-                assertMonthsBetween( "", "", "0");
-        }
+    @Test
+    public void return_zero_if_some_date_is_not_present()
+    {
+        assertMonthsBetween( null, null, "0" );
+        assertMonthsBetween( null, "", "0" );
+        assertMonthsBetween( "", null, "0" );
+        assertMonthsBetween( "", "", "0" );
+    }
 
-        @Test
-        public void return_difference_of_months_of_two_dates()
-        {
-                assertMonthsBetween( "2010-10-15", "2010-10-22",  ("0") );
-                assertMonthsBetween( "2010-09-30", "2010-10-31",  ("1") );
-                assertMonthsBetween( "2013-01-31", "2013-02-01",  ("0") );
-                assertMonthsBetween( "2016-01-01", "2016-07-31",  ("6") );
-                assertMonthsBetween( "2015-01-01", "2016-06-30", ("17") );
+    @Test
+    public void return_difference_of_months_of_two_dates()
+    {
+        assertMonthsBetween( "2010-10-15", "2010-10-22", ("0") );
+        assertMonthsBetween( "2010-09-30", "2010-10-31", ("1") );
+        assertMonthsBetween( "2013-01-31", "2013-02-01", ("0") );
+        assertMonthsBetween( "2016-01-01", "2016-07-31", ("6") );
+        assertMonthsBetween( "2015-01-01", "2016-06-30", ("17") );
 
-                assertMonthsBetween( "2010-10-22", "2010-10-15",  ("0") );
-                assertMonthsBetween( "2010-10-31", "2010-09-30", ("-1" ) );
-                assertMonthsBetween( "2013-02-01", "2013-01-31",  ("0") );
-                assertMonthsBetween( "2016-07-31", "2016-01-01", ("-6" ) );
-                assertMonthsBetween( "2016-06-30", "2015-01-01", ("-17") );
-        }
+        assertMonthsBetween( "2010-10-22", "2010-10-15", ("0") );
+        assertMonthsBetween( "2010-10-31", "2010-09-30", ("-1") );
+        assertMonthsBetween( "2013-02-01", "2013-01-31", ("0") );
+        assertMonthsBetween( "2016-07-31", "2016-01-01", ("-6") );
+        assertMonthsBetween( "2016-06-30", "2015-01-01", ("-17") );
+    }
 
-        @Test(expected = IllegalArgumentException.class)
-        public void throw_illegal_argument_exception_if_first_date_is_invalid()
-        {
-                assertMonthsBetween( "bad date", "2010-01-01", null );
-        }
+    @Test( expected = IllegalArgumentException.class )
+    public void throw_illegal_argument_exception_if_first_date_is_invalid()
+    {
+        assertMonthsBetween( "bad date", "2010-01-01", null );
+    }
 
-        @Test(expected = IllegalArgumentException.class)
-        public void throw_illegal_argument_exception_if_second_date_is_invalid()
-        {
-                assertMonthsBetween( "2010-01-01", "bad date", null );
-        }
+    @Test( expected = IllegalArgumentException.class )
+    public void throw_illegal_argument_exception_if_second_date_is_invalid()
+    {
+        assertMonthsBetween( "2010-01-01", "bad date", null );
+    }
 
-        @Test(expected = IllegalArgumentException.class)
-        public void throw_illegal_argument_exception_if_first_and_second_date_is_invalid()
-        {
-                assertMonthsBetween(  "bad date", "bad date", null );
-        }
+    @Test( expected = IllegalArgumentException.class )
+    public void throw_illegal_argument_exception_if_first_and_second_date_is_invalid()
+    {
+        assertMonthsBetween( "bad date", "bad date", null );
+    }
 
-        private void assertMonthsBetween( String startDate, String endDate, String monthsBetween )
-        {
-                when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( startDate );
-                when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( endDate );
-                MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (monthsBetween) ) );
-        }
+    private void assertMonthsBetween( String startDate, String endDate, String monthsBetween )
+    {
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( startDate );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( endDate );
+        MatcherAssert
+            .assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (monthsBetween) ) );
+    }
 }

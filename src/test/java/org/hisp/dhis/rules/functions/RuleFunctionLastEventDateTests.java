@@ -30,11 +30,11 @@ package org.hisp.dhis.rules.functions;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueBuilder;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -73,8 +73,9 @@ public class RuleFunctionLastEventDateTests
     private RuleFunctionLastEventDate functionToTest = new RuleFunctionLastEventDate();
 
     @Before
-    public void setUp() {
-        when(context.expr(0)).thenReturn( mockedFirstExpr );
+    public void setUp()
+    {
+        when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
     }
 
     @Test
@@ -82,7 +83,7 @@ public class RuleFunctionLastEventDateTests
     {
         Map<String, RuleVariableValue> valueMap = getEmptyValueMap();
 
-        assertLastEventDate( "test_variable" , valueMap,"" );
+        assertLastEventDate( "test_variable", valueMap, "" );
     }
 
     @Test
@@ -104,10 +105,10 @@ public class RuleFunctionLastEventDateTests
     {
         Map<String, RuleVariableValue> valueMap = new HashMap<>();
         valueMap.put( variableNameWithValue, RuleVariableValueBuilder
-                .create()
-                .withValue( "value" )
-                .withCandidates( Arrays.<String>asList() )
-                .withEventDate( todayDate ).build() );
+            .create()
+            .withValue( "value" )
+            .withCandidates( Arrays.<String>asList() )
+            .withEventDate( todayDate ).build() );
 
         return valueMap;
     }
@@ -116,6 +117,7 @@ public class RuleFunctionLastEventDateTests
     {
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( value );
         when( visitor.getValueMap() ).thenReturn( valueMap );
-        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (lastEventDate) ) );
+        MatcherAssert
+            .assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (lastEventDate) ) );
     }
 }

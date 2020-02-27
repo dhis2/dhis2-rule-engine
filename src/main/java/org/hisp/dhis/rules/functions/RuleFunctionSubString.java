@@ -37,7 +37,7 @@ import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext
 
 /**
  * @Author Zubair Asghar.
- *
+ * <p>
  * Evaluates to the part of a string specified by the start and end character number.
  */
 public class RuleFunctionSubString
@@ -49,7 +49,7 @@ public class RuleFunctionSubString
         String originalString = visitor.castStringVisit( ctx.expr( 0 ) );
         return StringUtils.substring(
             originalString == null ? "" : originalString,
-            castDouble( visitor.castStringVisit( ctx.expr(1) ) ).intValue(),
-            castDouble( visitor.castStringVisit( ctx.expr(2) ) ).intValue() );
+            castDouble( visitor.castStringVisit( ctx.expr( 1 ) ) ).intValue(),
+            castDouble( visitor.castStringVisit( ctx.expr( 2 ) ) ).intValue() );
     }
 }

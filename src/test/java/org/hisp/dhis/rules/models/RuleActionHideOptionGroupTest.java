@@ -10,33 +10,33 @@ import org.junit.runners.JUnit4;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
-@RunWith(JUnit4.class)
+@RunWith( JUnit4.class )
 public class RuleActionHideOptionGroupTest
 {
-        @Rule
-        public ExpectedException thrown = ExpectedException.none();
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
-        @Test
-        public void createMustSubstituteEmptyStringIfArgumentsNull()
-        {
-            RuleActionHideOptionGroup ruleActionHideOptionGroup =
-                    RuleActionHideOptionGroup.create( null, "test_option_group" );
+    @Test
+    public void createMustSubstituteEmptyStringIfArgumentsNull()
+    {
+        RuleActionHideOptionGroup ruleActionHideOptionGroup =
+            RuleActionHideOptionGroup.create( null, "test_option_group" );
 
-            assertThat( ruleActionHideOptionGroup.content() ).isEqualTo( "" );
-        }
+        assertThat( ruleActionHideOptionGroup.content() ).isEqualTo( "" );
+    }
 
-        @Test
-        public void createMustThrowOnNullField()
-        {
-            thrown.expect( NullPointerException.class );
-            RuleActionHideOptionGroup.create(  "test_content", null );
-        }
+    @Test
+    public void createMustThrowOnNullField()
+    {
+        thrown.expect( NullPointerException.class );
+        RuleActionHideOptionGroup.create( "test_content", null );
+    }
 
-        @Test
-        public void equalsAndHashCodeFunctionsMustConformContract()
-        {
-            EqualsVerifier.forClass( RuleActionHideOptionGroup.create( "test_content", "test_option_group" ).getClass() )
-                    .suppress( Warning.NULL_FIELDS )
-                    .verify();
-        }
+    @Test
+    public void equalsAndHashCodeFunctionsMustConformContract()
+    {
+        EqualsVerifier.forClass( RuleActionHideOptionGroup.create( "test_content", "test_option_group" ).getClass() )
+            .suppress( Warning.NULL_FIELDS )
+            .verify();
+    }
 }
