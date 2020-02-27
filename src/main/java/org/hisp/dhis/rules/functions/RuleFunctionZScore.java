@@ -215,6 +215,6 @@ public abstract class RuleFunctionZScore
     {
         DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance();
         decimalFormatSymbols.setDecimalSeparator( '.' );
-        return new DecimalFormat( "###.00", decimalFormatSymbols );
+        return new DecimalFormat( "##0.00", decimalFormatSymbols );
     }
 }
