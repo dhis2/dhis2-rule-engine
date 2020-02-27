@@ -41,11 +41,15 @@ public class RuleFunctionAddDaysTests
                 RuleFunctionAddDays addDaysFunction = new RuleFunctionAddDays();
 
                 when( visitor.castStringVisit( mockedDateExpr ) ).thenReturn( "2011-01-01" );
-                when( visitor.castStringVisit( mockedIntExpr ) ).thenReturn( "6" );
+                when( visitor.castStringVisit( mockedIntExpr ) ).thenReturn( "6.0" );
                 assertThat( addDaysFunction.evaluate( context, visitor), CoreMatchers.<Object>is( ("2011-01-07") ) );
 
                 when( visitor.castStringVisit( mockedDateExpr ) ).thenReturn( "2010-10-10" );
                 when( visitor.castStringVisit( mockedIntExpr ) ).thenReturn( "1" );
+                assertThat( addDaysFunction.evaluate( context, visitor), CoreMatchers.<Object>is( ("2010-10-11") ) );
+
+                when( visitor.castStringVisit( mockedDateExpr ) ).thenReturn( "2010-10-10" );
+                when( visitor.castStringVisit( mockedIntExpr ) ).thenReturn( "1.3" );
                 assertThat( addDaysFunction.evaluate( context, visitor), CoreMatchers.<Object>is( ("2010-10-11") ) );
 
                 when( visitor.castStringVisit( mockedDateExpr ) ).thenReturn( "2010-10-31" );
