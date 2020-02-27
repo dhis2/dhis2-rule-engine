@@ -215,7 +215,7 @@
         <dependency>
             <groupId>org.hisp.dhis.support</groupId>
             <artifactId>dhis-support-antlr-expression-parser</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
