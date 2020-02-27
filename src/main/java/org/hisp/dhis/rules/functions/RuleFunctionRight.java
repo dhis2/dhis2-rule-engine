@@ -29,45 +29,31 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.apache.commons.lang3.StringUtils;
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+import static org.hisp.dhis.antlr.AntlrParserUtils.castDouble;
+import static org.hisp.dhis.rules.functions.RuleFunction.wrap;
 
 /**
  * @Author Zubair Asghar.
  */
-public class RuleFunctionRight extends RuleFunction
+public class RuleFunctionRight
+    extends ScalarFunctionToEvaluate
 {
-    public static final String D2_RIGHT = "d2:right";
-
-    @Nonnull
     @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        if ( arguments.size() != 2 )
-        {
-            throw new IllegalArgumentException( "Two argument was expected, " +
-                    arguments.size() + " were supplied" );
-        }
+        Double doubleValue = castDouble( visitor.castStringVisit( ctx.expr( 1 ) ) );
+        int chars = doubleValue.intValue();
 
-        int chars = 0;
-
-        try
-        {
-            chars = Integer.parseInt( arguments.get( 1 ) );
-        }
-        catch ( NumberFormatException e )
+        if ( doubleValue.doubleValue() % 1 != 0 )
         {
             throw new IllegalArgumentException( "Number has to be an integer" );
         }
 
-        return wrap( StringUtils.reverse( StringUtils.substring( StringUtils.reverse( arguments.get( 0 ) ), 0, chars ) ) );
-    }
-
-    public static RuleFunctionRight create()
-    {
-        return new RuleFunctionRight();
+        return wrap( StringUtils.reverse(
+            StringUtils.substring( StringUtils.reverse( visitor.castStringVisit( ctx.expr( 0 ) ) ), 0, chars ) ) );
     }
 }

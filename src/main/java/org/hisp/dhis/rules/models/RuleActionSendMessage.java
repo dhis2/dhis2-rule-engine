@@ -41,15 +41,16 @@ import javax.annotation.Nullable;
 public abstract class RuleActionSendMessage
     extends RuleAction
 {
-        @Nonnull
-        public abstract String notification();
+    @Nonnull
+    public static RuleActionSendMessage create( @Nullable String notification, @Nullable String data )
+    {
+        return new AutoValue_RuleActionSendMessage( notification == null ? "" : notification,
+            data == null ? "" : data );
+    }
 
-        @Nonnull
-        public abstract String data();
+    @Nonnull
+    public abstract String notification();
 
-        @Nonnull
-        public static RuleActionSendMessage create( @Nullable String notification, @Nullable String data  )
-        {
-                return new AutoValue_RuleActionSendMessage( notification == null ? "" : notification, data == null ? "" : data );
-        }
+    @Nonnull
+    public abstract String data();
 }

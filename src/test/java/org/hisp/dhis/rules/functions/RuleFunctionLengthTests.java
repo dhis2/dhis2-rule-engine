@@ -28,66 +28,55 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
-import org.junit.Rule;
+import org.hamcrest.CoreMatchers;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
-import static java.util.Arrays.asList;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-@RunWith( JUnit4.class )
+@RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionLengthTests
 {
-        @Rule
-        public ExpectedException thrown = ExpectedException.none();
+    @Mock
+    private ExpressionParser.ExprContext context;
 
-        private Map<String, RuleVariableValue> variableValues = new HashMap<>();
+    @Mock
+    private CommonExpressionVisitor visitor;
 
-        @Test
-        public void return_length_of_argument()
-        {
-                RuleFunction lengthFunction = RuleFunctionLength.create();
+    @Mock
+    private ExpressionParser.ExprContext mockedFirstExpr;
 
-                assertThat( lengthFunction.evaluate( Arrays.asList( "" ), variableValues, null ),
-                    is( "0" ) );
+    @Before
+    public void setUp()
+    {
+        when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
+    }
 
-                assertThat( lengthFunction.evaluate( Arrays.asList( "abc" ), variableValues, null ),
-                    is( "3" ) );
+    @Test
+    public void return_length_of_argument()
+    {
+        RuleFunctionLength lengthFunction = new RuleFunctionLength();
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "" );
 
-                assertThat( lengthFunction.evaluate( Arrays.asList( "abcdef" ), variableValues, null ),
-                    is( "6" ) );
-        }
+        assertThat( lengthFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0" ) );
 
-        @Test
-        public void throw_illegal_argument_exception_if_first_parameter_is_empty_list()
-        {
-                thrown.expect( IllegalArgumentException.class );
-                RuleFunction lengthFunction = RuleFunctionLength.create();
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abc" );
+        assertThat( lengthFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "3" ) );
 
-                lengthFunction.evaluate( new ArrayList<>(), variableValues, null );
-        }
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
+        assertThat( lengthFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "6" ) );
+    }
 
-        @Test
-        public void throw_illegal_argument_exception_when_argument_count_is_greater_than_expected()
-        {
-                thrown.expect( IllegalArgumentException.class );
-                RuleFunctionLength.create().evaluate(
-                    asList( "cdcdcd", "2" ), variableValues, null );
-        }
-
-        @Test
-        public void throw_null_pointer_exception_when_arguments_is_null()
-        {
-                thrown.expect( NullPointerException.class );
-                RuleFunctionLength.create().evaluate( null, variableValues, null );
-        }
+    @Test( expected = NullPointerException.class )
+    public void throw_null_pointer_exception_when_arguments_is_null()
+    {
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( null );
+        new RuleFunctionLength().evaluate( context, visitor );
+    }
 }

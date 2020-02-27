@@ -1,5 +1,18 @@
 apply plugin: 'java'
 
+repositories {
+    // required by crashlytics
+    maven {
+        url("https://maven.fabric.io/public")
+    }
+
+    // used by sdk
+    maven {
+        url("https://oss.sonatype.org/content/repositories/snapshots")
+    }
+    mavenCentral()
+}
+
 dependencies {
 
     testImplementation 'junit:junit:4.12'
@@ -15,8 +28,9 @@ dependencies {
     implementation 'joda-time:joda-time:2.10.5'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
     implementation group: 'commons-logging', name: 'commons-logging', version: '1.2'
-    implementation group : 'org.apache.commons', name : 'commons-jexl', version: '2.1.1'
-    implementation group : 'org.apache.commons', name : 'commons-text', version: '1.8'
-    implementation group : 'org.apache.commons', name : 'commons-math3', version: '3.6.1'
-//    implementation group : 'org.hisp.dhis', name : 'dhis-support-antlr-expression-parser', version: '2.34-SNAPSHOT'
+    implementation group: 'org.apache.commons', name: 'commons-jexl', version: '2.1.1'
+    implementation group: 'org.apache.commons', name: 'commons-text', version: '1.8'
+    implementation group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
+    implementation group: 'org.hisp.dhis.support', name: 'dhis-support-antlr-expression-parser', version: '1.0.0-SNAPSHOT'
+
 }

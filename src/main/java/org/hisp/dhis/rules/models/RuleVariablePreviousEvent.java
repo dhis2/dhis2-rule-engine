@@ -9,10 +9,10 @@ public abstract class RuleVariablePreviousEvent
     extends RuleVariableDataElement
 {
 
-        @Nonnull
-        public static RuleVariablePreviousEvent create( @Nonnull String name,
-            @Nonnull String dataElement, @Nonnull RuleValueType valueType )
-        {
-                return new AutoValue_RuleVariablePreviousEvent( name, dataElement, valueType );
-        }
+    @Nonnull
+    public static RuleVariablePreviousEvent create( @Nonnull String name,
+        @Nonnull String dataElement, @Nonnull RuleValueType valueType )
+    {
+        return new AutoValue_RuleVariablePreviousEvent( name, dataElement, valueType );
+    }
 }

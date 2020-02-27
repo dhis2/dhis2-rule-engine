@@ -32,7 +32,6 @@ import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Date;
 
 /**
  * Created by zubair@dhis2.org on 07.02.18.
@@ -41,15 +40,16 @@ import java.util.Date;
 public abstract class RuleActionScheduleMessage
     extends RuleAction
 {
-        @Nonnull
-        public abstract String notification();
+    @Nonnull
+    public static RuleActionScheduleMessage create( @Nullable String notification, @Nullable String data )
+    {
+        return new AutoValue_RuleActionScheduleMessage( notification == null ? "" : notification,
+            data == null ? "" : data );
+    }
 
-        @Nonnull
-        public abstract String data();
+    @Nonnull
+    public abstract String notification();
 
-        @Nonnull
-        public static RuleActionScheduleMessage create( @Nullable String notification, @Nullable String data  )
-        {
-                return new AutoValue_RuleActionScheduleMessage( notification == null ? "" : notification, data == null ? "" : data );
-        }
+    @Nonnull
+    public abstract String data();
 }

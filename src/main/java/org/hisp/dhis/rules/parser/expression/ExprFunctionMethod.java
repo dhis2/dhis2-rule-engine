@@ -1,7 +1,7 @@
-package org.hisp.dhis.rules;
+package org.hisp.dhis.rules.parser.expression;
 
 /*
- * Copyright (c) 2004-2017, University of Oslo
+ * Copyright (c) 2004-2019, University of Oslo
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,25 +28,22 @@ package org.hisp.dhis.rules;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.apache.commons.jexl2.Expression;
-import org.apache.commons.jexl2.JexlEngine;
+import org.hisp.dhis.antlr.AntlrExprItem;
 
-import javax.annotation.Nonnull;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
- * Created by zubair@dhis2.org on 24.11.17.
+ * Applies a method in an ExprFunction.
  */
-public class ExpressionEvaluator
-    implements RuleExpressionEvaluator
+//@FunctionalInterface
+public interface ExprFunctionMethod
 {
-        private static final JexlEngine JEXL = new JexlEngine();
-
-        @Nonnull
-        @Override
-        public String evaluate( @Nonnull String expression )
-        {
-                Expression exp = JEXL.createExpression( expression );
-
-                return exp.evaluate( null ).toString();
-        }
+    /**
+     * Invokes a method in an org.hisp.dhis.rules.parser.expression function
+     *
+     * @param function the function to evaluate
+     * @param ctx      the org.hisp.dhis.rules.parser.expression context
+     * @return the function result
+     */
+    Object apply( AntlrExprItem function, ExprContext ctx, CommonExpressionVisitor visitor );
 }

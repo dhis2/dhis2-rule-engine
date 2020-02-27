@@ -10,23 +10,23 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 public class RuleActionScheduleMessageTests
 {
 
-        @Test
-        public void substitute_empty_strings_when_create_with_null_arguments()
-        {
-                RuleActionScheduleMessage ruleActionScheduleMessage = RuleActionScheduleMessage
-                    .create( "notification", "data" );
-                RuleActionScheduleMessage ruleActionScheduleMessageNoData = RuleActionScheduleMessage
-                    .create( "notification", null );
-                RuleActionScheduleMessage ruleActionScheduleMessageNoNotification = RuleActionScheduleMessage
-                    .create( null, "data" );
+    @Test
+    public void substitute_empty_strings_when_create_with_null_arguments()
+    {
+        RuleActionScheduleMessage ruleActionScheduleMessage = RuleActionScheduleMessage
+            .create( "notification", "data" );
+        RuleActionScheduleMessage ruleActionScheduleMessageNoData = RuleActionScheduleMessage
+            .create( "notification", null );
+        RuleActionScheduleMessage ruleActionScheduleMessageNoNotification = RuleActionScheduleMessage
+            .create( null, "data" );
 
-                assertThat( ruleActionScheduleMessage.notification() ).isEqualTo( "notification" );
-                assertThat( ruleActionScheduleMessage.data() ).isEqualTo( "data" );
+        assertThat( ruleActionScheduleMessage.notification() ).isEqualTo( "notification" );
+        assertThat( ruleActionScheduleMessage.data() ).isEqualTo( "data" );
 
-                assertThat( ruleActionScheduleMessageNoData.notification() ).isEqualTo( "notification" );
-                assertThat( ruleActionScheduleMessageNoData.data() ).isEqualTo( "" );
+        assertThat( ruleActionScheduleMessageNoData.notification() ).isEqualTo( "notification" );
+        assertThat( ruleActionScheduleMessageNoData.data() ).isEqualTo( "" );
 
-                assertThat( ruleActionScheduleMessageNoNotification.notification() ).isEqualTo( "" );
-                assertThat( ruleActionScheduleMessageNoNotification.data() ).isEqualTo( "data" );
-        }
+        assertThat( ruleActionScheduleMessageNoNotification.notification() ).isEqualTo( "" );
+        assertThat( ruleActionScheduleMessageNoNotification.data() ).isEqualTo( "data" );
+    }
 }

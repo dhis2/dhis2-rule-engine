@@ -29,8 +29,8 @@ package org.hisp.dhis.rules.functions;
  */
 
 import com.google.common.collect.Sets;
-
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -39,42 +39,48 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
  * @Author Zubair Asghar.
  */
 public abstract class RuleFunctionZScore
-    extends
-    RuleFunction
+    extends ScalarFunctionToEvaluate
 {
     private static final Set<String> GENDER_CODES = Sets.newHashSet( "male", "MALE", "Male", "ma", "m", "M", "0",
         "false" );
 
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
-        Map<String, List<String>> supplementaryData )
+    protected static DecimalFormat getDecimalFormat()
     {
-        if ( arguments.size() < 3 )
-        {
-            throw new IllegalArgumentException( "At least three arguments required but found: " + arguments.size() );
-        }
+        DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance();
+        decimalFormatSymbols.setDecimalSeparator( '.' );
+        return new DecimalFormat( "##0.00", decimalFormatSymbols );
+    }
+
+    @Override
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
 
         // 1 = female, 0 = male
         float parameter;
         float weight;
-        byte gender = GENDER_CODES.contains( arguments.get( 2 ) ) ? (byte) 0 : (byte) 1;
+        String genderParameter = visitor.castStringVisit( ctx.expr( 2 ) );
+
+        if ( genderParameter == null )
+        {
+            throw new IllegalArgumentException( "Gender cannot be null" );
+        }
+
+        byte gender = GENDER_CODES.contains( genderParameter ) ? (byte) 0 : (byte) 1;
 
         String zScore;
 
         try
         {
-            parameter = Float.parseFloat( arguments.get( 0 ) );
-            weight = Float.parseFloat( arguments.get( 1 ) );
+            parameter = Float.parseFloat( visitor.castStringVisit( ctx.expr( 0 ) ) );
+            weight = Float.parseFloat( visitor.castStringVisit( ctx.expr( 1 ) ) );
         }
         catch ( NumberFormatException ex )
         {
@@ -99,7 +105,7 @@ public abstract class RuleFunctionZScore
         // Female
         if ( gender == 1 )
         {
-            if( getTableForGirl().get( key ) != null )
+            if ( getTableForGirl().get( key ) != null )
             {
                 sdMap = getTableForGirl().get( key );
             }
@@ -110,7 +116,7 @@ public abstract class RuleFunctionZScore
         }
         else
         {
-            if( getTableForBoy().get( key ) != null )
+            if ( getTableForBoy().get( key ) != null )
             {
                 sdMap = getTableForBoy().get( key );
             }
@@ -128,7 +134,7 @@ public abstract class RuleFunctionZScore
         int multiplicationFactor = getMultiplicationFactor( sdMap, weight );
 
         // weight exactly matches with any of the SD values
-        if ( sdMap.keySet().contains( weight ) )
+        if ( sdMap.containsKey( weight ) )
         {
             int sd = sdMap.get( weight );
 
@@ -209,12 +215,5 @@ public abstract class RuleFunctionZScore
         Collections.sort( list );
 
         return list;
-    }
-
-    protected static DecimalFormat getDecimalFormat()
-    {
-        DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance();
-        decimalFormatSymbols.setDecimalSeparator( '.' );
-        return new DecimalFormat( "##0.00", decimalFormatSymbols );
     }
 }

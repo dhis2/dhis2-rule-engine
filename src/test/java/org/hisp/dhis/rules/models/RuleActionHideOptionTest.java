@@ -10,33 +10,33 @@ import org.junit.runners.JUnit4;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
-@RunWith(JUnit4.class)
+@RunWith( JUnit4.class )
 public class RuleActionHideOptionTest
 {
-        @Rule
-        public ExpectedException thrown = ExpectedException.none();
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
-        @Test
-        public void createMustSubstituteEmptyStringIfArgumentsNull()
-        {
-            RuleActionHideOption ruleActionHideOption =
-                    RuleActionHideOption.create( null, "test_option", "test_field" );
+    @Test
+    public void createMustSubstituteEmptyStringIfArgumentsNull()
+    {
+        RuleActionHideOption ruleActionHideOption =
+            RuleActionHideOption.create( null, "test_option", "test_field" );
 
-            assertThat( ruleActionHideOption.content() ).isEqualTo( "" );
-        }
+        assertThat( ruleActionHideOption.content() ).isEqualTo( "" );
+    }
 
-        @Test
-        public void createMustThrowOnNullField()
-        {
-            thrown.expect( NullPointerException.class );
-            RuleActionHideOption.create(  "test_content", null, "null" );
-        }
+    @Test
+    public void createMustThrowOnNullField()
+    {
+        thrown.expect( NullPointerException.class );
+        RuleActionHideOption.create( "test_content", null, "null" );
+    }
 
-        @Test
-        public void equalsAndHashCodeFunctionsMustConformContract()
-        {
-            EqualsVerifier.forClass( RuleActionHideOption.create( "test_content", "test_option", "test_field" ).getClass() )
-                    .suppress( Warning.NULL_FIELDS )
-                    .verify();
-        }
+    @Test
+    public void equalsAndHashCodeFunctionsMustConformContract()
+    {
+        EqualsVerifier.forClass( RuleActionHideOption.create( "test_content", "test_option", "test_field" ).getClass() )
+            .suppress( Warning.NULL_FIELDS )
+            .verify();
+    }
 }

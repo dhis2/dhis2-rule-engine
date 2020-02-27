@@ -28,77 +28,76 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueBuilder;
-import org.junit.Rule;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.util.Arrays.asList;
-import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.when;
 
 /**
  * @Author Zubair Asghar.
  */
+@RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionMaxValueTests
 {
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    @Mock
+    private ExpressionParser.ExprContext context;
 
-    private Map<String, RuleVariableValue> variableValues = new HashMap<>();
+    @Mock
+    private CommonExpressionVisitor visitor;
 
-    @Test
-    public void throw_Exception_If_ValueMap_Null()
+    @Mock
+    private ExpressionParser.ProgramRuleVariableNameContext mockedVariableName;
+
+    private RuleFunctionMaxValue functionToTest = new RuleFunctionMaxValue();
+
+    @Before
+    public void setUp()
     {
-        thrown.expect( IllegalArgumentException.class );
-
-        RuleFunction maxValueFunction = RuleFunctionMaxValue.create();
-
-        maxValueFunction.evaluate( asList("1"),null, null );
-    }
-
-    @Test
-    public void throw_Exception_If_Argument_Has_More_Than_One_Element()
-    {
-        thrown.expect( IllegalArgumentException.class );
-
-        RuleFunction maxValueFunction = RuleFunctionMaxValue.create();
-
-        maxValueFunction.evaluate( asList(),variableValues, null );
+        when( context.programRuleVariableName() ).thenReturn( mockedVariableName );
     }
 
     @Test
     public void return_Max_Value()
     {
-        RuleFunction maxValueFunction = RuleFunctionMaxValue.create();
-
         String variableNameOne = "test_variable_one";
         String value = "5.0";
 
+        Map<String, RuleVariableValue> variableValues = new HashMap<>();
         variableValues.put( variableNameOne, RuleVariableValueBuilder.create()
             .withValue( value )
             .withCandidates( Arrays.asList( value, "6", "7" ) )
             .withEventDate( new Date().toString() )
             .build() );
 
-        MatcherAssert.assertThat( maxValueFunction.evaluate( asList( variableNameOne ), variableValues,
-            null ), is( "7.0" ) );
+        assertMaxValue( variableNameOne, variableValues, "7.0" );
     }
 
     @Test
     public void return_Empty_String_If_Value_Absent()
     {
-        RuleFunction maxValueFunction = RuleFunctionMaxValue.create();
-
         String variableNameOne = "test_variable_one";
 
-        MatcherAssert.assertThat( maxValueFunction.evaluate( asList( variableNameOne ), variableValues,
-            null ), is( "" ) );
+        assertMaxValue( variableNameOne, new HashMap<String, RuleVariableValue>(), "" );
+    }
+
+    private void assertMaxValue( String value, Map<String, RuleVariableValue> valueMap, String maxValue )
+    {
+        when( mockedVariableName.getText() ).thenReturn( value );
+        when( visitor.getValueMap() ).thenReturn( valueMap );
+        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (maxValue) ) );
     }
 }

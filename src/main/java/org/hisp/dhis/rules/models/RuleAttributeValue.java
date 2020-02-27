@@ -8,15 +8,15 @@ import javax.annotation.Nonnull;
 public abstract class RuleAttributeValue
 {
 
-        @Nonnull
-        public abstract String trackedEntityAttribute();
+    @Nonnull
+    public static RuleAttributeValue create( @Nonnull String attribute, @Nonnull String value )
+    {
+        return new AutoValue_RuleAttributeValue( attribute, value );
+    }
 
-        @Nonnull
-        public abstract String value();
+    @Nonnull
+    public abstract String trackedEntityAttribute();
 
-        @Nonnull
-        public static RuleAttributeValue create( @Nonnull String attribute, @Nonnull String value )
-        {
-                return new AutoValue_RuleAttributeValue( attribute, value );
-        }
+    @Nonnull
+    public abstract String value();
 }

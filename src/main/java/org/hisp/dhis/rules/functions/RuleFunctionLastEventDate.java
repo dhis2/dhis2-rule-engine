@@ -29,40 +29,32 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
-import javax.annotation.Nonnull;
-import java.util.List;
 import java.util.Map;
+
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
+import static org.hisp.dhis.rules.functions.RuleFunction.wrap;
 
 /**
  * @Author Zubair Asghar.
  */
-public class RuleFunctionLastEventDate extends RuleFunction
+public class RuleFunctionLastEventDate
+    extends ScalarFunctionToEvaluate
 {
-    static final String D2_LAST_EVENT_DATE = "d2:lastEventDate";
-
-    @Nonnull
     @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        if ( arguments.size() < 1 )
-        {
-            throw new IllegalArgumentException( "Atleast one argument required in LastEventDate function" );
-        }
+        Map<String, RuleVariableValue> valueMap = visitor.getValueMap();
 
-        if ( !valueMap.containsKey( arguments.get( 0 ) ) )
+        if ( !valueMap.containsKey( visitor.castStringVisit( ctx.expr( 0 ) ) ) )
         {
             return "";
         }
 
-        RuleVariableValue variableValue = valueMap.get( arguments.get( 0 ) );
+        RuleVariableValue variableValue = valueMap.get( visitor.castStringVisit( ctx.expr( 0 ) ) );
 
-        return wrap(  variableValue.eventDate() );
-    }
-
-    @Nonnull
-    public static RuleFunctionLastEventDate create()
-    {
-        return new RuleFunctionLastEventDate();
+        return wrap( variableValue.eventDate() );
     }
 }

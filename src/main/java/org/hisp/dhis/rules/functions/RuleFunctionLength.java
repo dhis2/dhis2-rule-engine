@@ -28,34 +28,20 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
  * @Author Zubair Asghar.
  */
-public class RuleFunctionLength extends RuleFunction
+public class RuleFunctionLength
+    extends ScalarFunctionToEvaluate
 {
-    public static final String D2_LENGTH = "d2:length";
-
-    @Nonnull
     @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        if ( arguments.size() != 1 )
-        {
-            throw new IllegalArgumentException( "One argument was expected, " +
-                    arguments.size() + " were supplied" );
-        }
-        return String.valueOf( arguments.get( 0 ).length() );
-    }
-
-    @Nonnull
-    public static RuleFunctionLength create()
-    {
-        return new RuleFunctionLength();
+        return String.valueOf( visitor.castStringVisit( ctx.expr( 0 ) ).length() );
     }
 }

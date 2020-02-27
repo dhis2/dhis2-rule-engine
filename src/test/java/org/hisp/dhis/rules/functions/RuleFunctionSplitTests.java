@@ -28,107 +28,85 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
-import org.hisp.dhis.rules.RuleVariableValue;
-import org.junit.Rule;
+import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-import static java.util.Arrays.asList;
-import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.when;
 
 /**
  * @Author Zubair Asghar.
  */
 
-@RunWith( JUnit4.class )
+@RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionSplitTests
 {
-        @Rule
-        public ExpectedException thrown = ExpectedException.none();
+    @Mock
+    private ExpressionParser.ExprContext context;
 
-        private Map<String, RuleVariableValue> variableValues = new HashMap<>();
+    @Mock
+    private CommonExpressionVisitor visitor;
 
-        @Test
-        public void return_empty_string_for_null_inputs()
-        {
-                RuleFunction splitFunction = RuleFunctionSplit.create();
+    @Mock
+    private ExpressionParser.ExprContext mockedFirstExpr;
 
-                MatcherAssert.assertThat( splitFunction.evaluate( asList( null, null, "0" ), variableValues, null ), is( "" ) );
-                MatcherAssert.assertThat( splitFunction.evaluate( asList( "", null, "0" ), variableValues, null ), is( "" ) );
-                MatcherAssert.assertThat( splitFunction.evaluate( asList( null, "", "0" ), variableValues, null ), is( "" ) );
-        }
+    @Mock
+    private ExpressionParser.ExprContext mockedSecondExpr;
 
-        @Test
-        public void return_the_nth_field_of_the_splited_first_argument()
-        {
-                RuleFunction splitFunction = RuleFunctionSplit.create();
+    @Mock
+    private ExpressionParser.ExprContext mockedThirdExpr;
 
-                MatcherAssert
-                    .assertThat( splitFunction.evaluate( asList( "a,b,c", ",", "0" ), variableValues, null ), is( "'a'" ) );
-                MatcherAssert
-                    .assertThat( splitFunction.evaluate( asList( "a,b,c", ",", "2" ), variableValues, null ), is( "'c'" ) );
-                MatcherAssert
-                    .assertThat( splitFunction.evaluate( asList( "a,;b,;c", ",;", "1" ), variableValues, null ), is( "'b'" ) );
-        }
+    private RuleFunctionSplit functionToTest = new RuleFunctionSplit();
 
-        @Test
-        public void return_empty_string_if_field_index_is_out_of_bounds()
-        {
-                RuleFunction splitFunction = RuleFunctionSplit.create();
+    @Before
+    public void setUp()
+    {
+        when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
+        when( context.expr( 1 ) ).thenReturn( mockedSecondExpr );
+        when( context.expr( 2 ) ).thenReturn( mockedThirdExpr );
+    }
 
-                MatcherAssert
-                    .assertThat( splitFunction.evaluate( asList( "a,b,c", ",", "10" ), variableValues, null ), is( "" ) );
-                MatcherAssert
-                    .assertThat( splitFunction.evaluate( asList( "a,b,c", ",", "-1" ), variableValues, null ), is( "" ) );
-        }
+    @Test
+    public void return_empty_string_for_null_inputs()
+    {
+        assertSplit( null, null, "0", "" );
+        assertSplit( "", null, "0", "" );
+        assertSplit( null, "", "0", "" );
+    }
 
-        @Test
-        public void throw_illegal_argument_exception_if_position_is_a_text()
-        {
-                thrown.expect( IllegalArgumentException.class );
-                RuleFunction splitFunction = RuleFunctionSplit.create();
+    @Test
+    public void return_the_nth_field_of_the_splited_first_argument()
+    {
+        assertSplit( "a,b,c", ",", "0", "a" );
+        assertSplit( "a,b,c", ",", "2", "c" );
+        assertSplit( "a,;b,;c", ",;", "1", "b" );
+    }
 
-                splitFunction.evaluate(
-                    Arrays.asList( "test_variable_one", "variable", "text" ), variableValues, null );
-        }
+    @Test
+    public void return_empty_string_if_field_index_is_out_of_bounds()
+    {
+        assertSplit( "a,b,c", ",", "10", "" );
+        assertSplit( "a,b,c", ",", "-1", "" );
+    }
 
-        @Test
-        public void throw_illegal_argument_exception_if_first_parameter_is_empty_list()
-        {
-                thrown.expect( IllegalArgumentException.class );
-                RuleFunction splitFunction = RuleFunctionSplit.create();
+    @Test( expected = ParserExceptionWithoutContext.class )
+    public void throw_parser_exception_without_context_if_position_is_a_text()
+    {
+        assertSplit( "test_variable_one", "variable", "text", null );
+    }
 
-                splitFunction.evaluate( new ArrayList<>(), variableValues, null );
-        }
-
-        @Test
-        public void throw_illegal_argument_exception_when_argument_count_is_greater_than_expected()
-        {
-                thrown.expect( IllegalArgumentException.class );
-                RuleFunctionSplit.create().evaluate(
-                    asList( "test_variable_one", ",", "1", "2" ), variableValues, null );
-        }
-
-        @Test
-        public void throw_illegal_argument_exception_when_argument_count_is_lower_than_expected()
-        {
-                thrown.expect( IllegalArgumentException.class );
-                RuleFunctionSplit.create().evaluate(
-                    asList( "test_variable_one", "," ), variableValues, null );
-        }
-
-        @Test
-        public void throw_null_pointer_exception_when_arguments_is_null()
-        {
-                thrown.expect( NullPointerException.class );
-                RuleFunctionSplit.create().evaluate( null, variableValues, null );
-        }
+    private void assertSplit( String input, String delimiter, String index, String zScore )
+    {
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( input );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( delimiter );
+        when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( index );
+        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (zScore) ) );
+    }
 }

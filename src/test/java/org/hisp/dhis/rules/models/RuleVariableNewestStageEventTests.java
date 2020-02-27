@@ -1,87 +1,52 @@
 package org.hisp.dhis.rules.models;
 
-import org.hisp.dhis.rules.models.RuleValueType;
-import org.hisp.dhis.rules.models.RuleVariableNewestStageEvent;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 @RunWith( JUnit4.class )
 public class RuleVariableNewestStageEventTests
 {
 
-        @Test
-        public void createShouldThrowOnNullName()
-        {
-                try
-                {
-                        RuleVariableNewestStageEvent
-                            .create( null, "test_dataelement", "test_programstage", RuleValueType.TEXT );
-                        fail( "NullPointerException is expected, but nothing was thrown" );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
-        }
+    @Test( expected = NullPointerException.class )
+    public void createShouldThrowOnNullName()
+    {
+        RuleVariableNewestStageEvent
+            .create( null, "test_dataelement", "test_programstage", RuleValueType.TEXT );
+    }
 
-        @Test
-        public void createShouldThrowOnNullDataElement()
-        {
-                try
-                {
-                        RuleVariableNewestStageEvent
-                            .create( "test_variable", null, "test_programstage", RuleValueType.TEXT );
-                        fail( "NullPointerException is expected, but nothing was thrown" );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
-        }
+    @Test( expected = NullPointerException.class )
+    public void createShouldThrowOnNullDataElement()
+    {
+        RuleVariableNewestStageEvent
+            .create( "test_variable", null, "test_programstage", RuleValueType.TEXT );
+    }
 
-        @Test
-        public void createShouldThrowOnNullProgramStage()
-        {
-                try
-                {
-                        RuleVariableNewestStageEvent
-                            .create( "test_variable", "test_dataelement", null, RuleValueType.TEXT );
-                        fail( "NullPointerException is expected, but nothing was thrown" );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
-        }
+    @Test( expected = NullPointerException.class )
+    public void createShouldThrowOnNullProgramStage()
+    {
+        RuleVariableNewestStageEvent
+            .create( "test_variable", "test_dataelement", null, RuleValueType.TEXT );
+    }
 
-        @Test
-        public void createShouldThrowOnNullDataElementType()
-        {
-                try
-                {
-                        RuleVariableNewestStageEvent
-                            .create( "test_variable", "test_dataelement", "test_programstage", null );
-                        fail( "NullPointerException is expected, but nothing was thrown" );
-                }
-                catch ( NullPointerException exception )
-                {
-                        // noop
-                }
-        }
+    @Test( expected = NullPointerException.class )
+    public void createShouldThrowOnNullDataElementType()
+    {
+        RuleVariableNewestStageEvent
+            .create( "test_variable", "test_dataelement", "test_programstage", null );
+    }
 
-        @Test
-        public void createShouldPropagatePropertiesCorrectly()
-        {
-                RuleVariableNewestStageEvent ruleVariablePreviousEvent = RuleVariableNewestStageEvent.create(
-                    "test_variable", "test_dataelement", "test_programstage", RuleValueType.NUMERIC );
+    @Test
+    public void createShouldPropagatePropertiesCorrectly()
+    {
+        RuleVariableNewestStageEvent ruleVariablePreviousEvent = RuleVariableNewestStageEvent.create(
+            "test_variable", "test_dataelement", "test_programstage", RuleValueType.NUMERIC );
 
-                assertThat( ruleVariablePreviousEvent.name() ).isEqualTo( "test_variable" );
-                assertThat( ruleVariablePreviousEvent.dataElement() ).isEqualTo( "test_dataelement" );
-                assertThat( ruleVariablePreviousEvent.programStage() ).isEqualTo( "test_programstage" );
-                assertThat( ruleVariablePreviousEvent.dataElementType() ).isEqualTo( RuleValueType.NUMERIC );
-        }
+        assertThat( ruleVariablePreviousEvent.name() ).isEqualTo( "test_variable" );
+        assertThat( ruleVariablePreviousEvent.dataElement() ).isEqualTo( "test_dataelement" );
+        assertThat( ruleVariablePreviousEvent.programStage() ).isEqualTo( "test_programstage" );
+        assertThat( ruleVariablePreviousEvent.dataElementType() ).isEqualTo( RuleValueType.NUMERIC );
+    }
 }

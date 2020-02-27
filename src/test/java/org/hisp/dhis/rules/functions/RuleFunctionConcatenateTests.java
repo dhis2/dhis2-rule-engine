@@ -28,54 +28,67 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.google.common.collect.Lists;
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
-import org.hisp.dhis.rules.RuleVariableValue;
-import org.junit.Rule;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-import static java.util.Arrays.asList;
-import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.when;
 
 /**
  * @Author Zubair Asghar.
  */
 
-@RunWith( JUnit4.class )
+@RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionConcatenateTests
 {
-        @Rule
-        public ExpectedException thrown = ExpectedException.none();
+    @Mock
+    private ExpressionParser.ExprContext context;
 
-        private Map<String, RuleVariableValue> variableValues = new HashMap<>();
+    @Mock
+    private CommonExpressionVisitor visitor;
 
-        @Test
-        public void evaluateD2Concatenate()
-        {
-                RuleFunction concatenateFunction = RuleFunctionConcatenate.create();
+    @Mock
+    private ExpressionParser.ExprContext mockedFirstExpr;
 
-                MatcherAssert.assertThat( concatenateFunction.evaluate( asList( "hello" ), variableValues, null ),
-                    is( "'hello'" ) );
-                MatcherAssert.assertThat( concatenateFunction.evaluate( asList( "hello", null ), variableValues, null ),
-                    is( "'hello'" ) );
-                MatcherAssert.assertThat(
-                    concatenateFunction.evaluate( Arrays.<String>asList( null, null ), variableValues, null ),
-                    is( "''" ) );
-                MatcherAssert.assertThat(
-                    concatenateFunction.evaluate( asList( "hello", " ", "there", "!" ), variableValues, null ),
-                    is( "'hello there!'" ) );
-        }
+    @Mock
+    private ExpressionParser.ExprContext mockedSecondExpr;
 
-        @Test
-        public void throw_null_pointer_exception_when_arguments_is_null()
-        {
-                thrown.expect( NullPointerException.class );
-                RuleFunctionConcatenate.create().evaluate( null, variableValues, null );
-        }
+    @Mock
+    private ExpressionParser.ExprContext mockedThirdExpr;
+
+    @Test
+    public void evaluateD2Concatenate()
+    {
+        RuleFunctionConcatenate concatenateFunction = new RuleFunctionConcatenate();
+
+        when( context.expr() ).thenReturn( Lists.newArrayList( mockedFirstExpr ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "hello" );
+        MatcherAssert.assertThat( concatenateFunction.evaluate( context, visitor ),
+            CoreMatchers.<Object>is( "hello" ) );
+
+        when( context.expr() ).thenReturn( Lists.newArrayList( mockedFirstExpr, mockedSecondExpr ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "hello" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( null );
+        MatcherAssert.assertThat( concatenateFunction.evaluate( context, visitor ),
+            CoreMatchers.<Object>is( "hello" ) );
+
+        when( context.expr() ).thenReturn( Lists.newArrayList( mockedFirstExpr, mockedSecondExpr ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( null );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( null );
+        MatcherAssert.assertThat( concatenateFunction.evaluate( context, visitor ),
+            CoreMatchers.<Object>is( "" ) );
+
+        when( context.expr() ).thenReturn( Lists.newArrayList( mockedFirstExpr, mockedSecondExpr, mockedThirdExpr ) );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "hello" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( " " );
+        when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "there" );
+        MatcherAssert.assertThat( concatenateFunction.evaluate( context, visitor ),
+            CoreMatchers.<Object>is( "hello there" ) );
+    }
 }

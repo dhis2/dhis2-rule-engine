@@ -2,12 +2,10 @@ package org.hisp.dhis.rules;
 
 import org.hisp.dhis.rules.models.RuleValueType;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RuleVariableValueBuilder
 {
