@@ -28,47 +28,23 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
-
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
 /**
  * @Author Zubair Asghar.
- *
+ * <p>
  * Evaluates the argument of type number to one if the value is zero or positive, otherwise to zero.
  */
-public class RuleFunctionOizp extends RuleFunction
+public class RuleFunctionOizp
+    extends ScalarFunctionToEvaluate
 {
-    public static final String D2_OIZP = "d2:oizp";
-
-    @Nonnull
     @Override
-    public String evaluate(@ Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        if ( arguments.size() != 1 )
-        {
-            throw new IllegalArgumentException( "One argument was expected, " +
-                    arguments.size() + " were supplied" );
-        }
+        Double value = Double.parseDouble( visitor.castStringVisit( ctx.expr( 0 ) ) );
 
-        Double value = 0.0;
-
-        try
-        {
-            value = Double.parseDouble( arguments.get( 0 ) );
-        }
-        catch ( NumberFormatException e )
-        {
-            throw new IllegalArgumentException( "Invalid number format" );
-        }
-
-        return value >= 0 ? String.valueOf( 1 ) : String.valueOf(  0 );
-    }
-
-    public static RuleFunctionOizp create()
-    {
-        return new RuleFunctionOizp();
+        return value >= 0 ? String.valueOf( 1 ) : String.valueOf( 0 );
     }
 }

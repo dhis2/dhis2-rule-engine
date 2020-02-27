@@ -28,43 +28,34 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
+
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
  * @Author Zubair Asghar.
  */
-public class RuleFunctionHasUserRole extends RuleFunction
+public class RuleFunctionHasUserRole
+    extends ScalarFunctionToEvaluate
 {
     private static final String USER = "USER";
 
-    static final String D2_HAS_USER_ROLE = "d2:hasUserRole";
-
-    @Nonnull
     @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        if( !supplementaryData.containsKey( USER ) )
+        Map<String, List<String>> supplementaryData = visitor.getSupplementaryData();
+
+        if ( !supplementaryData.containsKey( USER ) )
         {
             throw new IllegalArgumentException( "Supplementary data needs to be provided" );
         }
 
-        if ( arguments.size() < 1 )
-        {
-            throw new IllegalArgumentException( "One argument was expected but "+ arguments.size() +" found " );
-        }
-
         List<String> roles = supplementaryData.get( USER );
 
-        return String.valueOf( roles != null ? roles.contains( arguments.get( 0 ) ) : "false" );
-    }
-
-    @Nonnull
-    public static RuleFunctionHasUserRole create()
-    {
-        return new RuleFunctionHasUserRole();
+        return String.valueOf( roles != null ? roles.contains( visitor.castStringVisit( ctx.expr( 0 ) ) ) : "false" );
     }
 }

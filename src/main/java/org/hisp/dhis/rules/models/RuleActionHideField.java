@@ -10,24 +10,24 @@ public abstract class RuleActionHideField
     extends RuleAction
 {
 
-        /**
-         * @return a message to show to user
-         * when a target field is hidden.
-         */
-        @Nonnull
-        public abstract String content();
+    @Nonnull
+    public static RuleActionHideField create(
+        @Nullable String content, @Nonnull String field )
+    {
+        return new AutoValue_RuleActionHideField( content == null ? "" : content, field );
+    }
 
-        /**
-         * @return uid of the target field to hide.
-         * It can be both dataElement and trackedEntityAttribute.
-         */
-        @Nonnull
-        public abstract String field();
+    /**
+     * @return a message to show to user
+     * when a target field is hidden.
+     */
+    @Nonnull
+    public abstract String content();
 
-        @Nonnull
-        public static RuleActionHideField create(
-            @Nullable String content, @Nonnull String field )
-        {
-                return new AutoValue_RuleActionHideField( content == null ? "" : content, field );
-        }
+    /**
+     * @return uid of the target field to hide.
+     * It can be both dataElement and trackedEntityAttribute.
+     */
+    @Nonnull
+    public abstract String field();
 }

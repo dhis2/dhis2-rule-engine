@@ -29,51 +29,27 @@ package org.hisp.dhis.rules.functions;
  */
 
 import com.google.common.collect.Lists;
+import org.hisp.dhis.rules.RuleExpression;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
  * @Author Zubair Asghar.
  * <p>
  * return minimum value of provided data element present in entire enrollment
  */
-public class RuleFunctionMinValue extends RuleFunction
+public class RuleFunctionMinValue
+    extends ScalarFunctionToEvaluate
 {
-    static final String D2_MIN_VALUE = "d2:minValue";
-
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
-        Map<String, List<String>> supplementaryData )
+    private String getMinValue( String dataElement, Map<String, RuleVariableValue> valueMap )
     {
-        if ( valueMap == null )
-        {
-            throw new IllegalArgumentException( "valueMap is expected" );
-        }
-
-        if ( arguments.size() != 1 )
-        {
-            throw new IllegalArgumentException( "One argument was expected, " +
-                    arguments.size() + " were supplied" );
-        }
-
-        return getMinValue( arguments, valueMap );
-    }
-
-    @Nonnull
-    public static RuleFunctionMinValue create()
-    {
-        return new RuleFunctionMinValue();
-    }
-
-    private String getMinValue( List<String> arguments, Map<String, RuleVariableValue> valueMap )
-    {
-        String dataElement = arguments.get( 0 );
-
         if ( valueMap.containsKey( dataElement ) )
         {
             RuleVariableValue ruleVariableValue = valueMap.get( dataElement );
@@ -91,5 +67,11 @@ public class RuleFunctionMinValue extends RuleFunction
         }
 
         return "";
+    }
+
+    @Override
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return getMinValue( RuleExpression.getProgramRuleVariable( ctx ), visitor.getValueMap() );
     }
 }

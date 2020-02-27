@@ -29,36 +29,27 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.apache.commons.lang3.StringUtils;
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+import static org.hisp.dhis.antlr.AntlrParserUtils.castDouble;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
  * @Author Zubair Asghar.
- *
+ * <p>
  * Evaluates to the part of a string specified by the start and end character number.
  */
-public class RuleFunctionSubString extends RuleFunction
+public class RuleFunctionSubString
+    extends ScalarFunctionToEvaluate
 {
-    public static final String D2_SUBSTRING = "d2:substring";
-
-    @Nonnull
     @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        if ( arguments.size() != 3 )
-        {
-            throw new IllegalArgumentException( "Three argument was expected, " +
-                arguments.size() + " were supplied" );
-        }
-
-        return wrap( StringUtils.substring( arguments.get( 0 ), Integer.parseInt( arguments.get( 1 ) ), Integer.parseInt( arguments.get( 2 ) ) ) );
-    }
-
-    public static RuleFunctionSubString create()
-    {
-        return new RuleFunctionSubString();
+        String originalString = visitor.castStringVisit( ctx.expr( 0 ) );
+        return StringUtils.substring(
+            originalString == null ? "" : originalString,
+            castDouble( visitor.castStringVisit( ctx.expr( 1 ) ) ).intValue(),
+            castDouble( visitor.castStringVisit( ctx.expr( 2 ) ) ).intValue() );
     }
 }

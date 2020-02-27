@@ -29,54 +29,43 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.apache.commons.lang3.StringUtils;
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+
+import static org.hisp.dhis.antlr.AntlrParserUtils.castDouble;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
  * @Author Zubair Asghar.
- *
+ * <p>
  * Split the text by delimiter, and keep the nth element(0 is the first).
  */
-public class RuleFunctionSplit extends RuleFunction
+public class RuleFunctionSplit
+    extends ScalarFunctionToEvaluate
 {
-    public static final String D2_SPLIT = "d2:split";
-
-    @Nonnull
     @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        if ( arguments.size() != 3 )
-        {
-            throw new IllegalArgumentException( "Three argument were expected, " + arguments.size() + " were supplied" );
-        }
-
-        String input = arguments.get( 0 );
-        String delimiter = arguments.get( 1 );
+        String input = visitor.castStringVisit( ctx.expr( 0 ) );
+        String delimiter = visitor.castStringVisit( ctx.expr( 1 ) );
 
         if ( input == null || delimiter == null )
         {
             return "";
         }
 
-        int index = Integer.parseInt( arguments.get( 2 ) );
+        int index = castDouble( visitor.castStringVisit( ctx.expr( 2 ) ) ).intValue();
 
         List<String> tokens = Arrays.asList( StringUtils.split( input, delimiter ) );
 
         if ( tokens.size() > index && index >= 0 )
         {
-            return wrap( tokens.get( index ) );
+            return RuleFunction.wrap( tokens.get( index ) );
         }
 
         return "";
-    }
-
-    @Nonnull
-    public static RuleFunctionSplit create()
-    {
-        return new RuleFunctionSplit();
     }
 }

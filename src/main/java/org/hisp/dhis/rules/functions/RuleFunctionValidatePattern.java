@@ -28,45 +28,33 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.hisp.dhis.rules.functions.RuleFunction.wrap;
+
 /**
  * @Author Zubair Asghar.
- *
- * Evaluates to true if the input text is an exact match with the supplied regular expression pattern. The regular expression needs to be escaped.
+ * <p>
+ * Evaluates to true if the input text is an exact match with the supplied regular org.hisp.dhis.rules.parser.expression pattern. The regular org.hisp.dhis.rules.parser.expression needs to be escaped.
  */
-public class RuleFunctionValidatePattern extends RuleFunction
+public class RuleFunctionValidatePattern
+    extends ScalarFunctionToEvaluate
 {
-    public static final String D2_VALIDATE_PATTERN = "d2:validatePattern";
-
-    @Nonnull
     @Override
-    public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        if ( arguments.size() != 2 )
-        {
-            throw new IllegalArgumentException( "Two arguments were expected, " +
-                    arguments.size() + " were supplied" );
-        }
-        
-        String input = arguments.get( 0 );
-        String regex = arguments.get( 1 );
+        String input = visitor.castStringVisit( ctx.expr( 0 ) );
+        String regex = visitor.castStringVisit( ctx.expr( 1 ) );
 
         Pattern pattern = Pattern.compile( regex );
 
         Matcher matcher = pattern.matcher( input );
-        
-        return wrap( String.valueOf( matcher.matches() ) );
-    }
 
-    public static RuleFunctionValidatePattern create()
-    {
-        return new RuleFunctionValidatePattern();
+        return wrap( String.valueOf( matcher.matches() ) );
     }
 }

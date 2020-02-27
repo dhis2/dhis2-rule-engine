@@ -5,8 +5,17 @@ import org.joda.time.LocalDate;
 public class TimeInterval
 {
     private final LocalDate startDate;
+
     private final LocalDate endDate;
+
     private final boolean empty;
+
+    private TimeInterval( LocalDate startDate, LocalDate endDate, boolean empty )
+    {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.empty = empty;
+    }
 
     public static TimeInterval empty()
     {
@@ -16,13 +25,6 @@ public class TimeInterval
     public static TimeInterval fromTo( LocalDate startDate, LocalDate endDate )
     {
         return new TimeInterval( startDate, endDate, false );
-    }
-
-    private TimeInterval( LocalDate startDate, LocalDate endDate, boolean empty )
-    {
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.empty = empty;
     }
 
     public LocalDate getStartDate()

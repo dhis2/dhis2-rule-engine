@@ -9,12 +9,12 @@ public abstract class RuleActionHideProgramStage
     extends RuleAction
 {
 
-        @Nonnull
-        public abstract String programStage();
+    @Nonnull
+    public static RuleActionHideProgramStage create( @Nonnull String programStage )
+    {
+        return new AutoValue_RuleActionHideProgramStage( programStage );
+    }
 
-        @Nonnull
-        public static RuleActionHideProgramStage create( @Nonnull String programStage )
-        {
-                return new AutoValue_RuleActionHideProgramStage( programStage );
-        }
+    @Nonnull
+    public abstract String programStage();
 }

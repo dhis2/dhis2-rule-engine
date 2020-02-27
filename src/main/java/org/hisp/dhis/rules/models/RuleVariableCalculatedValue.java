@@ -37,18 +37,19 @@ import javax.annotation.Nonnull;
  */
 
 @AutoValue
-public abstract class RuleVariableCalculatedValue extends RuleVariable
+public abstract class RuleVariableCalculatedValue
+    extends RuleVariable
 {
-    @Nonnull
-    public abstract String calculatedValueVariable();
-
-    @Nonnull
-    public abstract RuleValueType calculatedValueType();
-
     @Nonnull
     public static RuleVariableCalculatedValue create( @Nonnull String name,
         @Nonnull String variable, @Nonnull RuleValueType variableType )
     {
         return new AutoValue_RuleVariableCalculatedValue( name, variable, variableType );
     }
+
+    @Nonnull
+    public abstract String calculatedValueVariable();
+
+    @Nonnull
+    public abstract RuleValueType calculatedValueType();
 }

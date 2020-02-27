@@ -28,45 +28,36 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 
 /**
  * @Author Zubair Asghar.
  */
-public class RuleFunctionInOrgUnitGroup extends RuleFunction
+public class RuleFunctionInOrgUnitGroup
+    extends ScalarFunctionToEvaluate
 {
-        static final String D2_IN_ORG_UNIT_GROUP = "d2:inOrgUnitGroup";
+    @Override
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        Map<String, RuleVariableValue> valueMap = visitor.getValueMap();
+        Map<String, List<String>> supplementaryData = visitor.getSupplementaryData();
 
-        @Nonnull
-        @Override
-        public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
-            Map<String, List<String>> supplementaryData )
+        String value = visitor.castStringVisit( ctx.expr( 0 ) );
+        if ( !valueMap.containsKey( "org_unit" ) || !supplementaryData.containsKey( value ) )
         {
-                if ( arguments.size() != 1 )
-                {
-                        throw new IllegalArgumentException( "Two arguments were expected, " +
-                            arguments.size() + " were supplied" );
-                }
-
-                if ( !valueMap.containsKey( "org_unit" ) || !supplementaryData.containsKey( arguments.get( 0 ) ) )
-                {
-                        return String.valueOf( false );
-                }
-
-                String orgUnit = valueMap.get( "org_unit" ).value().replace( "'", "" );
-
-                List<String> members = supplementaryData.get( arguments.get( 0 ) );
-
-                return String.valueOf( members.contains( orgUnit ) );
+            return String.valueOf( false );
         }
 
-        @Nonnull
-        public static RuleFunctionInOrgUnitGroup create()
-        {
-                return new RuleFunctionInOrgUnitGroup();
-        }
+        String orgUnit = valueMap.get( "org_unit" ).value().replace( "'", "" );
+
+        List<String> members = supplementaryData.get( value );
+
+        return String.valueOf( members.contains( orgUnit ) );
+    }
 }

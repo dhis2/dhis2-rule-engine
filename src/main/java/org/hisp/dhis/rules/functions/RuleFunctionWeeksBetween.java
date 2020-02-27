@@ -1,38 +1,15 @@
 package org.hisp.dhis.rules.functions;
 
-import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.models.TimeInterval;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 import org.joda.time.Weeks;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
-final class RuleFunctionWeeksBetween
-    extends RuleFunction
+public class RuleFunctionWeeksBetween
+    extends ScalarFunctionToEvaluate
 {
-    static final String D2_WEEKS_BETWEEN = "d2:weeksBetween";
-
-    @Nonnull
-    public static RuleFunctionWeeksBetween create()
-    {
-        return new RuleFunctionWeeksBetween();
-    }
-
-    @Nonnull
-    @Override
-    public String evaluate( @Nonnull List<String> arguments,
-        Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        if ( arguments.size() != 2 )
-        {
-            throw new IllegalArgumentException( "Two arguments were expected, " +
-                arguments.size() + " were supplied" );
-        }
-
-        return String.valueOf( weeksBetween( arguments.get( 0 ), arguments.get( 1 ) ) );
-    }
-
     /**
      * Function which will return the number of weeks between the two given dates.
      *
@@ -42,7 +19,7 @@ final class RuleFunctionWeeksBetween
      */
     private Integer weeksBetween( String start, String end )
     {
-        TimeInterval interval = getTimeInterval( start, end );
+        TimeInterval interval = RuleFunction.getTimeInterval( start, end );
 
         if ( interval.isEmpty() )
         {
@@ -50,5 +27,13 @@ final class RuleFunctionWeeksBetween
         }
 
         return Weeks.weeksBetween( interval.getStartDate(), interval.getEndDate() ).getWeeks();
+    }
+
+    @Override
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return String.valueOf(
+            weeksBetween( visitor.castStringVisit( ctx.expr( 0 ) ),
+                visitor.castStringVisit( ctx.expr( 1 ) ) ) );
     }
 }

@@ -33,12 +33,20 @@ import java.util.Map;
 /**
  * @Author Zubair Asghar.
  */
-public class RuleFunctionZScoreHFA extends RuleFunctionZScore
+public class RuleFunctionZScoreHFA
+    extends RuleFunctionZScore
 {
-    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_GIRL = ZScoreTable.getZscoreHFATableGirl();
+    public static final String D2_ZSCOREHFA = "d2:zScoreHFA";
+
+    private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_GIRL = ZScoreTable
+        .getZscoreHFATableGirl();
+
     private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_BOY = ZScoreTable.getZscoreHFATableBoy();
 
-    public static final String D2_ZSCOREHFA = "d2:zScoreHFA";
+    public static RuleFunctionZScoreHFA create()
+    {
+        return new RuleFunctionZScoreHFA();
+    }
 
     @Override
     public Map<ZScoreTableKey, Map<Float, Integer>> getTableForGirl()
@@ -50,10 +58,5 @@ public class RuleFunctionZScoreHFA extends RuleFunctionZScore
     public Map<ZScoreTableKey, Map<Float, Integer>> getTableForBoy()
     {
         return ZSCORE_TABLE_BOY;
-    }
-
-    public static RuleFunctionZScoreHFA create()
-    {
-        return new RuleFunctionZScoreHFA();
     }
 }

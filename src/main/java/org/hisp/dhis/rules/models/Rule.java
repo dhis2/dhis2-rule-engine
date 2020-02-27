@@ -11,26 +11,26 @@ import java.util.List;
 @AutoValue
 public abstract class Rule
 {
-        @Nullable
-        public abstract String name();
+    @Nonnull
+    public static Rule create( @Nullable String programStage, @Nullable Integer priority,
+        @Nonnull String condition, @Nonnull List<RuleAction> actions, @Nullable String name )
+    {
+        return new AutoValue_Rule( name, programStage, priority, condition,
+            Collections.unmodifiableList( new ArrayList<>( actions ) ) );
+    }
 
-        @Nullable
-        public abstract String programStage();
+    @Nullable
+    public abstract String name();
 
-        @Nullable
-        public abstract Integer priority();
+    @Nullable
+    public abstract String programStage();
 
-        @Nonnull
-        public abstract String condition();
+    @Nullable
+    public abstract Integer priority();
 
-        @Nonnull
-        public abstract List<RuleAction> actions();
+    @Nonnull
+    public abstract String condition();
 
-        @Nonnull
-        public static Rule create( @Nullable String programStage, @Nullable Integer priority,
-                                  @Nonnull String condition, @Nonnull List<RuleAction> actions, @Nullable String name )
-        {
-                return new AutoValue_Rule( name, programStage, priority, condition,
-                    Collections.unmodifiableList( new ArrayList<>( actions ) ) );
-        }
+    @Nonnull
+    public abstract List<RuleAction> actions();
 }

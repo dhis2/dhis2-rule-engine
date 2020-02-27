@@ -28,11 +28,14 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hisp.dhis.rules.RuleExpression;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
-import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.Map;
+
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
  * @Author Zubair Asghar.
@@ -41,66 +44,49 @@ import java.util.Map;
  * The source field parameter is the name of one of the defined source fields in the program.
  */
 public class RuleFunctionCountIfZeroPos
-    extends RuleFunction
+    extends ScalarFunctionToEvaluate
 {
-        public static final String D2_COUNT_IF_ZERO_POS = "d2:countIfZeroPos";
+    private boolean isZeroPos( String input )
+    {
+        Double value;
 
-        @Nonnull
-        @Override
-        public String evaluate( @Nonnull List<String> arguments, Map<String, RuleVariableValue> valueMap,
-            Map<String, List<String>> supplementaryData )
+        try
         {
-                if ( valueMap == null )
-                {
-                        throw new IllegalArgumentException( "valueMap is expected" );
-                }
+            value = Double.parseDouble( input );
+        }
+        catch ( NumberFormatException e )
+        {
+            throw new IllegalArgumentException( "Invalid number format" );
+        }
 
-                if ( arguments.size() != 1 )
-                {
-                        throw new IllegalArgumentException( "One arguments were expected, " +
-                            arguments.size() + " were supplied" );
-                }
+        return value >= 0;
+    }
 
-                RuleVariableValue value = valueMap.get( arguments.get( 0 ) );
+    @Override
+    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        RuleVariableValue value = visitor.getValueMap().get( RuleExpression.getProgramRuleVariable( ctx ) );
 
-                if ( value != null )
-                {
-                        List<String> candidates = value.candidates();
+        if ( value != null )
+        {
+            List<String> candidates = value.candidates();
 
-                        Integer count = 0;
-                        for (String string : candidates){
-                                if(isZeroPos(string))
-                                        count++;
-                        }
+            Integer count = 0;
+            for ( String string : candidates )
+            {
+                    if ( isZeroPos( string ) )
+                    {
+                            count++;
+                    }
+            }
 
 //                        Integer count = candidates.stream().filter( this::isZeroPos ).collect( Collectors.toList() ).size();
 
-                        return String.valueOf( count );
-                }
-                else
-                {
-                        return "0";
-                }
+            return String.valueOf( count );
         }
-
-        public static RuleFunctionCountIfZeroPos create()
+        else
         {
-                return new RuleFunctionCountIfZeroPos();
+            return "0";
         }
-
-        private boolean isZeroPos( String input )
-        {
-                Double value;
-
-                try
-                {
-                        value = Double.parseDouble( input );
-                }
-                catch ( NumberFormatException e )
-                {
-                        throw new IllegalArgumentException( "Invalid number format" );
-                }
-
-                return value >= 0;
-        }
+    }
 }

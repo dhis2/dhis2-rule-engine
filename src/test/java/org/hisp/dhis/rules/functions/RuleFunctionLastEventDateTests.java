@@ -28,63 +28,72 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueBuilder;
-import org.junit.Rule;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import static org.mockito.Mockito.when;
 
 /**
  * @Author Zubair Asghar.
  */
+@RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionLastEventDateTests
 {
     private static final String DATE_PATTERN = "yyyy-MM-dd";
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
-    private Map<String, RuleVariableValue> valueMap = new HashMap<>();
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat( DATE_PATTERN, Locale.US );
 
     private String todayDate = dateFormat.format( new Date() );
 
-    @Test
-    public void throwExceptionIfArgumentListIsZero()
+    @Mock
+    private ExpressionParser.ExprContext context;
+
+    @Mock
+    private CommonExpressionVisitor visitor;
+
+    @Mock
+    private ExpressionParser.ExprContext mockedFirstExpr;
+
+    private RuleFunctionLastEventDate functionToTest = new RuleFunctionLastEventDate();
+
+    @Before
+    public void setUp()
     {
-        RuleFunction lastEventDateFunction = RuleFunctionLastEventDate.create();
-
-        thrown.expect( IllegalArgumentException.class );
-
-        lastEventDateFunction.evaluate( Arrays.asList(), valueMap, null);
+        when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
     }
 
     @Test
     public void returnNothingWhenValueMapDoesNotHaveValue()
     {
-        RuleFunction lastEventDateFunction = RuleFunctionLastEventDate.create();
+        Map<String, RuleVariableValue> valueMap = getEmptyValueMap();
 
-        valueMap = getEmptyValueMap();
-
-        assertThat( lastEventDateFunction.evaluate( Arrays.asList( "test_variable" ), valueMap, null ), is( "" ) );
+        assertLastEventDate( "test_variable", valueMap, "" );
     }
 
     @Test
     public void returnLastestDateWhenValueExist()
     {
-        RuleFunction lastEventDateFunction = RuleFunctionLastEventDate.create();
-
         String variableWithValue = "test_variable_one";
 
-        valueMap = getValueMapWithValue( variableWithValue );
+        Map<String, RuleVariableValue> valueMap = getValueMapWithValue( variableWithValue );
 
-        assertThat( lastEventDateFunction.evaluate( Arrays.asList( variableWithValue ), valueMap, null ), is( "'"+todayDate+"'" ) );
+        assertLastEventDate( variableWithValue, valueMap, todayDate );
     }
 
     private Map<String, RuleVariableValue> getEmptyValueMap()
@@ -94,12 +103,21 @@ public class RuleFunctionLastEventDateTests
 
     private Map<String, RuleVariableValue> getValueMapWithValue( String variableNameWithValue )
     {
+        Map<String, RuleVariableValue> valueMap = new HashMap<>();
         valueMap.put( variableNameWithValue, RuleVariableValueBuilder
-                .create()
-                .withValue( "value" )
-                .withCandidates( Arrays.asList() )
-                .withEventDate( todayDate ).build() );
+            .create()
+            .withValue( "value" )
+            .withCandidates( Arrays.<String>asList() )
+            .withEventDate( todayDate ).build() );
 
         return valueMap;
+    }
+
+    private void assertLastEventDate( String value, Map<String, RuleVariableValue> valueMap, String lastEventDate )
+    {
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( value );
+        when( visitor.getValueMap() ).thenReturn( valueMap );
+        MatcherAssert
+            .assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( (lastEventDate) ) );
     }
 }

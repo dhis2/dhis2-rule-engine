@@ -10,29 +10,29 @@ public abstract class RuleActionDisplayKeyValuePair
     extends RuleActionText
 {
 
-        @Nonnull
-        public static RuleActionDisplayKeyValuePair createForFeedback(
-            @Nullable String content, @Nullable String data )
+    @Nonnull
+    public static RuleActionDisplayKeyValuePair createForFeedback(
+        @Nullable String content, @Nullable String data )
+    {
+        if ( content == null && data == null )
         {
-                if ( content == null && data == null )
-                {
-                        throw new IllegalArgumentException( "Both content and data must not be null" );
-                }
-
-                return new AutoValue_RuleActionDisplayKeyValuePair( content == null ? "" : content,
-                    data == null ? "" : data, LOCATION_FEEDBACK_WIDGET );
+            throw new IllegalArgumentException( "Both content and data must not be null" );
         }
 
-        @Nonnull
-        public static RuleActionDisplayKeyValuePair createForIndicators(
-            @Nullable String content, @Nullable String data )
-        {
-                if ( content == null && data == null )
-                {
-                        throw new IllegalArgumentException( "Both content and data must not be null" );
-                }
+        return new AutoValue_RuleActionDisplayKeyValuePair( content == null ? "" : content,
+            data == null ? "" : data, LOCATION_FEEDBACK_WIDGET );
+    }
 
-                return new AutoValue_RuleActionDisplayKeyValuePair( content == null ? "" : content,
-                    data == null ? "" : data, LOCATION_INDICATOR_WIDGET );
+    @Nonnull
+    public static RuleActionDisplayKeyValuePair createForIndicators(
+        @Nullable String content, @Nullable String data )
+    {
+        if ( content == null && data == null )
+        {
+            throw new IllegalArgumentException( "Both content and data must not be null" );
         }
+
+        return new AutoValue_RuleActionDisplayKeyValuePair( content == null ? "" : content,
+            data == null ? "" : data, LOCATION_INDICATOR_WIDGET );
+    }
 }

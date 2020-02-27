@@ -28,65 +28,77 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
-import org.hisp.dhis.rules.RuleVariableValue;
-import org.junit.Rule;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import static java.util.Arrays.asList;
-import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.when;
 
 /**
  * @Author Zubair Asghar.
  */
 
-@RunWith( JUnit4.class )
+@RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionModulusTests
 {
-        @Rule
-        public ExpectedException thrown = ExpectedException.none();
+    @Mock
+    private ExpressionParser.ExprContext context;
 
-        private Map<String, RuleVariableValue> variableValues = new HashMap<>();
+    @Mock
+    private CommonExpressionVisitor visitor;
 
-        @Test
-        public void return_argument_rounded_down_to_nearest_whole_number()
-        {
-                RuleFunction modulusFunction = RuleFunctionModulus.create();
+    @Mock
+    private ExpressionParser.ExprContext mockedFirstExpr;
 
-                MatcherAssert.assertThat( modulusFunction.evaluate( asList( "0", "2" ), variableValues, null ), is( "0.0" ) );
-                MatcherAssert.assertThat( modulusFunction.evaluate( asList( "11", "3" ), variableValues, null ), is( "2.0" ) );
-                MatcherAssert
-                    .assertThat( modulusFunction.evaluate( asList( "-11", "3" ), variableValues, null ), is( "-2.0" ) );
-        }
+    @Mock
+    private ExpressionParser.ExprContext mockedSecondExpr;
 
-        @Test
-        public void return_NaN_when_invalid_operations()
-        {
-                RuleFunction modulusFunction = RuleFunctionModulus.create();
+    @Before
+    public void setUp()
+    {
+        when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
+        when( context.expr( 1 ) ).thenReturn( mockedSecondExpr );
+    }
 
-                MatcherAssert.assertThat( modulusFunction.evaluate( asList( "2", "0" ), variableValues, null ), is( "NaN" ) );
-                MatcherAssert.assertThat( modulusFunction.evaluate( asList( "bad number", "bad number" ), variableValues, null ), is( "NaN" ) );
-                MatcherAssert.assertThat( modulusFunction.evaluate( asList( null, null ), variableValues, null ), is( "NaN" ) );
-        }
+    @Test
+    public void return_argument_rounded_down_to_nearest_whole_number()
+    {
+        RuleFunctionModulus modulusFunction = new RuleFunctionModulus();
 
-        @Test
-        public void throw_illegal_argument_exception_when_argument_count_is_greater_than_expected()
-        {
-                thrown.expect( IllegalArgumentException.class );
-                RuleFunctionModulus.create().evaluate( asList( "5.9", "6.8", "3.4" ), variableValues, null );
-        }
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "2" );
+        MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0.0" ) );
 
-        @Test
-        public void throw_illegal_argument_exception_when_arguments_count_is_lower_than_expected()
-        {
-                thrown.expect( IllegalArgumentException.class );
-                RuleFunctionModulus.create().evaluate( new ArrayList<>(), variableValues, null );
-        }
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "11" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "3" );
+        MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "2.0" ) );
+
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "-11" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "3" );
+        MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "-2.0" ) );
+    }
+
+    @Test
+    public void return_NaN_when_invalid_operations()
+    {
+        RuleFunctionModulus modulusFunction = new RuleFunctionModulus();
+
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "2" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "0" );
+        MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "NaN" ) );
+
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "bad number" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "bad number" );
+        MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "NaN" ) );
+
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( null );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( null );
+        MatcherAssert.assertThat( modulusFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "NaN" ) );
+    }
 }
