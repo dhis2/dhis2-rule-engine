@@ -10,6 +10,8 @@ addons:
 before_install:
 - rm ~/.m2/settings.xml
 
+install: skip
+
 jobs:
   include:
     - stage: tests
