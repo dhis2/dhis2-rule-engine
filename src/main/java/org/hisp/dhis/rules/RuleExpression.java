@@ -34,9 +34,25 @@ public abstract class RuleExpression
     @Nonnull
     public static String getProgramRuleVariable( ExpressionParser.ExprContext ctx )
     {
-        return ctx.programRuleVariableName() != null
-            ? ctx.programRuleVariableName().getText()
+        return isProgramRuleVariable(ctx)
+            ? getProgramRuleVariableText(ctx)
             : ctx.uid0.getText() + secondPart( ctx ) + thirdPart( ctx );
+    }
+
+    private static String getProgramRuleVariableText( ExpressionParser.ExprContext ctx )
+    {
+        if ( ctx.programRuleVariableName() != null ) {
+            return ctx.programRuleVariableName().getText();
+        }
+        else
+        {
+            return ctx.STRING_LITERAL().getText().replaceAll( "\'", "" );
+        }
+    }
+
+    private static boolean isProgramRuleVariable( ExpressionParser.ExprContext ctx )
+    {
+        return ctx.programRuleVariableName() != null || ctx.STRING_LITERAL() != null;
     }
 
     private static String secondPart( ExpressionParser.ExprContext ctx )
