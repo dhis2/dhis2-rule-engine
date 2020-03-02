@@ -48,6 +48,29 @@ public class RuleEngineFunctionTests
     }
 
     @Test
+    @Deprecated
+    public void evaluateHasValueFunctionWithStringValue()
+        throws Exception
+    {
+        RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+            "test_action_content", "d2:hasValue('test_variable')" );
+        RuleVariable ruleVariable = RuleVariableCurrentEvent.create(
+            "test_variable", "test_data_element", RuleValueType.TEXT );
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+
+        RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable ) );
+
+        RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList( RuleDataValue.create(
+                new Date(), "test_program_stage", "test_data_element", "test_value" ) ), "" );
+        List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
+
+        assertThat( ruleEffects.size() ).isEqualTo( 1 );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "true" );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+    }
+
+    @Test
     public void evaluateHasValueFunctionMustReturnTrueIfNoValueSpecified()
         throws Exception
     {
@@ -182,6 +205,45 @@ public class RuleEngineFunctionTests
     }
 
     @Test
+    @Deprecated
+    public void evaluateD2InOrgUnitGroupWithStringValue()
+        throws Exception
+    {
+        List<String> members = Arrays.asList( "location1", "location2" );
+
+        Map<String, List<String>> supplementaryData = new HashMap<>();
+        supplementaryData.put( "OU_GROUP_ID", members );
+
+        RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+            "test_action_content", "d2:inOrgUnitGroup('OU_GROUP_ID')" );
+        RuleVariable ruleVariableOne = RuleVariableCurrentEvent.create(
+            "test_var_one", "test_data_element_one", RuleValueType.TEXT );
+
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+
+        RuleEngine ruleEngine = RuleEngineContext
+            .builder()
+            .rules( Arrays.asList( rule ) )
+            .ruleVariables( Arrays.asList( ruleVariableOne ) )
+            .supplementaryData( supplementaryData )
+            .calculatedValueMap( new HashMap<String, Map<String, String>>() )
+            .constantsValue( new HashMap<String, String>() )
+            .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
+            .build();
+
+        RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "location1", null, Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "OU_GROUP_ID" ) ),
+            "" );
+
+        List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
+
+        assertThat( ruleEffects.size() ).isEqualTo( 1 );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "true" );
+    }
+
+    @Test
     public void evaluateD2HasUserRole()
         throws Exception
     {
@@ -192,6 +254,44 @@ public class RuleEngineFunctionTests
 
         RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
             "test_action_content", "d2:hasUserRole(#{test_var_one})" );
+        RuleVariable ruleVariableOne = RuleVariableCurrentEvent.create(
+            "test_var_one", "test_data_element_one", RuleValueType.TEXT );
+
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+
+        RuleEngine ruleEngine = RuleEngineContext
+            .builder()
+            .rules( Arrays.asList( rule ) )
+            .ruleVariables( Arrays.asList( ruleVariableOne ) )
+            .supplementaryData( supplementaryData )
+            .calculatedValueMap( new HashMap<String, Map<String, String>>() )
+            .constantsValue( new HashMap<String, String>() )
+            .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
+            .build();
+
+        RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "location1", null, Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "role1" ) ), "" );
+
+        List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
+
+        assertThat( ruleEffects.size() ).isEqualTo( 1 );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "true" );
+    }
+
+    @Test
+    @Deprecated
+    public void evaluateD2HasUserRoleWithStringValue()
+        throws Exception
+    {
+        List<String> roles = Arrays.asList( "role1", "role2" );
+
+        Map<String, List<String>> supplementaryData = new HashMap<>();
+        supplementaryData.put( "USER", roles );
+
+        RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+            "test_action_content", "d2:hasUserRole('role1')" );
         RuleVariable ruleVariableOne = RuleVariableCurrentEvent.create(
             "test_var_one", "test_data_element_one", RuleValueType.TEXT );
 
@@ -287,11 +387,84 @@ public class RuleEngineFunctionTests
     }
 
     @Test
+    @Deprecated
+    public void evaluateD2CountIfValueWithStringValue()
+        throws Exception
+    {
+        RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+            "test_action_content", "d2:countIfValue('test_var_one', 'condition')" );
+        RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
+            "test_var_one", "test_data_element_one", RuleValueType.TEXT );
+
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
+
+        RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition" ) ), "" );
+        RuleEvent ruleEvent2 = RuleEvent.create( "test_event2", "test_program_stage2",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition2" ) ), "" );
+        RuleEvent ruleEvent3 = RuleEvent.create( "test_event3", "test_program_stage3",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition" ) ), "" );
+
+        ruleEngineBuilder.events( Arrays.asList( ruleEvent2, ruleEvent3 ) );
+
+        List<RuleEffect> ruleEffects = ruleEngineBuilder.build().evaluate( ruleEvent ).call();
+
+        assertThat( ruleEffects.size() ).isEqualTo( 1 );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertTrue( ruleEffects.get( 0 ).data().equals( "2" ) );
+    }
+
+    @Test
     public void evaluateD2Count()
         throws Exception
     {
         RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
             "test_action_content", "d2:count(#{test_var_one})" );
+        RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
+            "test_var_one", "test_data_element_one", RuleValueType.TEXT );
+
+        RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
+            "test_var_two", "test_data_element_two", RuleValueType.TEXT );
+
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
+
+        RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition" ) ), "" );
+        RuleEvent ruleEvent2 = RuleEvent.create( "test_event2", "test_program_stage2",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition2" ) ), "" );
+        RuleEvent ruleEvent3 = RuleEvent.create( "test_event3", "test_program_stage3",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition" ) ), "" );
+
+        RuleEvent ruleEvent4 = RuleEvent.create( "test_event3", "test_program_stage3",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "condition" ) ), "" );
+
+        ruleEngineBuilder.events( Arrays.asList( ruleEvent2, ruleEvent3, ruleEvent4 ) );
+
+        List<RuleEffect> ruleEffects = ruleEngineBuilder.build().evaluate( ruleEvent ).call();
+
+        assertThat( ruleEffects.size() ).isEqualTo( 1 );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( "3", ruleEffects.get( 0 ).data() );
+    }
+
+    @Test
+    @Deprecated
+    public void evaluateD2CountWithStringValue()
+        throws Exception
+    {
+        RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+            "test_action_content", "d2:count('test_var_one')" );
         RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
             "test_var_one", "test_data_element_one", RuleValueType.TEXT );
 
@@ -554,6 +727,40 @@ public class RuleEngineFunctionTests
     {
         RuleAction ruleAction = RuleActionDisplayText.createForFeedback(
             "test_action_content", "d2:countIfZeroPos(#{test_var_one})" );
+        RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
+            "test_var_one", "test_data_element_one", RuleValueType.NUMERIC );
+
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
+
+        RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "0" ) ), "" );
+
+        RuleEvent ruleEvent1 = RuleEvent.create( "test_event1", "test_program_stage",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "1" ) ), "" );
+
+        RuleEvent ruleEvent2 = RuleEvent.create( "test_event1", "test_program_stage",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "-3" ) ), "" );
+
+        List<RuleEffect> ruleEffects = ruleEngineBuilder.events( Arrays.asList( ruleEvent1, ruleEvent2 ) ).build()
+            .evaluate( ruleEvent ).call();
+
+        assertThat( ruleEffects.size() ).isEqualTo( 1 );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( "2", ruleEffects.get( 0 ).data() );
+    }
+
+    @Test
+    @Deprecated
+    public void evaluateD2CountIfZeroPosWithStringValue()
+        throws Exception
+    {
+        RuleAction ruleAction = RuleActionDisplayText.createForFeedback(
+            "test_action_content", "d2:countIfZeroPos('test_var_one')" );
         RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
             "test_var_one", "test_data_element_one", RuleValueType.NUMERIC );
 
@@ -960,11 +1167,91 @@ public class RuleEngineFunctionTests
     }
 
     @Test
+    @Deprecated
+    public void evaluateD2MaxValueWithStringValue()
+        throws Exception
+    {
+        RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+            "test_action_content", "true" );
+        RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
+            "test_var_one", "test_data_element_one", RuleValueType.NUMERIC );
+
+        RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
+            "test_var_two", "test_data_element_two", RuleValueType.TEXT );
+
+        Rule rule = Rule.create( null, null, "d2:maxValue('test_var_one') == 8.0", Arrays.asList( ruleAction ), "" );
+
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule,
+            Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
+
+        RuleEvent ruleEvent1 = RuleEvent.create( "test_event1", "test_program_stage1",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "5" ),
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "" );
+
+        RuleEvent ruleEvent2 = RuleEvent.create( "test_event2", "test_program_stage2",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "7" ),
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "" );
+
+        RuleEvent ruleEvent3 = RuleEvent.create( "test_event3", "test_program_stage3",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "8" ),
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "" );
+
+        List<RuleEffect> ruleEffects = ruleEngineBuilder.events( Arrays.asList( ruleEvent1, ruleEvent2 ) ).build()
+            .evaluate( ruleEvent3 ).call();
+
+        assertThat( ruleEffects.size() ).isEqualTo( 1 );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+    }
+
+    @Test
     public void testMinValue()
         throws Exception
     {
         RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
             "test_action_content", "d2:minValue(#{test_var_one})" );
+        RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
+            "test_var_one", "test_data_element_one", RuleValueType.NUMERIC );
+
+        RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
+            "test_var_two", "test_data_element_two", RuleValueType.TEXT );
+
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule,
+            Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
+
+        RuleEvent ruleEvent1 = RuleEvent.create( "test_event1", "test_program_stage1",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "5" ),
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "" );
+
+        RuleEvent ruleEvent2 = RuleEvent.create( "test_event2", "test_program_stage2",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "7" ),
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "" );
+
+        RuleEvent ruleEvent3 = RuleEvent.create( "test_event3", "test_program_stage3",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "8" ),
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "" );
+
+        List<RuleEffect> ruleEffects = ruleEngineBuilder.events( Arrays.asList( ruleEvent1, ruleEvent2 ) ).build()
+            .evaluate( ruleEvent3 ).call();
+
+        assertThat( ruleEffects.size() ).isEqualTo( 1 );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "5.0" );
+    }
+
+    @Test
+    public void testMinValueWithStringValue()
+        throws Exception
+    {
+        RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+            "test_action_content", "d2:minValue('test_var_one')" );
         RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
             "test_var_one", "test_data_element_one", RuleValueType.NUMERIC );
 
