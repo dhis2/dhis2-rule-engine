@@ -2,7 +2,7 @@ language: java
 sudo : false
 dist : trusty
 jdk:
-- openjdk8
+- openjdk7
 addons:
   apt:
     packages:
@@ -10,13 +10,15 @@ addons:
 before_install:
 - rm ~/.m2/settings.xml
 
-jobs: 
+install: skip
+
+jobs:
   include:
-    - stage: tests 
+    - stage: tests
       name: unit
-      script: 
-        - mvn clean install -DskipTests=false -q --update-snapshots 
-        
+      script:
+        - mvn clean install -DskipTests=false -q --update-snapshots
+
 branches:
   only:
   - master
