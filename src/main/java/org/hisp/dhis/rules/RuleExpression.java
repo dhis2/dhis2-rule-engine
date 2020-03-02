@@ -46,13 +46,13 @@ public abstract class RuleExpression
         }
         else
         {
-            return ctx.stringLiteral().get( 0 ).getText().replaceAll( "\'", "" );
+            return ctx.programRuleStringVariableName().getText().replaceAll( "\'", "" );
         }
     }
 
     private static boolean isProgramRuleVariable( ExpressionParser.ExprContext ctx )
     {
-        return ctx.programRuleVariableName() != null || ( ctx.stringLiteral() != null && !ctx.stringLiteral().isEmpty());
+        return ctx.programRuleVariableName() != null || ( ctx.programRuleStringVariableName() != null );
     }
 
     private static String secondPart( ExpressionParser.ExprContext ctx )
