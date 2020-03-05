@@ -45,11 +45,9 @@
             </snapshots>
         </repository>
         <repository>
-            <id>ossrelease</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
+            <id>github</id>
+            <name>Antlr Expression Parser</name>
+            <url>https://maven.pkg.github.com/dhis2/dhis2-antlr-expression-parser</url>
         </repository>
         <repository>
             <id>ossrh</id>
