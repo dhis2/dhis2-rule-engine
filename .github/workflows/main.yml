@@ -17,6 +17,5 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
     - name: Test
       run: mvn clean install -DskipTests=false --update-snapshots -q
