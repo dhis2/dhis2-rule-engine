@@ -18,4 +18,6 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
     - name: Test
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: mvn clean install -DskipTests=false --update-snapshots -q
