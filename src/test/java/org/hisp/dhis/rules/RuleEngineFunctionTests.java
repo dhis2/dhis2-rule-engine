@@ -1080,7 +1080,7 @@ public class RuleEngineFunctionTests
             "test_var_two", "test_data_element_two", RuleValueType.TEXT );
 
         Rule rule = Rule
-            .create( null, null, "d2:zScoreWFH(55,#{test_var_one},#{test_var_two}) == -2", Arrays.asList( ruleAction ),
+            .create( null, null, "d2:zScoreWFH(52,#{test_var_one},A{test_var_two}) < 2", Arrays.asList( ruleAction ),
                 "" );
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule,
@@ -1088,7 +1088,7 @@ public class RuleEngineFunctionTests
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
             RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
-                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "3.8" ),
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "3" ),
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "" );
 
         List<RuleEffect> ruleEffects = ruleEngineBuilder.build().evaluate( ruleEvent ).call();

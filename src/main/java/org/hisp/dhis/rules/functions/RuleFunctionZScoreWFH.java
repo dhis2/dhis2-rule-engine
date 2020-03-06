@@ -36,8 +36,6 @@ import java.util.Map;
 public class RuleFunctionZScoreWFH
     extends RuleFunctionZScore
 {
-    public static final String D2_ZSCOREWFH = "d2:zScoreWFH";
-
     private static final Map<ZScoreTableKey, Map<Float, Integer>> ZSCORE_TABLE_GIRL = ZScoreTable
         .getZscoreWFHTableGirl();
 
