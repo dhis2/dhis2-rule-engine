@@ -95,49 +95,49 @@
     </build>
 
     <profiles>
-    <profile>
-        <id>default</id>
-        <activation>
-            <activeByDefault>true</activeByDefault>
-        </activation>
-        <build>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.18.1</version>
-                    <configuration>
-                        <systemProperties>
-                            <property>
-                                <name>org.hisp.dhis.rules</name>
-                                <value>true</value>
-                            </property>
-                        </systemProperties>
-                        <includes>
-                            <include>**/Test*.java</include>
-                            <include>**/*Test*.java</include>
-                        </includes>
-                        <argLine>-Xmx1024m</argLine>
-                    </configuration>
-                </plugin>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.18.1</version>
+                        <configuration>
+                            <systemProperties>
+                                <property>
+                                    <name>org.hisp.dhis.rules</name>
+                                    <value>true</value>
+                                </property>
+                            </systemProperties>
+                            <includes>
+                                <include>**/Test*.java</include>
+                                <include>**/*Test*.java</include>
+                            </includes>
+                            <argLine>-Xmx1024m</argLine>
+                        </configuration>
+                    </plugin>
 
-                <!--Deployment-->
-                <plugin>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <version>2.8.1</version>
-                    <executions>
-                        <execution>
-                            <id>default-deploy</id>
-                            <phase>deploy</phase>
-                            <goals>
-                                <goal>deploy</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-        </build>
-    </profile>
+                    <!--Deployment-->
+                    <plugin>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <version>2.8.1</version>
+                        <executions>
+                            <execution>
+                                <id>default-deploy</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>dev</id>
             <activation>
@@ -156,6 +156,27 @@
                         <configuration>
                             <skipTests>true</skipTests>
                         </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>deploy</id>
+            <build>
+                <plugins>
+                    <!--Deployment-->
+                    <plugin>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <version>2.8.1</version>
+                        <executions>
+                            <execution>
+                                <id>default-deploy</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
