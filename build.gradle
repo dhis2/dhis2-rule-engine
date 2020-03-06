@@ -1,0 +1,28 @@
+apply plugin: 'java'
+
+repositories {
+    maven {
+        url("https://oss.sonatype.org/content/repositories/snapshots")
+    }
+    mavenCentral()
+}
+
+dependencies {
+    def pomXml = new XmlSlurper().parse('dhis2-rule-engine/pom.xml')
+    def pomDependencies = pomXml.dependencies.dependency
+
+    pomDependencies.each { dependency ->
+        def dependencySpec = "${dependency.groupId}:${dependency.artifactId}:${dependency.version}"
+
+        if (dependency.scope == 'test') {
+            dependencies.add 'testImplementation', dependencySpec
+        } else {
+            if(dependency.artifactId == 'auto-value'){
+                dependencies.add 'compileOnly', dependencySpec
+                dependencies.add 'annotationProcessor', 'com.google.auto.value:auto-value:1.5.2'
+            }else {
+                dependencies.add 'implementation', dependencySpec
+            }
+        }
+    }
+}

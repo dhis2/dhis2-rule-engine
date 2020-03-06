@@ -23,11 +23,17 @@ public abstract class RuleActionHideOptionGroup
          */
         @Nonnull
         public abstract String optionGroup();
+        /**
+         * @return uid of the target field to hide options.
+         *
+         */
+        @Nonnull
+        public abstract String field();
 
         @Nonnull
         public static RuleActionHideOptionGroup create(
-                @Nullable String content, @Nonnull String optionGroup )
+                @Nullable String content, @Nonnull String optionGroup, @Nonnull String field  )
         {
-            return new AutoValue_RuleActionHideOptionGroup( content == null ? "" : content, optionGroup );
+            return new AutoValue_RuleActionHideOptionGroup( content == null ? "" : content, optionGroup, field );
         }
 }
