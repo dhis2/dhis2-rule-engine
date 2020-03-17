@@ -8,11 +8,7 @@ import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @AutoValue
 public abstract class RuleVariableValue
@@ -22,16 +18,19 @@ public abstract class RuleVariableValue
     private static final String NUMBER_PATTERN = "0.0";
 
     @Nonnull
-    public static RuleVariableValue create( @Nonnull RuleValueType ruleValueType ) {
-        return new AutoValue_RuleVariableValue(null, ruleValueType,
-                Collections.unmodifiableList(new ArrayList<String>()), getFormattedDate(new Date()));
+    public static RuleVariableValue create( @Nonnull RuleValueType ruleValueType )
+    {
+        return new AutoValue_RuleVariableValue( null, ruleValueType,
+            Collections.unmodifiableList( new ArrayList<String>() ), getFormattedDate( new Date() ) );
     }
 
     @Nonnull
-    public static RuleVariableValue create(@Nonnull String value,
-                                    @Nonnull RuleValueType ruleValueType) {
-        if (ruleValueType == null) {
-            throw new IllegalArgumentException("Invalid value type");
+    public static RuleVariableValue create( @Nonnull String value,
+        @Nonnull RuleValueType ruleValueType )
+    {
+        if ( ruleValueType == null )
+        {
+            throw new IllegalArgumentException( "Invalid value type" );
         }
         // clean-up the value before processing it
         String processedValue = value == null ? null : value.replace( "'", "" );
@@ -52,9 +51,11 @@ public abstract class RuleVariableValue
 
     @Nonnull
     public static RuleVariableValue create( @Nonnull String value,
-        @Nonnull RuleValueType ruleValueType, @Nonnull List<String> candidates, @Nonnull String eventDate ) {
-        if (candidates == null) {
-            throw new IllegalArgumentException("Candidate cannot be null");
+        @Nonnull RuleValueType ruleValueType, @Nonnull List<String> candidates, @Nonnull String eventDate )
+    {
+        if ( candidates == null )
+        {
+            throw new IllegalArgumentException( "Candidate cannot be null" );
         }
         // clean-up the value before processing it
         String processedValue = value.replace( "'", "" );

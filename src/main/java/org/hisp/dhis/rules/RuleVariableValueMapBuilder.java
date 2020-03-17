@@ -6,19 +6,13 @@ import org.hisp.dhis.rules.models.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import static org.hisp.dhis.rules.RuleVariableValue.create;
 
-@SuppressWarnings("PMD.GodClass")
-public final class RuleVariableValueMapBuilder {
+@SuppressWarnings( "PMD.GodClass" )
+public final class RuleVariableValueMapBuilder
+{
     private static final String DATE_PATTERN = "yyyy-MM-dd";
 
     private static final String ENV_VAR_CURRENT_DATE = "current_date";
@@ -81,8 +75,9 @@ public final class RuleVariableValueMapBuilder {
     @Nullable
     private TriggerEnvironment triggerEnvironment;
 
-    private RuleVariableValueMapBuilder() {
-        this.dateFormat = new SimpleDateFormat(DATE_PATTERN, Locale.US);
+    private RuleVariableValueMapBuilder()
+    {
+        this.dateFormat = new SimpleDateFormat( DATE_PATTERN, Locale.US );
 
         // collections used for construction of resulting variable value map
         this.ruleVariables = new ArrayList<>();
@@ -91,7 +86,8 @@ public final class RuleVariableValueMapBuilder {
         this.allConstantValues = new HashMap<>();
     }
 
-    private RuleVariableValueMapBuilder(@Nonnull RuleEnrollment ruleEnrollment) {
+    private RuleVariableValueMapBuilder( @Nonnull RuleEnrollment ruleEnrollment )
+    {
         this();
 
         // enrollment is the target
@@ -195,13 +191,17 @@ public final class RuleVariableValueMapBuilder {
         return Collections.unmodifiableMap( valueMap );
     }
 
-    private boolean isEventInList(@Nonnull List<RuleEvent> ruleEvents,
-                                         @Nullable RuleEvent ruleEvent) {
-        if (ruleEvent != null) {
-            for (int i = 0; i < ruleEvents.size(); i++) {
-                RuleEvent event = ruleEvents.get(i);
+    private boolean isEventInList( @Nonnull List<RuleEvent> ruleEvents,
+        @Nullable RuleEvent ruleEvent )
+    {
+        if ( ruleEvent != null )
+        {
+            for ( int i = 0; i < ruleEvents.size(); i++ )
+            {
+                RuleEvent event = ruleEvents.get( i );
 
-                if (event.event().equals(ruleEvent.event())) {
+                if ( event.event().equals( ruleEvent.event() ) )
+                {
                     return true;
                 }
             }
@@ -210,22 +210,27 @@ public final class RuleVariableValueMapBuilder {
         return false;
     }
 
-    private Map<String, RuleDataValue> buildCurrentEventValues() {
+    private Map<String, RuleDataValue> buildCurrentEventValues()
+    {
         Map<String, RuleDataValue> currentEventValues = Maps.newHashMap();
 
-        if (ruleEvent != null) {
-            for (int index = 0; index < ruleEvent.dataValues().size(); index++) {
-                RuleDataValue ruleDataValue = ruleEvent.dataValues().get(index);
-                currentEventValues.put(ruleDataValue.dataElement(), ruleDataValue);
+        if ( ruleEvent != null )
+        {
+            for ( int index = 0; index < ruleEvent.dataValues().size(); index++ )
+            {
+                RuleDataValue ruleDataValue = ruleEvent.dataValues().get( index );
+                currentEventValues.put( ruleDataValue.dataElement(), ruleDataValue );
             }
         }
 
         return currentEventValues;
     }
 
-    private Map<String, RuleAttributeValue> buildCurrentEnrollmentValues() {
+    private Map<String, RuleAttributeValue> buildCurrentEnrollmentValues()
+    {
         Map<String, RuleAttributeValue> currentEnrollmentValues = Maps.newHashMap();
-        if (ruleEnrollment != null) {
+        if ( ruleEnrollment != null )
+        {
             List<RuleAttributeValue> ruleAttributeValues = ruleEnrollment.attributeValues();
             for ( int index = 0; index < ruleAttributeValues.size(); index++ )
             {
@@ -237,9 +242,10 @@ public final class RuleVariableValueMapBuilder {
         return currentEnrollmentValues;
     }
 
-    private Map<String, List<RuleDataValue>> buildAllEventValues() {
+    private Map<String, List<RuleDataValue>> buildAllEventValues()
+    {
         Map<String, List<RuleDataValue>> allEventsValues = Maps.newHashMap();
-        List<RuleEvent> events = new ArrayList<>(ruleEvents);
+        List<RuleEvent> events = new ArrayList<>( ruleEvents );
 
         if ( ruleEvent != null )
         {
@@ -275,21 +281,24 @@ public final class RuleVariableValueMapBuilder {
         return allEventsValues;
     }
 
-    private Map<String, RuleVariableValue> buildConstantsValues() {
+    private Map<String, RuleVariableValue> buildConstantsValues()
+    {
         Map<String, RuleVariableValue> valueMap = Maps.newHashMap();
 
-        for (Map.Entry<String, String> entrySet : allConstantValues.entrySet())
+        for ( Map.Entry<String, String> entrySet : allConstantValues.entrySet() )
         {
             valueMap.put( entrySet.getKey(), create( entrySet.getValue(), RuleValueType.NUMERIC ) );
         }
         return valueMap;
     }
 
-    private Map<String, RuleVariableValue> buildEnvironmentVariables() {
+    private Map<String, RuleVariableValue> buildEnvironmentVariables()
+    {
         Map<String, RuleVariableValue> valueMap = Maps.newHashMap();
-        String currentDate = dateFormat.format(new Date());
+        String currentDate = dateFormat.format( new Date() );
 
-        valueMap.put(ENV_VAR_CURRENT_DATE, create(currentDate, RuleValueType.TEXT, Arrays.asList(currentDate), currentDate));
+        valueMap.put( ENV_VAR_CURRENT_DATE,
+            create( currentDate, RuleValueType.TEXT, Arrays.asList( currentDate ), currentDate ) );
 
         if ( triggerEnvironment != null )
         {
@@ -363,16 +372,17 @@ public final class RuleVariableValueMapBuilder {
             valueMap.put( ENV_VAR_PROGRAM_STAGE_ID, create( programStageId, RuleValueType.TEXT ) );
 
             String programStageName = ruleEvent.programStageName();
-            valueMap.put(ENV_VAR_PROGRAM_STAGE_NAME, create(programStageName, RuleValueType.TEXT));
+            valueMap.put( ENV_VAR_PROGRAM_STAGE_NAME, create( programStageName, RuleValueType.TEXT ) );
 
             String organisationUnitCode = ruleEvent.organisationUnitCode();
-            valueMap.put(ENV_VAR_OU_CODE, create(organisationUnitCode, RuleValueType.TEXT));
+            valueMap.put( ENV_VAR_OU_CODE, create( organisationUnitCode, RuleValueType.TEXT ) );
         }
 
         return valueMap;
     }
 
-    private Map<String, RuleVariableValue> buildRuleVariableValues() {
+    private Map<String, RuleVariableValue> buildRuleVariableValues()
+    {
         Map<String, RuleVariableValue> valueMap = Maps.newHashMap();
 
         // map data values within all events to data elements
@@ -384,9 +394,11 @@ public final class RuleVariableValueMapBuilder {
         // build a map of current event values
         Map<String, RuleDataValue> currentEventValues = buildCurrentEventValues();
 
-        for (RuleVariable ruleVariable : ruleVariables) {
+        for ( RuleVariable ruleVariable : ruleVariables )
+        {
 
-            valueMap.putAll( ruleVariable.createValues( this, allEventValues, currentEnrollmentValues, currentEventValues ) );
+            valueMap.putAll(
+                ruleVariable.createValues( this, allEventValues, currentEnrollmentValues, currentEventValues ) );
         }
 
         return valueMap;

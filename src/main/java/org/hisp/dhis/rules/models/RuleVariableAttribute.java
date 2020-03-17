@@ -18,44 +18,49 @@ public abstract class RuleVariableAttribute
     extends RuleVariable
 {
 
-        @Nonnull
-        public abstract String trackedEntityAttribute();
+    @Nonnull
+    public static RuleVariableAttribute create( @Nonnull String name,
+        @Nonnull String attribute, @Nonnull RuleValueType attributeType )
+    {
+        return new AutoValue_RuleVariableAttribute( name, attribute, attributeType );
+    }
 
-        @Nonnull
-        public abstract RuleValueType trackedEntityAttributeType();
+    @Nonnull
+    public abstract String trackedEntityAttribute();
 
-        @Nonnull
-        public static RuleVariableAttribute create( @Nonnull String name,
-            @Nonnull String attribute, @Nonnull RuleValueType attributeType )
+    @Nonnull
+    public abstract RuleValueType trackedEntityAttributeType();
+
+    @Override
+    public Map<String, RuleVariableValue> createValues( RuleVariableValueMapBuilder builder,
+        Map<String, List<RuleDataValue>> allEventValues,
+        Map<String, RuleAttributeValue> currentEnrollmentValues,
+        Map<String, RuleDataValue> currentEventValues )
+    {
+        Map<String, RuleVariableValue> valueMap = Maps.newHashMap();
+
+        if ( builder.ruleEnrollment == null )
         {
-                return new AutoValue_RuleVariableAttribute( name, attribute, attributeType );
+            return valueMap;
         }
 
-        @Override
-        public Map<String, RuleVariableValue> createValues( RuleVariableValueMapBuilder builder,
-            Map<String, List<RuleDataValue>> allEventValues,
-            Map<String, RuleAttributeValue> currentEnrollmentValues,
-            Map<String, RuleDataValue> currentEventValues ) {
-                Map<String, RuleVariableValue> valueMap = Maps.newHashMap();
+        String currentDate = dateFormat.format( new Date() );
 
-                if (builder.ruleEnrollment == null) {
-                        return valueMap;
-                }
+        RuleVariableValue variableValue;
 
-                String currentDate = dateFormat.format(new Date());
-
-                RuleVariableValue variableValue;
-
-                if (currentEnrollmentValues.containsKey(this.trackedEntityAttribute())) {
-                        RuleAttributeValue value = currentEnrollmentValues
-                            .get(this.trackedEntityAttribute());
-                        variableValue = RuleVariableValue.create(value.value(), this.trackedEntityAttributeType(),
-                            Arrays.asList(value.value()), currentDate);
-                } else {
-                        variableValue = RuleVariableValue.create(this.trackedEntityAttributeType());
-                }
-
-                valueMap.put(this.name(), variableValue);
-                return valueMap;
+        if ( currentEnrollmentValues.containsKey( this.trackedEntityAttribute() ) )
+        {
+            RuleAttributeValue value = currentEnrollmentValues
+                .get( this.trackedEntityAttribute() );
+            variableValue = RuleVariableValue.create( value.value(), this.trackedEntityAttributeType(),
+                Arrays.asList( value.value() ), currentDate );
         }
+        else
+        {
+            variableValue = RuleVariableValue.create( this.trackedEntityAttributeType() );
+        }
+
+        valueMap.put( this.name(), variableValue );
+        return valueMap;
+    }
 }
