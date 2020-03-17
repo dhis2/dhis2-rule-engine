@@ -11,4 +11,5 @@ abstract class RuleVariableDataElement
 
     @Nonnull
     public abstract RuleValueType dataElementType();
+
 }

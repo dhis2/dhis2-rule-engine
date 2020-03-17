@@ -29,8 +29,17 @@ package org.hisp.dhis.rules.models;
  */
 
 import com.google.auto.value.AutoValue;
+import com.google.common.collect.Maps;
+import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.RuleVariableValueMapBuilder;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import static org.hisp.dhis.rules.Utils.dateFormat;
 
 /**
  * @Author Zubair Asghar.
@@ -52,4 +61,40 @@ public abstract class RuleVariableCalculatedValue
 
     @Nonnull
     public abstract RuleValueType calculatedValueType();
+
+    @Override
+    public Map<String, RuleVariableValue> createValues( RuleVariableValueMapBuilder builder,
+        Map<String, List<RuleDataValue>> allEventValues,
+        Map<String, RuleAttributeValue> currentEnrollmentValues,
+        Map<String, RuleDataValue> currentEventValues )
+    {
+        Map<String, RuleVariableValue> valueMap = Maps.newHashMap();
+        if ( builder.ruleEnrollment == null )
+        {
+            return valueMap;
+        }
+
+        RuleVariableValue variableValue;
+        if ( builder.calculatedValueMap.containsKey( builder.ruleEnrollment.enrollment() ) )
+        {
+            if ( builder.calculatedValueMap.get( builder.ruleEnrollment.enrollment() ).containsKey( this.name() ) )
+            {
+                String value = builder.calculatedValueMap.get( builder.ruleEnrollment.enrollment() ).get( this.name() );
+
+                variableValue = RuleVariableValue.create( value, this.calculatedValueType(),
+                    Arrays.asList( value ), dateFormat.format( new Date() ) );
+            }
+            else
+            {
+                variableValue = RuleVariableValue.create( this.calculatedValueType() );
+            }
+        }
+        else
+        {
+            variableValue = RuleVariableValue.create( this.calculatedValueType() );
+        }
+
+        valueMap.put( this.name(), variableValue );
+        return valueMap;
+    }
 }
