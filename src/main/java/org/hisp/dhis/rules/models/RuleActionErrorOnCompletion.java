@@ -21,7 +21,7 @@ public abstract class RuleActionErrorOnCompletion
                 " must not be null at the same time" );
         }
 
-        return new AutoValue_RuleActionErrorOnCompletion( content == null ? "" : content,
-            data == null ? "" : data, field == null ? "" : field );
+        return new AutoValue_RuleActionErrorOnCompletion( data == null ? "" : data, content == null ? "" : content,
+            field == null ? "" : field );
     }
 }

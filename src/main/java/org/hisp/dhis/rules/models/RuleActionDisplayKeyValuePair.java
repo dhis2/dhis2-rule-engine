@@ -19,8 +19,8 @@ public abstract class RuleActionDisplayKeyValuePair
             throw new IllegalArgumentException( "Both content and data must not be null" );
         }
 
-        return new AutoValue_RuleActionDisplayKeyValuePair( content == null ? "" : content,
-            data == null ? "" : data, LOCATION_FEEDBACK_WIDGET );
+        return new AutoValue_RuleActionDisplayKeyValuePair( data == null ? "" : data, content == null ? "" : content,
+            LOCATION_FEEDBACK_WIDGET );
     }
 
     @Nonnull
@@ -32,7 +32,7 @@ public abstract class RuleActionDisplayKeyValuePair
             throw new IllegalArgumentException( "Both content and data must not be null" );
         }
 
-        return new AutoValue_RuleActionDisplayKeyValuePair( content == null ? "" : content,
-            data == null ? "" : data, LOCATION_INDICATOR_WIDGET );
+        return new AutoValue_RuleActionDisplayKeyValuePair( data == null ? "" : data, content == null ? "" : content,
+            LOCATION_INDICATOR_WIDGET );
     }
 }

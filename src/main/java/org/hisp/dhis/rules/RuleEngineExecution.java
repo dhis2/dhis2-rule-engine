@@ -14,14 +14,7 @@ import org.hisp.dhis.rules.variables.ProgramRuleVariable;
 import org.hisp.dhis.rules.variables.Variable;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
 
@@ -154,7 +147,7 @@ class RuleEngineExecution
                         }
                         else
                         {
-                            ruleEffects.add( create( rule.actions().get( j ) ) );
+                            ruleEffects.add( ruleEffect );
                         }
                     }
                 }
@@ -209,50 +202,10 @@ class RuleEngineExecution
             valueMap.put( RuleExpression.unwrapVariableName( field ), variableValue );
             return RuleEffect.create( ruleAction, data );
         }
-        else if ( ruleAction instanceof RuleActionSendMessage )
+        else if ( ruleAction instanceof RuleActionData )
         {
             return RuleEffect.create( ruleAction, process(
-                ((RuleActionSendMessage) ruleAction).data() ) );
-        }
-        else if ( ruleAction instanceof RuleActionScheduleMessage )
-        {
-            return RuleEffect.create( ruleAction, process(
-                ((RuleActionScheduleMessage) ruleAction).data() ) );
-        }
-        else if ( ruleAction instanceof RuleActionCreateEvent )
-        {
-            return RuleEffect.create( ruleAction, process(
-                ((RuleActionCreateEvent) ruleAction).data() ) );
-        }
-        else if ( ruleAction instanceof RuleActionDisplayKeyValuePair )
-        {
-            return RuleEffect.create( ruleAction, process(
-                ((RuleActionDisplayKeyValuePair) ruleAction).data() ) );
-        }
-        else if ( ruleAction instanceof RuleActionDisplayText )
-        {
-            return RuleEffect.create( ruleAction, process(
-                ((RuleActionDisplayText) ruleAction).data() ) );
-        }
-        else if ( ruleAction instanceof RuleActionErrorOnCompletion )
-        {
-            return RuleEffect.create( ruleAction, process(
-                ((RuleActionErrorOnCompletion) ruleAction).data() ) );
-        }
-        else if ( ruleAction instanceof RuleActionShowError )
-        {
-            return RuleEffect.create( ruleAction,
-                process( ((RuleActionShowError) ruleAction).data() ) );
-        }
-        else if ( ruleAction instanceof RuleActionShowWarning )
-        {
-            return RuleEffect.create( ruleAction,
-                process( ((RuleActionShowWarning) ruleAction).data() ) );
-        }
-        else if ( ruleAction instanceof RuleActionWarningOnCompletion )
-        {
-            return RuleEffect.create( ruleAction,
-                process( ((RuleActionWarningOnCompletion) ruleAction).data() ) );
+                ((RuleActionData) ruleAction).data() ) );
         }
 
         return RuleEffect.create( ruleAction );

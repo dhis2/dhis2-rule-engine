@@ -19,7 +19,6 @@ public abstract class RuleActionShowError
             throw new IllegalArgumentException( "Both content and data must not be null" );
         }
 
-        return new AutoValue_RuleActionShowError( content == null ? "" : content,
-            data == null ? "" : data, field );
+        return new AutoValue_RuleActionShowError( data == null ? "" : data, content == null ? "" : content, field );
     }
 }
