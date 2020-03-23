@@ -21,7 +21,7 @@ public abstract class RuleActionWarningOnCompletion
                 " must not be null at the same time" );
         }
 
-        return new AutoValue_RuleActionWarningOnCompletion( content == null ? "" : content,
-            data == null ? "" : data, field == null ? "" : field );
+        return new AutoValue_RuleActionWarningOnCompletion( data == null ? "" : data, content == null ? "" : content,
+            field == null ? "" : field );
     }
 }
