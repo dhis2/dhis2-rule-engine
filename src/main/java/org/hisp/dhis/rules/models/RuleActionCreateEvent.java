@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 
 @AutoValue
 public abstract class RuleActionCreateEvent
-    extends RuleActionData
+    extends RuleAction
 {
 
     @Nonnull

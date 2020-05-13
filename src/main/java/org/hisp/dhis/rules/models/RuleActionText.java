@@ -3,7 +3,7 @@ package org.hisp.dhis.rules.models;
 import javax.annotation.Nonnull;
 
 abstract class RuleActionText
-    extends RuleActionData
+    extends RuleAction
 {
     public static final String LOCATION_FEEDBACK_WIDGET = "feedback";
 

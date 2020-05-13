@@ -67,30 +67,7 @@ public final class RuleEngine
     @Nonnull
     public Callable<List<RuleEffect>> evaluate( @Nonnull RuleEvent ruleEvent )
     {
-        if ( ruleEvent == null )
-        {
-            throw new IllegalArgumentException( "ruleEvent == null" );
-        }
-
-        for ( RuleEvent contextualEvent : ruleEvents )
-        {
-            if ( contextualEvent.event().equals( ruleEvent.event() ) )
-            {
-                throw new IllegalStateException( String.format( Locale.US, "Event '%s' is already " +
-                    "set as a part of execution context.", contextualEvent.event() ) );
-            }
-        }
-
-        Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEvent )
-            .ruleVariables( ruleEngineContext.ruleVariables() )
-            .ruleEnrollment( ruleEnrollment )
-            .triggerEnvironment( triggerEnvironment )
-            .ruleEvents( ruleEvents )
-            .calculatedValueMap( ruleEngineContext.calculatedValueMap() )
-            .constantValueMap( ruleEngineContext.constantsValues() )
-            .build();
-
-        return new RuleEngineExecution( ruleEngineContext.rules(), valueMap, ruleEngineContext.supplementaryData() );
+        return evaluate( ruleEvent, ruleEngineContext.rules() );
     }
 
     @Nonnull
@@ -99,15 +76,6 @@ public final class RuleEngine
         if ( ruleEvent == null )
         {
             throw new IllegalArgumentException( "ruleEvent == null" );
-        }
-
-        for ( RuleEvent contextualEvent : ruleEvents )
-        {
-            if ( contextualEvent.event().equals( ruleEvent.event() ) )
-            {
-                throw new IllegalStateException( String.format( Locale.US, "Event '%s' is already " +
-                    "set as a part of execution context.", contextualEvent.event() ) );
-            }
         }
 
         Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEvent )
@@ -131,16 +99,11 @@ public final class RuleEngine
             throw new IllegalArgumentException( "ruleEnrollment == null" );
         }
 
-        if ( this.ruleEnrollment != null )
-        {
-            throw new IllegalStateException( String.format( Locale.US, "Enrollment '%s' is already " +
-                "set as a part of execution context.", this.ruleEnrollment.enrollment() ) );
-        }
-
         Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEnrollment )
             .ruleVariables( ruleEngineContext.ruleVariables() )
             .triggerEnvironment( triggerEnvironment )
             .ruleEvents( ruleEvents )
+            .calculatedValueMap( ruleEngineContext.calculatedValueMap() )
             .constantValueMap( ruleEngineContext.constantsValues() )
             .build();
 
@@ -150,26 +113,7 @@ public final class RuleEngine
     @Nonnull
     public Callable<List<RuleEffect>> evaluate( @Nonnull RuleEnrollment ruleEnrollment )
     {
-        if ( ruleEnrollment == null )
-        {
-            throw new IllegalArgumentException( "ruleEnrollment == null" );
-        }
-
-        if ( this.ruleEnrollment != null )
-        {
-            throw new IllegalStateException( String.format( Locale.US, "Enrollment '%s' is already " +
-                "set as a part of execution context.", this.ruleEnrollment.enrollment() ) );
-        }
-
-        Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEnrollment )
-            .ruleVariables( ruleEngineContext.ruleVariables() )
-            .triggerEnvironment( triggerEnvironment )
-            .ruleEvents( ruleEvents )
-            .constantValueMap( ruleEngineContext.constantsValues() )
-            .build();
-
-        return new RuleEngineExecution( ruleEngineContext.rules(),
-            valueMap, ruleEngineContext.supplementaryData() );
+        return evaluate( ruleEnrollment, ruleEngineContext.rules() );
     }
 
     public static class Builder

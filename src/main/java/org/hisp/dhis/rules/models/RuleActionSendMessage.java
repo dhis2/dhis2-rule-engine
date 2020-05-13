@@ -39,7 +39,7 @@ import javax.annotation.Nullable;
 
 @AutoValue
 public abstract class RuleActionSendMessage
-    extends RuleActionData
+    extends RuleAction
 {
     @Nonnull
     public static RuleActionSendMessage create( @Nullable String notification, @Nullable String data )

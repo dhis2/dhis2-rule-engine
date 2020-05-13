@@ -134,8 +134,8 @@ class RuleEngineExecution
                         //Check if action is assigning value to calculated variable
                         if ( isAssignToCalculatedValue( action ) )
                         {
-                            RuleActionAssign ruleActionAssignVariable = (RuleActionAssign) action;
-                            updateValueMap( ruleActionAssignVariable.content(), RuleVariableValue.create( process( ruleActionAssignVariable.data() ), RuleValueType.TEXT ) );
+                            RuleActionAssign ruleActionAssign = (RuleActionAssign) action;
+                            updateValueMap( ruleActionAssign.content(), RuleVariableValue.create( process( ruleActionAssign.data() ), RuleValueType.TEXT ) );
                         }
                         else
                         {
@@ -191,10 +191,8 @@ class RuleEngineExecution
             String data = process( ruleActionAssign.data() );
             updateValueMap( ruleActionAssign.field(), RuleVariableValue.create( data, RuleValueType.TEXT ) );
             return RuleEffect.create( ruleAction, data );
-        } else if ( ruleAction instanceof RuleActionData ) {
-            return RuleEffect.create( ruleAction, process( ((RuleActionData)ruleAction).data() ) );
         }
 
-        return RuleEffect.create( ruleAction );
+        return RuleEffect.create( ruleAction, process( ruleAction.data() ) );
     }
 }

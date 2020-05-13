@@ -14,7 +14,7 @@ public abstract class RuleActionHideField
     public static RuleActionHideField create(
         @Nullable String content, @Nonnull String field )
     {
-        return new AutoValue_RuleActionHideField( content == null ? "" : content, field );
+        return new AutoValue_RuleActionHideField( "", content == null ? "" : content, field );
     }
 
     /**
