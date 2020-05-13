@@ -403,18 +403,4 @@ public final class RuleVariableValueMapBuilder
 
         return valueMap;
     }
-
-    private String getLastUpdateDate( List<RuleDataValue> ruleDataValues )
-    {
-        List<Date> dates = new ArrayList<>();
-        for ( RuleDataValue date : ruleDataValues )
-        {
-            Date d = date.eventDate();
-            if ( !d.after( new Date() ) )
-            {
-                dates.add( d );
-            }
-        }
-        return dateFormat.format( Collections.max( dates ) );
-    }
 }

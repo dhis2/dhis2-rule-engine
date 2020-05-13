@@ -69,13 +69,7 @@ class RuleEngineExecution
 
         .build();
 
-    private static final String TODAY = new Date().toString();
-
     private static final Log log = LogFactory.getLog( RuleEngineExecution.class );
-
-    private static final String REGEX = "[a-zA-Z0-9]+(?:[\\w -]*[a-zA-Z0-9]+)*";
-
-    private static final Pattern pattern = Pattern.compile( REGEX, Pattern.CASE_INSENSITIVE );
 
     @Nonnull
     private final Map<String, List<String>> supplementaryData;
@@ -126,23 +120,22 @@ class RuleEngineExecution
                 }
             }
         } );
-        for ( int i = 0; i < ruleList.size(); i++ )
+        for ( Rule rule : ruleList )
         {
-            Rule rule = ruleList.get( i );
             try
             {
                 log.debug( "Evaluating programrule: " + rule.name() );
-                // send org.hisp.dhis.rules.parser.expression to evaluator
+
                 if ( Boolean.valueOf( process( rule.condition() ) ) )
                 {
-                    // process each action for this rule
-                    for ( int j = 0; j < rule.actions().size(); j++ )
+
+                    for ( RuleAction action : rule.actions() )
                     {
-                        RuleEffect ruleEffect = create( rule.actions().get( j ) );
+                        RuleEffect ruleEffect = create( action );
                         //Check if action is assigning value to calculated variable
-                        if ( isAssignToCalculatedValue( rule.actions().get( j ) ) )
+                        if ( isAssignToCalculatedValue( action ) )
                         {
-                            updateValueMapForCalculatedValue( (RuleActionAssign) rule.actions().get( j ),
+                            updateValueMapForCalculatedValue( (RuleActionAssign) action,
                                 RuleVariableValue.create( ruleEffect.data(), RuleValueType.TEXT ) );
                         }
                         else
@@ -191,18 +184,7 @@ class RuleEngineExecution
     @Nonnull
     private RuleEffect create( @Nonnull RuleAction ruleAction )
     {
-        // Only certain types of actions might
-        // contain code to execute.
-        if ( ruleAction instanceof RuleActionAssign )
-        {
-            String data = process( ((RuleActionAssign) ruleAction).data() );
-            RuleVariableValue variableValue = RuleVariableValue.create( data, RuleValueType.TEXT, Arrays.asList( data ),
-                TODAY );
-            String field = ((RuleActionAssign) ruleAction).field();
-            valueMap.put( RuleExpression.unwrapVariableName( field ), variableValue );
-            return RuleEffect.create( ruleAction, data );
-        }
-        else if ( ruleAction instanceof RuleActionData )
+        if ( ruleAction instanceof RuleActionData )
         {
             return RuleEffect.create( ruleAction, process(
                 ((RuleActionData) ruleAction).data() ) );
