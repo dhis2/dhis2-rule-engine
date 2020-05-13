@@ -16,7 +16,6 @@ import org.hisp.dhis.rules.variables.Variable;
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.concurrent.Callable;
-import java.util.regex.Pattern;
 
 import static org.hisp.dhis.antlr.AntlrParserUtils.ANTLR_EXPRESSION_ITEMS;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.*;
@@ -120,27 +119,27 @@ class RuleEngineExecution
                 }
             }
         } );
+
         for ( Rule rule : ruleList )
         {
+            log.debug( "Evaluating programrule: " + rule.name() );
+
             try
             {
-                log.debug( "Evaluating programrule: " + rule.name() );
-
                 if ( Boolean.valueOf( process( rule.condition() ) ) )
                 {
-
                     for ( RuleAction action : rule.actions() )
                     {
-                        RuleEffect ruleEffect = create( action );
+
                         //Check if action is assigning value to calculated variable
                         if ( isAssignToCalculatedValue( action ) )
                         {
-                            updateValueMapForCalculatedValue( (RuleActionAssign) action,
-                                RuleVariableValue.create( ruleEffect.data(), RuleValueType.TEXT ) );
+                            RuleActionAssign ruleActionAssignVariable = (RuleActionAssign) action;
+                            updateValueMap( ruleActionAssignVariable.content(), RuleVariableValue.create( process( ruleActionAssignVariable.data() ), RuleValueType.TEXT ) );
                         }
                         else
                         {
-                            ruleEffects.add( ruleEffect );
+                            ruleEffects.add( create( action ) );
                         }
                     }
                 }
@@ -151,6 +150,7 @@ class RuleEngineExecution
                 log.error( "Exception in " + rule.name() + ": " + e.getMessage() );
             }
         }
+
         return ruleEffects;
     }
 
@@ -167,27 +167,32 @@ class RuleEngineExecution
             .withSupplementaryData( supplementaryData )
             .validateCommonProperties();
 
+
         return Parser.visit( condition, commonExpressionVisitor ).toString();
+
     }
 
     private Boolean isAssignToCalculatedValue( RuleAction ruleAction )
     {
-        return ruleAction instanceof RuleActionAssign && ((RuleActionAssign) ruleAction).field().isEmpty();
+        return ruleAction instanceof RuleActionAssign && ((RuleActionAssign)ruleAction).field().isEmpty() ;
     }
 
-    private void updateValueMapForCalculatedValue( RuleActionAssign ruleActionAssign, RuleVariableValue value )
+    private void updateValueMap( String variable, RuleVariableValue value )
     {
-        valueMap.put( RuleExpression.unwrapVariableName( ruleActionAssign.content() ),
-            value );
+        valueMap.put( RuleExpression.unwrapVariableName( variable ), value );
     }
 
     @Nonnull
     private RuleEffect create( @Nonnull RuleAction ruleAction )
     {
-        if ( ruleAction instanceof RuleActionData )
+        if ( ruleAction instanceof RuleActionAssign )
         {
-            return RuleEffect.create( ruleAction, process(
-                ((RuleActionData) ruleAction).data() ) );
+            RuleActionAssign ruleActionAssign = (RuleActionAssign) ruleAction;
+            String data = process( ruleActionAssign.data() );
+            updateValueMap( ruleActionAssign.field(), RuleVariableValue.create( data, RuleValueType.TEXT ) );
+            return RuleEffect.create( ruleAction, data );
+        } else if ( ruleAction instanceof RuleActionData ) {
+            return RuleEffect.create( ruleAction, process( ((RuleActionData)ruleAction).data() ) );
         }
 
         return RuleEffect.create( ruleAction );
