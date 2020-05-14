@@ -14,16 +14,8 @@ import org.hisp.dhis.rules.variables.ProgramRuleVariable;
 import org.hisp.dhis.rules.variables.Variable;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
-import java.util.regex.Pattern;
 
 import static org.hisp.dhis.antlr.AntlrParserUtils.ANTLR_EXPRESSION_ITEMS;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.*;
@@ -76,13 +68,7 @@ class RuleEngineExecution
 
         .build();
 
-    private static final String TODAY = new Date().toString();
-
     private static final Log log = LogFactory.getLog( RuleEngineExecution.class );
-
-    private static final String REGEX = "[a-zA-Z0-9]+(?:[\\w -]*[a-zA-Z0-9]+)*";
-
-    private static final Pattern pattern = Pattern.compile( REGEX, Pattern.CASE_INSENSITIVE );
 
     @Nonnull
     private final Map<String, List<String>> supplementaryData;
@@ -133,28 +119,27 @@ class RuleEngineExecution
                 }
             }
         } );
-        for ( int i = 0; i < ruleList.size(); i++ )
+
+        for ( Rule rule : ruleList )
         {
-            Rule rule = ruleList.get( i );
+            log.debug( "Evaluating programrule: " + rule.name() );
+
             try
             {
-                log.debug( "Evaluating programrule: " + rule.name() );
-                // send org.hisp.dhis.rules.parser.expression to evaluator
                 if ( Boolean.valueOf( process( rule.condition() ) ) )
                 {
-                    // process each action for this rule
-                    for ( int j = 0; j < rule.actions().size(); j++ )
+                    for ( RuleAction action : rule.actions() )
                     {
-                        RuleEffect ruleEffect = create( rule.actions().get( j ) );
+
                         //Check if action is assigning value to calculated variable
-                        if ( isAssignToCalculatedValue( rule.actions().get( j ) ) )
+                        if ( isAssignToCalculatedValue( action ) )
                         {
-                            updateValueMapForCalculatedValue( (RuleActionAssign) rule.actions().get( j ),
-                                RuleVariableValue.create( ruleEffect.data(), RuleValueType.TEXT ) );
+                            RuleActionAssign ruleActionAssign = (RuleActionAssign) action;
+                            updateValueMap( ruleActionAssign.content(), RuleVariableValue.create( process( ruleActionAssign.data() ), RuleValueType.TEXT ) );
                         }
                         else
                         {
-                            ruleEffects.add( create( rule.actions().get( j ) ) );
+                            ruleEffects.add( create( action ) );
                         }
                     }
                 }
@@ -165,6 +150,7 @@ class RuleEngineExecution
                 log.error( "Exception in " + rule.name() + ": " + e.getMessage() );
             }
         }
+
         return ruleEffects;
     }
 
@@ -181,80 +167,32 @@ class RuleEngineExecution
             .withSupplementaryData( supplementaryData )
             .validateCommonProperties();
 
+
         return Parser.visit( condition, commonExpressionVisitor ).toString();
+
     }
 
     private Boolean isAssignToCalculatedValue( RuleAction ruleAction )
     {
-        return ruleAction instanceof RuleActionAssign && ((RuleActionAssign) ruleAction).field().isEmpty();
+        return ruleAction instanceof RuleActionAssign && ((RuleActionAssign)ruleAction).field().isEmpty() ;
     }
 
-    private void updateValueMapForCalculatedValue( RuleActionAssign ruleActionAssign, RuleVariableValue value )
+    private void updateValueMap( String variable, RuleVariableValue value )
     {
-        valueMap.put( RuleExpression.unwrapVariableName( ruleActionAssign.content() ),
-            value );
+        valueMap.put( RuleExpression.unwrapVariableName( variable ), value );
     }
 
     @Nonnull
     private RuleEffect create( @Nonnull RuleAction ruleAction )
     {
-        // Only certain types of actions might
-        // contain code to execute.
         if ( ruleAction instanceof RuleActionAssign )
         {
-            String data = process( ((RuleActionAssign) ruleAction).data() );
-            RuleVariableValue variableValue = RuleVariableValue.create( data, RuleValueType.TEXT, Arrays.asList( data ),
-                TODAY );
-            String field = ((RuleActionAssign) ruleAction).field();
-            valueMap.put( RuleExpression.unwrapVariableName( field ), variableValue );
+            RuleActionAssign ruleActionAssign = (RuleActionAssign) ruleAction;
+            String data = process( ruleActionAssign.data() );
+            updateValueMap( ruleActionAssign.field(), RuleVariableValue.create( data, RuleValueType.TEXT ) );
             return RuleEffect.create( ruleAction, data );
         }
-        else if ( ruleAction instanceof RuleActionSendMessage )
-        {
-            return RuleEffect.create( ruleAction, process(
-                ((RuleActionSendMessage) ruleAction).data() ) );
-        }
-        else if ( ruleAction instanceof RuleActionScheduleMessage )
-        {
-            return RuleEffect.create( ruleAction, process(
-                ((RuleActionScheduleMessage) ruleAction).data() ) );
-        }
-        else if ( ruleAction instanceof RuleActionCreateEvent )
-        {
-            return RuleEffect.create( ruleAction, process(
-                ((RuleActionCreateEvent) ruleAction).data() ) );
-        }
-        else if ( ruleAction instanceof RuleActionDisplayKeyValuePair )
-        {
-            return RuleEffect.create( ruleAction, process(
-                ((RuleActionDisplayKeyValuePair) ruleAction).data() ) );
-        }
-        else if ( ruleAction instanceof RuleActionDisplayText )
-        {
-            return RuleEffect.create( ruleAction, process(
-                ((RuleActionDisplayText) ruleAction).data() ) );
-        }
-        else if ( ruleAction instanceof RuleActionErrorOnCompletion )
-        {
-            return RuleEffect.create( ruleAction, process(
-                ((RuleActionErrorOnCompletion) ruleAction).data() ) );
-        }
-        else if ( ruleAction instanceof RuleActionShowError )
-        {
-            return RuleEffect.create( ruleAction,
-                process( ((RuleActionShowError) ruleAction).data() ) );
-        }
-        else if ( ruleAction instanceof RuleActionShowWarning )
-        {
-            return RuleEffect.create( ruleAction,
-                process( ((RuleActionShowWarning) ruleAction).data() ) );
-        }
-        else if ( ruleAction instanceof RuleActionWarningOnCompletion )
-        {
-            return RuleEffect.create( ruleAction,
-                process( ((RuleActionWarningOnCompletion) ruleAction).data() ) );
-        }
 
-        return RuleEffect.create( ruleAction );
+        return RuleEffect.create( ruleAction, process( ruleAction.data() ) );
     }
 }

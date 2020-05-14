@@ -12,7 +12,7 @@ public abstract class RuleActionHideSection
     @Nonnull
     public static RuleActionHideSection create( @Nonnull String section )
     {
-        return new AutoValue_RuleActionHideSection( section );
+        return new AutoValue_RuleActionHideSection( "", section );
     }
 
     @Nonnull

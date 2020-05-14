@@ -14,7 +14,7 @@ public abstract class RuleActionShowOptionGroup
     public static RuleActionShowOptionGroup create(
         @Nullable String content, @Nonnull String optionGroup, @Nonnull String field )
     {
-        return new AutoValue_RuleActionShowOptionGroup( content == null ? "" : content, optionGroup, field );
+        return new AutoValue_RuleActionShowOptionGroup( "", content == null ? "" : content, optionGroup, field );
     }
 
     /**

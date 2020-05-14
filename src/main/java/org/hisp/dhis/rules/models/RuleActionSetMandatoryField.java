@@ -12,7 +12,7 @@ public abstract class RuleActionSetMandatoryField
     @Nonnull
     public static RuleActionSetMandatoryField create( @Nonnull String field )
     {
-        return new AutoValue_RuleActionSetMandatoryField( field );
+        return new AutoValue_RuleActionSetMandatoryField( "", field );
     }
 
     @Nonnull

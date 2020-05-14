@@ -28,6 +28,7 @@ package org.hisp.dhis.rules;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.google.common.collect.Maps;
 import org.hisp.dhis.rules.models.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -89,6 +90,74 @@ public class ConstantsValueTests
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
         assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "3.14" );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( assignAction );
+    }
+
+    @Test
+    public void assignValue()
+        throws Exception
+    {
+        RuleAction assignAction = RuleActionAssign.create( null, "4", "#{test_attribute}" );
+        RuleAction action = RuleActionShowError.create( null, "#{test_attribute}", "" );
+        org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
+            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1" );
+        org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule
+            .create( null, 1, "#{test_attribute} > 3", Arrays.asList( action ), "test_program_rule2" );
+
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule, rule2 ),
+            Maps.<String, String>newHashMap() );
+
+        RuleEnrollment enrollment = RuleEnrollment.builder()
+            .enrollment( "test_enrollment" )
+            .programName( "test_program" )
+            .incidentDate( new Date() )
+            .enrollmentDate( new Date() )
+            .status( RuleEnrollment.Status.ACTIVE )
+            .organisationUnit( "test_ou" )
+            .organisationUnitCode( "test_ou_code" )
+            .attributeValues( Arrays.asList( RuleAttributeValue.create( "test_attribute", "test_value" ) ) )
+            .build();
+
+        RuleEngine ruleEngine = ruleEngineBuilder.build();
+        List<RuleEffect> ruleEffects = ruleEngine.evaluate( enrollment ).call();
+
+        assertThat( ruleEffects.size() ).isEqualTo( 2 );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4.0" );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( assignAction );
+        assertThat( ruleEffects.get( 1 ).data() ).isEqualTo( "4.0" );
+        assertThat( ruleEffects.get( 1 ).ruleAction() ).isEqualTo( action );
+    }
+
+    @Test
+    public void assignValueThroughVariable()
+        throws Exception
+    {
+        RuleAction assignAction = RuleActionAssign.create( "#{test_attribute}", "4", null );
+        RuleAction action = RuleActionShowError.create( null, "#{test_attribute}", "" );
+        org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
+            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1" );
+        org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule
+            .create( null, 1, "#{test_attribute} > 3", Arrays.asList( action ), "test_program_rule2" );
+
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule, rule2 ),
+            Maps.<String, String>newHashMap() );
+
+        RuleEnrollment enrollment = RuleEnrollment.builder()
+            .enrollment( "test_enrollment" )
+            .programName( "test_program" )
+            .incidentDate( new Date() )
+            .enrollmentDate( new Date() )
+            .status( RuleEnrollment.Status.ACTIVE )
+            .organisationUnit( "test_ou" )
+            .organisationUnitCode( "test_ou_code" )
+            .attributeValues( Arrays.asList( RuleAttributeValue.create( "test_attribute", "test_value" ) ) )
+            .build();
+
+        RuleEngine ruleEngine = ruleEngineBuilder.build();
+        List<RuleEffect> ruleEffects = ruleEngine.evaluate( enrollment ).call();
+
+        assertThat( ruleEffects.size() ).isEqualTo( 1 );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4.0" );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( action );
     }
 
     @Test

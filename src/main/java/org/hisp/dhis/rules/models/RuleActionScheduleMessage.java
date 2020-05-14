@@ -43,13 +43,10 @@ public abstract class RuleActionScheduleMessage
     @Nonnull
     public static RuleActionScheduleMessage create( @Nullable String notification, @Nullable String data )
     {
-        return new AutoValue_RuleActionScheduleMessage( notification == null ? "" : notification,
-            data == null ? "" : data );
+        return new AutoValue_RuleActionScheduleMessage( data == null ? "" : data,
+            notification == null ? "" : notification );
     }
 
     @Nonnull
     public abstract String notification();
-
-    @Nonnull
-    public abstract String data();
 }

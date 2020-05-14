@@ -14,7 +14,7 @@ public abstract class RuleActionHideOption
     public static RuleActionHideOption create(
         @Nullable String content, @Nonnull String option, @Nonnull String field )
     {
-        return new AutoValue_RuleActionHideOption( content == null ? "" : content, option, field );
+        return new AutoValue_RuleActionHideOption( "", content == null ? "" : content, option, field );
     }
 
     /**

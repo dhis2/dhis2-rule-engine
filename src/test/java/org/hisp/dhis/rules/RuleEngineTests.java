@@ -114,18 +114,6 @@ public class RuleEngineTests
         ruleEngine.evaluate( ruleEvent );
     }
 
-    @Test( expected = IllegalStateException.class )
-    public void evaluateShouldThrowIfEnrollmentIsAlreadyInContext()
-    {
-        RuleEnrollment ruleEnrollment = mock( RuleEnrollment.class );
-
-        RuleEngine ruleEngine = ruleEngineContext.toEngineBuilder()
-            .enrollment( ruleEnrollment )
-            .build();
-
-        ruleEngine.evaluate( ruleEnrollment );
-    }
-
     @Test( expected = IllegalArgumentException.class )
     public void evaluateShouldThrowOnNullEnrollment()
     {

@@ -10,8 +10,5 @@ abstract class RuleActionMessage
     public abstract String content();
 
     @Nonnull
-    public abstract String data();
-
-    @Nonnull
     public abstract String field();
 }

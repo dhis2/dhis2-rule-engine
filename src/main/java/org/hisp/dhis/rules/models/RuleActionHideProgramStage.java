@@ -12,7 +12,7 @@ public abstract class RuleActionHideProgramStage
     @Nonnull
     public static RuleActionHideProgramStage create( @Nonnull String programStage )
     {
-        return new AutoValue_RuleActionHideProgramStage( programStage );
+        return new AutoValue_RuleActionHideProgramStage("", programStage );
     }
 
     @Nonnull

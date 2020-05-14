@@ -90,6 +90,10 @@ public class RuleFunctionLeftTests
     {
         RuleFunctionLeft leftFunction = new RuleFunctionLeft();
 
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "000" );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "2" );
+        MatcherAssert.assertThat( leftFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "00" ) );
+
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "abcdef" );
         when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "0" );
         MatcherAssert.assertThat( leftFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
