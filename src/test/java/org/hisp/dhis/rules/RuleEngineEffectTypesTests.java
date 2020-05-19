@@ -247,7 +247,7 @@ public class RuleEngineEffectTypesTests
     public void simpleConditionMustResultInHideOptionGroupEffect()
         throws Exception
     {
-        RuleAction ruleAction = RuleActionHideOptionGroup.create( "test_content", "test_option_group" );
+        RuleAction ruleAction = RuleActionHideOptionGroup.create( "test_content", "test_option_group", "field" );
         Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );

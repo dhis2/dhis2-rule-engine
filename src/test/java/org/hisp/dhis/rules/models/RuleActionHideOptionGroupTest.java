@@ -20,7 +20,7 @@ public class RuleActionHideOptionGroupTest
     public void createMustSubstituteEmptyStringIfArgumentsNull()
     {
         RuleActionHideOptionGroup ruleActionHideOptionGroup =
-            RuleActionHideOptionGroup.create( null, "test_option_group" );
+            RuleActionHideOptionGroup.create( null, "test_option_group", "field" );
 
         assertThat( ruleActionHideOptionGroup.content() ).isEqualTo( "" );
     }
@@ -29,13 +29,20 @@ public class RuleActionHideOptionGroupTest
     public void createMustThrowOnNullField()
     {
         thrown.expect( NullPointerException.class );
-        RuleActionHideOptionGroup.create( "test_content", null );
+        RuleActionHideOptionGroup.create( "test_content", null ,"field");
+    }
+
+    @Test
+    public void createMustThrowOnNullOptionGroup()
+    {
+        thrown.expect( NullPointerException.class );
+        RuleActionHideOptionGroup.create( "test_content", null ,"field");
     }
 
     @Test
     public void equalsAndHashCodeFunctionsMustConformContract()
     {
-        EqualsVerifier.forClass( RuleActionHideOptionGroup.create( "test_content", "test_option_group" ).getClass() )
+        EqualsVerifier.forClass( RuleActionHideOptionGroup.create( "test_content", "test_option_group", "field" ).getClass() )
             .suppress( Warning.NULL_FIELDS )
             .verify();
     }
