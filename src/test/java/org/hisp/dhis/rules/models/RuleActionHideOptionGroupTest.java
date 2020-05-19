@@ -29,7 +29,7 @@ public class RuleActionHideOptionGroupTest
     public void createMustThrowOnNullField()
     {
         thrown.expect( NullPointerException.class );
-        RuleActionHideOptionGroup.create( "test_content", null ,"field");
+        RuleActionHideOptionGroup.create( "test_content", "test_option_group" , null);
     }
 
     @Test
