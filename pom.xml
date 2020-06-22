@@ -45,12 +45,9 @@
             </snapshots>
         </repository>
         <repository>
-            <id>github</id>
-            <name>Antlr Expression Parser</name>
+            <id>githubAntlr</id>
+            <name>GitHub ANTLR Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/dhis2/dhis2-antlr-expression-parser</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
         </repository>
         <repository>
             <id>ossrh</id>
