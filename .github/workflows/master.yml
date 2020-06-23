@@ -14,12 +14,12 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.7
-#      - uses: actions/cache@v1
-#        with:
-#          path: ~/.m2/repository
-#          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-#          restore-keys: |
-#            ${{ runner.os }}-maven-
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       - name: Test
         run: mvn clean install -DskipTests=false --update-snapshots -q
 
