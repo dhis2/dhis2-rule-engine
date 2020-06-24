@@ -19,6 +19,8 @@ jobs:
             ${{ runner.os }}-maven-
       - name: Test
         run: mvn clean install -DskipTests=false --update-snapshots -q
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   artifact:
     name: Publish - Nexus
