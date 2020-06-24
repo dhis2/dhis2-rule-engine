@@ -38,3 +38,5 @@ jobs:
         with:
           nexus_username: ${{ secrets.nexus_username }}
           nexus_password: ${{ secrets.nexus_password }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
