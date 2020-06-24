@@ -179,7 +179,7 @@ class RuleEngineExecution
 
     private void updateValueMap( String variable, RuleVariableValue value )
     {
-        valueMap.put( RuleExpression.unwrapVariableName( variable ), value );
+        valueMap.put( variable, value );
     }
 
     @Nonnull
