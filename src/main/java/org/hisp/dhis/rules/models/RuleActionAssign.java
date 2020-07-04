@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nonnull;
@@ -24,8 +25,10 @@ public abstract class RuleActionAssign
     }
 
     @Nonnull
+    @JsonProperty( "content" )
     public abstract String content();
 
     @Nonnull
+    @JsonProperty( "field" )
     public abstract String field();
 }

@@ -28,6 +28,7 @@ package org.hisp.dhis.rules.models;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nonnull;
@@ -41,12 +42,14 @@ public abstract class RuleActionScheduleMessage
     extends RuleAction
 {
     @Nonnull
-    public static RuleActionScheduleMessage create( @Nullable String notification, @Nullable String data )
+    public static RuleActionScheduleMessage create( @Nullable String notification,
+                                                    @Nullable String data )
     {
         return new AutoValue_RuleActionScheduleMessage( data == null ? "" : data,
             notification == null ? "" : notification );
     }
 
     @Nonnull
+    @JsonProperty( "notification" )
     public abstract String notification();
 }
