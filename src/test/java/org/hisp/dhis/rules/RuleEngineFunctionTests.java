@@ -187,7 +187,6 @@ public class RuleEngineFunctionTests
             .rules( Arrays.asList( rule ) )
             .ruleVariables( Arrays.asList( ruleVariableOne ) )
             .supplementaryData( supplementaryData )
-            .calculatedValueMap( new HashMap<String, Map<String, String>>() )
             .constantsValue( new HashMap<String, String>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
             .build();
@@ -226,7 +225,6 @@ public class RuleEngineFunctionTests
             .rules( Arrays.asList( rule ) )
             .ruleVariables( Arrays.asList( ruleVariableOne ) )
             .supplementaryData( supplementaryData )
-            .calculatedValueMap( new HashMap<String, Map<String, String>>() )
             .constantsValue( new HashMap<String, String>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
             .build();
@@ -264,7 +262,6 @@ public class RuleEngineFunctionTests
             .rules( Arrays.asList( rule ) )
             .ruleVariables( Arrays.asList( ruleVariableOne ) )
             .supplementaryData( supplementaryData )
-            .calculatedValueMap( new HashMap<String, Map<String, String>>() )
             .constantsValue( new HashMap<String, String>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
             .build();
@@ -302,7 +299,6 @@ public class RuleEngineFunctionTests
             .rules( Arrays.asList( rule ) )
             .ruleVariables( Arrays.asList( ruleVariableOne ) )
             .supplementaryData( supplementaryData )
-            .calculatedValueMap( new HashMap<String, Map<String, String>>() )
             .constantsValue( new HashMap<String, String>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
             .build();
@@ -1346,7 +1342,6 @@ public class RuleEngineFunctionTests
             .builder()
             .rules( Arrays.asList( rule ) )
             .ruleVariables( ruleVariables )
-            .calculatedValueMap( new HashMap<String, Map<String, String>>() )
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( new HashMap<String, String>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );

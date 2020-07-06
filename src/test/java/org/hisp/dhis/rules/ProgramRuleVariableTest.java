@@ -348,7 +348,6 @@ public class ProgramRuleVariableTest
             .builder()
             .rules( rules )
             .ruleVariables( Arrays.<RuleVariable>asList() )
-            .calculatedValueMap( new HashMap<String, Map<String, String>>() )
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( new HashMap<String, String>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );

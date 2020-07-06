@@ -23,19 +23,14 @@ public final class RuleEngineContext
     private final Map<String, List<String>> supplementaryData;
 
     @Nonnull
-    private final Map<String, Map<String, String>> calculatedValueMap;
-
-    @Nonnull
     private final Map<String, String> constantsValues;
 
     RuleEngineContext( @Nonnull List<Rule> rules, @Nonnull List<RuleVariable> ruleVariables,
-        Map<String, List<String>> supplementaryData,
-        Map<String, Map<String, String>> calculatedValueMap, Map<String, String> constantsValues )
+        Map<String, List<String>> supplementaryData, Map<String, String> constantsValues )
     {
         this.rules = rules;
         this.ruleVariables = ruleVariables;
         this.supplementaryData = supplementaryData;
-        this.calculatedValueMap = calculatedValueMap;
         this.constantsValues = constantsValues;
     }
 
@@ -71,12 +66,6 @@ public final class RuleEngineContext
     }
 
     @Nonnull
-    public Map<String, Map<String, String>> calculatedValueMap()
-    {
-        return calculatedValueMap;
-    }
-
-    @Nonnull
     public Map<String, String> constantsValues()
     {
         return constantsValues;
@@ -99,9 +88,6 @@ public final class RuleEngineContext
 
         @Nullable
         private Map<String, List<String>> supplementaryData;
-
-        @Nullable
-        private Map<String, Map<String, String>> calculatedValueMap;
 
         @Nullable
         private Map<String, String> constantsValues;
@@ -149,14 +135,9 @@ public final class RuleEngineContext
             return this;
         }
 
-        @Nonnull
+        @Deprecated
         public Builder calculatedValueMap( Map<String, Map<String, String>> calculatedValueMap )
         {
-            if ( calculatedValueMap == null )
-            {
-                throw new IllegalArgumentException( "calculatedValueMap == null" );
-            }
-            this.calculatedValueMap = calculatedValueMap;
             return this;
         }
 
@@ -184,8 +165,7 @@ public final class RuleEngineContext
                 ruleVariables = unmodifiableList( new ArrayList<RuleVariable>() );
             }
 
-            return new RuleEngineContext( rules, ruleVariables, supplementaryData, calculatedValueMap,
-                constantsValues );
+            return new RuleEngineContext( rules, ruleVariables, supplementaryData, constantsValues );
         }
     }
 }
