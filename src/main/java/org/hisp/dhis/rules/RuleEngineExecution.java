@@ -168,8 +168,16 @@ class RuleEngineExecution
             .validateCommonProperties();
 
 
-        return Parser.visit( condition, commonExpressionVisitor ).toString();
+        return Parser.visit( condition, commonExpressionVisitor, !isOldAndroidVersion() ).toString();
 
+    }
+
+    private Boolean isOldAndroidVersion()
+    {
+        return valueMap.containsKey( "environment" ) &&
+                Objects.equals( valueMap.get( "environment" ).value(), TriggerEnvironment.ANDROIDCLIENT.getClientName() ) &&
+                supplementaryData.containsKey( "android_version" ) &&
+                Integer.parseInt( supplementaryData.get( "android_version" ).get( 0 ) ) < 21;
     }
 
     private Boolean isAssignToCalculatedValue( RuleAction ruleAction )
