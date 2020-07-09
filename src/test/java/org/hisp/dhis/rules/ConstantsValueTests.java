@@ -96,7 +96,7 @@ public class ConstantsValueTests
     public void assignValue()
         throws Exception
     {
-        RuleAction assignAction = RuleActionAssign.create( null, "4", "#{test_attribute}" );
+        RuleAction assignAction = RuleActionAssign.create( null, "4", "test_attribute" );
         RuleAction action = RuleActionShowError.create( null, "#{test_attribute}", "" );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
             .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1" );
@@ -131,7 +131,7 @@ public class ConstantsValueTests
     public void assignValueThroughVariable()
         throws Exception
     {
-        RuleAction assignAction = RuleActionAssign.create( "#{test_attribute}", "4", null );
+        RuleAction assignAction = RuleActionAssign.create( "test_attribute", "4", null );
         RuleAction action = RuleActionShowError.create( null, "#{test_attribute}", "" );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
             .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1" );
