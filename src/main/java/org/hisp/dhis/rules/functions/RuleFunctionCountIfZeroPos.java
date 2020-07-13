@@ -89,4 +89,10 @@ public class RuleFunctionCountIfZeroPos
             return "0";
         }
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return null;
+    }
 }

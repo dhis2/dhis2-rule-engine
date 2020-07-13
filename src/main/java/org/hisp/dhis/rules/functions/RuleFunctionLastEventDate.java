@@ -57,4 +57,10 @@ public class RuleFunctionLastEventDate
 
         return wrap( variableValue.eventDate() );
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return null;
+    }
 }

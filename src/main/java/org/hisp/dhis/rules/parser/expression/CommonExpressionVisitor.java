@@ -73,6 +73,26 @@ public class CommonExpressionVisitor
      */
     private Map<String, List<String>> supplementaryData = new HashMap<>();
 
+    /**
+     * Used to collect the string replacements to build a description.
+     */
+    private Map<String, String> itemDescriptions = new HashMap<>();
+
+    /**
+     * Default value for data type double.
+     */
+    public static final double DEFAULT_DOUBLE_VALUE = 1d;
+
+    /**
+     * Default value for data type date.
+     */
+    public static final String DEFAULT_DATE_VALUE = "2017-07-08";
+
+    /**
+     * Default value for data type boolean.
+     */
+    public static final boolean DEFAULT_BOOLEAN_VALUE = false;
+
     // -------------------------------------------------------------------------
     // Constructors
     // -------------------------------------------------------------------------
@@ -153,6 +173,11 @@ public class CommonExpressionVisitor
         return supplementaryData;
     }
 
+    public Map<String, String> getItemDescriptions()
+    {
+        return itemDescriptions;
+    }
+
     // -------------------------------------------------------------------------
     // Builder
     // -------------------------------------------------------------------------
@@ -190,6 +215,12 @@ public class CommonExpressionVisitor
         public Builder withSupplementaryData( Map<String, List<String>> supplementaryData )
         {
             this.visitor.supplementaryData = supplementaryData;
+            return this;
+        }
+
+        public Builder withIteamDescriptions( Map<String, String> iteamDescriptions )
+        {
+            this.visitor.itemDescriptions = iteamDescriptions;
             return this;
         }
 

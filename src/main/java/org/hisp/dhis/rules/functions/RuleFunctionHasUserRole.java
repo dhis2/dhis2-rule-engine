@@ -58,4 +58,10 @@ public class RuleFunctionHasUserRole
 
         return String.valueOf( roles != null ? roles.contains( visitor.castStringVisit( ctx.expr( 0 ) ) ) : "false" );
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return null;
+    }
 }

@@ -95,4 +95,10 @@ public class RuleFunctionCountIfValue
             valueToFind,
             visitor.getValueMap() );
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return null;
+    }
 }

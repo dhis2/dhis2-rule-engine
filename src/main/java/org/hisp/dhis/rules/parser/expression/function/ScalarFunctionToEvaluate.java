@@ -35,4 +35,6 @@ public abstract class ScalarFunctionToEvaluate
     {
         return evaluate( ctx, (CommonExpressionVisitor) visitor );
     }
+
+    public abstract Object getDescription(  ExprContext ctx, CommonExpressionVisitor visitor );
 }

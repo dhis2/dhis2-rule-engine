@@ -92,6 +92,12 @@ public abstract class RuleFunctionZScore
         return zScore;
     }
 
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return null;
+    }
+
     public abstract Map<ZScoreTableKey, Map<Float, Integer>> getTableForGirl();
 
     public abstract Map<ZScoreTableKey, Map<Float, Integer>> getTableForBoy();

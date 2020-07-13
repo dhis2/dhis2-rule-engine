@@ -14,4 +14,10 @@ public class RuleFunctionCeil
     {
         return String.valueOf( (long) Math.ceil( toDouble( visitor.castStringVisit( ctx.expr( 0 ) ), 0.0 ) ) );
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return null;
+    }
 }

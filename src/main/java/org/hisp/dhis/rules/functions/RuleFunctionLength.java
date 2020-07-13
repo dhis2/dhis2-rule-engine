@@ -44,4 +44,10 @@ public class RuleFunctionLength
     {
         return String.valueOf( visitor.castStringVisit( ctx.expr( 0 ) ).length() );
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return null;
+    }
 }

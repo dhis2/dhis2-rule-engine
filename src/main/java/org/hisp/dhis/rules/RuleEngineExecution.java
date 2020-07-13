@@ -168,9 +168,7 @@ class RuleEngineExecution
             .withSupplementaryData( supplementaryData )
             .validateCommonProperties();
 
-
         return Parser.visit( condition, commonExpressionVisitor, !isOldAndroidVersion() ).toString();
-
     }
 
     private Boolean isOldAndroidVersion()

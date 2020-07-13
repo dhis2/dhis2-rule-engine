@@ -37,4 +37,10 @@ public class RuleFunctionDaysBetween
             visitor.castStringVisit( ctx.expr( 0 ) ),
             visitor.castStringVisit( ctx.expr( 1 ) ) ) );
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return null;
+    }
 }

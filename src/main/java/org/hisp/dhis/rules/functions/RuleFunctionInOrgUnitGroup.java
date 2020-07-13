@@ -60,4 +60,10 @@ public class RuleFunctionInOrgUnitGroup
 
         return String.valueOf( members.contains( orgUnit ) );
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return null;
+    }
 }

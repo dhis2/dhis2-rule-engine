@@ -1,7 +1,7 @@
-package org.hisp.dhis.rules.functions;
+package org.hisp.dhis.rules.models;
 
 /*
- * Copyright (c) 2004-2018, University of Oslo
+ * Copyright (c) 2004-2020, University of Oslo
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,34 +28,50 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.apache.commons.lang3.StringUtils;
-import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
-
-import static org.hisp.dhis.antlr.AntlrParserUtils.castDouble;
-import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
-
 /**
- * @Author Zubair Asghar.
- * <p>
- * Evaluates to the part of a string specified by the start and end character number.
+ * @author Zubair Asghar
  */
-public class RuleFunctionSubString
-    extends ScalarFunctionToEvaluate
+public class RuleValidationResult
 {
-    @Override
-    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
+    private String description;
+    private boolean isValid;
+
+    public RuleValidationResult( String description, boolean isValid )
     {
-        String originalString = visitor.castStringVisit( ctx.expr( 0 ) );
-        return StringUtils.substring(
-            originalString == null ? "" : originalString,
-            castDouble( visitor.castStringVisit( ctx.expr( 1 ) ) ).intValue(),
-            castDouble( visitor.castStringVisit( ctx.expr( 2 ) ) ).intValue() );
+        this.description = description;
+        this.isValid = isValid;
     }
 
-    @Override
-    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    public String getDescription()
     {
-        return null;
+        return description;
+    }
+
+    public boolean isValid()
+    {
+        return isValid;
+    }
+
+    public static class Builder
+    {
+        private String description;
+        private boolean isValid;
+
+        public Builder description( String description )
+        {
+            this.description = description;
+            return this;
+        }
+
+        public Builder isValid( boolean isValid )
+        {
+            this.isValid = isValid;
+            return this;
+        }
+
+        public RuleValidationResult build()
+        {
+            return new RuleValidationResult( this.description, this.isValid );
+        }
     }
 }

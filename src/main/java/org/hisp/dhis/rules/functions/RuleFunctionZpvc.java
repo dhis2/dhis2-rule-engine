@@ -57,4 +57,10 @@ public class RuleFunctionZpvc
         }
         return String.valueOf( list.size() );
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return null;
+    }
 }

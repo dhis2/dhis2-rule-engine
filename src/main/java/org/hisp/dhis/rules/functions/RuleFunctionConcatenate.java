@@ -55,4 +55,10 @@ public class RuleFunctionConcatenate
 
         return builder.toString();
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return null;
+    }
 }

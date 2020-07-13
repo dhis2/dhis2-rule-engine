@@ -4,6 +4,7 @@ import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleEffect;
 import org.hisp.dhis.rules.models.RuleEnrollment;
 import org.hisp.dhis.rules.models.RuleEvent;
+import org.hisp.dhis.rules.models.RuleValidationResult;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
 
 import javax.annotation.Nonnull;
@@ -112,6 +113,12 @@ public final class RuleEngine
     public Callable<List<RuleEffect>> evaluate( @Nonnull RuleEnrollment ruleEnrollment )
     {
         return evaluate( ruleEnrollment, ruleEngineContext.rules() );
+    }
+
+    @Nonnull
+    public RuleValidationResult evaluate( String expression )
+    {
+        return null;
     }
 
     public static class Builder

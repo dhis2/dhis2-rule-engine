@@ -8,6 +8,7 @@ import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 import java.util.Map;
 
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
+import static org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor.DEFAULT_BOOLEAN_VALUE;
 
 public class RuleFunctionHasValue
     extends ScalarFunctionToEvaluate
@@ -26,5 +27,15 @@ public class RuleFunctionHasValue
         }
 
         return String.valueOf( valueMap.get( variableName ).value() != null );
+    }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        ctx
+
+        visitor.getItemDescriptions().put( ctx.getText(), "" );
+
+        return DEFAULT_BOOLEAN_VALUE;
     }
 }

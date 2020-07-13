@@ -49,4 +49,10 @@ public class RuleFunctionZing
 
         return value < 0 ? String.valueOf( 0 ) : argument;
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return null;
+    }
 }

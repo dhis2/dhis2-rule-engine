@@ -68,4 +68,10 @@ public class RuleFunctionSplit
 
         return "";
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return null;
+    }
 }

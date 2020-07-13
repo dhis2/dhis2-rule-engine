@@ -25,4 +25,10 @@ public class ProgramRuleCustomVariable
 
         return variable;
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return null;
+    }
 }

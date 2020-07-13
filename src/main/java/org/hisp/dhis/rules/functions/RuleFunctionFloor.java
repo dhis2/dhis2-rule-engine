@@ -14,4 +14,10 @@ public class RuleFunctionFloor
     {
         return String.valueOf( (long) Math.floor( toDouble( visitor.castStringVisit( ctx.expr( 0 ) ), 0.0 ) ) );
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return null;
+    }
 }

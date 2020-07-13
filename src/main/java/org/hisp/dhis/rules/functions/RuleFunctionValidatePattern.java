@@ -57,4 +57,10 @@ public class RuleFunctionValidatePattern
 
         return wrap( String.valueOf( matcher.matches() ) );
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return null;
+    }
 }
