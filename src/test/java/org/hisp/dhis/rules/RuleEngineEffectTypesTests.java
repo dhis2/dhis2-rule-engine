@@ -132,7 +132,6 @@ public class RuleEngineEffectTypesTests
         RuleEngine ruleEngine = RuleEngineContext
             .builder()
             .rules( Arrays.asList( rule, rule2 ) )
-            .calculatedValueMap( new HashMap<String, Map<String, String>>() )
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( new HashMap<String, String>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
@@ -331,7 +330,6 @@ public class RuleEngineEffectTypesTests
         return RuleEngineContext
             .builder()
             .rules( Arrays.asList( rule ) )
-            .calculatedValueMap( new HashMap<String, Map<String, String>>() )
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( new HashMap<String, String>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )

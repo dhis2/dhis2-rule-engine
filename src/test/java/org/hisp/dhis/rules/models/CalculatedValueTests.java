@@ -54,17 +54,6 @@ import static org.mockito.Mockito.mock;
 @RunWith( JUnit4.class )
 public class CalculatedValueTests
 {
-    @Test( expected = IllegalArgumentException.class )
-    public void shouldThrowExceptionIfCalculatedValueMapIsNull()
-    {
-        RuleEngineContext.builder()
-            .ruleVariables( Arrays.asList( mock( RuleVariable.class ) ) )
-            .supplementaryData( new HashMap<String, List<String>>() )
-            .calculatedValueMap( null )
-            .rules( Arrays.asList( mock( org.hisp.dhis.rules.models.Rule.class ) ) )
-            .build();
-    }
-
     @Test
     public void evaluateTenThousandRulesTest()
         throws Exception
@@ -138,23 +127,11 @@ public class CalculatedValueTests
                 new Date(), "test_program_stage", "test_data_element", "test_value" ) ) )
             .build();
 
-        Map<String, Map<String, String>> calculatedValueMap = new HashMap<>();
-        Map<String, String> valueMap = new HashMap<>();
-        valueMap.put( "test_calculated_value", "4" );
-        calculatedValueMap.put( enrollment.enrollment(), valueMap );
-
-        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Lists.newArrayList( rule2 ), calculatedValueMap );
-        RuleEngine ruleEngine = ruleEngineBuilder.enrollment( enrollment ).build();
+        RuleEngine ruleEngine = getRuleEngine( Arrays.asList( rule, rule2 ) ).enrollment( enrollment ).build();
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
         assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4.0" );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( sendMessageAction );
-
-        RuleEngine ruleEngine2 = getRuleEngine( Arrays.asList( rule, rule2 ) ).enrollment( enrollment ).build();
-        List<RuleEffect> ruleEffects2 = ruleEngine2.evaluate( ruleEvent ).call();
-
-        assertThat( ruleEffects2.get( 0 ).data() ).isEqualTo( "4.0" );
-        assertThat( ruleEffects2.get( 0 ).ruleAction() ).isEqualTo( sendMessageAction );
     }
 
     private List<org.hisp.dhis.rules.models.Rule> createRules( int i )
@@ -228,28 +205,10 @@ public class CalculatedValueTests
         RuleVariable ruleVariable = RuleVariableCalculatedValue
             .create( "test_calculated_value", "", RuleValueType.TEXT );
 
-        Map<String, Map<String, String>> calculatedValueMap = new HashMap<>();
-
         return RuleEngineContext
             .builder()
             .rules( rules )
             .ruleVariables( Arrays.asList( ruleVariable ) )
-            .calculatedValueMap( calculatedValueMap )
-            .supplementaryData( new HashMap<String, List<String>>() )
-            .constantsValue( new HashMap<String, String>() )
-            .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );
-    }
-
-    private RuleEngine.Builder getRuleEngine( List<org.hisp.dhis.rules.models.Rule> rules, Map<String, Map<String, String>> calculatedValueMap )
-    {
-        RuleVariable ruleVariable = RuleVariableCalculatedValue
-            .create( "test_calculated_value", "", RuleValueType.TEXT );
-
-        return RuleEngineContext
-            .builder()
-            .rules( rules )
-            .ruleVariables( Arrays.asList( ruleVariable ) )
-            .calculatedValueMap( calculatedValueMap )
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( new HashMap<String, String>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );

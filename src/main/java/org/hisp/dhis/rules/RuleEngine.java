@@ -83,7 +83,6 @@ public final class RuleEngine
             .ruleEnrollment( ruleEnrollment )
             .triggerEnvironment( triggerEnvironment )
             .ruleEvents( ruleEvents )
-            .calculatedValueMap( ruleEngineContext.calculatedValueMap() )
             .constantValueMap( ruleEngineContext.constantsValues() )
             .build();
 
@@ -103,7 +102,6 @@ public final class RuleEngine
             .ruleVariables( ruleEngineContext.ruleVariables() )
             .triggerEnvironment( triggerEnvironment )
             .ruleEvents( ruleEvents )
-            .calculatedValueMap( ruleEngineContext.calculatedValueMap() )
             .constantValueMap( ruleEngineContext.constantsValues() )
             .build();
 

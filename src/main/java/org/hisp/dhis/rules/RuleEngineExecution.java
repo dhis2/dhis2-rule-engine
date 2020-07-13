@@ -160,6 +160,7 @@ class RuleEngineExecution
         {
             return "";
         }
+
         CommonExpressionVisitor commonExpressionVisitor = CommonExpressionVisitor.newBuilder()
             .withFunctionMap( FUNCTIONS )
             .withVariablesMap( valueMap )

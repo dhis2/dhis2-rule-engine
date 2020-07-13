@@ -55,9 +55,6 @@ public final class RuleVariableValueMapBuilder
     public final SimpleDateFormat dateFormat;
 
     @Nonnull
-    public final Map<String, Map<String, String>> calculatedValueMap;
-
-    @Nonnull
     private final Map<String, String> allConstantValues;
 
     @Nonnull
@@ -82,7 +79,6 @@ public final class RuleVariableValueMapBuilder
         // collections used for construction of resulting variable value map
         this.ruleVariables = new ArrayList<>();
         this.ruleEvents = new ArrayList<>();
-        this.calculatedValueMap = new HashMap<>();
         this.allConstantValues = new HashMap<>();
     }
 
@@ -156,13 +152,6 @@ public final class RuleVariableValueMapBuilder
         }
 
         this.ruleEvents.addAll( ruleEvents );
-        return this;
-    }
-
-    @Nonnull
-    RuleVariableValueMapBuilder calculatedValueMap( @Nonnull Map<String, Map<String, String>> calculatedValueMap )
-    {
-        this.calculatedValueMap.putAll( calculatedValueMap );
         return this;
     }
 

@@ -12,7 +12,7 @@ public abstract class RuleActionHideOptionGroup
 
     @Nonnull
     public static RuleActionHideOptionGroup create(
-        @Nullable String content, @Nonnull String optionGroup, @Nonnull String field )
+        @Nullable String content, @Nonnull String optionGroup, @Nonnull String field  )
     {
         return new AutoValue_RuleActionHideOptionGroup( "", content == null ? "" : content, optionGroup, field );
     }

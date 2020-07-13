@@ -69,32 +69,8 @@ public abstract class RuleVariableCalculatedValue
         Map<String, RuleDataValue> currentEventValues )
     {
         Map<String, RuleVariableValue> valueMap = Maps.newHashMap();
-        if ( builder.ruleEnrollment == null )
-        {
-            return valueMap;
-        }
 
-        RuleVariableValue variableValue;
-        if ( builder.calculatedValueMap.containsKey( builder.ruleEnrollment.enrollment() ) )
-        {
-            if ( builder.calculatedValueMap.get( builder.ruleEnrollment.enrollment() ).containsKey( this.name() ) )
-            {
-                String value = builder.calculatedValueMap.get( builder.ruleEnrollment.enrollment() ).get( this.name() );
-
-                variableValue = RuleVariableValue.create( value, this.calculatedValueType(),
-                    Arrays.asList( value ), dateFormat.format( new Date() ) );
-            }
-            else
-            {
-                variableValue = RuleVariableValue.create( this.calculatedValueType() );
-            }
-        }
-        else
-        {
-            variableValue = RuleVariableValue.create( this.calculatedValueType() );
-        }
-
-        valueMap.put( this.name(), variableValue );
+        valueMap.put( this.name(), RuleVariableValue.create( this.calculatedValueType() ) );
         return valueMap;
     }
 }
