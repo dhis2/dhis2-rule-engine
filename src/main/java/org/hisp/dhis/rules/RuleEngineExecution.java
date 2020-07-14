@@ -5,6 +5,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.dhis.antlr.AntlrExprItem;
 import org.hisp.dhis.antlr.Parser;
+import org.hisp.dhis.antlr.operator.AntlrOperatorCompareEqual;
+import org.hisp.dhis.antlr.operator.AntlrOperatorLogicalOr;
 import org.hisp.dhis.rules.functions.*;
 import org.hisp.dhis.rules.models.*;
 import org.hisp.dhis.rules.operators.OperatorCompareGreaterThan;
@@ -35,6 +37,7 @@ import java.util.concurrent.Callable;
 
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.*;
 import static org.hisp.dhis.rules.parser.expression.ParserUtils.FUNCTION_EVALUATE;
+import static org.hisp.dhis.antlr.AntlrParserUtils.ANTLR_EXPRESSION_ITEMS;
 
 class RuleEngineExecution
     implements Callable<List<RuleEffect>>
@@ -80,26 +83,7 @@ class RuleEngineExecution
         .put( X_BRACE, new ProgramRuleCustomVariable() )
 
         // Common ANTLR operators
-        .put( EQ, new OperatorCompareEqual() )
-        .put( OR, new OperatorLogicalOr() )
-        .put( VERTICAL_BAR_2, new OperatorLogicalOr() )
-        .put( AND, new OperatorLogicalAnd() )
-        .put( AMPERSAND_2, new OperatorLogicalAnd() )
-        .put( PAREN, new OperatorGroupingParentheses() )
-        .put( PLUS, new OperatorMathPlus() )
-        .put( MINUS, new OperatorMathMinus() )
-        .put( POWER, new OperatorMathPower() )
-        .put( MUL, new OperatorMathMultiply() )
-        .put( DIV, new OperatorMathDivide() )
-        .put( MOD, new OperatorMathModulus() )
-        .put( NOT, new OperatorLogicalNot() )
-        .put( EXCLAMATION_POINT, new OperatorLogicalNot() )
-        .put( NE, new OperatorCompareNotEqual() )
-        .put( GT, new OperatorCompareGreaterThan() )
-        .put( LT, new OperatorCompareLessThan() )
-        .put( GEQ, new OperatorCompareGreaterThanOrEqual() )
-        .put( LEQ, new OperatorCompareLessThanOrEqual() )
-
+        .putAll( ANTLR_EXPRESSION_ITEMS  )
         .build();
 
     private static final Log log = LogFactory.getLog( RuleEngineExecution.class );
