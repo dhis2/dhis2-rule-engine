@@ -29,8 +29,6 @@ package org.hisp.dhis.rules.parser.expression;
  */
 
 import org.hisp.dhis.antlr.AntlrExprItem;
-import org.hisp.dhis.rules.parser.expression.function.ExpressionItem;
-import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
@@ -47,5 +45,5 @@ public interface ExprFunctionMethod
      * @param ctx      the org.hisp.dhis.rules.parser.expression context
      * @return the function result
      */
-    Object apply( ExpressionItem function, ExprContext ctx, CommonExpressionVisitor visitor );
+    Object apply( AntlrExprItem function, ExprContext ctx, CommonExpressionVisitor visitor );
 }

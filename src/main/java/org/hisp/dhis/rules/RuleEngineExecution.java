@@ -3,6 +3,7 @@ package org.hisp.dhis.rules;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hisp.dhis.antlr.AntlrExprItem;
 import org.hisp.dhis.antlr.Parser;
 import org.hisp.dhis.rules.functions.*;
 import org.hisp.dhis.rules.models.*;
@@ -23,7 +24,6 @@ import org.hisp.dhis.rules.operators.OperatorMathMultiply;
 import org.hisp.dhis.rules.operators.OperatorMathPlus;
 import org.hisp.dhis.rules.operators.OperatorMathPower;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.rules.parser.expression.function.ExpressionItem;
 import org.hisp.dhis.rules.variables.ProgramRuleConstant;
 import org.hisp.dhis.rules.variables.ProgramRuleCustomVariable;
 import org.hisp.dhis.rules.variables.ProgramRuleVariable;
@@ -39,7 +39,7 @@ import static org.hisp.dhis.rules.parser.expression.ParserUtils.FUNCTION_EVALUAT
 class RuleEngineExecution
     implements Callable<List<RuleEffect>>
 {
-    public final static ImmutableMap<Integer, ExpressionItem> FUNCTIONS = ImmutableMap.<Integer, ExpressionItem>builder()
+    public final static ImmutableMap<Integer, AntlrExprItem> FUNCTIONS = ImmutableMap.<Integer, AntlrExprItem>builder()
 
         .put( D2_CEIL, new RuleFunctionCeil() )
         .put( D2_ADD_DAYS, new RuleFunctionAddDays() )
@@ -99,7 +99,6 @@ class RuleEngineExecution
         .put( LT, new OperatorCompareLessThan() )
         .put( GEQ, new OperatorCompareGreaterThanOrEqual() )
         .put( LEQ, new OperatorCompareLessThanOrEqual() )
-
 
         .build();
 

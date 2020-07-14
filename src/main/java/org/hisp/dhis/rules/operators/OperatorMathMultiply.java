@@ -28,12 +28,13 @@ package org.hisp.dhis.rules.operators;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hisp.dhis.antlr.AntlrExprItem;
 import org.hisp.dhis.antlr.operator.AntlrOperatorMathMultiply;
-import org.hisp.dhis.rules.parser.expression.function.ExpressionItem;
 
 /**
  * @author Zubair Asghar
  */
-public class OperatorMathMultiply extends AntlrOperatorMathMultiply implements ExpressionItem
+public class OperatorMathMultiply extends AntlrOperatorMathMultiply
+    implements AntlrExprItem
 {
 }

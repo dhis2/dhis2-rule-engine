@@ -34,8 +34,6 @@ import org.hisp.dhis.antlr.AntlrExpressionVisitor;
 import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 import org.hisp.dhis.rules.RuleVariableValue;
-import org.hisp.dhis.rules.parser.expression.function.ExpressionItem;
-import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +51,7 @@ public class CommonExpressionVisitor
     /**
      * Map of ExprFunction instances to call for each org.hisp.dhis.rules.parser.expression function
      */
-    private Map<Integer, ExpressionItem> itemMap;
+    private Map<Integer, AntlrExprItem> itemMap;
 
     /**
      * Method to call within the ExprFunction instance
@@ -123,7 +121,7 @@ public class CommonExpressionVisitor
 
         if ( ctx.it != null )
         {
-            ExpressionItem item = itemMap.get( ctx.it.getType() );
+            AntlrExprItem item = itemMap.get( ctx.it.getType() );
 
             if ( item == null )
             {
@@ -196,7 +194,7 @@ public class CommonExpressionVisitor
             this.visitor = new CommonExpressionVisitor();
         }
 
-        public Builder withFunctionMap( Map<Integer, ExpressionItem> functionMap )
+        public Builder withFunctionMap( Map<Integer, AntlrExprItem> functionMap )
         {
             this.visitor.itemMap = functionMap;
             return this;

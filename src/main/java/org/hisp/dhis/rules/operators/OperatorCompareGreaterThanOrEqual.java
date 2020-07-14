@@ -28,13 +28,13 @@ package org.hisp.dhis.rules.operators;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hisp.dhis.antlr.AntlrExprItem;
 import org.hisp.dhis.antlr.operator.AntlrOperatorCompareGreaterThanOrEqual;
-import org.hisp.dhis.rules.parser.expression.function.ExpressionItem;
 
 /**
  * @author Zubair Asghar
  */
 public class OperatorCompareGreaterThanOrEqual extends AntlrOperatorCompareGreaterThanOrEqual
-    implements ExpressionItem
+    implements AntlrExprItem
 {
 }

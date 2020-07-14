@@ -28,12 +28,13 @@ package org.hisp.dhis.rules.operators;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hisp.dhis.antlr.AntlrExprItem;
 import org.hisp.dhis.antlr.operator.AntlrOperatorGroupingParentheses;
-import org.hisp.dhis.rules.parser.expression.function.ExpressionItem;
 
 /**
  * @author Zubair Asghar
  */
-public class OperatorGroupingParentheses extends AntlrOperatorGroupingParentheses implements ExpressionItem
+public class OperatorGroupingParentheses extends AntlrOperatorGroupingParentheses
+    implements AntlrExprItem
 {
 }

@@ -28,8 +28,8 @@ package org.hisp.dhis.rules.parser.expression;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hisp.dhis.antlr.AntlrExprItem;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
-import org.hisp.dhis.rules.parser.expression.function.ExpressionItem;
 import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
 /**
@@ -40,7 +40,7 @@ public class ParserUtils
     public final static ExprFunctionMethod FUNCTION_EVALUATE = new ExprFunctionMethod()
     {
         @Override
-        public Object apply( ExpressionItem item, ExpressionParser.ExprContext exprContext,
+        public Object apply( AntlrExprItem item, ExpressionParser.ExprContext exprContext,
                             CommonExpressionVisitor antlrExpressionVisitor )
         {
             return item.evaluate( exprContext, antlrExpressionVisitor );
@@ -50,7 +50,7 @@ public class ParserUtils
     public final static ExprFunctionMethod FUNCTION_GET_DESCRIPTION = new ExprFunctionMethod()
     {
         @Override
-        public Object apply( ExpressionItem item, ExpressionParser.ExprContext exprContext,
+        public Object apply( AntlrExprItem item, ExpressionParser.ExprContext exprContext,
                              CommonExpressionVisitor antlrExpressionVisitor )
         {
             return ((ScalarFunctionToEvaluate)item).getDescription( exprContext, antlrExpressionVisitor );
