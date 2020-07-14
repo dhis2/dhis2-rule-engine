@@ -1,6 +1,5 @@
 package org.hisp.dhis.rules;
 
-import com.google.common.collect.Maps;
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleVariable;
 
