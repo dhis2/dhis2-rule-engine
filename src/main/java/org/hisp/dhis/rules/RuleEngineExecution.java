@@ -3,11 +3,27 @@ package org.hisp.dhis.rules;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hisp.dhis.antlr.AntlrExprItem;
 import org.hisp.dhis.antlr.Parser;
 import org.hisp.dhis.rules.functions.*;
 import org.hisp.dhis.rules.models.*;
+import org.hisp.dhis.rules.operators.OperatorCompareGreaterThan;
+import org.hisp.dhis.rules.operators.OperatorCompareGreaterThanOrEqual;
+import org.hisp.dhis.rules.operators.OperatorCompareLessThan;
+import org.hisp.dhis.rules.operators.OperatorCompareLessThanOrEqual;
+import org.hisp.dhis.rules.operators.OperatorCompareNotEqual;
+import org.hisp.dhis.rules.operators.OperatorGroupingParentheses;
+import org.hisp.dhis.rules.operators.OperatorLogicalAnd;
+import org.hisp.dhis.rules.operators.OperatorLogicalNot;
+import org.hisp.dhis.rules.operators.OperatorLogicalOr;
+import org.hisp.dhis.rules.operators.OperatorCompareEqual;
+import org.hisp.dhis.rules.operators.OperatorMathDivide;
+import org.hisp.dhis.rules.operators.OperatorMathMinus;
+import org.hisp.dhis.rules.operators.OperatorMathModulus;
+import org.hisp.dhis.rules.operators.OperatorMathMultiply;
+import org.hisp.dhis.rules.operators.OperatorMathPlus;
+import org.hisp.dhis.rules.operators.OperatorMathPower;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.parser.expression.function.ExpressionItem;
 import org.hisp.dhis.rules.variables.ProgramRuleConstant;
 import org.hisp.dhis.rules.variables.ProgramRuleCustomVariable;
 import org.hisp.dhis.rules.variables.ProgramRuleVariable;
@@ -17,14 +33,13 @@ import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.concurrent.Callable;
 
-import static org.hisp.dhis.antlr.AntlrParserUtils.ANTLR_EXPRESSION_ITEMS;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.*;
 import static org.hisp.dhis.rules.parser.expression.ParserUtils.FUNCTION_EVALUATE;
 
 class RuleEngineExecution
     implements Callable<List<RuleEffect>>
 {
-    public final static ImmutableMap<Integer, AntlrExprItem> FUNCTIONS = ImmutableMap.<Integer, AntlrExprItem>builder()
+    public final static ImmutableMap<Integer, ExpressionItem> FUNCTIONS = ImmutableMap.<Integer, ExpressionItem>builder()
 
         .put( D2_CEIL, new RuleFunctionCeil() )
         .put( D2_ADD_DAYS, new RuleFunctionAddDays() )
@@ -64,7 +79,27 @@ class RuleEngineExecution
         .put( A_BRACE, new Variable() )
         .put( X_BRACE, new ProgramRuleCustomVariable() )
 
-        .putAll( ANTLR_EXPRESSION_ITEMS )
+        // Common ANTLR operators
+        .put( EQ, new OperatorCompareEqual() )
+        .put( OR, new OperatorLogicalOr() )
+        .put( VERTICAL_BAR_2, new OperatorLogicalOr() )
+        .put( AND, new OperatorLogicalAnd() )
+        .put( AMPERSAND_2, new OperatorLogicalAnd() )
+        .put( PAREN, new OperatorGroupingParentheses() )
+        .put( PLUS, new OperatorMathPlus() )
+        .put( MINUS, new OperatorMathMinus() )
+        .put( POWER, new OperatorMathPower() )
+        .put( MUL, new OperatorMathMultiply() )
+        .put( DIV, new OperatorMathDivide() )
+        .put( MOD, new OperatorMathModulus() )
+        .put( NOT, new OperatorLogicalNot() )
+        .put( EXCLAMATION_POINT, new OperatorLogicalNot() )
+        .put( NE, new OperatorCompareNotEqual() )
+        .put( GT, new OperatorCompareGreaterThan() )
+        .put( LT, new OperatorCompareLessThan() )
+        .put( GEQ, new OperatorCompareGreaterThanOrEqual() )
+        .put( LEQ, new OperatorCompareLessThanOrEqual() )
+
 
         .build();
 
@@ -163,8 +198,8 @@ class RuleEngineExecution
 
         CommonExpressionVisitor commonExpressionVisitor = CommonExpressionVisitor.newBuilder()
             .withFunctionMap( FUNCTIONS )
-            .withVariablesMap( valueMap )
             .withFunctionMethod( FUNCTION_EVALUATE )
+            .withVariablesMap( valueMap )
             .withSupplementaryData( supplementaryData )
             .validateCommonProperties();
 

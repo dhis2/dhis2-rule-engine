@@ -32,10 +32,6 @@ public class RuleFunctionHasValue
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        ctx
-
-        visitor.getItemDescriptions().put( ctx.getText(), "" );
-
         return DEFAULT_BOOLEAN_VALUE;
     }
 }

@@ -1,7 +1,7 @@
-package org.hisp.dhis.rules.parser.expression;
+package org.hisp.dhis.rules.operators;
 
 /*
- * Copyright (c) 2004-2019, University of Oslo
+ * Copyright (c) 2004-2020, University of Oslo
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,32 +28,13 @@ package org.hisp.dhis.rules.parser.expression;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.antlr.operator.AntlrOperatorCompareLessThan;
 import org.hisp.dhis.rules.parser.expression.function.ExpressionItem;
-import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
 /**
- * Utilities for ANTLR parsing
+ * @author Zubair Asghar
  */
-public class ParserUtils
+public class OperatorCompareLessThan extends AntlrOperatorCompareLessThan
+    implements ExpressionItem
 {
-    public final static ExprFunctionMethod FUNCTION_EVALUATE = new ExprFunctionMethod()
-    {
-        @Override
-        public Object apply( ExpressionItem item, ExpressionParser.ExprContext exprContext,
-                            CommonExpressionVisitor antlrExpressionVisitor )
-        {
-            return item.evaluate( exprContext, antlrExpressionVisitor );
-        }
-    };
-
-    public final static ExprFunctionMethod FUNCTION_GET_DESCRIPTION = new ExprFunctionMethod()
-    {
-        @Override
-        public Object apply( ExpressionItem item, ExpressionParser.ExprContext exprContext,
-                             CommonExpressionVisitor antlrExpressionVisitor )
-        {
-            return ((ScalarFunctionToEvaluate)item).getDescription( exprContext, antlrExpressionVisitor );
-        }
-    };
 }

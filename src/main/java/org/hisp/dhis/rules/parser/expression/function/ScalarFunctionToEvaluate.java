@@ -12,7 +12,7 @@ import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext
  * @author Enrico Colasante
  */
 public abstract class ScalarFunctionToEvaluate
-    implements AntlrExprItem
+    implements ExpressionItem
 {
     /**
      * Finds the value of an expression function, evaluating arguments only
@@ -36,5 +36,12 @@ public abstract class ScalarFunctionToEvaluate
         return evaluate( ctx, (CommonExpressionVisitor) visitor );
     }
 
+    /**
+     * Finds the description of an expression function.
+     *
+     * @param ctx     the expression context
+     * @param visitor the specific tree visitor
+     * @return expression description
+     */
     public abstract Object getDescription(  ExprContext ctx, CommonExpressionVisitor visitor );
 }
