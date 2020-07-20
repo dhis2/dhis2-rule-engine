@@ -118,12 +118,23 @@ public final class RuleEngine
     @Nonnull
     public RuleValidationResult evaluate( String expression )
     {
+        if ( RuleEngineIntent.DESCRIPTION == ruleEngineContext.getRuleEngineIntent() )
+        {
+            Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target()
+                    .ruleVariables( ruleEngineContext.ruleVariables() )
+                    .triggerEnvironment( triggerEnvironment )
+                    .constantValueMap( ruleEngineContext.constantsValues() )
+                    .build();
+
+            //TODO add Parser.visit
+
+        }
+
         return null;
     }
 
     public static class Builder
     {
-
         @Nonnull
         private final RuleEngineContext ruleEngineContext;
 

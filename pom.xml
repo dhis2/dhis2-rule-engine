@@ -21,6 +21,12 @@
 
     <developers>
         <developer>
+            <name>Enrico Colasante</name>
+            <email>enrico@dhis2.org</email>
+            <organization>UiO</organization>
+            <organizationUrl>http://www.uio.no/</organizationUrl>
+        </developer>
+        <developer>
             <name>Zubair Asghar</name>
             <email>zubair@dhis2.org</email>
             <organization>UiO</organization>

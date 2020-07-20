@@ -111,6 +111,12 @@ public final class RuleVariableValueMapBuilder
     }
 
     @Nonnull
+    static RuleVariableValueMapBuilder target()
+    {
+        return new RuleVariableValueMapBuilder();
+    }
+
+    @Nonnull
     RuleVariableValueMapBuilder ruleVariables( @Nonnull List<RuleVariable> ruleVariables )
     {
         this.ruleVariables.addAll( ruleVariables );

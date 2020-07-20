@@ -6,15 +6,15 @@ import org.hisp.dhis.rules.models.RuleVariable;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static java.util.Collections.unmodifiableList;
-import static java.util.Collections.unmodifiableMap;
 
 public final class RuleEngineContext
 {
+    private final RuleEngineIntent ruleEngineIntent;
+
     @Nonnull
     private final List<Rule> rules;
 
@@ -27,17 +27,14 @@ public final class RuleEngineContext
     @Nonnull
     private final Map<String, String> constantsValues;
 
-    @Nullable
-    private final Map<String, String> itemDescriptions;
-
     RuleEngineContext( @Nonnull List<Rule> rules, @Nonnull List<RuleVariable> ruleVariables,
-        Map<String, List<String>> supplementaryData, Map<String, String> constantsValues, Map<String, String> itemDescriptions )
+        Map<String, List<String>> supplementaryData, Map<String, String> constantsValues, RuleEngineIntent intent )
     {
         this.rules = rules;
         this.ruleVariables = ruleVariables;
         this.supplementaryData = supplementaryData;
         this.constantsValues = constantsValues;
-        this.itemDescriptions = itemDescriptions;
+        this.ruleEngineIntent = intent;
     }
 
     RuleEngineContext( @Nonnull List<Rule> rules, @Nonnull List<RuleVariable> ruleVariables,
@@ -47,7 +44,7 @@ public final class RuleEngineContext
         this.ruleVariables = ruleVariables;
         this.supplementaryData = supplementaryData;
         this.constantsValues = constantsValues;
-        this.itemDescriptions = new HashMap<>();
+        this.ruleEngineIntent = RuleEngineIntent.EVALUATION;
     }
 
     @Nonnull
@@ -87,6 +84,12 @@ public final class RuleEngineContext
         return constantsValues;
     }
 
+    @Nullable
+    public RuleEngineIntent getRuleEngineIntent()
+    {
+        return ruleEngineIntent;
+    }
+
     @Nonnull
     public RuleEngine.Builder toEngineBuilder()
     {
@@ -95,6 +98,7 @@ public final class RuleEngineContext
 
     public static class Builder
     {
+        private RuleEngineIntent intent;
 
         @Nullable
         private List<Rule> rules;
@@ -107,9 +111,6 @@ public final class RuleEngineContext
 
         @Nullable
         private Map<String, String> constantsValues;
-
-        @Nullable
-        private Map<String, String> itemDescriptions;
 
         Builder( @Nonnull RuleExpressionEvaluator evaluator )
         {
@@ -144,6 +145,13 @@ public final class RuleEngineContext
         }
 
         @Nonnull
+        public Builder ruleEngineItent( @Nullable RuleEngineIntent ruleEngineIntent )
+        {
+            this.intent = ruleEngineIntent;
+            return this;
+        }
+
+        @Nonnull
         public Builder supplementaryData( Map<String, List<String>> supplementaryData )
         {
             if ( supplementaryData == null )
@@ -172,18 +180,6 @@ public final class RuleEngineContext
         }
 
         @Nonnull
-        public Builder itemDescriptions( Map<String, String> itemDescriptions )
-        {
-            if ( itemDescriptions == null )
-            {
-                throw new IllegalArgumentException( "itemDescriptions == null" );
-            }
-
-            this.itemDescriptions = itemDescriptions;
-            return this;
-        }
-
-        @Nonnull
         public RuleEngineContext build()
         {
             if ( rules == null )
@@ -196,28 +192,16 @@ public final class RuleEngineContext
                 ruleVariables = unmodifiableList( new ArrayList<RuleVariable>() );
             }
 
-            return new RuleEngineContext( rules, ruleVariables, supplementaryData, constantsValues );
-        }
-
-        @Nonnull
-        public RuleEngineContext buildForDescriptions()
-        {
-            if ( rules == null )
+            if ( intent == null )
             {
-                rules = unmodifiableList( new ArrayList<Rule>() );
+                // For evaluation
+                return new RuleEngineContext( rules, ruleVariables, supplementaryData, constantsValues );
             }
-
-            if ( ruleVariables == null )
+            else
             {
-                ruleVariables = unmodifiableList( new ArrayList<RuleVariable>() );
+                // for description
+                return new RuleEngineContext( rules, ruleVariables, supplementaryData, constantsValues, intent );
             }
-
-            if ( itemDescriptions == null )
-            {
-                itemDescriptions = unmodifiableMap( new HashMap<String, String>() );
-            }
-
-            return new RuleEngineContext( rules, ruleVariables, supplementaryData, constantsValues, itemDescriptions );
         }
     }
 }
