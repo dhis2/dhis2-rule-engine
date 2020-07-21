@@ -61,6 +61,9 @@ public class RuleFunctionValidatePattern
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return null;
+        visitor.castStringVisit( ctx.expr( 0 ) );
+        visitor.castStringVisit( ctx.expr( 1 ) );
+
+        return CommonExpressionVisitor.DEFAULT_BOOLEAN_VALUE;
     }
 }

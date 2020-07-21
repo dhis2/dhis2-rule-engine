@@ -1,20 +1,26 @@
 package org.hisp.dhis.rules;
 
+import org.hisp.dhis.antlr.Parser;
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleEffect;
 import org.hisp.dhis.rules.models.RuleEnrollment;
 import org.hisp.dhis.rules.models.RuleEvent;
 import org.hisp.dhis.rules.models.RuleValidationResult;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.utils.RuleUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Callable;
+
+import static org.hisp.dhis.antlr.AntlrParserUtils.castClass;
+import static org.hisp.dhis.rules.parser.expression.ParserUtils.FUNCTION_FOR_DESCRIPTION;
 
 // ToDo: logging
 public final class RuleEngine
@@ -118,19 +124,36 @@ public final class RuleEngine
     @Nonnull
     public RuleValidationResult evaluate( String expression )
     {
-        if ( RuleEngineIntent.DESCRIPTION == ruleEngineContext.getRuleEngineIntent() )
+        Map<String, String> itemDescriptions = new HashMap<>();
+
+        CommonExpressionVisitor visitor = CommonExpressionVisitor.newBuilder()
+            .withIteamStore( ruleEngineContext.getItemStore() )
+            .withFunctionMethod( FUNCTION_FOR_DESCRIPTION )
+            .withFunctionMap( RuleUtils.FUNCTIONS )
+            .withItemDescriptions( itemDescriptions )
+            .validateAndBuildForDescription();
+
+        RuleValidationResult result;
+
+        try
         {
-            Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target()
-                    .ruleVariables( ruleEngineContext.ruleVariables() )
-                    .triggerEnvironment( triggerEnvironment )
-                    .constantValueMap( ruleEngineContext.constantsValues() )
-                    .build();
+            castClass( Boolean.class  , Parser.visit( expression, visitor ) );
 
-            //TODO add Parser.visit
+            String description = expression;
 
+            for ( Map.Entry<String, String> entry : itemDescriptions.entrySet() )
+            {
+                description = description.replace( entry.getKey(), entry.getValue() );
+            }
+
+            result = new RuleValidationResult.Builder().isValid( true ).description( description ).build();
+        }
+        catch ( Exception e )
+        {
+            result = new RuleValidationResult.Builder().isValid( false ).errorMessage( e.getMessage() ).build();
         }
 
-        return null;
+        return result;
     }
 
     public static class Builder

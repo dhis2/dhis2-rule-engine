@@ -47,7 +47,7 @@ public class ParserUtils
         }
     };
 
-    public final static ExprFunctionMethod FUNCTION_GET_DESCRIPTION = new ExprFunctionMethod()
+    public final static ExprFunctionMethod FUNCTION_FOR_DESCRIPTION = new ExprFunctionMethod()
     {
         @Override
         public Object apply( AntlrExprItem item, ExpressionParser.ExprContext exprContext,

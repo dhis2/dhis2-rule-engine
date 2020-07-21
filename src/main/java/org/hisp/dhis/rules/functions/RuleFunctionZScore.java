@@ -95,7 +95,11 @@ public abstract class RuleFunctionZScore
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return null;
+        visitor.castDoubleVisit( ctx.expr( 0 ) );
+        visitor.castDoubleVisit( ctx.expr( 1 ) );
+        visitor.castStringVisit( ctx.expr( 2 ) );
+
+        return CommonExpressionVisitor.DEFAULT_DOUBLE_VALUE;
     }
 
     public abstract Map<ZScoreTableKey, Map<Float, Integer>> getTableForGirl();

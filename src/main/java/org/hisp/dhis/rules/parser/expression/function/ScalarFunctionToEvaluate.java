@@ -2,7 +2,10 @@ package org.hisp.dhis.rules.parser.expression.function;
 
 import org.hisp.dhis.antlr.AntlrExprItem;
 import org.hisp.dhis.antlr.AntlrExpressionVisitor;
+import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.variables.ProgramRuleCustomVariable;
+import org.hisp.dhis.rules.variables.ProgramRuleVariable;
 
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
@@ -44,4 +47,19 @@ public abstract class ScalarFunctionToEvaluate
      * @return expression description
      */
     public abstract Object getDescription(  ExprContext ctx, CommonExpressionVisitor visitor );
+
+    protected ScalarFunctionToEvaluate getProgramArgType( ExprContext ctx )
+    {
+        if ( ctx.programVariable() != null )
+        {
+            return new ProgramRuleVariable();
+        }
+
+        if ( ctx.programRuleVariableName() != null )
+        {
+            return new ProgramRuleCustomVariable();
+        }
+
+        throw new ParserExceptionWithoutContext( "Illegal argument in program indicator expression: " + ctx.getText() );
+    }
 }

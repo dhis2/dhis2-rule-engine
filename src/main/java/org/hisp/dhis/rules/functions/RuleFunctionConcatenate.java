@@ -32,6 +32,7 @@ import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
+import static org.hisp.dhis.antlr.AntlrParserUtils.castString;
 
 /**
  * @Author Zubair Asghar.
@@ -59,6 +60,7 @@ public class RuleFunctionConcatenate
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return null;
+        castString( visitor.visit( ctx.expr( 0 ) ) );
+        return "concatenated_string";
     }
 }

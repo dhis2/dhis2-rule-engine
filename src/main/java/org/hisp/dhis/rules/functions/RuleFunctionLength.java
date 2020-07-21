@@ -48,6 +48,7 @@ public class RuleFunctionLength
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return null;
+        visitor.castDoubleVisit( ctx.expr( 0 ) );
+        return CommonExpressionVisitor.DEFAULT_DOUBLE_VALUE;
     }
 }

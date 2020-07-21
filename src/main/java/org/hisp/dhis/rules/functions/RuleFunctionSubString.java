@@ -56,6 +56,10 @@ public class RuleFunctionSubString
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return null;
+        visitor.castStringVisit( ctx.expr( 0 ) );
+        visitor.castDoubleVisit( ctx.expr( 1 ) );
+        visitor.castDoubleVisit( ctx.expr( 2 ) );
+
+        return "sample_substring";
     }
 }

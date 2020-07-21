@@ -51,6 +51,9 @@ public class RuleFunctionModulus
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return null;
+        visitor.castDoubleVisit( ctx.expr( 0 ) );
+        visitor.castDoubleVisit( ctx.expr( 1 ) );
+
+        return CommonExpressionVisitor.DEFAULT_DOUBLE_VALUE;
     }
 }

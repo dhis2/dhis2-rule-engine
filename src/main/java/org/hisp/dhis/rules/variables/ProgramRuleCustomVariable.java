@@ -29,6 +29,8 @@ public class ProgramRuleCustomVariable
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return null;
+        visitor.getItemDescriptions().put( ctx.getText(), visitor.getItemStore().get( ctx.programRuleVariableName().getText() ) );
+
+        return "sample_program_rule_variable_value";
     }
 }

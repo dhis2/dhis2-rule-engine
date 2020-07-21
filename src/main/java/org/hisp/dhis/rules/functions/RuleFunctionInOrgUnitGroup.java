@@ -64,6 +64,7 @@ public class RuleFunctionInOrgUnitGroup
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return null;
+        visitor.visit( ctx.expr( 0 ) );
+        return CommonExpressionVisitor.DEFAULT_BOOLEAN_VALUE;
     }
 }

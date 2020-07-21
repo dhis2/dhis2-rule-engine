@@ -28,6 +28,8 @@ public class ProgramRuleConstant
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return null;
+        visitor.getItemDescriptions().put( ctx.getText(), visitor.getItemStore().get( ctx.uid0.getText() ) );
+
+        return CommonExpressionVisitor.DEFAULT_DOUBLE_VALUE;
     }
 }

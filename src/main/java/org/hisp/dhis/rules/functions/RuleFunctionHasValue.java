@@ -32,6 +32,8 @@ public class RuleFunctionHasValue
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
+        getProgramArgType( ctx ).getDescription( ctx, visitor );
+
         return DEFAULT_BOOLEAN_VALUE;
     }
 }

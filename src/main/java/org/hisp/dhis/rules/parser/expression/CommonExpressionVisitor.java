@@ -79,6 +79,11 @@ public class CommonExpressionVisitor
     private Map<String, String> itemDescriptions = new HashMap<>();
 
     /**
+     * Used to collect program rule variables, constents and program variables.
+     */
+    private Map<String, String> itemStore = new HashMap<>();
+
+    /**
      * Default value for data type double.
      */
     public static final double DEFAULT_DOUBLE_VALUE = 1d;
@@ -178,6 +183,11 @@ public class CommonExpressionVisitor
         return itemDescriptions;
     }
 
+    public Map<String, String> getItemStore()
+    {
+        return itemStore;
+    }
+
     // -------------------------------------------------------------------------
     // Builder
     // -------------------------------------------------------------------------
@@ -218,15 +228,29 @@ public class CommonExpressionVisitor
             return this;
         }
 
-        public Builder withIteamDescriptions( Map<String, String> iteamDescriptions )
+        public Builder withItemDescriptions( Map<String, String> itemDescriptions )
         {
-            this.visitor.itemDescriptions = iteamDescriptions;
+            this.visitor.itemDescriptions = itemDescriptions;
+            return this;
+        }
+
+        public Builder withIteamStore( Map<String, String> itemStore )
+        {
+            this.visitor.itemStore = itemStore;
             return this;
         }
 
         public CommonExpressionVisitor validateCommonProperties()
         {
             Validate.notNull( this.visitor.itemMap, "Missing required property 'functionMap'" );
+            Validate.notNull( this.visitor.functionMethod, "Missing required property 'functionMethod'" );
+
+            return visitor;
+        }
+
+        public CommonExpressionVisitor validateAndBuildForDescription()
+        {
+            Validate.notNull( this.visitor.itemStore, "Missing required property 'itemStore'" );
             Validate.notNull( this.visitor.functionMethod, "Missing required property 'functionMethod'" );
 
             return visitor;

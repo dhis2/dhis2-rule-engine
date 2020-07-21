@@ -61,6 +61,7 @@ public class RuleFunctionLastEventDate
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return null;
+        visitor.visit( ctx.expr( 0 ) );
+        return CommonExpressionVisitor.DEFAULT_DATE_VALUE;
     }
 }

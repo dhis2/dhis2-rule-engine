@@ -35,11 +35,13 @@ public class RuleValidationResult
 {
     private String description;
     private boolean isValid;
+    private String errorMessage;
 
-    public RuleValidationResult( String description, boolean isValid )
+    public RuleValidationResult( String description, boolean isValid, String errorMessage )
     {
         this.description = description;
         this.isValid = isValid;
+        this.errorMessage = errorMessage;
     }
 
     public String getDescription()
@@ -52,10 +54,16 @@ public class RuleValidationResult
         return isValid;
     }
 
+    public String getErrorMessage()
+    {
+        return errorMessage;
+    }
+
     public static class Builder
     {
         private String description;
         private boolean isValid;
+        private String errorMessage;
 
         public Builder description( String description )
         {
@@ -69,9 +77,15 @@ public class RuleValidationResult
             return this;
         }
 
+        public Builder errorMessage( String errorMessage )
+        {
+            this.errorMessage = errorMessage;
+            return this;
+        }
+
         public RuleValidationResult build()
         {
-            return new RuleValidationResult( this.description, this.isValid );
+            return new RuleValidationResult( this.description, this.isValid, this.errorMessage );
         }
     }
 }

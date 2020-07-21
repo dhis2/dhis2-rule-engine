@@ -69,6 +69,8 @@ public class RuleFunctionCount
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return null;
+        getProgramArgType( ctx ).getDescription( ctx, visitor );
+
+        return CommonExpressionVisitor.DEFAULT_DOUBLE_VALUE;
     }
 }

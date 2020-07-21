@@ -59,6 +59,9 @@ public class RuleFunctionLeft
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return null;
+        visitor.castStringVisit( ctx.expr( 0 ) );
+        visitor.castStringVisit( ctx.expr( 1 ) );
+
+        return "sample_left_string_value";
     }
 }
