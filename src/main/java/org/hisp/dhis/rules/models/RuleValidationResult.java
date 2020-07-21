@@ -59,6 +59,11 @@ public class RuleValidationResult
         return errorMessage;
     }
 
+    public static Builder builder()
+    {
+        return new Builder();
+    }
+
     public static class Builder
     {
         private String description;
