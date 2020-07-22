@@ -15,8 +15,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith( JUnit4.class )
 public class RuleEngineFunctionTests
@@ -1124,6 +1123,30 @@ public class RuleEngineFunctionTests
     }
 
     @Test
+    public void evaluateGetDescription()
+    {
+        RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback("", "" );
+        Rule correctRuleHasValue = Rule.create( null, null, "d2:hasValue(#{test_var_one})", Arrays.asList( ruleAction ), "" );
+        Rule incorrectRuleHasValue = Rule.create( null, null, "d2:hasValue(#{test_var_one} + 1)", Arrays.asList( ruleAction ), "" );
+
+        Map<String, String> itemStore = new HashMap<>();
+        itemStore.put( "test_var_one", "This is test rule variable one" );
+
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilderForDescription( correctRuleHasValue, itemStore );
+        RuleValidationResult result = ruleEngineBuilder.build().evaluate( correctRuleHasValue.condition() );
+
+        assertNotNull( result );
+        assertTrue( result.isValid() );
+        assertEquals( result.getDescription(), "This is test rule variable one" );
+
+        ruleEngineBuilder = getRuleEngineBuilderForDescription( incorrectRuleHasValue, itemStore );
+        result = ruleEngineBuilder.build().evaluate( incorrectRuleHasValue.condition() );
+
+        assertNotNull( result );
+        assertFalse( result.isValid() );
+    }
+
+    @Test
     public void evaluateD2MaxValue()
         throws Exception
     {
@@ -1345,5 +1368,14 @@ public class RuleEngineFunctionTests
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( new HashMap<String, String>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );
+    }
+
+    private RuleEngine.Builder getRuleEngineBuilderForDescription( Rule rule, Map<String, String> itemStore )
+    {
+        return RuleEngineContext
+                .builder()
+                .supplementaryData( new HashMap<String, List<String>>() )
+                .constantsValue( new HashMap<String, String>() ).itemStore( itemStore ).ruleEngineItent( RuleEngineIntent.DESCRIPTION )
+                .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );
     }
 }

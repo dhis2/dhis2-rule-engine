@@ -151,6 +151,7 @@ public final class RuleEngine
         catch ( Exception e )
         {
             result = new RuleValidationResult.Builder().isValid( false ).errorMessage( e.getMessage() ).build();
+            e.printStackTrace();
         }
 
         return result;
