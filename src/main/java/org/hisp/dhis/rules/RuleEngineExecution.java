@@ -1,26 +1,17 @@
 package org.hisp.dhis.rules;
 
-import com.google.common.collect.ImmutableMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hisp.dhis.antlr.AntlrExprItem;
 import org.hisp.dhis.antlr.Parser;
-import org.hisp.dhis.rules.functions.*;
 import org.hisp.dhis.rules.models.*;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.rules.utils.RuleUtils;
-import org.hisp.dhis.rules.variables.ProgramRuleConstant;
-import org.hisp.dhis.rules.variables.ProgramRuleCustomVariable;
-import org.hisp.dhis.rules.variables.ProgramRuleVariable;
-import org.hisp.dhis.rules.variables.Variable;
+import org.hisp.dhis.rules.utils.RuleEngineUtils;
 
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.concurrent.Callable;
 
-import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.*;
 import static org.hisp.dhis.rules.parser.expression.ParserUtils.FUNCTION_EVALUATE;
-import static org.hisp.dhis.antlr.AntlrParserUtils.ANTLR_EXPRESSION_ITEMS;
 
 class RuleEngineExecution
     implements Callable<List<RuleEffect>>
@@ -119,7 +110,7 @@ class RuleEngineExecution
         }
 
         CommonExpressionVisitor commonExpressionVisitor = CommonExpressionVisitor.newBuilder()
-            .withFunctionMap( RuleUtils.FUNCTIONS )
+            .withFunctionMap( RuleEngineUtils.FUNCTIONS )
             .withFunctionMethod( FUNCTION_EVALUATE )
             .withVariablesMap( valueMap )
             .withSupplementaryData( supplementaryData )

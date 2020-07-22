@@ -2,7 +2,7 @@ package org.hisp.dhis.rules;
 
 import com.google.common.collect.Maps;
 import org.hisp.dhis.rules.models.*;
-import org.hisp.dhis.rules.utils.RuleUtils;
+import org.hisp.dhis.rules.utils.RuleEngineUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -257,85 +257,85 @@ public final class RuleVariableValueMapBuilder
         Map<String, RuleVariableValue> valueMap = Maps.newHashMap();
         String currentDate = dateFormat.format( new Date() );
 
-        valueMap.put( RuleUtils.ENV_VAR_CURRENT_DATE,
+        valueMap.put( RuleEngineUtils.ENV_VAR_CURRENT_DATE,
             create( currentDate, RuleValueType.TEXT, Arrays.asList( currentDate ), currentDate ) );
 
         if ( triggerEnvironment != null )
         {
             String environment = triggerEnvironment.getClientName();
-            valueMap.put( RuleUtils.ENV_VAR_ENVIRONMENT,
+            valueMap.put( RuleEngineUtils.ENV_VAR_ENVIRONMENT,
                 create( environment, RuleValueType.TEXT, Arrays.asList( environment ), currentDate ) );
         }
 
         if ( !ruleEvents.isEmpty() )
         {
-            valueMap.put( RuleUtils.ENV_VAR_EVENT_COUNT, create( String.valueOf( ruleEvents.size() ),
+            valueMap.put( RuleEngineUtils.ENV_VAR_EVENT_COUNT, create( String.valueOf( ruleEvents.size() ),
                 RuleValueType.NUMERIC, Arrays.asList( String.valueOf( ruleEvents.size() ) ), currentDate ) );
         }
 
         if ( ruleEnrollment != null )
         {
-            valueMap.put( RuleUtils.ENV_VAR_ENROLLMENT_ID, create( ruleEnrollment.enrollment(),
+            valueMap.put( RuleEngineUtils.ENV_VAR_ENROLLMENT_ID, create( ruleEnrollment.enrollment(),
                 RuleValueType.TEXT, Arrays.asList( ruleEnrollment.enrollment() ), currentDate ) );
-            valueMap.put( RuleUtils.ENV_VAR_ENROLLMENT_COUNT, create( "1",
+            valueMap.put( RuleEngineUtils.ENV_VAR_ENROLLMENT_COUNT, create( "1",
                 RuleValueType.NUMERIC, Arrays.asList( "1" ), currentDate ) );
-            valueMap.put( RuleUtils.ENV_VAR_TEI_COUNT, create( "1",
+            valueMap.put( RuleEngineUtils.ENV_VAR_TEI_COUNT, create( "1",
                 RuleValueType.NUMERIC, Arrays.asList( "1" ), currentDate ) );
 
             String enrollmentDate = dateFormat.format( ruleEnrollment.enrollmentDate() );
-            valueMap.put( RuleUtils.ENV_VAR_ENROLLMENT_DATE, create( enrollmentDate,
+            valueMap.put( RuleEngineUtils.ENV_VAR_ENROLLMENT_DATE, create( enrollmentDate,
                 RuleValueType.TEXT, Arrays.asList( enrollmentDate ), currentDate ) );
 
             String incidentDate = dateFormat.format( ruleEnrollment.incidentDate() );
-            valueMap.put( RuleUtils.ENV_VAR_INCIDENT_DATE, create( incidentDate,
+            valueMap.put( RuleEngineUtils.ENV_VAR_INCIDENT_DATE, create( incidentDate,
                 RuleValueType.TEXT, Arrays.asList( incidentDate ), currentDate ) );
 
             String status = ruleEnrollment.status().toString();
-            valueMap.put( RuleUtils.ENV_VAR_ENROLLMENT_STATUS, create( status,
+            valueMap.put( RuleEngineUtils.ENV_VAR_ENROLLMENT_STATUS, create( status,
                 RuleValueType.TEXT, Arrays.asList( status ), currentDate ) );
 
             String organisationUnit = ruleEnrollment.organisationUnit();
-            valueMap.put( RuleUtils.ENV_VAR_OU, create( organisationUnit, RuleValueType.TEXT ) );
+            valueMap.put( RuleEngineUtils.ENV_VAR_OU, create( organisationUnit, RuleValueType.TEXT ) );
 
             String programName = ruleEnrollment.programName();
-            valueMap.put( RuleUtils.ENV_VAR_PROGRAM_NAME, create( programName, RuleValueType.TEXT ) );
+            valueMap.put( RuleEngineUtils.ENV_VAR_PROGRAM_NAME, create( programName, RuleValueType.TEXT ) );
 
             String organisationUnitCode = ruleEnrollment.organisationUnitCode();
-            valueMap.put( RuleUtils.ENV_VAR_OU_CODE, create( organisationUnitCode, RuleValueType.TEXT ) );
+            valueMap.put( RuleEngineUtils.ENV_VAR_OU_CODE, create( organisationUnitCode, RuleValueType.TEXT ) );
         }
 
         if ( ruleEvent != null )
         {
             String eventDate = dateFormat.format( ruleEvent.eventDate() );
-            valueMap.put( RuleUtils.ENV_VAR_EVENT_DATE, create( eventDate, RuleValueType.TEXT,
+            valueMap.put( RuleEngineUtils.ENV_VAR_EVENT_DATE, create( eventDate, RuleValueType.TEXT,
                 Arrays.asList( eventDate ), currentDate ) );
 
             String dueDate = dateFormat.format( ruleEvent.dueDate() );
-            valueMap.put( RuleUtils.ENV_VAR_DUE_DATE, create( dueDate, RuleValueType.TEXT,
+            valueMap.put( RuleEngineUtils.ENV_VAR_DUE_DATE, create( dueDate, RuleValueType.TEXT,
                 Arrays.asList( dueDate ), currentDate ) );
 
             // override value of event count
             String eventCount = String.valueOf( ruleEvents.size() + 1 );
-            valueMap.put( RuleUtils.ENV_VAR_EVENT_COUNT, create( eventCount,
+            valueMap.put( RuleEngineUtils.ENV_VAR_EVENT_COUNT, create( eventCount,
                 RuleValueType.NUMERIC, Arrays.asList( eventCount ), currentDate ) );
-            valueMap.put( RuleUtils.ENV_VAR_EVENT_ID, create( ruleEvent.event(),
+            valueMap.put( RuleEngineUtils.ENV_VAR_EVENT_ID, create( ruleEvent.event(),
                 RuleValueType.TEXT, Arrays.asList( ruleEvent.event() ), currentDate ) );
 
             String status = ruleEvent.status().toString();
-            valueMap.put( RuleUtils.ENV_VAR_EVENT_STATUS, create( status,
+            valueMap.put( RuleEngineUtils.ENV_VAR_EVENT_STATUS, create( status,
                 RuleValueType.TEXT, Arrays.asList( status ), currentDate ) );
 
             String organisationUnit = ruleEvent.organisationUnit();
-            valueMap.put( RuleUtils.ENV_VAR_OU, create( organisationUnit, RuleValueType.TEXT ) );
+            valueMap.put( RuleEngineUtils.ENV_VAR_OU, create( organisationUnit, RuleValueType.TEXT ) );
 
             String programStageId = ruleEvent.programStage();
-            valueMap.put( RuleUtils.ENV_VAR_PROGRAM_STAGE_ID, create( programStageId, RuleValueType.TEXT ) );
+            valueMap.put( RuleEngineUtils.ENV_VAR_PROGRAM_STAGE_ID, create( programStageId, RuleValueType.TEXT ) );
 
             String programStageName = ruleEvent.programStageName();
-            valueMap.put( RuleUtils.ENV_VAR_PROGRAM_STAGE_NAME, create( programStageName, RuleValueType.TEXT ) );
+            valueMap.put( RuleEngineUtils.ENV_VAR_PROGRAM_STAGE_NAME, create( programStageName, RuleValueType.TEXT ) );
 
             String organisationUnitCode = ruleEvent.organisationUnitCode();
-            valueMap.put( RuleUtils.ENV_VAR_OU_CODE, create( organisationUnitCode, RuleValueType.TEXT ) );
+            valueMap.put( RuleEngineUtils.ENV_VAR_OU_CODE, create( organisationUnitCode, RuleValueType.TEXT ) );
         }
 
         return valueMap;

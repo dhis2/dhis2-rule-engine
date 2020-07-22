@@ -8,7 +8,7 @@ import org.hisp.dhis.rules.models.RuleEvent;
 import org.hisp.dhis.rules.models.RuleValidationResult;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.rules.utils.RuleUtils;
+import org.hisp.dhis.rules.utils.RuleEngineUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -129,7 +129,7 @@ public final class RuleEngine
         CommonExpressionVisitor visitor = CommonExpressionVisitor.newBuilder()
             .withIteamStore( ruleEngineContext.getItemStore() )
             .withFunctionMethod( FUNCTION_FOR_DESCRIPTION )
-            .withFunctionMap( RuleUtils.FUNCTIONS )
+            .withFunctionMap( RuleEngineUtils.FUNCTIONS )
             .withItemDescriptions( itemDescriptions )
             .validateAndBuildForDescription();
 

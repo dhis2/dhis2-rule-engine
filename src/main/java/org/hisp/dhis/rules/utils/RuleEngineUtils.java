@@ -77,51 +77,51 @@ import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.X_BRACE;
 /**
  * @author Zubair Asghar
  */
-public class RuleUtils
+public class RuleEngineUtils
 {
     public final static ImmutableMap<Integer, AntlrExprItem> FUNCTIONS = ImmutableMap.<Integer, AntlrExprItem>builder()
 
-            .put( D2_CEIL, new RuleFunctionCeil() )
-            .put( D2_ADD_DAYS, new RuleFunctionAddDays() )
-            .put( D2_CONCATENATE, new RuleFunctionConcatenate() )
-            .put( D2_FLOOR, new RuleFunctionFloor() )
-            .put( D2_SUBSTRING, new RuleFunctionSubString() )
-            .put( D2_LENGTH, new RuleFunctionLength() )
-            .put( D2_LEFT, new RuleFunctionLeft() )
-            .put( D2_RIGHT, new RuleFunctionRight() )
-            .put( D2_MODULUS, new RuleFunctionModulus() )
-            .put( D2_ROUND, new RuleFunctionRound() )
-            .put( D2_YEARS_BETWEEN, new RuleFunctionYearsBetween() )
-            .put( D2_MONTHS_BETWEEN, new RuleFunctionMonthsBetween() )
-            .put( D2_WEEKS_BETWEEN, new RuleFunctionWeeksBetween() )
-            .put( D2_DAYS_BETWEEN, new RuleFunctionDaysBetween() )
-            .put( D2_ZSCOREWFH, new RuleFunctionZScoreWFH() )
-            .put( D2_ZSCOREWFA, new RuleFunctionZScoreWFA() )
-            .put( D2_ZSCOREHFA, new RuleFunctionZScoreHFA() )
-            .put( D2_SPLIT, new RuleFunctionSplit() )
-            .put( D2_OIZP, new RuleFunctionOizp() )
-            .put( D2_ZING, new RuleFunctionZing() )
-            .put( D2_ZPVC, new RuleFunctionZpvc() )
-            .put( D2_VALIDATE_PATTERN, new RuleFunctionValidatePattern() )
-            .put( D2_MAX_VALUE, new RuleFunctionMaxValue() )
-            .put( D2_MIN_VALUE, new RuleFunctionMinValue() )
-            .put( D2_COUNT, new RuleFunctionCount() )
-            .put( D2_COUNT_IF_VALUE, new RuleFunctionCountIfValue() )
-            .put( D2_HAS_USER_ROLE, new RuleFunctionHasUserRole() )
-            .put( D2_HAS_VALUE, new RuleFunctionHasValue() )
-            .put( D2_IN_ORG_UNIT_GROUP, new RuleFunctionInOrgUnitGroup() )
-            .put( D2_LAST_EVENT_DATE, new RuleFunctionLastEventDate() )
-            .put( D2_COUNT_IF_ZERO_POS, new RuleFunctionCountIfZeroPos() )
+        .put( D2_CEIL, new RuleFunctionCeil() )
+        .put( D2_ADD_DAYS, new RuleFunctionAddDays() )
+        .put( D2_CONCATENATE, new RuleFunctionConcatenate() )
+        .put( D2_FLOOR, new RuleFunctionFloor() )
+        .put( D2_SUBSTRING, new RuleFunctionSubString() )
+        .put( D2_LENGTH, new RuleFunctionLength() )
+        .put( D2_LEFT, new RuleFunctionLeft() )
+        .put( D2_RIGHT, new RuleFunctionRight() )
+        .put( D2_MODULUS, new RuleFunctionModulus() )
+        .put( D2_ROUND, new RuleFunctionRound() )
+        .put( D2_YEARS_BETWEEN, new RuleFunctionYearsBetween() )
+        .put( D2_MONTHS_BETWEEN, new RuleFunctionMonthsBetween() )
+        .put( D2_WEEKS_BETWEEN, new RuleFunctionWeeksBetween() )
+        .put( D2_DAYS_BETWEEN, new RuleFunctionDaysBetween() )
+        .put( D2_ZSCOREWFH, new RuleFunctionZScoreWFH() )
+        .put( D2_ZSCOREWFA, new RuleFunctionZScoreWFA() )
+        .put( D2_ZSCOREHFA, new RuleFunctionZScoreHFA() )
+        .put( D2_SPLIT, new RuleFunctionSplit() )
+        .put( D2_OIZP, new RuleFunctionOizp() )
+        .put( D2_ZING, new RuleFunctionZing() )
+        .put( D2_ZPVC, new RuleFunctionZpvc() )
+        .put( D2_VALIDATE_PATTERN, new RuleFunctionValidatePattern() )
+        .put( D2_MAX_VALUE, new RuleFunctionMaxValue() )
+        .put( D2_MIN_VALUE, new RuleFunctionMinValue() )
+        .put( D2_COUNT, new RuleFunctionCount() )
+        .put( D2_COUNT_IF_VALUE, new RuleFunctionCountIfValue() )
+        .put( D2_HAS_USER_ROLE, new RuleFunctionHasUserRole() )
+        .put( D2_HAS_VALUE, new RuleFunctionHasValue() )
+        .put( D2_IN_ORG_UNIT_GROUP, new RuleFunctionInOrgUnitGroup() )
+        .put( D2_LAST_EVENT_DATE, new RuleFunctionLastEventDate() )
+        .put( D2_COUNT_IF_ZERO_POS, new RuleFunctionCountIfZeroPos() )
 
-            .put( V_BRACE, new ProgramRuleVariable() )
-            .put( HASH_BRACE, new Variable() )
-            .put( C_BRACE, new ProgramRuleConstant() )
-            .put( A_BRACE, new Variable() )
-            .put( X_BRACE, new ProgramRuleCustomVariable() )
+        .put( V_BRACE, new ProgramRuleVariable() )
+        .put( HASH_BRACE, new Variable() )
+        .put( C_BRACE, new ProgramRuleConstant() )
+        .put( A_BRACE, new Variable() )
+        .put( X_BRACE, new ProgramRuleCustomVariable() )
 
-            // Common ANTLR operators
-            .putAll( ANTLR_EXPRESSION_ITEMS  )
-            .build();
+        // Common ANTLR operators
+        .putAll( ANTLR_EXPRESSION_ITEMS  )
+        .build();
 
     public static final String ENV_VAR_CURRENT_DATE = "current_date";
     public static final String ENV_VAR_EVENT_DATE = "event_date";
@@ -143,7 +143,7 @@ public class RuleUtils
     public static final String ENV_VAR_OU_CODE = "orgunit_code";
 
     public static final List<String> ENV_VARIABLES = Arrays.asList( ENV_VAR_CURRENT_DATE, ENV_VAR_EVENT_DATE, ENV_VAR_EVENT_COUNT,
-            ENV_VAR_DUE_DATE, ENV_VAR_EVENT_ID, ENV_VAR_ENROLLMENT_DATE, ENV_VAR_ENROLLMENT_ID, ENV_VAR_ENROLLMENT_COUNT, ENV_VAR_INCIDENT_DATE,
-            ENV_VAR_TEI_COUNT, ENV_VAR_EVENT_STATUS, ENV_VAR_OU, ENV_VAR_ENROLLMENT_STATUS, ENV_VAR_PROGRAM_STAGE_ID, ENV_VAR_PROGRAM_STAGE_NAME,
-            ENV_VAR_PROGRAM_NAME, ENV_VAR_ENVIRONMENT, ENV_VAR_OU_CODE );
+        ENV_VAR_DUE_DATE, ENV_VAR_EVENT_ID, ENV_VAR_ENROLLMENT_DATE, ENV_VAR_ENROLLMENT_ID, ENV_VAR_ENROLLMENT_COUNT, ENV_VAR_INCIDENT_DATE,
+        ENV_VAR_TEI_COUNT, ENV_VAR_EVENT_STATUS, ENV_VAR_OU, ENV_VAR_ENROLLMENT_STATUS, ENV_VAR_PROGRAM_STAGE_ID, ENV_VAR_PROGRAM_STAGE_NAME,
+        ENV_VAR_PROGRAM_NAME, ENV_VAR_ENVIRONMENT, ENV_VAR_OU_CODE );
 }
