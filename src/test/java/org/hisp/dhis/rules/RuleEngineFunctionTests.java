@@ -1125,25 +1125,47 @@ public class RuleEngineFunctionTests
     @Test
     public void evaluateGetDescription()
     {
+        String test_var_one = "Variable_ONE";
+        String test_var_two = "Variable_TWO";
+
         RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback("", "" );
         Rule correctRuleHasValue = Rule.create( null, null, "d2:hasValue(#{test_var_one})", Arrays.asList( ruleAction ), "" );
         Rule incorrectRuleHasValue = Rule.create( null, null, "d2:hasValue(#{test_var_one} + 1)", Arrays.asList( ruleAction ), "" );
+        Rule incorrectDaysBetweenRule = Rule.create( null, null, "d2:daysBetween(#{test_var_one},#{test_var_two})", Arrays.asList( ruleAction ), "" );
+
+        Rule correctDaysBetweenRule = Rule.create( null, null, "d2:daysBetween(#{test_var_one},#{test_var_two}) > 0", Arrays.asList( ruleAction ), "" );
+        Rule multipleD2FunctionRule = Rule.create( null, null, "d2:hasValue(#{test_var_one}) && d2:daysBetween(#{test_var_one},#{test_var_two}) > 0", Arrays.asList( ruleAction ), "" );
+        Rule withoutD2FunctionRule = Rule.create( null, null, "#{test_var_one} > 0", Arrays.asList( ruleAction ), "" );
+        Rule stringLiteralValueRule = Rule.create( null, null, " true && false", Arrays.asList( ruleAction ), "" );
 
         Map<String, String> itemStore = new HashMap<>();
-        itemStore.put( "test_var_one", "This is test rule variable one" );
+        itemStore.put( "test_var_one", test_var_one );
+        itemStore.put( "test_var_two", test_var_two );
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilderForDescription( correctRuleHasValue, itemStore );
         RuleValidationResult result = ruleEngineBuilder.build().evaluate( correctRuleHasValue.condition() );
 
         assertNotNull( result );
         assertTrue( result.isValid() );
-        assertEquals( result.getDescription(), "This is test rule variable one" );
+        assertEquals( result.getDescription(), test_var_one );
 
         ruleEngineBuilder = getRuleEngineBuilderForDescription( incorrectRuleHasValue, itemStore );
         result = ruleEngineBuilder.build().evaluate( incorrectRuleHasValue.condition() );
 
         assertNotNull( result );
         assertFalse( result.isValid() );
+
+        ruleEngineBuilder = getRuleEngineBuilderForDescription( incorrectDaysBetweenRule, itemStore );
+        result = ruleEngineBuilder.build().evaluate( incorrectDaysBetweenRule.condition() );
+
+        assertNotNull( result );
+        assertFalse( result.isValid() );
+
+        ruleEngineBuilder = getRuleEngineBuilderForDescription( correctDaysBetweenRule, itemStore );
+        result = ruleEngineBuilder.build().evaluate( correctDaysBetweenRule.condition() );
+
+        assertNotNull( result );
+        assertTrue( result.isValid() );
     }
 
     @Test
