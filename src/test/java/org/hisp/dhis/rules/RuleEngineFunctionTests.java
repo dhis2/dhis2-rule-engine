@@ -1190,7 +1190,6 @@ public class RuleEngineFunctionTests
         Rule constantRule = Rule.create( null, null, "C{NAgjOfWMXg6} == 0", Arrays.asList( ruleAction ), "" );
         Rule programEnvVariableRule = Rule.create( null, null, "d2:hasValue(V{completed_date})", Arrays.asList( ruleAction ), "" );
 
-
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( correctRuleHasValue, itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( correctRuleHasValue.condition() );
 
@@ -1202,8 +1201,7 @@ public class RuleEngineFunctionTests
 
         assertNotNull( result );
         assertTrue( result.isValid() );
-
-
+        
         ruleEngine = getRuleEngineBuilderForDescription( literalStringRule, itemStore ).build();
         result = ruleEngine.evaluate( literalStringRule.condition() );
 
