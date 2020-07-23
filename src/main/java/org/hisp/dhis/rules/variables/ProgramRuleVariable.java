@@ -28,8 +28,8 @@ public class ProgramRuleVariable
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        visitor.getItemDescriptions().put( ctx.getText(), visitor.getItemStore().get( ctx.programVariable().getText() ) );
+        visitor.getItemDescriptions().put( ctx.getText(), visitor.getItemStore().get( ctx.programVariable().getText() ).getValue() );
 
-        return "sample_program_variable_value";
+        return visitor.getItemStore().get( ctx.programVariable().getText() ).getValueType().getValue();
     }
 }

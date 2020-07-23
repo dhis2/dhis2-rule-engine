@@ -61,6 +61,22 @@ import org.hisp.dhis.rules.functions.RuleFunctionZScoreWFA;
 import org.hisp.dhis.rules.functions.RuleFunctionZScoreWFH;
 import org.hisp.dhis.rules.functions.RuleFunctionZing;
 import org.hisp.dhis.rules.functions.RuleFunctionZpvc;
+import org.hisp.dhis.rules.parser.expression.function.OperatorCompareEqual;
+import org.hisp.dhis.rules.parser.expression.function.OperatorCompareGreaterThan;
+import org.hisp.dhis.rules.parser.expression.function.OperatorCompareGreaterThanOrEqual;
+import org.hisp.dhis.rules.parser.expression.function.OperatorCompareLessThan;
+import org.hisp.dhis.rules.parser.expression.function.OperatorCompareLessThanOrEqual;
+import org.hisp.dhis.rules.parser.expression.function.OperatorCompareNotEqual;
+import org.hisp.dhis.rules.parser.expression.function.OperatorGroupingParentheses;
+import org.hisp.dhis.rules.parser.expression.function.OperatorLogicalAnd;
+import org.hisp.dhis.rules.parser.expression.function.OperatorLogicalNot;
+import org.hisp.dhis.rules.parser.expression.function.OperatorLogicalOr;
+import org.hisp.dhis.rules.parser.expression.function.OperatorMathDivide;
+import org.hisp.dhis.rules.parser.expression.function.OperatorMathMinus;
+import org.hisp.dhis.rules.parser.expression.function.OperatorMathModulus;
+import org.hisp.dhis.rules.parser.expression.function.OperatorMathMultiply;
+import org.hisp.dhis.rules.parser.expression.function.OperatorMathPlus;
+import org.hisp.dhis.rules.parser.expression.function.OperatorMathPower;
 import org.hisp.dhis.rules.variables.ProgramRuleConstant;
 import org.hisp.dhis.rules.variables.ProgramRuleCustomVariable;
 import org.hisp.dhis.rules.variables.ProgramRuleVariable;
@@ -69,7 +85,6 @@ import org.hisp.dhis.rules.variables.Variable;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.hisp.dhis.antlr.AntlrParserUtils.ANTLR_EXPRESSION_ITEMS;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.*;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.A_BRACE;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.X_BRACE;
@@ -119,8 +134,31 @@ public class RuleEngineUtils
         .put( A_BRACE, new Variable() )
         .put( X_BRACE, new ProgramRuleCustomVariable() )
 
+        .put( PAREN, new OperatorGroupingParentheses() )
+        .put( PLUS, new OperatorMathPlus() )
+        .put( MINUS, new OperatorMathMinus() )
+        .put( POWER, new OperatorMathPower() )
+        .put( MUL, new OperatorMathMultiply() )
+        .put( DIV, new OperatorMathDivide() )
+        .put( MOD, new OperatorMathModulus() )
+        .put( NOT, new OperatorLogicalNot() )
+        .put( EXCLAMATION_POINT, new OperatorLogicalNot() )
+        .put( AND, new OperatorLogicalAnd() )
+        .put( AMPERSAND_2, new OperatorLogicalAnd() )
+        .put( OR, new OperatorLogicalOr() )
+        .put( VERTICAL_BAR_2, new OperatorLogicalOr() )
+
+        // Comparison operators
+
+        .put( EQ, new OperatorCompareEqual() )
+        .put( NE, new OperatorCompareNotEqual() )
+        .put( GT, new OperatorCompareGreaterThan() )
+        .put( LT, new OperatorCompareLessThan() )
+        .put( GEQ, new OperatorCompareGreaterThanOrEqual() )
+        .put( LEQ, new OperatorCompareLessThanOrEqual() )
+
         // Common ANTLR operators
-        .putAll( ANTLR_EXPRESSION_ITEMS  )
+        //.putAll( ANTLR_EXPRESSION_ITEMS  )
         .build();
 
     public static final String ENV_VAR_CURRENT_DATE = "current_date";

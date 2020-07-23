@@ -28,12 +28,28 @@ package org.hisp.dhis.rules.parser.expression.function;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.antlr.AntlrExprItem;
+
+import org.hisp.dhis.antlr.AntlrExpressionVisitor;
 import org.hisp.dhis.antlr.operator.AntlrOperatorCompareGreaterThan;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 
 /**
- * @author Zubair Asghar
+ * Compare operator: greater than
+ *
+ * @author Jim Grace
  */
-public class OperatorGreaterThan extends AntlrOperatorCompareGreaterThan implements AntlrExprItem
+public class OperatorCompareGreaterThan extends ScalarFunctionToEvaluate
 {
+    @Override
+    public Object evaluate(ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return new AntlrOperatorCompareGreaterThan().evaluate( ctx, visitor );
+    }
+
+    @Override
+    public Object getDescription( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        return evaluate( ctx, (AntlrExpressionVisitor) visitor );
+    }
 }

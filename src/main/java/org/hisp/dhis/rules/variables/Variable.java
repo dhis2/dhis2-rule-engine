@@ -30,6 +30,8 @@ public class Variable
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return null;
+        visitor.getItemDescriptions().put( ctx.getText(), visitor.getItemStore().get( RuleExpression.getProgramRuleVariable( ctx ) ).getValue() );
+
+        return visitor.getItemStore().get( RuleExpression.getProgramRuleVariable( ctx ) ).getValueType().getValue();
     }
 }

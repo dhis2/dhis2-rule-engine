@@ -29,12 +29,12 @@ public final class RuleEngineContext
     private final Map<String, String> constantsValues;
 
     @Nullable
-    private final Map<String, String> itemStore;
+    private final Map<String, SampleValue> itemStore;
 
 
     RuleEngineContext( @Nonnull List<Rule> rules, @Nonnull List<RuleVariable> ruleVariables,
         Map<String, List<String>> supplementaryData, Map<String, String> constantsValues, RuleEngineIntent intent,
-        Map<String, String> itemStore )
+        Map<String, SampleValue> itemStore )
     {
         this.rules = rules;
         this.ruleVariables = ruleVariables;
@@ -93,7 +93,7 @@ public final class RuleEngineContext
     }
 
     @Nullable
-    public Map<String, String> getItemStore()
+    public Map<String, SampleValue> getItemStore()
     {
         return itemStore;
     }
@@ -127,7 +127,7 @@ public final class RuleEngineContext
         private Map<String, String> constantsValues;
 
         @Nullable
-        private Map<String, String> itemStore;
+        private Map<String, SampleValue> itemStore;
 
         Builder( @Nonnull RuleExpressionEvaluator evaluator )
         {
@@ -169,7 +169,7 @@ public final class RuleEngineContext
         }
 
         @Nonnull
-        public Builder itemStore( @Nullable Map<String, String> itemStore )
+        public Builder itemStore( @Nullable Map<String, SampleValue> itemStore )
         {
             this.itemStore = itemStore;
             return this;
