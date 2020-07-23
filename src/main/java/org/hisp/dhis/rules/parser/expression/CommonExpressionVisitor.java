@@ -34,7 +34,7 @@ import org.hisp.dhis.antlr.AntlrExpressionVisitor;
 import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 import org.hisp.dhis.rules.RuleVariableValue;
-import org.hisp.dhis.rules.SampleValue;
+import org.hisp.dhis.rules.DataItem;
 
 import java.util.HashMap;
 import java.util.List;
@@ -82,7 +82,7 @@ public class CommonExpressionVisitor
     /**
      * Used to collect program rule variables, constents and program variables.
      */
-    private Map<String, SampleValue> itemStore = new HashMap<>();
+    private Map<String, DataItem> itemStore = new HashMap<>();
 
     /**
      * Default value for data type double.
@@ -132,7 +132,7 @@ public class CommonExpressionVisitor
             if ( item == null )
             {
                 throw new ParserExceptionWithoutContext(
-                    "Item " + ctx.it.getText() + " not supported for this type of expression" );
+                    "DataItem " + ctx.it.getText() + " not supported for this type of expression" );
             }
 
             return functionMethod.apply( item, ctx, this );
@@ -184,7 +184,7 @@ public class CommonExpressionVisitor
         return itemDescriptions;
     }
 
-    public Map<String, SampleValue> getItemStore()
+    public Map<String, DataItem> getItemStore()
     {
         return itemStore;
     }
@@ -235,7 +235,7 @@ public class CommonExpressionVisitor
             return this;
         }
 
-        public Builder withIteamStore( Map<String, SampleValue> itemStore )
+        public Builder withIteamStore( Map<String, DataItem> itemStore )
         {
             this.visitor.itemStore = itemStore;
             return this;

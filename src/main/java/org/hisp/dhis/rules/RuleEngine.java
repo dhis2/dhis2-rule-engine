@@ -127,7 +127,7 @@ public final class RuleEngine
         Map<String, String> itemDescriptions = new HashMap<>();
 
         CommonExpressionVisitor visitor = CommonExpressionVisitor.newBuilder()
-            .withIteamStore( ruleEngineContext.getItemStore() )
+            .withIteamStore( ruleEngineContext.getDataItemStore() )
             .withFunctionMethod( FUNCTION_FOR_DESCRIPTION )
             .withFunctionMap( RuleEngineUtils.FUNCTIONS )
             .withItemDescriptions( itemDescriptions )

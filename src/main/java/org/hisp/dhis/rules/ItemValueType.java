@@ -31,16 +31,16 @@ package org.hisp.dhis.rules;
 /**
  * @author Zubair Asghar
  */
-public enum SampleValueType
+public enum ItemValueType
 {
     NUMBER( "1.0" ),
     DATE( "2020-01-01" ),
-    STRING( "Sample_text_string" ),
+    TEXT( "Sample_text_string" ),
     BOOLEAN( "true" );
 
     private String value;
 
-    SampleValueType( String value )
+    ItemValueType( String value )
     {
         this.value = value;
     }

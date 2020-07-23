@@ -33,7 +33,7 @@ public class RuleEngineFunctionTests
     private String completionDate = "Completion date";
     private String constant = "PI";
 
-    private Map<String, SampleValue> itemStore = new HashMap<>();
+    private Map<String, DataItem> itemStore = new HashMap<>();
 
     private RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback("", "" );
 
@@ -45,12 +45,12 @@ public class RuleEngineFunctionTests
     {
         itemStore = new HashMap<>();
 
-        SampleValue var_1 = new SampleValue.Builder().value( test_var_one ).valueType( SampleValueType.STRING ).build();
-        SampleValue var_2 = new SampleValue.Builder().value( test_var_two ).valueType( SampleValueType.STRING ).build();
-        SampleValue var_3 = new SampleValue.Builder().value( test_var_date_one ).valueType( SampleValueType.DATE ).build();
-        SampleValue var_4 = new SampleValue.Builder().value( test_var_date_two ).valueType( SampleValueType.DATE ).build();
-        SampleValue var_5 = new SampleValue.Builder().value( completionDate ).valueType( SampleValueType.DATE ).build();
-        SampleValue var_6 = new SampleValue.Builder().value( constant ).valueType( SampleValueType.STRING ).build();
+        DataItem var_1 = DataItem.builder().value( test_var_one ).valueType( ItemValueType.TEXT ).build();
+        DataItem var_2 = DataItem.builder().value( test_var_two ).valueType( ItemValueType.TEXT ).build();
+        DataItem var_3 = DataItem.builder().value( test_var_date_one ).valueType( ItemValueType.DATE ).build();
+        DataItem var_4 = DataItem.builder().value( test_var_date_two ).valueType( ItemValueType.DATE ).build();
+        DataItem var_5 = DataItem.builder().value( completionDate ).valueType( ItemValueType.DATE ).build();
+        DataItem var_6 = DataItem.builder().value( constant ).valueType( ItemValueType.TEXT ).build();
 
         itemStore.put( "test_var_one", var_1 );
         itemStore.put( "test_var_two", var_2 );
@@ -1201,7 +1201,7 @@ public class RuleEngineFunctionTests
 
         assertNotNull( result );
         assertTrue( result.isValid() );
-        
+
         ruleEngine = getRuleEngineBuilderForDescription( literalStringRule, itemStore ).build();
         result = ruleEngine.evaluate( literalStringRule.condition() );
 
@@ -1463,7 +1463,7 @@ public class RuleEngineFunctionTests
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );
     }
 
-    private RuleEngine.Builder getRuleEngineBuilderForDescription( Rule rule, Map<String, SampleValue> itemStore )
+    private RuleEngine.Builder getRuleEngineBuilderForDescription( Rule rule, Map<String, DataItem> itemStore )
     {
         return RuleEngineContext
                 .builder()

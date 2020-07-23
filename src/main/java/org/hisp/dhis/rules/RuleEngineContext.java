@@ -29,19 +29,19 @@ public final class RuleEngineContext
     private final Map<String, String> constantsValues;
 
     @Nullable
-    private final Map<String, SampleValue> itemStore;
+    private final Map<String, DataItem> dataItemStore;
 
 
     RuleEngineContext( @Nonnull List<Rule> rules, @Nonnull List<RuleVariable> ruleVariables,
         Map<String, List<String>> supplementaryData, Map<String, String> constantsValues, RuleEngineIntent intent,
-        Map<String, SampleValue> itemStore )
+        Map<String, DataItem> itemStore )
     {
         this.rules = rules;
         this.ruleVariables = ruleVariables;
         this.supplementaryData = supplementaryData;
         this.constantsValues = constantsValues;
         this.ruleEngineIntent = intent;
-        this.itemStore = itemStore;
+        this.dataItemStore = itemStore;
     }
 
     RuleEngineContext( @Nonnull List<Rule> rules, @Nonnull List<RuleVariable> ruleVariables,
@@ -52,7 +52,7 @@ public final class RuleEngineContext
         this.supplementaryData = supplementaryData;
         this.constantsValues = constantsValues;
         this.ruleEngineIntent = RuleEngineIntent.EVALUATION;
-        this.itemStore = new HashMap<>();
+        this.dataItemStore = new HashMap<>();
     }
 
     @Nonnull
@@ -93,9 +93,9 @@ public final class RuleEngineContext
     }
 
     @Nullable
-    public Map<String, SampleValue> getItemStore()
+    public Map<String, DataItem> getDataItemStore()
     {
-        return itemStore;
+        return dataItemStore;
     }
 
     @Nullable
@@ -127,7 +127,7 @@ public final class RuleEngineContext
         private Map<String, String> constantsValues;
 
         @Nullable
-        private Map<String, SampleValue> itemStore;
+        private Map<String, DataItem> itemStore;
 
         Builder( @Nonnull RuleExpressionEvaluator evaluator )
         {
@@ -169,7 +169,7 @@ public final class RuleEngineContext
         }
 
         @Nonnull
-        public Builder itemStore( @Nullable Map<String, SampleValue> itemStore )
+        public Builder itemStore( @Nullable Map<String, DataItem> itemStore )
         {
             this.itemStore = itemStore;
             return this;

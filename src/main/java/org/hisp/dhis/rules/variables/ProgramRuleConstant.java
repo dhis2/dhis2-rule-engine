@@ -28,7 +28,7 @@ public class ProgramRuleConstant
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        visitor.getItemDescriptions().put( ctx.getText(), visitor.getItemStore().get( ctx.uid0.getText() ).getValue() );
+        visitor.getItemDescriptions().put( ctx.getText(), visitor.getItemStore().get( ctx.uid0.getText() ).getDisplayName() );
 
         return visitor.getItemStore().get( ctx.uid0.getText() ).getValueType().getValue();
     }
