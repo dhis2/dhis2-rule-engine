@@ -162,6 +162,7 @@ public class RuleEngineUtils
         .build();
 
     public static final String ENV_VAR_CURRENT_DATE = "current_date";
+    public static final String ENV_VAR_COMPLETED_DATE = "completed_date";
     public static final String ENV_VAR_EVENT_DATE = "event_date";
     public static final String ENV_VAR_EVENT_COUNT = "event_count";
     public static final String ENV_VAR_DUE_DATE = "due_date";
