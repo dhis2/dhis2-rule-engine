@@ -1,6 +1,7 @@
 package org.hisp.dhis.rules;
 
 import org.hisp.dhis.antlr.Parser;
+import org.hisp.dhis.antlr.ParserException;
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleEffect;
 import org.hisp.dhis.rules.models.RuleEnrollment;
@@ -146,11 +147,11 @@ public final class RuleEngine
                 description = description.replace( entry.getKey(), entry.getValue() );
             }
 
-            result = new RuleValidationResult.Builder().isValid( true ).description( description ).build();
+            result = RuleValidationResult.builder().isValid( true ).description( description ).build();
         }
-        catch ( Exception e )
+        catch ( IllegalStateException e )
         {
-            result = new RuleValidationResult.Builder().isValid( false ).errorMessage( e.getMessage() ).build();
+            result = RuleValidationResult.builder().isValid( false ).errorMessage( e.getMessage() ).build();
             e.printStackTrace();
         }
 
