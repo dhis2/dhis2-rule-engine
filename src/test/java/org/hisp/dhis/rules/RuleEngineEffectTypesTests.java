@@ -127,11 +127,10 @@ public class RuleEngineEffectTypesTests
         RuleAction ruleAction = RuleActionHideField.create(
             "test_action_content", "test_data_element" );
         Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
-        Rule rule2 = Rule.create( null, null, "!d2:", Arrays.asList( ruleAction ), "" );
 
         RuleEngine ruleEngine = RuleEngineContext
             .builder()
-            .rules( Arrays.asList( rule, rule2 ) )
+            .rules( Arrays.asList( rule ) )
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( new HashMap<String, String>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )

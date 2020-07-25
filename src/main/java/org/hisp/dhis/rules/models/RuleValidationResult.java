@@ -36,12 +36,14 @@ public class RuleValidationResult
     private String description;
     private boolean isValid;
     private String errorMessage;
+    private Throwable exception;
 
-    public RuleValidationResult( String description, boolean isValid, String errorMessage )
+    public RuleValidationResult( String description, boolean isValid, String errorMessage, Throwable exception )
     {
         this.description = description;
         this.isValid = isValid;
         this.errorMessage = errorMessage;
+        this.exception = exception;
     }
 
     public String getDescription()
@@ -59,6 +61,11 @@ public class RuleValidationResult
         return errorMessage;
     }
 
+    public Throwable getException()
+    {
+        return exception;
+    }
+
     public static Builder builder()
     {
         return new Builder();
@@ -69,6 +76,7 @@ public class RuleValidationResult
         private String description;
         private boolean isValid;
         private String errorMessage;
+        private Throwable exception;
 
         public Builder description( String description )
         {
@@ -88,9 +96,15 @@ public class RuleValidationResult
             return this;
         }
 
+        public Builder exception( Throwable exception )
+        {
+            this.exception = exception;
+            return this;
+        }
+
         public RuleValidationResult build()
         {
-            return new RuleValidationResult( this.description, this.isValid, this.errorMessage );
+            return new RuleValidationResult( this.description, this.isValid, this.errorMessage, exception );
         }
     }
 }

@@ -1,5 +1,7 @@
 package org.hisp.dhis.rules;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hisp.dhis.antlr.Parser;
 import org.hisp.dhis.antlr.ParserException;
 import org.hisp.dhis.rules.models.Rule;
@@ -26,6 +28,8 @@ import static org.hisp.dhis.rules.parser.expression.ParserUtils.FUNCTION_FOR_DES
 // ToDo: logging
 public final class RuleEngine
 {
+    private static final Log log = LogFactory.getLog( RuleEngine.class );
+
     @Nonnull
     private final RuleEngineContext ruleEngineContext;
 
@@ -151,8 +155,11 @@ public final class RuleEngine
         }
         catch ( IllegalStateException e )
         {
-            result = RuleValidationResult.builder().isValid( false ).errorMessage( e.getMessage() ).build();
-            e.printStackTrace();
+            result = RuleValidationResult.builder().isValid( false )
+                    .errorMessage( e.getMessage() )
+                    .exception( e )
+                    .build();
+            log.debug( e.getMessage(), e );
         }
 
         return result;
