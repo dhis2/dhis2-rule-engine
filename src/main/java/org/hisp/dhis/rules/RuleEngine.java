@@ -142,7 +142,7 @@ public final class RuleEngine
 
         try
         {
-            castClass( Boolean.class  , Parser.visit( expression, visitor ) );
+            castClass( Boolean.class, Parser.visit( expression, visitor ) );
 
             String description = expression;
 

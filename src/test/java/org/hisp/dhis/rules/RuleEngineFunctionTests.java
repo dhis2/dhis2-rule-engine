@@ -26,39 +26,6 @@ public class RuleEngineFunctionTests
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat( DATE_PATTERN, Locale.US );
 
-    private String test_var_one = "Variable_ONE";
-    private String test_var_two = "Variable_TWO";
-    private String test_var_date_one = "2020-01-01";
-    private String test_var_date_two = "2020-02-02";
-    private String completionDate = "Completion date";
-    private String constant = "PI";
-
-    private Map<String, DataItem> itemStore = new HashMap<>();
-
-    private RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback("", "" );
-
-    @org.junit.Rule
-    public ExpectedException thrown = ExpectedException.none();
-
-    @Before
-    public void setUp()
-    {
-        itemStore = new HashMap<>();
-
-        DataItem var_1 = DataItem.builder().value( test_var_one ).valueType( ItemValueType.TEXT ).build();
-        DataItem var_2 = DataItem.builder().value( test_var_two ).valueType( ItemValueType.TEXT ).build();
-        DataItem var_3 = DataItem.builder().value( test_var_date_one ).valueType( ItemValueType.DATE ).build();
-        DataItem var_4 = DataItem.builder().value( test_var_date_two ).valueType( ItemValueType.DATE ).build();
-        DataItem var_5 = DataItem.builder().value( completionDate ).valueType( ItemValueType.DATE ).build();
-        DataItem var_6 = DataItem.builder().value( constant ).valueType( ItemValueType.TEXT ).build();
-
-        itemStore.put( "test_var_one", var_1 );
-        itemStore.put( "test_var_two", var_2 );
-        itemStore.put( "test_var_date_one", var_3 );
-        itemStore.put( "test_var_date_two", var_4 );
-        itemStore.put( "completed_date", var_5 );
-        itemStore.put( "NAgjOfWMXg6", var_6 );
-    }
     @Test
     public void evaluateHasValueFunctionMustReturnTrueIfValueSpecified()
         throws Exception
@@ -1158,88 +1125,6 @@ public class RuleEngineFunctionTests
     }
 
     @Test
-    public void evaluateGetDescriptionWithIncorrectRules()
-    {
-        Rule incorrectRuleHasValue = Rule.create( null, null, "d2:hasValue(#{test_var_one} + 1)", Arrays.asList( ruleAction ), "" );
-        Rule incorrectSyntaxRule = Rule.create( null, null, "d2:daysBetween((#{test_var_date_one},#{test_var_date_two})", Arrays.asList( ruleAction ), "" );
-
-        RuleEngine ruleEngine = getRuleEngineBuilderForDescription( incorrectRuleHasValue, itemStore ).build();
-        RuleValidationResult result = ruleEngine.evaluate( incorrectRuleHasValue.condition() );
-
-        assertNotNull( result );
-        assertFalse( result.isValid() );
-
-        ruleEngine = getRuleEngineBuilderForDescription( incorrectSyntaxRule, itemStore ).build();
-        result = ruleEngine.evaluate( incorrectSyntaxRule.condition() );
-
-        assertNotNull( result );
-        assertFalse( result.isValid() );
-    }
-
-    @Test
-    public void evaluateGetDescriptionWithCorrectRules()
-    {
-        Rule correctRuleHasValue = Rule.create( null, null, "d2:hasValue(#{test_var_one})", Arrays.asList( ruleAction ), "" );
-
-        Rule literalStringRule = Rule.create( null, null, " true && false || 1 > 3", Arrays.asList( ruleAction ), "" );
-        Rule correctMultipleD2FunctionRule = Rule.create( null, null, "d2:count(#{test_var_one}) > 0 && d2:hasValue(#{test_var_two}) || #{test_var_two} ", Arrays.asList( ruleAction ), "" );
-
-        Rule correctD2betweenFunctionRule = Rule.create( null, null, "d2:daysBetween(#{test_var_date_one},#{test_var_date_two}) > 0", Arrays.asList( ruleAction ), "" );
-        Rule withoutD2AttFunctionRule = Rule.create( null, null, "A{test_var_one} > 0", Arrays.asList( ruleAction ), "" );
-        Rule withoutD2DEFunctionRule = Rule.create( null, null, "#{test_var_one} > 0", Arrays.asList( ruleAction ), "" );
-        Rule constantRule = Rule.create( null, null, "C{NAgjOfWMXg6} == 0", Arrays.asList( ruleAction ), "" );
-        Rule programEnvVariableRule = Rule.create( null, null, "d2:hasValue(V{completed_date})", Arrays.asList( ruleAction ), "" );
-
-        RuleEngine ruleEngine = getRuleEngineBuilderForDescription( correctRuleHasValue, itemStore ).build();
-        RuleValidationResult result = ruleEngine.evaluate( correctRuleHasValue.condition() );
-
-        assertNotNull( result );
-        assertTrue( result.isValid() );
-
-        ruleEngine = getRuleEngineBuilderForDescription( correctMultipleD2FunctionRule, itemStore ).build();
-        result = ruleEngine.evaluate( correctMultipleD2FunctionRule.condition() );
-
-        assertNotNull( result );
-        assertTrue( result.isValid() );
-
-        ruleEngine = getRuleEngineBuilderForDescription( literalStringRule, itemStore ).build();
-        result = ruleEngine.evaluate( literalStringRule.condition() );
-
-        assertNotNull( result );
-        assertTrue( result.isValid() );
-
-        ruleEngine = getRuleEngineBuilderForDescription( correctD2betweenFunctionRule, itemStore ).build();
-        result = ruleEngine.evaluate( correctD2betweenFunctionRule.condition() );
-
-        assertNotNull( result );
-        assertTrue( result.isValid() );
-
-        ruleEngine = getRuleEngineBuilderForDescription( withoutD2AttFunctionRule, itemStore ).build();
-        result = ruleEngine.evaluate( withoutD2AttFunctionRule.condition() );
-
-        assertNotNull( result );
-        assertTrue( result.isValid() );
-
-        ruleEngine = getRuleEngineBuilderForDescription( withoutD2DEFunctionRule, itemStore ).build();
-        result = ruleEngine.evaluate( withoutD2DEFunctionRule.condition() );
-
-        assertNotNull( result );
-        assertTrue( result.isValid() );
-
-        ruleEngine = getRuleEngineBuilderForDescription( constantRule, itemStore ).build();
-        result = ruleEngine.evaluate( constantRule.condition() );
-
-        assertNotNull( result );
-        assertTrue( result.isValid() );
-
-        ruleEngine = getRuleEngineBuilderForDescription( programEnvVariableRule, itemStore ).build();
-        result = ruleEngine.evaluate( programEnvVariableRule.condition() );
-
-        assertNotNull( result );
-        assertTrue( result.isValid() );
-    }
-
-    @Test
     public void evaluateD2MaxValue()
         throws Exception
     {
@@ -1461,14 +1346,5 @@ public class RuleEngineFunctionTests
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( new HashMap<String, String>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );
-    }
-
-    private RuleEngine.Builder getRuleEngineBuilderForDescription( Rule rule, Map<String, DataItem> itemStore )
-    {
-        return RuleEngineContext
-                .builder()
-                .supplementaryData( new HashMap<String, List<String>>() )
-                .constantsValue( new HashMap<String, String>() ).itemStore( itemStore ).ruleEngineItent( RuleEngineIntent.DESCRIPTION )
-                .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );
     }
 }

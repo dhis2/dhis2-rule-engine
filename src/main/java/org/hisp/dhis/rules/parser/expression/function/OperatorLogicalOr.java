@@ -59,7 +59,7 @@ import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 public class OperatorLogicalOr extends ScalarFunctionToEvaluate
 {
     @Override
-    public Object evaluate(ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
         return new AntlrOperatorLogicalOr().evaluate( ctx, visitor );
     }
