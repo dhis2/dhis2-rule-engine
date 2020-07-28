@@ -456,6 +456,35 @@ public class RuleEngineFunctionTests
     }
 
     @Test
+    public void evaluateLogicalAnd()
+            throws Exception
+    {
+        RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+                "test_action_content", "d2:count(#{test_var_one})" );
+        RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
+                "test_var_one", "test_data_element_one", RuleValueType.TEXT );
+
+        Rule rule = Rule.create( null, null, "d2:hasValue(V{current_date}) && d2:count(#{test_var_one}) > 0", Arrays.asList( ruleAction ), "" );
+
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
+
+        RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                        RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition" ) ), "" );
+        RuleEvent ruleEvent2 = RuleEvent.create( "test_event2", "test_program_stage2",
+                RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                        RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition2" ) ), "" );
+
+        ruleEngineBuilder.events( Arrays.asList( ruleEvent2 ) );
+
+        List<RuleEffect> ruleEffects = ruleEngineBuilder.build().evaluate( ruleEvent ).call();
+
+        assertThat( ruleEffects.size() ).isEqualTo( 1 );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( "2", ruleEffects.get( 0 ).data() );
+    }
+
+    @Test
     @Deprecated
     public void evaluateD2CountWithStringValue()
         throws Exception

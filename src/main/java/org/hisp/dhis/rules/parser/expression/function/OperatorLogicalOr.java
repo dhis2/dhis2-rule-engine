@@ -61,7 +61,24 @@ public class OperatorLogicalOr extends ScalarFunctionToEvaluate
     @Override
     public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return new AntlrOperatorLogicalOr().evaluate( ctx, visitor );
+        Boolean value = visitor.castBooleanVisit( ctx.expr( 0 ) );
+        Boolean value1 = visitor.castBooleanVisit( ctx.expr( 1 ) );
+
+        if ( value == null )
+        {
+            value = value1;
+
+            if ( value != null && !value )
+            {
+                value = null;
+            }
+        }
+        else if ( !value )
+        {
+            value = value1;
+        }
+
+        return value;
     }
 
     @Override
