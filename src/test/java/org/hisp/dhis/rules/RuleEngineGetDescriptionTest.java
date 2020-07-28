@@ -209,7 +209,7 @@ public class RuleEngineGetDescriptionTest
     @Test
     public void testGetDescriptionWithMultipleD2FunctionsAndLogicalOROperator()
     {
-        String condition = "d2:hasValue(#{test_var_two}) && d2:count(#{test_var_one}) > 0 ";
+        String condition = "d2:hasValue(#{test_var_two}) || d2:count(#{test_var_one}) > 0 ";
 
         Rule correctMultipleD2FunctionRuleWithOr = Rule.create( null, null, condition, Arrays.asList( ruleAction ), "" );
 
@@ -223,7 +223,7 @@ public class RuleEngineGetDescriptionTest
     @Test
     public void testGetDescriptionWithMultipleD2FunctionsAndLogicalANDOperator()
     {
-        String condition = "d2:count(#{test_var_one}) > 0 && d2:hasValue(#{test_var_two})";
+        String condition = "d2:hasValue(#{test_var_two}) && d2:count(#{test_var_one}) > 0 ";
 
         Rule correctMultipleD2FunctionRuleWithAnd = Rule.create( null, null, condition, Arrays.asList( ruleAction ), "" );
 
