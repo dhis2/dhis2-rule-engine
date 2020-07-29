@@ -36,12 +36,12 @@ import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 /**
  * Compare operator: not equal
  *
- * @author Jim Grace
+ * @author Zubair Asghar
  */
 public class OperatorCompareNotEqual extends ScalarFunctionToEvaluate
 {
     @Override
-    public Object evaluate(ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
         return new AntlrOperatorCompareNotEqual().evaluate( ctx, visitor );
     }

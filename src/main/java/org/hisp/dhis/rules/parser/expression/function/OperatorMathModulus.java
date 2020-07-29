@@ -36,7 +36,7 @@ import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 /**
  * Math operator: Modulus
  *
- * @author Jim Grace
+ * @author Zubair Asghar
  */
 public class OperatorMathModulus extends ScalarFunctionToEvaluate
 {

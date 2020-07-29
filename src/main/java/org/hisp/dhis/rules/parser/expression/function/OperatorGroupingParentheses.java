@@ -36,12 +36,12 @@ import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 /**
  * Operator to group using parentheses
  *
- * @author Jim Grace
+ * @author Zubair Asghar
  */
 public class OperatorGroupingParentheses extends ScalarFunctionToEvaluate
 {
     @Override
-    public Object evaluate(ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
         return new AntlrOperatorGroupingParentheses().evaluate( ctx, visitor );
     }

@@ -36,7 +36,7 @@ import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 /**
  * Expression math operator: Plus
  *
- * @author Jim Grace
+ * @author Zubair Asghar
  */
 public class OperatorMathPlus extends ScalarFunctionToEvaluate
 {

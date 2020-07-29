@@ -28,48 +28,28 @@ package org.hisp.dhis.rules.parser.expression.function;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.antlr.AntlrExpressionVisitor;
 import org.hisp.dhis.antlr.operator.AntlrOperatorLogicalAnd;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 
 /**
- * Logical operator: And
- * <pre>
  *
- * Truth table (same as for SQL):
- *
- *       A      B    A and B
- *     -----  -----  -------
- *     null   null    null
- *     null   false   null
- *     null   true    null
- *
- *     false  null    false
- *     false  false   false
- *     false  true    false
- *
- *     true   null    null
- *     true   false   false
- *     true   true    true
- * </pre>
- *
- * @author Jim Grace
+ * @author Zubair Asghar
  */
 public class OperatorLogicalAnd extends ScalarFunctionToEvaluate
 {
     @Override
     public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        Boolean value0 = visitor.castBooleanVisit( ctx.expr( 0 ) );
-        Boolean value1 = visitor.castBooleanVisit( ctx.expr( 1 ) );
-
-        return value0 != null && value0 ? value1 : true;
+        return new AntlrOperatorLogicalAnd().evaluate( ctx, visitor );
     }
 
     @Override
     public Object getDescription( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return evaluate( ctx, (AntlrExpressionVisitor) visitor );
+        visitor.castBooleanVisit( ctx.expr( 0 ) );
+        visitor.castBooleanVisit( ctx.expr( 1 ) );
+
+        return CommonExpressionVisitor.DEFAULT_BOOLEAN_VALUE;
     }
 }

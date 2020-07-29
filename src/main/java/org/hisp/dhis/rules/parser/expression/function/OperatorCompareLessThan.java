@@ -36,12 +36,12 @@ import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 /**
  * Compare operator: less than
  *
- * @author Jim Grace
+ * @author Zubair Asghar
  */
 public class OperatorCompareLessThan extends ScalarFunctionToEvaluate
 {
     @Override
-    public Object evaluate(ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
         return new AntlrOperatorCompareLessThan().evaluate( ctx, visitor );
     }

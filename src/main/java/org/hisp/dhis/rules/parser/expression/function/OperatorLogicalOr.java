@@ -28,62 +28,28 @@ package org.hisp.dhis.rules.parser.expression.function;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.antlr.AntlrExpressionVisitor;
 import org.hisp.dhis.antlr.operator.AntlrOperatorLogicalOr;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 
 /**
- * Logical operator: Or
- * <pre>
  *
- * Truth table (same as for SQL):
- *
- *       A      B    A or B
- *     -----  -----  ------
- *     null   null    null
- *     null   false   null
- *     null   true    true
- *
- *     false  null    null
- *     false  false   false
- *     false  true    true
- *
- *     true   null    true
- *     true   false   true
- *     true   true    true
- * </pre>
- *
- * @author Jim Grace
+ * @author Zubair Asghar
  */
 public class OperatorLogicalOr extends ScalarFunctionToEvaluate
 {
     @Override
     public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        Boolean value = visitor.castBooleanVisit( ctx.expr( 0 ) );
-        Boolean value1 = visitor.castBooleanVisit( ctx.expr( 1 ) );
-
-        if ( value == null )
-        {
-            value = value1;
-
-            if ( value != null && !value )
-            {
-                value = null;
-            }
-        }
-        else if ( !value )
-        {
-            value = value1;
-        }
-
-        return value;
+        return new AntlrOperatorLogicalOr().evaluate( ctx, visitor );
     }
 
     @Override
     public Object getDescription( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return evaluate( ctx, (AntlrExpressionVisitor) visitor );
+        visitor.castBooleanVisit( ctx.expr( 0 ) );
+        visitor.castBooleanVisit( ctx.expr( 1 ) );
+
+        return CommonExpressionVisitor.DEFAULT_BOOLEAN_VALUE;
     }
 }

@@ -34,19 +34,8 @@ import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 
 /**
- * Logical operator: Not
- * <pre>
  *
- * Truth table (same as for SQL):
- *
- *       A    not A
- *     -----  -----
- *     null   null
- *     false  true
- *     true   false
- * </pre>
- *
- * @author Jim Grace
+ * @author Zubair Asghar
  */
 public class OperatorLogicalNot extends ScalarFunctionToEvaluate
 {

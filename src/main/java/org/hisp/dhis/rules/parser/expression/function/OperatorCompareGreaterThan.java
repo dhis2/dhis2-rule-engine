@@ -37,7 +37,7 @@ import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 /**
  * Compare operator: greater than
  *
- * @author Jim Grace
+ * @author Zubair Asghar
  */
 public class OperatorCompareGreaterThan extends ScalarFunctionToEvaluate
 {
