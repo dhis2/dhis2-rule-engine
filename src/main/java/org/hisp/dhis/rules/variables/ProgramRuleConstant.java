@@ -28,8 +28,16 @@ public class ProgramRuleConstant
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        visitor.getItemDescriptions().put( ctx.getText(), visitor.getItemStore().get( ctx.uid0.getText() ).getDisplayName() );
+        String variable = ctx.uid0.getText();
 
-        return visitor.getItemStore().get( ctx.uid0.getText() ).getValueType().getValue();
+        if ( visitor.getItemStore().containsKey( variable ) )
+        {
+            visitor.getItemDescriptions().put( ctx.getText(), visitor.getItemStore().get( variable ).getDisplayName() );
+
+            return visitor.getItemStore().get( ctx.uid0.getText() ).getValueType().getValue();
+        }
+
+        throw new ParserExceptionWithoutContext(
+            "Variable " + ctx.uid0.getText() + " does not exist present" );
     }
 }

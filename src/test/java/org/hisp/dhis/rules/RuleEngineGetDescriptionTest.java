@@ -90,7 +90,7 @@ public class RuleEngineGetDescriptionTest
         Rule incorrectRuleHasValue = Rule.create( null, null, "d2:hasValue(#{test_var_one} + 1)", Arrays.asList( ruleAction ), "" );
         Rule incorrectSyntaxRule = Rule.create( null, null, "d2:daysBetween((#{test_var_date_one},#{test_var_date_two})", Arrays.asList( ruleAction ), "" );
 
-        RuleEngine ruleEngine = getRuleEngineBuilderForDescription(itemStore ).build();
+        RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( incorrectRuleHasValue.condition() );
 
         assertNotNull( result );
@@ -98,6 +98,18 @@ public class RuleEngineGetDescriptionTest
 
         ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         result = ruleEngine.evaluate( incorrectSyntaxRule.condition() );
+
+        assertNotNull( result );
+        assertFalse( result.isValid() );
+    }
+
+    @Test
+    public void evaluateGetDescriptionWithInvalidProgramRuleVariable()
+    {
+        Rule rule = Rule.create( null, null, "d2:hasValue(#{test_var_one1})", Arrays.asList( ruleAction ), "" );
+
+        RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
+        RuleValidationResult result = ruleEngine.evaluate( rule.condition() );
 
         assertNotNull( result );
         assertFalse( result.isValid() );

@@ -1,6 +1,7 @@
 package org.hisp.dhis.rules.variables;
 
 import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
+import org.hisp.dhis.rules.RuleExpression;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
@@ -28,8 +29,16 @@ public class ProgramRuleVariable
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        visitor.getItemDescriptions().put( ctx.getText(), visitor.getItemStore().get( ctx.programVariable().getText() ).getDisplayName() );
+        String variable = ctx.programVariable().getText();
 
-        return visitor.getItemStore().get( ctx.programVariable().getText() ).getValueType().getValue();
+        if ( visitor.getItemStore().containsKey( variable ) )
+        {
+            visitor.getItemDescriptions().put( ctx.getText(), visitor.getItemStore().get( variable ).getDisplayName() );
+
+            return visitor.getItemStore().get( ctx.programVariable().getText() ).getValueType().getValue();
+        }
+
+        throw new ParserExceptionWithoutContext(
+            "Variable " + ctx.programVariable().getText() + " does not exist present" );
     }
 }
