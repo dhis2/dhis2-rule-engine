@@ -40,6 +40,6 @@ public class Variable
         }
 
         throw new ParserExceptionWithoutContext(
-            "Variable " + RuleExpression.getProgramRuleVariable( ctx ) + " does not exist present" );
+            "Variable " + RuleExpression.getProgramRuleVariable( ctx ) + " does not exist" );
     }
 }

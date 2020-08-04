@@ -40,6 +40,6 @@ public class ProgramRuleCustomVariable
         }
 
         throw new ParserExceptionWithoutContext(
-            "Variable " + ctx.programRuleVariableName().getText() + " does not exist present" );
+            "Variable " + ctx.programRuleVariableName().getText() + " does not exist" );
     }
 }

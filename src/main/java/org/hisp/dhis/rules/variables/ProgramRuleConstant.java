@@ -38,6 +38,6 @@ public class ProgramRuleConstant
         }
 
         throw new ParserExceptionWithoutContext(
-            "Variable " + ctx.uid0.getText() + " does not exist present" );
+            "Variable " + ctx.uid0.getText() + " does not exist" );
     }
 }

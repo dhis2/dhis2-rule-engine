@@ -39,6 +39,6 @@ public class ProgramRuleVariable
         }
 
         throw new ParserExceptionWithoutContext(
-            "Variable " + ctx.programVariable().getText() + " does not exist present" );
+            "Variable " + ctx.programVariable().getText() + " does not exist" );
     }
 }
