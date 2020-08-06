@@ -26,7 +26,7 @@ public abstract class RuleEvent
         @Nonnull String organisationUnit,
         @Nullable String organisationUnitCode,
         @Nonnull List<RuleDataValue> ruleDataValues,
-        @Nonnull String programStageName )
+        @Nonnull String programStageName, @Nullable Date completedDate )
     {
         return new AutoValue_RuleEvent.Builder()
             .event( event )
@@ -37,6 +37,7 @@ public abstract class RuleEvent
             .dueDate( dueDate )
             .organisationUnit( organisationUnit )
             .organisationUnitCode( organisationUnitCode )
+            .completedDate( completedDate )
             .dataValues( Collections.unmodifiableList( new ArrayList<>( ruleDataValues ) ) )
             .build();
     }
@@ -63,6 +64,9 @@ public abstract class RuleEvent
 
     @Nonnull
     public abstract Date dueDate();
+
+    @Nullable
+    public abstract Date completedDate();
 
     @Nonnull
     public abstract String organisationUnit();
@@ -92,6 +96,8 @@ public abstract class RuleEvent
         public abstract Builder eventDate( Date eventDate );
 
         public abstract Builder dueDate( Date dueDate );
+
+        public abstract Builder completedDate( Date completedDate );
 
         public abstract Builder organisationUnit( String organisationUnit );
 
