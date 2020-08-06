@@ -26,7 +26,8 @@ public abstract class RuleEvent
         @Nonnull String organisationUnit,
         @Nullable String organisationUnitCode,
         @Nonnull List<RuleDataValue> ruleDataValues,
-        @Nonnull String programStageName, @Nullable Date completedDate )
+        @Nonnull String programStageName,
+        @Nullable Date completedDate )
     {
         return new AutoValue_RuleEvent.Builder()
             .event( event )

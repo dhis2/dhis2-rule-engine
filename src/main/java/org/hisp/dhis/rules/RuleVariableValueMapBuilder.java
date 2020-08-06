@@ -314,9 +314,12 @@ public final class RuleVariableValueMapBuilder
             valueMap.put( RuleEngineUtils.ENV_VAR_DUE_DATE, create( dueDate, RuleValueType.TEXT,
                 Arrays.asList( dueDate ), currentDate ) );
 
-            String completedDate = dateFormat.format( ruleEvent.completedDate() );
-            valueMap.put( RuleEngineUtils.ENV_VAR_COMPLETED_DATE, create( completedDate, RuleValueType.TEXT,
-                Arrays.asList( completedDate ), currentDate ) );
+            if ( ruleEvent.completedDate() != null )
+            {
+                String completedDate = dateFormat.format( ruleEvent.completedDate() );
+                valueMap.put( RuleEngineUtils.ENV_VAR_COMPLETED_DATE, create( completedDate, RuleValueType.TEXT,
+                        Arrays.asList( completedDate ), currentDate ) );
+            }
 
             // override value of event count
             String eventCount = String.valueOf( ruleEvents.size() + 1 );
