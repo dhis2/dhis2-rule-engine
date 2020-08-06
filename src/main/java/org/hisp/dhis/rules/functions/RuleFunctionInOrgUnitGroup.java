@@ -60,4 +60,11 @@ public class RuleFunctionInOrgUnitGroup
 
         return String.valueOf( members.contains( orgUnit ) );
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        visitor.visit( ctx.expr( 0 ) );
+        return CommonExpressionVisitor.DEFAULT_BOOLEAN_VALUE;
+    }
 }

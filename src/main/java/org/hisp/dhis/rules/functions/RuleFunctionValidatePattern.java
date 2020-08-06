@@ -57,4 +57,13 @@ public class RuleFunctionValidatePattern
 
         return wrap( String.valueOf( matcher.matches() ) );
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        visitor.castStringVisit( ctx.expr( 0 ) );
+        visitor.castStringVisit( ctx.expr( 1 ) );
+
+        return CommonExpressionVisitor.DEFAULT_BOOLEAN_VALUE;
+    }
 }

@@ -56,4 +56,13 @@ public class RuleFunctionRight
         return wrap( StringUtils.reverse(
             StringUtils.substring( StringUtils.reverse( visitor.castStringVisit( ctx.expr( 0 ) ) ), 0, chars ) ) );
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        visitor.castStringVisit( ctx.expr( 0 ) );
+        visitor.castStringVisit( ctx.expr( 1 ) );
+
+        return "sample_right_string_value";
+    }
 }

@@ -47,4 +47,12 @@ public class RuleFunctionOizp
 
         return value >= 0 ? String.valueOf( 1 ) : String.valueOf( 0 );
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        visitor.castDoubleVisit( ctx.expr( 0 ) );
+
+        return CommonExpressionVisitor.DEFAULT_DOUBLE_VALUE;
+    }
 }

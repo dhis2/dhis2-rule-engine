@@ -30,21 +30,30 @@ package org.hisp.dhis.rules.parser.expression;
 
 import org.hisp.dhis.antlr.AntlrExprItem;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
 /**
  * Utilities for ANTLR parsing
  */
 public class ParserUtils
 {
-
     public final static ExprFunctionMethod FUNCTION_EVALUATE = new ExprFunctionMethod()
     {
         @Override
-        public Object apply( AntlrExprItem AntlrExprItem, ExpressionParser.ExprContext exprContext,
-            CommonExpressionVisitor antlrExpressionVisitor )
+        public Object apply( AntlrExprItem item, ExpressionParser.ExprContext exprContext,
+                            CommonExpressionVisitor antlrExpressionVisitor )
         {
-            return AntlrExprItem
-                .evaluate( exprContext, antlrExpressionVisitor );
+            return item.evaluate( exprContext, antlrExpressionVisitor );
+        }
+    };
+
+    public final static ExprFunctionMethod FUNCTION_FOR_DESCRIPTION = new ExprFunctionMethod()
+    {
+        @Override
+        public Object apply( AntlrExprItem item, ExpressionParser.ExprContext exprContext,
+                             CommonExpressionVisitor antlrExpressionVisitor )
+        {
+            return ((ScalarFunctionToEvaluate)item).getDescription( exprContext, antlrExpressionVisitor );
         }
     };
 }

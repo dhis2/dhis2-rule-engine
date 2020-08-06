@@ -14,9 +14,18 @@ public abstract class RuleExpression
     @Nonnull
     public static String getProgramRuleVariable( ExpressionParser.ExprContext ctx )
     {
-        return isProgramRuleVariable(ctx)
-            ? getProgramRuleVariableText(ctx)
-            : ctx.uid0.getText() + secondPart( ctx ) + thirdPart( ctx );
+        if ( isProgramRuleVariable( ctx ) )
+        {
+            return getProgramRuleVariableText( ctx );
+        }
+        else if ( ctx.programVariable() != null )
+        {
+            return ctx.programVariable().getText();
+        }
+        else
+        {
+            return ctx.uid0.getText() + secondPart( ctx ) + thirdPart( ctx );
+        }
     }
 
     private static String getProgramRuleVariableText( ExpressionParser.ExprContext ctx )

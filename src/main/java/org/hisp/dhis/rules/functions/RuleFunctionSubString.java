@@ -52,4 +52,14 @@ public class RuleFunctionSubString
             castDouble( visitor.castStringVisit( ctx.expr( 1 ) ) ).intValue(),
             castDouble( visitor.castStringVisit( ctx.expr( 2 ) ) ).intValue() );
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        visitor.castStringVisit( ctx.expr( 0 ) );
+        visitor.castDoubleVisit( ctx.expr( 1 ) );
+        visitor.castDoubleVisit( ctx.expr( 2 ) );
+
+        return "sample_substring";
+    }
 }

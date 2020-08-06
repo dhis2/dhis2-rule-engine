@@ -1,23 +1,35 @@
 package org.hisp.dhis.rules;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.hisp.dhis.antlr.Parser;
+import org.hisp.dhis.antlr.ParserException;
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleEffect;
 import org.hisp.dhis.rules.models.RuleEnrollment;
 import org.hisp.dhis.rules.models.RuleEvent;
+import org.hisp.dhis.rules.models.RuleValidationResult;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
+import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
+import org.hisp.dhis.rules.utils.RuleEngineUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Callable;
+
+import static org.hisp.dhis.antlr.AntlrParserUtils.castClass;
+import static org.hisp.dhis.rules.parser.expression.ParserUtils.FUNCTION_FOR_DESCRIPTION;
 
 // ToDo: logging
 public final class RuleEngine
 {
+    private static final Log log = LogFactory.getLog( RuleEngine.class );
+
     @Nonnull
     private final RuleEngineContext ruleEngineContext;
 
@@ -114,9 +126,47 @@ public final class RuleEngine
         return evaluate( ruleEnrollment, ruleEngineContext.rules() );
     }
 
+    @Nonnull
+    public RuleValidationResult evaluate( String expression )
+    {
+        Map<String, String> itemDescriptions = new HashMap<>();
+
+        CommonExpressionVisitor visitor = CommonExpressionVisitor.newBuilder()
+            .withIteamStore( ruleEngineContext.getDataItemStore() )
+            .withFunctionMethod( FUNCTION_FOR_DESCRIPTION )
+            .withFunctionMap( RuleEngineUtils.FUNCTIONS )
+            .withItemDescriptions( itemDescriptions )
+            .validateAndBuildForDescription();
+
+        RuleValidationResult result;
+
+        try
+        {
+            castClass( Boolean.class, Parser.visit( expression, visitor ) );
+
+            String description = expression;
+
+            for ( Map.Entry<String, String> entry : itemDescriptions.entrySet() )
+            {
+                description = description.replace( entry.getKey(), entry.getValue() );
+            }
+
+            result = RuleValidationResult.builder().isValid( true ).description( description ).build();
+        }
+        catch ( IllegalStateException e )
+        {
+            result = RuleValidationResult.builder().isValid( false )
+                    .errorMessage( e.getMessage() )
+                    .exception( e )
+                    .build();
+            log.debug( e.getMessage(), e );
+        }
+
+        return result;
+    }
+
     public static class Builder
     {
-
         @Nonnull
         private final RuleEngineContext ruleEngineContext;
 
