@@ -15,6 +15,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine;
+import static org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngineBuilder;
 import static org.junit.Assert.*;
 
 @RunWith( JUnit4.class )
@@ -1383,22 +1385,5 @@ public class RuleEngineFunctionTests
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
         assertEquals( dateFormat.format( yesterday ), ruleEffects.get( 0 ).data() );
-    }
-
-    private RuleEngine getRuleEngine( Rule rule, List<RuleVariable> ruleVariables )
-    {
-        return getRuleEngineBuilder( rule, ruleVariables )
-            .build();
-    }
-
-    private RuleEngine.Builder getRuleEngineBuilder( Rule rule, List<RuleVariable> ruleVariables )
-    {
-        return RuleEngineContext
-            .builder()
-            .rules( Arrays.asList( rule ) )
-            .ruleVariables( ruleVariables )
-            .supplementaryData( new HashMap<String, List<String>>() )
-            .constantsValue( new HashMap<String, String>() )
-            .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );
     }
 }
