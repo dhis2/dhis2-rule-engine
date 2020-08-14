@@ -58,4 +58,12 @@ public class RuleFunctionHasUserRole
 
         return String.valueOf( roles != null ? roles.contains( visitor.castStringVisit( ctx.expr( 0 ) ) ) : "false" );
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        visitor.visit( ctx.expr( 0 ) );
+
+        return CommonExpressionVisitor.DEFAULT_BOOLEAN_VALUE;
+    }
 }

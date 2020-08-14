@@ -34,6 +34,7 @@ import org.hisp.dhis.antlr.AntlrExpressionVisitor;
 import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.DataItem;
 
 import java.util.HashMap;
 import java.util.List;
@@ -73,6 +74,31 @@ public class CommonExpressionVisitor
      */
     private Map<String, List<String>> supplementaryData = new HashMap<>();
 
+    /**
+     * Used to collect the string replacements to build a description.
+     */
+    private Map<String, String> itemDescriptions = new HashMap<>();
+
+    /**
+     * Used to collect program rule variables, constents and program variables.
+     */
+    private Map<String, DataItem> itemStore = new HashMap<>();
+
+    /**
+     * Default value for data type double.
+     */
+    public static final double DEFAULT_DOUBLE_VALUE = 1d;
+
+    /**
+     * Default value for data type date.
+     */
+    public static final String DEFAULT_DATE_VALUE = "2017-07-08";
+
+    /**
+     * Default value for data type boolean.
+     */
+    public static final boolean DEFAULT_BOOLEAN_VALUE = false;
+
     // -------------------------------------------------------------------------
     // Constructors
     // -------------------------------------------------------------------------
@@ -106,7 +132,7 @@ public class CommonExpressionVisitor
             if ( item == null )
             {
                 throw new ParserExceptionWithoutContext(
-                    "Item " + ctx.it.getText() + " not supported for this type of expression" );
+                    "DataItem " + ctx.it.getText() + " not supported for this type of expression" );
             }
 
             return functionMethod.apply( item, ctx, this );
@@ -153,6 +179,16 @@ public class CommonExpressionVisitor
         return supplementaryData;
     }
 
+    public Map<String, String> getItemDescriptions()
+    {
+        return itemDescriptions;
+    }
+
+    public Map<String, DataItem> getItemStore()
+    {
+        return itemStore;
+    }
+
     // -------------------------------------------------------------------------
     // Builder
     // -------------------------------------------------------------------------
@@ -193,9 +229,29 @@ public class CommonExpressionVisitor
             return this;
         }
 
+        public Builder withItemDescriptions( Map<String, String> itemDescriptions )
+        {
+            this.visitor.itemDescriptions = itemDescriptions;
+            return this;
+        }
+
+        public Builder withIteamStore( Map<String, DataItem> itemStore )
+        {
+            this.visitor.itemStore = itemStore;
+            return this;
+        }
+
         public CommonExpressionVisitor validateCommonProperties()
         {
             Validate.notNull( this.visitor.itemMap, "Missing required property 'functionMap'" );
+            Validate.notNull( this.visitor.functionMethod, "Missing required property 'functionMethod'" );
+
+            return visitor;
+        }
+
+        public CommonExpressionVisitor validateAndBuildForDescription()
+        {
+            Validate.notNull( this.visitor.itemStore, "Missing required property 'itemStore'" );
             Validate.notNull( this.visitor.functionMethod, "Missing required property 'functionMethod'" );
 
             return visitor;

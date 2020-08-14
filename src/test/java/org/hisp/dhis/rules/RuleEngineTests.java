@@ -102,7 +102,7 @@ public class RuleEngineTests
     public void evaluateShouldThrowIfEventIsAlreadyInContext()
     {
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_programstage",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, new ArrayList<RuleDataValue>(), "" );
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, new ArrayList<RuleDataValue>(), "", null);
 
         List<RuleEvent> ruleEvents = new ArrayList<>();
         ruleEvents.add( ruleEvent );

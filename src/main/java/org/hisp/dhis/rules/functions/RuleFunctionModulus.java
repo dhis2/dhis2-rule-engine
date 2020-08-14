@@ -47,4 +47,13 @@ public class RuleFunctionModulus
             toDouble( visitor.castStringVisit( ctx.expr( 0 ) ), 0.0 ) %
                 toDouble( visitor.castStringVisit( ctx.expr( 1 ) ), 0.0 ) );
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        visitor.castDoubleVisit( ctx.expr( 0 ) );
+        visitor.castDoubleVisit( ctx.expr( 1 ) );
+
+        return CommonExpressionVisitor.DEFAULT_DOUBLE_VALUE;
+    }
 }

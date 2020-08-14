@@ -46,4 +46,11 @@ public class RuleFunctionRound
     {
         return String.valueOf( Math.round( toDouble( visitor.castStringVisit( ctx.expr( 0 ) ), 0.0 ) ) );
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        visitor.castDoubleVisit( ctx.expr( 0 ) );
+        return CommonExpressionVisitor.DEFAULT_DOUBLE_VALUE;
+    }
 }

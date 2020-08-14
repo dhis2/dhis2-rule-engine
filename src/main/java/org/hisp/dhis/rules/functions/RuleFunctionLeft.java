@@ -55,4 +55,13 @@ public class RuleFunctionLeft
 
         return RuleFunction.wrap( StringUtils.substring( visitor.castStringVisit( ctx.expr( 0 ) ), 0, chars ) );
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        visitor.castStringVisit( ctx.expr( 0 ) );
+        visitor.castStringVisit( ctx.expr( 1 ) );
+
+        return "sample_left_string_value";
+    }
 }

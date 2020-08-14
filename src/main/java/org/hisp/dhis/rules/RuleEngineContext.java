@@ -6,6 +6,7 @@ import org.hisp.dhis.rules.models.RuleVariable;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,8 @@ import static java.util.Collections.unmodifiableList;
 
 public final class RuleEngineContext
 {
+    private final RuleEngineIntent ruleEngineIntent;
+
     @Nonnull
     private final List<Rule> rules;
 
@@ -25,13 +28,31 @@ public final class RuleEngineContext
     @Nonnull
     private final Map<String, String> constantsValues;
 
+    @Nullable
+    private final Map<String, DataItem> dataItemStore;
+
+
     RuleEngineContext( @Nonnull List<Rule> rules, @Nonnull List<RuleVariable> ruleVariables,
-        Map<String, List<String>> supplementaryData, Map<String, String> constantsValues )
+        Map<String, List<String>> supplementaryData, Map<String, String> constantsValues, RuleEngineIntent intent,
+        Map<String, DataItem> itemStore )
     {
         this.rules = rules;
         this.ruleVariables = ruleVariables;
         this.supplementaryData = supplementaryData;
         this.constantsValues = constantsValues;
+        this.ruleEngineIntent = intent;
+        this.dataItemStore = itemStore;
+    }
+
+    RuleEngineContext( @Nonnull List<Rule> rules, @Nonnull List<RuleVariable> ruleVariables,
+       Map<String, List<String>> supplementaryData, Map<String, String> constantsValues )
+    {
+        this.rules = rules;
+        this.ruleVariables = ruleVariables;
+        this.supplementaryData = supplementaryData;
+        this.constantsValues = constantsValues;
+        this.ruleEngineIntent = RuleEngineIntent.EVALUATION;
+        this.dataItemStore = new HashMap<>();
     }
 
     @Nonnull
@@ -71,6 +92,18 @@ public final class RuleEngineContext
         return constantsValues;
     }
 
+    @Nullable
+    public Map<String, DataItem> getDataItemStore()
+    {
+        return dataItemStore;
+    }
+
+    @Nullable
+    public RuleEngineIntent getRuleEngineIntent()
+    {
+        return ruleEngineIntent;
+    }
+
     @Nonnull
     public RuleEngine.Builder toEngineBuilder()
     {
@@ -79,6 +112,7 @@ public final class RuleEngineContext
 
     public static class Builder
     {
+        private RuleEngineIntent intent;
 
         @Nullable
         private List<Rule> rules;
@@ -91,6 +125,9 @@ public final class RuleEngineContext
 
         @Nullable
         private Map<String, String> constantsValues;
+
+        @Nullable
+        private Map<String, DataItem> itemStore;
 
         Builder( @Nonnull RuleExpressionEvaluator evaluator )
         {
@@ -123,6 +160,21 @@ public final class RuleEngineContext
             this.ruleVariables = unmodifiableList( new ArrayList<>( ruleVariables ) );
             return this;
         }
+
+        @Nonnull
+        public Builder ruleEngineItent( @Nullable RuleEngineIntent ruleEngineIntent )
+        {
+            this.intent = ruleEngineIntent;
+            return this;
+        }
+
+        @Nonnull
+        public Builder itemStore( @Nullable Map<String, DataItem> itemStore )
+        {
+            this.itemStore = itemStore;
+            return this;
+        }
+
 
         @Nonnull
         public Builder supplementaryData( Map<String, List<String>> supplementaryData )
@@ -165,7 +217,17 @@ public final class RuleEngineContext
                 ruleVariables = unmodifiableList( new ArrayList<RuleVariable>() );
             }
 
-            return new RuleEngineContext( rules, ruleVariables, supplementaryData, constantsValues );
+            if ( intent == null )
+            {
+                // For evaluation
+                return new RuleEngineContext( rules, ruleVariables, supplementaryData, constantsValues );
+            }
+            else
+            {
+                // for description
+                return new RuleEngineContext( rules, ruleVariables, supplementaryData, constantsValues,
+                    intent, itemStore );
+            }
         }
     }
 }

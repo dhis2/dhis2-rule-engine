@@ -26,4 +26,20 @@ public class Variable
 
         return variable;
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        String variable = RuleExpression.getProgramRuleVariable( ctx );
+
+        if ( visitor.getItemStore().containsKey( variable ) )
+        {
+            visitor.getItemDescriptions().put( ctx.getText(), visitor.getItemStore().get( variable ).getDisplayName() );
+
+            return visitor.getItemStore().get( RuleExpression.getProgramRuleVariable( ctx ) ).getValueType().getValue();
+        }
+
+        throw new ParserExceptionWithoutContext(
+            "Variable " + RuleExpression.getProgramRuleVariable( ctx ) + " does not exist" );
+    }
 }

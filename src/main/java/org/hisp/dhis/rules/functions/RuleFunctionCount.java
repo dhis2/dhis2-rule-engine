@@ -65,4 +65,12 @@ public class RuleFunctionCount
     {
         return count( RuleExpression.getProgramRuleVariable( ctx ), visitor.getValueMap() );
     }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        getProgramArgType( ctx ).getDescription( ctx, visitor );
+
+        return CommonExpressionVisitor.DEFAULT_DOUBLE_VALUE;
+    }
 }

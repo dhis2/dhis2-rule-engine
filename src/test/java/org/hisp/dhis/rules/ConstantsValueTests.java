@@ -181,6 +181,7 @@ public class ConstantsValueTests
             .dueDate( new Date() )
             .organisationUnit( "" )
             .organisationUnitCode( "" )
+            .completedDate( new Date() )
             .dataValues( Arrays.asList( RuleDataValue.create(
                 new Date(), "test_program_stage", "test_data_element", "test_value" ) ) )
             .build();

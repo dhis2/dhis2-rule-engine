@@ -5,6 +5,7 @@ import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 import org.joda.time.Days;
 
+import static org.hisp.dhis.antlr.AntlrParserUtils.castDate;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 public class RuleFunctionDaysBetween
@@ -36,5 +37,14 @@ public class RuleFunctionDaysBetween
         return String.valueOf( daysBetween(
             visitor.castStringVisit( ctx.expr( 0 ) ),
             visitor.castStringVisit( ctx.expr( 1 ) ) ) );
+    }
+
+    @Override
+    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        castDate( visitor.visit( ctx.expr( 0 ) ) );
+        castDate( visitor.visit( ctx.expr( 1 ) ) );
+
+        return CommonExpressionVisitor.DEFAULT_DATE_VALUE;
     }
 }
