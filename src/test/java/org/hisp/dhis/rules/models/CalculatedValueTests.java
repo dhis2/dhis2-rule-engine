@@ -95,7 +95,7 @@ public class CalculatedValueTests
     public void sendMessageMustGetValueFromAssignAction()
         throws Exception
     {
-        RuleAction assignAction = RuleActionAssign.create( "test_calculated_value", "2+2", null );
+        RuleAction assignAction = RuleActionAssign.create( "#{test_calculated_value}", "2+2", null );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
             .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1" );
 
@@ -137,7 +137,7 @@ public class CalculatedValueTests
     private List<org.hisp.dhis.rules.models.Rule> createRules( int i )
     {
         ArrayList<org.hisp.dhis.rules.models.Rule> rules = Lists.newArrayList();
-        RuleAction assignAction = RuleActionAssign.create( "test_calculated_value", "2+2", null );
+        RuleAction assignAction = RuleActionAssign.create( "#{test_calculated_value}", "2+2", null );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
             .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1" );
 
@@ -156,7 +156,7 @@ public class CalculatedValueTests
     public void sendMessageMustGetValueFromAssignActionInSingleExecution()
         throws Exception
     {
-        RuleAction assignAction = RuleActionAssign.create( "test_calculated_value", "2+2", null );
+        RuleAction assignAction = RuleActionAssign.create( "#{test_calculated_value}", "2+2", null );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
             .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1" );
 
