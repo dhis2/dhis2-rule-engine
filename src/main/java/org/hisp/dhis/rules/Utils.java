@@ -5,11 +5,17 @@ import org.hisp.dhis.rules.models.RuleEvent;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.annotation.Nonnull;
 
 public final class Utils
 {
 
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd", Locale.US );
+    static final String VARIABLE_PATTERN = "[#]\\{([\\w -_.]+)\\}";
+    static final Pattern VARIABLE_PATTERN_COMPILED = Pattern.compile( VARIABLE_PATTERN );
 
     private Utils()
     {
@@ -53,5 +59,19 @@ public final class Utils
             }
         }
         return dateFormat.format( Collections.max( dates ) );
+    }
+
+    @Nonnull
+    static String unwrapVariableName( @Nonnull String variable )
+    {
+        Matcher variableNameMatcher = VARIABLE_PATTERN_COMPILED.matcher( variable );
+
+        // extract variable name
+        if ( variableNameMatcher.find() )
+        {
+            return variableNameMatcher.group( 1 );
+        }
+
+        throw new IllegalArgumentException( "Malformed variable: " + variable );
     }
 }

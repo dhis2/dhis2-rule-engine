@@ -135,7 +135,10 @@ class RuleEngineExecution
                         if ( isAssignToCalculatedValue( action ) )
                         {
                             RuleActionAssign ruleActionAssign = (RuleActionAssign) action;
-                            updateValueMap( ruleActionAssign.content(), RuleVariableValue.create( process( ruleActionAssign.data() ), RuleValueType.TEXT ) );
+                            updateValueMap(
+                                    Utils.unwrapVariableName( ruleActionAssign.content() ),
+                                    RuleVariableValue.create( process( ruleActionAssign.data() ), RuleValueType.TEXT )
+                            );
                         }
                         else
                         {
