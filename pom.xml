@@ -126,6 +126,11 @@
     <profiles>
         <profile>
             <id>branch</id>
+            <activation>
+                <activeByDefault>
+                    true
+                </activeByDefault>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -154,11 +159,6 @@
         </profile>
         <profile>
             <id>master</id>
-            <activation>
-                <activeByDefault>
-                    true
-                </activeByDefault>
-            </activation>
             <build>
                 <plugins>
                     <plugin>
