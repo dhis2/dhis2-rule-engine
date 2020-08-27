@@ -38,7 +38,7 @@ import java.util.Map;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  * <p>
  * Counts the number of values that is entered for the source field in the argument.
  * The source field parameter is the name of one of the defined source fields in the program

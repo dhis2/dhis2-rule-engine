@@ -41,7 +41,7 @@ import java.util.Map;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  * <p>
  * return maximum value of provided data element present in entire enrollment
  */

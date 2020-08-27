@@ -52,7 +52,7 @@ import static org.mockito.Mockito.when;
 //import static org.assertj.core.api.Java6Assertions.fail;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  */
 
 @RunWith( MockitoJUnitRunner.class )

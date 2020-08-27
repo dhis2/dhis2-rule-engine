@@ -29,7 +29,7 @@ package org.hisp.dhis.rules.models;
  */
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  */
 public enum TriggerEnvironment
 {

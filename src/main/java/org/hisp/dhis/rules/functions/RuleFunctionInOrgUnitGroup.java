@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  */
 public class RuleFunctionInOrgUnitGroup
     extends ScalarFunctionToEvaluate

@@ -31,7 +31,7 @@ package org.hisp.dhis.rules.functions;
 import java.util.Map;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  */
 public class RuleFunctionZScoreWFH
     extends RuleFunctionZScore

@@ -33,7 +33,7 @@ import java.util.Map;
 /**
  * Returns standard deviation based on age, gender and weight
  *
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  */
 public class RuleFunctionZScoreWFA
     extends RuleFunctionZScore

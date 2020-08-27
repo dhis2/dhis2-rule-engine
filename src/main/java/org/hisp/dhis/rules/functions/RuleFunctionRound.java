@@ -35,7 +35,7 @@ import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 import static org.apache.commons.lang3.math.NumberUtils.toDouble;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  */
 
 public class RuleFunctionRound

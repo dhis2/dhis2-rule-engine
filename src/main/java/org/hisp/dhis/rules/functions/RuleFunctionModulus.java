@@ -35,7 +35,7 @@ import static org.apache.commons.lang3.math.NumberUtils.toDouble;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  */
 public class RuleFunctionModulus
     extends ScalarFunctionToEvaluate

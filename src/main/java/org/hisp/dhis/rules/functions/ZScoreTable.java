@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  */
 public class ZScoreTable
 {
