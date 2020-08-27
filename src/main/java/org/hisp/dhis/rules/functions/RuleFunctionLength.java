@@ -34,7 +34,7 @@ import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  */
 public class RuleFunctionLength
     extends ScalarFunctionToEvaluate

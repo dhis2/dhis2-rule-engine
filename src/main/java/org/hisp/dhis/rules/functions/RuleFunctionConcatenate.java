@@ -35,7 +35,7 @@ import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext
 import static org.hisp.dhis.antlr.AntlrParserUtils.castString;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  */
 public class RuleFunctionConcatenate
     extends ScalarFunctionToEvaluate

@@ -37,7 +37,7 @@ import java.util.Map;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  */
 public class RuleFunctionHasUserRole
     extends ScalarFunctionToEvaluate

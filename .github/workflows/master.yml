@@ -22,11 +22,9 @@ jobs:
             ${{ runner.os }}-maven-
       - name: Test
         run: mvn clean install -DskipTests=false --update-snapshots -q
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   artifact:
-    name: Publish - GitHub Packages
+    name: Publish - Nexus
     runs-on: ubuntu-18.04
     needs: unit-test
 
@@ -36,7 +34,11 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11.0.4
-      - name: Publish artifact on GitHub Packages
-        run: mvn -B clean deploy -DskipTests
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release Maven package
+        uses: samuelmeuli/action-maven-publish@v1
+        with:
+          nexus_username: ${{ secrets.nexus_username }}
+          nexus_password: ${{ secrets.nexus_password }}
+          gpg_private_key: ${{ secrets.gpg_private_key }}
+          gpg_passphrase: ${{ secrets.gpg_passphrase }}
+          maven_profiles: "master"

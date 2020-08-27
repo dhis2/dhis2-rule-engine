@@ -42,7 +42,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  */
 
 @RunWith( MockitoJUnitRunner.class )

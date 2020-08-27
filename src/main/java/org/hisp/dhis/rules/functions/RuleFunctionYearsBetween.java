@@ -37,7 +37,7 @@ import org.joda.time.Years;
 import static org.hisp.dhis.antlr.AntlrParserUtils.castDate;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  */
 public class RuleFunctionYearsBetween
     extends ScalarFunctionToEvaluate

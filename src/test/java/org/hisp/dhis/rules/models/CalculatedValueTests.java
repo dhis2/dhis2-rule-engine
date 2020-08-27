@@ -48,7 +48,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  */
 
 @RunWith( JUnit4.class )

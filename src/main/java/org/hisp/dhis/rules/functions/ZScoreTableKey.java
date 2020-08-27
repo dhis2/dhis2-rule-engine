@@ -28,7 +28,7 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  */
 public class ZScoreTableKey
 {

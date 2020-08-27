@@ -33,7 +33,7 @@ import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  * <p>
  * Evaluates the argument of type number to zero if the value is negative, otherwise to the value itself.
  */

@@ -37,7 +37,7 @@ import static org.hisp.dhis.antlr.AntlrParserUtils.castDouble;
 import static org.hisp.dhis.rules.functions.RuleFunction.wrap;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  */
 public class RuleFunctionRight
     extends ScalarFunctionToEvaluate

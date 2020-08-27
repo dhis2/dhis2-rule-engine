@@ -38,7 +38,7 @@ import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext
 import static org.hisp.dhis.rules.functions.RuleFunction.wrap;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  */
 public class RuleFunctionLastEventDate
     extends ScalarFunctionToEvaluate

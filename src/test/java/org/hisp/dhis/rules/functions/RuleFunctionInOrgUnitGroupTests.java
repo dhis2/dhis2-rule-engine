@@ -49,7 +49,7 @@ import java.util.Map;
 import static org.mockito.Mockito.when;
 
 /**
- * @Author Enrico Colasante.
+ * @author Enrico Colasante.
  */
 
 @RunWith( MockitoJUnitRunner.class )

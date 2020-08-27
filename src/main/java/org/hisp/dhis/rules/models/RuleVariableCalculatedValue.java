@@ -42,7 +42,7 @@ import java.util.Map;
 import static org.hisp.dhis.rules.Utils.dateFormat;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  */
 
 @AutoValue

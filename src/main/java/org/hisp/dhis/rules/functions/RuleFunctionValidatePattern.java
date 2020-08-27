@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
 import static org.hisp.dhis.rules.functions.RuleFunction.wrap;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  * <p>
  * Evaluates to true if the input text is an exact match with the supplied regular org.hisp.dhis.rules.parser.expression pattern. The regular org.hisp.dhis.rules.parser.expression needs to be escaped.
  */

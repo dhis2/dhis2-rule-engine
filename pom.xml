@@ -6,13 +6,11 @@
 
     <groupId>org.hisp.dhis.rules</groupId>
     <artifactId>rule-engine</artifactId>
-    <version>2.0.9</version>
+    <version>2.0.9-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>rule-engine</name>
 
-    <description>
-
-    </description>
+    <description>Rule Engine</description>
 
     <organization>
         <name>UiO</name>
@@ -41,6 +39,17 @@
         </license>
     </licenses>
 
+    <scm>
+        <url>lp:dhis2</url>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/dhis2/dhis2-rule-engine</url>
+    </issueManagement>
+
+    <url>https://github.com/dhis2/dhis2-rule-engine</url>
+
     <repositories>
         <repository>
             <id>MavenCentral</id>
@@ -49,11 +58,6 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-        </repository>
-        <repository>
-            <id>github</id>
-            <name>GitHub ANTLR Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/dhis2/dhis2-antlr-expression-parser</url>
         </repository>
         <repository>
             <id>ossrh</id>
@@ -75,11 +79,6 @@
             <name>Sonatype OSS</name>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
-        <repository>
-            <id>github</id>
-            <name>GitHub ANTLR Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/dhis2/dhis2-rule-engine</url>
-        </repository>
     </distributionManagement>
     <build>
         <plugins>
@@ -94,48 +93,70 @@
                     <testTarget>1.7</testTarget>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <source>8</source>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
 
     </build>
 
     <profiles>
         <profile>
-            <id>default</id>
+            <id>install</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>
+                    true
+                </activeByDefault>
             </activation>
+        </profile>
+        <profile>
+            <id>branch</id>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.18.1</version>
-                        <configuration>
-                            <systemProperties>
-                                <property>
-                                    <name>org.hisp.dhis.rules</name>
-                                    <value>true</value>
-                                </property>
-                            </systemProperties>
-                            <includes>
-                                <include>**/Test*.java</include>
-                                <include>**/*Test*.java</include>
-                            </includes>
-                            <argLine>-Xmx1024m</argLine>
-                        </configuration>
-                    </plugin>
-
-                    <!--Deployment-->
-                    <plugin>
-                        <artifactId>maven-deploy-plugin</artifactId>
-                        <version>2.8.1</version>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <version>3.0.0-M3</version>
                         <executions>
                             <execution>
-                                <id>default-deploy</id>
-                                <phase>deploy</phase>
+                                <id>enforce-no-releases</id>
                                 <goals>
-                                    <goal>deploy</goal>
+                                    <goal>enforce</goal>
                                 </goals>
+                                <configuration>
+                                    <rules>
+                                        <requireSnapshotVersion>
+                                            <message>No Releases Allowed!</message>
+                                        </requireSnapshotVersion>
+                                    </rules>
+                                    <fail>true</fail>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -143,42 +164,59 @@
             </build>
         </profile>
         <profile>
-            <id>dev</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-                <property>
-                    <name>p</name>
-                    <value>dev</value>
-                </property>
-            </activation>
+            <id>master</id>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.18.1</version>
-                        <configuration>
-                            <skipTests>true</skipTests>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>deploy</id>
-            <build>
-                <plugins>
-                    <!--Deployment-->
-                    <plugin>
-                        <artifactId>maven-deploy-plugin</artifactId>
-                        <version>2.8.1</version>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <version>3.0.0-M3</version>
                         <executions>
                             <execution>
-                                <id>default-deploy</id>
-                                <phase>deploy</phase>
+                                <id>enforce-no-snapshots</id>
                                 <goals>
-                                    <goal>deploy</goal>
+                                    <goal>enforce</goal>
                                 </goals>
+                                <configuration>
+                                    <rules>
+                                        <requireReleaseVersion>
+                                            <message>No Snapshots Allowed!</message>
+                                        </requireReleaseVersion>
+                                    </rules>
+                                    <fail>true</fail>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.8</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- Prevent `gpg` from using pinentry programs -->
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -252,7 +290,7 @@
         <dependency>
             <groupId>org.hisp.dhis.parser</groupId>
             <artifactId>dhis-antlr-expression-parser</artifactId>
-            <version>1.0.7</version>
+            <version>1.0.9</version>
         </dependency>
     </dependencies>
 

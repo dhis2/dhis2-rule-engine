@@ -40,7 +40,7 @@ import java.util.Map;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  * <p>
  * Counts the number of matching values that is entered for the source
  * field in the first argument. Only occurrences that matches the second

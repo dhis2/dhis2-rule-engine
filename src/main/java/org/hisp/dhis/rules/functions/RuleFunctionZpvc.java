@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  * <p>
  * Returns the number of numeric zero and positive values among the given object arguments. Can be provided with any number of arguments.
  */

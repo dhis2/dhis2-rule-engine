@@ -44,7 +44,7 @@ import java.util.Set;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
- * @Author Zubair Asghar.
+ * @author Zubair Asghar.
  */
 public abstract class RuleFunctionZScore
     extends ScalarFunctionToEvaluate
