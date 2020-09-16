@@ -35,6 +35,8 @@ final class RuleVariableValueMapBuilder {
 
     private static final String ENV_VAR_CURRENT_DATE = "current_date";
 
+    private static final String ENV_VAR_COMPLETED_DATE = "completed_date";
+
     private static final String ENV_VAR_EVENT_DATE = "event_date";
 
     private static final String ENV_VAR_EVENT_COUNT = "event_count";
@@ -312,6 +314,14 @@ final class RuleVariableValueMapBuilder {
         }
 
         if (ruleEvent != null) {
+
+            if ( ruleEvent.completedDate() != null )
+            {
+                String completedDate = dateFormat.format( ruleEvent.completedDate() );
+                valueMap.put( ENV_VAR_COMPLETED_DATE, create( completedDate, RuleValueType.TEXT,
+                        Arrays.asList( completedDate ), currentDate ) );
+            }
+
             String eventDate = dateFormat.format(ruleEvent.eventDate());
             valueMap.put(ENV_VAR_EVENT_DATE, create(eventDate, RuleValueType.TEXT,
                     Arrays.asList(eventDate), currentDate));

@@ -31,6 +31,9 @@ public abstract class RuleEvent {
     @Nonnull
     public abstract Date eventDate();
 
+    @Nullable
+    public abstract Date completedDate();
+
     @Nonnull
     public abstract Date dueDate();
 
@@ -53,13 +56,14 @@ public abstract class RuleEvent {
             @Nonnull String organisationUnit,
             @Nullable String organisationUnitCode,
             @Nonnull List<RuleDataValue> ruleDataValues,
-            @Nonnull String programStageName) {
+            @Nonnull String programStageName, Date completedDate) {
         return new AutoValue_RuleEvent.Builder()
                 .event(event)
                 .programStage(programStage)
                 .programStageName(programStageName)
                 .status(status)
                 .eventDate(eventDate)
+                .completedDate(completedDate)
                 .dueDate(dueDate)
                 .organisationUnit(organisationUnit)
                 .organisationUnitCode(organisationUnitCode)
@@ -84,6 +88,8 @@ public abstract class RuleEvent {
         public abstract Builder eventDate(Date eventDate);
 
         public abstract Builder dueDate(Date dueDate);
+
+        public abstract Builder completedDate(Date completedDate);
 
         public abstract Builder organisationUnit(String organisationUnit);
 
