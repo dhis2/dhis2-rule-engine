@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules;
 
+import org.assertj.core.api.Assertions;
 import org.hisp.dhis.rules.models.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -923,6 +924,48 @@ public class RuleEngineFunctionTests
             assertThat( ruleEffects.size() ).isEqualTo( 1 );
             assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
         }
+
+    @Test
+    public void testWithCompletedDateNull()
+            throws Exception
+    {
+        RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+                "test_action_content", "1" );
+
+        Rule rule = Rule.create( null, null, "d2:hasValue(V{completed_date})", Arrays.asList( ruleAction ), "" );
+
+        RuleEngine ruleEngine = getRuleEngine( rule, new ArrayList<RuleVariable>() );
+
+        RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null,
+                new ArrayList<RuleDataValue>(), "", null );
+
+        List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
+
+        Assertions.assertThat( ruleEffects.size() ).isEqualTo( 0 );
+    }
+
+    @Test
+    public void testWithCompletedDate()
+            throws Exception
+    {
+        RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+                "test_action_content", "1" );
+
+        Rule rule = Rule.create( null, null, "d2:hasValue(V{completed_date})", Arrays.asList( ruleAction ), "" );
+
+        RuleEngine ruleEngine = getRuleEngine( rule, new ArrayList<RuleVariable>() );
+
+        RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null,
+                new ArrayList<RuleDataValue>(), "", new Date() );
+
+        List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
+
+        Assertions.assertThat( ruleEffects.size() ).isEqualTo( 1 );
+        Assertions.assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "1.0" );
+        Assertions.assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+    }
 
 
          private RuleEngine getRuleEngine( Rule rule, List<RuleVariable> ruleVariables )
