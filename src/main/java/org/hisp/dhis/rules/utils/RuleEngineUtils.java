@@ -30,6 +30,7 @@ package org.hisp.dhis.rules.utils;
 
 import com.google.common.collect.ImmutableMap;
 import org.hisp.dhis.antlr.AntlrExprItem;
+import org.hisp.dhis.rules.ItemValueType;
 import org.hisp.dhis.rules.functions.RuleFunctionAddDays;
 import org.hisp.dhis.rules.functions.RuleFunctionCeil;
 import org.hisp.dhis.rules.functions.RuleFunctionConcatenate;
@@ -83,7 +84,7 @@ import org.hisp.dhis.rules.variables.ProgramRuleVariable;
 import org.hisp.dhis.rules.variables.Variable;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.*;
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.A_BRACE;
@@ -181,9 +182,26 @@ public class RuleEngineUtils
     public static final String ENV_VAR_ENVIRONMENT = "environment";
     public static final String ENV_VAR_OU_CODE = "orgunit_code";
 
-    // new environment variable must be added in this list
-    public static final List<String> ENV_VARIABLES = Arrays.asList( ENV_VAR_CURRENT_DATE, ENV_VAR_EVENT_DATE, ENV_VAR_EVENT_COUNT,
-        ENV_VAR_DUE_DATE, ENV_VAR_EVENT_ID, ENV_VAR_ENROLLMENT_DATE, ENV_VAR_ENROLLMENT_ID, ENV_VAR_ENROLLMENT_COUNT, ENV_VAR_INCIDENT_DATE,
-        ENV_VAR_TEI_COUNT, ENV_VAR_EVENT_STATUS, ENV_VAR_OU, ENV_VAR_ENROLLMENT_STATUS, ENV_VAR_PROGRAM_STAGE_ID, ENV_VAR_PROGRAM_STAGE_NAME,
-        ENV_VAR_PROGRAM_NAME, ENV_VAR_ENVIRONMENT, ENV_VAR_OU_CODE, ENV_VAR_COMPLETED_DATE );
+    // new environment variable must be added in this map
+    public static final ImmutableMap<String, ItemValueType> ENV_VARIABLES = new ImmutableMap.Builder<String, ItemValueType>()
+            .put( ENV_VAR_COMPLETED_DATE, ItemValueType.DATE )
+            .put( ENV_VAR_CURRENT_DATE, ItemValueType.DATE )
+            .put( ENV_VAR_EVENT_DATE, ItemValueType.DATE )
+            .put( ENV_VAR_INCIDENT_DATE, ItemValueType.DATE )
+            .put( ENV_VAR_ENROLLMENT_DATE, ItemValueType.DATE )
+            .put( ENV_VAR_DUE_DATE, ItemValueType.DATE )
+            .put( ENV_VAR_EVENT_COUNT, ItemValueType.NUMBER )
+            .put( ENV_VAR_TEI_COUNT, ItemValueType.NUMBER )
+            .put( ENV_VAR_ENROLLMENT_COUNT, ItemValueType.NUMBER )
+            .put( ENV_VAR_EVENT_ID, ItemValueType.NUMBER )
+            .put( ENV_VAR_PROGRAM_STAGE_ID, ItemValueType.NUMBER )
+            .put( ENV_VAR_ENROLLMENT_ID, ItemValueType.NUMBER )
+            .put( ENV_VAR_ENROLLMENT_STATUS, ItemValueType.TEXT )
+            .put( ENV_VAR_EVENT_STATUS, ItemValueType.TEXT )
+            .put( ENV_VAR_OU, ItemValueType.TEXT )
+            .put( ENV_VAR_OU_CODE, ItemValueType.TEXT )
+            .put( ENV_VAR_ENVIRONMENT, ItemValueType.TEXT )
+            .put( ENV_VAR_PROGRAM_NAME, ItemValueType.TEXT )
+            .put( ENV_VAR_PROGRAM_STAGE_NAME, ItemValueType.TEXT )
+            .build();
 }
