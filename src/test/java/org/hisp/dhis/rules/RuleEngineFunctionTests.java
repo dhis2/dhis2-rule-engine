@@ -952,7 +952,7 @@ public class RuleEngineFunctionTests
         RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
                 "test_action_content", "1" );
 
-        Rule rule = Rule.create( null, null, "d2:hasValue(V{completed_date})", Arrays.asList( ruleAction ), "" );
+        Rule rule = Rule.create( null, null, "V{completed_date} == V{current_date}", Arrays.asList( ruleAction ), "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule, new ArrayList<RuleVariable>() );
 
@@ -963,31 +963,30 @@ public class RuleEngineFunctionTests
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
         Assertions.assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        Assertions.assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "1.0" );
+        Assertions.assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "1" );
         Assertions.assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
     }
 
+    private RuleEngine getRuleEngine( Rule rule, List<RuleVariable> ruleVariables )
+    {
+            return RuleEngineContext
+                    .builder( new ExpressionEvaluator() )
+                    .rules( Arrays.asList( rule ) )
+                    .ruleVariables( ruleVariables )
+                    .calculatedValueMap( new HashMap<>( ) )
+                    .supplementaryData( new HashMap<>() )
+                    .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
+                    .build();
+    }
 
-         private RuleEngine getRuleEngine( Rule rule, List<RuleVariable> ruleVariables )
-        {
-                return RuleEngineContext
-                        .builder( new ExpressionEvaluator() )
-                        .rules( Arrays.asList( rule ) )
-                        .ruleVariables( ruleVariables )
-                        .calculatedValueMap( new HashMap<>( ) )
-                        .supplementaryData( new HashMap<>() )
-                        .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
-                        .build();
-        }
-
-        private RuleEngine.Builder getRuleEngineBuilder( Rule rule, List<RuleVariable> ruleVariables )
-        {
-                return RuleEngineContext
-                        .builder( new ExpressionEvaluator() )
-                        .rules( Arrays.asList( rule ) )
-                        .ruleVariables( ruleVariables )
-                        .calculatedValueMap( new HashMap<>() )
-                        .supplementaryData( new HashMap<>() )
-                        .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );
-        }
+    private RuleEngine.Builder getRuleEngineBuilder( Rule rule, List<RuleVariable> ruleVariables )
+    {
+            return RuleEngineContext
+                    .builder( new ExpressionEvaluator() )
+                    .rules( Arrays.asList( rule ) )
+                    .ruleVariables( ruleVariables )
+                    .calculatedValueMap( new HashMap<>() )
+                    .supplementaryData( new HashMap<>() )
+                    .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );
+    }
 }

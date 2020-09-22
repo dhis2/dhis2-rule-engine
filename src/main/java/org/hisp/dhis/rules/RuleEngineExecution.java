@@ -182,6 +182,7 @@ class RuleEngineExecution
         private String bindVariableValues( @Nonnull String expression )
         {
                 RuleExpression ruleExpression = RuleExpression.from( expression );
+
                 RuleExpressionBinder ruleExpressionBinder = RuleExpressionBinder.from( ruleExpression );
 
                 // substitute variable values
