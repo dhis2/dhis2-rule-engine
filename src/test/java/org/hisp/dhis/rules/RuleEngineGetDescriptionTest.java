@@ -55,6 +55,7 @@ public class RuleEngineGetDescriptionTest
     private String test_var_date_one = "2020-01-01";
     private String test_var_date_two = "2020-02-02";
     private String completionDate = "Completion date";
+    private String currentDate = "Current date";
     private String constant = "PI";
 
     private Map<String, DataItem> itemStore = new HashMap<>();
@@ -75,6 +76,7 @@ public class RuleEngineGetDescriptionTest
         DataItem var_4 = DataItem.builder().value( test_var_date_two ).valueType( ItemValueType.DATE ).build();
         DataItem var_5 = DataItem.builder().value( completionDate ).valueType( ItemValueType.DATE ).build();
         DataItem var_6 = DataItem.builder().value( constant ).valueType( ItemValueType.TEXT ).build();
+        DataItem var_7 = DataItem.builder().value( currentDate ).valueType( ItemValueType.DATE ).build();
 
         itemStore.put( "test_var_one", var_1 );
         itemStore.put( "test_var_two", var_2 );
@@ -82,6 +84,7 @@ public class RuleEngineGetDescriptionTest
         itemStore.put( "test_var_date_two", var_4 );
         itemStore.put( "completed_date", var_5 );
         itemStore.put( "NAgjOfWMXg6", var_6 );
+        itemStore.put( "current_date", var_7 );
     }
 
     @Test
@@ -145,6 +148,19 @@ public class RuleEngineGetDescriptionTest
     public void testGetDescriptionD2BetweenFunction()
     {
         String condition = "d2:daysBetween(#{test_var_date_one},#{test_var_date_two}) > 0";
+        Rule correctD2betweenFunctionRule = Rule.create( null, null, condition, Arrays.asList( ruleAction ), "" );
+
+        RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
+        RuleValidationResult result = ruleEngine.evaluate( correctD2betweenFunctionRule.condition() );
+
+        assertNotNull( result );
+        assertTrue( result.isValid() );
+    }
+
+    @Test
+    public void testGetDescriptionD2BetweenFunctionWithEnvironmentVariables()
+    {
+        String condition = "d2:daysBetween(V{completed_date},V{current_date}) > 0";
         Rule correctD2betweenFunctionRule = Rule.create( null, null, condition, Arrays.asList( ruleAction ), "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();

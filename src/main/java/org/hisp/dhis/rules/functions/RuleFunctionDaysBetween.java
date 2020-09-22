@@ -45,6 +45,6 @@ public class RuleFunctionDaysBetween
         castDate( visitor.visit( ctx.expr( 0 ) ) );
         castDate( visitor.visit( ctx.expr( 1 ) ) );
 
-        return CommonExpressionVisitor.DEFAULT_DATE_VALUE;
+        return CommonExpressionVisitor.DEFAULT_DOUBLE_VALUE;
     }
 }
