@@ -1,7 +1,6 @@
 apply plugin: 'java'
 
 repositories {
-    // used by sdk
     maven {
         url("https://oss.sonatype.org/content/repositories/snapshots")
     }
