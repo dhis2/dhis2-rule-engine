@@ -60,6 +60,11 @@ public abstract class ScalarFunctionToEvaluate
             return new ProgramRuleCustomVariable();
         }
 
+        if ( ctx.programRuleStringVariableName() != null )
+        {
+            return new ProgramRuleCustomVariable();
+        }
+
         throw new ParserExceptionWithoutContext( "Illegal argument in program rule expression: " + ctx.getText() );
     }
 }
