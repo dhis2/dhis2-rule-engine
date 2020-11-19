@@ -1,12 +1,6 @@
 apply plugin: 'java'
 
 repositories {
-    // required by crashlytics
-    maven {
-        url("https://maven.fabric.io/public")
-    }
-
-    // used by sdk
     maven {
         url("https://oss.sonatype.org/content/repositories/snapshots")
     }
