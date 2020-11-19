@@ -52,6 +52,7 @@ public class RuleEngineGetDescriptionTest
 {
     private String test_var_one = "Variable_ONE";
     private String test_var_two = "Variable_TWO";
+    private String test_var_three = "Variable_THREE";
     private String test_var_date_one = "2020-01-01";
     private String test_var_date_two = "2020-02-02";
     private String completionDate = "Completion date";
@@ -72,6 +73,7 @@ public class RuleEngineGetDescriptionTest
 
         DataItem var_1 = DataItem.builder().value( test_var_one ).valueType( ItemValueType.TEXT ).build();
         DataItem var_2 = DataItem.builder().value( test_var_two ).valueType( ItemValueType.TEXT ).build();
+        DataItem var_8 = DataItem.builder().value( test_var_three ).valueType( ItemValueType.TEXT ).build();
         DataItem var_3 = DataItem.builder().value( test_var_date_one ).valueType( ItemValueType.DATE ).build();
         DataItem var_4 = DataItem.builder().value( test_var_date_two ).valueType( ItemValueType.DATE ).build();
         DataItem var_5 = DataItem.builder().value( completionDate ).valueType( ItemValueType.DATE ).build();
@@ -85,6 +87,7 @@ public class RuleEngineGetDescriptionTest
         itemStore.put( "completed_date", var_5 );
         itemStore.put( "NAgjOfWMXg6", var_6 );
         itemStore.put( "current_date", var_7 );
+        itemStore.put( "test_var_three", var_8 );
     }
 
     @Test
@@ -125,6 +128,42 @@ public class RuleEngineGetDescriptionTest
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( correctMultipleD2FunctionRule.condition() );
+
+        assertNotNull( result );
+        assertTrue( result.isValid() );
+    }
+
+    @Test
+    public void testGetDescriptionWithD2FunctionsTEA()
+    {
+        Rule conditionWithD2FunctionsTEA = Rule.create( null, null, "d2:hasValue('test_var_three')", Arrays.asList( ruleAction ), "" );
+
+        RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
+        RuleValidationResult result = ruleEngine.evaluate( conditionWithD2FunctionsTEA.condition() );
+
+        assertNotNull( result );
+        assertTrue( result.isValid() );
+    }
+
+    @Test
+    public void testGetDescriptionWithPlainAttributeComparisonWithName()
+    {
+        Rule conditionWithD2FunctionsTEA = Rule.create( null, null, "'test_var_three' == 'email' ", Arrays.asList( ruleAction ), "" );
+
+        RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
+        RuleValidationResult result = ruleEngine.evaluate( conditionWithD2FunctionsTEA.condition() );
+
+        assertNotNull( result );
+        assertTrue( result.isValid() );
+    }
+
+    @Test
+    public void testGetDescriptionWithPlainAttributeComparison()
+    {
+        Rule conditionWithD2FunctionsTEA = Rule.create( null, null, "A{test_var_three} == 'email' ", Arrays.asList( ruleAction ), "" );
+
+        RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
+        RuleValidationResult result = ruleEngine.evaluate( conditionWithD2FunctionsTEA.condition() );
 
         assertNotNull( result );
         assertTrue( result.isValid() );

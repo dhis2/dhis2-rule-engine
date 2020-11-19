@@ -30,16 +30,25 @@ public class ProgramRuleCustomVariable
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        String variable = ctx.programRuleVariableName().getText();
+        String variable = null;
+
+        if ( ctx.programRuleVariableName() != null )
+        {
+            variable = ctx.programRuleVariableName().getText();
+        }
+        else if ( ctx.programRuleStringVariableName() != null )
+        {
+            variable = ctx.programRuleStringVariableName().getText().replace("\'","");
+        }
 
         if ( visitor.getItemStore().containsKey( variable ) )
         {
             visitor.getItemDescriptions().put( ctx.getText(), visitor.getItemStore().get( variable ).getDisplayName() );
 
-            return visitor.getItemStore().get( ctx.programRuleVariableName().getText() ).getValueType().getValue();
+            return visitor.getItemStore().get( variable ).getValueType().getValue();
         }
 
         throw new ParserExceptionWithoutContext(
-            "Variable " + ctx.programRuleVariableName().getText() + " does not exist" );
+            "Variable " + variable + " does not exist" );
     }
 }
