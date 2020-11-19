@@ -142,30 +142,33 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( conditionWithD2FunctionsTEA.condition() );
 
         assertNotNull( result );
+        assertEquals( "Variable_THREE", result.getDescription() );
         assertTrue( result.isValid() );
     }
 
     @Test
     public void testGetDescriptionWithPlainAttributeComparisonWithName()
     {
-        Rule conditionWithD2FunctionsTEA = Rule.create( null, null, "'test_var_three' == 'email' ", Arrays.asList( ruleAction ), "" );
+        Rule conditionWithD2FunctionsTEA = Rule.create( null, null, "'test_var_three' == 'email'", Arrays.asList( ruleAction ), "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( conditionWithD2FunctionsTEA.condition() );
 
         assertNotNull( result );
+        assertEquals( "'test_var_three' == 'email'", result.getDescription() );
         assertTrue( result.isValid() );
     }
 
     @Test
     public void testGetDescriptionWithPlainAttributeComparison()
     {
-        Rule conditionWithD2FunctionsTEA = Rule.create( null, null, "A{test_var_three} == 'email' ", Arrays.asList( ruleAction ), "" );
+        Rule conditionWithD2FunctionsTEA = Rule.create( null, null, "A{test_var_three} == 'email'", Arrays.asList( ruleAction ), "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( conditionWithD2FunctionsTEA.condition() );
 
         assertNotNull( result );
+        assertEquals( "Variable_THREE == 'email'", result.getDescription() );
         assertTrue( result.isValid() );
     }
 
