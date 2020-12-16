@@ -63,7 +63,7 @@ public abstract class RuleEvent
     @Nonnull
     public abstract Date eventDate();
 
-    @Nonnull
+    @Nullable
     public abstract Date dueDate();
 
     @Nullable
