@@ -310,10 +310,11 @@ public final class RuleVariableValueMapBuilder
             valueMap.put( RuleEngineUtils.ENV_VAR_EVENT_DATE, create( eventDate, RuleValueType.TEXT,
                 Arrays.asList( eventDate ), currentDate ) );
 
-            String dueDate = dateFormat.format( ruleEvent.dueDate() );
-            valueMap.put( RuleEngineUtils.ENV_VAR_DUE_DATE, create( dueDate, RuleValueType.TEXT,
-                Arrays.asList( dueDate ), currentDate ) );
-
+            if ( ruleEvent.dueDate() != null ) {
+                String dueDate = dateFormat.format(ruleEvent.dueDate());
+                valueMap.put(RuleEngineUtils.ENV_VAR_DUE_DATE, create(dueDate, RuleValueType.TEXT,
+                        Arrays.asList(dueDate), currentDate));
+            }
             if ( ruleEvent.completedDate() != null )
             {
                 String completedDate = dateFormat.format( ruleEvent.completedDate() );
