@@ -5,16 +5,24 @@ import com.google.auto.value.AutoValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static org.hisp.dhis.rules.models.AttributeType.UNKNOWN;
+
 @AutoValue
 public abstract class RuleActionHideOption
-    extends RuleAction
+    extends RuleActionAttribute
 {
 
     @Nonnull
     public static RuleActionHideOption create(
-        @Nullable String content, @Nonnull String option, @Nonnull String field )
+        @Nullable String content, @Nonnull String option, @Nonnull String field, @Nullable AttributeType attributeType )
     {
-        return new AutoValue_RuleActionHideOption( "", content == null ? "" : content, option, field );
+        return new AutoValue_RuleActionHideOption( "", attributeType, content == null ? "" : content, option, field );
+    }
+
+    @Nonnull
+    public static RuleActionHideOption create( @Nullable String content, @Nonnull String option, @Nonnull String field )
+    {
+        return create( content, option, field, UNKNOWN );
     }
 
     /**

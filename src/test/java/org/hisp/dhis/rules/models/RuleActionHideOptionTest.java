@@ -35,7 +35,9 @@ public class RuleActionHideOptionTest
     @Test
     public void equalsAndHashCodeFunctionsMustConformContract()
     {
-        EqualsVerifier.forClass( RuleActionHideOption.create( "test_content", "test_option", "test_field" ).getClass() )
+        EqualsVerifier.forClass(
+            RuleActionHideOption.create( "test_content", "test_option", "test_field", AttributeType.UNKNOWN )
+                .getClass() )
             .suppress( Warning.NULL_FIELDS )
             .verify();
     }

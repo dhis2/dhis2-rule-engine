@@ -5,16 +5,26 @@ import com.google.auto.value.AutoValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static org.hisp.dhis.rules.models.AttributeType.UNKNOWN;
+
 @AutoValue
 public abstract class RuleActionShowOptionGroup
-    extends RuleAction
+    extends RuleActionAttribute
 {
 
     @Nonnull
-    public static RuleActionShowOptionGroup create(
-        @Nullable String content, @Nonnull String optionGroup, @Nonnull String field )
+    public static RuleActionShowOptionGroup create( @Nullable String content, @Nonnull String optionGroup,
+        @Nonnull String field, @Nullable AttributeType attributeType )
     {
-        return new AutoValue_RuleActionShowOptionGroup( "", content == null ? "" : content, optionGroup, field );
+        return new AutoValue_RuleActionShowOptionGroup( "", attributeType, content == null ? "" : content, optionGroup,
+            field );
+    }
+
+    @Nonnull
+    public static RuleActionShowOptionGroup create( @Nullable String content, @Nonnull String optionGroup,
+        @Nonnull String field )
+    {
+        return create( content, optionGroup, field, UNKNOWN );
     }
 
     /**

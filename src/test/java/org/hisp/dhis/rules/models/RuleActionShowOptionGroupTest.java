@@ -43,7 +43,8 @@ public class RuleActionShowOptionGroupTest
     public void equalsAndHashCodeFunctionsMustConformContract()
     {
         EqualsVerifier.forClass(
-            RuleActionShowOptionGroup.create( "test_content", "test_option_group", "test_field" ).getClass() )
+            RuleActionShowOptionGroup
+                .create( "test_content", "test_option_group", "test_field", AttributeType.DATA_ELEMENT ).getClass() )
             .suppress( Warning.NULL_FIELDS )
             .verify();
     }
