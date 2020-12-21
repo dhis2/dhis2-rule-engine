@@ -1,10 +1,12 @@
 package org.hisp.dhis.rules;
 
+import org.assertj.core.api.AbstractAssert;
 import org.hisp.dhis.rules.models.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.mockito.ArgumentMatchers;
 
 import javax.annotation.Nonnull;
 import java.text.ParseException;
@@ -146,7 +148,7 @@ public class RuleVariableValueMapBuilderTests
         Date oldestEventDate = dateFormat.parse( "2013-01-01" );
         Date newestEventDate = dateFormat.parse( "2017-01-01" );
         Date currentEventDate = dateFormat.parse( "2015-01-01" );
-        Date currentEventDueDate = dateFormat.parse( "2016-01-01" );
+        Date currentEventDueDate = null;
 
         RuleEvent oldestRuleEvent = RuleEvent.create( "test_event_uid_oldest", "test_program_stage",
             RuleEvent.Status.ACTIVE, oldestEventDate, oldestEventDate, "", null, Arrays.asList(
@@ -173,7 +175,7 @@ public class RuleVariableValueMapBuilderTests
             .triggerEnvironment( TriggerEnvironment.SERVER )
             .build();
 
-        assertThat( valueMap.size() ).isEqualTo( 13 );
+        assertThat( valueMap.size() ).isEqualTo( 12 );
 
         assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -188,9 +190,7 @@ public class RuleVariableValueMapBuilderTests
         assertThatVariable( valueMap.get( "event_id" ) ).hasValue( "test_event_uid_current" )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_event_uid_current" );
 
-        assertThatVariable( valueMap.get( "due_date" ) )
-            .hasValue( wrap( dateFormat.format( currentEventDueDate ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( currentEventDueDate ) );
+        assertThat( valueMap.get( "due_date" ) ).isNull();
 
         assertThatVariable( valueMap.get( "test_variable_one" ) ).hasValue( "test_value_one_newest" )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_value_one_newest",
