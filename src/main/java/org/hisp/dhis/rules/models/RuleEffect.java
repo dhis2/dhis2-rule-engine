@@ -3,13 +3,14 @@ package org.hisp.dhis.rules.models;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 @AutoValue
 public abstract class RuleEffect
 {
 
     @Nonnull
-    public static RuleEffect create( @Nonnull RuleAction ruleAction, @Nonnull String data )
+    public static RuleEffect create( @Nonnull RuleAction ruleAction, @Nullable String data )
     {
         return new AutoValue_RuleEffect( ruleAction, data );
     }
