@@ -24,6 +24,6 @@ public abstract class RuleEffect
     @Nonnull
     public abstract RuleAction ruleAction();
 
-    @Nonnull
+    @Nullable
     public abstract String data();
 }
