@@ -5,14 +5,16 @@ import com.google.auto.value.AutoValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static org.hisp.dhis.rules.models.AttributeType.UNKNOWN;
+
 @AutoValue
 public abstract class RuleActionAssign
-    extends RuleAction
+    extends RuleActionAttribute
 {
 
     @Nonnull
     public static RuleActionAssign create( @Nullable String content,
-        @Nonnull String data, @Nullable String field )
+        @Nonnull String data, @Nullable String field, @Nullable AttributeType attributeType )
     {
         if ( content == null && field == null )
         {
@@ -20,7 +22,14 @@ public abstract class RuleActionAssign
                 "parameters must be not null." );
         }
 
-        return new AutoValue_RuleActionAssign( data, content == null ? "" : content, field == null ? "" : field );
+        return new AutoValue_RuleActionAssign( data, attributeType, content == null ? "" : content,
+            field == null ? "" : field );
+    }
+
+    @Nonnull
+    public static RuleActionAssign create( @Nullable String content, @Nonnull String data, @Nullable String field )
+    {
+        return create( content, data, field, UNKNOWN );
     }
 
     @Nonnull

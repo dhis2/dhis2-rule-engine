@@ -45,7 +45,7 @@ public class RuleActionShowWarningTests
     public void equalsAndHashcodeFunctionsMustConformToContract()
     {
         EqualsVerifier.forClass( RuleActionShowWarning
-            .create( "test_content", "test_data", "test_field" ).getClass() )
+            .create( "test_content", "test_data", "test_field", AttributeType.TRACKED_ENTITY_ATTRIBUTE ).getClass() )
             .suppress( Warning.NULL_FIELDS )
             .verify();
     }

@@ -45,7 +45,7 @@ public class RuleActionWarningOnCompletionTests
     public void equalsAndHashcodeFunctionsMustConformToContract()
     {
         EqualsVerifier.forClass( RuleActionWarningOnCompletion
-            .create( "test_content", "test_data", "test_field" ).getClass() )
+            .create( "test_content", "test_data", "test_field", AttributeType.UNKNOWN ).getClass() )
             .suppress( Warning.NULL_FIELDS )
             .verify();
     }

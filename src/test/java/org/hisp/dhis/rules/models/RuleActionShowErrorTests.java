@@ -44,7 +44,7 @@ public class RuleActionShowErrorTests
     public void equalsAndHashcodeFunctionsMustConformToContract()
     {
         EqualsVerifier.forClass( RuleActionShowError
-            .create( "test_content", "test_data", "test_field" ).getClass() )
+            .create( "test_content", "test_data", "test_field", AttributeType.DATA_ELEMENT ).getClass() )
             .suppress( Warning.NULL_FIELDS )
             .verify();
     }
