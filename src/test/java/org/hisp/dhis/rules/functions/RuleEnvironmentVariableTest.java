@@ -93,7 +93,7 @@ public class RuleEnvironmentVariableTest
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "1.0" );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "1" );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
     }
 }

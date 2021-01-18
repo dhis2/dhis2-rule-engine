@@ -119,15 +119,25 @@ class RuleEngineExecution
             .withSupplementaryData( supplementaryData )
             .validateCommonProperties();
 
-        return Parser.visit( condition, commonExpressionVisitor, !isOldAndroidVersion() ).toString();
+        Object result = Parser.visit( condition, commonExpressionVisitor, !isOldAndroidVersion() );
+        return convertInteger( result ).toString();
+    }
+
+    private Object convertInteger( Object result )
+    {
+        if ( result instanceof Double && (Double) result % 1 == 0 )
+        {
+            return ((Double) result).intValue();
+        }
+        return result;
     }
 
     private Boolean isOldAndroidVersion()
     {
         return valueMap.containsKey( "environment" ) &&
-                Objects.equals( valueMap.get( "environment" ).value(), TriggerEnvironment.ANDROIDCLIENT.getClientName() ) &&
-                supplementaryData.containsKey( "android_version" ) &&
-                Integer.parseInt( supplementaryData.get( "android_version" ).get( 0 ) ) < 21;
+            Objects.equals( valueMap.get( "environment" ).value(), TriggerEnvironment.ANDROIDCLIENT.getClientName() ) &&
+            supplementaryData.containsKey( "android_version" ) &&
+            Integer.parseInt( supplementaryData.get( "android_version" ).get( 0 ) ) < 21;
     }
 
     private Boolean isAssignToCalculatedValue( RuleAction ruleAction )
