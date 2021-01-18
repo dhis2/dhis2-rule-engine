@@ -120,9 +120,9 @@ public class ConstantsValueTests
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( enrollment ).call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 2 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4.0" );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( assignAction );
-        assertThat( ruleEffects.get( 1 ).data() ).isEqualTo( "4.0" );
+        assertThat( ruleEffects.get( 1 ).data() ).isEqualTo( "4" );
         assertThat( ruleEffects.get( 1 ).ruleAction() ).isEqualTo( action );
     }
 
@@ -155,7 +155,7 @@ public class ConstantsValueTests
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( enrollment ).call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4.0" );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( action );
     }
 

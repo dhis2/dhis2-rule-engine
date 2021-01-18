@@ -130,7 +130,7 @@ public class CalculatedValueTests
         RuleEngine ruleEngine = getRuleEngine( Arrays.asList( rule, rule2 ) ).enrollment( enrollment ).build();
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4.0" );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( sendMessageAction );
     }
 
@@ -195,7 +195,7 @@ public class CalculatedValueTests
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4.0" );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( sendMessageAction );
 
     }

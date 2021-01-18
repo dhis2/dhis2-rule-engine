@@ -1026,7 +1026,7 @@ public class RuleEngineFunctionTests
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "6.0" );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "6" );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
     }
 

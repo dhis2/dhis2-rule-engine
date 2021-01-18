@@ -82,7 +82,7 @@ public class RuleEngineEffectTypesTests
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4.0" );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
     }
 
@@ -99,7 +99,7 @@ public class RuleEngineEffectTypesTests
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4.0" );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
     }
 
@@ -116,7 +116,7 @@ public class RuleEngineEffectTypesTests
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4.0" );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
     }
 
@@ -303,7 +303,7 @@ public class RuleEngineEffectTypesTests
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4.0" );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
     }
 
@@ -320,7 +320,7 @@ public class RuleEngineEffectTypesTests
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4.0" );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
     }
 
