@@ -72,4 +72,8 @@ public class ZScoreTableKey
 
         return this.parameter == other.parameter && this.gender == other.gender;
     }
+
+    public float getParameter() {
+        return parameter;
+    }
 }
