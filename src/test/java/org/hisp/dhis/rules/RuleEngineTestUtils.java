@@ -28,6 +28,7 @@ package org.hisp.dhis.rules;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.google.common.collect.Lists;
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleVariable;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
@@ -41,17 +42,28 @@ import java.util.List;
  */
 public class RuleEngineTestUtils
 {
-    public static RuleEngine getRuleEngine(Rule rule, List<RuleVariable> ruleVariables )
+    public static RuleEngine getRuleEngine( Rule rule, List<RuleVariable> ruleVariables )
     {
-        return getRuleEngineBuilder( rule, ruleVariables )
+        return getRuleEngineBuilder( Arrays.asList( rule ), ruleVariables )
+            .build();
+    }
+
+    public static RuleEngine getRuleEngine( List<Rule> rules )
+    {
+        return getRuleEngineBuilder( rules, Lists.<RuleVariable>newArrayList() )
             .build();
     }
 
     public static RuleEngine.Builder getRuleEngineBuilder( Rule rule, List<RuleVariable> ruleVariables )
     {
+        return getRuleEngineBuilder( Arrays.asList( rule ), ruleVariables );
+    }
+
+    private static RuleEngine.Builder getRuleEngineBuilder( List<Rule> rule, List<RuleVariable> ruleVariables )
+    {
         return RuleEngineContext
             .builder()
-            .rules( Arrays.asList( rule ) )
+            .rules( rule )
             .ruleVariables( ruleVariables )
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( new HashMap<String, String>() )

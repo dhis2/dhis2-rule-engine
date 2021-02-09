@@ -3,6 +3,7 @@ package org.hisp.dhis.rules;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.dhis.antlr.Parser;
+import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
 import org.hisp.dhis.rules.models.*;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.rules.utils.RuleEngineUtils;
@@ -72,33 +73,25 @@ class RuleEngineExecution
         {
             log.debug( "Evaluating programrule: " + rule.name() );
 
-            try
+            if ( Boolean.valueOf( process( rule.condition() ) ) )
             {
-                if ( Boolean.valueOf( process( rule.condition() ) ) )
+                for ( RuleAction action : rule.actions() )
                 {
-                    for ( RuleAction action : rule.actions() )
-                    {
 
-                        //Check if action is assigning value to calculated variable
-                        if ( isAssignToCalculatedValue( action ) )
-                        {
-                            RuleActionAssign ruleActionAssign = (RuleActionAssign) action;
-                            updateValueMap(
-                                    Utils.unwrapVariableName( ruleActionAssign.content() ),
-                                    RuleVariableValue.create( process( ruleActionAssign.data() ), RuleValueType.TEXT )
-                            );
-                        }
-                        else
-                        {
-                            ruleEffects.add( create( action ) );
-                        }
+                    //Check if action is assigning value to calculated variable
+                    if ( isAssignToCalculatedValue( action ) )
+                    {
+                        RuleActionAssign ruleActionAssign = (RuleActionAssign) action;
+                        updateValueMap(
+                            Utils.unwrapVariableName( ruleActionAssign.content() ),
+                            RuleVariableValue.create( process( ruleActionAssign.data() ), RuleValueType.TEXT )
+                        );
+                    }
+                    else
+                    {
+                        ruleEffects.add( create( action ) );
                     }
                 }
-            }
-            catch ( Exception e )
-            {
-                e.printStackTrace();
-                log.error( "Exception in " + rule.name() + ": " + e.getMessage() );
             }
         }
 
@@ -111,16 +104,29 @@ class RuleEngineExecution
         {
             return "";
         }
+        try
+        {
+            CommonExpressionVisitor commonExpressionVisitor = CommonExpressionVisitor.newBuilder()
+                .withFunctionMap( RuleEngineUtils.FUNCTIONS )
+                .withFunctionMethod( FUNCTION_EVALUATE )
+                .withVariablesMap( valueMap )
+                .withSupplementaryData( supplementaryData )
+                .validateCommonProperties();
 
-        CommonExpressionVisitor commonExpressionVisitor = CommonExpressionVisitor.newBuilder()
-            .withFunctionMap( RuleEngineUtils.FUNCTIONS )
-            .withFunctionMethod( FUNCTION_EVALUATE )
-            .withVariablesMap( valueMap )
-            .withSupplementaryData( supplementaryData )
-            .validateCommonProperties();
-
-        Object result = Parser.visit( condition, commonExpressionVisitor, !isOldAndroidVersion() );
-        return convertInteger( result ).toString();
+            Object result = Parser.visit( condition, commonExpressionVisitor, !isOldAndroidVersion() );
+            return convertInteger( result ).toString();
+        }
+        catch ( ParserExceptionWithoutContext e )
+        {
+            log.warn( "Condition " + condition + " not executed: " + e.getMessage() );
+            return "";
+        }
+        catch ( Exception e )
+        {
+            e.printStackTrace();
+            log.error( "Unexpected exception while evaluating " + condition + ": " + e.getMessage() );
+            return "";
+        }
     }
 
     private Object convertInteger( Object result )
