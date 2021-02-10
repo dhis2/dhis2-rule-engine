@@ -15,13 +15,14 @@ public class ProgramRuleVariable
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
         RuleVariableValue variableValue = visitor.getValueMap().get( ctx.programVariable().getText() );
-        String variable = variableValue.value() == null ?
-            variableValue.type().defaultValue() : variableValue.value();
 
-        if ( variable == null )
+        if ( variableValue == null )
         {
             throw new ParserExceptionWithoutContext( "Variable " + ctx.programVariable().getText() + " not present" );
         }
+
+        String variable = variableValue.value() == null ?
+            variableValue.type().defaultValue() : variableValue.value();
 
         return variable;
     }

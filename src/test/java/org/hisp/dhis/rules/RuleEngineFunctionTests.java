@@ -1,6 +1,8 @@
 package org.hisp.dhis.rules;
 
+import com.google.common.collect.Lists;
 import org.hisp.dhis.rules.models.*;
+import org.hisp.dhis.rules.variables.Variable;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -25,6 +27,30 @@ public class RuleEngineFunctionTests
     private static final String DATE_PATTERN = "yyyy-MM-dd";
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat( DATE_PATTERN, Locale.US );
+
+    @Test
+    public void evaluateFailingRule()
+        throws Exception
+    {
+        Date enrollmentDate = new Date();
+        RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+            "test_action_content", "2 + 2" );
+        Rule failingRule = Rule
+            .create( null, null, "d2:daysBetween(V{enrollment_date},V{event_date}) < 0",
+                Arrays.asList( ruleAction ), "" );
+        Rule validRule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+        RuleEngine ruleEngine = getRuleEngine( Lists.newArrayList( failingRule, validRule ) );
+
+        RuleEnrollment ruleEnrollment = RuleEnrollment.create( "test_enrollment",
+            enrollmentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE, "", null,
+            Lists.<RuleAttributeValue>newArrayList(),
+            "" );
+        List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEnrollment ).call();
+
+        assertThat( ruleEffects.size() ).isEqualTo( 1 );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+    }
 
     @Test
     public void evaluateHasValueFunctionMustReturnTrueIfValueSpecified()
