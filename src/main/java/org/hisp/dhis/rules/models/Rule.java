@@ -1,7 +1,6 @@
 package org.hisp.dhis.rules.models;
 
 import com.google.auto.value.AutoValue;
-import com.sun.istack.internal.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -14,7 +13,7 @@ public abstract class Rule
 {
     @Nonnull
     public static Rule create( @Nullable String programStage, @Nullable Integer priority,
-        @Nonnull String condition, @Nonnull List<RuleAction> actions, @Nullable String name, @NotNull String uid )
+        @Nonnull String condition, @Nonnull List<RuleAction> actions, @Nullable String name, @Nonnull String uid )
     {
         return new AutoValue_Rule( name, programStage, priority, condition,
             Collections.unmodifiableList( new ArrayList<>( actions ) ), uid );
