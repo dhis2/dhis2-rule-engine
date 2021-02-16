@@ -13,10 +13,10 @@ public abstract class Rule
 {
     @Nonnull
     public static Rule create( @Nullable String programStage, @Nullable Integer priority,
-        @Nonnull String condition, @Nonnull List<RuleAction> actions, @Nullable String name )
+        @Nonnull String condition, @Nonnull List<RuleAction> actions, @Nullable String name, @Nonnull String uid )
     {
         return new AutoValue_Rule( name, programStage, priority, condition,
-            Collections.unmodifiableList( new ArrayList<>( actions ) ) );
+            Collections.unmodifiableList( new ArrayList<>( actions ) ), uid );
     }
 
     @Nullable
@@ -33,4 +33,7 @@ public abstract class Rule
 
     @Nonnull
     public abstract List<RuleAction> actions();
+
+    @Nonnull
+    public abstract String uid();
 }

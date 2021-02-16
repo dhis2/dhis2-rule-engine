@@ -41,7 +41,7 @@ public class RuleEngineEffectTypesTests
     {
         RuleAction ruleAction = RuleActionAssign.create(
             null, "'test_string'", "#{test_data_element}" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -58,7 +58,7 @@ public class RuleEngineEffectTypesTests
     {
         RuleAction ruleAction = RuleActionCreateEvent.create(
             "test_action_content", "'event_uid;test_data_value_one'", "test_program_stage" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -75,7 +75,7 @@ public class RuleEngineEffectTypesTests
     {
         RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
             "test_action_content", "2 + 2" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -92,7 +92,7 @@ public class RuleEngineEffectTypesTests
     {
         RuleAction ruleAction = RuleActionDisplayText.createForFeedback(
             "test_action_content", "2 + 2" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -109,7 +109,7 @@ public class RuleEngineEffectTypesTests
     {
         RuleAction ruleAction = RuleActionErrorOnCompletion.create(
             "test_action_content", "2 + 2", "test_data_element" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -126,7 +126,7 @@ public class RuleEngineEffectTypesTests
     {
         RuleAction ruleAction = RuleActionHideField.create(
             "test_action_content", "test_data_element" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = RuleEngineContext
             .builder()
@@ -149,7 +149,7 @@ public class RuleEngineEffectTypesTests
     {
         RuleAction ruleAction = RuleActionHideField.create(
             "test_action_content", "test_data_element" );
-        Rule rule = Rule.create( null, null, "V{event_status} =='COMPLETED'", Arrays.asList( ruleAction ), "" );
+        Rule rule = Rule.create( null, null, "V{event_status} =='COMPLETED'", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -166,7 +166,7 @@ public class RuleEngineEffectTypesTests
     {
         RuleAction ruleAction = RuleActionHideField.create(
             "test_action_content", "test_data_element" );
-        Rule rule = Rule.create( null, null, "V{environment} =='Server'", Arrays.asList( ruleAction ), "" );
+        Rule rule = Rule.create( null, null, "V{environment} =='Server'", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -182,7 +182,7 @@ public class RuleEngineEffectTypesTests
         throws Exception
     {
         RuleAction ruleAction = RuleActionHideProgramStage.create( "test_program_stage" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -198,7 +198,7 @@ public class RuleEngineEffectTypesTests
         throws Exception
     {
         RuleAction ruleAction = RuleActionScheduleMessage.create( "", "'2018-04-24'" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -214,7 +214,7 @@ public class RuleEngineEffectTypesTests
         throws Exception
     {
         RuleAction ruleAction = RuleActionHideSection.create( "test_section" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -230,7 +230,7 @@ public class RuleEngineEffectTypesTests
         throws Exception
     {
         RuleAction ruleAction = RuleActionHideOption.create( "test_content", "test_option", "test_field" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -246,7 +246,7 @@ public class RuleEngineEffectTypesTests
         throws Exception
     {
         RuleAction ruleAction = RuleActionHideOptionGroup.create( "test_content", "test_option_group", "field" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -262,7 +262,7 @@ public class RuleEngineEffectTypesTests
         throws Exception
     {
         RuleAction ruleAction = RuleActionSetMandatoryField.create( "test_data_element" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -279,7 +279,7 @@ public class RuleEngineEffectTypesTests
     {
         RuleAction ruleAction = RuleActionShowWarning.create(
             "test_warning_message", null, "target_field" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -296,7 +296,7 @@ public class RuleEngineEffectTypesTests
     {
         RuleAction ruleAction = RuleActionShowError.create(
             "test_error_message", "2 + 2", "target_field" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -313,7 +313,7 @@ public class RuleEngineEffectTypesTests
     {
         RuleAction ruleAction = RuleActionWarningOnCompletion.create(
             "test_warning_message", "2 + 2", "target_field" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "" );
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 

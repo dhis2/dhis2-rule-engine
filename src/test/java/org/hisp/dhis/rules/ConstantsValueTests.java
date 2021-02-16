@@ -65,7 +65,7 @@ public class ConstantsValueTests
     {
         RuleAction assignAction = RuleActionAssign.create( null, "C{A1234567890}", "#{test_attribute}" );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
-            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1" );
+            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1", "" );
 
         Map<String, String> constantsValueMap = new HashMap<>();
         constantsValueMap.put( "A1234567890", "3.14" );
@@ -98,9 +98,9 @@ public class ConstantsValueTests
         RuleAction assignAction = RuleActionAssign.create( null, "4", "test_attribute" );
         RuleAction action = RuleActionShowError.create( null, "#{test_attribute}", "" );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
-            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1" );
+            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1", "" );
         org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule
-            .create( null, 1, "#{test_attribute} > 3", Arrays.asList( action ), "test_program_rule2" );
+            .create( null, 1, "#{test_attribute} > 3", Arrays.asList( action ), "test_program_rule2", "" );
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule, rule2 ),
             Maps.<String, String>newHashMap() );
@@ -133,9 +133,9 @@ public class ConstantsValueTests
         RuleAction assignAction = RuleActionAssign.create( "#{test_attribute}", "4", null );
         RuleAction action = RuleActionShowError.create( null, "#{test_attribute}", "" );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
-            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1" );
+            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1", "" );
         org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule
-            .create( null, 1, "#{test_attribute} > 3", Arrays.asList( action ), "test_program_rule2" );
+            .create( null, 1, "#{test_attribute} > 3", Arrays.asList( action ), "test_program_rule2", "" );
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule, rule2 ),
             Maps.<String, String>newHashMap() );
@@ -165,7 +165,7 @@ public class ConstantsValueTests
     {
         RuleAction assignAction = RuleActionAssign.create( null, "C{A1234567890}", "#{test_data_element}" );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
-            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1" );
+            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1", "" );
 
         Map<String, String> constantsValueMap = new HashMap<>();
         constantsValueMap.put( "A1234567890", "3.14" );

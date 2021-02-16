@@ -62,7 +62,7 @@ public class RuleEnvironmentVariableTest
         RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
                 "test_action_content", "1" );
 
-        Rule rule = Rule.create( null, null, "d2:hasValue(V{completed_date})", Arrays.asList( ruleAction ), "" );
+        Rule rule = Rule.create( null, null, "d2:hasValue(V{completed_date})", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule, new ArrayList<RuleVariable>() );
 
@@ -82,7 +82,7 @@ public class RuleEnvironmentVariableTest
         RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
                 "test_action_content", "1" );
 
-        Rule rule = Rule.create( null, null, "d2:hasValue(V{completed_date})", Arrays.asList( ruleAction ), "" );
+        Rule rule = Rule.create( null, null, "d2:hasValue(V{completed_date})", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule, new ArrayList<RuleVariable>() );
 
