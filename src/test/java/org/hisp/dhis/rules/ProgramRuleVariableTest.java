@@ -288,7 +288,7 @@ public class ProgramRuleVariableTest
     {
         RuleAction assignAction = RuleActionAssign.create( null, variable, "#{test_data_element}" );
         return org.hisp.dhis.rules.models.Rule
-            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1" );
+            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1", "" );
     }
 
     private void assertProgramRuleVariableAssignment( List<RuleEffect> ruleEffects, Rule rule, String variableValue )

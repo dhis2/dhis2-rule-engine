@@ -10,16 +10,19 @@ public abstract class RuleEffect
 {
 
     @Nonnull
-    public static RuleEffect create( @Nonnull RuleAction ruleAction, @Nullable String data )
+    public static RuleEffect create( @Nonnull String ruleId, @Nonnull RuleAction ruleAction, @Nullable String data )
     {
-        return new AutoValue_RuleEffect( ruleAction, data );
+        return new AutoValue_RuleEffect( ruleId, ruleAction, data );
     }
 
     @Nonnull
-    public static RuleEffect create( @Nonnull RuleAction ruleAction )
+    public static RuleEffect create( @Nonnull String ruleId, @Nonnull RuleAction ruleAction )
     {
-        return new AutoValue_RuleEffect( ruleAction, "" );
+        return new AutoValue_RuleEffect( ruleId, ruleAction, "" );
     }
+
+    @Nullable
+    public abstract String ruleId();
 
     @Nonnull
     public abstract RuleAction ruleAction();

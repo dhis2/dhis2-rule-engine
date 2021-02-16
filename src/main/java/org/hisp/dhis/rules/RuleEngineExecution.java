@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.dhis.antlr.Parser;
@@ -89,7 +90,7 @@ class RuleEngineExecution
                     }
                     else
                     {
-                        ruleEffects.add( create( action ) );
+                        ruleEffects.add( create( rule, action ) );
                     }
                 }
             }
@@ -157,16 +158,17 @@ class RuleEngineExecution
     }
 
     @Nonnull
-    private RuleEffect create( @Nonnull RuleAction ruleAction )
+    private RuleEffect create( @Nonnull Rule rule, @Nonnull RuleAction ruleAction )
     {
         if ( ruleAction instanceof RuleActionAssign )
         {
             RuleActionAssign ruleActionAssign = (RuleActionAssign) ruleAction;
             String data = process( ruleActionAssign.data() );
             updateValueMap( ruleActionAssign.field(), RuleVariableValue.create( data, RuleValueType.TEXT ) );
-            return RuleEffect.create( ruleAction, data );
+            return RuleEffect
+                .create( rule.uid(), ruleAction, StringUtils.isEmpty( data ) ? ruleActionAssign.data() : data );
         }
 
-        return RuleEffect.create( ruleAction, process( ruleAction.data() ) );
+        return RuleEffect.create( rule.uid(), ruleAction, process( ruleAction.data() ) );
     }
 }

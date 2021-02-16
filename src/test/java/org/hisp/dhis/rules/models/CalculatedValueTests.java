@@ -97,11 +97,12 @@ public class CalculatedValueTests
     {
         RuleAction assignAction = RuleActionAssign.create( "#{test_calculated_value}", "2+2", null );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
-            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1" );
+            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1", "" );
 
         RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4" );
         org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule
-            .create( null, 4, "#{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2" );
+            .create( null, 4, "#{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2",
+                "" );
 
         RuleEnrollment enrollment = RuleEnrollment.builder()
             .enrollment( "test_enrollment" )
@@ -139,11 +140,12 @@ public class CalculatedValueTests
         ArrayList<org.hisp.dhis.rules.models.Rule> rules = Lists.newArrayList();
         RuleAction assignAction = RuleActionAssign.create( "#{test_calculated_value}", "2+2", null );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
-            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1" );
+            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1", "" );
 
         RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4" );
         org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule
-            .create( null, 4, "#{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2" );
+            .create( null, 4, "#{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2",
+                "" );
         for ( int j = 0; j < i; j++ )
         {
             rules.add( rule );
@@ -158,12 +160,12 @@ public class CalculatedValueTests
     {
         RuleAction assignAction = RuleActionAssign.create( "#{test_calculated_value}", "2+2", null );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
-            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1" );
+            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1", "" );
 
         RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4.0" );
         org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule
             .create( null, 4, "#{test_calculated_value}==4.0", Arrays.asList( sendMessageAction ),
-                "test_program_rule2" );
+                "test_program_rule2", "" );
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule, rule2 ) );
 
