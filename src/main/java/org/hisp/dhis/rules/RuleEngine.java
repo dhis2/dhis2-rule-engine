@@ -165,6 +165,45 @@ public final class RuleEngine
         return result;
     }
 
+    @Nonnull
+    public RuleValidationResult evaluateDataFieldExpression( String expression )
+    {
+        Map<String, String> itemDescriptions = new HashMap<>();
+
+        CommonExpressionVisitor visitor = CommonExpressionVisitor.newBuilder()
+                .withIteamStore( ruleEngineContext.getDataItemStore() )
+                .withFunctionMethod( FUNCTION_FOR_DESCRIPTION )
+                .withFunctionMap( RuleEngineUtils.FUNCTIONS )
+                .withItemDescriptions( itemDescriptions )
+                .validateAndBuildForDescription();
+
+        RuleValidationResult result;
+
+        try
+        {
+            Parser.visit( expression, visitor );
+
+            String description = expression;
+
+            for ( Map.Entry<String, String> entry : itemDescriptions.entrySet() )
+            {
+                description = description.replace( entry.getKey(), entry.getValue() );
+            }
+
+            result = RuleValidationResult.builder().isValid( true ).description( description ).build();
+        }
+        catch ( IllegalStateException e )
+        {
+            result = RuleValidationResult.builder().isValid( false )
+                    .errorMessage( e.getMessage() )
+                    .exception( e )
+                    .build();
+            log.debug( e.getMessage(), e );
+        }
+
+        return result;
+    }
+
     public static class Builder
     {
         @Nonnull
