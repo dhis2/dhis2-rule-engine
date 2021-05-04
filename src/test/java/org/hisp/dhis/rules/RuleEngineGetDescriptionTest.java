@@ -40,6 +40,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
 
 /**
@@ -312,6 +314,30 @@ public class RuleEngineGetDescriptionTest
 
         assertNotNull( result );
         assertTrue( result.isValid() );
+    }
+
+    @Test
+    public void testGetDescriptionForDataFieldExpression()
+    {
+        RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
+
+        RuleValidationResult result = ruleEngine.evaluateDataFieldExpression( "1 + 1" );
+        assertNotNull( result );
+        assertTrue( result.isValid() );
+
+        result = ruleEngine.evaluateDataFieldExpression( "d2:hasValue(#{test_var_two}) && d2:count(#{test_var_one}) > 0 " );
+        assertNotNull( result );
+        assertTrue( result.isValid() );
+
+        result = ruleEngine.evaluateDataFieldExpression( "1 + 1 +" );
+        assertNotNull( result );
+        assertFalse( result.isValid() );
+        assertThat( result.getException(), instanceOf( IllegalStateException.class ) );
+
+        result = ruleEngine.evaluateDataFieldExpression( "d2:hasValue(#{test_var_two}) && d2:count(#{test_var_one}) > 0 (" );
+        assertNotNull( result );
+        assertFalse( result.isValid() );
+        assertThat( result.getException(), instanceOf( IllegalStateException.class ) );
     }
 
     private RuleEngine.Builder getRuleEngineBuilderForDescription( Map<String, DataItem> itemStore )
