@@ -129,20 +129,40 @@ public final class RuleEngine
     @Nonnull
     public RuleValidationResult evaluate( String expression )
     {
+        // Rule condition expression should be evaluated against Boolean
+        return getExpressionDescription( expression, Boolean.class );
+    }
+
+    @Nonnull
+    public RuleValidationResult evaluateDataFieldExpression( String expression )
+    {
+        // Rule action data field field should be evaluated against all i.e Boolean, String, Date and Numerical value
+        return getExpressionDescription( expression, null );
+    }
+
+    private RuleValidationResult getExpressionDescription( String expression, Class<?> klass )
+    {
         Map<String, String> itemDescriptions = new HashMap<>();
 
         CommonExpressionVisitor visitor = CommonExpressionVisitor.newBuilder()
-            .withIteamStore( ruleEngineContext.getDataItemStore() )
-            .withFunctionMethod( FUNCTION_FOR_DESCRIPTION )
-            .withFunctionMap( RuleEngineUtils.FUNCTIONS )
-            .withItemDescriptions( itemDescriptions )
-            .validateAndBuildForDescription();
+                .withIteamStore( ruleEngineContext.getDataItemStore() )
+                .withFunctionMethod( FUNCTION_FOR_DESCRIPTION )
+                .withFunctionMap( RuleEngineUtils.FUNCTIONS )
+                .withItemDescriptions( itemDescriptions )
+                .validateAndBuildForDescription();
 
         RuleValidationResult result;
 
         try
         {
-            castClass( Boolean.class, Parser.visit( expression, visitor ) );
+            if ( klass == null )
+            {
+                Parser.visit( expression, visitor );
+            }
+            else
+            {
+                castClass( klass, Parser.visit( expression, visitor ) );
+            }
 
             String description = expression;
 
