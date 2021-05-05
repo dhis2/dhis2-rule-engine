@@ -3,23 +3,13 @@ package org.hisp.dhis.rules;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.dhis.antlr.Parser;
-import org.hisp.dhis.antlr.ParserException;
-import org.hisp.dhis.rules.models.Rule;
-import org.hisp.dhis.rules.models.RuleEffect;
-import org.hisp.dhis.rules.models.RuleEnrollment;
-import org.hisp.dhis.rules.models.RuleEvent;
-import org.hisp.dhis.rules.models.RuleValidationResult;
-import org.hisp.dhis.rules.models.TriggerEnvironment;
+import org.hisp.dhis.rules.models.*;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.rules.utils.RuleEngineUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 import static org.hisp.dhis.antlr.AntlrParserUtils.castClass;
@@ -105,11 +95,6 @@ public final class RuleEngine
     public Callable<List<RuleEffect>> evaluate( @Nonnull RuleEnrollment ruleEnrollment,
         @Nonnull List<Rule> rulesToEvaluate )
     {
-        if ( ruleEnrollment == null )
-        {
-            throw new IllegalArgumentException( "ruleEnrollment == null" );
-        }
-
         Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEnrollment )
             .ruleVariables( ruleEngineContext.ruleVariables() )
             .triggerEnvironment( triggerEnvironment )
@@ -118,6 +103,21 @@ public final class RuleEngine
             .build();
 
         return new RuleEngineExecution( rulesToEvaluate, valueMap, ruleEngineContext.supplementaryData() );
+    }
+
+    @Nonnull
+    public Callable<List<RuleEffects>> evaluate()
+    {
+        RuleVariableValueMap valueMap = RuleVariableValueMapBuilder.target()
+            .ruleVariables( ruleEngineContext.ruleVariables() )
+            .ruleEnrollment( ruleEnrollment )
+            .triggerEnvironment( triggerEnvironment )
+            .ruleEvents( ruleEvents )
+            .constantValueMap( ruleEngineContext.constantsValues() )
+            .multipleBuild();
+
+        return new RuleEngineMultipleExecution( ruleEngineContext.rules(), valueMap,
+            ruleEngineContext.supplementaryData() );
     }
 
     @Nonnull

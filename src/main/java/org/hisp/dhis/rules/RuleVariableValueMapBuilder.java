@@ -151,6 +151,25 @@ public final class RuleVariableValueMapBuilder
         return Collections.unmodifiableMap( valueMap );
     }
 
+    @Nonnull
+    RuleVariableValueMap multipleBuild()
+    {
+        Map<RuleEnrollment, Map<String, RuleVariableValue>> enrollmentMap = new HashMap<>();
+        if ( ruleEnrollment != null )
+        {
+            enrollmentMap.put( ruleEnrollment, build() );
+        }
+        Map<RuleEvent, Map<String, RuleVariableValue>> eventMap = new HashMap<>();
+
+        for ( RuleEvent event : ruleEvents )
+        {
+            this.ruleEvent = event;
+            eventMap.put( ruleEvent, build() );
+        }
+
+        return new RuleVariableValueMap( enrollmentMap, eventMap );
+    }
+
     private boolean isEventInList( @Nonnull List<RuleEvent> ruleEvents,
         @Nullable RuleEvent ruleEvent )
     {
@@ -319,11 +338,16 @@ public final class RuleVariableValueMapBuilder
             {
                 String completedDate = dateFormat.format( ruleEvent.completedDate() );
                 valueMap.put( RuleEngineUtils.ENV_VAR_COMPLETED_DATE, create( completedDate, RuleValueType.TEXT,
-                        Arrays.asList( completedDate ), currentDate ) );
+                    Arrays.asList( completedDate ), currentDate ) );
             }
 
             // override value of event count
             String eventCount = String.valueOf( ruleEvents.size() + 1 );
+            if ( ruleEvents.contains( ruleEvent ) )
+            {
+                eventCount = String.valueOf( ruleEvents.size() );
+            }
+
             valueMap.put( RuleEngineUtils.ENV_VAR_EVENT_COUNT, create( eventCount,
                 RuleValueType.NUMERIC, Arrays.asList( eventCount ), currentDate ) );
             valueMap.put( RuleEngineUtils.ENV_VAR_EVENT_ID, create( ruleEvent.event(),
