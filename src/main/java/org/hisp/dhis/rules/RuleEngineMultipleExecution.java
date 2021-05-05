@@ -49,9 +49,11 @@ class RuleEngineMultipleExecution
         for ( Map.Entry<RuleEnrollment, Map<String, RuleVariableValue>> enrollments : ruleVariableValueMap
             .getEnrollmentMap().entrySet() )
         {
+            List<RuleEffect> enrollmentRuleEffects = ruleConditionEvaluator
+                .getRuleEffects( enrollments.getValue(), supplementaryData,
+                    RuleEngineFilter.filterRules( rules, enrollments.getKey() ) );
             ruleEffects.add( new RuleEffects( TrackerObjectType.ENROLLMENT, enrollments.getKey().enrollment(),
-                ruleConditionEvaluator.getRuleEffects( enrollments.getValue(), supplementaryData,
-                    RuleEngineFilter.filterRules( rules, enrollments.getKey() ) ) ) );
+                enrollmentRuleEffects ) );
         }
 
         for ( Map.Entry<RuleEvent, Map<String, RuleVariableValue>> events : ruleVariableValueMap

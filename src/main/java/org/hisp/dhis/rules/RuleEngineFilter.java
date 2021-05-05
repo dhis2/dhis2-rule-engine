@@ -50,9 +50,7 @@ class RuleEngineFilter
             {
                 List<RuleAction> ruleActions = filterActionRules( rule.actions(),
                     AttributeType.TRACKED_ENTITY_ATTRIBUTE );
-                rule.actions().clear();
-                rule.actions().addAll( ruleActions );
-                filteredRules.add( rule );
+                filteredRules.add( Rule.copy( rule, ruleActions ) );
             }
         }
 
@@ -70,9 +68,7 @@ class RuleEngineFilter
             {
                 List<RuleAction> ruleActions = filterActionRules( rule.actions(),
                     AttributeType.DATA_ELEMENT );
-                rule.actions().clear();
-                rule.actions().addAll( ruleActions );
-                filteredRules.add( rule );
+                filteredRules.add( Rule.copy( rule, ruleActions ) );
             }
         }
 
@@ -85,7 +81,7 @@ class RuleEngineFilter
 
         for ( RuleAction ruleAction : ruleActions )
         {
-            if ( ruleAction instanceof RuleActionAttribute &&
+            if ( !(ruleAction instanceof RuleActionAttribute) ||
                 ((RuleActionAttribute) ruleAction).attributeType() == attributeType )
             {
                 filteredRuleActions.add( ruleAction );

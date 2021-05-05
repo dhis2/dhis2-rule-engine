@@ -29,9 +29,7 @@ package org.hisp.dhis.rules;
  */
 
 import com.google.common.collect.Lists;
-import org.hisp.dhis.rules.models.Rule;
-import org.hisp.dhis.rules.models.RuleVariable;
-import org.hisp.dhis.rules.models.TriggerEnvironment;
+import org.hisp.dhis.rules.models.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -45,6 +43,13 @@ public class RuleEngineTestUtils
     public static RuleEngine getRuleEngine( Rule rule, List<RuleVariable> ruleVariables )
     {
         return getRuleEngineBuilder( Arrays.asList( rule ), ruleVariables )
+            .build();
+    }
+
+    public static RuleEngine getRuleEngine( List<Rule> rules, RuleEnrollment ruleEnrollment,
+        List<RuleEvent> ruleEvents )
+    {
+        return getRuleEngineBuilder( rules, ruleEnrollment, ruleEvents )
             .build();
     }
 
@@ -68,5 +73,13 @@ public class RuleEngineTestUtils
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( new HashMap<String, String>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );
+    }
+
+    private static RuleEngine.Builder getRuleEngineBuilder( List<Rule> rule, RuleEnrollment ruleEnrollment,
+        List<RuleEvent> ruleEvents )
+    {
+        return getRuleEngineBuilder( rule, Lists.<RuleVariable>newArrayList() )
+            .enrollment( ruleEnrollment )
+            .events( ruleEvents );
     }
 }

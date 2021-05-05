@@ -3,6 +3,7 @@ package org.hisp.dhis.rules;
 import com.google.common.collect.Lists;
 import org.hisp.dhis.rules.models.*;
 import org.hisp.dhis.rules.variables.Variable;
+import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -50,6 +51,58 @@ public class RuleEngineFunctionTests
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
         assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+    }
+
+    @Test
+    public void evaluateFailingRuleInMultipleContext()
+        throws Exception
+    {
+        final Date today = new Date();
+        final Date yesterday = LocalDate.now().minusDays( 1 ).toDate();
+        RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+            "test_action_content", "2 + 2" );
+        Rule failingRule = Rule
+            .create( null, null, "d2:daysBetween(V{enrollment_date},V{event_date}) < 0",
+                Arrays.asList( ruleAction ), "", "" );
+
+        RuleEnrollment ruleEnrollment = RuleEnrollment.create( "test_enrollment",
+            today, today, RuleEnrollment.Status.ACTIVE, "", null,
+            Lists.<RuleAttributeValue>newArrayList(),
+            "" );
+        RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition" ) ), "",
+            null );
+
+        RuleEvent ruleNotFailingEvent = RuleEvent.create( "test_not_failing_event", "test_program_stage",
+            RuleEvent.Status.ACTIVE, yesterday, yesterday, "", null, Arrays.asList(
+                RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition" ) ), "",
+            null );
+
+        RuleEngine ruleEngine = getRuleEngine( Lists.newArrayList( failingRule ), ruleEnrollment,
+            Lists.newArrayList( ruleEvent, ruleNotFailingEvent ) );
+        List<RuleEffects> ruleEffects = ruleEngine.evaluate().call();
+
+        assertThat( ruleEffects.size() ).isEqualTo( 3 );
+        assertThat( getRuleEffectsByUid( ruleEffects, "test_event" ).getRuleEffects() ).isEmpty();
+        assertThat( getRuleEffectsByUid( ruleEffects, "test_not_failing_event" ).getRuleEffects() ).isNotEmpty();
+        assertThat( getRuleEffectsByUid( ruleEffects, "test_not_failing_event" ).getRuleEffects().get( 0 ).data() )
+            .isEqualTo( "4" );
+        assertThat( getRuleEffectsByUid( ruleEffects, "test_enrollment" ).getRuleEffects() ).isEmpty();
+
+        ;
+    }
+
+    private RuleEffects getRuleEffectsByUid( List<RuleEffects> ruleEffects, String uid )
+    {
+        for ( RuleEffects ruleEffect : ruleEffects )
+        {
+            if ( ruleEffect.getTrackerObjectUid().equals( uid ) )
+            {
+                return ruleEffect;
+            }
+        }
+        return null;
     }
 
     @Test
