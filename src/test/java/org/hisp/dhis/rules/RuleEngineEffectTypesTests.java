@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules;
 
+import org.assertj.core.util.Lists;
 import org.hisp.dhis.rules.models.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,6 +51,23 @@ public class RuleEngineEffectTypesTests
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
         assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "test_string" );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+    }
+
+    @Test
+    public void simpleConditionMustResultInAssignEffectMultipleExecution()
+        throws Exception
+    {
+        RuleAction ruleAction = RuleActionAssign.create(
+            null, "'test_string'", "#{test_data_element}" );
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
+
+        RuleEngine ruleEngine = getRuleEngineMultiple( rule, getTestRuleEvent( RuleEvent.Status.ACTIVE ) );
+
+        List<RuleEffects> ruleEffects = ruleEngine.evaluate().call();
+
+        assertThat( ruleEffects.size() ).isEqualTo( 1 );
+        assertThat( ruleEffects.get( 0 ).getRuleEffects().get( 0 ).data() ).isEqualTo( "test_string" );
+        assertThat( ruleEffects.get( 0 ).getRuleEffects().get( 0 ).ruleAction() ).isEqualTo( ruleAction );
     }
 
     @Test
@@ -332,6 +350,18 @@ public class RuleEngineEffectTypesTests
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( new HashMap<String, String>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
+            .build();
+    }
+
+    private RuleEngine getRuleEngineMultiple( Rule rule, RuleEvent ruleEvent )
+    {
+        return RuleEngineContext
+            .builder()
+            .rules( Arrays.asList( rule ) )
+            .supplementaryData( new HashMap<String, List<String>>() )
+            .constantsValue( new HashMap<String, String>() )
+            .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
+            .events( Lists.newArrayList( ruleEvent ) )
             .build();
     }
 }

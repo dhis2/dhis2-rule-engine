@@ -29,146 +29,21 @@ class RuleEngineExecution
     @Nonnull
     private Map<String, RuleVariableValue> valueMap;
 
+    @Nonnull
+    private RuleConditionEvaluator ruleConditionEvaluator;
+
     RuleEngineExecution( @Nonnull List<Rule> rules,
         @Nonnull Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
     {
         this.valueMap = new HashMap<>( valueMap );
         this.rules = rules;
         this.supplementaryData = supplementaryData;
+        this.ruleConditionEvaluator = new RuleConditionEvaluator();
     }
 
     @Override
     public List<RuleEffect> call()
     {
-        List<RuleEffect> ruleEffects = new ArrayList<>();
-
-        List<Rule> ruleList = new ArrayList<>( rules );
-
-        Collections.sort( ruleList, new Comparator<Rule>()
-        {
-            @Override
-            public int compare( Rule rule1, Rule rule2 )
-            {
-                Integer priority1 = rule1.priority();
-                Integer priority2 = rule2.priority();
-                if ( priority1 != null && priority2 != null )
-                {
-                    return priority1.compareTo( priority2 );
-                }
-                else if ( priority1 != null )
-                {
-                    return -1;
-                }
-                else if ( priority2 != null )
-                {
-                    return 1;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-        } );
-
-        for ( Rule rule : ruleList )
-        {
-            log.debug( "Evaluating programrule: " + rule.name() );
-
-            if ( Boolean.valueOf( process( rule.condition() ) ) )
-            {
-                for ( RuleAction action : rule.actions() )
-                {
-
-                    //Check if action is assigning value to calculated variable
-                    if ( isAssignToCalculatedValue( action ) )
-                    {
-                        RuleActionAssign ruleActionAssign = (RuleActionAssign) action;
-                        updateValueMap(
-                            Utils.unwrapVariableName( ruleActionAssign.content() ),
-                            RuleVariableValue.create( process( ruleActionAssign.data() ), RuleValueType.TEXT )
-                        );
-                    }
-                    else
-                    {
-                        ruleEffects.add( create( rule, action ) );
-                    }
-                }
-            }
-        }
-
-        return ruleEffects;
-    }
-
-    private String process( String condition )
-    {
-        if ( condition.isEmpty() )
-        {
-            return "";
-        }
-        try
-        {
-            CommonExpressionVisitor commonExpressionVisitor = CommonExpressionVisitor.newBuilder()
-                .withFunctionMap( RuleEngineUtils.FUNCTIONS )
-                .withFunctionMethod( FUNCTION_EVALUATE )
-                .withVariablesMap( valueMap )
-                .withSupplementaryData( supplementaryData )
-                .validateCommonProperties();
-
-            Object result = Parser.visit( condition, commonExpressionVisitor, !isOldAndroidVersion() );
-            return convertInteger( result ).toString();
-        }
-        catch ( ParserExceptionWithoutContext e )
-        {
-            log.warn( "Condition " + condition + " not executed: " + e.getMessage() );
-            return "";
-        }
-        catch ( Exception e )
-        {
-            e.printStackTrace();
-            log.error( "Unexpected exception while evaluating " + condition + ": " + e.getMessage() );
-            return "";
-        }
-    }
-
-    private Object convertInteger( Object result )
-    {
-        if ( result instanceof Double && (Double) result % 1 == 0 )
-        {
-            return ((Double) result).intValue();
-        }
-        return result;
-    }
-
-    private Boolean isOldAndroidVersion()
-    {
-        return valueMap.containsKey( "environment" ) &&
-            Objects.equals( valueMap.get( "environment" ).value(), TriggerEnvironment.ANDROIDCLIENT.getClientName() ) &&
-            supplementaryData.containsKey( "android_version" ) &&
-            Integer.parseInt( supplementaryData.get( "android_version" ).get( 0 ) ) < 21;
-    }
-
-    private Boolean isAssignToCalculatedValue( RuleAction ruleAction )
-    {
-        return ruleAction instanceof RuleActionAssign && ((RuleActionAssign)ruleAction).field().isEmpty() ;
-    }
-
-    private void updateValueMap( String variable, RuleVariableValue value )
-    {
-        valueMap.put( variable, value );
-    }
-
-    @Nonnull
-    private RuleEffect create( @Nonnull Rule rule, @Nonnull RuleAction ruleAction )
-    {
-        if ( ruleAction instanceof RuleActionAssign )
-        {
-            RuleActionAssign ruleActionAssign = (RuleActionAssign) ruleAction;
-            String data = process( ruleActionAssign.data() );
-            updateValueMap( ruleActionAssign.field(), RuleVariableValue.create( data, RuleValueType.TEXT ) );
-            return RuleEffect
-                .create( rule.uid(), ruleAction, StringUtils.isEmpty( data ) ? ruleActionAssign.data() : data );
-        }
-
-        return RuleEffect.create( rule.uid(), ruleAction, process( ruleAction.data() ) );
+        return ruleConditionEvaluator.getRuleEffects( valueMap, supplementaryData, this.rules );
     }
 }

@@ -2,6 +2,7 @@ package org.hisp.dhis.rules;
 
 import org.assertj.core.api.AbstractAssert;
 import org.hisp.dhis.rules.models.*;
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -580,11 +581,168 @@ public class RuleVariableValueMapBuilderTests
             .hasValue( "test_attribute_value_two" ).hasCandidates( "test_attribute_value_two" );
     }
 
+    @Test
+    public void MultipleMapBuilderShoulCreateCorrectMapForEnrollmentAndEvents()
+        throws ParseException
+    {
+        RuleVariable ruleVariableOne = RuleVariableAttribute.create( "test_variable_one",
+            "test_attribute_one", RuleValueType.NUMERIC );
+        RuleVariable ruleVariableTwo = RuleVariableAttribute.create( "test_variable_two",
+            "test_attribute_two", RuleValueType.TEXT );
+        RuleVariable ruleVariableThree = RuleVariableCurrentEvent.create( "test_variable_three",
+            "test_dataelement_one", RuleValueType.BOOLEAN );
+
+        String currentDate = dateFormat.format( new Date() );
+        Date enrollmentDate = dateFormat.parse( "2017-02-02" );
+        Date incidentDate = dateFormat.parse( "2017-04-02" );
+        RuleEnrollment ruleEnrollment = RuleEnrollment.create( "test_enrollment", incidentDate,
+            enrollmentDate, RuleEnrollment.Status.ACTIVE, "", null, Arrays.asList(
+                RuleAttributeValue.create( "test_attribute_one", "test_attribute_value_one" ),
+                RuleAttributeValue.create( "test_attribute_two", "test_attribute_value_two" ),
+                RuleAttributeValue.create( "test_attribute_three", "test_attribute_value_three" ) ), "" );
+
+        Date eventOneDate = LocalDate.now().minusDays( 1 ).toDate();
+        Date eventOneDueDate = LocalDate.now().minusDays( 2 ).toDate();
+        Date eventTwoDate = LocalDate.now().minusDays( 3 ).toDate();
+        Date eventTwoDueDate = LocalDate.now().minusDays( 4 ).toDate();
+
+        RuleEvent ruleEventOne = RuleEvent.create( "test_event_one", "test_program_stage",
+            RuleEvent.Status.ACTIVE, eventOneDate, eventOneDueDate, "", null, new ArrayList<RuleDataValue>(), "",
+            null );
+        RuleEvent ruleEventTwo = RuleEvent.create( "test_event_two", "test_program_stage",
+            RuleEvent.Status.ACTIVE, eventTwoDate, eventTwoDueDate, "", null, new ArrayList<RuleDataValue>(), "",
+            null );
+
+        RuleVariableValueMap ruleVariableValueMap = RuleVariableValueMapBuilder.target( ruleEnrollment )
+            .ruleVariables( Arrays.asList( ruleVariableOne, ruleVariableTwo, ruleVariableThree ) )
+            .ruleEvents( Arrays.asList( ruleEventOne, ruleEventTwo ) )
+            .triggerEnvironment( TriggerEnvironment.SERVER )
+            .multipleBuild();
+
+        assertThat( ruleVariableValueMap.getEnrollmentMap().size() ).isEqualTo( 1 );
+        assertThat( ruleVariableValueMap.getEventMap().size() ).isEqualTo( 2 );
+
+        Map<String, RuleVariableValue> enrollmentValueMap = ruleVariableValueMap.getEnrollmentMap()
+            .get( ruleEnrollment );
+
+        Map<String, RuleVariableValue> eventOneValueMap = ruleVariableValueMap.getEventMap()
+            .get( ruleEventOne );
+
+        Map<String, RuleVariableValue> eventTwoValueMap = ruleVariableValueMap.getEventMap()
+            .get( ruleEventTwo );
+
+        // Enrollment
+        assertThatVariable( enrollmentValueMap.get( "current_date" ) ).hasValue( wrap( currentDate ) )
+            .isTypeOf( RuleValueType.TEXT ).hasCandidates( currentDate );
+
+        assertThatVariable( enrollmentValueMap.get( "event_count" ) ).hasValue( "2" )
+            .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "2" );
+
+        assertThatVariable( enrollmentValueMap.get( "enrollment_date" ) )
+            .hasValue( wrap( dateFormat.format( enrollmentDate ) ) )
+            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( enrollmentDate ) );
+
+        assertThatVariable( enrollmentValueMap.get( "enrollment_id" ) ).hasValue( "test_enrollment" )
+            .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_enrollment" );
+
+        assertThatVariable( enrollmentValueMap.get( "enrollment_count" ) ).hasValue( "1" )
+            .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "1" );
+
+        assertThatVariable( enrollmentValueMap.get( "incident_date" ) )
+            .hasValue( wrap( dateFormat.format( incidentDate ) ) )
+            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( incidentDate ) );
+
+        assertThatVariable( enrollmentValueMap.get( "tei_count" ) ).hasValue( "1" )
+            .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "1" );
+
+        assertThatVariable( enrollmentValueMap.get( "test_variable_one" ) ).hasValue( "test_attribute_value_one" )
+            .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "test_attribute_value_one" );
+
+        assertThatVariable( enrollmentValueMap.get( "test_variable_two" ) ).isTypeOf( RuleValueType.TEXT )
+            .hasValue( "test_attribute_value_two" ).hasCandidates( "test_attribute_value_two" );
+
+        // Event one
+        assertThatVariable( eventOneValueMap.get( "current_date" ) ).hasValue( wrap( currentDate ) )
+            .isTypeOf( RuleValueType.TEXT ).hasCandidates( currentDate );
+
+        assertThatVariable( eventOneValueMap.get( "event_count" ) ).hasValue( "2" )
+            .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "2" );
+
+        assertThatVariable( eventOneValueMap.get( "enrollment_date" ) )
+            .hasValue( wrap( dateFormat.format( enrollmentDate ) ) )
+            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( enrollmentDate ) );
+
+        assertThatVariable( eventOneValueMap.get( "enrollment_id" ) ).hasValue( "test_enrollment" )
+            .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_enrollment" );
+
+        assertThatVariable( eventOneValueMap.get( "enrollment_count" ) ).hasValue( "1" )
+            .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "1" );
+
+        assertThatVariable( eventOneValueMap.get( "incident_date" ) )
+            .hasValue( wrap( dateFormat.format( incidentDate ) ) )
+            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( incidentDate ) );
+
+        assertThatVariable( eventOneValueMap.get( "tei_count" ) ).hasValue( "1" )
+            .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "1" );
+
+        assertThatVariable( eventOneValueMap.get( "test_variable_one" ) ).hasValue( "test_attribute_value_one" )
+            .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "test_attribute_value_one" );
+
+        assertThatVariable( eventOneValueMap.get( "test_variable_two" ) ).isTypeOf( RuleValueType.TEXT )
+            .hasValue( "test_attribute_value_two" ).hasCandidates( "test_attribute_value_two" );
+
+        assertThatVariable( eventOneValueMap.get( "event_date" ) )
+            .hasValue( wrap( dateFormat.format( eventOneDate ) ) )
+            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( eventOneDate ) );
+
+        assertThatVariable( eventOneValueMap.get( "due_date" ) )
+            .hasValue( wrap( dateFormat.format( eventOneDueDate ) ) )
+            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( eventOneDueDate ) );
+
+        // Event two
+        assertThatVariable( eventTwoValueMap.get( "current_date" ) ).hasValue( wrap( currentDate ) )
+            .isTypeOf( RuleValueType.TEXT ).hasCandidates( currentDate );
+
+        assertThatVariable( eventTwoValueMap.get( "event_count" ) ).hasValue( "2" )
+            .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "2" );
+
+        assertThatVariable( eventTwoValueMap.get( "enrollment_date" ) )
+            .hasValue( wrap( dateFormat.format( enrollmentDate ) ) )
+            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( enrollmentDate ) );
+
+        assertThatVariable( eventTwoValueMap.get( "enrollment_id" ) ).hasValue( "test_enrollment" )
+            .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_enrollment" );
+
+        assertThatVariable( eventTwoValueMap.get( "enrollment_count" ) ).hasValue( "1" )
+            .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "1" );
+
+        assertThatVariable( eventTwoValueMap.get( "incident_date" ) )
+            .hasValue( wrap( dateFormat.format( incidentDate ) ) )
+            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( incidentDate ) );
+
+        assertThatVariable( eventTwoValueMap.get( "tei_count" ) ).hasValue( "1" )
+            .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "1" );
+
+        assertThatVariable( eventTwoValueMap.get( "test_variable_one" ) ).hasValue( "test_attribute_value_one" )
+            .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "test_attribute_value_one" );
+
+        assertThatVariable( eventTwoValueMap.get( "test_variable_two" ) ).isTypeOf( RuleValueType.TEXT )
+            .hasValue( "test_attribute_value_two" ).hasCandidates( "test_attribute_value_two" );
+
+        assertThatVariable( eventTwoValueMap.get( "event_date" ) )
+            .hasValue( wrap( dateFormat.format( eventTwoDate ) ) )
+            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( eventTwoDate ) );
+
+        assertThatVariable( eventTwoValueMap.get( "due_date" ) )
+            .hasValue( wrap( dateFormat.format( eventTwoDueDate ) ) )
+            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( eventTwoDueDate ) );
+    }
+
     @Test( expected = IllegalStateException.class )
     public void buildShouldThrowOnDuplicateEvent()
     {
         RuleEvent ruleEvent = RuleEvent.create( "test_event_two", "test_program_stage",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, new ArrayList<RuleDataValue>(), "", null);
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, new ArrayList<RuleDataValue>(), "", null );
 
         RuleVariableValueMapBuilder.target( ruleEvent )
             .ruleVariables( new ArrayList<RuleVariable>() )

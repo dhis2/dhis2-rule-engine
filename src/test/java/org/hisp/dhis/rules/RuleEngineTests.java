@@ -125,7 +125,7 @@ public class RuleEngineTests
     public void concurrentIterationOverRulesListShouldNotFail()
         throws InterruptedException
     {
-        final RuleEngine ruleEngine = RuleEngineContext.builder( mock( RuleExpressionEvaluator.class ) )
+        final RuleEngine ruleEngine = RuleEngineContext.builder()
             .rules( Arrays.asList( mock( Rule.class ), mock( Rule.class ) ) )
             .build().toEngineBuilder().build();
 

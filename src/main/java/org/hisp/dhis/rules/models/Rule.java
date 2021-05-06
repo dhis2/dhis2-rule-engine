@@ -11,6 +11,12 @@ import java.util.List;
 @AutoValue
 public abstract class Rule
 {
+    public static Rule copy( @Nonnull Rule rule, @Nonnull List<RuleAction> actions )
+    {
+        return new AutoValue_Rule( rule.name(), rule.programStage(), rule.priority(), rule.condition(),
+            Collections.unmodifiableList( new ArrayList<>( actions ) ), rule.uid() );
+    }
+
     @Nonnull
     public static Rule create( @Nullable String programStage, @Nullable Integer priority,
         @Nonnull String condition, @Nonnull List<RuleAction> actions, @Nullable String name, @Nonnull String uid )
