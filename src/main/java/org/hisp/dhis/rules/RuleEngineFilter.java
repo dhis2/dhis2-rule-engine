@@ -82,7 +82,8 @@ class RuleEngineFilter
         for ( RuleAction ruleAction : ruleActions )
         {
             if ( !(ruleAction instanceof RuleActionAttribute) ||
-                ((RuleActionAttribute) ruleAction).attributeType() == attributeType )
+                (((RuleActionAttribute) ruleAction).attributeType() == attributeType ||
+                    ((RuleActionAttribute) ruleAction).attributeType() == AttributeType.UNKNOWN) )
             {
                 filteredRuleActions.add( ruleAction );
             }
