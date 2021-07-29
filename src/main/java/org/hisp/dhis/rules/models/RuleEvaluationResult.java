@@ -10,7 +10,7 @@ public class RuleEvaluationResult
 
     private List<RuleEffect> ruleEffects;
 
-    private boolean isEvaluated;
+    private boolean evaluatedAs;
 
     public static RuleEvaluationResult evaluatedResult(Rule rule, List<RuleEffect> ruleEffects) {
         return new RuleEvaluationResult( rule, ruleEffects, true );
@@ -20,10 +20,10 @@ public class RuleEvaluationResult
         return new RuleEvaluationResult( rule, new ArrayList<RuleEffect>(), false );
     }
 
-    private RuleEvaluationResult( Rule rule, List<RuleEffect> ruleEffects, boolean isEvaluated ) {
+    private RuleEvaluationResult( Rule rule, List<RuleEffect> ruleEffects, boolean evaluatedAs) {
         this.rule = rule;
         this.ruleEffects = ruleEffects;
-        this.isEvaluated = isEvaluated;
+        this.evaluatedAs = evaluatedAs;
     }
 
     public Rule getRule() {
@@ -34,7 +34,7 @@ public class RuleEvaluationResult
         return ruleEffects;
     }
 
-    public boolean isEvaluated() {
-        return isEvaluated;
+    public boolean isEvaluatedAs() {
+        return evaluatedAs;
     }
 }

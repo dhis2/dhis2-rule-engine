@@ -11,7 +11,6 @@ import org.hisp.dhis.rules.utils.RuleEngineUtils;
 
 import javax.annotation.Nonnull;
 import java.util.*;
-import java.util.concurrent.Callable;
 
 import static org.hisp.dhis.rules.parser.expression.ParserUtils.FUNCTION_EVALUATE;
 
@@ -28,9 +27,9 @@ class RuleConditionEvaluator
 
             log.debug( "Rule " + ruleEvaluationResult.getRule().uid() +
                         " with condition (" + ruleEvaluationResult.getRule().condition() +
-                        " was evaluated " + ruleEvaluationResult.isEvaluated() );
+                        " was evaluated " + ruleEvaluationResult.isEvaluatedAs() );
 
-            if (ruleEvaluationResult.isEvaluated() ) {
+            if (ruleEvaluationResult.isEvaluatedAs() ) {
                 ruleEffects.addAll( ruleEvaluationResult.getRuleEffects() );
             }
         }
