@@ -95,6 +95,11 @@ public final class RuleEngine
     public Callable<List<RuleEffect>> evaluate( @Nonnull RuleEnrollment ruleEnrollment,
         @Nonnull List<Rule> rulesToEvaluate )
     {
+        if ( ruleEnrollment == null )
+        {
+            throw new IllegalArgumentException( "ruleEnrollment == null" );
+        }
+
         Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEnrollment )
             .ruleVariables( ruleEngineContext.ruleVariables() )
             .triggerEnvironment( triggerEnvironment )

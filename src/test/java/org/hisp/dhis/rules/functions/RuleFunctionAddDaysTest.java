@@ -13,7 +13,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith( MockitoJUnitRunner.class )
-public class RuleFunctionAddDaysTests
+public class RuleFunctionAddDaysTest
 {
     @Mock
     private ExpressionParser.ExprContext context;

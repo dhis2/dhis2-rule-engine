@@ -20,9 +20,28 @@ class RuleConditionEvaluator
     private static final Log log = LogFactory.getLog( RuleConditionEvaluator.class );
 
     public List<RuleEffect> getRuleEffects( Map<String, RuleVariableValue> valueMap,
-        Map<String, List<String>> supplementaryData, List<Rule> rules )
+                                            Map<String, List<String>> supplementaryData, List<Rule> rules )
     {
         List<RuleEffect> ruleEffects = new ArrayList<>();
+        List<RuleEvaluationResult> ruleEvaluationResults = getRuleEvaluationResults(valueMap, supplementaryData, rules);
+        for (RuleEvaluationResult ruleEvaluationResult : ruleEvaluationResults) {
+
+            log.debug( "Rule " + ruleEvaluationResult.getRule().uid() +
+                        " with condition (" + ruleEvaluationResult.getRule().condition() +
+                        " was evaluated " + ruleEvaluationResult.isEvaluated() );
+
+            if (ruleEvaluationResult.isEvaluated() ) {
+                ruleEffects.addAll( ruleEvaluationResult.getRuleEffects() );
+            }
+        }
+
+        return ruleEffects;
+    }
+
+    public List<RuleEvaluationResult> getRuleEvaluationResults( Map<String, RuleVariableValue> valueMap,
+        Map<String, List<String>> supplementaryData, List<Rule> rules )
+    {
+        List<RuleEvaluationResult> ruleEvaluationResults = new ArrayList<>();
 
         rules = orderRules( rules );
         valueMap = new HashMap<>( valueMap );
@@ -30,6 +49,8 @@ class RuleConditionEvaluator
         for ( Rule rule : orderRules( rules ) )
         {
             log.debug( "Evaluating programrule: " + rule.name() );
+
+            List<RuleEffect> ruleEffects = new ArrayList<>();
 
             if ( Boolean.valueOf( process( rule.condition(), valueMap, supplementaryData ) ) )
             {
@@ -52,10 +73,14 @@ class RuleConditionEvaluator
                         ruleEffects.add( create( rule, action, valueMap, supplementaryData ) );
                     }
                 }
+
+                ruleEvaluationResults.add( RuleEvaluationResult.evaluatedResult( rule, ruleEffects ) );
+            } else {
+                ruleEvaluationResults.add( RuleEvaluationResult.notEvaluatedResult( rule ) );
             }
         }
 
-        return ruleEffects;
+        return ruleEvaluationResults;
 
     }
 
