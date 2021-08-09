@@ -38,7 +38,7 @@ import java.util.List;
 /**
  * @author Zubair Asghar
  */
-public class RuleEngineTestUtil
+public class RuleEngineTestUtils
 {
     public static RuleEngine getRuleEngine( Rule rule, List<RuleVariable> ruleVariables )
     {

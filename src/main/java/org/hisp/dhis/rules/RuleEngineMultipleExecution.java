@@ -1,19 +1,19 @@
 package org.hisp.dhis.rules;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hisp.dhis.antlr.Parser;
-import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
-import org.hisp.dhis.rules.models.*;
-import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.rules.utils.RuleEngineUtils;
+import org.hisp.dhis.rules.models.Rule;
+import org.hisp.dhis.rules.models.RuleEffect;
+import org.hisp.dhis.rules.models.RuleEffects;
+import org.hisp.dhis.rules.models.RuleEnrollment;
+import org.hisp.dhis.rules.models.RuleEvent;
+import org.hisp.dhis.rules.models.TrackerObjectType;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
-
-import static org.hisp.dhis.rules.parser.expression.ParserUtils.FUNCTION_EVALUATE;
 
 class RuleEngineMultipleExecution
     implements Callable<List<RuleEffects>>

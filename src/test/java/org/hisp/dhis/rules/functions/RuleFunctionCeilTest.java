@@ -13,7 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import static org.mockito.Mockito.when;
 
 @RunWith( MockitoJUnitRunner.class )
-public class RuleFunctionCeilTests
+public class RuleFunctionCeilTest
 {
 
     @Mock
