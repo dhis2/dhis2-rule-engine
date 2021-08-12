@@ -1,22 +1,22 @@
 package org.hisp.dhis.rules;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hisp.dhis.antlr.Parser;
 import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
 import org.hisp.dhis.rules.models.*;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.rules.utils.RuleEngineUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.util.*;
 
 import static org.hisp.dhis.rules.parser.expression.ParserUtils.FUNCTION_EVALUATE;
 
-class RuleConditionEvaluator
+public class RuleConditionEvaluator
 {
-    private static final Log log = LogFactory.getLog( RuleConditionEvaluator.class );
+    private static final Logger log = LoggerFactory.getLogger( RuleConditionEvaluator.class.getName() );
 
     public List<RuleEffect> getRuleEffects( Map<String, RuleVariableValue> valueMap,
                                             Map<String, List<String>> supplementaryData, List<Rule> rules )
@@ -25,8 +25,8 @@ class RuleConditionEvaluator
         List<RuleEvaluationResult> ruleEvaluationResults = getRuleEvaluationResults(valueMap, supplementaryData, rules);
         for (RuleEvaluationResult ruleEvaluationResult : ruleEvaluationResults) {
 
-            log.debug( "Rule " + ruleEvaluationResult.getRule().uid() +
-                        " with condition (" + ruleEvaluationResult.getRule().condition() +
+            log.info( "Rule " + ruleEvaluationResult.getRule().uid() +
+                        " with condition (" + ruleEvaluationResult.getRule().condition() +  ")" +
                         " was evaluated " + ruleEvaluationResult.isEvaluatedAs() );
 
             if (ruleEvaluationResult.isEvaluatedAs() ) {

@@ -1,7 +1,5 @@
 package org.hisp.dhis.rules;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleEffect;
 import org.hisp.dhis.rules.models.RuleEffects;
@@ -18,7 +16,6 @@ import java.util.concurrent.Callable;
 class RuleEngineMultipleExecution
     implements Callable<List<RuleEffects>>
 {
-    private static final Log log = LogFactory.getLog( RuleEngineMultipleExecution.class );
 
     @Nonnull
     private final Map<String, List<String>> supplementaryData;
