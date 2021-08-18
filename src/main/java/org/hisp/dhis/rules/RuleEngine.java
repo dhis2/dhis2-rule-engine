@@ -1,11 +1,11 @@
 package org.hisp.dhis.rules;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hisp.dhis.antlr.Parser;
 import org.hisp.dhis.rules.models.*;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.rules.utils.RuleEngineUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -18,7 +18,7 @@ import static org.hisp.dhis.rules.parser.expression.ParserUtils.FUNCTION_FOR_DES
 // ToDo: logging
 public final class RuleEngine
 {
-    private static final Log log = LogFactory.getLog( RuleEngine.class );
+    private static final Logger log = LoggerFactory.getLogger( RuleEngine.class.getName() );
 
     @Nonnull
     private final RuleEngineContext ruleEngineContext;
