@@ -46,19 +46,21 @@ class RuleEngineMultipleExecution
         for ( Map.Entry<RuleEnrollment, Map<String, RuleVariableValue>> enrollments : ruleVariableValueMap
             .getEnrollmentMap().entrySet() )
         {
+            RuleEnrollment enrollment = enrollments.getKey();
             List<RuleEffect> enrollmentRuleEffects = ruleConditionEvaluator
-                .getRuleEffects( enrollments.getValue(), supplementaryData,
-                    RuleEngineFilter.filterRules( rules, enrollments.getKey() ) );
-            ruleEffects.add( new RuleEffects( TrackerObjectType.ENROLLMENT, enrollments.getKey().enrollment(),
+                .getRuleEffects( "enrollment", enrollment.enrollment(), enrollments.getValue(),
+                        supplementaryData, RuleEngineFilter.filterRules( rules, enrollment) );
+            ruleEffects.add( new RuleEffects( TrackerObjectType.ENROLLMENT, enrollment.enrollment(),
                 enrollmentRuleEffects ) );
         }
 
         for ( Map.Entry<RuleEvent, Map<String, RuleVariableValue>> events : ruleVariableValueMap
             .getEventMap().entrySet() )
         {
-            ruleEffects.add( new RuleEffects( TrackerObjectType.EVENT, events.getKey().event(),
-                ruleConditionEvaluator.getRuleEffects( events.getValue(), supplementaryData,
-                    RuleEngineFilter.filterRules( rules, events.getKey() ) ) ) );
+            RuleEvent event = events.getKey();
+            ruleEffects.add( new RuleEffects( TrackerObjectType.EVENT, event.event(),
+                ruleConditionEvaluator.getRuleEffects( "event", event.event(), events.getValue(),
+                        supplementaryData, RuleEngineFilter.filterRules( rules, event) ) ) );
         }
 
         return ruleEffects;
