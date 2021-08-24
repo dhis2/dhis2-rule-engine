@@ -18,7 +18,7 @@ public class RuleConditionEvaluator
 {
     private static final Logger log = LoggerFactory.getLogger( RuleConditionEvaluator.class.getName() );
 
-    public List<RuleEffect> getRuleEffects( Map<String, RuleVariableValue> valueMap,
+    public List<RuleEffect> getRuleEffects( String targetType, String targetUid, Map<String, RuleVariableValue> valueMap,
                                             Map<String, List<String>> supplementaryData, List<Rule> rules )
     {
         List<RuleEffect> ruleEffects = new ArrayList<>();
@@ -26,6 +26,7 @@ public class RuleConditionEvaluator
         for (RuleEvaluationResult ruleEvaluationResult : ruleEvaluationResults) {
 
             log.info( "Rule " + ruleEvaluationResult.getRule().uid() +
+                        " executed for " + targetType +  "(" + targetUid +")" +
                         " with condition (" + ruleEvaluationResult.getRule().condition() +  ")" +
                         " was evaluated " + ruleEvaluationResult.isEvaluatedAs() );
 

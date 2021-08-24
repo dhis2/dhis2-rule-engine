@@ -88,7 +88,7 @@ public final class RuleEngine
             .constantValueMap( ruleEngineContext.constantsValues() )
             .build();
 
-        return new RuleEngineExecution( rulesToEvaluate, valueMap, ruleEngineContext.supplementaryData() );
+        return new RuleEngineExecution( ruleEvent, rulesToEvaluate, valueMap, ruleEngineContext.supplementaryData() );
     }
 
     @Nonnull
@@ -107,7 +107,7 @@ public final class RuleEngine
             .constantValueMap( ruleEngineContext.constantsValues() )
             .build();
 
-        return new RuleEngineExecution( rulesToEvaluate, valueMap, ruleEngineContext.supplementaryData() );
+        return new RuleEngineExecution( ruleEnrollment, rulesToEvaluate, valueMap, ruleEngineContext.supplementaryData() );
     }
 
     @Nonnull
