@@ -25,7 +25,7 @@ public class RuleConditionEvaluator
         List<RuleEvaluationResult> ruleEvaluationResults = getRuleEvaluationResults( targetType, targetUid, valueMap, supplementaryData, rules);
         for (RuleEvaluationResult ruleEvaluationResult : ruleEvaluationResults) {
 
-            log.info( "Rule " + ruleEvaluationResult.getRule().name() +  "(" + ruleEvaluationResult.getRule().uid() +")" +
+            log.info( "Rule " + ruleEvaluationResult.getRule().name() + " with id " + ruleEvaluationResult.getRule().uid() +
                         " executed for " + targetType.getName() +  "(" + targetUid +")" +
                         " with condition (" + ruleEvaluationResult.getRule().condition() +  ")" +
                         " was evaluated " + ruleEvaluationResult.isEvaluatedAs() );
@@ -139,7 +139,7 @@ public class RuleConditionEvaluator
         }
         catch ( ParserExceptionWithoutContext e )
         {
-            log.warn( "Rule " + rule.name() +  "(" + rule.uid() +")" +
+            log.warn( "Rule " + rule.name() + " with id " + rule.uid() +
                     " executed for " + targetType.getName() +  "(" + targetUid +")" +
                     " with condition (" + condition +  ")" +
                     " was not executed: " + e.getMessage() );
@@ -148,7 +148,7 @@ public class RuleConditionEvaluator
         catch ( Exception e )
         {
             e.printStackTrace();
-            log.error( "Rule " + rule.name() +  "(" + rule.uid() +")" +
+            log.error( "Rule " + rule.name() + " with id " + rule.uid() +
                     " executed for " + targetType.getName() +  "(" + targetUid +")" +
                     " with condition (" + condition +  ")" +
                     " raised an unexpected exception: " + e.getMessage() );
