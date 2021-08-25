@@ -121,7 +121,7 @@ public class RuleConditionEvaluator
     private String process( TrackerObjectType targetType, String targetUid, Rule rule, String condition,
                             Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
     {
-        if ( rule.condition().isEmpty() )
+        if ( condition.isEmpty() )
         {
             return "";
         }
