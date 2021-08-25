@@ -4,6 +4,7 @@ import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleEffect;
 import org.hisp.dhis.rules.models.RuleEnrollment;
 import org.hisp.dhis.rules.models.RuleEvent;
+import org.hisp.dhis.rules.models.TrackerObjectType;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -56,10 +57,10 @@ class RuleEngineExecution
     public List<RuleEffect> call()
     {
         if (event != null) {
-            return ruleConditionEvaluator.getRuleEffects("event", event.event(), valueMap,
+            return ruleConditionEvaluator.getRuleEffects(TrackerObjectType.EVENT, event.event(), valueMap,
                     supplementaryData, this.rules );
         } else {
-            return ruleConditionEvaluator.getRuleEffects( "enrollment", enrollment.enrollment(), valueMap,
+            return ruleConditionEvaluator.getRuleEffects( TrackerObjectType.ENROLLMENT, enrollment.enrollment(), valueMap,
                     supplementaryData, this.rules );
         }
     }
