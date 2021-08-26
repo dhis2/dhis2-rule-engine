@@ -5,6 +5,16 @@ package org.hisp.dhis.rules.models;
  */
 public enum TrackerObjectType
 {
-    EVENT,
-    ENROLLMENT;
+    EVENT("event"),
+    ENROLLMENT("enrollment");
+
+    private final String name;
+
+    TrackerObjectType(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
