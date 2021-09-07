@@ -142,7 +142,7 @@ public class RuleConditionEvaluator
             log.warn( "Rule " + rule.name() + " with id " + rule.uid() +
                     " executed for " + targetType.getName() +  "(" + targetUid +")" +
                     " with condition (" + condition +  ")" +
-                    " was not executed: " + e.getMessage() );
+                    " raised an error: " + e.getMessage() );
             return "";
         }
         catch ( Exception e )
