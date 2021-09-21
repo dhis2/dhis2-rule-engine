@@ -60,6 +60,7 @@ public class RuleEngineGetDescriptionTest
     private String completionDate = "Completion date";
     private String currentDate = "Current date";
     private String constant = "PI";
+    private String test_var_number = "9";
 
     private Map<String, DataItem> itemStore = new HashMap<>();
 
@@ -81,6 +82,7 @@ public class RuleEngineGetDescriptionTest
         DataItem var_5 = DataItem.builder().value( completionDate ).valueType( ItemValueType.DATE ).build();
         DataItem var_6 = DataItem.builder().value( constant ).valueType( ItemValueType.TEXT ).build();
         DataItem var_7 = DataItem.builder().value( currentDate ).valueType( ItemValueType.DATE ).build();
+        DataItem var_9 = DataItem.builder().value( test_var_number ).valueType( ItemValueType.NUMBER ).build();
 
         itemStore.put( "test_var_one", var_1 );
         itemStore.put( "test_var_two", var_2 );
@@ -90,6 +92,7 @@ public class RuleEngineGetDescriptionTest
         itemStore.put( "NAgjOfWMXg6", var_6 );
         itemStore.put( "current_date", var_7 );
         itemStore.put( "test_var_three", var_8 );
+        itemStore.put( "test_var_number", var_9 );
     }
 
     @Test
@@ -121,6 +124,32 @@ public class RuleEngineGetDescriptionTest
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( rule.condition() );
+
+        assertNotNull( result );
+        assertFalse( result.isValid() );
+    }
+
+    @Test
+    public void getDescriptionForLengthFunction()
+    {
+        Rule rule = Rule.create( null, null, "d2:length(#{test_var_one1})", Arrays.asList( ruleAction ), "", "" );
+
+        RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
+        RuleValidationResult result = ruleEngine.evaluate( rule.condition() );
+
+        assertNotNull( result );
+        assertFalse( result.isValid() );
+
+        rule = Rule.create( null, null, "d2:length(#{test_var_date_one})", Arrays.asList( ruleAction ), "", "" );
+
+        result = ruleEngine.evaluate( rule.condition() );
+
+        assertNotNull( result );
+        assertFalse( result.isValid() );
+
+        rule = Rule.create( null, null, "d2:length(#{test_var_number})", Arrays.asList( ruleAction ), "", "" );
+
+        result = ruleEngine.evaluate( rule.condition() );
 
         assertNotNull( result );
         assertFalse( result.isValid() );
