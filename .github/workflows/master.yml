@@ -42,4 +42,3 @@ jobs:
           gpg_private_key: ${{ secrets.gpg_private_key }}
           gpg_passphrase: ${{ secrets.gpg_passphrase }}
           maven_profiles: "master"
-          maven_args: "-DstagingProgressTimeoutMinutes=20"
