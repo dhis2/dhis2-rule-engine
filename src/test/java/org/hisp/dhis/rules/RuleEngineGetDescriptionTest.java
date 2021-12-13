@@ -132,7 +132,7 @@ public class RuleEngineGetDescriptionTest
     @Test
     public void getDescriptionForLengthFunction()
     {
-        Rule rule = Rule.create( null, null, "d2:length(#{test_var_one1})", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "d2:length(#{test_var_one})", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( rule.condition() );
