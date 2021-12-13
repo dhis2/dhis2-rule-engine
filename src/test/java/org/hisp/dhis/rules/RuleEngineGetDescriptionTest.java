@@ -138,28 +138,28 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( rule.condition() );
 
         assertNotNull( result );
-        assertFalse( result.isValid() );
+        assertTrue( result.isValid() );
 
         rule = Rule.create( null, null, "d2:length(#{test_var_date_one})", Arrays.asList( ruleAction ), "", "" );
 
         result = ruleEngine.evaluate( rule.condition() );
 
         assertNotNull( result );
-        assertFalse( result.isValid() );
+        assertTrue( result.isValid() );
 
         rule = Rule.create( null, null, "d2:length(#{test_var_number})", Arrays.asList( ruleAction ), "", "" );
 
         result = ruleEngine.evaluate( rule.condition() );
 
         assertNotNull( result );
-        assertFalse( result.isValid() );
+        assertTrue( result.isValid() );
     }
 
     @Test
     public void testGetDescriptionWithD2FunctionsAndLogicalAnd()
     {
         Rule correctMultipleD2FunctionRule = Rule
-            .create( null, null, "d2:count(#{test_var_one}) > 0 && d2:hasValue(#{test_var_two}) || #{test_var_two} ",
+            .create( null, null, "d2:count(#{test_var_one}) > 0 && d2:hasValue(#{test_var_two})",
                 Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
