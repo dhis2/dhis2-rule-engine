@@ -14,7 +14,7 @@ dependencies {
         def dependencySpec = "${dependency.groupId}:${dependency.artifactId}:${dependency.version}"
         if (dependency.scope == 'test') {
             dependencies.add 'testImplementation', dependencySpec
-        } else if (dependency.artifactId == 'auto-value') {
+        } else if (dependency.artifactId == 'auto-value' || dependency.artifactId == 'javax.annotation-api' && JavaVersion.current() != JavaVersion.VERSION_1_8) {
             dependencies.add 'compileOnly', dependencySpec
             dependencies.add 'annotationProcessor', dependencySpec
         } else {
