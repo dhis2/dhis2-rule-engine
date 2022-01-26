@@ -198,7 +198,27 @@ public enum GS1Elements {
         return element;
     }
 
-    public static GS1Elements fromKey(String key) {
+    public static Set<String> GS1Identifiers = new HashSet<>(
+            Arrays.asList(
+                GS1_E0_IDENTIFIER.element,
+                GS1_E1_IDENTIFIER.element,
+                GS1_E2_IDENTIFIER.element,
+                GS1_E3_IDENTIFIER.element,
+                GS1_E4_IDENTIFIER.element,
+                GS1_I1_IDENTIFIER.element,
+                GS1_C1_IDENTIFIER.element,
+                GS1_e0_IDENTIFIER.element,
+                GS1_e1_IDENTIFIER.element,
+                GS1_e2_IDENTIFIER.element,
+                GS1_d2_IDENTIFIER.element,
+                GS1_q3_IDENTIFIER.element,
+                GS1_j1_IDENTIFIER.element,
+                GS1_d1_IDENTIFIER.element,
+                GS1_q1_IDENTIFIER.element
+    ));
+
+    public static GS1Elements fromKey( String key )
+    {
         switch (key) {
             case "gtin":
                 return GTIN;

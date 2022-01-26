@@ -28,41 +28,54 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.antlr.AntlrExpressionVisitor;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.rules.RuleExpression;
+import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.gs1.GS1Elements;
 import org.hisp.dhis.rules.gs1.GS1ValueFormatter;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
+import java.util.Map;
+
 public class RuleFunctionExtractDataMatrixValue
-    extends ScalarFunctionToEvaluate
+    extends
+    ScalarFunctionToEvaluate
 {
     @Override
-    public Object evaluate(ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor) {
-        return null;
+    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    {
+        String gs1Key = visitor.castStringVisit( ctx.expr( 0 ) );
+
+        Map<String, RuleVariableValue> valueMap = visitor.getValueMap();
+
+        String variableName = RuleExpression.getProgramRuleVariable( ctx );
+        RuleVariableValue variableValue = valueMap.get( variableName );
+
+        if ( variableValue == null || variableValue.value() == null )
+        {
+            return "";
+        }
+        return extractDataMatrixValue( variableValue.value(), gs1Key );
     }
 
     @Override
-    public Object evaluate( ExpressionParser.ExprContext ctx, AntlrExpressionVisitor visitor ) {
-        return extractDataMatrixValue( visitor.castStringVisit( ctx.expr( 1 ) ),
-                visitor.castStringVisit( ctx.expr( 0 ) ));
-    }
+    public Object getDescription( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
+    {
 
-    @Override
-    public Object getDescription(ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor) {
-
-        visitor.castStringVisit( ctx.expr(0) );
+        visitor.castStringVisit( ctx.expr( 0 ) );
 
         return "sample_data_matrix_string_value";
     }
 
-    private String extractDataMatrixValue( String value, String key ){
+    private String extractDataMatrixValue( String value, String key )
+    {
         GS1ValueFormatter formatter = new GS1ValueFormatter();
-        if( value == null || !formatter.isGS1( value ) ){
+        if ( value == null || !formatter.isGS1( value ) )
+        {
             throw new IllegalArgumentException( "It is not GS1 formatted" );
         }
-        return formatter.formatValue(value, GS1Elements.fromKey( key ));
+        return formatter.formatValue( value, GS1Elements.fromKey( key ) );
     }
 
 }

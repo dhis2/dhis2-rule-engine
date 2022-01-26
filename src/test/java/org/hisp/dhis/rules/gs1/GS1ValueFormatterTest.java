@@ -23,12 +23,10 @@ public class GS1ValueFormatterTest {
         assertThat(expDate).isEqualTo("220228");
     }
 
-    @Test
-    public void shouldReturnNullIfValueIsNotAvailable() {
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionIfValueIsNotAvailable() {
         String testValue = "]d201084700069915412110081996195256\u001D10DXB2005\u001D17220228";
-        String billToLoc = new GS1ValueFormatter().formatValue(testValue, GS1Elements.BILL_TO_LOC);
-
-        assertThat(billToLoc).isNull();
+        new GS1ValueFormatter().formatValue(testValue, GS1Elements.BILL_TO_LOC);
     }
 
     @Test(expected = IllegalArgumentException.class)
