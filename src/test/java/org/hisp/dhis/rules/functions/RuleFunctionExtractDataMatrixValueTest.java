@@ -57,12 +57,16 @@ public class RuleFunctionExtractDataMatrixValueTest
     @Mock
     private ExpressionParser.ExprContext mockedFirstExpr;
 
+    @Mock
+    private ExpressionParser.ProgramRuleVariableNameContext mockedVariableName;
+
     private RuleFunctionExtractDataMatrixValue functionToTest = new RuleFunctionExtractDataMatrixValue();
 
     @Before
     public void setUp()
     {
         when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
+        when ( context.programRuleVariableName() ).thenReturn( mockedVariableName );
     }
 
     @Test
