@@ -69,13 +69,6 @@ public class RuleFunctionExtractDataMatrixValueTest
         when ( context.programRuleVariableName() ).thenReturn( mockedVariableName );
     }
 
-    @Test
-    public void return_empty_when_value_is_null()
-    {
-        testValues( null, "serial number" );
-        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
-    }
-
     @Test( expected = IllegalArgumentException.class )
     public void throw_argument_exception_if_value_is_not_gs1()
     {
@@ -111,7 +104,7 @@ public class RuleFunctionExtractDataMatrixValueTest
     }
 
     @Test
-    public void return_gs1_value_if_key_is_in_value2()
+    public void return_gs1_value_if_key_is_in_value()
     {
         String testValue = "]d201084700069915412110081996195256\u001D10DXB2005\u001D17220228";
         String gs1Key = "serial number";

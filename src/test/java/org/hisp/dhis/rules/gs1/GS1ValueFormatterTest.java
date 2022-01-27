@@ -23,6 +23,20 @@ public class GS1ValueFormatterTest {
         assertThat(expDate).isEqualTo("220228");
     }
 
+    @Test
+    public void shouldFormatToDataMatrixValuesWithoutInitialGS() {
+        String testValue = "]d201084700069915412110081996195256\u001D10DXB2005\u001D17220228";
+        String gtin = new GS1ValueFormatter().formatValue(testValue, GS1Elements.GTIN);
+        String lotNumber = new GS1ValueFormatter().formatValue(testValue, GS1Elements.LOT_NUMBER);
+        String expDate = new GS1ValueFormatter().formatValue(testValue, GS1Elements.EXP_DATE);
+        String serialNumber = new GS1ValueFormatter().formatValue(testValue, GS1Elements.SERIAL_NUMBER);
+
+        assertThat(gtin).isEqualTo("08470006991541");
+        assertThat(serialNumber).isEqualTo("10081996195256");
+        assertThat(lotNumber).isEqualTo("DXB2005");
+        assertThat(expDate).isEqualTo("220228");
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionIfValueIsNotAvailable() {
         String testValue = "]d201084700069915412110081996195256\u001D10DXB2005\u001D17220228";
