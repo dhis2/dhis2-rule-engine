@@ -143,6 +143,7 @@ public class RuleFunctionExtractDataMatrixValueTest
     private void testValues( String value, String gs1Key )
     {
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( gs1Key );
+        when( mockedVariableName.getText() ).thenReturn( "variableName" );
         when( visitor.getValueMap() ).thenReturn( givenAVariableValue( "variableName", value) );
     }
 }
