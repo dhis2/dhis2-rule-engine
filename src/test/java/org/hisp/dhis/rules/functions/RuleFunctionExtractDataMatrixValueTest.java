@@ -118,6 +118,7 @@ public class RuleFunctionExtractDataMatrixValueTest
         String testValue = "]d2\u001D01084700069915412110081996195256\u001D10DXB2005\u001D17220228";
         String gs1Key = "production date";
         testValues( testValue, gs1Key );
+        functionToTest.evaluate( context, visitor );
     }
 
     private Map<String, RuleVariableValue> givenAVariableValue( String variableName, String value )
