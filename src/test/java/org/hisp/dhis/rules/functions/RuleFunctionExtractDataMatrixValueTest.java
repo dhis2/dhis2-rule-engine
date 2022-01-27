@@ -133,7 +133,7 @@ public class RuleFunctionExtractDataMatrixValueTest
         Map<String, RuleVariableValue> variableValues = new HashMap<>();
 
         variableValues.put( variableName,
-                new RuleVariableValueBuilder()
+                RuleVariableValueBuilder.create()
                         .withValue( value )
                         .build() );
 
