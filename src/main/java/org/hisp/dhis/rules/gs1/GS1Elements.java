@@ -44,10 +44,10 @@ public enum GS1Elements {
     GS1_e1_IDENTIFIER( "]e1" ), // GS1 Composite
     GS1_e2_IDENTIFIER( "]e2" ), // GS1 Composite
     GS1_d2_IDENTIFIER( "]d2" ), // GS1 DataMatrix
-    GS1_q3_IDENTIFIER( "]Q3" ), // GS1 QR Code
-    GS1_j1_IDENTIFIER( "]J1" ), // GS1 DotCode
+    GS1_Q3_IDENTIFIER( "]Q3" ), // GS1 QR Code
+    GS1_J1_IDENTIFIER( "]J1" ), // GS1 DotCode
     GS1_d1_IDENTIFIER( "]d1" ), // Data Matrix implementing ECC 200
-    GS1_q1_IDENTIFIER( "]Q1" ), // QR Code
+    GS1_Q1_IDENTIFIER( "]Q1" ), // QR Code
     GS1_GROUP_SEPARATOR( "\u001d" ),
     SSCC( "00" ),
     GTIN( "01" ),
@@ -257,10 +257,10 @@ public enum GS1Elements {
                 GS1Elements.GS1_e1_IDENTIFIER.element,
                 GS1Elements.GS1_e2_IDENTIFIER.element,
                 GS1Elements.GS1_d2_IDENTIFIER.element,
-                GS1Elements.GS1_q3_IDENTIFIER.element,
-                GS1Elements.GS1_j1_IDENTIFIER.element,
+                GS1Elements.GS1_Q3_IDENTIFIER.element,
+                GS1Elements.GS1_J1_IDENTIFIER.element,
                 GS1Elements.GS1_d1_IDENTIFIER.element,
-                GS1Elements.GS1_q1_IDENTIFIER.element
+                GS1Elements.GS1_Q1_IDENTIFIER.element
     ));
 
     public static GS1Elements fromKey( String key )

@@ -29,14 +29,12 @@ package org.hisp.dhis.rules.functions;
  */
 
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
-import org.hisp.dhis.rules.RuleExpression;
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.gs1.GS1BaseValueFormatter;
 import org.hisp.dhis.rules.gs1.GS1Elements;
+import org.hisp.dhis.rules.gs1.GS1DataMatrixValueFormatter;
 import org.hisp.dhis.rules.gs1.GS1ValueFormatter;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
-
-import java.util.Map;
 
 public class RuleFunctionExtractDataMatrixValue
     extends
@@ -66,11 +64,7 @@ public class RuleFunctionExtractDataMatrixValue
 
     private String extractDataMatrixValue( String value, String key )
     {
-        GS1ValueFormatter formatter = new GS1ValueFormatter();
-        if ( value == null || !formatter.isGS1( value ) )
-        {
-            throw new IllegalArgumentException( "It is not GS1 formatted" );
-        }
+        GS1ValueFormatter formatter = GS1BaseValueFormatter.getFormatterFromValue( value );
         return formatter.formatValue( value, GS1Elements.fromKey( key ) );
     }
 
