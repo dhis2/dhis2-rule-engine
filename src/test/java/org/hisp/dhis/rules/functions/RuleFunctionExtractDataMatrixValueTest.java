@@ -112,13 +112,12 @@ public class RuleFunctionExtractDataMatrixValueTest
         MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( "10081996195256" ) );
     }
 
-    @Test
-    public void return_null_if_key_is_not_in_value()
+    @Test(expected = IllegalArgumentException.class)
+    public void throw_exception_if_key_is_not_in_value()
     {
         String testValue = "]d2\u001D01084700069915412110081996195256\u001D10DXB2005\u001D17220228";
         String gs1Key = "production date";
         testValues( testValue, gs1Key );
-        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>nullValue() );
     }
 
     private Map<String, RuleVariableValue> givenAVariableValue( String variableName, String value )
