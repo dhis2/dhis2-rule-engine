@@ -18,8 +18,15 @@ public class GS1ValueFormatter
         return dataMap.get( valueToReturn.getElement() );
     }
 
-    private void handleGroupData( String gs1Group ) {
-        if ( !gs1Group.isEmpty() ) {
+    private String removeGS1Identifier( String value )
+    {
+        return value.substring( 3 );
+    }
+
+    private void handleGroupData( String gs1Group )
+    {
+        if ( !gs1Group.isEmpty() )
+        {
             int gs1GroupLength = gs1Group.length();
             String ai = GS1Elements.getApplicationIdentifier( gs1Group );
             Integer nextValueLength = GS1Table.aiFixedLengthMap().get( ai );
