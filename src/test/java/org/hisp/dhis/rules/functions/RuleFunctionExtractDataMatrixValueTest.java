@@ -66,7 +66,7 @@ public class RuleFunctionExtractDataMatrixValueTest
     public void setUp()
     {
         when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
-        when( context.expr( 0 ) ).thenReturn( mockedSecondExpr );
+        when( context.expr( 1 ) ).thenReturn( mockedSecondExpr );
     }
 
     @Test( expected = IllegalArgumentException.class )
