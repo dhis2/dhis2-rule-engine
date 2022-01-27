@@ -33,12 +33,17 @@ import static org.mockito.Mockito.when;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.rules.RuleVariableValueBuilder;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionExtractDataMatrixValueTest
@@ -119,8 +124,21 @@ public class RuleFunctionExtractDataMatrixValueTest
         MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.nullValue() );
     }
 
+    private Map<String, RuleVariableValue> givenAVariableValue( String variableName, String value )
+    {
+        Map<String, RuleVariableValue> variableValues = new HashMap<>();
+
+        variableValues.put( variableName,
+                new RuleVariableValueBuilder()
+                        .withValue( value )
+                        .build() );
+
+        return variableValues;
+    }
+
     private void testValues( String value, String gs1Key )
     {
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( gs1Key );
+        when( visitor.getValueMap() ).thenReturn( givenAVariableValue( "variableName", value) );
     }
 }
