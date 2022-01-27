@@ -69,7 +69,7 @@ public class RuleFunctionExtractDataMatrixValueTest
     public void return_empty_when_value_is_null()
     {
         testValues( null, "serial number" );
-        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.is( "" ) );
+        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( "" ) );
     }
 
     @Test( expected = IllegalArgumentException.class )
@@ -94,7 +94,7 @@ public class RuleFunctionExtractDataMatrixValueTest
         String testValue = "]d2\u001D01084700069915412110081996195256\u001D10DXB2005\u001D17220228";
         String gs1Key = "serial number";
         testValues( testValue, gs1Key );
-        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.is( "10081996195256" ) );
+        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( "10081996195256" ) );
     }
 
     @Test
@@ -103,7 +103,7 @@ public class RuleFunctionExtractDataMatrixValueTest
         String testValue = "]d2\u001D01084700069915412110081996195256\u001D10DXB2005\u001D17220228";
         String gs1Key = "21";
         testValues( testValue, gs1Key );
-        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.is( "10081996195256" ) );
+        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( "10081996195256" ) );
     }
 
     @Test
@@ -112,7 +112,7 @@ public class RuleFunctionExtractDataMatrixValueTest
         String testValue = "]d201084700069915412110081996195256\u001D10DXB2005\u001D17220228";
         String gs1Key = "serial number";
         testValues( testValue, gs1Key );
-        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.is( "10081996195256" ) );
+        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>is( "10081996195256" ) );
     }
 
     @Test
@@ -121,7 +121,7 @@ public class RuleFunctionExtractDataMatrixValueTest
         String testValue = "]d2\u001D01084700069915412110081996195256\u001D10DXB2005\u001D17220228";
         String gs1Key = "production date";
         testValues( testValue, gs1Key );
-        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.nullValue() );
+        MatcherAssert.assertThat( functionToTest.evaluate( context, visitor ), CoreMatchers.<Object>nullValue() );
     }
 
     private Map<String, RuleVariableValue> givenAVariableValue( String variableName, String value )
