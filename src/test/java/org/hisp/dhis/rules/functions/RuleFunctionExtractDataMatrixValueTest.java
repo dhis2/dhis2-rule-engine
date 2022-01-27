@@ -58,7 +58,7 @@ public class RuleFunctionExtractDataMatrixValueTest
     private ExpressionParser.ExprContext mockedFirstExpr;
 
     @Mock
-    private ExpressionParser.ProgramRuleVariableNameContext mockedVariableName;
+    private ExpressionParser.ExprContext mockedSecondExpr;
 
     private RuleFunctionExtractDataMatrixValue functionToTest = new RuleFunctionExtractDataMatrixValue();
 
@@ -66,7 +66,7 @@ public class RuleFunctionExtractDataMatrixValueTest
     public void setUp()
     {
         when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
-        when ( context.programRuleVariableName() ).thenReturn( mockedVariableName );
+        when( context.expr( 0 ) ).thenReturn( mockedSecondExpr );
     }
 
     @Test( expected = IllegalArgumentException.class )
@@ -121,22 +121,9 @@ public class RuleFunctionExtractDataMatrixValueTest
         functionToTest.evaluate( context, visitor );
     }
 
-    private Map<String, RuleVariableValue> givenAVariableValue( String variableName, String value )
-    {
-        Map<String, RuleVariableValue> variableValues = new HashMap<>();
-
-        variableValues.put( variableName,
-                RuleVariableValueBuilder.create()
-                        .withValue( value )
-                        .build() );
-
-        return variableValues;
-    }
-
     private void testValues( String value, String gs1Key )
     {
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( gs1Key );
-        when( mockedVariableName.getText() ).thenReturn( "variableName" );
-        when( visitor.getValueMap() ).thenReturn( givenAVariableValue( "variableName", value) );
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( value );
     }
 }

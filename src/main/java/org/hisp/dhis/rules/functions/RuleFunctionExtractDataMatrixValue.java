@@ -46,17 +46,13 @@ public class RuleFunctionExtractDataMatrixValue
     public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
         String gs1Key = visitor.castStringVisit( ctx.expr( 0 ) );
+        String value = visitor.castStringVisit( ctx.expr( 1 ) );
 
-        Map<String, RuleVariableValue> valueMap = visitor.getValueMap();
-
-        String variableName = RuleExpression.getProgramRuleVariable( ctx );
-        RuleVariableValue variableValue = valueMap.get( variableName );
-
-        if ( variableValue == null || variableValue.value() == null )
+        if ( value == null )
         {
             return "";
         }
-        return extractDataMatrixValue( variableValue.value(), gs1Key );
+        return extractDataMatrixValue( value, gs1Key );
     }
 
     @Override
