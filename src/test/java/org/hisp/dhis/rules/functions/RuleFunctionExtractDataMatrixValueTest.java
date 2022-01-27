@@ -52,16 +52,12 @@ public class RuleFunctionExtractDataMatrixValueTest
     @Mock
     private ExpressionParser.ExprContext mockedFirstExpr;
 
-    @Mock
-    private ExpressionParser.ExprContext mockedSecondExpr;
-
     private RuleFunctionExtractDataMatrixValue functionToTest = new RuleFunctionExtractDataMatrixValue();
 
     @Before
     public void setUp()
     {
         when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
-        when( context.expr( 1 ) ).thenReturn( mockedSecondExpr );
     }
 
     @Test
@@ -126,6 +122,5 @@ public class RuleFunctionExtractDataMatrixValueTest
     private void testValues( String value, String gs1Key )
     {
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( gs1Key );
-        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( value );
     }
 }
