@@ -38,6 +38,7 @@ import org.hisp.dhis.rules.functions.RuleFunctionCount;
 import org.hisp.dhis.rules.functions.RuleFunctionCountIfValue;
 import org.hisp.dhis.rules.functions.RuleFunctionCountIfZeroPos;
 import org.hisp.dhis.rules.functions.RuleFunctionDaysBetween;
+import org.hisp.dhis.rules.functions.RuleFunctionExtractDataMatrixValue;
 import org.hisp.dhis.rules.functions.RuleFunctionFloor;
 import org.hisp.dhis.rules.functions.RuleFunctionHasUserRole;
 import org.hisp.dhis.rules.functions.RuleFunctionHasValue;
@@ -128,6 +129,7 @@ public class RuleEngineUtils
         .put( D2_IN_ORG_UNIT_GROUP, new RuleFunctionInOrgUnitGroup() )
         .put( D2_LAST_EVENT_DATE, new RuleFunctionLastEventDate() )
         .put( D2_COUNT_IF_ZERO_POS, new RuleFunctionCountIfZeroPos() )
+        .put( D2_EXTRACT_DATA_MATRIX_VALUE, new RuleFunctionExtractDataMatrixValue() )
 
         .put( V_BRACE, new ProgramRuleVariable() )
         .put( HASH_BRACE, new Variable() )
