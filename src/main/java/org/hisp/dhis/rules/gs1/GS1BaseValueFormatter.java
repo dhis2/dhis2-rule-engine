@@ -9,6 +9,9 @@ public abstract class GS1BaseValueFormatter
         if( value == null )
             throw new IllegalArgumentException( "Can't extract data from null value" );
 
+        if( value.length() < 3 )
+            throw new IllegalArgumentException( "Value does not contains enough information" );
+
         String gs1Identifier = value.substring( 0, 3 );
         switch ( GS1Elements.fromKey( gs1Identifier ) ){
             case GS1_d2_IDENTIFIER:
