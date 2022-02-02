@@ -57,7 +57,7 @@ public class RuleFunctionExtractDataMatrixValue
     public Object getDescription( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
 
-        visitor.castStringVisit( ctx.expr( 0 ) );
+        extractDataMatrixValue( visitor.castStringVisit( ctx.expr( 1 ) ), visitor.castStringVisit( ctx.expr( 0 ) ) );
 
         return "sample_data_matrix_string_value";
     }
