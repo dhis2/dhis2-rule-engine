@@ -194,8 +194,14 @@ public class RuleConditionEvaluator
             RuleActionAssign ruleActionAssign = (RuleActionAssign) ruleAction;
             String data = process( targetType, targetUid, rule, ruleActionAssign.data(), valueMap, supplementaryData );
             updateValueMap( ruleActionAssign.field(), RuleVariableValue.create( data, RuleValueType.TEXT ), valueMap );
-            return RuleEffect
-                .create( rule.uid(), ruleAction, StringUtils.isEmpty( data ) ? ruleActionAssign.data() : data );
+            if ( StringUtils.isEmpty( data ) && StringUtils.isEmpty( ruleActionAssign.data() ) )
+            {
+                return RuleEffect.create( rule.uid(), ruleAction, ruleActionAssign.data() );
+            }
+            else
+            {
+                return RuleEffect.create( rule.uid(), ruleAction, data );
+            }
         }
 
         return RuleEffect.create( rule.uid(), ruleAction, process( targetType, targetUid, rule, ruleAction.data(),
