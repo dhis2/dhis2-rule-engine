@@ -35,6 +35,7 @@ import org.joda.time.format.DateTimeFormat;
 
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 import static org.hisp.dhis.antlr.AntlrParserUtils.castDate;
+import static org.hisp.dhis.antlr.AntlrParserUtils.castDouble;
 
 /**
  * @author Zubair Asghar.
@@ -67,7 +68,7 @@ public class RuleFunctionAddDays
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
         castDate( visitor.visit( ctx.expr( 0 ) ) );
-        castDate( visitor.visit( ctx.expr( 1 ) ) );
+        castDouble( visitor.visit( ctx.expr( 1 ) ) );
 
         return CommonExpressionVisitor.DEFAULT_DATE_VALUE;
     }
