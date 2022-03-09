@@ -25,7 +25,7 @@ public class RuleConditionEvaluator
         List<RuleEvaluationResult> ruleEvaluationResults = getRuleEvaluationResults( targetType, targetUid, valueMap, supplementaryData, rules);
         for (RuleEvaluationResult ruleEvaluationResult : ruleEvaluationResults) {
 
-            log.info( "Rule " + ruleEvaluationResult.getRule().name() + " with id " + ruleEvaluationResult.getRule().uid() +
+            log.debug( "Rule " + ruleEvaluationResult.getRule().name() + " with id " + ruleEvaluationResult.getRule().uid() +
                         " executed for " + targetType.getName() +  "(" + targetUid +")" +
                         " with condition (" + ruleEvaluationResult.getRule().condition() +  ")" +
                         " was evaluated " + ruleEvaluationResult.isEvaluatedAs() );
