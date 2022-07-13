@@ -30,6 +30,7 @@ package org.hisp.dhis.rules.functions;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
+import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueBuilder;
@@ -86,8 +87,19 @@ public class RuleFunctionLastEventDateTest
         assertLastEventDate( "test_variable", valueMap, "" );
     }
 
+    @Test(expected = ParserExceptionWithoutContext.class)
+    public void raiseExceptionWhenValueMapDoesHaveNullValue()
+    {
+        String variableWithValue = "test_variable_one";
+        Map<String, RuleVariableValue> valueMap = getValueMapWithValue( variableWithValue, null );
+
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( variableWithValue );
+        when( visitor.getValueMap() ).thenReturn( valueMap );
+        functionToTest.evaluate( context, visitor );
+    }
+
     @Test
-    public void returnLastestDateWhenValueExist()
+    public void returnLatestDateWhenValueExist()
     {
         String variableWithValue = "test_variable_one";
 
@@ -101,16 +113,21 @@ public class RuleFunctionLastEventDateTest
         return new HashMap<>();
     }
 
-    private Map<String, RuleVariableValue> getValueMapWithValue( String variableNameWithValue )
+    private Map<String, RuleVariableValue> getValueMapWithValue( String variableNameWithValue, String date )
     {
         Map<String, RuleVariableValue> valueMap = new HashMap<>();
         valueMap.put( variableNameWithValue, RuleVariableValueBuilder
-            .create()
-            .withValue( "value" )
-            .withCandidates( Arrays.<String>asList() )
-            .withEventDate( todayDate ).build() );
+                .create()
+                .withValue( "value" )
+                .withCandidates( Arrays.<String>asList() )
+                .withEventDate( date ).build() );
 
         return valueMap;
+    }
+
+    private Map<String, RuleVariableValue> getValueMapWithValue( String variableNameWithValue )
+    {
+        return getValueMapWithValue( variableNameWithValue, todayDate );
     }
 
     private void assertLastEventDate( String value, Map<String, RuleVariableValue> valueMap, String lastEventDate )
