@@ -48,7 +48,7 @@ class RuleEngineMultipleExecution
         {
             RuleEnrollment enrollment = enrollments.getKey();
             List<RuleEffect> enrollmentRuleEffects = ruleConditionEvaluator
-                .getRuleEffects( TrackerObjectType.ENROLLMENT, enrollment.enrollment(), enrollments.getValue(),
+                .getEvaluatedAndErrorRuleEffects( TrackerObjectType.ENROLLMENT, enrollment.enrollment(), enrollments.getValue(),
                         supplementaryData, RuleEngineFilter.filterRules( rules, enrollment) );
             ruleEffects.add( new RuleEffects( TrackerObjectType.ENROLLMENT, enrollment.enrollment(),
                 enrollmentRuleEffects ) );
@@ -59,7 +59,7 @@ class RuleEngineMultipleExecution
         {
             RuleEvent event = events.getKey();
             ruleEffects.add( new RuleEffects( TrackerObjectType.EVENT, event.event(),
-                ruleConditionEvaluator.getRuleEffects( TrackerObjectType.EVENT, event.event(), events.getValue(),
+                ruleConditionEvaluator.getEvaluatedAndErrorRuleEffects( TrackerObjectType.EVENT, event.event(), events.getValue(),
                         supplementaryData, RuleEngineFilter.filterRules( rules, event) ) ) );
         }
 

@@ -88,7 +88,7 @@ public class RuleEngineFunctionTest
         assertThat( getRuleEffectsByUid( ruleEffects, "test_not_failing_event" ).getRuleEffects() ).isNotEmpty();
         assertThat( getRuleEffectsByUid( ruleEffects, "test_not_failing_event" ).getRuleEffects().get( 0 ).data() )
             .isEqualTo( "4" );
-        assertThat( getRuleEffectsByUid( ruleEffects, "test_enrollment" ).getRuleEffects() ).isEmpty();
+        assertThat( getRuleEffectsByUid( ruleEffects, "test_enrollment" ).getRuleEffects() ).isNotEmpty();
 
         ;
     }

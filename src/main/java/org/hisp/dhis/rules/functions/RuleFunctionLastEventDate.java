@@ -28,6 +28,7 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
@@ -55,7 +56,11 @@ public class RuleFunctionLastEventDate
 
         RuleVariableValue variableValue = valueMap.get( visitor.castStringVisit( ctx.expr( 0 ) ) );
 
-        return wrap( variableValue.eventDate() );
+        if (variableValue.eventDate() == null) {
+            throw new ParserExceptionWithoutContext("Only event present is in the future");
+        }
+
+        return variableValue.eventDate();
     }
 
     @Override

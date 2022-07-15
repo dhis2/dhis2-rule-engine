@@ -12,18 +12,28 @@ public class RuleEvaluationResult
 
     private boolean evaluatedAs;
 
+    private boolean error;
+
     public static RuleEvaluationResult evaluatedResult(Rule rule, List<RuleEffect> ruleEffects) {
-        return new RuleEvaluationResult( rule, ruleEffects, true );
+        return new RuleEvaluationResult( rule, ruleEffects, true, false );
     }
 
     public static RuleEvaluationResult notEvaluatedResult(Rule rule) {
-        return new RuleEvaluationResult( rule, new ArrayList<RuleEffect>(), false );
+        return new RuleEvaluationResult( rule, new ArrayList<RuleEffect>(), false, false );
     }
 
-    private RuleEvaluationResult( Rule rule, List<RuleEffect> ruleEffects, boolean evaluatedAs) {
+    public static RuleEvaluationResult errorRule( Rule rule, String errorMessage ) {
+        ArrayList<RuleEffect> effects = new ArrayList<>();
+
+        effects.add(RuleEffect.create(rule.uid(), RuleActionError.create(errorMessage), errorMessage));
+        return new RuleEvaluationResult( rule, effects, false, true );
+    }
+
+    private RuleEvaluationResult( Rule rule, List<RuleEffect> ruleEffects, boolean evaluatedAs, boolean error ) {
         this.rule = rule;
         this.ruleEffects = ruleEffects;
         this.evaluatedAs = evaluatedAs;
+        this.error = error;
     }
 
     public Rule getRule() {
@@ -36,5 +46,9 @@ public class RuleEvaluationResult
 
     public boolean isEvaluatedAs() {
         return evaluatedAs;
+    }
+
+    public boolean isError() {
+        return error;
     }
 }

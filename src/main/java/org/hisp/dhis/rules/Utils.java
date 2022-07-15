@@ -44,6 +44,10 @@ public final class Utils
                 dates.add( d );
             }
         }
+        // TODO: This check is needed as long as DHIS2-13468 is not fixed
+        if ( dates.isEmpty() ) {
+            return null;
+        }
         return dateFormat.format( Collections.max( dates ) );
     }
 
@@ -57,6 +61,10 @@ public final class Utils
             {
                 dates.add( d );
             }
+        }
+        // TODO: This check is needed as long as DHIS2-13468 is not fixed
+        if ( dates.isEmpty() ) {
+            return null;
         }
         return dateFormat.format( Collections.max( dates ) );
     }
