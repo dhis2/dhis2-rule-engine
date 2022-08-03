@@ -87,17 +87,6 @@ public class RuleFunctionLastEventDateTest
         assertLastEventDate( "test_variable", valueMap, "" );
     }
 
-    @Test(expected = ParserExceptionWithoutContext.class)
-    public void raiseExceptionWhenValueMapDoesHaveNullValue()
-    {
-        String variableWithValue = "test_variable_one";
-        Map<String, RuleVariableValue> valueMap = getValueMapWithValue( variableWithValue, null );
-
-        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( variableWithValue );
-        when( visitor.getValueMap() ).thenReturn( valueMap );
-        functionToTest.evaluate( context, visitor );
-    }
-
     @Test
     public void returnLatestDateWhenValueExist()
     {

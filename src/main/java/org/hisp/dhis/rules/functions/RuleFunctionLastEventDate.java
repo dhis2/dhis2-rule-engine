@@ -56,10 +56,6 @@ public class RuleFunctionLastEventDate
 
         RuleVariableValue variableValue = valueMap.get( visitor.castStringVisit( ctx.expr( 0 ) ) );
 
-        if (variableValue.eventDate() == null) {
-            throw new ParserExceptionWithoutContext("Only event present is in the future");
-        }
-
         return variableValue.eventDate();
     }
 
