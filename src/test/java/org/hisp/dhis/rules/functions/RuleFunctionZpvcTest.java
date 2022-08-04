@@ -80,8 +80,6 @@ public class RuleFunctionZpvcTest
 
         when( context.expr() ).thenReturn( Lists.newArrayList( mockText, mockNull, mockNumber ) );
         when( visitor.castStringVisit( mockText ) ).thenReturn( "sxsx" );
-        when( visitor.castStringVisit( mockNull ) ).thenReturn( null );
-        when( visitor.castStringVisit( mockNumber ) ).thenReturn( "2" );
 
         functionToTest.evaluate( context, visitor );
     }

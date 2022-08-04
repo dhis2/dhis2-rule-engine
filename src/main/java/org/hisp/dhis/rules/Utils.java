@@ -39,15 +39,12 @@ public final class Utils
         for ( RuleDataValue date : ruleDataValues )
         {
             Date d = date.eventDate();
-            if ( !d.after( new Date() ) && d.before( ruleEvent.eventDate() ) )
+            if ( d.before( ruleEvent.eventDate() ) )
             {
                 dates.add( d );
             }
         }
-        // TODO: This check is needed as long as DHIS2-13468 is not fixed
-        if ( dates.isEmpty() ) {
-            return null;
-        }
+
         return dateFormat.format( Collections.max( dates ) );
     }
 
@@ -57,15 +54,9 @@ public final class Utils
         for ( RuleDataValue date : ruleDataValues )
         {
             Date d = date.eventDate();
-            if ( !d.after( new Date() ) )
-            {
-                dates.add( d );
-            }
+            dates.add( d );
         }
-        // TODO: This check is needed as long as DHIS2-13468 is not fixed
-        if ( dates.isEmpty() ) {
-            return null;
-        }
+
         return dateFormat.format( Collections.max( dates ) );
     }
 
