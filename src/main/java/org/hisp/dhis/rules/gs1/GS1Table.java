@@ -22,7 +22,7 @@ public class GS1Table
         Map<String, Integer> aiFixedLengthMap = new HashMap<>();
 
         aiFixedLengthMap.put(SSCC.getElement(), 20);
-        aiFixedLengthMap.put( GTIN.getElement(), 16);
+        aiFixedLengthMap.put(GTIN.getElement(), 16);
         aiFixedLengthMap.put(CONTENT.getElement(), 16);
         aiFixedLengthMap.put( "03", 16);
         aiFixedLengthMap.put( "04", 18);
@@ -42,7 +42,7 @@ public class GS1Table
         aiFixedLengthMap.put( "34", 10);
         aiFixedLengthMap.put( "35", 10);
         aiFixedLengthMap.put( "36", 10);
-        aiFixedLengthMap.put( "41", 10);
+        aiFixedLengthMap.put( "41", 16);
 
         return aiFixedLengthMap;
     }
