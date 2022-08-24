@@ -31,10 +31,10 @@ public class GS1DataMatrixValueFormatter extends GS1BaseValueFormatter
         {
             int gs1GroupLength = gs1Group.length();
             String ai = GS1Elements.getApplicationIdentifier( gs1Group );
-            Integer nextValueLength = GS1Table.aiFixedLengthMap().get( ai );
+            Integer nextValueLength = GS1Table.aiFixedLengthMap().get( ai.substring(0, 2) );
             if ( nextValueLength == null )
                 nextValueLength = gs1GroupLength;
-            dataMap.put( ai, gs1Group.substring( 2, nextValueLength ) );
+            dataMap.put( ai, gs1Group.substring( ai.length(), nextValueLength ) );
             handleGroupData( gs1Group.substring( nextValueLength ) );
         }
     }
