@@ -6,7 +6,7 @@
 
     <groupId>org.hisp.dhis.rules</groupId>
     <artifactId>rule-engine</artifactId>
-    <version>2.0.41</version>
+    <version>2.0.42</version>
     <packaging>jar</packaging>
     <name>rule-engine</name>
 
@@ -291,7 +291,7 @@
         <dependency>
             <groupId>org.hisp.dhis.parser</groupId>
             <artifactId>dhis-antlr-expression-parser</artifactId>
-            <version>1.0.28</version>
+            <version>1.0.29</version>
         </dependency>
     </dependencies>
 
