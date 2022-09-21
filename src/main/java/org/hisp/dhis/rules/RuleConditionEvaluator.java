@@ -64,17 +64,24 @@ public class RuleConditionEvaluator
                 for ( RuleAction action : rule.actions() )
                 {
 
-                        //Check if action is assigning value to calculated variable
-                        if (isAssignToCalculatedValue(action)) {
-                            RuleActionAssign ruleActionAssign = (RuleActionAssign) action;
-                            updateValueMap(
-                                    Utils.unwrapVariableName(ruleActionAssign.content()),
-                                    RuleVariableValue.create(process( ruleActionAssign.data(), valueMap, supplementaryData),
-                                            RuleValueType.TEXT),
-                                    valueMap
-                            );
-                        } else {
-                            ruleEffects.add(create( rule, action, valueMap, supplementaryData));
+                        try {
+                            //Check if action is assigning value to calculated variable
+                            if ( isAssignToCalculatedValue( action ) )
+                            {
+                                RuleActionAssign ruleActionAssign = (RuleActionAssign) action;
+                                updateValueMap(
+                                        Utils.unwrapVariableName(ruleActionAssign.content()),
+                                        RuleVariableValue.create(process( ruleActionAssign.data(), valueMap, supplementaryData),
+                                                RuleValueType.TEXT),
+                                        valueMap
+                                );
+                            }
+                            else
+                            {
+                                ruleEffects.add( create( rule, action, valueMap, supplementaryData ) );
+                            }
+                        } catch ( Exception e ) {
+                            addRuleErrorResult( rule,action, e, targetType, targetUid, ruleEvaluationResults );
                         }
                     }
 
@@ -82,33 +89,60 @@ public class RuleConditionEvaluator
                 } else {
                     ruleEvaluationResults.add(RuleEvaluationResult.notEvaluatedResult(rule));
                 }
-            } catch ( ParserExceptionWithoutContext e ) {
-                String errorMessage = "Rule " + rule.name() + " with id " + rule.uid() +
-                        " executed for " + targetType.getName() + "(" + targetUid + ")" +
-                        " with condition (" + rule.condition() + ")" +
-                        " raised an error: " + e.getMessage();
-                log.warn( errorMessage );
-                ruleEvaluationResults.add(RuleEvaluationResult.errorRule(rule, errorMessage));
             } catch ( Exception e ) {
-                String errorMessage = "Rule " + rule.name() + " with id " + rule.uid() +
-                        " executed for " + targetType.getName() + "(" + targetUid + ")" +
-                        " with condition (" + rule.condition() + ")" +
-                        " raised an unexpected exception: " + e.getMessage();
-                log.error( errorMessage );
-                ruleEvaluationResults.add( RuleEvaluationResult.errorRule( rule, errorMessage ) );
+                addRuleErrorResult(rule, null, e, targetType, targetUid, ruleEvaluationResults);
             }
         }
 
         for (RuleEvaluationResult ruleEvaluationResult : ruleEvaluationResults) {
 
-            log.debug( "Rule " + ruleEvaluationResult.getRule().name() + " with id " + ruleEvaluationResult.getRule().uid() +
-                    " executed for " + targetType.getName() +  "(" + targetUid +")" +
-                    " with condition (" + ruleEvaluationResult.getRule().condition() +  ")" +
-                    " was evaluated " + ruleEvaluationResult.isEvaluatedAs() );
+            log.debug("Rule " + ruleEvaluationResult.getRule().name() + " with id " + ruleEvaluationResult.getRule().uid() +
+                    " executed for " + targetType.getName() + "(" + targetUid + ")" +
+                    " with condition (" + ruleEvaluationResult.getRule().condition() + ")" +
+                    " was evaluated " + ruleEvaluationResult.isEvaluatedAs());
         }
 
         return ruleEvaluationResults;
 
+    }
+
+    private void addRuleErrorResult( Rule rule, RuleAction ruleAction, Exception e, TrackerObjectType targetType,
+                                    String targetUid, List<RuleEvaluationResult> ruleEvaluationResults )
+    {
+        String errorMessage;
+        if ( ruleAction != null && e instanceof ParserExceptionWithoutContext )
+        {
+            errorMessage = "Action " + ruleAction.getClass().getName() +
+                    " from rule " + rule.name() + " with id " + rule.uid() +
+                    " executed for " + targetType.getName() + "(" + targetUid + ")" +
+                    " with condition (" + rule.condition() + ")" +
+                    " raised an error: " + e.getMessage();
+        }
+        else if ( ruleAction != null )
+        {
+            errorMessage = "Action " + ruleAction.getClass().getName() +
+                    " from rule " + rule.name() + " with id " + rule.uid() +
+                    " executed for " + targetType.getName() + "(" + targetUid + ")" +
+                    " with condition (" + rule.condition() + ")" +
+                    " raised an unexpected exception: " + e.getMessage();
+        }
+        else if(e instanceof ParserExceptionWithoutContext)
+        {
+            errorMessage = "Rule " + rule.name() + " with id " + rule.uid() +
+                    " executed for " + targetType.getName() + "(" + targetUid + ")" +
+                    " with condition (" + rule.condition() + ")" +
+                    " raised an error: " + e.getMessage();
+        }
+        else
+        {
+            errorMessage = "Rule " + rule.name() + " with id " + rule.uid() +
+                    " executed for " + targetType.getName() + "(" + targetUid + ")" +
+                    " with condition (" + rule.condition() + ")" +
+                    " raised an unexpected exception: " + e.getMessage();
+        }
+
+        log.error(errorMessage);
+        ruleEvaluationResults.add(RuleEvaluationResult.errorRule(rule, errorMessage));
     }
 
     private List<Rule> orderRules( List<Rule> rules )
