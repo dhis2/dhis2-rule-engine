@@ -65,7 +65,7 @@ public class RuleFunctionRound
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
         visitor.castDoubleVisit( ctx.expr( 0 ) );
-        if ( ctx.expr().size() < 2 ) {
+        if ( ctx.expr().size() > 1 ) {
             visitor.castDoubleVisit( ctx.expr( 1 ) );
         }
         return CommonExpressionVisitor.DEFAULT_DOUBLE_VALUE;
