@@ -50,7 +50,7 @@ public class RuleFunctionRound
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
         double rawNumber = toDouble(visitor.castStringVisit(ctx.expr(0)), 0.0);
-        int precision = toInt(visitor.castStringVisit(ctx.expr(1)), 0);
+        int precision = ctx.expr(1) == null ? 0 : toInt(visitor.castStringVisit(ctx.expr(1)), 0);
 
         BigDecimal roundedNumber = BigDecimal.valueOf(rawNumber).setScale(precision, RoundingMode.HALF_UP);
 
