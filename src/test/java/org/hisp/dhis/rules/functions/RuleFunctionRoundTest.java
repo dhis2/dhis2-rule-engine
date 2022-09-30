@@ -28,8 +28,8 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.google.common.collect.Lists;
 import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.junit.Before;
@@ -38,7 +38,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
@@ -65,6 +65,7 @@ public class RuleFunctionRoundTest
     {
         when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
         when( context.expr( 1 ) ).thenReturn( mockedSecondExpr );
+        when( context.expr() ).thenReturn(Lists.newArrayList( mockedFirstExpr, mockedSecondExpr ) );
     }
 
     @Test

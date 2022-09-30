@@ -50,11 +50,11 @@ public class RuleFunctionRound
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
         double rawNumber = toDouble(visitor.castStringVisit(ctx.expr(0)), 0.0);
-        int precision = ctx.expr(1) == null ? 0 : toInt(visitor.castStringVisit(ctx.expr(1)), 0);
+        int precision = ctx.expr().size() < 2 ? 0 : toInt(visitor.castStringVisit(ctx.expr(1)), 0);
 
         BigDecimal roundedNumber = BigDecimal.valueOf(rawNumber).setScale(precision, RoundingMode.HALF_UP);
 
-        if (precision == 0 ) {
+        if ( precision == 0 ) {
             return String.valueOf(roundedNumber.intValue());
         }
 
@@ -65,7 +65,9 @@ public class RuleFunctionRound
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
         visitor.castDoubleVisit( ctx.expr( 0 ) );
-        visitor.castDoubleVisit( ctx.expr( 1 ) );
+        if ( ctx.expr().size() < 2 ) {
+            visitor.castDoubleVisit( ctx.expr( 1 ) );
+        }
         return CommonExpressionVisitor.DEFAULT_DOUBLE_VALUE;
     }
 }
