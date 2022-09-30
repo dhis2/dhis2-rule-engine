@@ -38,6 +38,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static org.hamcrest.MatcherAssert.*;
 import static org.mockito.Mockito.when;
 
 /**
@@ -56,10 +57,14 @@ public class RuleFunctionRoundTest
     @Mock
     private ExpressionParser.ExprContext mockedFirstExpr;
 
+    @Mock
+    private ExpressionParser.ExprContext mockedSecondExpr;
+
     @Before
     public void setUp()
     {
         when( context.expr( 0 ) ).thenReturn( mockedFirstExpr );
+        when( context.expr( 1 ) ).thenReturn( mockedSecondExpr );
     }
 
     @Test
@@ -68,22 +73,69 @@ public class RuleFunctionRoundTest
         RuleFunctionRound roundFunction = new RuleFunctionRound();
 
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0" );
-        MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0" ) );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0" ) );
 
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.8" );
-        MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "1" ) );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "1" ) );
+
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.5" );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "1" ) );
 
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.4999" );
-        MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0" ) );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0" ) );
 
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.5001" );
-        MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "1" ) );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "1" ) );
 
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "-9.3" );
-        MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "-9" ) );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "-9" ) );
 
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "-9.8" );
-        MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "-10" ) );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "-10" ) );
+    }
+
+    @Test
+    public void return_argument_rounded_up_to_nearest_precision()
+    {
+        RuleFunctionRound roundFunction = new RuleFunctionRound();
+
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "1" );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0" );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0.0" ) );
+
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.8" );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0.8" ) );
+
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.4999" );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0.5" ) );
+
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.45999" );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0.5" ) );
+
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "-9.333" );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "-9.3" ) );
+
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "-9.888" );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "-9.9" ) );
+
+        when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "2" );
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0" );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0.00" ) );
+
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.8" );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0.80" ) );
+
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.4999" );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0.50" ) );
+
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.45999" );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0.46" ) );
+
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "-9.333" );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "-9.33" ) );
+
+        when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "-9.888" );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "-9.89" ) );
     }
 
     @Test
@@ -93,6 +145,6 @@ public class RuleFunctionRoundTest
 
         RuleFunctionRound roundFunction = new RuleFunctionRound();
 
-        MatcherAssert.assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0" ) );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0" ) );
     }
 }
