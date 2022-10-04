@@ -58,7 +58,7 @@ public class RuleFunctionRound
             return String.valueOf(roundedNumber.intValue());
         }
 
-        return String.valueOf(roundedNumber);
+        return String.valueOf(roundedNumber.stripTrailingZeros());
     }
 
     @Override

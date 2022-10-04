@@ -102,7 +102,7 @@ public class RuleFunctionRoundTest
 
         when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "1" );
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0" );
-        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0.0" ) );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0" ) );
 
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.8" );
         assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0.8" ) );
@@ -121,13 +121,13 @@ public class RuleFunctionRoundTest
 
         when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "2" );
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0" );
-        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0.00" ) );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0" ) );
 
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.8" );
-        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0.80" ) );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0.8" ) );
 
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.4999" );
-        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0.50" ) );
+        assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0.5" ) );
 
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "0.45999" );
         assertThat( roundFunction.evaluate( context, visitor ), CoreMatchers.<Object>is( "0.46" ) );
