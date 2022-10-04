@@ -54,7 +54,7 @@ public class RuleFunctionRound
 
         BigDecimal roundedNumber = BigDecimal.valueOf(rawNumber).setScale(precision, RoundingMode.HALF_UP);
 
-        if ( precision == 0 ) {
+        if ( precision == 0 || roundedNumber.intValue() == roundedNumber.doubleValue() ) {
             return String.valueOf(roundedNumber.intValue());
         }
 
