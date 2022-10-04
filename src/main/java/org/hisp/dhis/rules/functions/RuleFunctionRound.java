@@ -32,7 +32,12 @@ import org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+
 import static org.apache.commons.lang3.math.NumberUtils.toDouble;
+import static org.apache.commons.lang3.math.NumberUtils.toInt;
 
 /**
  * @author Zubair Asghar.
@@ -44,13 +49,25 @@ public class RuleFunctionRound
     @Override
     public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        return String.valueOf( Math.round( toDouble( visitor.castStringVisit( ctx.expr( 0 ) ), 0.0 ) ) );
+        double rawNumber = toDouble(visitor.castStringVisit(ctx.expr(0)), 0.0);
+        int precision = ctx.expr().size() < 2 ? 0 : toInt(visitor.castStringVisit(ctx.expr(1)), 0);
+
+        BigDecimal roundedNumber = BigDecimal.valueOf(rawNumber).setScale(precision, RoundingMode.HALF_UP);
+
+        if ( precision == 0 || roundedNumber.intValue() == roundedNumber.doubleValue() ) {
+            return String.valueOf(roundedNumber.intValue());
+        }
+
+        return String.valueOf(roundedNumber.stripTrailingZeros());
     }
 
     @Override
     public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
     {
         visitor.castDoubleVisit( ctx.expr( 0 ) );
+        if ( ctx.expr().size() > 1 ) {
+            visitor.castDoubleVisit( ctx.expr( 1 ) );
+        }
         return CommonExpressionVisitor.DEFAULT_DOUBLE_VALUE;
     }
 }
