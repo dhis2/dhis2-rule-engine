@@ -39,11 +39,12 @@ public final class Utils
         for ( RuleDataValue date : ruleDataValues )
         {
             Date d = date.eventDate();
-            if ( !d.after( new Date() ) && d.before( ruleEvent.eventDate() ) )
+            if ( d.before( ruleEvent.eventDate() ) )
             {
                 dates.add( d );
             }
         }
+
         return dateFormat.format( Collections.max( dates ) );
     }
 
@@ -53,11 +54,9 @@ public final class Utils
         for ( RuleDataValue date : ruleDataValues )
         {
             Date d = date.eventDate();
-            if ( !d.after( new Date() ) )
-            {
-                dates.add( d );
-            }
+            dates.add( d );
         }
+
         return dateFormat.format( Collections.max( dates ) );
     }
 

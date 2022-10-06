@@ -88,7 +88,7 @@ public class RuleEngineFunctionTest
         assertThat( getRuleEffectsByUid( ruleEffects, "test_not_failing_event" ).getRuleEffects() ).isNotEmpty();
         assertThat( getRuleEffectsByUid( ruleEffects, "test_not_failing_event" ).getRuleEffects().get( 0 ).data() )
             .isEqualTo( "4" );
-        assertThat( getRuleEffectsByUid( ruleEffects, "test_enrollment" ).getRuleEffects() ).isEmpty();
+        assertThat( getRuleEffectsByUid( ruleEffects, "test_enrollment" ).getRuleEffects() ).isNotEmpty();
 
         ;
     }
@@ -1429,7 +1429,6 @@ public class RuleEngineFunctionTest
     {
         java.util.Calendar cal = java.util.Calendar.getInstance();
 
-        Date today = cal.getTime();
         cal.add( java.util.Calendar.DATE, -1 );
         Date yesterday = cal.getTime();
         cal.add( java.util.Calendar.DATE, -1 );
@@ -1441,9 +1440,6 @@ public class RuleEngineFunctionTest
             "test_action_content", "d2:lastEventDate('test_var_one')" );
         RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
             "test_var_one", "test_data_element_one", RuleValueType.TEXT );
-
-        RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT );
 
         Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "test_rule", "" );
 
@@ -1468,6 +1464,6 @@ public class RuleEngineFunctionTest
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
-        assertEquals( dateFormat.format( yesterday ), ruleEffects.get( 0 ).data() );
+        assertEquals( dateFormat.format( dayAfterTomorrow ), ruleEffects.get( 0 ).data() );
     }
 }

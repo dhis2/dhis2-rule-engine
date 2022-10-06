@@ -18,19 +18,24 @@ public class RuleConditionEvaluator
 {
     private static final Logger log = LoggerFactory.getLogger( RuleConditionEvaluator.class.getName() );
 
+    public List<RuleEffect> getEvaluatedAndErrorRuleEffects( TrackerObjectType targetType, String targetUid, Map<String, RuleVariableValue> valueMap,
+                                            Map<String, List<String>> supplementaryData, List<Rule> rules )
+    {
+        List<RuleEffect> ruleEffects = new ArrayList<>();
+        for (RuleEvaluationResult ruleEvaluationResult : getRuleEvaluationResults( targetType, targetUid, valueMap, supplementaryData, rules)) {
+                ruleEffects.addAll( ruleEvaluationResult.getRuleEffects() );
+        }
+
+        return ruleEffects;
+    }
+
     public List<RuleEffect> getRuleEffects( TrackerObjectType targetType, String targetUid, Map<String, RuleVariableValue> valueMap,
                                             Map<String, List<String>> supplementaryData, List<Rule> rules )
     {
         List<RuleEffect> ruleEffects = new ArrayList<>();
-        List<RuleEvaluationResult> ruleEvaluationResults = getRuleEvaluationResults( targetType, targetUid, valueMap, supplementaryData, rules);
-        for (RuleEvaluationResult ruleEvaluationResult : ruleEvaluationResults) {
+        for (RuleEvaluationResult ruleEvaluationResult : getRuleEvaluationResults( targetType, targetUid, valueMap, supplementaryData, rules)) {
 
-            log.info( "Rule " + ruleEvaluationResult.getRule().name() + " with id " + ruleEvaluationResult.getRule().uid() +
-                        " executed for " + targetType.getName() +  "(" + targetUid +")" +
-                        " with condition (" + ruleEvaluationResult.getRule().condition() +  ")" +
-                        " was evaluated " + ruleEvaluationResult.isEvaluatedAs() );
-
-            if (ruleEvaluationResult.isEvaluatedAs() ) {
+            if ( !ruleEvaluationResult.isError() ) {
                 ruleEffects.addAll( ruleEvaluationResult.getRuleEffects() );
             }
         }
@@ -51,38 +56,93 @@ public class RuleConditionEvaluator
         {
             log.debug( "Evaluating programrule: " + rule.name() );
 
-            List<RuleEffect> ruleEffects = new ArrayList<>();
+            try {
+                List<RuleEffect> ruleEffects = new ArrayList<>();
 
-            if ( Boolean.valueOf( process( targetType, targetUid, rule, rule.condition(), valueMap, supplementaryData ) ) )
+            if ( Boolean.valueOf( process( rule.condition(), valueMap, supplementaryData ) ) )
             {
                 for ( RuleAction action : rule.actions() )
                 {
 
-                    //Check if action is assigning value to calculated variable
-                    if ( isAssignToCalculatedValue( action ) )
-                    {
-                        RuleActionAssign ruleActionAssign = (RuleActionAssign) action;
-                        updateValueMap(
-                            Utils.unwrapVariableName( ruleActionAssign.content() ),
-                            RuleVariableValue.create( process( targetType, targetUid, rule, ruleActionAssign.data(), valueMap, supplementaryData ),
-                                RuleValueType.TEXT ),
-                            valueMap
-                        );
+                        try {
+                            //Check if action is assigning value to calculated variable
+                            if ( isAssignToCalculatedValue( action ) )
+                            {
+                                RuleActionAssign ruleActionAssign = (RuleActionAssign) action;
+                                updateValueMap(
+                                        Utils.unwrapVariableName(ruleActionAssign.content()),
+                                        RuleVariableValue.create(process( ruleActionAssign.data(), valueMap, supplementaryData),
+                                                RuleValueType.TEXT),
+                                        valueMap
+                                );
+                            }
+                            else
+                            {
+                                ruleEffects.add( create( rule, action, valueMap, supplementaryData ) );
+                            }
+                        } catch ( Exception e ) {
+                            addRuleErrorResult( rule,action, e, targetType, targetUid, ruleEvaluationResults );
+                        }
                     }
-                    else
-                    {
-                        ruleEffects.add( create( targetType, targetUid, rule, action, valueMap, supplementaryData ) );
-                    }
-                }
 
-                ruleEvaluationResults.add( RuleEvaluationResult.evaluatedResult( rule, ruleEffects ) );
-            } else {
-                ruleEvaluationResults.add( RuleEvaluationResult.notEvaluatedResult( rule ) );
+                    ruleEvaluationResults.add(RuleEvaluationResult.evaluatedResult(rule, ruleEffects));
+                } else {
+                    ruleEvaluationResults.add(RuleEvaluationResult.notEvaluatedResult(rule));
+                }
+            } catch ( Exception e ) {
+                addRuleErrorResult(rule, null, e, targetType, targetUid, ruleEvaluationResults);
             }
+        }
+
+        for (RuleEvaluationResult ruleEvaluationResult : ruleEvaluationResults) {
+
+            log.debug("Rule " + ruleEvaluationResult.getRule().name() + " with id " + ruleEvaluationResult.getRule().uid() +
+                    " executed for " + targetType.getName() + "(" + targetUid + ")" +
+                    " with condition (" + ruleEvaluationResult.getRule().condition() + ")" +
+                    " was evaluated " + ruleEvaluationResult.isEvaluatedAs());
         }
 
         return ruleEvaluationResults;
 
+    }
+
+    private void addRuleErrorResult( Rule rule, RuleAction ruleAction, Exception e, TrackerObjectType targetType,
+                                    String targetUid, List<RuleEvaluationResult> ruleEvaluationResults )
+    {
+        String errorMessage;
+        if ( ruleAction != null && e instanceof ParserExceptionWithoutContext )
+        {
+            errorMessage = "Action " + ruleAction.getClass().getName() +
+                    " from rule " + rule.name() + " with id " + rule.uid() +
+                    " executed for " + targetType.getName() + "(" + targetUid + ")" +
+                    " with condition (" + rule.condition() + ")" +
+                    " raised an error: " + e.getMessage();
+        }
+        else if ( ruleAction != null )
+        {
+            errorMessage = "Action " + ruleAction.getClass().getName() +
+                    " from rule " + rule.name() + " with id " + rule.uid() +
+                    " executed for " + targetType.getName() + "(" + targetUid + ")" +
+                    " with condition (" + rule.condition() + ")" +
+                    " raised an unexpected exception: " + e.getMessage();
+        }
+        else if(e instanceof ParserExceptionWithoutContext)
+        {
+            errorMessage = "Rule " + rule.name() + " with id " + rule.uid() +
+                    " executed for " + targetType.getName() + "(" + targetUid + ")" +
+                    " with condition (" + rule.condition() + ")" +
+                    " raised an error: " + e.getMessage();
+        }
+        else
+        {
+            errorMessage = "Rule " + rule.name() + " with id " + rule.uid() +
+                    " executed for " + targetType.getName() + "(" + targetUid + ")" +
+                    " with condition (" + rule.condition() + ")" +
+                    " raised an unexpected exception: " + e.getMessage();
+        }
+
+        log.error(errorMessage);
+        ruleEvaluationResults.add(RuleEvaluationResult.errorRule(rule, errorMessage));
     }
 
     private List<Rule> orderRules( List<Rule> rules )
@@ -118,42 +178,23 @@ public class RuleConditionEvaluator
         return ruleList;
     }
 
-    private String process( TrackerObjectType targetType, String targetUid, Rule rule, String condition,
-                            Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    private String process( String condition, Map<String, RuleVariableValue> valueMap,
+                            Map<String, List<String>> supplementaryData )
     {
         if ( condition.isEmpty() )
         {
             return "";
         }
-        try
-        {
-            CommonExpressionVisitor commonExpressionVisitor = CommonExpressionVisitor.newBuilder()
-                .withFunctionMap( RuleEngineUtils.FUNCTIONS )
-                .withFunctionMethod( FUNCTION_EVALUATE )
-                .withVariablesMap( valueMap )
-                .withSupplementaryData( supplementaryData )
-                .validateCommonProperties();
 
-            Object result = Parser.visit( condition, commonExpressionVisitor, !isOldAndroidVersion( valueMap, supplementaryData ) );
-            return convertInteger( result ).toString();
-        }
-        catch ( ParserExceptionWithoutContext e )
-        {
-            log.warn( "Rule " + rule.name() + " with id " + rule.uid() +
-                    " executed for " + targetType.getName() +  "(" + targetUid +")" +
-                    " with condition (" + condition +  ")" +
-                    " raised an error: " + e.getMessage() );
-            return "";
-        }
-        catch ( Exception e )
-        {
-            e.printStackTrace();
-            log.error( "Rule " + rule.name() + " with id " + rule.uid() +
-                    " executed for " + targetType.getName() +  "(" + targetUid +")" +
-                    " with condition (" + condition +  ")" +
-                    " raised an unexpected exception: " + e.getMessage() );
-            return "";
-        }
+        CommonExpressionVisitor commonExpressionVisitor = CommonExpressionVisitor.newBuilder()
+            .withFunctionMap( RuleEngineUtils.FUNCTIONS )
+            .withFunctionMethod( FUNCTION_EVALUATE )
+            .withVariablesMap( valueMap )
+            .withSupplementaryData( supplementaryData )
+            .validateCommonProperties();
+
+        Object result = Parser.visit( condition, commonExpressionVisitor, !isOldAndroidVersion( valueMap, supplementaryData ) );
+        return convertInteger( result ).toString();
     }
 
     private Object convertInteger( Object result )
@@ -184,7 +225,7 @@ public class RuleConditionEvaluator
     }
 
     @Nonnull
-    private RuleEffect create( TrackerObjectType targetType, String targetUid, @Nonnull Rule rule,
+    private RuleEffect create( @Nonnull Rule rule,
                                 @Nonnull RuleAction ruleAction,
                                 Map<String, RuleVariableValue> valueMap,
                                 Map<String, List<String>> supplementaryData )
@@ -192,13 +233,18 @@ public class RuleConditionEvaluator
         if ( ruleAction instanceof RuleActionAssign )
         {
             RuleActionAssign ruleActionAssign = (RuleActionAssign) ruleAction;
-            String data = process( targetType, targetUid, rule, ruleActionAssign.data(), valueMap, supplementaryData );
+            String data = process( ruleActionAssign.data(), valueMap, supplementaryData );
             updateValueMap( ruleActionAssign.field(), RuleVariableValue.create( data, RuleValueType.TEXT ), valueMap );
-            return RuleEffect
-                .create( rule.uid(), ruleAction, StringUtils.isEmpty( data ) ? ruleActionAssign.data() : data );
+            if ( StringUtils.isEmpty( data ) && StringUtils.isEmpty( ruleActionAssign.data() ) )
+            {
+                return RuleEffect.create( rule.uid(), ruleAction, ruleActionAssign.data() );
+            }
+            else
+            {
+                return RuleEffect.create( rule.uid(), ruleAction, data );
+            }
         }
 
-        return RuleEffect.create( rule.uid(), ruleAction, process( targetType, targetUid, rule, ruleAction.data(),
-                valueMap, supplementaryData ) );
+        return RuleEffect.create( rule.uid(), ruleAction, process( ruleAction.data(), valueMap, supplementaryData ) );
     }
 }

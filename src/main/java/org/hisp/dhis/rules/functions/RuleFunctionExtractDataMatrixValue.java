@@ -28,41 +28,45 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
-import org.hisp.dhis.rules.RuleVariableValue;
+import org.hisp.dhis.parser.expression.antlr.ExpressionParser;
+import org.hisp.dhis.rules.gs1.GS1BaseValueFormatter;
+import org.hisp.dhis.rules.gs1.GS1Elements;
+import org.hisp.dhis.rules.gs1.GS1DataMatrixValueFormatter;
+import org.hisp.dhis.rules.gs1.GS1ValueFormatter;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
-import java.util.Map;
-
-import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
-import static org.hisp.dhis.rules.functions.RuleFunction.wrap;
-
-/**
- * @author Zubair Asghar.
- */
-public class RuleFunctionLastEventDate
-    extends ScalarFunctionToEvaluate
+public class RuleFunctionExtractDataMatrixValue
+    extends
+    ScalarFunctionToEvaluate
 {
     @Override
-    public Object evaluate( ExprContext ctx, CommonExpressionVisitor visitor )
+    public Object evaluate( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        Map<String, RuleVariableValue> valueMap = visitor.getValueMap();
+        String gs1Key = visitor.castStringVisit( ctx.expr( 0 ) );
+        String value = visitor.castStringVisit( ctx.expr( 1 ) );
 
-        if ( !valueMap.containsKey( visitor.castStringVisit( ctx.expr( 0 ) ) ) )
+        if ( value == null )
         {
             return "";
         }
-
-        RuleVariableValue variableValue = valueMap.get( visitor.castStringVisit( ctx.expr( 0 ) ) );
-
-        return variableValue.eventDate();
+        return extractDataMatrixValue( value, gs1Key );
     }
 
     @Override
-    public Object getDescription( ExprContext ctx, CommonExpressionVisitor visitor )
+    public Object getDescription( ExpressionParser.ExprContext ctx, CommonExpressionVisitor visitor )
     {
-        visitor.visit( ctx.expr( 0 ) );
-        return CommonExpressionVisitor.DEFAULT_DATE_VALUE;
+
+        visitor.castStringVisit( ctx.expr( 1 ) );
+        visitor.castStringVisit( ctx.expr( 0 ) );
+
+        return "sample_data_matrix_string_value";
     }
+
+    private String extractDataMatrixValue( String value, String key )
+    {
+        GS1ValueFormatter formatter = GS1BaseValueFormatter.getFormatterFromValue( value );
+        return formatter.formatValue( value, GS1Elements.fromKey( key ) );
+    }
+
 }

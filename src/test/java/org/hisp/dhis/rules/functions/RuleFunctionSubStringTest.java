@@ -126,7 +126,6 @@ public class RuleFunctionSubStringTest
 
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( "test_variable_one" );
         when( visitor.castStringVisit( mockedSecondExpr ) ).thenReturn( "variable" );
-        when( visitor.castStringVisit( mockedThirdExpr ) ).thenReturn( "3" );
 
         subStringFunction.evaluate( context, visitor );
     }
