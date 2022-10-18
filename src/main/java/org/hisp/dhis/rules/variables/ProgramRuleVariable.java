@@ -21,10 +21,8 @@ public class ProgramRuleVariable
             throw new ParserExceptionWithoutContext( "Variable " + ctx.programVariable().getText() + " not present" );
         }
 
-        String variable = variableValue.value() == null ?
-            variableValue.type().defaultValue() : variableValue.value();
-
-        return variable;
+        return variableValue.value() == null ?
+                variableValue.type().defaultValue() : getValueCastedByType( variableValue );
     }
 
     @Override

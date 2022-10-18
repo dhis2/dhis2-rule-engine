@@ -3,9 +3,12 @@ package org.hisp.dhis.rules.parser.expression.function;
 import org.hisp.dhis.antlr.AntlrExprItem;
 import org.hisp.dhis.antlr.AntlrExpressionVisitor;
 import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
+import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.rules.variables.ProgramRuleCustomVariable;
 import org.hisp.dhis.rules.variables.ProgramRuleVariable;
+
+import javax.annotation.Nonnull;
 
 import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
@@ -66,5 +69,17 @@ public abstract class ScalarFunctionToEvaluate
         }
 
         throw new ParserExceptionWithoutContext( "Illegal argument in program rule expression: " + ctx.getText() );
+    }
+
+    protected Object getValueCastedByType( @Nonnull RuleVariableValue value )
+    {
+        switch (value.type()) {
+            case NUMERIC:
+                return Double.parseDouble(value.value());
+            case BOOLEAN:
+                return Boolean.valueOf(value.value());
+            default:
+                return value.value();
+        }
     }
 }
