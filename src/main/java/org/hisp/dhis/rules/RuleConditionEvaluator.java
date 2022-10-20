@@ -59,7 +59,7 @@ public class RuleConditionEvaluator
             try {
                 List<RuleEffect> ruleEffects = new ArrayList<>();
 
-            if ( Boolean.valueOf( process( rule.condition(), valueMap, supplementaryData ) ) )
+            if ( Boolean.parseBoolean( process( rule.condition(), valueMap, supplementaryData ) ) )
             {
                 for ( RuleAction action : rule.actions() )
                 {

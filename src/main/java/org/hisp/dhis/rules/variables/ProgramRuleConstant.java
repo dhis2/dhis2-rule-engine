@@ -20,10 +20,8 @@ public class ProgramRuleConstant
             throw new ParserExceptionWithoutContext( "Variable " + ctx.uid0.getText() + " not present" );
         }
 
-        String variable = variableValue.value() == null ?
-            variableValue.type().defaultValue() : variableValue.value();
-
-        return variable;
+        return variableValue.value() == null ?
+            variableValue.type().defaultValue() : getValueCastedByType( variableValue );
     }
 
     @Override

@@ -4,18 +4,18 @@ import javax.annotation.Nonnull;
 
 public enum RuleValueType
 {
-    TEXT( "" ), NUMERIC( "0.0" ), BOOLEAN( "false" ), DATE( "2020-01-01" );
+    TEXT( "" ), NUMERIC( 0.0 ), BOOLEAN( false ), DATE( "2020-01-01" );
 
     @Nonnull
-    private final String defaultValue;
+    private final Object defaultValue;
 
-    RuleValueType( @Nonnull String defaultValue )
+    RuleValueType( @Nonnull Object defaultValue )
     {
         this.defaultValue = defaultValue;
     }
 
     @Nonnull
-    public String defaultValue()
+    public Object defaultValue()
     {
         return defaultValue;
     }
