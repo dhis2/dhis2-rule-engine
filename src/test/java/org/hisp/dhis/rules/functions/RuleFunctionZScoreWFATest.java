@@ -109,6 +109,14 @@ public class RuleFunctionZScoreWFATest
         assertZScore( "1", "2.8", "1", "-2.80" );
     }
 
+    @Test
+    public void testFractionAgeParameter()
+    {
+        assertZScore( "1.2","2.9", "1", "-2.88" );
+        assertZScore( "1.3", "5.2", "1", "1.14" );
+        assertZScore( "1.4", "4.8", "1", "0.38" );
+    }
+
     @Test( expected = IllegalArgumentException.class )
     public void testExceptionIfInvalidArgument()
     {

@@ -28,17 +28,17 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
-/**
- * @author Zubair Asghar.
- */
 public class ZScoreTable
 {
     public static Map<ZScoreTableKey, Map<Float, Integer>> getZscoreWFATableGirl()
     {
-        Map<ZScoreTableKey, Map<Float, Integer>> zscoreMap = new HashMap<>();
+        Map<ZScoreTableKey, Map<Float, Integer>> zscoreMap = new LinkedHashMap<>();
 
         zscoreMap
             .put( new ZScoreTableKey( (byte) 1, (float) 0 ), createSDMap( 2.0f, 2.4f, 2.8f, 3.2f, 3.7f, 4.2f, 4.8f ) );
@@ -168,7 +168,7 @@ public class ZScoreTable
 
     public static Map<ZScoreTableKey, Map<Float, Integer>> getZscoreWFATableBoy()
     {
-        Map<ZScoreTableKey, Map<Float, Integer>> zscoreMap = new HashMap<>();
+        Map<ZScoreTableKey, Map<Float, Integer>> zscoreMap = new LinkedHashMap<>();
 
         zscoreMap
             .put( new ZScoreTableKey( (byte) 0, (float) 0 ), createSDMap( 2.1f, 2.5f, 2.9f, 3.3f, 3.9f, 4.4f, 5.0f ) );
@@ -296,7 +296,7 @@ public class ZScoreTable
 
     public static Map<ZScoreTableKey, Map<Float, Integer>> getZscoreHFATableGirl()
     {
-        Map<ZScoreTableKey, Map<Float, Integer>> zscoreMap = new HashMap<>();
+        Map<ZScoreTableKey, Map<Float, Integer>> zscoreMap = new LinkedHashMap<>();
 
         zscoreMap.put( new ZScoreTableKey( (byte) 1, (float) 0 ),
             createSDMap( 43.6f, 45.4f, 47.3f, 49.1f, 51.0f, 52.9f, 54.7f ) );
@@ -426,7 +426,7 @@ public class ZScoreTable
 
     public static Map<ZScoreTableKey, Map<Float, Integer>> getZscoreHFATableBoy()
     {
-        Map<ZScoreTableKey, Map<Float, Integer>> zscoreMap = new HashMap<>();
+        Map<ZScoreTableKey, Map<Float, Integer>> zscoreMap = new LinkedHashMap<>();
 
         zscoreMap.put( new ZScoreTableKey( (byte) 0, (float) 0 ),
             createSDMap( 44.2f, 46.1f, 48.0f, 49.9f, 51.8f, 53.7f, 55.6f ) );
@@ -556,7 +556,7 @@ public class ZScoreTable
 
     public static Map<ZScoreTableKey, Map<Float, Integer>> getZscoreWFHTableGirl()
     {
-        Map<ZScoreTableKey, Map<Float, Integer>> zscoreMap = new HashMap<>();
+        Map<ZScoreTableKey, Map<Float, Integer>> zscoreMap = new LinkedHashMap<>();
 
         zscoreMap
             .put( new ZScoreTableKey( (byte) 1, (float) 45 ), createSDMap( 1.9f, 2.1f, 2.3f, 2.5f, 2.7f, 3.0f, 3.3f ) );
@@ -866,7 +866,7 @@ public class ZScoreTable
 
     public static Map<ZScoreTableKey, Map<Float, Integer>> getZscoreWFHTableBoy()
     {
-        Map<ZScoreTableKey, Map<Float, Integer>> zscoreMap = new HashMap<>();
+        Map<ZScoreTableKey, Map<Float, Integer>> zscoreMap = new LinkedHashMap<>();
 
         zscoreMap
             .put( new ZScoreTableKey( (byte) 0, (float) 45 ), createSDMap( 1.9f, 2f, 2.2f, 2.4f, 2.7f, 3f, 3.3f ) );
@@ -1177,7 +1177,7 @@ public class ZScoreTable
     private static Map<Float, Integer> createSDMap( Float SD3neg, Float SD2neg, Float SD1neg, Float SD0, Float SD1,
         Float SD2, Float SD3 )
     {
-        Map<Float, Integer> sdMap = new HashMap<>();
+        Map<Float, Integer> sdMap = new LinkedHashMap<>();
 
         sdMap.put( SD3neg, 3 );
         sdMap.put( SD2neg, 2 );
@@ -1188,5 +1188,24 @@ public class ZScoreTable
         sdMap.put( SD3, 3 );
 
         return sdMap;
+    }
+
+    public static HashMap<Float, Integer> createInterpolatedSDMap( Float parameter, Float step, Map<Float, Integer> sdCeilMap, Map<Float, Integer> sdFloorMap)
+    {
+        List<Float> floorValues = new ArrayList<>(sdFloorMap.keySet());
+        List<Float> ceilValues = new ArrayList<>(sdCeilMap.keySet());
+        return (HashMap<Float, Integer>) createSDMap(
+                interpolate(parameter,step, floorValues.get(0), ceilValues.get(0)),
+                interpolate(parameter,step, floorValues.get(1), ceilValues.get(1)),
+                interpolate(parameter,step, floorValues.get(2), ceilValues.get(2)),
+                interpolate(parameter,step, floorValues.get(3), ceilValues.get(3)),
+                interpolate(parameter,step, floorValues.get(4), ceilValues.get(4)),
+                interpolate(parameter,step, floorValues.get(5), ceilValues.get(5)),
+                interpolate(parameter,step, floorValues.get(6), ceilValues.get(6))
+        );
+    }
+
+    private static Float interpolate(Float parameter, Float step, Float floorValue, Float ceilValue) {
+        return  (float)((parameter - Math.floor(parameter)) * (ceilValue - floorValue) / step + floorValue);
     }
 }

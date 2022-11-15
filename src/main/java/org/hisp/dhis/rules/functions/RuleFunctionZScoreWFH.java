@@ -57,4 +57,12 @@ public class RuleFunctionZScoreWFH
     {
         return ZSCORE_TABLE_BOY;
     }
+
+    @Override
+    public void validateParameter( float parameter )
+    {
+        if( parameter < 45 || parameter > 120 ){
+            throw new IllegalArgumentException("height parameter should be between 45 and 120");
+        }
+    }
 }

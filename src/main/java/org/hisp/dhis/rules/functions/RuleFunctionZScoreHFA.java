@@ -59,4 +59,13 @@ public class RuleFunctionZScoreHFA
     {
         return ZSCORE_TABLE_BOY;
     }
+
+    @Override
+    public void validateParameter( float parameter )
+    {
+        if( parameter < 0 || parameter > 60 )
+        {
+            throw new IllegalArgumentException("age parameter should be between 0 and 60");
+        }
+    }
 }

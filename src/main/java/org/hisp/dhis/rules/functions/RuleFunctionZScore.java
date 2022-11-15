@@ -28,7 +28,10 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
+
 import com.google.common.collect.Sets;
+
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
@@ -40,8 +43,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
  * @author Zubair Asghar.
@@ -87,6 +88,8 @@ public abstract class RuleFunctionZScore
             throw new IllegalArgumentException( "Byte parsing failed" );
         }
 
+        validateParameter( parameter );
+
         zScore = getZScore( parameter, weight, gender );
 
         return zScore;
@@ -102,39 +105,29 @@ public abstract class RuleFunctionZScore
         return CommonExpressionVisitor.DEFAULT_DOUBLE_VALUE;
     }
 
+    private Map<ZScoreTableKey, Map<Float, Integer>> getTableForGender(int gender)
+    {
+        if ( gender == 1 )
+        {
+            return getTableForGirl();
+        }
+        else
+        {
+            return getTableForBoy();
+        }
+    }
+
     public abstract Map<ZScoreTableKey, Map<Float, Integer>> getTableForGirl();
 
     public abstract Map<ZScoreTableKey, Map<Float, Integer>> getTableForBoy();
+
+    public abstract void validateParameter(float parameter);
 
     private String getZScore( float parameter, float weight, byte gender )
     {
         ZScoreTableKey key = new ZScoreTableKey( gender, parameter );
 
-        Map<Float, Integer> sdMap;
-
-        // Female
-        if ( gender == 1 )
-        {
-            if ( getTableForGirl().get( key ) != null )
-            {
-                sdMap = getTableForGirl().get( key );
-            }
-            else
-            {
-                sdMap = new HashMap<Float, Integer>();
-            }
-        }
-        else
-        {
-            if ( getTableForBoy().get( key ) != null )
-            {
-                sdMap = getTableForBoy().get( key );
-            }
-            else
-            {
-                sdMap = new HashMap<Float, Integer>();
-            }
-        }
+        Map<Float, Integer> sdMap = getMap( gender, key );
 
         if ( sdMap.isEmpty() )
         {
@@ -152,13 +145,10 @@ public abstract class RuleFunctionZScore
         }
 
         // weight is beyond -3SD or 3SD
-        if ( weight > Collections.max( sdMap.keySet() ) )
-        {
-            return String.valueOf( 3.5 );
-        }
-        else if ( weight < Collections.min( sdMap.keySet() ) )
-        {
-            return String.valueOf( -3.5 );
+        if (weight > Collections.max(sdMap.keySet())) {
+            return String.valueOf(3.5);
+        } else if (weight < Collections.min(sdMap.keySet())) {
+            return String.valueOf(-3.5);
         }
 
         float lowerLimitX = 0, higherLimitY = 0;
@@ -200,6 +190,39 @@ public abstract class RuleFunctionZScore
         result = result * multiplicationFactor;
 
         return String.valueOf( getDecimalFormat().format( result ) );
+    }
+
+    private HashMap<Float, Integer> getMap( byte gender, ZScoreTableKey key )
+    {
+        HashMap<Float, Integer> sdMap;
+        Map<ZScoreTableKey, Map<Float, Integer>> table = getTableForGender(gender);
+        if ( table.containsKey( key ) )
+        {
+            sdMap = (HashMap<Float, Integer>) table.get( key );
+        }
+        else if ( parameterCanBeInterpolated( gender, key.getParameter(), table ) )
+        {
+            ArrayList<ZScoreTableKey> tableKeys = new ArrayList<>(table.keySet());
+            int indexOfFloat = tableKeys.indexOf( key.floor() );
+            Map<Float, Integer> sdFloorMap = table.get( tableKeys.get(indexOfFloat) );
+            Map<Float, Integer> sdCeilMap = table.get( tableKeys.get(indexOfFloat+1) );
+            float step = tableKeys.get( indexOfFloat + 1 ).getParameter() - tableKeys.get( indexOfFloat ).getParameter();
+            sdMap = ZScoreTable.createInterpolatedSDMap( key.getParameter(), step,sdCeilMap, sdFloorMap );
+        }
+        else
+        {
+            sdMap = new HashMap<>();
+        }
+
+        return sdMap;
+    }
+
+    private Boolean parameterCanBeInterpolated( byte gender, Float parameter, Map<ZScoreTableKey, Map<Float, Integer>> table )
+    {
+        float ceilParameter = (float) Math.ceil( parameter );
+        float floorParameter = (float) Math.floor( parameter );
+        return table.containsKey( new ZScoreTableKey( gender, floorParameter ) ) &&
+                table.containsKey( new ZScoreTableKey( gender, ceilParameter ) );
     }
 
     private int getMultiplicationFactor( Map<Float, Integer> sdMap, float weight )
