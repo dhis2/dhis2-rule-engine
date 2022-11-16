@@ -40,12 +40,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.mockito.Mockito.when;
 
-/**
- * @author Zubair Asghar.
- */
 
 @RunWith( MockitoJUnitRunner.class )
-public class RuleFunctionZScoreWFATest
+public class RuleFunctionZScoreHFATest
 {
     @Mock
     private ExpressionParser.ExprContext context;
@@ -62,7 +59,7 @@ public class RuleFunctionZScoreWFATest
     @Mock
     private ExpressionParser.ExprContext mockedThirdExpr;
 
-    private RuleFunctionZScoreWFA functionToTest = new RuleFunctionZScoreWFA();
+    private RuleFunctionZScoreHFA functionToTest = new RuleFunctionZScoreHFA();
 
     @Before
     public void setUp()
@@ -75,46 +72,46 @@ public class RuleFunctionZScoreWFATest
     @Test
     public void testZscoreAtExactSDValue()
     {
-        assertZScore( "1", "4.8", "1", "1" );
-        assertZScore( "1", "3.2", "1", "-2" );
-        assertZScore( "39", "9.9", "1", "-3" );
-        assertZScore( "39", "11.5", "1", "-1.80" );
+        assertZScore( "1", "55.6", "1", "1" );
+        assertZScore( "1", "49.8", "1", "-2" );
+        assertZScore( "39", "85.3", "1", "-3" );
+        assertZScore( "39", "89.9", "1", "-1.82" );
     }
 
     @Test
     public void testZscoreBeyond3SD()
     {
-        assertZScore( "1", "7.5", "1", "3.5" );
+        assertZScore( "1", "60", "1", "3.5" );
     }
 
     @Test
     public void testZscoreBeyondNegative3SD()
     {
-        assertZScore( "1", "4.8", "1", "1" );
+        assertZScore( "1", "43", "1", "-3.5" );
     }
 
     @Test
     public void testZscoreAboveSD0()
     {
-        assertZScore( "1", "5.2", "1", "1.57" );
-        assertZScore( "6", "9.5", "1", "2.15" );
-        assertZScore( "1", "6.0", "1", "2.71" );
+        assertZScore( "1", "55.7", "1", "1.05" );
+        assertZScore( "6", "68.5", "1", "1.22" );
+        assertZScore( "1", "58.0", "1", "2.21" );
     }
 
     @Test
     public void testZscoreBelowSD0()
     {
-        assertZScore( "1", "2.9", "1", "-2.60" );
-        assertZScore( "12", "7.5", "1", "-1.44" );
-        assertZScore( "1", "2.8", "1", "-2.80" );
+        assertZScore( "1", "50.9", "1", "-1.42" );
+        assertZScore( "12", "70.1", "1", "-1.52" );
+        assertZScore( "1", "48.22", "1", "-2.79" );
     }
 
     @Test
     public void testFractionAgeParameter()
     {
-        assertZScore( "1.2","2.9", "1", "-2.60" );
-        assertZScore( "1.3", "5.2", "1", "1.57" );
-        assertZScore( "1.4", "4.8", "1", "1" );
+        assertZScore( "1.2","49.23", "1", "-2.28" );
+        assertZScore( "1.3", "55.92", "1", "1.16" );
+        assertZScore( "1.4", "54.43", "1", "0.38" );
     }
 
     @Test( expected = IllegalArgumentException.class )

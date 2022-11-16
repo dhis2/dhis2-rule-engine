@@ -65,4 +65,18 @@ public class RuleFunctionZScoreWFH
             throw new IllegalArgumentException("height parameter should be between 45 and 120");
         }
     }
+
+    @Override
+    public float parameterCorrection( float parameter )
+    {
+        float floorParameter = ( float ) Math.floor(parameter);
+        if( parameter - floorParameter < 0.5f )
+        {
+            return floorParameter;
+        }
+        else
+        {
+            return floorParameter + 0.5f;
+        }
+    }
 }

@@ -70,4 +70,10 @@ public class RuleFunctionZScoreWFA
             throw new IllegalArgumentException("age parameter should be between 0 and 60");
         }
     }
+
+    @Override
+    public float parameterCorrection( float parameter )
+    {
+        return ( float ) Math.floor( parameter );
+    }
 }
