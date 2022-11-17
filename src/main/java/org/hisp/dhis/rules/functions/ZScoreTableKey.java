@@ -42,6 +42,16 @@ public class ZScoreTableKey
         this.parameter = parameter;
     }
 
+    public ZScoreTableKey ceil()
+    {
+        return new ZScoreTableKey( gender, (float) Math.ceil( parameter ) );
+    }
+
+    public ZScoreTableKey floor()
+    {
+        return new ZScoreTableKey( gender, (float) Math.floor( parameter ));
+    }
+
     @Override
     public int hashCode()
     {

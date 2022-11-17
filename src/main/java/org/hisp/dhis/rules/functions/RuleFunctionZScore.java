@@ -28,7 +28,12 @@ package org.hisp.dhis.rules.functions;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
+
 import com.google.common.collect.Sets;
+
+import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
+import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
 import org.hisp.dhis.rules.parser.expression.function.ScalarFunctionToEvaluate;
 
@@ -40,8 +45,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import static org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext;
 
 /**
  * @author Zubair Asghar.
@@ -79,13 +82,15 @@ public abstract class RuleFunctionZScore
 
         try
         {
-            parameter = Float.parseFloat( visitor.castStringVisit( ctx.expr( 0 ) ) );
+            parameter = parameterCorrection(Float.parseFloat( visitor.castStringVisit( ctx.expr( 0 ) ) ));
             weight = Float.parseFloat( visitor.castStringVisit( ctx.expr( 1 ) ) );
         }
         catch ( NumberFormatException ex )
         {
             throw new IllegalArgumentException( "Byte parsing failed" );
         }
+
+        validateParameter( parameter );
 
         zScore = getZScore( parameter, weight, gender );
 
@@ -102,39 +107,31 @@ public abstract class RuleFunctionZScore
         return CommonExpressionVisitor.DEFAULT_DOUBLE_VALUE;
     }
 
+    private Map<ZScoreTableKey, Map<Float, Integer>> getTableForGender(int gender)
+    {
+        if ( gender == 1 )
+        {
+            return getTableForGirl();
+        }
+        else
+        {
+            return getTableForBoy();
+        }
+    }
+
     public abstract Map<ZScoreTableKey, Map<Float, Integer>> getTableForGirl();
 
     public abstract Map<ZScoreTableKey, Map<Float, Integer>> getTableForBoy();
+
+    public abstract void validateParameter(float parameter);
+
+    public abstract float parameterCorrection(float parameter);
 
     private String getZScore( float parameter, float weight, byte gender )
     {
         ZScoreTableKey key = new ZScoreTableKey( gender, parameter );
 
-        Map<Float, Integer> sdMap;
-
-        // Female
-        if ( gender == 1 )
-        {
-            if ( getTableForGirl().get( key ) != null )
-            {
-                sdMap = getTableForGirl().get( key );
-            }
-            else
-            {
-                sdMap = new HashMap<Float, Integer>();
-            }
-        }
-        else
-        {
-            if ( getTableForBoy().get( key ) != null )
-            {
-                sdMap = getTableForBoy().get( key );
-            }
-            else
-            {
-                sdMap = new HashMap<Float, Integer>();
-            }
-        }
+        Map<Float, Integer> sdMap = getMap( gender, key );
 
         if ( sdMap.isEmpty() )
         {
@@ -200,6 +197,22 @@ public abstract class RuleFunctionZScore
         result = result * multiplicationFactor;
 
         return String.valueOf( getDecimalFormat().format( result ) );
+    }
+
+    private HashMap<Float, Integer> getMap( byte gender, ZScoreTableKey key )
+    {
+        HashMap<Float, Integer> sdMap;
+        Map<ZScoreTableKey, Map<Float, Integer>> table = getTableForGender(gender);
+        if ( table.containsKey( key ) )
+        {
+            sdMap = (HashMap<Float, Integer>) table.get( key );
+        }
+        else
+        {
+            sdMap = new HashMap<>();
+        }
+
+        return sdMap;
     }
 
     private int getMultiplicationFactor( Map<Float, Integer> sdMap, float weight )
