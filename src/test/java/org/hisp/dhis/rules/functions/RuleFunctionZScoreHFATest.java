@@ -126,6 +126,12 @@ public class RuleFunctionZScoreHFATest
         assertZScore( "1", "abc", "1", "2.40" );
     }
 
+    @Test( expected = IllegalArgumentException.class )
+    public void testExceptionIfParameterOutOfRange()
+    {
+        assertZScore("61", "52.9", "1" , "-2");
+    }
+
     private void assertZScore( String parameter, String weight, String gender, String zScore )
     {
         when( visitor.castStringVisit( mockedFirstExpr ) ).thenReturn( parameter );

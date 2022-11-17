@@ -40,9 +40,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.mockito.Mockito.when;
 
-/**
- * @author Zubair Asghar.
- */
 
 @RunWith( MockitoJUnitRunner.class )
 public class RuleFunctionZScoreWFHTest
@@ -126,6 +123,12 @@ public class RuleFunctionZScoreWFHTest
     public void testExceptionWeightIsInvalid()
     {
         assertZScore( "1", "abc", "1", "2.40" );
+    }
+
+    @Test( expected = IllegalArgumentException.class )
+    public void testExceptionIfParameterOutOfRange()
+    {
+        assertZScore("42", "2.9", "1" , "1");
     }
 
     private void assertZScore( String parameter, String weight, String gender, String zScore )
