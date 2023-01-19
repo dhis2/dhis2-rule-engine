@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions
+package org.dhis2.ruleengine.functions
 /*
  * Copyright (c) 2004-2020, University of Oslo
  * All rights reserved.

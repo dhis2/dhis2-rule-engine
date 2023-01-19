@@ -1,6 +1,10 @@
 package org.dhis2.ruleengine.exprk
 
 import org.dhis2.ruleengine.RuleVariableValue
+import org.dhis2.ruleengine.exprk.functions.ADD_DAYS
+import org.dhis2.ruleengine.exprk.functions.AddDays
+import org.dhis2.ruleengine.exprk.functions.CEIL
+import org.dhis2.ruleengine.exprk.functions.Ceil
 import org.dhis2.ruleengine.exprk.internal.Function
 import org.dhis2.ruleengine.exprk.internal.Evaluator
 import org.dhis2.ruleengine.exprk.internal.Expr
@@ -21,6 +25,9 @@ class Expressions {
                 return (arguments.first().isNotEmpty()).toString()
             }
         })
+
+        evaluator.addFunction(ADD_DAYS, AddDays())
+        evaluator.addFunction(CEIL, Ceil())
 
          evaluator.addFunction("#", object : Function() {
              override fun call(arguments: List<String>): String {

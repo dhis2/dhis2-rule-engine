@@ -58,6 +58,7 @@ kotlin {
         val nativeTest by getting
         commonMain{
             dependencies{
+                kotlin("stdlib")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
             }
         }
