@@ -8,8 +8,8 @@ import org.dhis2.ruleengine.exprk.internal.Function
 const val ADD_DAYS = "d2:addDays"
 
 class AddDays : Function() {
-    override fun call(arguments: List<String>): String {
+    override fun call(arguments: List<String?>): String {
         if (arguments.size != 2) throw IllegalArgumentException("Expected two parameters")
-        return arguments[0].toLocalDate().plus(arguments[1].toDouble().toInt(), DateTimeUnit.DAY).toString()
+        return arguments[0]?.toLocalDate()?.plus(arguments[1]?.toDouble()?.toInt()?:0, DateTimeUnit.DAY).toString()
     }
 }

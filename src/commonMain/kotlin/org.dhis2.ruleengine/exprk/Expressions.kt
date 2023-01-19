@@ -11,6 +11,8 @@ import org.dhis2.ruleengine.exprk.internal.Expr
 import org.dhis2.ruleengine.exprk.internal.Parser
 import org.dhis2.ruleengine.exprk.internal.Scanner
 import org.dhis2.ruleengine.exprk.internal.Token
+import kotlin.math.abs
+import kotlin.math.round
 
 class ExpressionException(message: String) : RuntimeException(message)
 
@@ -20,9 +22,9 @@ class Expressions {
 
     init {
         evaluator.addFunction("d2:hasValue", object : Function() {
-            override fun call(arguments: List<String>): String {
+            override fun call(arguments: List<String?>): String {
                 if (arguments.size != 1) throw ExpressionException("d2:hasValue requires one argument")
-                return (arguments.first().isNotEmpty()).toString()
+                return (arguments.first()?.isNotEmpty()).toString()
             }
         })
 
@@ -30,98 +32,80 @@ class Expressions {
         evaluator.addFunction(CEIL, Ceil())
 
          evaluator.addFunction("#", object : Function() {
-             override fun call(arguments: List<String>): String {
+             override fun call(arguments: List<String?>): String {
                  if (arguments.size != 1) throw ExpressionException("requires one argument")
-                 return arguments.first()
+                 return arguments.first().toString()
              }
 
          })
 
         evaluator.addFunction("abs", object : Function() {
-            override fun call(arguments: List<String>): String {
+            override fun call(arguments: List<String?>): String {
                 if (arguments.size != 1) throw ExpressionException(
                     "abs requires one argument"
                 )
 
-                return arguments.first()
+                return abs(arguments.first()?.toDouble()?:0.0).toString()
             }
         })
 
         evaluator.addFunction("sum", object : Function() {
-            override fun call(arguments: List<String>): String {
+            override fun call(arguments: List<String?>): String {
                 if (arguments.isEmpty()) throw ExpressionException(
                     "sum requires at least one argument"
                 )
 
-                return arguments.map { it.toFloat() }.reduce { acc, value ->
+                return arguments.mapNotNull { it?.toFloat() }.reduce { acc, value ->
                     acc + value
                 }.toString()
             }
         })
 
-        evaluator.addFunction("floor", object : Function() {
-            override fun call(arguments: List<String>): String {
-                if (arguments.size != 1) throw ExpressionException(
-                    "abs requires one argument"
-                )
-
-                return arguments.first()
-            }
-        })
-
-        evaluator.addFunction("ceil", object : Function() {
-            override fun call(arguments: List<String>): String {
-                if (arguments.size != 1) throw ExpressionException(
-                    "abs requires one argument"
-                )
-
-                return arguments.first()
-            }
-        })
-
         evaluator.addFunction("round", object : Function() {
-            override fun call(arguments: List<String>): String {
+            override fun call(arguments: List<String?>): String {
                 if (arguments.size !in listOf(1, 2)) throw ExpressionException(
                     "round requires either one or two arguments"
                 )
 
                 val value = arguments.first()
-                val scale = if (arguments.size == 2) arguments.last().toInt() else 0
+                val scale = if (arguments.size == 2) arguments.last()?.toInt() else 0
 
-                return value
+                return round(value?.toDouble()?:0.0).toString()
             }
         })
 
         evaluator.addFunction("min", object : Function() {
-            override fun call(arguments: List<String>): String {
-                if (arguments.isEmpty()) throw ExpressionException(
+            override fun call(arguments: List<String?>): String {
+                val filteredArguments = arguments.filterNotNull()
+                if (filteredArguments.isEmpty()) throw ExpressionException(
                     "min requires at least one argument"
                 )
 
-                return arguments.minOfOrNull { it.toFloat() }?.toString() ?: ""
+                return filteredArguments.minOfOrNull { it.toFloat() }?.toString() ?: ""
             }
         })
 
         evaluator.addFunction("max", object : Function() {
-            override fun call(arguments: List<String>): String {
-                if (arguments.isEmpty()) throw ExpressionException(
+            override fun call(arguments: List<String?>): String {
+                val filteredArguments = arguments.filterNotNull()
+                if (filteredArguments.isEmpty()) throw ExpressionException(
                     "max requires at least one argument"
                 )
 
-                return arguments.maxOfOrNull { it.toFloat() }?.toString() ?: ""
+                return filteredArguments.maxOfOrNull { it.toFloat() }?.toString() ?: ""
             }
         })
 
         evaluator.addFunction("if", object : Function() {
-            override fun call(arguments: List<String>): String {
+            override fun call(arguments: List<String?>): String {
                 val condition = arguments[0]
                 val thenValue = arguments[1]
                 val elseValue = arguments[2]
 
                 return if (condition.toBoolean()) {
-                    thenValue
+                    thenValue?:""
                 } else {
-                    elseValue
+                    elseValue?:""
                 }
             }
         })
@@ -152,9 +136,9 @@ class Expressions {
         return this
     }
 
-    fun addFunction(name: String, func: (List<String>) -> String): Expressions {
+    fun addFunction(name: String, func: (List<String?>) -> String): Expressions {
         evaluator.addFunction(name, object : Function() {
-            override fun call(arguments: List<String>): String {
+            override fun call(arguments: List<String?>): String {
                 return func(arguments)
             }
 
