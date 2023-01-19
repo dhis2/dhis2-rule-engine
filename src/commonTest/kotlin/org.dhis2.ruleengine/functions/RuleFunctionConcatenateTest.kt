@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.functions
+package org.dhis2.ruleengine.functions
 
 import org.dhis2.ruleengine.exprk.functions.Concatenate
 import kotlin.test.Test
