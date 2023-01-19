@@ -1,7 +1,9 @@
 package org.dhis2.ruleengine.functions
 
+import kotlinx.datetime.toLocalDate
+import org.dhis2.ruleengine.RuleEngineTestUtils.currentDate
 import org.dhis2.ruleengine.RuleVariableValue
-import org.dhis2.ruleengine.exprk.functions.InOrgUnitGroup
+import org.dhis2.ruleengine.exprk.functions.LastEventDate
 import org.dhis2.ruleengine.models.RuleValueType
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -34,50 +36,41 @@ import kotlin.test.assertTrue
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-class RuleFunctionInOrgUnitGroupTest {
+class RuleFunctionLastEventDateTest {
 
     @Test
-    fun returnFalseWhenValueMapAndDataAreEmpty() {
-        assertInOrgUnitGroup(
-            "uid1", mutableMapOf(), mutableMapOf(),
-            "false"
-        )
+    fun returnNothingWhenValueMapDoesNotHaveValue() {
+        val valueMap: Map<String, RuleVariableValue> = emptyValueMap
+        assertLastEventDate("test_variable", valueMap, "")
     }
 
     @Test
-    fun returnFalseIfMemberIsNotInData() {
-        val supplementaryData: Map<String, List<String>> = mutableMapOf()
-        val valueMap: Map<String, RuleVariableValue> = givenAVariableValuesAndOneWithTwoCandidates("location1")
-        assertInOrgUnitGroup("value", supplementaryData, valueMap, "false")
+    fun returnLatestDateWhenValueExist() {
+        val variableWithValue = "test_variable_one"
+        val valueMap: Map<String, RuleVariableValue> = getValueMapWithValue(variableWithValue)
+        assertLastEventDate(variableWithValue, valueMap, currentDate().toString())
     }
 
-    @Test
-    fun returnTrueIfMemberIsInData() {
-        val value = "value"
-        val location = "location1"
-        val supplementaryData: MutableMap<String, List<String>> = mutableMapOf()
-        supplementaryData[value] = listOf(location)
-        val valueMap: Map<String, RuleVariableValue> = givenAVariableValuesAndOneWithTwoCandidates(location)
-        assertInOrgUnitGroup(value, supplementaryData, valueMap, "true")
-    }
+    private val emptyValueMap: Map<String, RuleVariableValue>
+        get() = mutableMapOf()
 
-    private fun givenAVariableValuesAndOneWithTwoCandidates(locationValue: String): Map<String, RuleVariableValue> {
-        val variableValues: MutableMap<String, RuleVariableValue> = mutableMapOf()
-        variableValues["org_unit"] = RuleVariableValue(
-            variableValue = locationValue,
-            candidates = listOf(locationValue, "two"),
+    private fun getValueMapWithValue(variableNameWithValue: String, date: String): Map<String, RuleVariableValue> {
+        val valueMap: MutableMap<String, RuleVariableValue> = mutableMapOf()
+        valueMap[variableNameWithValue] = RuleVariableValue(
+            variableValue = "value",
+            eventDate = date.toLocalDate(),
             ruleValueType = RuleValueType.TEXT
         )
-        return variableValues
+        return valueMap
     }
 
-    private fun assertInOrgUnitGroup(
-        value: String,
-        supplementaryData: Map<String, List<String>>,
-        valueMap: Map<String, RuleVariableValue>, inOrgUnitGroup: String
-    ) {
+    private fun getValueMapWithValue(variableNameWithValue: String): Map<String, RuleVariableValue> {
+        return getValueMapWithValue(variableNameWithValue, currentDate().toString())
+    }
+
+    private fun assertLastEventDate(value: String, valueMap: Map<String, RuleVariableValue>, lastEventDate: String) {
         assertTrue {
-            InOrgUnitGroup(valueMap, supplementaryData).call(listOf(value)) == inOrgUnitGroup
+            LastEventDate(valueMap).call(listOf(value)) == lastEventDate
         }
     }
 }
