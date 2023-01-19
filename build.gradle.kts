@@ -47,7 +47,6 @@ kotlin {
             dependencies{
                 implementation("org.hisp.dhis.parser:dhis-antlr-expression-parser:1.0.29")
                 implementation("junit:junit:4.13.1")
-                implementation("junit:junit:4.13.1")
                 implementation("org.assertj:assertj-core:2.9.1")
                 implementation("org.mockito:mockito-core:2.2.9")
             }
