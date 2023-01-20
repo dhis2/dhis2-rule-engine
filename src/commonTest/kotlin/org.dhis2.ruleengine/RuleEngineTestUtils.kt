@@ -31,6 +31,7 @@ import org.dhis2.ruleengine.models.Rule
 import org.dhis2.ruleengine.models.RuleEnrollment
 import org.dhis2.ruleengine.models.RuleEvent
 import org.dhis2.ruleengine.models.RuleVariable
+import kotlin.test.assertTrue
 
 /**
  * @author Zubair Asghar
@@ -87,6 +88,14 @@ object RuleEngineTestUtils {
             this.plus(days, DateTimeUnit.DAY)
         }else{
             this.minus(days, DateTimeUnit.DAY)
+        }
+    }
+
+    fun assertThrowsIllegalArgumentException(method: () -> Unit) {
+        try {
+            method.invoke()
+        } catch (e: Exception) {
+            assertTrue { e is IllegalArgumentException }
         }
     }
 }

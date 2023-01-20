@@ -1,5 +1,6 @@
 package org.dhis2.ruleengine.functions
 
+import org.dhis2.ruleengine.RuleEngineTestUtils.assertThrowsIllegalArgumentException
 import org.dhis2.ruleengine.exprk.functions.MonthsBetween
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -82,14 +83,6 @@ class RuleFunctionMonthsBetweenTest {
     private fun assertMonthsBetween(startDate: String?, endDate: String?, monthsBetween: String?) {
         assertTrue {
             MonthsBetween().call(listOf(startDate, endDate)) == monthsBetween
-        }
-    }
-
-    private fun assertThrowsIllegalArgumentException(method: () -> Unit) {
-        try {
-            method.invoke()
-        } catch (e: Exception) {
-            assertTrue { e is IllegalArgumentException }
         }
     }
 }
