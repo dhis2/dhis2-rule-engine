@@ -6,11 +6,11 @@ import kotlinx.datetime.toLocalDate
 import kotlinx.datetime.until
 import org.dhis2.ruleengine.exprk.internal.Function
 
-const val MONTHS_BETWEEN = "d2:monthBetween"
+const val YEARS_BETWEEN = "d2:yearsBetween"
 
-class MonthsBetween : Function() {
+class YearsBetween : Function() {
     override fun call(arguments: List<String?>): String {
-        if (arguments.size != 2) throw IllegalArgumentException("monthsBetween requires two arguments")
+        if (arguments.size != 2) throw IllegalArgumentException("yearsBetween requires two arguments")
         val startDate = arguments[0]?.takeIf { it.isNotBlank() }?.let { parseToDate(it) }
         val endDate = arguments[1]?.takeIf { it.isNotBlank() }?.let { parseToDate(it) }
 
@@ -19,7 +19,7 @@ class MonthsBetween : Function() {
         return when {
             startDate == null -> "0"
             endDate == null -> "0"
-            else -> startDate.until(endDate, DateTimeUnit.MONTH).toString()
+            else -> startDate.until(endDate, DateTimeUnit.YEAR).toString()
         }
     }
 
