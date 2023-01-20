@@ -1,8 +1,6 @@
 package org.dhis2.ruleengine.exprk.functions
 
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.periodUntil
-import kotlinx.datetime.toLocalDate
+import kotlinx.datetime.*
 import org.dhis2.ruleengine.exprk.internal.Function
 
 const val DAYS_BETWEEN = "d2:daysBetween"
@@ -15,7 +13,7 @@ class DaysBetween : Function() {
         return when {
             startDate == null -> "0"
             endDate == null -> "0"
-            else -> startDate.periodUntil(endDate).days.toString()
+            else -> startDate.until(endDate, DateTimeUnit.DAY).toString()
         }
     }
 
