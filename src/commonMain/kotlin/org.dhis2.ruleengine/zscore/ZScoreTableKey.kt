@@ -1,4 +1,4 @@
-package org.dhis2.ruleengine.functions
+package org.dhis2.ruleengine.zscore
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -26,25 +26,22 @@ package org.dhis2.ruleengine.functions
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-/ **
- * @author Zubair Asghar.
  */
 class ZScoreTableKey(private val gender: Byte, val parameter: Float) {
 
     fun ceil(): ZScoreTableKey {
-        return ZScoreTableKey(gender, Math.ceil(parameter.toDouble()).toFloat())
+        return ZScoreTableKey(gender, kotlin.math.ceil(parameter))
     }
 
     fun floor(): ZScoreTableKey {
-        return ZScoreTableKey(gender, Math.floor(parameter.toDouble()).toFloat())
+        return ZScoreTableKey(gender, kotlin.math.floor(parameter))
     }
 
     override fun hashCode(): Int {
         val prime = 31
         var result = 1
         result = prime * result + gender
-        result = prime * result + java.lang.Float.floatToIntBits(parameter)
+        result = prime * result + parameter.toBits()
         return result
     }
 

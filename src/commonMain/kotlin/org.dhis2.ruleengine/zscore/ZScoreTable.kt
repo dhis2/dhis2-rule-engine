@@ -1,4 +1,4 @@
-package org.dhis2.ruleengine.functions
+package org.dhis2.ruleengine.zscore
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -26,8 +26,6 @@ package org.dhis2.ruleengine.functions
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ /**
- * @author Zubair Asghar.
  */
 object ZScoreTable {
     val zscoreWFATableGirl: Map<ZScoreTableKey, Map<Float, Int>>

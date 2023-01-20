@@ -1,5 +1,8 @@
 package org.dhis2.ruleengine.functions
 
+import org.dhis2.ruleengine.zscore.ZScoreTable
+import org.dhis2.ruleengine.zscore.ZScoreTableKey
+
 /*
  * Copyright (c) 2004-2018, University of Oslo
  * All rights reserved.
