@@ -1,4 +1,4 @@
-package ruleengine
+package org.dhis2.ruleengine
 
 import org.dhis2.ruleengine.RuleEffect
 import org.dhis2.ruleengine.RuleEngineTestUtils

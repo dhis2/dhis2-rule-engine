@@ -44,14 +44,7 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val jvmMain by getting{
-            dependencies{
-                implementation("org.hisp.dhis.parser:dhis-antlr-expression-parser:1.0.29")
-                implementation("junit:junit:4.13.1")
-                implementation("org.assertj:assertj-core:2.9.1")
-                implementation("org.mockito:mockito-core:2.2.9")
-            }
-        }
+        val jvmMain by getting
         val jvmTest by getting
         val jsMain by getting
         val jsTest by getting
