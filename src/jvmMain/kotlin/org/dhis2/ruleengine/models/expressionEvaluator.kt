@@ -22,17 +22,6 @@ actual fun expressionEvaluator(): ExpressionParserEvaluator {
                 .withValueMap(valueMap)
                 .withSupplementaryData(supplementaryData)
                 .eval(condition)
-
-            /*val commonExpressionVisitor: CommonExpressionVisitor = CommonExpressionVisitor.newBuilder()
-                .withFunctionMap(FUNCTIONS)
-                .withFunctionMethod(FUNCTION_EVALUATE)
-                .withVariablesMap(valueMap)
-                .withSupplementaryData(supplementaryData)
-                .validateCommonProperties()
-            val result =
-                Parser.visit(condition, commonExpressionVisitor, !isOldAndroidVersion(valueMap, supplementaryData))
-            return convertInteger(result).toString()*/
-
         }
 
         override fun getExpressionDescription(
@@ -63,21 +52,6 @@ actual fun expressionEvaluator(): ExpressionParserEvaluator {
 
             return description
         }
-
-        private fun isOldAndroidVersion(
-            valueMap: Map<String, RuleVariableValue>,
-            supplementaryData: Map<String, List<String>>
-        ): Boolean {
-            return valueMap.containsKey("environment") && valueMap["environment"]!!.value == getClientName().clientName &&
-                    supplementaryData.containsKey("android_version") && supplementaryData["android_version"]!![0].toInt() < 21
-        }
-
-        private fun convertInteger(result: Any): Any {
-            return if (result is Double && result % 1 == 0.0) {
-                result.toInt()
-            } else result
-        }
-
     }
 
 
