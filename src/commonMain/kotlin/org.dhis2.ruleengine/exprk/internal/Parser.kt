@@ -189,10 +189,13 @@ internal class Parser(private val tokens: List<Token>) {
             return GroupingExpr(expr)
         }
 
-       /* if(match(D2_IDENTIFIER)){
-            return VariableExpr(previous())
-        }*/
-
+        if(match(LITERAL)){
+            val openLiteralPos = current
+            val expr = expression()
+            consume(LITERAL, "Expected closing '\'' after '${previous().lexeme}'.")
+            val tokensInLiteral = previousInLiteral(openLiteralPos).joinToString(separator = "") { it.lexeme }
+            return LiteralExpr(tokensInLiteral)
+        }
         throw ExpressionException("Expected expression after '${previous().lexeme}'.")
     }
 
@@ -246,5 +249,7 @@ internal class Parser(private val tokens: List<Token>) {
     private fun previous() = tokens[current - 1]
 
     private fun previousTwo() = Pair(tokens[current - 2], tokens[current - 1])
+
+    private fun previousInLiteral(openLiteralPosition:Int) = tokens.subList(openLiteralPosition, current-1)
 
 }

@@ -12,7 +12,7 @@ class RuleVariableValue(
     val candidates: List<String> = emptyList(),
     val eventDate: LocalDate? = Clock.System.now().toLocalDateTime(TimeZone.UTC).date
 ) {
-    val value get() = variableValue
+    val value get() = variableValue.takeIf { it != null }?:ruleValueType.defaultValue
 
     init {
         variableValue = variableValue?.replace("'", "")

@@ -2,6 +2,7 @@ package org.dhis2.ruleengine.models
 
 import org.dhis2.ruleengine.DataItem
 import org.dhis2.ruleengine.RuleVariableValue
+import org.dhis2.ruleengine.exprk.Expressions
 import org.dhis2.ruleengine.parser.expression.CommonExpressionVisitor
 import org.dhis2.ruleengine.parser.expression.ParserUtils.FUNCTION_EVALUATE
 import org.dhis2.ruleengine.parser.expression.ParserUtils.FUNCTION_FOR_DESCRIPTION
@@ -16,11 +17,13 @@ actual fun expressionEvaluator(): ExpressionParserEvaluator {
             valueMap: Map<String, RuleVariableValue>,
             supplementaryData: Map<String, List<String>>
         ): String {
-            if (condition.isEmpty()) {
-                return ""
-            }
+            if(condition.isEmpty()) return ""
+            return Expressions()
+                .withValueMap(valueMap)
+                .withSupplementaryData(supplementaryData)
+                .eval(condition)
 
-            val commonExpressionVisitor: CommonExpressionVisitor = CommonExpressionVisitor.newBuilder()
+            /*val commonExpressionVisitor: CommonExpressionVisitor = CommonExpressionVisitor.newBuilder()
                 .withFunctionMap(FUNCTIONS)
                 .withFunctionMethod(FUNCTION_EVALUATE)
                 .withVariablesMap(valueMap)
@@ -28,7 +31,7 @@ actual fun expressionEvaluator(): ExpressionParserEvaluator {
                 .validateCommonProperties()
             val result =
                 Parser.visit(condition, commonExpressionVisitor, !isOldAndroidVersion(valueMap, supplementaryData))
-            return convertInteger(result).toString()
+            return convertInteger(result).toString()*/
 
         }
 

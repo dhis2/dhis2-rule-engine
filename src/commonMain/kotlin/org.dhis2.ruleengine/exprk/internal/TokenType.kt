@@ -24,6 +24,7 @@ internal enum class TokenType {
 
     // Other
     COMMA,
+    LITERAL,
 
     // Parentheses
     LEFT_PAREN,

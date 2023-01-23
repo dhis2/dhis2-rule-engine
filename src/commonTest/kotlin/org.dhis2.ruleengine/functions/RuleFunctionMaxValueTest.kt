@@ -4,7 +4,7 @@ import org.dhis2.ruleengine.RuleVariableValue
 import org.dhis2.ruleengine.exprk.functions.MaxValue
 import org.dhis2.ruleengine.models.RuleValueType
 import kotlin.test.Test
-import kotlin.test.assertTrue
+import kotlin.test.assertEquals
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -46,7 +46,7 @@ class RuleFunctionMaxValueTest {
             candidates = listOf(value, "6", "7"),
             ruleValueType = RuleValueType.TEXT
         )
-        assertMaxValue(variableNameOne, variableValues, "7.0")
+        assertMaxValue(variableNameOne, variableValues, "7")
     }
 
     @Test
@@ -56,8 +56,9 @@ class RuleFunctionMaxValueTest {
     }
 
     private fun assertMaxValue(value: String, valueMap: Map<String, RuleVariableValue>, maxValue: String) {
-        assertTrue {
-            MaxValue(valueMap).call(listOf(value)) == maxValue
-        }
+        assertEquals(
+            maxValue,
+            MaxValue{valueMap}.call(listOf(value))
+        )
     }
 }

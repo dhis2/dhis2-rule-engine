@@ -1,18 +1,11 @@
 package org.dhis2.ruleengine.exprk
 
 import org.dhis2.ruleengine.RuleVariableValue
-import org.dhis2.ruleengine.exprk.functions.ADD_DAYS
-import org.dhis2.ruleengine.exprk.functions.AddDays
-import org.dhis2.ruleengine.exprk.functions.CEIL
-import org.dhis2.ruleengine.exprk.functions.Ceil
-import org.dhis2.ruleengine.exprk.internal.Function
-import org.dhis2.ruleengine.exprk.internal.Evaluator
-import org.dhis2.ruleengine.exprk.internal.Expr
-import org.dhis2.ruleengine.exprk.internal.Parser
-import org.dhis2.ruleengine.exprk.internal.Scanner
-import org.dhis2.ruleengine.exprk.internal.Token
+import org.dhis2.ruleengine.exprk.functions.*
+import org.dhis2.ruleengine.exprk.internal.*
 import kotlin.math.abs
 import kotlin.math.round
+import org.dhis2.ruleengine.exprk.internal.Function
 
 class ExpressionException(message: String) : RuntimeException(message)
 
@@ -21,80 +14,44 @@ class Expressions {
     private val evaluator = Evaluator()
 
     init {
-        evaluator.addFunction("d2:hasValue", object : Function() {
-            override fun call(arguments: List<String?>): String {
-                if (arguments.size != 1) throw ExpressionException("d2:hasValue requires one argument")
-                return (arguments.first()?.isNotEmpty()).toString()
-            }
-        })
-
         evaluator.addFunction(ADD_DAYS, AddDays())
         evaluator.addFunction(CEIL, Ceil())
+        evaluator.addFunction(CONCATENATE, Concatenate())
+        evaluator.addFunction(COUNT_IF_VALUE, CountIfValue{evaluator.valueMap})
+        evaluator.addFunction(COUNT_IF_ZERO_POS, CountIfZeroPos{evaluator.valueMap})
+        evaluator.addFunction(COUNT, Count{evaluator.valueMap})
+        evaluator.addFunction(DAYS_BETWEEN, DaysBetween())
+        evaluator.addFunction(EXTRACT_DATAMATRIX_VALUE, ExtractDataMatrixValue())
+        evaluator.addFunction(FLOOR, Floor())
+        evaluator.addFunction(HAS_USER_ROLE, HasUserRole { evaluator.supplementaryData })
+        evaluator.addFunction(HAS_VALUE, HasValue{evaluator.valueMap})
+        evaluator.addFunction(
+            IN_ORG_UNIT_GROUP,
+            InOrgUnitGroup({ evaluator.valueMap }, { evaluator.supplementaryData })
+        )
+        evaluator.addFunction(LAST_EVENT_DATE, LastEventDate { evaluator.valueMap })
+        evaluator.addFunction(LEFT, Left())
+        evaluator.addFunction(LENGTH, Length())
+        evaluator.addFunction(MAX_VALUE, MaxValue { evaluator.valueMap })
+        evaluator.addFunction(MIN_VALUE, MinValue { evaluator.valueMap })
+        evaluator.addFunction(MODULUS, Modulus())
+        evaluator.addFunction(MONTHS_BETWEEN, MonthsBetween())
+        evaluator.addFunction(O_ZIP, Ozip())
+        evaluator.addFunction(RIGHT, Right())
+        evaluator.addFunction(ROUND, Round())
+        evaluator.addFunction(SPLIT, Split())
+        evaluator.addFunction(SUB_STRING, SubString())
+        evaluator.addFunction(VALIDATE_PATTERN, ValidatePattern())
+        evaluator.addFunction(WEEKS_BETWEEN, WeeksBetween())
+        evaluator.addFunction(YEARS_BETWEEN, YearsBetween())
+        evaluator.addFunction(ZING, Zing())
+        evaluator.addFunction(ZPVC, Zpvc())
+        evaluator.addFunction(ZSCORE_HFA, ZScoreHFA())
+        evaluator.addFunction(ZSCORE_WFA, ZScoreWFA())
+        evaluator.addFunction(ZSCORE_WFH, ZScoreWFH())
 
-         evaluator.addFunction("#", object : Function() {
-             override fun call(arguments: List<String?>): String {
-                 if (arguments.size != 1) throw ExpressionException("requires one argument")
-                 return arguments.first().toString()
-             }
-
-         })
-
-        evaluator.addFunction("abs", object : Function() {
-            override fun call(arguments: List<String?>): String {
-                if (arguments.size != 1) throw ExpressionException(
-                    "abs requires one argument"
-                )
-
-                return abs(arguments.first()?.toDouble()?:0.0).toString()
-            }
-        })
-
-        evaluator.addFunction("sum", object : Function() {
-            override fun call(arguments: List<String?>): String {
-                if (arguments.isEmpty()) throw ExpressionException(
-                    "sum requires at least one argument"
-                )
-
-                return arguments.mapNotNull { it?.toFloat() }.reduce { acc, value ->
-                    acc + value
-                }.toString()
-            }
-        })
-
-        evaluator.addFunction("round", object : Function() {
-            override fun call(arguments: List<String?>): String {
-                if (arguments.size !in listOf(1, 2)) throw ExpressionException(
-                    "round requires either one or two arguments"
-                )
-
-                val value = arguments.first()
-                val scale = if (arguments.size == 2) arguments.last()?.toInt() else 0
-
-                return round(value?.toDouble()?:0.0).toString()
-            }
-        })
-
-        evaluator.addFunction("min", object : Function() {
-            override fun call(arguments: List<String?>): String {
-                val filteredArguments = arguments.filterNotNull()
-                if (filteredArguments.isEmpty()) throw ExpressionException(
-                    "min requires at least one argument"
-                )
-
-                return filteredArguments.minOfOrNull { it.toFloat() }?.toString() ?: ""
-            }
-        })
-
-        evaluator.addFunction("max", object : Function() {
-            override fun call(arguments: List<String?>): String {
-                val filteredArguments = arguments.filterNotNull()
-                if (filteredArguments.isEmpty()) throw ExpressionException(
-                    "max requires at least one argument"
-                )
-
-                return filteredArguments.maxOfOrNull { it.toFloat() }?.toString() ?: ""
-            }
-        })
+        define("true", "true")
+        define("false", "true")
 
         evaluator.addFunction("if", object : Function() {
             override fun call(arguments: List<String?>): String {
@@ -103,9 +60,9 @@ class Expressions {
                 val elseValue = arguments[2]
 
                 return if (condition.toBoolean()) {
-                    thenValue?:""
+                    thenValue ?: ""
                 } else {
-                    elseValue?:""
+                    elseValue ?: ""
                 }
             }
         })
@@ -151,8 +108,13 @@ class Expressions {
         return evaluator.eval(parse(expression))
     }
 
-    fun withValueMap(valueMap:Map<String, RuleVariableValue>): Expressions {
+    fun withValueMap(valueMap: Map<String, RuleVariableValue>): Expressions {
         evaluator.addValueMap(valueMap)
+        return this
+    }
+
+    fun withSupplementaryData(supplementaryData: Map<String, List<String>>): Expressions {
+        evaluator.addSupplementaryData(supplementaryData)
         return this
     }
 

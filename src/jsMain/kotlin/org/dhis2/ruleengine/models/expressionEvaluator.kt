@@ -11,8 +11,10 @@ actual fun expressionEvaluator(): ExpressionParserEvaluator {
             valueMap: Map<String, RuleVariableValue>,
             supplementaryData: Map<String, List<String>>
         ): String {
+            if(condition.isEmpty()) return ""
             return Expressions()
                 .withValueMap(valueMap)
+                .withSupplementaryData(supplementaryData)
                 .eval(condition)
         }
 

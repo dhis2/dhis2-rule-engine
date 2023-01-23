@@ -4,6 +4,7 @@ import org.dhis2.ruleengine.RuleVariableValue
 import org.dhis2.ruleengine.exprk.functions.MinValue
 import org.dhis2.ruleengine.models.RuleValueType
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 /*
@@ -60,8 +61,9 @@ class RuleFunctionMinValueTest {
     }
 
     private fun assertMinValue(value: String, valueMap: Map<String, RuleVariableValue>, minValue: String) {
-        assertTrue {
-            MinValue(valueMap).call(listOf(value)) == minValue
-        }
+        assertEquals(
+            minValue,
+            MinValue{valueMap}.call(listOf(value))
+        )
     }
 }

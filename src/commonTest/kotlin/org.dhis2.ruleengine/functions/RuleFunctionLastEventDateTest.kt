@@ -70,7 +70,7 @@ class RuleFunctionLastEventDateTest {
 
     private fun assertLastEventDate(value: String, valueMap: Map<String, RuleVariableValue>, lastEventDate: String) {
         assertTrue {
-            LastEventDate(valueMap).call(listOf(value)) == lastEventDate
+            LastEventDate{valueMap}.call(listOf(value)) == lastEventDate
         }
     }
 }

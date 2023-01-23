@@ -69,7 +69,7 @@ class RuleFunctionZScoreHFATest {
 
     @Test
     fun testFractionAgeParameter() {
-        assertZScore("1.2", "49.23", "1", "-2.28")
+        assertZScore("1.2", "49.23", "1", "-2.29")
         assertZScore("1.3", "55.92", "1", "1.16")
         assertZScore("1.4", "54.43", "1", "0.38")
     }

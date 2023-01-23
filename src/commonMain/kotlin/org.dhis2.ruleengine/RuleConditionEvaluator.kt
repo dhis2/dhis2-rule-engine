@@ -50,7 +50,7 @@ class RuleConditionEvaluator {
                         try {
                             if (action.isAssignToCalculatedValue()) {
                                 updateValueMap(
-                                    VariableNameUnwrapper.unwrap((action as RuleAction.Assign).content),
+                                    VariableNameUnwrapper.unwrap((action as RuleAction.Assign).content, null),
                                     RuleVariableValue(
                                         variableValue = process(
                                             condition = action.data,

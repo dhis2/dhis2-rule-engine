@@ -1,52 +1,48 @@
 package org.dhis2.ruleengine
 
-import org.assertj.core.api.Assertions
 import org.dhis2.ruleengine.RuleEngineTestUtils.currentDate
 import org.dhis2.ruleengine.RuleEngineTestUtils.getRuleEngine
 import org.dhis2.ruleengine.models.*
 import org.dhis2.ruleengine.models.RuleAction.DisplayKeyValuePair
 import org.dhis2.ruleengine.models.RuleVariable.RuleVariableCurrentEvent
 import org.dhis2.ruleengine.models.RuleVariable.RuleVariableNewestEvent
-import org.junit.Assert
-import org.junit.jupiter.api.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
-import java.util.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
-@RunWith(JUnit4::class)
 class RuleEngineVariableNameTest {
     @Test
     @Throws(Exception::class)
     fun evaluateD2Round() {
         val ruleAction1: RuleAction = DisplayKeyValuePair(
-            "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:round(#{" + UID01 + "})"
+            "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:round(#{$UID01})"
         )
         val ruleAction2: RuleAction = DisplayKeyValuePair(
-            "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:round(#{" + VARIABLE_NAME + "})"
+            "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:round(#{$VARIABLE_NAME})"
         )
         val ruleAction3: RuleAction = DisplayKeyValuePair(
-            "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:round(#{" + UID0 + "})"
+            "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:round(#{$UID0})"
         )
         val ruleAction4: RuleAction = DisplayKeyValuePair(
-            "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:round(#{" + UID0WILD + "})"
+            "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:round(#{$UID0WILD})"
         )
         val ruleAction5: RuleAction = DisplayKeyValuePair(
-            "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:round(#{" + UID01WILD + "})"
+            "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:round(#{$UID01WILD})"
         )
         val ruleAction6: RuleAction = DisplayKeyValuePair(
-            "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:round(#{" + UID012 + "})"
+            "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:round(#{$UID012})"
         )
         val ruleAction7: RuleAction = DisplayKeyValuePair(
-            "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:round(#{" + UID0WILD2 + "})"
+            "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:round(#{$UID0WILD2})"
         )
         val ruleAction8: RuleAction = DisplayKeyValuePair(
-            "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:round(A{" + UID0 + "})"
+            "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:round(A{$UID0})"
         )
         val ruleAction9: RuleAction = DisplayKeyValuePair(
-            "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:round(A{" + UID01 + "})"
+            "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:round(A{$UID01})"
         )
         val ruleAction10: RuleAction = DisplayKeyValuePair(
-            "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:round(A{" + VARIABLE_NAME + "})"
+            "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:round(A{$VARIABLE_NAME})"
         )
         val ruleVariable1: RuleVariable = RuleVariableNewestEvent(
             UID01, "test_data_element1", RuleValueType.NUMERIC
@@ -69,8 +65,7 @@ class RuleEngineVariableNameTest {
         val ruleVariable7: RuleVariable = RuleVariableNewestEvent(
             UID0WILD2, "test_data_element7", RuleValueType.NUMERIC
         )
-        val actions = Arrays
-            .asList(
+        val actions = listOf(
                 ruleAction1, ruleAction2, ruleAction3, ruleAction4, ruleAction5, ruleAction6, ruleAction7,
                 ruleAction8, ruleAction9, ruleAction10
             )
@@ -78,8 +73,7 @@ class RuleEngineVariableNameTest {
             null, null, null, "true",
             actions, ""
         )
-        val ruleVariables = Arrays
-            .asList(
+        val ruleVariables = listOf(
                 ruleVariable1, ruleVariable2, ruleVariable3, ruleVariable4, ruleVariable5, ruleVariable6,
                 ruleVariable7
             )
@@ -94,7 +88,7 @@ class RuleEngineVariableNameTest {
             null,
             "",
             null,
-            Arrays.asList(
+            listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element1", "2.6"),
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element2", "2.6"),
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element3", "2.6"),
@@ -109,27 +103,27 @@ class RuleEngineVariableNameTest {
         )
 
         val ruleEffects: List<RuleEffect> = getRuleEngine(rule, ruleVariables).evaluate(ruleEvent)
-        Assertions.assertThat(ruleEffects.size).isEqualTo(10)
-        Assertions.assertThat(ruleEffects[0].ruleAction).isEqualTo(ruleAction1)
-        Assert.assertEquals("3", ruleEffects[0].data)
-        Assertions.assertThat(ruleEffects[1].ruleAction).isEqualTo(ruleAction2)
-        Assert.assertEquals("3", ruleEffects[1].data)
-        Assertions.assertThat(ruleEffects[2].ruleAction).isEqualTo(ruleAction3)
-        Assert.assertEquals("3", ruleEffects[2].data)
-        Assertions.assertThat(ruleEffects[3].ruleAction).isEqualTo(ruleAction4)
-        Assert.assertEquals("3", ruleEffects[3].data)
-        Assertions.assertThat(ruleEffects[4].ruleAction).isEqualTo(ruleAction5)
-        Assert.assertEquals("3", ruleEffects[4].data)
-        Assertions.assertThat(ruleEffects[5].ruleAction).isEqualTo(ruleAction6)
-        Assert.assertEquals("3", ruleEffects[5].data)
-        Assertions.assertThat(ruleEffects[6].ruleAction).isEqualTo(ruleAction7)
-        Assert.assertEquals("3", ruleEffects[6].data)
-        Assertions.assertThat(ruleEffects[7].ruleAction).isEqualTo(ruleAction8)
-        Assert.assertEquals("3", ruleEffects[7].data)
-        Assertions.assertThat(ruleEffects[8].ruleAction).isEqualTo(ruleAction9)
-        Assert.assertEquals("3", ruleEffects[8].data)
-        Assertions.assertThat(ruleEffects[9].ruleAction).isEqualTo(ruleAction10)
-        Assert.assertEquals("3", ruleEffects[9].data)
+        assertEquals(ruleEffects.size, 10)
+        assertEquals(ruleEffects[0].ruleAction, ruleAction1)
+        assertEquals("3", ruleEffects[0].data)
+        assertEquals(ruleEffects[1].ruleAction, ruleAction2)
+        assertEquals("3", ruleEffects[1].data)
+        assertEquals(ruleEffects[2].ruleAction, ruleAction3)
+        assertEquals("3", ruleEffects[2].data)
+        assertEquals(ruleEffects[3].ruleAction, ruleAction4)
+        assertEquals("3", ruleEffects[3].data)
+        assertEquals(ruleEffects[4].ruleAction, ruleAction5)
+        assertEquals("3", ruleEffects[4].data)
+        assertEquals(ruleEffects[5].ruleAction, ruleAction6)
+        assertEquals("3", ruleEffects[5].data)
+        assertEquals(ruleEffects[6].ruleAction, ruleAction7)
+          assertEquals("3", ruleEffects[6].data)
+        assertEquals(ruleEffects[7].ruleAction, ruleAction8)
+         assertEquals("3", ruleEffects[7].data)
+         assertEquals(ruleEffects[8].ruleAction, ruleAction9)
+         assertEquals("3", ruleEffects[8].data)
+         assertEquals(ruleEffects[9].ruleAction, ruleAction10)
+        assertEquals("3", ruleEffects[9].data)
     }
 
     @Test
@@ -141,7 +135,7 @@ class RuleEngineVariableNameTest {
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent(
             UID01, "test_data_element", RuleValueType.TEXT
         )
-        val rule = Rule(null, null, null, "true", Arrays.asList(ruleAction), "")
+        val rule = Rule(null, null, null, "true", listOf(ruleAction), "")
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -160,9 +154,9 @@ class RuleEngineVariableNameTest {
         )
 
         val ruleEffects: List<RuleEffect> = getRuleEngine(rule, listOf(ruleVariable)).evaluate(ruleEvent)
-        Assertions.assertThat(ruleEffects.size).isEqualTo(1)
-        Assertions.assertThat(ruleEffects[0].data).isEqualTo("true")
-        Assertions.assertThat(ruleEffects[0].ruleAction).isEqualTo(ruleAction)
+        assertEquals(ruleEffects.size, 1)
+        assertEquals(ruleEffects[0].data, "true")
+        assertEquals(ruleEffects[0].ruleAction, ruleAction)
     }
 
     @Test
@@ -174,7 +168,7 @@ class RuleEngineVariableNameTest {
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent(
             VARIABLE_NAME, "test_data_element", RuleValueType.TEXT
         )
-        val rule = Rule(null, null, null, "true", Arrays.asList(ruleAction), "")
+        val rule = Rule(null, null, null, "true", listOf(ruleAction), "")
 
         val ruleEvent = RuleEvent(
             "test_event",
@@ -193,9 +187,9 @@ class RuleEngineVariableNameTest {
             )
         )
         val ruleEffects: List<RuleEffect> = getRuleEngine(rule, listOf(ruleVariable)).evaluate(ruleEvent)
-        Assertions.assertThat(ruleEffects.size).isEqualTo(1)
-        Assertions.assertThat(ruleEffects[0].data).isEqualTo("true")
-        Assertions.assertThat(ruleEffects[0].ruleAction).isEqualTo(ruleAction)
+        assertEquals(ruleEffects.size, 1)
+        assertEquals(ruleEffects[0].data, "true")
+        assertEquals(ruleEffects[0].ruleAction, ruleAction)
     }
 
     @Test
@@ -209,22 +203,22 @@ class RuleEngineVariableNameTest {
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             VARIABLE_NAME, "test_data_element_one", RuleValueType.TEXT
         )
-        val rule = Rule("", null, null, "true", Arrays.asList(ruleAction), "")
+        val rule = Rule("", null, null, "true", listOf(ruleAction), "")
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "condition2")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
@@ -234,9 +228,9 @@ class RuleEngineVariableNameTest {
             ruleVariables = listOf(ruleVariableOne),
             ruleEvents = listOf(ruleEvent2, ruleEvent3)
         ).evaluate(ruleEvent)
-        Assertions.assertThat(ruleEffects.size).isEqualTo(1)
-        Assertions.assertThat(ruleEffects[0].ruleAction).isEqualTo(ruleAction)
-        Assert.assertTrue(ruleEffects[0].data == "2")
+        assertEquals(ruleEffects.size, 1)
+        assertEquals(ruleEffects[0].ruleAction, ruleAction)
+        assertTrue(ruleEffects[0].data == "2")
     }
 
     @Test
@@ -250,22 +244,22 @@ class RuleEngineVariableNameTest {
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             UID01, "test_data_element_one", RuleValueType.TEXT
         )
-        val rule = Rule("", null, null, "true", Arrays.asList(ruleAction), "")
+        val rule = Rule("", null, null, "true", listOf(ruleAction), "")
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "condition2")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
@@ -275,9 +269,9 @@ class RuleEngineVariableNameTest {
             ruleEvents = listOf(ruleEvent2, ruleEvent3)
         )
         val ruleEffects: List<RuleEffect> = ruleEngine.evaluate(ruleEvent)
-        Assertions.assertThat(ruleEffects.size).isEqualTo(1)
-        Assertions.assertThat(ruleEffects[0].ruleAction).isEqualTo(ruleAction)
-        Assert.assertTrue(ruleEffects[0].data == "2")
+        assertEquals(ruleEffects.size, 1)
+        assertEquals(ruleEffects[0].ruleAction, ruleAction)
+        assertTrue(ruleEffects[0].data == "2")
     }
 
     @Test
@@ -292,28 +286,28 @@ class RuleEngineVariableNameTest {
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", "test_data_element_two", RuleValueType.TEXT
         )
-        val rule = Rule("", null, null, "true", Arrays.asList(ruleAction), "")
+        val rule = Rule("", null, null, "true", listOf(ruleAction), "")
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "condition2")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent4 = RuleEvent(
             "test_event3", "test_program_stage3", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_two", "condition")
             )
         )
@@ -323,9 +317,9 @@ class RuleEngineVariableNameTest {
             ruleEvents = listOf(ruleEvent2, ruleEvent3, ruleEvent4)
         )
         val ruleEffects: List<RuleEffect> = ruleEngine.evaluate(ruleEvent)
-        Assertions.assertThat(ruleEffects.size).isEqualTo(1)
-        Assertions.assertThat(ruleEffects[0].ruleAction).isEqualTo(ruleAction)
-        Assert.assertEquals("3", ruleEffects[0].data)
+        assertEquals(ruleEffects.size, 1)
+        assertEquals(ruleEffects[0].ruleAction, ruleAction)
+        assertEquals("3", ruleEffects[0].data)
     }
 
     @Test
@@ -340,28 +334,28 @@ class RuleEngineVariableNameTest {
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", "test_data_element_two", RuleValueType.TEXT
         )
-        val rule = Rule("", null, null, "true", Arrays.asList(ruleAction), "")
+        val rule = Rule("", null, null, "true", listOf(ruleAction), "")
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "condition2")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent4 = RuleEvent(
             "test_event3", "test_program_stage3", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_two", "condition")
             )
         )
@@ -372,9 +366,9 @@ class RuleEngineVariableNameTest {
         )
         val ruleEffects: List<RuleEffect> = ruleEngine.evaluate(ruleEvent)
 
-        Assertions.assertThat(ruleEffects.size).isEqualTo(1)
-        Assertions.assertThat(ruleEffects[0].ruleAction).isEqualTo(ruleAction)
-        Assert.assertEquals("3", ruleEffects[0].data)
+        assertEquals(ruleEffects.size, 1)
+        assertEquals(ruleEffects[0].ruleAction, ruleAction)
+        assertEquals("3", ruleEffects[0].data)
     }
 
     @Test
@@ -388,22 +382,22 @@ class RuleEngineVariableNameTest {
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             VARIABLE_NAME, "test_data_element_one", RuleValueType.NUMERIC
         )
-        val rule = Rule("", null, null, "true", Arrays.asList(ruleAction), "")
+        val rule = Rule("", null, null, "true", listOf(ruleAction), "")
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "0")
             )
         )
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "1")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event1", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "-3")
             )
         )
@@ -411,9 +405,9 @@ class RuleEngineVariableNameTest {
         val ruleEffects =
             getRuleEngine(listOf(rule), listOf(ruleVariableOne), ruleEvents = listOf(ruleEvent1, ruleEvent2))
                 .evaluate(ruleEvent)
-        Assertions.assertThat(ruleEffects.size).isEqualTo(1)
-        Assertions.assertThat(ruleEffects[0].ruleAction).isEqualTo(ruleAction)
-        Assert.assertEquals("2", ruleEffects[0].data)
+        assertEquals(ruleEffects.size, 1)
+        assertEquals(ruleEffects[0].ruleAction, ruleAction)
+        assertEquals("2", ruleEffects[0].data)
     }
 
     @Test
@@ -425,31 +419,31 @@ class RuleEngineVariableNameTest {
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             UID01, "test_data_element_one", RuleValueType.NUMERIC
         )
-        val rule = Rule("", null, null, "true", Arrays.asList(ruleAction), "")
+        val rule = Rule("", null, null, "true", listOf(ruleAction), "")
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "0")
             )
         )
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "1")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event1", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "-3")
             )
         )
         val ruleEffects =
             getRuleEngine(listOf(rule), listOf(ruleVariableOne), ruleEvents = listOf(ruleEvent1, ruleEvent2))
                 .evaluate(ruleEvent)
-        Assertions.assertThat(ruleEffects.size).isEqualTo(1)
-        Assertions.assertThat(ruleEffects[0].ruleAction).isEqualTo(ruleAction)
-        Assert.assertEquals("2", ruleEffects[0].data)
+        assertEquals(ruleEffects.size, 1)
+        assertEquals(ruleEffects[0].ruleAction, ruleAction)
+        assertEquals("2", ruleEffects[0].data)
     }
 
     @Test
@@ -467,25 +461,25 @@ class RuleEngineVariableNameTest {
             "test_var_two", "test_data_element_two", RuleValueType.TEXT
         )
         val rule: Rule =
-            Rule("", null, null, "d2:maxValue(#{" + VARIABLE_NAME + "}) == 8.0", Arrays.asList(ruleAction), "")
+            Rule("", null, null, "d2:maxValue(#{" + VARIABLE_NAME + "}) == 8.0", listOf(ruleAction), "")
 
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage1", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "5"),
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "7"),
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "8"),
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
@@ -496,8 +490,8 @@ class RuleEngineVariableNameTest {
             ruleEvents = listOf(ruleEvent1, ruleEvent2)
         )
             .evaluate(ruleEvent3)
-        Assertions.assertThat(ruleEffects.size).isEqualTo(1)
-        Assertions.assertThat(ruleEffects[0].ruleAction).isEqualTo(ruleAction)
+        assertEquals(ruleEffects.size, 1)
+        assertEquals(ruleEffects[0].ruleAction, ruleAction)
     }
 
     @Test
@@ -514,24 +508,24 @@ class RuleEngineVariableNameTest {
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("", null, null, "d2:maxValue(#{" + UID01 + "}) == 8.0", Arrays.asList(ruleAction), "")
+        val rule: Rule = Rule("", null, null, "d2:maxValue(#{" + UID01 + "}) == 8.0", listOf(ruleAction), "")
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage1", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "5"),
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "7"),
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "8"),
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
@@ -542,8 +536,8 @@ class RuleEngineVariableNameTest {
             ruleEvents = listOf(ruleEvent1, ruleEvent2)
         )
             .evaluate(ruleEvent3)
-        Assertions.assertThat(ruleEffects.size).isEqualTo(1)
-        Assertions.assertThat(ruleEffects[0].ruleAction).isEqualTo(ruleAction)
+        assertEquals(ruleEffects.size, 1)
+        assertEquals(ruleEffects[0].ruleAction, ruleAction)
     }
 
     @Test
@@ -552,30 +546,31 @@ class RuleEngineVariableNameTest {
         val ruleAction: RuleAction = DisplayKeyValuePair(
             "test_action_content", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "d2:minValue(#{" + VARIABLE_NAME + "})"
         )
+
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             VARIABLE_NAME, "test_data_element_one", RuleValueType.NUMERIC
         )
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", "test_data_element_two", RuleValueType.TEXT
         )
-        val rule = Rule("", null, null, "true", Arrays.asList(ruleAction), "")
+        val rule = Rule("", null, null, "true", listOf(ruleAction), "")
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage1", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "5"),
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "7"),
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "8"),
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
@@ -586,9 +581,9 @@ class RuleEngineVariableNameTest {
             ruleEvents = listOf(ruleEvent1, ruleEvent2)
         )
             .evaluate(ruleEvent3)
-        Assertions.assertThat(ruleEffects.size).isEqualTo(1)
-        Assertions.assertThat(ruleEffects[0].ruleAction).isEqualTo(ruleAction)
-        Assertions.assertThat(ruleEffects[0].data).isEqualTo("5.0")
+        assertEquals(ruleEffects.size, 1)
+        assertEquals(ruleEffects[0].ruleAction, ruleAction)
+        assertEquals(ruleEffects[0].data, "5")
     }
 
     @Test
@@ -603,25 +598,25 @@ class RuleEngineVariableNameTest {
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", "test_data_element_two", RuleValueType.TEXT
         )
-        val rule = Rule("", null, null, "true", Arrays.asList(ruleAction), "")
+        val rule = Rule("", null, null, "true", listOf(ruleAction), "")
 
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage1", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "5"),
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "7"),
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), null, "", null, listOf(
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_one", "8"),
                 RuleDataValue(currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
@@ -632,9 +627,9 @@ class RuleEngineVariableNameTest {
             ruleEvents = listOf(ruleEvent1, ruleEvent2)
         )
             .evaluate(ruleEvent3)
-        Assertions.assertThat(ruleEffects.size).isEqualTo(1)
-        Assertions.assertThat(ruleEffects[0].ruleAction).isEqualTo(ruleAction)
-        Assertions.assertThat(ruleEffects[0].data).isEqualTo("5.0")
+        assertEquals(ruleEffects.size, 1)
+        assertEquals(ruleEffects[0].ruleAction, ruleAction)
+        assertEquals(ruleEffects[0].data, "5")
     }
 
     companion object {
@@ -644,6 +639,7 @@ class RuleEngineVariableNameTest {
         private const val UID01WILD = "Eabcde12345.Fabcde12345.*"
         private const val UID012 = "Gabcde12345.Habcde12345.Iabcde12345"
         private const val UID0WILD2 = "Labcde12345.*.Mabcde12345"
-        private const val VARIABLE_NAME = "Variable.name_3_4-1"
+//        private const val VARIABLE_NAME = "Variable.name_3_4-1" //TODO: MINUS is not permitted in the evaluator
+        private const val VARIABLE_NAME = "Variable.name_3_4"
     }
 }

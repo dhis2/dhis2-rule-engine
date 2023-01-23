@@ -1,14 +1,11 @@
 package org.dhis2.ruleengine
 
-import org.assertj.core.api.Assertions.assertThat
 import org.dhis2.ruleengine.RuleEngineTestUtils.currentDate
 import org.dhis2.ruleengine.RuleEngineTestUtils.getRuleEngine
 import org.dhis2.ruleengine.models.*
-import org.junit.jupiter.api.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
-@RunWith(JUnit4::class)
 class RuleEngineValueTypesTest {
     @Test
     @Throws(Exception::class)
@@ -35,9 +32,9 @@ class RuleEngineValueTypesTest {
             ArrayList()
         )
         val ruleEffects: List<RuleEffect> = ruleEngine.evaluate(ruleEvent)
-        assertThat(ruleEffects.size).isEqualTo(1)
-        assertThat(ruleEffects[0].data).isEqualTo("false")
-        assertThat(ruleEffects[0].ruleAction).isEqualTo(ruleAction)
+        assertEquals(ruleEffects.size, 1)
+        assertEquals(ruleEffects[0].data, "false")
+        assertEquals(ruleEffects[0].ruleAction, ruleAction)
     }
 
     @Test
@@ -65,9 +62,9 @@ class RuleEngineValueTypesTest {
             ArrayList()
         )
         val ruleEffects: List<RuleEffect> = ruleEngine.evaluate(ruleEvent)
-        assertThat(ruleEffects.size).isEqualTo(1)
-        assertThat(ruleEffects[0].data).isEqualTo("0.0")
-        assertThat(ruleEffects[0].ruleAction).isEqualTo(ruleAction)
+        assertEquals(ruleEffects.size, 1)
+        assertEquals(ruleEffects[0].data, "0.0")
+        assertEquals(ruleEffects[0].ruleAction, ruleAction)
     }
 
     @Test
@@ -95,8 +92,8 @@ class RuleEngineValueTypesTest {
             ArrayList()
         )
         val ruleEffects: List<RuleEffect> = ruleEngine.evaluate(ruleEvent)
-        assertThat(ruleEffects.size).isEqualTo(1)
-        assertThat(ruleEffects[0].data).isEqualTo("")
-        assertThat(ruleEffects[0].ruleAction).isEqualTo(ruleAction)
+        assertEquals(ruleEffects.size, 1)
+        assertEquals(ruleEffects[0].data, "")
+        assertEquals(ruleEffects[0].ruleAction, ruleAction)
     }
 }

@@ -3,6 +3,7 @@ package org.dhis2.ruleengine.exprk.functions
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDate
+import org.dhis2.ruleengine.exprk.internal.Evaluator
 import org.dhis2.ruleengine.exprk.internal.Function
 
 const val ADD_DAYS = "d2:addDays"

@@ -3,12 +3,17 @@ package org.dhis2.ruleengine.exprk.internal
 import org.dhis2.ruleengine.RuleVariableValue
 import org.dhis2.ruleengine.exprk.ExpressionException
 import org.dhis2.ruleengine.exprk.internal.TokenType.*
+import org.dhis2.ruleengine.utils.VariableNameUnwrapper
 import kotlin.math.pow
 
 internal class Evaluator() : ExprVisitor<String> {
-    private val variables: LinkedHashMap<String, String> = linkedMapOf()
+    private val variables: LinkedHashMap<String, String> = linkedMapOf(
+        Pair("true", "true"),
+        Pair("false", "false")
+    )
     private val functions: MutableMap<String, Function> = mutableMapOf()
-    private var valueMap: Map<String, RuleVariableValue> = mutableMapOf()
+    var valueMap: Map<String, RuleVariableValue> = mutableMapOf()
+    var supplementaryData: Map<String, List<String>> = mutableMapOf()
 
     private fun define(name: String, value: String) {
         variables += name to value
@@ -29,6 +34,11 @@ internal class Evaluator() : ExprVisitor<String> {
     fun addValueMap(valueMap: Map<String, RuleVariableValue>): Evaluator {
         this.valueMap = valueMap
 
+        return this
+    }
+
+    fun addSupplementaryData(supplementaryData: Map<String, List<String>>): Evaluator {
+        this.supplementaryData = supplementaryData
         return this
     }
 
@@ -62,16 +72,26 @@ internal class Evaluator() : ExprVisitor<String> {
     }
 
     override fun visitBinaryExpr(expr: BinaryExpr): String {
-        val left = eval(expr.left).toDouble()
-        val right = eval(expr.right).toDouble()
+        val leftIsInt = eval(expr.left).toIntOrNull() != null
+        val rightIsInt = eval(expr.right).toIntOrNull() != null
+        val canParseAsInt = leftIsInt && rightIsInt
+        val left = eval(expr.left).toDoubleOrNull()?: eval(expr.left)
+        val right = eval(expr.right).toDoubleOrNull()?: eval(expr.right)
 
+        return when{
+            left is Double && right is Double -> numericBinaryExpr(expr, right, left, canParseAsInt)
+            else -> textBinaryExpr(expr, right.toString(), left.toString())
+        }
+    }
+
+    private fun numericBinaryExpr(expr: BinaryExpr, right: Double, left: Double, canParseAsInt: Boolean):String {
         return when (expr.operator.type) {
-            PLUS -> (left + right).toString()
-            MINUS -> (left - right).toString()
-            STAR -> (left * right).toString()
+            PLUS -> (left + right).canParseAsInt(canParseAsInt)
+            MINUS -> (left - right).canParseAsInt(canParseAsInt)
+            STAR -> (left * right).canParseAsInt(canParseAsInt)
             SLASH -> left.div(right).toString()
             MODULO -> left.mod(right).toString()
-            EXPONENT -> left.pow(right).toString()
+            EXPONENT -> left.pow(right).canParseAsInt(canParseAsInt)
             EQUAL_EQUAL -> (left == right).toString()
             NOT_EQUAL -> (left != right).toString()
             GREATER -> (left > right).toString()
@@ -81,6 +101,27 @@ internal class Evaluator() : ExprVisitor<String> {
             else -> throw ExpressionException(
                 "Invalid binary operator '${expr.operator.lexeme}'"
             )
+        }
+    }
+
+    private fun textBinaryExpr(expr: BinaryExpr, right: String, left: String):String {
+        return when (expr.operator.type) {
+            PLUS -> (left + right)
+            EQUAL_EQUAL -> (left == right).toString()
+            NOT_EQUAL -> (left != right).toString()
+            GREATER -> (left > right).toString()
+            GREATER_EQUAL -> (left >= right).toString()
+            LESS -> (left < right).toString()
+            LESS_EQUAL -> (left <= right).toString()
+            else -> left+expr.operator.type.name+right
+        }
+    }
+
+    private fun Double.canParseAsInt(canParseAsInt: Boolean): String {
+        return if (canParseAsInt) {
+            toInt().toString()
+        } else {
+            toString()
         }
     }
 
@@ -104,7 +145,19 @@ internal class Evaluator() : ExprVisitor<String> {
         val name = expr.name
         val function = functions[name.lowercase()] ?: throw ExpressionException("Undefined function '$name'")
 
-        return function.call(expr.arguments.map { eval(it) })
+        return function.call(expr.arguments.map {
+            when {
+                it is VariableExpr -> {
+                    if (function.requiresArgumentEvaluation()) {
+                        eval(it)
+                    } else {
+                        it.name.lexeme
+                    }
+                }
+
+                else -> eval(it)
+            }
+        })
     }
 
     override fun visitLiteralExpr(expr: LiteralExpr): String {
@@ -113,8 +166,12 @@ internal class Evaluator() : ExprVisitor<String> {
 
     override fun visitVariableExpr(expr: VariableExpr): String {
         val name = expr.name.lexeme
-
-        val value = variables[name.lowercase()] ?: valueMap[name]?.value
+        val value = when {
+            variables[name.lowercase()] != null -> variables[name.lowercase()]
+            VariableNameUnwrapper.matchesVariable(name) -> valueMap[VariableNameUnwrapper.unwrap(name,null)]?.value
+            VariableNameUnwrapper.matchesConstant(name) -> valueMap[VariableNameUnwrapper.unwrap(name,null)]?.value
+            else -> ""
+        }
         return value ?: throw ExpressionException("Undefined variable '$name'")
     }
 

@@ -3,7 +3,8 @@ package org.dhis2.ruleengine
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import org.dhis2.ruleengine.models.*
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
+import kotlin.test.assertTrue
 
 internal class RuleEngineTest {
     @Test
@@ -17,7 +18,7 @@ internal class RuleEngineTest {
                     condition = "d2:hasValue(A{variable_test})",
                     actions = listOf(
                         RuleAction.Assign(
-                            field = "A{tea_assign_uid}",
+                            field = "tea_assign_uid",
                             data = "A{variable_test} * 2",
                             content = "A{variable_test} * 3"
                         )
@@ -74,9 +75,9 @@ internal class RuleEngineTest {
         )
 
         result.apply {
-            assert(isNotEmpty())
-            assert(first().ruleAction is RuleAction.Assign)
-            assert(first().data == "22")
+            assertTrue(isNotEmpty())
+            assertTrue(first().ruleAction is RuleAction.Assign)
+            assertTrue(first().data == "22")
         }
     }
 }

@@ -73,7 +73,7 @@ class RuleFunctionHasUserRoleTest {
 
     private fun assertHasUserRole(value: String, supplementaryData: Map<String, List<String>>, hasUserRole: String) {
         assertTrue {
-            HasUserRole(supplementaryData).call(listOf(value)) == hasUserRole
+            HasUserRole{supplementaryData}.call(listOf(value)) == hasUserRole
         }
     }
 }

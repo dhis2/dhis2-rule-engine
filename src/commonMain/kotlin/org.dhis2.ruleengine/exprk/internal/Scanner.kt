@@ -14,6 +14,7 @@ internal class Scanner(
     private val tokens: MutableList<Token> = mutableListOf()
     private var start = 0
     private var current = 0
+    private var variableNameStarted = false
 
     fun scanTokens(): List<Token> {
         while (!isAtEnd()) {
@@ -53,8 +54,9 @@ internal class Scanner(
             '|' -> if (match('|')) addToken(BAR_BAR) else invalidToken(c)
             '&' -> if (match('&')) addToken(AMP_AMP) else invalidToken(c)
             ',' -> addToken(COMMA)
-            '(', '{' -> addToken(LEFT_PAREN)
-            ')', '}' -> addToken(RIGHT_PAREN)
+            '(' -> addToken(LEFT_PAREN)
+            ')' -> addToken(RIGHT_PAREN)
+            '\'' -> addToken(LITERAL)
             else -> {
                 when {
                     c.isDigit() -> number()
@@ -93,9 +95,32 @@ internal class Scanner(
     }
 
     private fun identifier() {
-        while (peek().isAlphaNumeric()) advance()
+        when {
+            isVariableName(peekPrevious(), peek()) -> variableNameStarted = true
+            source[current] == '}' -> variableNameStarted = false
+        }
+        while (variableNameStarted || peek().isAlphaNumeric()){
+            advance()
+            if(isVariableNameEnd(peek())){
+                variableNameStarted = false
+            }
+        }
 
         addToken(IDENTIFIER)
+    }
+
+    private fun isVariableName(
+        char: Char,
+        nextChar: Char = '\u0000'
+    ): Boolean {
+        return "$char$nextChar" == "A{"
+                || "$char$nextChar" == "#{"
+                || "$char$nextChar" == "V{"
+                || "$char$nextChar" == "C{"
+    }
+
+    private fun isVariableNameEnd(char:Char):Boolean{
+        return peek() == '}'
     }
 
     private fun advance() = source[current++]
@@ -140,6 +165,9 @@ internal class Scanner(
             || this == '_'
             || this == ':'
             || this == '#'
+            || this == '{'
+            || this == '}'
+            || this == ';'
 
     private fun Char.isDigit() = this == '.' || this in '0'..'9'
 }

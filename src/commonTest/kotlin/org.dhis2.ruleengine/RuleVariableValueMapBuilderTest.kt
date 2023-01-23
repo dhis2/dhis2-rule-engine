@@ -2,14 +2,13 @@ package org.dhis2.ruleengine
 
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toLocalDate
-import org.assertj.core.api.Assertions.assertThat
 import org.dhis2.ruleengine.RuleEngineTestUtils.add
 import org.dhis2.ruleengine.RuleEngineTestUtils.currentDate
-import org.dhis2.ruleengine.RuleVariableValueAssert.Companion.assertThatVariable
+import org.dhis2.ruleengine.RuleVariableValueAssert.Companion.assertEqualsVariable
 import org.dhis2.ruleengine.models.*
-import org.junit.jupiter.api.Test
-import java.text.ParseException
-import java.util.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class RuleVariableValueMapBuilderTest {
 
@@ -47,7 +46,6 @@ class RuleVariableValueMapBuilderTest {
      }*/
 
     @Test
-    @Throws(ParseException::class)
     fun currentEventVariableShouldContainValuesFromCurrentEvent() {
         val ruleVariableOne: RuleVariable = RuleVariable.RuleVariableCurrentEvent(
             "test_variable_one", "test_dataelement_one", RuleValueType.TEXT
@@ -61,7 +59,7 @@ class RuleVariableValueMapBuilderTest {
         // values from context ruleEvents should be ignored
         val contextEventOne: RuleEvent = RuleEvent(
             "test_context_event_one", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), currentDate(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentDate(), currentDate(), currentDate(), "", null, listOf(
                 RuleDataValue(
                     eventDate, "test_program_stage",
                     "test_dataelement_one", "test_context_value_one"
@@ -108,29 +106,28 @@ class RuleVariableValueMapBuilderTest {
                 constantsValues = emptyMap()
             )
 
-        assertThat(valueMap.size).isEqualTo(13)
-        assertThatVariable(valueMap["current_date"]).hasValue(currentDate().toString())
+        assertEquals(valueMap.size, 13)
+        assertEqualsVariable(valueMap["current_date"]).hasValue(currentDate().toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(currentDate().toString())
-        assertThatVariable(valueMap["event_date"]).hasValue(eventDate.toString())
+        assertEqualsVariable(valueMap["event_date"]).hasValue(eventDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(eventDate.toString())
-        assertThatVariable(valueMap["event_status"]).hasValue(RuleEvent.Status.ACTIVE.toString())
+        assertEqualsVariable(valueMap["event_status"]).hasValue(RuleEvent.Status.ACTIVE.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(RuleEvent.Status.ACTIVE.toString())
 
         // event count variable should respect current event
-        assertThatVariable(valueMap["event_count"]).hasValue("3")
+        assertEqualsVariable(valueMap["event_count"]).hasValue("3")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("3")
-        assertThatVariable(valueMap["event_id"]).hasValue("test_event_uid")
+        assertEqualsVariable(valueMap["event_id"]).hasValue("test_event_uid")
             .isTypeOf(RuleValueType.TEXT).hasCandidates("test_event_uid")
-        assertThatVariable(valueMap["due_date"]).hasValue(dueDate.toString())
+        assertEqualsVariable(valueMap["due_date"]).hasValue(dueDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(dueDate.toString())
-        assertThatVariable(valueMap["test_variable_one"]).hasValue("test_value_one")
+        assertEqualsVariable(valueMap["test_variable_one"]).hasValue("test_value_one")
             .isTypeOf(RuleValueType.TEXT).hasCandidates("test_value_one")
-        assertThatVariable(valueMap["test_variable_two"]).hasValue("test_value_two")
+        assertEqualsVariable(valueMap["test_variable_two"]).hasValue("test_value_two")
             .isTypeOf(RuleValueType.TEXT).hasCandidates("test_value_two")
     }
 
     @Test
-    @Throws(ParseException::class)
     fun newestEventProgramVariableShouldContainValueFromNewestContextEvent() {
         val ruleVariableOne: RuleVariable = RuleVariable.RuleVariableNewestEvent(
             "test_variable_one", "test_dataelement_one", RuleValueType.TEXT
@@ -188,20 +185,20 @@ class RuleVariableValueMapBuilderTest {
             ruleVariables = listOf(ruleVariableOne, ruleVariableTwo),
             constantsValues = emptyMap()
         )
-        assertThat(valueMap.size).isEqualTo(12)
-        assertThatVariable(valueMap["current_date"]).hasValue(
+        assertEquals(valueMap.size, 12)
+        assertEqualsVariable(valueMap["current_date"]).hasValue(
             currentDate().toString()
         )
             .isTypeOf(RuleValueType.TEXT).hasCandidates(currentDate().toString())
-        assertThatVariable(valueMap["event_date"])
+        assertEqualsVariable(valueMap["event_date"])
             .hasValue(currentEventDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(currentEventDate.toString())
-        assertThatVariable(valueMap["event_count"]).hasValue("3")
+        assertEqualsVariable(valueMap["event_count"]).hasValue("3")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("3")
-        assertThatVariable(valueMap["event_id"]).hasValue("test_event_uid_current")
+        assertEqualsVariable(valueMap["event_id"]).hasValue("test_event_uid_current")
             .isTypeOf(RuleValueType.TEXT).hasCandidates("test_event_uid_current")
-        assertThat<RuleVariableValue>(valueMap["due_date"]).isNull()
-        assertThatVariable(valueMap["test_variable_one"])
+        assertNull(valueMap["due_date"])
+        assertEqualsVariable(valueMap["test_variable_one"])
             .hasValue("test_value_one_newest")
             .isTypeOf(RuleValueType.TEXT)
             .hasCandidates(
@@ -209,7 +206,7 @@ class RuleVariableValueMapBuilderTest {
                 "test_value_one_current",
                 "test_value_one_oldest"
             )
-        assertThatVariable(valueMap["test_variable_two"]).hasValue("test_value_two_newest")
+        assertEqualsVariable(valueMap["test_variable_two"]).hasValue("test_value_two_newest")
             .isTypeOf(RuleValueType.TEXT).hasCandidates(
                 "test_value_two_newest",
                 "test_value_two_current",
@@ -218,7 +215,6 @@ class RuleVariableValueMapBuilderTest {
     }
 
     @Test
-    @Throws(ParseException::class)
     fun newestEventProgramVariableShouldReturnValuesFromCurrentEventWhenIfNewest() {
         val ruleVariableOne: RuleVariable = RuleVariable.RuleVariableNewestEvent(
             "test_variable_one", "test_dataelement_one", RuleValueType.TEXT
@@ -270,35 +266,35 @@ class RuleVariableValueMapBuilderTest {
             )
         )
         val valueMap: Map<String, RuleVariableValue> = buildValueMap(
-            ruleEvents = Arrays.asList(firstRuleEvent, secondRuleEvent),
+            ruleEvents = listOf(firstRuleEvent, secondRuleEvent),
             ruleEnrollment = null,
             ruleEvent = currentEvent,
-            ruleVariables = Arrays.asList(ruleVariableOne, ruleVariableTwo),
+            ruleVariables = listOf(ruleVariableOne, ruleVariableTwo),
             constantsValues = emptyMap()
         )
-        assertThat(valueMap.size).isEqualTo(13)
-        assertThatVariable(valueMap["current_date"]).hasValue(
+        assertEquals(valueMap.size, 13)
+        assertEqualsVariable(valueMap["current_date"]).hasValue(
             currentDate().toString()
         )
             .isTypeOf(RuleValueType.TEXT).hasCandidates(currentDate().toString())
-        assertThatVariable(valueMap["event_date"])
+        assertEqualsVariable(valueMap["event_date"])
             .hasValue(dateEventCurrent.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(dateEventCurrent.toString())
-        assertThatVariable(valueMap["event_count"]).hasValue("3")
+        assertEqualsVariable(valueMap["event_count"]).hasValue("3")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("3")
-        assertThatVariable(valueMap["event_id"]).hasValue("test_event_uid_current")
+        assertEqualsVariable(valueMap["event_id"]).hasValue("test_event_uid_current")
             .isTypeOf(RuleValueType.TEXT).hasCandidates("test_event_uid_current")
-        assertThatVariable(valueMap["due_date"])
+        assertEqualsVariable(valueMap["due_date"])
             .hasValue(dateEventDueCurrent.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(dateEventDueCurrent.toString())
-        assertThatVariable(valueMap["test_variable_one"])
+        assertEqualsVariable(valueMap["test_variable_one"])
             .hasValue("test_value_dataelement_one_current")
             .isTypeOf(RuleValueType.TEXT).hasCandidates(
                 "test_value_dataelement_one_current",
                 "test_value_dataelement_one_second",
                 "test_value_dataelement_one_first"
             )
-        assertThatVariable(valueMap["test_variable_two"])
+        assertEqualsVariable(valueMap["test_variable_two"])
             .hasValue("test_value_dataelement_two_current")
             .isTypeOf(RuleValueType.TEXT).hasCandidates(
                 "test_value_dataelement_two_current",
@@ -308,7 +304,6 @@ class RuleVariableValueMapBuilderTest {
     }
 
     @Test
-    @Throws(ParseException::class)
     fun newestEventProgramStageVariableShouldContainValueFromNewestContextEvent() {
         val ruleVariable: RuleVariable = RuleVariable.RuleVariableNewestStageEvent(
             "test_variable",
@@ -362,27 +357,26 @@ class RuleVariableValueMapBuilderTest {
             ruleVariables = listOf(ruleVariable),
             constantsValues = emptyMap()
         )
-        assertThat(valueMap.size).isEqualTo(12)
-        assertThatVariable(valueMap["current_date"]).hasValue(
+        assertEquals(valueMap.size, 12)
+        assertEqualsVariable(valueMap["current_date"]).hasValue(
             currentDate().toString()
         )
             .isTypeOf(RuleValueType.TEXT).hasCandidates(currentDate().toString())
-        assertThatVariable(valueMap["event_date"])
+        assertEqualsVariable(valueMap["event_date"])
             .hasValue(dateEventCurrent.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(dateEventCurrent.toString())
-        assertThatVariable(valueMap["event_count"]).hasValue("4")
+        assertEqualsVariable(valueMap["event_count"]).hasValue("4")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("4")
-        assertThatVariable(valueMap["event_id"]).hasValue("test_event_uid_current")
+        assertEqualsVariable(valueMap["event_id"]).hasValue("test_event_uid_current")
             .isTypeOf(RuleValueType.TEXT).hasCandidates("test_event_uid_current")
-        assertThatVariable(valueMap["due_date"])
+        assertEqualsVariable(valueMap["due_date"])
             .hasValue(dateEventDueCurrent.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(dateEventDueCurrent.toString())
-        assertThatVariable(valueMap["test_variable"]).hasValue("test_value_one")
+        assertEqualsVariable(valueMap["test_variable"]).hasValue("test_value_one")
             .isTypeOf(RuleValueType.TEXT).hasCandidates("test_value_one", "test_value_current")
     }
 
     @Test
-    @Throws(ParseException::class)
     fun newestEventProgramStageVariableShouldNotContainAnyValues() {
         val ruleVariable: RuleVariable = RuleVariable.RuleVariableNewestStageEvent(
             "test_variable",
@@ -409,32 +403,31 @@ class RuleVariableValueMapBuilderTest {
             )
         )
         val valueMap = buildValueMap(
-            ruleEvents = Arrays.asList(ruleEventOne),
+            ruleEvents = listOf(ruleEventOne),
             ruleEnrollment = null,
             ruleEvent = ruleEventTwo,
-            ruleVariables = Arrays.asList(ruleVariable),
+            ruleVariables = listOf(ruleVariable),
             constantsValues = emptyMap()
         )
 
-        assertThat(valueMap.size).isEqualTo(12)
-        assertThatVariable(valueMap["current_date"]).hasValue(
+        assertEquals(valueMap.size, 12)
+        assertEqualsVariable(valueMap["current_date"]).hasValue(
             currentDate().toString()
         )
             .isTypeOf(RuleValueType.TEXT).hasCandidates(currentDate().toString())
-        assertThatVariable(valueMap["event_date"]).hasValue(dateEventTwo.toString())
+        assertEqualsVariable(valueMap["event_date"]).hasValue(dateEventTwo.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(dateEventTwo.toString())
-        assertThatVariable(valueMap["event_count"]).hasValue("2")
+        assertEqualsVariable(valueMap["event_count"]).hasValue("2")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("2")
-        assertThatVariable(valueMap["event_id"]).hasValue("test_event_uid_two")
+        assertEqualsVariable(valueMap["event_id"]).hasValue("test_event_uid_two")
             .isTypeOf(RuleValueType.TEXT).hasCandidates("test_event_uid_two")
-        assertThatVariable(valueMap["due_date"]).hasValue(dateEventTwo.toString())
+        assertEqualsVariable(valueMap["due_date"]).hasValue(dateEventTwo.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(dateEventTwo.toString())
-        assertThatVariable(valueMap["test_variable"]).hasValue(null)
+        assertEqualsVariable(valueMap["test_variable"]).hasValue("") //TODO: This contradicts test textVariableWithoutValueMustFallbackToDefaultTextValue() is expected value is null
             .isTypeOf(RuleValueType.TEXT).hasCandidates()
     }
 
     @Test
-    @Throws(ParseException::class)
     fun previousEventVariableShouldContainValuesFromPreviousEvent() {
         val ruleVariable: RuleVariable = RuleVariable.RuleVariablePreviousEvent(
             "test_variable",
@@ -481,28 +474,28 @@ class RuleVariableValueMapBuilderTest {
             )
         )
         val valueMap = buildValueMap(
-            ruleEvents = Arrays.asList(ruleEventOne, ruleEventTwo, ruleEventThree),
+            ruleEvents = listOf(ruleEventOne, ruleEventTwo, ruleEventThree),
             ruleEnrollment = null,
             ruleEvent = ruleEventCurrent,
-            ruleVariables = Arrays.asList(ruleVariable),
+            ruleVariables = listOf(ruleVariable),
             constantsValues = emptyMap()
         )
-        assertThat(valueMap.size).isEqualTo(12)
-        assertThatVariable(valueMap["current_date"]).hasValue(
+        assertEquals(valueMap.size, 12)
+        assertEqualsVariable(valueMap["current_date"]).hasValue(
             currentDate().toString()
         )
             .isTypeOf(RuleValueType.TEXT).hasCandidates(currentDate().toString())
-        assertThatVariable(valueMap["event_date"])
+        assertEqualsVariable(valueMap["event_date"])
             .hasValue(dateEventCurrent.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(dateEventCurrent.toString())
-        assertThatVariable(valueMap["event_count"]).hasValue("4")
+        assertEqualsVariable(valueMap["event_count"]).hasValue("4")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("4")
-        assertThatVariable(valueMap["event_id"]).hasValue("test_event_uid_current")
+        assertEqualsVariable(valueMap["event_id"]).hasValue("test_event_uid_current")
             .isTypeOf(RuleValueType.TEXT).hasCandidates("test_event_uid_current")
-        assertThatVariable(valueMap["due_date"])
+        assertEqualsVariable(valueMap["due_date"])
             .hasValue(dateEventCurrent.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(dateEventCurrent.toString())
-        assertThatVariable(valueMap["test_variable"])
+        assertEqualsVariable(valueMap["test_variable"])
             .hasValue("test_value_two")
             .isTypeOf(RuleValueType.TEXT)
             .hasCandidates(
@@ -514,7 +507,6 @@ class RuleVariableValueMapBuilderTest {
     }
 
     @Test
-    @Throws(ParseException::class)
     fun attributeVariableShouldContainValuesFromContextEnrollment() {
         val ruleVariableOne: RuleVariable = RuleVariable.RuleVariableAttribute(
             "test_variable_one",
@@ -566,48 +558,47 @@ class RuleVariableValueMapBuilderTest {
 
         // here we will expect correct values to be returned
         val valueMap = buildValueMap(
-            ruleEvents = Arrays.asList(contextEvent),
+            ruleEvents = listOf(contextEvent),
             ruleEnrollment = ruleEnrollment,
             ruleEvent = currentEvent,
-            ruleVariables = Arrays.asList(ruleVariableOne, ruleVariableTwo),
+            ruleVariables = listOf(ruleVariableOne, ruleVariableTwo),
             constantsValues = emptyMap()
         )
-        assertThat(valueMap.size).isEqualTo(20)
-        assertThatVariable(valueMap["current_date"]).hasValue(
+        assertEquals(valueMap.size, 20)
+        assertEqualsVariable(valueMap["current_date"]).hasValue(
             currentDate().toString()
         )
             .isTypeOf(RuleValueType.TEXT).hasCandidates(currentDate().toString())
-        assertThatVariable(valueMap["event_date"]).hasValue(eventDate.toString())
+        assertEqualsVariable(valueMap["event_date"]).hasValue(eventDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(eventDate.toString())
-        assertThatVariable(valueMap["event_count"]).hasValue("2")
+        assertEqualsVariable(valueMap["event_count"]).hasValue("2")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("2")
-        assertThatVariable(valueMap["event_id"]).hasValue("test_event_uid")
+        assertEqualsVariable(valueMap["event_id"]).hasValue("test_event_uid")
             .isTypeOf(RuleValueType.TEXT).hasCandidates("test_event_uid")
-        assertThatVariable(valueMap["due_date"]).hasValue(eventDate.toString())
+        assertEqualsVariable(valueMap["due_date"]).hasValue(eventDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(eventDate.toString())
-        assertThatVariable(valueMap["enrollment_status"])
+        assertEqualsVariable(valueMap["enrollment_status"])
             .hasValue(RuleEnrollment.Status.ACTIVE.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(RuleEnrollment.Status.ACTIVE.toString())
-        assertThatVariable(valueMap["enrollment_date"])
+        assertEqualsVariable(valueMap["enrollment_date"])
             .hasValue(enrollmentDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(enrollmentDate.toString())
-        assertThatVariable(valueMap["enrollment_id"]).hasValue("test_enrollment")
+        assertEqualsVariable(valueMap["enrollment_id"]).hasValue("test_enrollment")
             .isTypeOf(RuleValueType.TEXT).hasCandidates("test_enrollment")
-        assertThatVariable(valueMap["enrollment_count"]).hasValue("1")
+        assertEqualsVariable(valueMap["enrollment_count"]).hasValue("1")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("1")
-        assertThatVariable(valueMap["incident_date"])
+        assertEqualsVariable(valueMap["incident_date"])
             .hasValue(enrollmentDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(enrollmentDate.toString())
-        assertThatVariable(valueMap["tei_count"]).hasValue("1")
+        assertEqualsVariable(valueMap["tei_count"]).hasValue("1")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("1")
-        assertThatVariable(valueMap["test_variable_one"]).hasValue("test_attribute_value_one")
+        assertEqualsVariable(valueMap["test_variable_one"]).hasValue("test_attribute_value_one")
             .isTypeOf(RuleValueType.TEXT).hasCandidates("test_attribute_value_one")
-        assertThatVariable(valueMap["test_variable_two"]).hasValue("test_attribute_value_two")
+        assertEqualsVariable(valueMap["test_variable_two"]).hasValue("test_attribute_value_two")
             .isTypeOf(RuleValueType.TEXT).hasCandidates("test_attribute_value_two")
     }
 
     @Test
-    @Throws(ParseException::class)
     fun ruleEnrollmentValuesShouldBePropagatedToMapCorrectly() {
         val ruleVariableOne: RuleVariable = RuleVariable.RuleVariableAttribute(
             "test_variable_one",
@@ -641,38 +632,37 @@ class RuleVariableValueMapBuilderTest {
             RuleEvent.Status.ACTIVE, currentDate(), currentDate(), currentDate(), "", null, ArrayList<RuleDataValue>()
         )
         val valueMap: Map<String, RuleVariableValue> = buildValueMap(
-            ruleEvents = Arrays.asList(ruleEventOne, ruleEventTwo),
+            ruleEvents = listOf(ruleEventOne, ruleEventTwo),
             ruleEnrollment = ruleEnrollment,
             ruleEvent = null,
-            ruleVariables = Arrays.asList(ruleVariableOne, ruleVariableTwo, ruleVariableThree),
+            ruleVariables = listOf(ruleVariableOne, ruleVariableTwo, ruleVariableThree),
             constantsValues = emptyMap()
         )
 
-        assertThat(valueMap.size).isEqualTo(14)
-        assertThatVariable(valueMap["current_date"]).hasValue(currentDate.toString())
+        assertEquals(valueMap.size, 14)
+        assertEqualsVariable(valueMap["current_date"]).hasValue(currentDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(currentDate.toString())
-        assertThatVariable(valueMap["event_count"]).hasValue("2")
+        assertEqualsVariable(valueMap["event_count"]).hasValue("2")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("2")
-        assertThatVariable(valueMap["enrollment_date"])
+        assertEqualsVariable(valueMap["enrollment_date"])
             .hasValue(enrollmentDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(enrollmentDate.toString())
-        assertThatVariable(valueMap["enrollment_id"]).hasValue("test_enrollment")
+        assertEqualsVariable(valueMap["enrollment_id"]).hasValue("test_enrollment")
             .isTypeOf(RuleValueType.TEXT).hasCandidates("test_enrollment")
-        assertThatVariable(valueMap["enrollment_count"]).hasValue("1")
+        assertEqualsVariable(valueMap["enrollment_count"]).hasValue("1")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("1")
-        assertThatVariable(valueMap["incident_date"])
+        assertEqualsVariable(valueMap["incident_date"])
             .hasValue(incidentDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(incidentDate.toString())
-        assertThatVariable(valueMap["tei_count"]).hasValue("1")
+        assertEqualsVariable(valueMap["tei_count"]).hasValue("1")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("1")
-        assertThatVariable(valueMap["test_variable_one"]).hasValue("test_attribute_value_one")
+        assertEqualsVariable(valueMap["test_variable_one"]).hasValue("test_attribute_value_one")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("test_attribute_value_one")
-        assertThatVariable(valueMap["test_variable_two"]).isTypeOf(RuleValueType.TEXT)
+        assertEqualsVariable(valueMap["test_variable_two"]).isTypeOf(RuleValueType.TEXT)
             .hasValue("test_attribute_value_two").hasCandidates("test_attribute_value_two")
     }
 
     @Test
-    @Throws(ParseException::class)
     fun MultipleMapBuilderShoulCreateCorrectMapForEnrollmentAndEvents() {
         val ruleVariableOne: RuleVariable = RuleVariable.RuleVariableAttribute(
             "test_variable_one",
@@ -712,8 +702,8 @@ class RuleVariableValueMapBuilderTest {
             RuleEvent.Status.ACTIVE, eventTwoDate, eventTwoDueDate, null, "", null, ArrayList<RuleDataValue>()
         )
 
-        val ruleEvents = Arrays.asList(ruleEventOne, ruleEventTwo)
-        val ruleVariables = Arrays.asList(ruleVariableOne, ruleVariableTwo, ruleVariableThree)
+        val ruleEvents = listOf(ruleEventOne, ruleEventTwo)
+        val ruleVariables = listOf(ruleVariableOne, ruleVariableTwo, ruleVariableThree)
         val multipleValueMap = RuleVariableValueMap(
             enrollmentMap = mapOf(
                 Pair(
@@ -738,87 +728,87 @@ class RuleVariableValueMapBuilderTest {
             }
         )
 
-        assertThat(multipleValueMap.enrollmentMap.size).isEqualTo(1)
-        assertThat(multipleValueMap.eventMap.size).isEqualTo(2)
+        assertEquals(multipleValueMap.enrollmentMap.size, 1)
+        assertEquals(multipleValueMap.eventMap.size, 2)
         val enrollmentValueMap = multipleValueMap.enrollmentMap[ruleEnrollment]!!
         val eventOneValueMap = multipleValueMap.eventMap[ruleEventOne]!!
         val eventTwoValueMap = multipleValueMap.eventMap[ruleEventTwo]!!
 
         // Enrollment
-        assertThatVariable(enrollmentValueMap["current_date"]).hasValue(currentDate.toString())
+        assertEqualsVariable(enrollmentValueMap["current_date"]).hasValue(currentDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(currentDate.toString())
-        assertThatVariable(enrollmentValueMap["event_count"]).hasValue("2")
+        assertEqualsVariable(enrollmentValueMap["event_count"]).hasValue("2")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("2")
-        assertThatVariable(enrollmentValueMap["enrollment_date"])
+        assertEqualsVariable(enrollmentValueMap["enrollment_date"])
             .hasValue(enrollmentDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(enrollmentDate.toString())
-        assertThatVariable(enrollmentValueMap["enrollment_id"]).hasValue("test_enrollment")
+        assertEqualsVariable(enrollmentValueMap["enrollment_id"]).hasValue("test_enrollment")
             .isTypeOf(RuleValueType.TEXT).hasCandidates("test_enrollment")
-        assertThatVariable(enrollmentValueMap["enrollment_count"]).hasValue("1")
+        assertEqualsVariable(enrollmentValueMap["enrollment_count"]).hasValue("1")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("1")
-        assertThatVariable(enrollmentValueMap["incident_date"])
+        assertEqualsVariable(enrollmentValueMap["incident_date"])
             .hasValue(incidentDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(incidentDate.toString())
-        assertThatVariable(enrollmentValueMap["tei_count"]).hasValue("1")
+        assertEqualsVariable(enrollmentValueMap["tei_count"]).hasValue("1")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("1")
-        assertThatVariable(enrollmentValueMap["test_variable_one"]).hasValue("test_attribute_value_one")
+        assertEqualsVariable(enrollmentValueMap["test_variable_one"]).hasValue("test_attribute_value_one")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("test_attribute_value_one")
-        assertThatVariable(enrollmentValueMap["test_variable_two"]).isTypeOf(RuleValueType.TEXT)
+        assertEqualsVariable(enrollmentValueMap["test_variable_two"]).isTypeOf(RuleValueType.TEXT)
             .hasValue("test_attribute_value_two").hasCandidates("test_attribute_value_two")
 
         // Event one
-        assertThatVariable(eventOneValueMap["current_date"]).hasValue(currentDate.toString())
+        assertEqualsVariable(eventOneValueMap["current_date"]).hasValue(currentDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(currentDate.toString())
-        assertThatVariable(eventOneValueMap["event_count"]).hasValue("2")
+        assertEqualsVariable(eventOneValueMap["event_count"]).hasValue("2")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("2")
-        assertThatVariable(eventOneValueMap["enrollment_date"])
+        assertEqualsVariable(eventOneValueMap["enrollment_date"])
             .hasValue(enrollmentDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(enrollmentDate.toString())
-        assertThatVariable(eventOneValueMap["enrollment_id"]).hasValue("test_enrollment")
+        assertEqualsVariable(eventOneValueMap["enrollment_id"]).hasValue("test_enrollment")
             .isTypeOf(RuleValueType.TEXT).hasCandidates("test_enrollment")
-        assertThatVariable(eventOneValueMap["enrollment_count"]).hasValue("1")
+        assertEqualsVariable(eventOneValueMap["enrollment_count"]).hasValue("1")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("1")
-        assertThatVariable(eventOneValueMap["incident_date"])
+        assertEqualsVariable(eventOneValueMap["incident_date"])
             .hasValue(incidentDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(incidentDate.toString())
-        assertThatVariable(eventOneValueMap["tei_count"]).hasValue("1")
+        assertEqualsVariable(eventOneValueMap["tei_count"]).hasValue("1")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("1")
-        assertThatVariable(eventOneValueMap["test_variable_one"]).hasValue("test_attribute_value_one")
+        assertEqualsVariable(eventOneValueMap["test_variable_one"]).hasValue("test_attribute_value_one")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("test_attribute_value_one")
-        assertThatVariable(eventOneValueMap["test_variable_two"]).isTypeOf(RuleValueType.TEXT)
+        assertEqualsVariable(eventOneValueMap["test_variable_two"]).isTypeOf(RuleValueType.TEXT)
             .hasValue("test_attribute_value_two").hasCandidates("test_attribute_value_two")
-        assertThatVariable(eventOneValueMap["event_date"])
+        assertEqualsVariable(eventOneValueMap["event_date"])
             .hasValue(eventOneDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(eventOneDate.toString())
-        assertThatVariable(eventOneValueMap["due_date"])
+        assertEqualsVariable(eventOneValueMap["due_date"])
             .hasValue(eventOneDueDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(eventOneDueDate.toString())
 
         // Event two
-        assertThatVariable(eventTwoValueMap["current_date"]).hasValue(currentDate.toString())
+        assertEqualsVariable(eventTwoValueMap["current_date"]).hasValue(currentDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(currentDate.toString())
-        assertThatVariable(eventTwoValueMap["event_count"]).hasValue("2")
+        assertEqualsVariable(eventTwoValueMap["event_count"]).hasValue("2")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("2")
-        assertThatVariable(eventTwoValueMap["enrollment_date"])
+        assertEqualsVariable(eventTwoValueMap["enrollment_date"])
             .hasValue(enrollmentDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(enrollmentDate.toString())
-        assertThatVariable(eventTwoValueMap["enrollment_id"]).hasValue("test_enrollment")
+        assertEqualsVariable(eventTwoValueMap["enrollment_id"]).hasValue("test_enrollment")
             .isTypeOf(RuleValueType.TEXT).hasCandidates("test_enrollment")
-        assertThatVariable(eventTwoValueMap["enrollment_count"]).hasValue("1")
+        assertEqualsVariable(eventTwoValueMap["enrollment_count"]).hasValue("1")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("1")
-        assertThatVariable(eventTwoValueMap["incident_date"])
+        assertEqualsVariable(eventTwoValueMap["incident_date"])
             .hasValue(incidentDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(incidentDate.toString())
-        assertThatVariable(eventTwoValueMap["tei_count"]).hasValue("1")
+        assertEqualsVariable(eventTwoValueMap["tei_count"]).hasValue("1")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("1")
-        assertThatVariable(eventTwoValueMap["test_variable_one"]).hasValue("test_attribute_value_one")
+        assertEqualsVariable(eventTwoValueMap["test_variable_one"]).hasValue("test_attribute_value_one")
             .isTypeOf(RuleValueType.NUMERIC).hasCandidates("test_attribute_value_one")
-        assertThatVariable(eventTwoValueMap["test_variable_two"]).isTypeOf(RuleValueType.TEXT)
+        assertEqualsVariable(eventTwoValueMap["test_variable_two"]).isTypeOf(RuleValueType.TEXT)
             .hasValue("test_attribute_value_two").hasCandidates("test_attribute_value_two")
-        assertThatVariable(eventTwoValueMap["event_date"])
+        assertEqualsVariable(eventTwoValueMap["event_date"])
             .hasValue(eventTwoDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(eventTwoDate.toString())
-        assertThatVariable(eventTwoValueMap["due_date"])
+        assertEqualsVariable(eventTwoValueMap["due_date"])
             .hasValue(eventTwoDueDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(eventTwoDueDate.toString())
     }
@@ -831,7 +821,7 @@ class RuleVariableValueMapBuilderTest {
         )
         RuleVariableValueMapBuilder.target(ruleEvent)
             .ruleVariables(ArrayList<RuleVariable>())
-            .ruleEvents(Arrays.asList(ruleEvent))
+            .ruleEvents(listOf(ruleEvent))
             .build()
     }
 */

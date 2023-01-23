@@ -74,20 +74,21 @@ abstract class ZScore : Function() {
         val decimalAddition: Float
         var result: Float
         if (weight > findMedian(sdMap)) {
-            gap = weight - lowerLimitX
+            gap = withDecimalFormat(weight - lowerLimitX).toFloat()
             decimalAddition = gap / distance
             result = sdMap[lowerLimitX]!! + decimalAddition
         } else {
-            gap = higherLimitY - weight
+            gap = withDecimalFormat(higherLimitY - weight).toFloat()
             decimalAddition = gap / distance
             result = sdMap[higherLimitY]!! + decimalAddition
         }
+        println("GAP: $gap, DECIMAL ADD: $decimalAddition RESULT: $result")
         result *= multiplicationFactor
         return withDecimalFormat(result)
     }
 
     private fun withDecimalFormat(value: Float): String {
-        return decimalFormatter().format(value)
+        return decimalFormatter().format(value, 2)
     }
 
     private fun getMap(gender: Byte, key: ZScoreTableKey): MutableMap<Float, Int> {

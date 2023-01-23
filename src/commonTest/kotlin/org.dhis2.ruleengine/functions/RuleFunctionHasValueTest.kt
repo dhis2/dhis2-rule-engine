@@ -1,6 +1,7 @@
 package org.dhis2.ruleengine.functions
 
 import org.dhis2.ruleengine.RuleVariableValue
+import org.dhis2.ruleengine.exprk.Expressions
 import org.dhis2.ruleengine.exprk.functions.HasValue
 import org.dhis2.ruleengine.models.RuleValueType
 import kotlin.test.Test
@@ -55,7 +56,7 @@ class RuleFunctionHasValueTest {
 
     private fun assertHasValue(value: String, valueMap: Map<String, RuleVariableValue>, hasValue: String) {
         assertTrue {
-            HasValue(valueMap).call(listOf(value)) == hasValue
+            HasValue{valueMap}.call(listOf(value)) == hasValue
         }
     }
 }

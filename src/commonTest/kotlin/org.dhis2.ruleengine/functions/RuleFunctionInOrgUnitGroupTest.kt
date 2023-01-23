@@ -77,7 +77,7 @@ class RuleFunctionInOrgUnitGroupTest {
         valueMap: Map<String, RuleVariableValue>, inOrgUnitGroup: String
     ) {
         assertTrue {
-            InOrgUnitGroup(valueMap, supplementaryData).call(listOf(value)) == inOrgUnitGroup
+            InOrgUnitGroup({valueMap}, {supplementaryData}).call(listOf(value)) == inOrgUnitGroup
         }
     }
 }

@@ -1,16 +1,12 @@
 package org.dhis2.ruleengine
 
-import com.google.common.collect.Maps
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import org.assertj.core.api.Assertions.assertThat
 import org.dhis2.ruleengine.RuleEngineTestUtils.getRuleEngine
 import org.dhis2.ruleengine.models.*
-import org.junit.jupiter.api.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
-import java.util.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /*
  * Copyright (c) 2004-2018, University of Oslo
@@ -39,7 +35,6 @@ import java.util.*
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-@RunWith(JUnit4::class)
 class ConstantsValueTest {
     /*@Test(expected = IllegalArgumentException::class)
     fun shouldThrowExceptionIfConstantsValueMapIsNull() {
@@ -77,9 +72,9 @@ class ConstantsValueTest {
         )
 
         val ruleEffects: List<RuleEffect> = ruleEngine.evaluate(ruleEnrollment = enrollment)
-        assertThat(ruleEffects.size).isEqualTo(1)
-        assertThat(ruleEffects[0].data).isEqualTo("3.14")
-        assertThat(ruleEffects[0].ruleAction).isEqualTo(assignAction)
+        assertEquals(1, ruleEffects.size)
+        assertEquals("3.14", ruleEffects[0].data)
+        assertEquals(assignAction, ruleEffects[0].ruleAction)
     }
 
     @Test
@@ -106,11 +101,11 @@ class ConstantsValueTest {
         )
 
         val ruleEffects: List<RuleEffect> = ruleEngine.evaluate(ruleEnrollment = enrollment)
-        assertThat(ruleEffects.size).isEqualTo(2)
-        assertThat(ruleEffects[0].data).isEqualTo("4")
-        assertThat(ruleEffects[0].ruleAction).isEqualTo(assignAction)
-        assertThat(ruleEffects[1].data).isEqualTo("4")
-        assertThat(ruleEffects[1].ruleAction).isEqualTo(action)
+        assertEquals(2, ruleEffects.size)
+        assertEquals("4", ruleEffects[0].data)
+        assertEquals(assignAction, ruleEffects[0].ruleAction)
+        assertEquals("4", ruleEffects[1].data)
+        assertEquals(action, ruleEffects[1].ruleAction)
     }
 
     @Test
@@ -136,9 +131,9 @@ class ConstantsValueTest {
             ruleEnrollment = enrollment
         )
         val ruleEffects: List<RuleEffect> = ruleEngine.evaluate(ruleEnrollment = enrollment)
-        assertThat(ruleEffects.size).isEqualTo(1)
-        assertThat(ruleEffects[0].data).isEqualTo("4")
-        assertThat(ruleEffects[0].ruleAction).isEqualTo(action)
+        assertEquals(1, ruleEffects.size)
+        assertEquals("4", ruleEffects[0].data)
+        assertEquals(action, ruleEffects[0].ruleAction)
     }
 
     @Test
@@ -169,8 +164,8 @@ class ConstantsValueTest {
         )
         val ruleEngine = getRuleEngine(rules = listOf(rule), constantsValue = constantsValueMap)
         val ruleEffects: List<RuleEffect> = ruleEngine.evaluate(ruleEvent)
-        assertThat(ruleEffects.size).isEqualTo(1)
-        assertThat(ruleEffects[0].data).isEqualTo("3.14")
-        assertThat(ruleEffects[0].ruleAction).isEqualTo(assignAction)
+        assertEquals(1, ruleEffects.size)
+        assertEquals("3.14", ruleEffects[0].data)
+        assertEquals(assignAction, ruleEffects[0].ruleAction)
     }
 }

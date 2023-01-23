@@ -32,6 +32,7 @@ import org.dhis2.ruleengine.RuleEngineTestUtils.currentDate
 import org.dhis2.ruleengine.RuleEngineTestUtils.getRuleEngine
 import org.dhis2.ruleengine.models.*
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 
@@ -69,8 +70,8 @@ class RuleEnvironmentVariableTest {
             listOf()
         )
         val ruleEffects: List<RuleEffect> = ruleEngine.evaluate(ruleEvent)
-        assertTrue { ruleEffects.size == 1 }
-        assertTrue { ruleEffects[0].data == "1" }
-        assertTrue { ruleEffects[0].ruleAction == ruleAction }
+        assertEquals(1, ruleEffects.size)
+        assertEquals("1", ruleEffects[0].data)
+        assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
 }

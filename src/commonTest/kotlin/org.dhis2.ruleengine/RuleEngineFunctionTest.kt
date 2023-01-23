@@ -1,22 +1,5 @@
 package org.dhis2.ruleengine
 
-import com.google.common.collect.Lists
-import junit.framework.TestCase.assertEquals
-import org.assertj.core.api.Assertions
-import org.assertj.core.api.Assertions.assertThat
-import org.dhis2.ruleengine.RuleEngineTestUtils.currentDate
-import org.dhis2.ruleengine.RuleEngineTestUtils.getRuleEngine
-import org.dhis2.ruleengine.models.*
-import org.joda.time.LocalDate
-import org.joda.time.LocalTime
-import org.junit.Assert
-import org.junit.jupiter.api.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
-import java.text.SimpleDateFormat
-import java.util.*
-
-@RunWith(JUnit4::class)
 class RuleEngineFunctionTest {
    /* private val dateFormat = SimpleDateFormat(DATE_PATTERN, Locale.US)
 

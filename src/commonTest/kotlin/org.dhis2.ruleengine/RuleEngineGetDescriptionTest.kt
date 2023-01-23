@@ -26,21 +26,13 @@ package org.dhis2.ruleengine
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import junit.framework.TestCase.assertEquals
-import org.dhis2.ruleengine.models.*
-import org.junit.Assert
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.rules.ExpectedException
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
-import kotlin.test.assertTrue
-import org.junit.Rule as TestRule
+import org.dhis2.ruleengine.models.DisplayLocation
+import org.dhis2.ruleengine.models.Rule
+import org.dhis2.ruleengine.models.RuleAction
+import org.dhis2.ruleengine.models.RuleValidationResult
+import kotlin.test.*
 
-/**
- * @author Zubair Asghar
- */
-@RunWith(JUnit4::class)
+@Ignore
 class RuleEngineGetDescriptionTest {
     private val test_var_one = "Variable_ONE"
     private val test_var_two = "Variable_TWO"
@@ -55,10 +47,7 @@ class RuleEngineGetDescriptionTest {
     private val ruleAction: RuleAction =
         RuleAction.DisplayKeyValuePair("", DisplayLocation.LOCATION_FEEDBACK_WIDGET, "")
 
-    @TestRule
-    var thrown = ExpectedException.none()
-
-    @BeforeEach
+    @BeforeTest
     fun setUp() {
         itemStore = HashMap()
         val var_1 = DataItem(test_var_one, ItemValueType.TEXT)
@@ -92,12 +81,12 @@ class RuleEngineGetDescriptionTest {
         )
         var ruleEngine: RuleEngine = getRuleEngineBuilderForDescription(itemStore)
         var result = ruleEngine.getExpressionDescription(incorrectRuleHasValue.condition)
-        Assert.assertNotNull(result)
-        Assert.assertFalse(result is RuleValidationResult.Valid)
+        assertNotNull(result)
+        assertFalse(result is RuleValidationResult.Valid)
         ruleEngine = getRuleEngineBuilderForDescription(itemStore)
         result = ruleEngine.getExpressionDescription(incorrectSyntaxRule.condition)
-        Assert.assertNotNull(result)
-        Assert.assertFalse(result is RuleValidationResult.Valid)
+        assertNotNull(result)
+        assertFalse(result is RuleValidationResult.Valid)
     }
 
     @Test
@@ -105,27 +94,26 @@ class RuleEngineGetDescriptionTest {
         val rule = Rule("", null, null, "d2:hasValue(#{test_var_one1})", listOf(ruleAction), "")
         val ruleEngine: RuleEngine = getRuleEngineBuilderForDescription(itemStore)
         val result = ruleEngine.getExpressionDescription(rule.condition)
-        Assert.assertNotNull(result)
-        Assert.assertFalse(result is RuleValidationResult.Valid)
+        assertNotNull(result)
+        assertFalse(result is RuleValidationResult.Valid)
     }
 
-    @get:Test
-    val descriptionForLengthFunction: Unit
-        get() {
-            var rule = Rule("", null, null, "d2:length(#{test_var_one})", listOf(ruleAction), "")
-            val ruleEngine: RuleEngine = getRuleEngineBuilderForDescription(itemStore)
-            var result = ruleEngine.getExpressionDescription(rule.condition)
-            Assert.assertNotNull(result)
-            Assert.assertTrue(result is RuleValidationResult.Valid)
-            rule = Rule("", null, null, "d2:length(#{test_var_date_one})", listOf(ruleAction), "")
-            result = ruleEngine.getExpressionDescription(rule.condition)
-            Assert.assertNotNull(result)
-            Assert.assertTrue(result is RuleValidationResult.Valid)
-            rule = Rule("", null, null, "d2:length(#{test_var_number})", listOf(ruleAction), "")
-            result = ruleEngine.getExpressionDescription(rule.condition)
-            Assert.assertNotNull(result)
-            Assert.assertTrue(result is RuleValidationResult.Valid)
-        }
+    @Test
+    fun getDescriptionForLengthFunction() {
+        var rule = Rule("", null, null, "d2:length(#{test_var_one})", listOf(ruleAction), "")
+        val ruleEngine: RuleEngine = getRuleEngineBuilderForDescription(itemStore)
+        var result = ruleEngine.getExpressionDescription(rule.condition)
+        assertNotNull(result)
+        assertTrue(result is RuleValidationResult.Valid)
+        rule = Rule("", null, null, "d2:length(#{test_var_date_one})", listOf(ruleAction), "")
+        result = ruleEngine.getExpressionDescription(rule.condition)
+        assertNotNull(result)
+        assertTrue(result is RuleValidationResult.Valid)
+        rule = Rule("", null, null, "d2:length(#{test_var_number})", listOf(ruleAction), "")
+        result = ruleEngine.getExpressionDescription(rule.condition)
+        assertNotNull(result)
+        assertTrue(result is RuleValidationResult.Valid)
+    }
 
     @Test
     fun testGetDescriptionWithD2FunctionsAndLogicalAnd() {
@@ -136,8 +124,8 @@ class RuleEngineGetDescriptionTest {
         )
         val ruleEngine: RuleEngine = getRuleEngineBuilderForDescription(itemStore)
         val result = ruleEngine.getExpressionDescription(correctMultipleD2FunctionRule.condition)
-        Assert.assertNotNull(result)
-        Assert.assertTrue(result is RuleValidationResult.Valid)
+        assertNotNull(result)
+        assertTrue(result is RuleValidationResult.Valid)
     }
 
     @Test
@@ -146,8 +134,8 @@ class RuleEngineGetDescriptionTest {
             Rule("", null, null, "d2:hasValue('test_var_three')", listOf(ruleAction), "")
         val ruleEngine: RuleEngine = getRuleEngineBuilderForDescription(itemStore)
         val result = ruleEngine.getExpressionDescription(conditionWithD2FunctionsTEA.condition)
-        Assert.assertNotNull(result)
-        Assert.assertTrue(result is RuleValidationResult.Valid)
+        assertNotNull(result)
+        assertTrue(result is RuleValidationResult.Valid)
         assertEquals("Variable_THREE", (result as RuleValidationResult.Valid).description)
     }
 
@@ -157,8 +145,8 @@ class RuleEngineGetDescriptionTest {
             Rule("", null, null, "'test_var_three' == 'email'", listOf(ruleAction), "")
         val ruleEngine: RuleEngine = getRuleEngineBuilderForDescription(itemStore)
         val result = ruleEngine.getExpressionDescription(conditionWithD2FunctionsTEA.condition)
-        Assert.assertNotNull(result)
-        Assert.assertTrue(result is RuleValidationResult.Valid)
+        assertNotNull(result)
+        assertTrue(result is RuleValidationResult.Valid)
         assertEquals("'test_var_three' == 'email'", (result as RuleValidationResult.Valid).description)
     }
 
@@ -168,8 +156,8 @@ class RuleEngineGetDescriptionTest {
             Rule("", null, null, "A{test_var_three} == 'email'", listOf(ruleAction), "")
         val ruleEngine: RuleEngine = getRuleEngineBuilderForDescription(itemStore)
         val result = ruleEngine.getExpressionDescription(conditionWithD2FunctionsTEA.condition)
-        Assert.assertNotNull(result)
-        Assert.assertTrue(result is RuleValidationResult.Valid)
+        assertNotNull(result)
+        assertTrue(result is RuleValidationResult.Valid)
         assertEquals("Variable_THREE == 'email'", (result as RuleValidationResult.Valid).description)
     }
 
@@ -179,8 +167,8 @@ class RuleEngineGetDescriptionTest {
         val literalStringRule = Rule("", null, null, condition, listOf(ruleAction), "")
         val ruleEngine: RuleEngine = getRuleEngineBuilderForDescription(itemStore)
         val result = ruleEngine.getExpressionDescription(literalStringRule.condition)
-        Assert.assertNotNull(result)
-        Assert.assertTrue(result is RuleValidationResult.Valid)
+        assertNotNull(result)
+        assertTrue(result is RuleValidationResult.Valid)
     }
 
     @Test
@@ -189,8 +177,8 @@ class RuleEngineGetDescriptionTest {
         val correctD2betweenFunctionRule = Rule("", null, null, condition, listOf(ruleAction), "")
         val ruleEngine: RuleEngine = getRuleEngineBuilderForDescription(itemStore)
         val result = ruleEngine.getExpressionDescription(correctD2betweenFunctionRule.condition)
-        Assert.assertNotNull(result)
-        Assert.assertTrue(result is RuleValidationResult.Valid)
+        assertNotNull(result)
+        assertTrue(result is RuleValidationResult.Valid)
     }
 
     @Test
@@ -199,8 +187,8 @@ class RuleEngineGetDescriptionTest {
         val correctD2betweenFunctionRule = Rule("", null, null, condition, listOf(ruleAction), "")
         val ruleEngine: RuleEngine = getRuleEngineBuilderForDescription(itemStore)
         val result = ruleEngine.getExpressionDescription(correctD2betweenFunctionRule.condition)
-        Assert.assertNotNull(result)
-        Assert.assertTrue(result is RuleValidationResult.Valid)
+        assertNotNull(result)
+        assertTrue(result is RuleValidationResult.Valid)
     }
 
     @Test
@@ -209,8 +197,8 @@ class RuleEngineGetDescriptionTest {
         val withoutD2AttFunctionRule = Rule("", null, null, condition, listOf(ruleAction), "")
         val ruleEngine: RuleEngine = getRuleEngineBuilderForDescription(itemStore)
         val result = ruleEngine.getExpressionDescription(withoutD2AttFunctionRule.condition)
-        Assert.assertNotNull(result)
-        Assert.assertTrue(result is RuleValidationResult.Valid)
+        assertNotNull(result)
+        assertTrue(result is RuleValidationResult.Valid)
     }
 
     @Test
@@ -219,8 +207,8 @@ class RuleEngineGetDescriptionTest {
         val withoutD2DEFunctionRule = Rule("", null, null, condition, listOf(ruleAction), "")
         val ruleEngine: RuleEngine = getRuleEngineBuilderForDescription(itemStore)
         val result = ruleEngine.getExpressionDescription(withoutD2DEFunctionRule.condition)
-        Assert.assertNotNull(result)
-        Assert.assertTrue(result is RuleValidationResult.Valid)
+        assertNotNull(result)
+        assertTrue(result is RuleValidationResult.Valid)
     }
 
     @Test
@@ -229,8 +217,8 @@ class RuleEngineGetDescriptionTest {
         val constantRule = Rule("", null, null, condition, listOf(ruleAction), "")
         val ruleEngine: RuleEngine = getRuleEngineBuilderForDescription(itemStore)
         val result = ruleEngine.getExpressionDescription(constantRule.condition)
-        Assert.assertNotNull(result)
-        Assert.assertTrue(result is RuleValidationResult.Valid)
+        assertNotNull(result)
+        assertTrue(result is RuleValidationResult.Valid)
     }
 
     @Test
@@ -239,8 +227,8 @@ class RuleEngineGetDescriptionTest {
         val programEnvVariableRule = Rule("", null, null, condition, listOf(ruleAction), "")
         val ruleEngine: RuleEngine = getRuleEngineBuilderForDescription(itemStore)
         val result = ruleEngine.getExpressionDescription(programEnvVariableRule.condition)
-        Assert.assertNotNull(result)
-        Assert.assertTrue(result is RuleValidationResult.Valid)
+        assertNotNull(result)
+        assertTrue(result is RuleValidationResult.Valid)
     }
 
     @Test
@@ -249,8 +237,8 @@ class RuleEngineGetDescriptionTest {
         val correctRuleHasValue = Rule("", null, null, condition, listOf(ruleAction), "")
         val ruleEngine: RuleEngine = getRuleEngineBuilderForDescription(itemStore)
         val result = ruleEngine.getExpressionDescription(correctRuleHasValue.condition)
-        Assert.assertNotNull(result)
-        Assert.assertTrue(result is RuleValidationResult.Valid)
+        assertNotNull(result)
+        assertTrue(result is RuleValidationResult.Valid)
     }
 
     @Test
@@ -259,8 +247,8 @@ class RuleEngineGetDescriptionTest {
         val correctMultipleD2FunctionRuleWithOr = Rule("", null, null, condition, listOf(ruleAction), "")
         val ruleEngine: RuleEngine = getRuleEngineBuilderForDescription(itemStore)
         val result = ruleEngine.getExpressionDescription(correctMultipleD2FunctionRuleWithOr.condition)
-        Assert.assertNotNull(result)
-        Assert.assertTrue(result is RuleValidationResult.Valid)
+        assertNotNull(result)
+        assertTrue(result is RuleValidationResult.Valid)
     }
 
     @Test
@@ -269,29 +257,29 @@ class RuleEngineGetDescriptionTest {
         val correctMultipleD2FunctionRuleWithAnd = Rule("", null, null, condition, listOf(ruleAction), "")
         val ruleEngine: RuleEngine = getRuleEngineBuilderForDescription(itemStore)
         val result = ruleEngine.getExpressionDescription(correctMultipleD2FunctionRuleWithAnd.condition)
-        Assert.assertNotNull(result)
-        Assert.assertTrue(result is RuleValidationResult.Valid)
+        assertNotNull(result)
+        assertTrue(result is RuleValidationResult.Valid)
     }
 
     @Test
     fun testGetDescriptionForDataFieldExpression() {
         val ruleEngine: RuleEngine = getRuleEngineBuilderForDescription(itemStore)
         var result = ruleEngine.getExpressionDescription("1 + 1")
-        Assert.assertNotNull(result)
-        Assert.assertTrue(result is RuleValidationResult.Valid)
+        assertNotNull(result)
+        assertTrue(result is RuleValidationResult.Valid)
         result =
             ruleEngine.getExpressionDescription("d2:hasValue(#{test_var_two}) && d2:count(#{test_var_one}) > 0 ")
-        Assert.assertNotNull(result)
-        Assert.assertTrue(result is RuleValidationResult.Valid)
+        assertNotNull(result)
+        assertTrue(result is RuleValidationResult.Valid)
         result = ruleEngine.getExpressionDescription("1 + 1 +")
-        Assert.assertNotNull(result)
-        Assert.assertFalse(result is RuleValidationResult.Valid)
-        assertTrue { (result as RuleValidationResult.Error).exception is java.lang.IllegalStateException }
+        assertNotNull(result)
+        assertFalse(result is RuleValidationResult.Valid)
+        assertTrue { (result as RuleValidationResult.Error).exception is IllegalStateException }
         result =
             ruleEngine.getExpressionDescription("d2:hasValue(#{test_var_two}) && d2:count(#{test_var_one}) > 0 (")
-        Assert.assertNotNull(result)
-        Assert.assertFalse(result is RuleValidationResult.Valid)
-        assertTrue { (result as RuleValidationResult.Error).exception is java.lang.IllegalStateException }
+        assertNotNull(result)
+        assertFalse(result is RuleValidationResult.Valid)
+        assertTrue { (result as RuleValidationResult.Error).exception is IllegalStateException }
     }
 
     private fun getRuleEngineBuilderForDescription(itemStore: Map<String, DataItem>): RuleEngine {

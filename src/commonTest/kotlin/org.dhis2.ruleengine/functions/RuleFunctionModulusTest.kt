@@ -2,6 +2,7 @@ package org.dhis2.ruleengine.functions
 
 import org.dhis2.ruleengine.exprk.functions.Modulus
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 /*
@@ -50,8 +51,9 @@ class RuleFunctionModulusTest {
     }
 
     private fun assertModulus(firstArgument: String?, secondArgument: String?, expectedValue: String) {
-        assertTrue {
-            Modulus().call(listOf(firstArgument, secondArgument)) == expectedValue
-        }
+        assertEquals(
+            expectedValue,
+            Modulus().call(listOf(firstArgument, secondArgument))
+        )
     }
 }

@@ -151,7 +151,7 @@ class RuleFunctionCountIfValueTest {
         countIfValue: String
     ) {
         assertTrue {
-            CountIfValue(valueMap).call(listOf(variableName, valueToFind)) == countIfValue
+            CountIfValue{valueMap}.call(listOf(variableName, valueToFind)) == countIfValue
         }
     }
 }

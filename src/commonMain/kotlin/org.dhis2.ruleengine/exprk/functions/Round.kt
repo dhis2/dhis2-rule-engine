@@ -11,4 +11,6 @@ class Round : Function() {
             ?: "0"
     }
 
+    override fun requiresArgumentEvaluation(): Boolean = true
+
 }

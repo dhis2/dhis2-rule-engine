@@ -26,17 +26,14 @@ package org.dhis2.ruleengine
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import kotlinx.datetime.*
+import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
-import org.assertj.core.api.Assertions.assertThat
+import kotlinx.datetime.toLocalDate
+import kotlinx.datetime.toLocalDateTime
 import org.dhis2.ruleengine.models.*
-import org.junit.jupiter.api.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
-import java.text.SimpleDateFormat
-import java.util.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
-@RunWith(JUnit4::class)
 class ProgramRuleVariableTest {
     @Test
     @Throws(Exception::class)
@@ -91,7 +88,7 @@ class ProgramRuleVariableTest {
     fun testEnvironmentProgramVariableIsAssigned() {
         val rule: Rule = getRule("V{environment}")
         val ruleEffects = callEnrollmentRuleEngine(rule)
-        assertProgramRuleVariableAssignment(ruleEffects, rule, "JVM")
+        assertProgramRuleVariableAssignment(ruleEffects, rule, getClientName().clientName)
     }
 
     @Test
@@ -183,14 +180,14 @@ class ProgramRuleVariableTest {
     }
 
     private fun getRule(variable: String): Rule {
-        val assignAction = RuleAction.Assign("#{test_data_element}", variable, "")
+        val assignAction = RuleAction.Assign("test_data_element", variable, "")
         return Rule("test_program_rule1", null, 1, "true", listOf(assignAction), "")
     }
 
     private fun assertProgramRuleVariableAssignment(ruleEffects: List<RuleEffect>, rule: Rule, variableValue: String) {
-        assertThat(ruleEffects.size).isEqualTo(1)
-        assertThat(ruleEffects[0].data).isEqualTo(variableValue)
-        assertThat(ruleEffects[0].ruleAction).isEqualTo(rule.actions[0])
+        assertEquals(1, ruleEffects.size)
+        assertEquals(variableValue, ruleEffects[0].data)
+        assertEquals(rule.actions[0], ruleEffects[0].ruleAction)
     }
 
     @Throws(Exception::class)

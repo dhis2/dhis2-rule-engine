@@ -1,40 +1,26 @@
 package org.dhis2.ruleengine
 
-import junit.framework.TestCase
-import org.assertj.core.api.Assertions.assertThat
 import org.dhis2.ruleengine.models.Rule
 import org.dhis2.ruleengine.models.RuleValueType
 import org.dhis2.ruleengine.models.RuleVariable
-import org.junit.Before
-import org.junit.jupiter.api.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.MockitoAnnotations
-import java.util.*
+import kotlin.test.Test
+import kotlin.test.assertNotEquals
 
-@RunWith(JUnit4::class)
 class RuleEngineContextTest {
-    @Before
-    @Throws(Exception::class)
-    fun setUp() {
-        MockitoAnnotations.initMocks(this)
-    }
 
-   /* @Test(expected = IllegalArgumentException::class)
-    fun builderShouldThrowOnNullVariableList() {
-        RuleEngineContext.builder()
-            .rules(ArrayList<Rule>())
-            .ruleVariables(null)
-    }
+    /* @Test(expected = IllegalArgumentException::class)
+     fun builderShouldThrowOnNullVariableList() {
+         RuleEngineContext.builder()
+             .rules(ArrayList<Rule>())
+             .ruleVariables(null)
+     }
 
-    @Test(expected = IllegalArgumentException::class)
-    fun builderShouldThrowOnNullRulesList() {
-        RuleEngineContext.builder()
-            .ruleVariables(ArrayList<RuleVariable>())
-            .ruleVariables(null)
-    }*/
+     @Test(expected = IllegalArgumentException::class)
+     fun builderShouldThrowOnNullRulesList() {
+         RuleEngineContext.builder()
+             .ruleVariables(ArrayList<RuleVariable>())
+             .ruleVariables(null)
+     }*/
 
     /*@Test
     fun builderShouldContainImmutableCopyOfRules() {
@@ -81,8 +67,8 @@ class RuleEngineContextTest {
 
     @Test
     fun toEngineBuilderShouldReturnNewInstances() {
-        val mockedRule = Rule("test",null,null,"true", emptyList(),"")
-        val mockedVariable = RuleVariable.RuleVariableCurrentEvent("test","test",RuleValueType.TEXT)
+        val mockedRule = Rule("test", null, null, "true", emptyList(), "")
+        val mockedVariable = RuleVariable.RuleVariableCurrentEvent("test", "test", RuleValueType.TEXT)
         val ruleEngineContext = RuleEngineContext(
             rules = listOf(mockedRule),
             ruleVariables = listOf(mockedVariable),
@@ -90,8 +76,8 @@ class RuleEngineContextTest {
             constantsValues = emptyMap(),
             dataItemStore = emptyMap()
         )
-        val ruleEngineBuilderOne: RuleEngine = ruleEngineContext.toRuleEngine(emptyList(),null)
-        val ruleEngineBuilderTwo: RuleEngine = ruleEngineContext.toRuleEngine(emptyList(),null)
-        assertThat(ruleEngineBuilderOne).isNotEqualTo(ruleEngineBuilderTwo)
+        val ruleEngineBuilderOne: RuleEngine = ruleEngineContext.toRuleEngine(emptyList(), null)
+        val ruleEngineBuilderTwo: RuleEngine = ruleEngineContext.toRuleEngine(emptyList(), null)
+        assertNotEquals(ruleEngineBuilderTwo, ruleEngineBuilderOne)
     }
 }
