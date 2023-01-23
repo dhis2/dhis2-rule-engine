@@ -46,7 +46,7 @@ class RuleFunctionValidatePatternTest {
 
     @Test
     fun return_false_for_non_matching_pairs() {
-        assertValidatePattern("1999/99/9", "\\[9]{4}/\\d{2}/\\d", "false")
+        assertValidatePattern("1999/99/9", "[9]{4}/\\d{2}/\\d", "false")
         assertValidatePattern("9999/99/", "[0-9]{4}/[0-9]{2}/[0-9]", "false")
         assertValidatePattern("abc123", "xyz", "false")
         assertValidatePattern("abc123", "^bc", "false")
