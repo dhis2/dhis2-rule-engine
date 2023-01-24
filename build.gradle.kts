@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform") version "1.7.10"
+    id("maven-publish")
 }
 
 group = "org.dhis2.ruleenginemultiplatform"
@@ -44,7 +45,11 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val jvmMain by getting
+        val jvmMain by getting{
+            dependencies{
+                implementation("junit:junit:4.13.1")
+            }
+        }
         val jvmTest by getting
         val jsMain by getting
         val jsTest by getting

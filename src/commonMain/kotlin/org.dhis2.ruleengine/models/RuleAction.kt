@@ -32,14 +32,14 @@ sealed class RuleAction(open val data: String, val attributeType: AttributeType?
     data class ErrorOnCompletion(
         val type: AttributeType,
         val content: String,
-        val field:String,
+        val field: String,
         override val data: String,
     ) : RuleAction(data, type)
 
     data class WarningOnCompletion(
         val type: AttributeType,
         val content: String,
-        val field:String,
+        val field: String,
         override val data: String,
     ) : RuleAction(data, type)
 
@@ -84,34 +84,47 @@ sealed class RuleAction(open val data: String, val attributeType: AttributeType?
     ) : RuleAction(data, type)
 
     data class ScheduleMessage(
-        val notification:String,
+        val notification: String,
         override val data: String
-    ):RuleAction(data)
+    ) : RuleAction(data)
 
     data class SendMessage(
-        val notification:String,
+        val notification: String,
         override val data: String
-    ):RuleAction(data)
+    ) : RuleAction(data)
 
     data class SetMandatory(
         val type: AttributeType,
         val field: String,
         override val data: String
-    ):RuleAction(data, type)
+    ) : RuleAction(data, type)
 
     data class ShowError(
         val type: AttributeType,
         val content: String,
         val field: String,
         override val data: String
-    ):RuleAction(data, type)
+    ) : RuleAction(data, type)
+
+    data class ShowOptionGroup(
+        val type: AttributeType,
+        val content: String,
+        val optionGroup: String,
+        val field: String,
+        override val data: String
+    ) : RuleAction(data, type)
 
     data class ShowWarning(
         val type: AttributeType,
         val content: String,
         val field: String,
         override val data: String
-    ):RuleAction(data, type)
+    ) : RuleAction(data, type)
+
+    data class RuleActionError(
+        val action: String,
+        val message: String
+    ) : RuleAction("")
 
     fun isAssignToCalculatedValue(): Boolean {
         return this is Assign && this.field.isNullOrEmpty()
