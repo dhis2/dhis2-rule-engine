@@ -16,5 +16,3 @@ interface ExpressionParserEvaluator {
         castAsBoolean: Boolean = false
     ): String
 }
-
-expect fun expressionEvaluator(): ExpressionParserEvaluator

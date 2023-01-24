@@ -48,7 +48,7 @@ internal class Scanner(
             '^' -> addToken(EXPONENT)
             '√' -> addToken(SQUARE_ROOT)
             '=' -> if (match('=')) addToken(EQUAL_EQUAL) else addToken(ASSIGN)
-            '!' -> if (match('=')) addToken(NOT_EQUAL) else invalidToken(c)
+            '!' -> if (match('=')) addToken(NOT_EQUAL) else addToken(NEGATION)
             '>' -> if (match('=')) addToken(GREATER_EQUAL) else addToken(GREATER)
             '<' -> if (match('=')) addToken(LESS_EQUAL) else addToken(LESS)
             '|' -> if (match('|')) addToken(BAR_BAR) else invalidToken(c)

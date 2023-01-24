@@ -136,6 +136,16 @@ internal class Parser(private val tokens: List<Token>) {
             return UnaryExpr(operator, right)
         }
 
+        return booleanNeg()
+    }
+
+    private fun booleanNeg():Expr {
+        if(match(NEGATION)){
+            val operator = previous()
+            val right = unary()
+            return UnaryExpr(operator, right)
+        }
+
         return exponent()
     }
 

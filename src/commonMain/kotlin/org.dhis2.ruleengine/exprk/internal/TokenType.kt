@@ -21,6 +21,7 @@ internal enum class TokenType {
     LESS_EQUAL,
     BAR_BAR,
     AMP_AMP,
+    NEGATION,
 
     // Other
     COMMA,

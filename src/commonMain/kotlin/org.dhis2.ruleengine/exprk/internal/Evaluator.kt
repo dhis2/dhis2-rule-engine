@@ -137,6 +137,10 @@ internal class Evaluator() : ExprVisitor<String> {
                 right.toDouble().pow(0.5).toString()
             }
 
+            NEGATION -> {
+                (!right.toBoolean()).toString()
+            }
+
             else -> throw ExpressionException("Invalid unary operator")
         }
     }

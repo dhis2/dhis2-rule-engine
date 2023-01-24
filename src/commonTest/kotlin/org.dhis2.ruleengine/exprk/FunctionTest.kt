@@ -104,4 +104,23 @@ class FunctionTest {
             ).eval("C{test_variable}")
         assertEquals("123", result)
     }
+
+    @Test
+    fun testBooleanNegation() {
+        val result = Expressions()
+            .withValueMap(
+                mapOf(
+                    "test_variable" to RuleVariableValue("true", RuleValueType.BOOLEAN)
+                )
+            ).eval("!#{test_variable}")
+        assertEquals("false", result)
+    }
+
+    @Test
+    fun testBooleanNegationWithoutVariable() {
+        val result = Expressions()
+            .withValueMap(mapOf())
+            .eval("!true")
+        assertEquals("false", result)
+    }
 }

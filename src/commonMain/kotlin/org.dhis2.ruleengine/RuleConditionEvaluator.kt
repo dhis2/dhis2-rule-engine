@@ -3,12 +3,33 @@ package org.dhis2.ruleengine
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.dhis2.ruleengine.exprk.Expressions
 import org.dhis2.ruleengine.models.*
 import org.dhis2.ruleengine.utils.VariableNameUnwrapper
 
 class RuleConditionEvaluator {
 
-    val expressionParserEvaluator = expressionEvaluator()
+    val expressionParserEvaluator =  object : ExpressionParserEvaluator {
+        override fun evaluate(
+            condition: String,
+            valueMap: Map<String, RuleVariableValue>,
+            supplementaryData: Map<String, List<String>>
+        ): String {
+            if(condition.isEmpty()) return ""
+            return Expressions()
+                .withValueMap(valueMap)
+                .withSupplementaryData(supplementaryData)
+                .eval(condition)
+        }
+
+        override fun getExpressionDescription(
+            expression: String,
+            dataItemStore: Map<String, DataItem>,
+            castAsBoolean: Boolean
+        ): String {
+            TODO("Not yet implemented")
+        }
+    }
 
     fun getRuleEffects(
         trackerObjectType: TrackerObjectType,
