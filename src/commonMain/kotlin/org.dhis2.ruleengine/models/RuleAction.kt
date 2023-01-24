@@ -126,6 +126,11 @@ sealed class RuleAction(open val data: String, val attributeType: AttributeType?
         val message: String
     ) : RuleAction("")
 
+    data class RuleActionUnsupported(
+        val content: String,
+        val actionValueType: String
+    ) : RuleAction("")
+
     fun isAssignToCalculatedValue(): Boolean {
         return this is Assign && this.field.isNullOrEmpty()
     }
