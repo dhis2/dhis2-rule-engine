@@ -1,6 +1,5 @@
 package org.hisp.dhis.rules;
 
-import com.google.common.collect.Maps;
 import org.hisp.dhis.rules.models.*;
 import org.hisp.dhis.rules.utils.RuleEngineUtils;
 
@@ -191,7 +190,7 @@ public final class RuleVariableValueMapBuilder
 
     private Map<String, RuleDataValue> buildCurrentEventValues()
     {
-        Map<String, RuleDataValue> currentEventValues = Maps.newHashMap();
+        Map<String, RuleDataValue> currentEventValues = new HashMap<>();
 
         if ( ruleEvent != null )
         {
@@ -207,7 +206,7 @@ public final class RuleVariableValueMapBuilder
 
     private Map<String, RuleAttributeValue> buildCurrentEnrollmentValues()
     {
-        Map<String, RuleAttributeValue> currentEnrollmentValues = Maps.newHashMap();
+        Map<String, RuleAttributeValue> currentEnrollmentValues = new HashMap<>();
         if ( ruleEnrollment != null )
         {
             List<RuleAttributeValue> ruleAttributeValues = ruleEnrollment.attributeValues();
@@ -223,7 +222,7 @@ public final class RuleVariableValueMapBuilder
 
     private Map<String, List<RuleDataValue>> buildAllEventValues()
     {
-        Map<String, List<RuleDataValue>> allEventsValues = Maps.newHashMap();
+        Map<String, List<RuleDataValue>> allEventsValues = new HashMap<>();
         List<RuleEvent> events = new ArrayList<>( ruleEvents );
 
         if ( ruleEvent != null )
@@ -262,7 +261,7 @@ public final class RuleVariableValueMapBuilder
 
     private Map<String, RuleVariableValue> buildConstantsValues()
     {
-        Map<String, RuleVariableValue> valueMap = Maps.newHashMap();
+        Map<String, RuleVariableValue> valueMap = new HashMap<>();
 
         for ( Map.Entry<String, String> entrySet : allConstantValues.entrySet() )
         {
@@ -273,7 +272,7 @@ public final class RuleVariableValueMapBuilder
 
     private Map<String, RuleVariableValue> buildEnvironmentVariables()
     {
-        Map<String, RuleVariableValue> valueMap = Maps.newHashMap();
+        Map<String, RuleVariableValue> valueMap = new HashMap<>();
         String currentDate = dateFormat.format( new Date() );
 
         valueMap.put( RuleEngineUtils.ENV_VAR_CURRENT_DATE,
@@ -375,7 +374,7 @@ public final class RuleVariableValueMapBuilder
 
     private Map<String, RuleVariableValue> buildRuleVariableValues()
     {
-        Map<String, RuleVariableValue> valueMap = Maps.newHashMap();
+        Map<String, RuleVariableValue> valueMap = new HashMap<>();
 
         // map data values within all events to data elements
         Map<String, List<RuleDataValue>> allEventValues = buildAllEventValues();

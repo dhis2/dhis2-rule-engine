@@ -1,8 +1,20 @@
 package org.hisp.dhis.rules;
 
-import com.google.common.collect.Lists;
-import org.hisp.dhis.rules.models.*;
-import org.hisp.dhis.rules.variables.Variable;
+import org.hisp.dhis.rules.models.Rule;
+import org.hisp.dhis.rules.models.RuleAction;
+import org.hisp.dhis.rules.models.RuleActionDisplayKeyValuePair;
+import org.hisp.dhis.rules.models.RuleActionDisplayText;
+import org.hisp.dhis.rules.models.RuleAttributeValue;
+import org.hisp.dhis.rules.models.RuleDataValue;
+import org.hisp.dhis.rules.models.RuleEffect;
+import org.hisp.dhis.rules.models.RuleEffects;
+import org.hisp.dhis.rules.models.RuleEnrollment;
+import org.hisp.dhis.rules.models.RuleEvent;
+import org.hisp.dhis.rules.models.RuleValueType;
+import org.hisp.dhis.rules.models.RuleVariable;
+import org.hisp.dhis.rules.models.RuleVariableCurrentEvent;
+import org.hisp.dhis.rules.models.RuleVariableNewestEvent;
+import org.hisp.dhis.rules.models.TriggerEnvironment;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +32,8 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine;
 import static org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngineBuilder;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith( JUnit4.class )
 public class RuleEngineFunctionTest
@@ -40,11 +53,11 @@ public class RuleEngineFunctionTest
             .create( null, null, "d2:daysBetween(V{enrollment_date},V{event_date}) < 0",
                 Arrays.asList( ruleAction ), "", "" );
         Rule validRule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
-        RuleEngine ruleEngine = getRuleEngine( Lists.newArrayList( failingRule, validRule ) );
+        RuleEngine ruleEngine = getRuleEngine( List.of( failingRule, validRule ) );
 
         RuleEnrollment ruleEnrollment = RuleEnrollment.create( "test_enrollment",
             enrollmentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE, "", null,
-            Lists.<RuleAttributeValue>newArrayList(),
+            List.of(),
             "" );
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEnrollment ).call();
 
@@ -67,7 +80,7 @@ public class RuleEngineFunctionTest
 
         RuleEnrollment ruleEnrollment = RuleEnrollment.create( "test_enrollment",
             today, today, RuleEnrollment.Status.ACTIVE, "", null,
-            Lists.<RuleAttributeValue>newArrayList(),
+            List.of(),
             "" );
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
             RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
@@ -79,8 +92,8 @@ public class RuleEngineFunctionTest
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition" ) ), "",
             null );
 
-        RuleEngine ruleEngine = getRuleEngine( Lists.newArrayList( failingRule ), ruleEnrollment,
-            Lists.newArrayList( ruleEvent, ruleNotFailingEvent ) );
+        RuleEngine ruleEngine = getRuleEngine( List.of( failingRule ), ruleEnrollment,
+            List.of( ruleEvent, ruleNotFailingEvent ) );
         List<RuleEffects> ruleEffects = ruleEngine.evaluate().call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 3 );

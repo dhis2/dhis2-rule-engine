@@ -1,18 +1,15 @@
 package org.hisp.dhis.rules;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hisp.dhis.antlr.Parser;
-import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
+import org.hisp.dhis.expression.Expression;
+import org.hisp.dhis.expression.spi.ExpressionData;
+import org.hisp.dhis.expression.spi.IllegalExpressionException;
 import org.hisp.dhis.rules.models.*;
-import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.rules.utils.RuleEngineUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.util.*;
-
-import static org.hisp.dhis.rules.parser.expression.ParserUtils.FUNCTION_EVALUATE;
 
 public class RuleConditionEvaluator
 {
@@ -110,7 +107,7 @@ public class RuleConditionEvaluator
                                     String targetUid, List<RuleEvaluationResult> ruleEvaluationResults )
     {
         String errorMessage;
-        if ( ruleAction != null && e instanceof ParserExceptionWithoutContext )
+        if ( ruleAction != null && e instanceof IllegalExpressionException)
         {
             errorMessage = "Action " + ruleAction.getClass().getName() +
                     " from rule " + rule.name() + " with id " + rule.uid() +
@@ -126,7 +123,7 @@ public class RuleConditionEvaluator
                     " with condition (" + rule.condition() + ")" +
                     " raised an unexpected exception: " + e.getMessage();
         }
-        else if(e instanceof ParserExceptionWithoutContext)
+        else if(e instanceof IllegalExpressionException)
         {
             errorMessage = "Rule " + rule.name() + " with id " + rule.uid() +
                     " executed for " + targetType.getName() + "(" + targetUid + ")" +
@@ -186,15 +183,13 @@ public class RuleConditionEvaluator
             return "";
         }
 
-        CommonExpressionVisitor commonExpressionVisitor = CommonExpressionVisitor.newBuilder()
-            .withFunctionMap( RuleEngineUtils.FUNCTIONS )
-            .withFunctionMethod( FUNCTION_EVALUATE )
-            .withVariablesMap( valueMap )
-            .withSupplementaryData( supplementaryData )
-            .validateCommonProperties();
+        Expression expression = new Expression(condition, Expression.Mode.RULE_ENGINE);
 
-        Object result = Parser.visit( condition, commonExpressionVisitor, !isOldAndroidVersion( valueMap, supplementaryData ) );
-        return convertInteger( result ).toString();
+        ExpressionData build = ExpressionData.builder()
+                .supplementaryValues(supplementaryData)
+                .programRuleVariableValues(valueMap)
+                .build();
+        return convertInteger( expression.evaluate(name -> null, build) ).toString();
     }
 
     private Object convertInteger( Object result )

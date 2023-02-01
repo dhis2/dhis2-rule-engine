@@ -29,17 +29,13 @@ package org.hisp.dhis.rules.models;
  */
 
 import com.google.auto.value.AutoValue;
-import com.google.common.collect.Maps;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueMapBuilder;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.hisp.dhis.rules.Utils.dateFormat;
 
 /**
  * @author Zubair Asghar.
@@ -68,7 +64,7 @@ public abstract class RuleVariableCalculatedValue
         Map<String, RuleAttributeValue> currentEnrollmentValues,
         Map<String, RuleDataValue> currentEventValues )
     {
-        Map<String, RuleVariableValue> valueMap = Maps.newHashMap();
+        Map<String, RuleVariableValue> valueMap = new HashMap();
 
         valueMap.put( this.name(), RuleVariableValue.create( this.calculatedValueType() ) );
         return valueMap;

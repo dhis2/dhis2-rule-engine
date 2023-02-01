@@ -1,13 +1,22 @@
 package org.hisp.dhis.rules;
 
-import org.assertj.core.api.AbstractAssert;
-import org.hisp.dhis.rules.models.*;
+import org.hisp.dhis.rules.models.RuleAttributeValue;
+import org.hisp.dhis.rules.models.RuleDataValue;
+import org.hisp.dhis.rules.models.RuleEnrollment;
+import org.hisp.dhis.rules.models.RuleEvent;
+import org.hisp.dhis.rules.models.RuleValueType;
+import org.hisp.dhis.rules.models.RuleVariable;
+import org.hisp.dhis.rules.models.RuleVariableAttribute;
+import org.hisp.dhis.rules.models.RuleVariableCurrentEvent;
+import org.hisp.dhis.rules.models.RuleVariableNewestEvent;
+import org.hisp.dhis.rules.models.RuleVariableNewestStageEvent;
+import org.hisp.dhis.rules.models.RuleVariablePreviousEvent;
+import org.hisp.dhis.rules.models.TriggerEnvironment;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.mockito.ArgumentMatchers;
 
 import javax.annotation.Nonnull;
 import java.text.ParseException;

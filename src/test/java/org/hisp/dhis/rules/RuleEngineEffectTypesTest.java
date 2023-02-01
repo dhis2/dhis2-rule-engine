@@ -1,7 +1,28 @@
 package org.hisp.dhis.rules;
 
 import org.assertj.core.util.Lists;
-import org.hisp.dhis.rules.models.*;
+import org.hisp.dhis.rules.models.Rule;
+import org.hisp.dhis.rules.models.RuleAction;
+import org.hisp.dhis.rules.models.RuleActionAssign;
+import org.hisp.dhis.rules.models.RuleActionCreateEvent;
+import org.hisp.dhis.rules.models.RuleActionDisplayKeyValuePair;
+import org.hisp.dhis.rules.models.RuleActionDisplayText;
+import org.hisp.dhis.rules.models.RuleActionErrorOnCompletion;
+import org.hisp.dhis.rules.models.RuleActionHideField;
+import org.hisp.dhis.rules.models.RuleActionHideOption;
+import org.hisp.dhis.rules.models.RuleActionHideOptionGroup;
+import org.hisp.dhis.rules.models.RuleActionHideProgramStage;
+import org.hisp.dhis.rules.models.RuleActionHideSection;
+import org.hisp.dhis.rules.models.RuleActionScheduleMessage;
+import org.hisp.dhis.rules.models.RuleActionSetMandatoryField;
+import org.hisp.dhis.rules.models.RuleActionShowError;
+import org.hisp.dhis.rules.models.RuleActionShowWarning;
+import org.hisp.dhis.rules.models.RuleActionWarningOnCompletion;
+import org.hisp.dhis.rules.models.RuleDataValue;
+import org.hisp.dhis.rules.models.RuleEffect;
+import org.hisp.dhis.rules.models.RuleEffects;
+import org.hisp.dhis.rules.models.RuleEvent;
+import org.hisp.dhis.rules.models.TriggerEnvironment;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -10,7 +31,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

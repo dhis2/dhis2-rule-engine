@@ -28,8 +28,17 @@ package org.hisp.dhis.rules;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.google.common.collect.Maps;
-import org.hisp.dhis.rules.models.*;
+import org.hisp.dhis.rules.models.Rule;
+import org.hisp.dhis.rules.models.RuleAction;
+import org.hisp.dhis.rules.models.RuleActionAssign;
+import org.hisp.dhis.rules.models.RuleActionShowError;
+import org.hisp.dhis.rules.models.RuleAttributeValue;
+import org.hisp.dhis.rules.models.RuleDataValue;
+import org.hisp.dhis.rules.models.RuleEffect;
+import org.hisp.dhis.rules.models.RuleEnrollment;
+import org.hisp.dhis.rules.models.RuleEvent;
+import org.hisp.dhis.rules.models.RuleVariable;
+import org.hisp.dhis.rules.models.TriggerEnvironment;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -103,7 +112,7 @@ public class ConstantsValueTest
             .create( null, 1, "#{test_attribute} > 3", Arrays.asList( action ), "test_program_rule2", "" );
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule, rule2 ),
-            Maps.<String, String>newHashMap() );
+            new HashMap() );
 
         RuleEnrollment enrollment = RuleEnrollment.builder()
             .enrollment( "test_enrollment" )
@@ -138,7 +147,7 @@ public class ConstantsValueTest
             .create( null, 1, "#{test_attribute} > 3", Arrays.asList( action ), "test_program_rule2", "" );
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule, rule2 ),
-            Maps.<String, String>newHashMap() );
+            new HashMap() );
 
         RuleEnrollment enrollment = RuleEnrollment.builder()
             .enrollment( "test_enrollment" )

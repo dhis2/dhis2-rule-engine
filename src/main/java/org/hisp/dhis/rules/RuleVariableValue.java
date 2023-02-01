@@ -1,6 +1,7 @@
 package org.hisp.dhis.rules;
 
 import com.google.auto.value.AutoValue;
+import org.hisp.dhis.expression.spi.VariableValue;
 import org.hisp.dhis.rules.models.RuleValueType;
 
 import javax.annotation.Nonnull;
@@ -11,7 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @AutoValue
-public abstract class RuleVariableValue
+public abstract class RuleVariableValue implements VariableValue
 {
     private static final String DATE_PATTERN = "yyyy-MM-dd";
 
