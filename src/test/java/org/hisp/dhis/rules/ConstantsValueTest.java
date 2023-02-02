@@ -39,10 +39,13 @@ import org.hisp.dhis.rules.models.RuleEnrollment;
 import org.hisp.dhis.rules.models.RuleEvent;
 import org.hisp.dhis.rules.models.RuleVariable;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
+import org.hisp.dhis.rules.util.MockRule;
+import org.hisp.dhis.rules.util.MockRuleVariable;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -60,8 +63,8 @@ public class ConstantsValueTest
     public void shouldThrowExceptionIfConstantsValueMapIsNull()
     {
         RuleEngineContext.builder()
-            .rules( Arrays.asList( mock( org.hisp.dhis.rules.models.Rule.class ) ) )
-            .ruleVariables( Arrays.asList( mock( RuleVariable.class ) ) )
+            .rules( Arrays.asList( new MockRule()) )
+            .ruleVariables( Arrays.asList( new MockRuleVariable()) )
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( null )
             .build();
@@ -210,7 +213,7 @@ public class ConstantsValueTest
         return RuleEngineContext
             .builder()
             .rules( rules )
-            .ruleVariables( Arrays.<RuleVariable>asList() )
+            .ruleVariables( new ArrayList<>())
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( constantsValueMap )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );

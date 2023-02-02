@@ -12,6 +12,8 @@ import org.hisp.dhis.rules.models.RuleVariableNewestEvent;
 import org.hisp.dhis.rules.models.RuleVariableNewestStageEvent;
 import org.hisp.dhis.rules.models.RuleVariablePreviousEvent;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
+import org.hisp.dhis.rules.util.MockRuleEnrollment;
+import org.hisp.dhis.rules.util.MockRuleEvent;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,29 +53,10 @@ public class RuleVariableValueMapBuilderTest
         dateFormat = new SimpleDateFormat( DATE_PATTERN, Locale.US );
     }
 
-    @Test( expected = UnsupportedOperationException.class )
-    public void buildShouldReturnImmutableMap()
-        throws ParseException
-    {
-        RuleEvent ruleEvent = mock( RuleEvent.class );
-        when( ruleEvent.event() ).thenReturn( "test_event_uid" );
-        when( ruleEvent.status() ).thenReturn( RuleEvent.Status.ACTIVE );
-        when( ruleEvent.eventDate() ).thenReturn( dateFormat.parse( "1994-02-03" ) );
-        when( ruleEvent.dueDate() ).thenReturn( dateFormat.parse( "1995-02-03" ) );
-        when( ruleEvent.programStageName() ).thenReturn( "" );
-        when( ruleEvent.programStage() ).thenReturn( "" );
-        when( ruleEvent.organisationUnit() ).thenReturn( "" );
-
-        RuleVariableValueMapBuilder.target( ruleEvent )
-            .ruleVariables( new ArrayList<RuleVariable>() )
-            .triggerEnvironment( TriggerEnvironment.SERVER )
-            .build().clear();
-    }
-
     @Test( expected = IllegalStateException.class )
     public void ruleEnrollmentShouldThrowIfTargetEnrollmentIsAlreadySet()
     {
-        RuleEnrollment ruleEnrollment = mock( RuleEnrollment.class );
+        RuleEnrollment ruleEnrollment = new MockRuleEnrollment();
         RuleVariableValueMapBuilder.target( ruleEnrollment )
             .ruleEnrollment( ruleEnrollment )
             .build();

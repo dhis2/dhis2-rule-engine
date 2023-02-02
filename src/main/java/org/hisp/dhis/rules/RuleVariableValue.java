@@ -1,6 +1,7 @@
 package org.hisp.dhis.rules;
 
 import com.google.auto.value.AutoValue;
+import org.hisp.dhis.expression.spi.ValueType;
 import org.hisp.dhis.expression.spi.VariableValue;
 import org.hisp.dhis.rules.models.RuleValueType;
 
@@ -101,4 +102,20 @@ public abstract class RuleVariableValue implements VariableValue
 
     @Nullable
     public abstract String eventDate();
+
+    @Override
+    public final ValueType valueType() {
+        switch (type()) {
+            case DATE: return ValueType.DATE;
+            case NUMERIC: return ValueType.NUMBER;
+            case BOOLEAN: return ValueType.BOOLEAN;
+            default: return ValueType.STRING;
+        }
+    }
+
+    @Override
+    public final Object valueOrDefault() {
+        String value = value();
+        return value != null ? value : type().defaultValue();
+    }
 }

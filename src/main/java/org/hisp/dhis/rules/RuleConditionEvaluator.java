@@ -189,7 +189,9 @@ public class RuleConditionEvaluator
                 .supplementaryValues(supplementaryData)
                 .programRuleVariableValues(valueMap)
                 .build();
-        return convertInteger( expression.evaluate(name -> null, build) ).toString();
+        return convertInteger( expression.evaluate(name -> {
+            throw new UnsupportedOperationException(name);
+        }, build) ).toString();
     }
 
     private Object convertInteger( Object result )
@@ -199,14 +201,6 @@ public class RuleConditionEvaluator
             return ((Double) result).intValue();
         }
         return result;
-    }
-
-    private Boolean isOldAndroidVersion( Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        return valueMap.containsKey( "environment" ) &&
-            Objects.equals( valueMap.get( "environment" ).value(), TriggerEnvironment.ANDROIDCLIENT.getClientName() ) &&
-            supplementaryData.containsKey( "android_version" ) &&
-            Integer.parseInt( supplementaryData.get( "android_version" ).get( 0 ) ) < 21;
     }
 
     private Boolean isAssignToCalculatedValue( RuleAction ruleAction )

@@ -1,6 +1,9 @@
 package org.hisp.dhis.rules;
 
 import org.hisp.dhis.expression.Expression;
+import org.hisp.dhis.expression.spi.ID;
+import org.hisp.dhis.expression.spi.IllegalExpressionException;
+import org.hisp.dhis.expression.spi.ParseException;
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleEffect;
 import org.hisp.dhis.rules.models.RuleEffects;
@@ -152,7 +155,17 @@ public final class RuleEngine
 
     private RuleValidationResult getExpressionDescription( String expression, Class<?> klass )
     {
-        return RuleValidationResult.builder().isValid( true ).description( new Expression(expression).describe(new HashMap()) ).build();
+        try {
+            Map<String, String> displayNames = new HashMap<>();
+            for (Map.Entry<String, DataItem> e : ruleEngineContext.getDataItemStore().entrySet()) {
+                displayNames.put(e.getKey(), e.getValue().getDisplayName());
+            }
+            String description = new Expression(expression, Expression.Mode.RULE_ENGINE).describe(displayNames);
+            return RuleValidationResult.builder().isValid( true ).description(description).build();
+        } catch (IllegalExpressionException | ParseException ex) {
+            return RuleValidationResult.builder().isValid(false).exception(ex).errorMessage(ex.getMessage()).build();
+        }
+
     }
 
     public static class Builder

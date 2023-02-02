@@ -132,7 +132,7 @@ public class CalculatedValueTest
 
     private List<org.hisp.dhis.rules.models.Rule> createRules( int i )
     {
-        List<org.hisp.dhis.rules.models.Rule> rules = List.of();
+        List<org.hisp.dhis.rules.models.Rule> rules = new ArrayList<>();
         RuleAction assignAction = RuleActionAssign.create( "#{test_calculated_value}", "2+2", null );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
             .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1", "" );

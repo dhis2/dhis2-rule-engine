@@ -36,6 +36,7 @@ import org.hisp.dhis.rules.models.RuleActionAttribute;
 import org.hisp.dhis.rules.models.RuleEnrollment;
 import org.hisp.dhis.rules.models.RuleEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -46,7 +47,7 @@ class RuleEngineFilter
 {
     static List<Rule> filterRules( List<Rule> rules, RuleEnrollment ruleEnrollment )
     {
-        List<Rule> filteredRules = List.of();
+        List<Rule> filteredRules = new ArrayList<>();
 
         for ( Rule rule : rules )
         {
@@ -63,7 +64,7 @@ class RuleEngineFilter
 
     static List<Rule> filterRules( List<Rule> rules, RuleEvent ruleEvent )
     {
-        List<Rule> filteredRules = List.of();
+        List<Rule> filteredRules = new ArrayList<>();
 
         for ( Rule rule : rules )
         {
@@ -81,7 +82,7 @@ class RuleEngineFilter
 
     private static List<RuleAction> filterActionRules( List<RuleAction> ruleActions, AttributeType attributeType )
     {
-        List<RuleAction> filteredRuleActions = List.of();
+        List<RuleAction> filteredRuleActions = new ArrayList<>();
 
         for ( RuleAction ruleAction : ruleActions )
         {

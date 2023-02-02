@@ -1393,7 +1393,7 @@ public class RuleEngineFunctionTest
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "5.0" );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "5" );
     }
 
     @Test
@@ -1433,7 +1433,7 @@ public class RuleEngineFunctionTest
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "5.0" );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "5" );
     }
 
     @Test

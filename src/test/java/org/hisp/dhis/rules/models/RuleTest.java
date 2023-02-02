@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules.models;
 
+import org.hisp.dhis.rules.util.MockRuleAction;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -30,7 +31,7 @@ public class RuleTest
     @Test
     public void createShouldPropagatePropertiesCorrectly()
     {
-        RuleAction ruleAction = mock( RuleAction.class );
+        RuleAction ruleAction = new MockRuleAction();
 
         Rule rule = Rule.create( "test_program_stage", 1,
             "test_condition", Arrays.asList( ruleAction ), "", "uid" );
@@ -46,8 +47,8 @@ public class RuleTest
     @Test( expected = UnsupportedOperationException.class )
     public void createShouldReturnImmutableList()
     {
-        RuleAction ruleActionOne = mock( RuleAction.class );
-        RuleAction ruleActionTwo = mock( RuleAction.class );
+        RuleAction ruleActionOne = new MockRuleAction();
+        RuleAction ruleActionTwo = new MockRuleAction();
 
         List<RuleAction> actions = new ArrayList<>();
         actions.add( ruleActionOne );

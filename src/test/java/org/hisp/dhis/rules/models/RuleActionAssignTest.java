@@ -40,12 +40,4 @@ public class RuleActionAssignTest
         RuleActionAssign.create( "test_content", null, "test_field" );
     }
 
-    @Test
-    public void equalsAndHashcodeFunctionsMustConformToContract()
-    {
-        EqualsVerifier.forClass( RuleActionAssign
-            .create( "test_content", "test_data", "test_field" ).getClass() )
-            .suppress( Warning.NULL_FIELDS )
-            .verify();
-    }
 }

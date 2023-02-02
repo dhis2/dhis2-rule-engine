@@ -501,7 +501,7 @@ public class RuleEngineVariableNameTest
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "5.0" );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "5" );
     }
 
     @Test
@@ -541,7 +541,7 @@ public class RuleEngineVariableNameTest
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "5.0" );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "5" );
     }
 
     private RuleEngine getRuleEngine( Rule rule, List<RuleVariable> ruleVariables )

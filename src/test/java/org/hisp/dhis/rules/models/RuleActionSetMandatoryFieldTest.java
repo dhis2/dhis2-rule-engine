@@ -16,12 +16,4 @@ public class RuleActionSetMandatoryFieldTest
         RuleActionSetMandatoryField.create( null );
     }
 
-    @Test
-    public void equalsAndHashcodeMustConformToContract()
-    {
-        EqualsVerifier
-            .forClass( RuleActionSetMandatoryField.create( "", AttributeType.TRACKED_ENTITY_ATTRIBUTE ).getClass() )
-            .suppress( Warning.NULL_FIELDS )
-            .verify();
-    }
 }

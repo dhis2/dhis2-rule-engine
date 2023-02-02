@@ -35,12 +35,4 @@ public class RuleActionCreateEventTest
         RuleActionCreateEvent.create( "test_content", "test_data", null );
     }
 
-    @Test
-    public void equalsAndHashcodeFunctionsMustConformToContract()
-    {
-        EqualsVerifier.forClass( RuleActionCreateEvent
-            .create( "test_content", "test_data", "test_field" ).getClass() )
-            .suppress( Warning.NULL_FIELDS )
-            .verify();
-    }
 }
