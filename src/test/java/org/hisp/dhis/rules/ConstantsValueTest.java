@@ -37,7 +37,6 @@ import org.hisp.dhis.rules.models.RuleDataValue;
 import org.hisp.dhis.rules.models.RuleEffect;
 import org.hisp.dhis.rules.models.RuleEnrollment;
 import org.hisp.dhis.rules.models.RuleEvent;
-import org.hisp.dhis.rules.models.RuleVariable;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
 import org.hisp.dhis.rules.util.MockRule;
 import org.hisp.dhis.rules.util.MockRuleVariable;

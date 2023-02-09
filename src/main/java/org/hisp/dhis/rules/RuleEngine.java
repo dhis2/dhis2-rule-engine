@@ -1,9 +1,8 @@
 package org.hisp.dhis.rules;
 
-import org.hisp.dhis.expression.Expression;
-import org.hisp.dhis.expression.spi.ID;
-import org.hisp.dhis.expression.spi.IllegalExpressionException;
-import org.hisp.dhis.expression.spi.ParseException;
+import org.hisp.dhis.lib.expression.Expression;
+import org.hisp.dhis.lib.expression.spi.IllegalExpressionException;
+import org.hisp.dhis.lib.expression.spi.ParseException;
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleEffect;
 import org.hisp.dhis.rules.models.RuleEffects;

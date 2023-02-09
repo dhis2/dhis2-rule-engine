@@ -28,7 +28,7 @@ package org.hisp.dhis.rules;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.expression.spi.ParseException;
+import org.hisp.dhis.lib.expression.spi.ParseException;
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleAction;
 import org.hisp.dhis.rules.models.RuleActionDisplayKeyValuePair;
@@ -187,7 +187,7 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( conditionWithD2FunctionsTEA.condition() );
 
         assertNotNull( result );
-        assertEquals( "Variable_THREE", result.getDescription() );
+        assertEquals( "d2:hasValue(Variable_THREE)", result.getDescription() );
         assertTrue( result.isValid() );
     }
 
@@ -201,7 +201,7 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( conditionWithD2FunctionsTEA.condition() );
 
         assertNotNull( result );
-        assertEquals( "'test_var_three'=='email'", result.getDescription() );
+        assertEquals( "'test_var_three' == 'email'", result.getDescription() );
         assertTrue( result.isValid() );
     }
 
@@ -215,7 +215,7 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( conditionWithD2FunctionsTEA.condition() );
 
         assertNotNull( result );
-        assertEquals( "Variable_THREE=='email'", result.getDescription() );
+        assertEquals( "Variable_THREE == 'email'", result.getDescription() );
         assertTrue( result.isValid() );
     }
 

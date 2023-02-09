@@ -1,8 +1,8 @@
 package org.hisp.dhis.rules;
 
 import com.google.auto.value.AutoValue;
-import org.hisp.dhis.expression.spi.ValueType;
-import org.hisp.dhis.expression.spi.VariableValue;
+import org.hisp.dhis.lib.expression.spi.ValueType;
+import org.hisp.dhis.lib.expression.spi.VariableValue;
 import org.hisp.dhis.rules.models.RuleValueType;
 
 import javax.annotation.Nonnull;

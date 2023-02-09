@@ -1,9 +1,9 @@
 package org.hisp.dhis.rules;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hisp.dhis.expression.Expression;
-import org.hisp.dhis.expression.spi.ExpressionData;
-import org.hisp.dhis.expression.spi.IllegalExpressionException;
+import org.hisp.dhis.lib.expression.Expression;
+import org.hisp.dhis.lib.expression.spi.ExpressionData;
+import org.hisp.dhis.lib.expression.spi.IllegalExpressionException;
 import org.hisp.dhis.rules.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
