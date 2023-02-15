@@ -183,7 +183,7 @@ public class RuleConditionEvaluator
             return "";
         }
 
-        Expression expression = new Expression(condition, Expression.Mode.RULE_ENGINE);
+        Expression expression = new Expression(condition, Expression.Mode.RULE_ENGINE_CONDITION);
 
         ExpressionData build = ExpressionData.builder()
                 .supplementaryValues(supplementaryData)

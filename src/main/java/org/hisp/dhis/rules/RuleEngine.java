@@ -159,7 +159,7 @@ public final class RuleEngine
             for (Map.Entry<String, DataItem> e : ruleEngineContext.getDataItemStore().entrySet()) {
                 displayNames.put(e.getKey(), e.getValue().getDisplayName());
             }
-            String description = new Expression(expression, Expression.Mode.RULE_ENGINE).describe(displayNames);
+            String description = new Expression(expression, Expression.Mode.RULE_ENGINE_ACTION).describe(displayNames);
             return RuleValidationResult.builder().isValid( true ).description(description).build();
         } catch (IllegalExpressionException | ParseException ex) {
             return RuleValidationResult.builder().isValid(false).exception(ex).errorMessage(ex.getMessage()).build();
