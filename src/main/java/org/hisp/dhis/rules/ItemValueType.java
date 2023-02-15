@@ -28,6 +28,8 @@ package org.hisp.dhis.rules;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import org.hisp.dhis.lib.expression.spi.ValueType;
+
 /**
  * @author Zubair Asghar
  */
@@ -48,5 +50,15 @@ public enum ItemValueType
     public String getValue()
     {
         return value;
+    }
+
+    public ValueType toValueType(){
+        switch (this) {
+            case NUMBER: return ValueType.NUMBER;
+            case DATE: return ValueType.DATE;
+            case TEXT: return ValueType.STRING;
+            case BOOLEAN: return ValueType.BOOLEAN;
+        }
+        return ValueType.MIXED;
     }
 }

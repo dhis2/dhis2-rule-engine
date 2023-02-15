@@ -140,7 +140,7 @@ public class RuleEngineGetDescriptionTest
     @Test
     public void getDescriptionForLengthFunction()
     {
-        Rule rule = Rule.create( null, null, "d2:length(#{test_var_one})", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "d2:length(#{test_var_one}) > 0", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( rule.condition() );
@@ -148,14 +148,14 @@ public class RuleEngineGetDescriptionTest
         assertNotNull( result );
         assertTrue( result.isValid() );
 
-        rule = Rule.create( null, null, "d2:length(#{test_var_date_one})", Arrays.asList( ruleAction ), "", "" );
+        rule = Rule.create( null, null, "d2:length(#{test_var_date_one})  > 0 ", Arrays.asList( ruleAction ), "", "" );
 
         result = ruleEngine.evaluate( rule.condition() );
 
         assertNotNull( result );
         assertTrue( result.isValid() );
 
-        rule = Rule.create( null, null, "d2:length(#{test_var_number})", Arrays.asList( ruleAction ), "", "" );
+        rule = Rule.create( null, null, "d2:length(#{test_var_number}) > 0 ", Arrays.asList( ruleAction ), "", "" );
 
         result = ruleEngine.evaluate( rule.condition() );
 
@@ -275,7 +275,7 @@ public class RuleEngineGetDescriptionTest
     @Test
     public void testGetDescriptionWithD2FunctionDataElement()
     {
-        String condition = "#{test_var_one} > 0";
+        String condition = "#{test_var_number} > 0";
         Rule withoutD2DEFunctionRule = Rule.create( null, null, condition, Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();

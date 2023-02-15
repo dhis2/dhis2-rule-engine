@@ -3,6 +3,7 @@ package org.hisp.dhis.rules;
 import org.hisp.dhis.lib.expression.Expression;
 import org.hisp.dhis.lib.expression.spi.IllegalExpressionException;
 import org.hisp.dhis.lib.expression.spi.ParseException;
+import org.hisp.dhis.lib.expression.spi.ValueType;
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleEffect;
 import org.hisp.dhis.rules.models.RuleEffects;
@@ -142,24 +143,30 @@ public final class RuleEngine
     public RuleValidationResult evaluate( String expression )
     {
         // Rule condition expression should be evaluated against Boolean
-        return getExpressionDescription( expression, Boolean.class );
+        return getExpressionDescription( expression, Expression.Mode.RULE_ENGINE_CONDITION);
     }
 
     @Nonnull
     public RuleValidationResult evaluateDataFieldExpression( String expression )
     {
         // Rule action data field field should be evaluated against all i.e Boolean, String, Date and Numerical value
-        return getExpressionDescription( expression, null );
+        return getExpressionDescription( expression, Expression.Mode.RULE_ENGINE_ACTION);
     }
 
-    private RuleValidationResult getExpressionDescription( String expression, Class<?> klass )
+    private RuleValidationResult getExpressionDescription(String expression, Expression.Mode mode)
     {
         try {
+            Map<String, ValueType> validationMap = new HashMap<>();
+            for (Map.Entry<String, DataItem> e : ruleEngineContext.getDataItemStore().entrySet()) {
+                validationMap.put(e.getKey(), e.getValue().getValueType().toValueType());
+            }
+            new Expression(expression, mode).validate( validationMap );
+
             Map<String, String> displayNames = new HashMap<>();
             for (Map.Entry<String, DataItem> e : ruleEngineContext.getDataItemStore().entrySet()) {
                 displayNames.put(e.getKey(), e.getValue().getDisplayName());
             }
-            String description = new Expression(expression, Expression.Mode.RULE_ENGINE_ACTION).describe(displayNames);
+            String description = new Expression(expression, mode).describe(displayNames);
             return RuleValidationResult.builder().isValid( true ).description(description).build();
         } catch (IllegalExpressionException | ParseException ex) {
             return RuleValidationResult.builder().isValid(false).exception(ex).errorMessage(ex.getMessage()).build();

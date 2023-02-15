@@ -56,7 +56,7 @@ public class RuleConditionEvaluator
             try {
                 List<RuleEffect> ruleEffects = new ArrayList<>();
 
-            if ( Boolean.parseBoolean( process( rule.condition(), valueMap, supplementaryData ) ) )
+            if ( Boolean.parseBoolean( process( rule.condition(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_CONDITION) ) )
             {
                 for ( RuleAction action : rule.actions() )
                 {
@@ -68,7 +68,7 @@ public class RuleConditionEvaluator
                                 RuleActionAssign ruleActionAssign = (RuleActionAssign) action;
                                 updateValueMap(
                                         Utils.unwrapVariableName(ruleActionAssign.content()),
-                                        RuleVariableValue.create(process( ruleActionAssign.data(), valueMap, supplementaryData),
+                                        RuleVariableValue.create(process( ruleActionAssign.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION),
                                                 RuleValueType.TEXT),
                                         valueMap
                                 );
@@ -175,15 +175,15 @@ public class RuleConditionEvaluator
         return ruleList;
     }
 
-    private String process( String condition, Map<String, RuleVariableValue> valueMap,
-                            Map<String, List<String>> supplementaryData )
+    private String process(String condition, Map<String, RuleVariableValue> valueMap,
+                           Map<String, List<String>> supplementaryData, Expression.Mode mode)
     {
         if ( condition.isEmpty() )
         {
             return "";
         }
 
-        Expression expression = new Expression(condition, Expression.Mode.RULE_ENGINE_CONDITION);
+        Expression expression = new Expression(condition, mode);
 
         ExpressionData build = ExpressionData.builder()
                 .supplementaryValues(supplementaryData)
@@ -222,7 +222,7 @@ public class RuleConditionEvaluator
         if ( ruleAction instanceof RuleActionAssign )
         {
             RuleActionAssign ruleActionAssign = (RuleActionAssign) ruleAction;
-            String data = process( ruleActionAssign.data(), valueMap, supplementaryData );
+            String data = process( ruleActionAssign.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION);
             updateValueMap( ruleActionAssign.field(), RuleVariableValue.create( data, RuleValueType.TEXT ), valueMap );
             if ( StringUtils.isEmpty( data ) && StringUtils.isEmpty( ruleActionAssign.data() ) )
             {
@@ -234,6 +234,6 @@ public class RuleConditionEvaluator
             }
         }
 
-        return RuleEffect.create( rule.uid(), ruleAction, process( ruleAction.data(), valueMap, supplementaryData ) );
+        return RuleEffect.create( rule.uid(), ruleAction, process( ruleAction.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION) );
     }
 }
