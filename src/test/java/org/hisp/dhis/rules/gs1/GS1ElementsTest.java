@@ -1,5 +1,11 @@
 package org.hisp.dhis.rules.gs1;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 @RunWith(JUnit4.class)
 public class GS1ElementsTest {
     @Test
