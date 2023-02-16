@@ -148,19 +148,19 @@ public class RuleEngineGetDescriptionTest
         assertNotNull( result );
         assertTrue( result.isValid() );
 
-        rule = Rule.create( null, null, "d2:length(#{test_var_date_one})  > 0 ", Arrays.asList( ruleAction ), "", "" );
+        rule = Rule.create( null, null, "d2:length(#{test_var_date_one}) > 0 ", Arrays.asList( ruleAction ), "", "" );
 
         result = ruleEngine.evaluate( rule.condition() );
 
         assertNotNull( result );
-        assertTrue( result.isValid() );
+        assertFalse( result.isValid() );
 
         rule = Rule.create( null, null, "d2:length(#{test_var_number}) > 0 ", Arrays.asList( ruleAction ), "", "" );
 
         result = ruleEngine.evaluate( rule.condition() );
 
         assertNotNull( result );
-        assertTrue( result.isValid() );
+        assertFalse( result.isValid() );
     }
 
     @Test
@@ -262,7 +262,7 @@ public class RuleEngineGetDescriptionTest
     @Test
     public void testGetDescriptionD2FunctionAttribute()
     {
-        String condition = "A{test_var_one} > 0";
+        String condition = "A{test_var_number} > 0";
         Rule withoutD2AttFunctionRule = Rule.create( null, null, condition, Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
@@ -310,6 +310,7 @@ public class RuleEngineGetDescriptionTest
         assertNotNull( result );
         assertTrue( result.isValid() );
     }
+
     @Test
     public void testGetDescriptionWithSingleD2Function()
     {

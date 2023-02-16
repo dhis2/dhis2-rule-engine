@@ -39,11 +39,6 @@ public abstract class RuleVariableAttribute
     {
         Map<String, RuleVariableValue> valueMap = new HashMap();
 
-        if ( builder.ruleEnrollment == null )
-        {
-            return valueMap;
-        }
-
         String currentDate = dateFormat.format( new Date() );
 
         RuleVariableValue variableValue;

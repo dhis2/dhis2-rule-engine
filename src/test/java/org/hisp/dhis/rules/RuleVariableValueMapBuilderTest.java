@@ -541,7 +541,7 @@ public class RuleVariableValueMapBuilderTest
             .triggerEnvironment( TriggerEnvironment.SERVER )
             .build();
 
-        assertThat( valueMap.size() ).isEqualTo( 14 );
+        assertThat( valueMap.size() ).isEqualTo( 15 );
 
         assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( currentDate ) )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( currentDate );

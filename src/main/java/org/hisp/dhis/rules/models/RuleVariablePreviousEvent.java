@@ -31,10 +31,6 @@ public abstract class RuleVariablePreviousEvent
         Map<String, RuleDataValue> currentEventValues )
     {
         Map<String, RuleVariableValue> valueMap = new HashMap();
-        if ( builder.ruleEvent == null )
-        {
-            return valueMap;
-        }
 
         RuleVariableValue variableValue = null;
         List<RuleDataValue> ruleDataValues = allEventValues.get( this.dataElement() );

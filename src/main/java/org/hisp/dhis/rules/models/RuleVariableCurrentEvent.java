@@ -31,10 +31,6 @@ public abstract class RuleVariableCurrentEvent
         Map<String, RuleDataValue> currentEventValues )
     {
         Map<String, RuleVariableValue> valueMap = new HashMap();
-        if ( builder.ruleEvent == null )
-        {
-            return valueMap;
-        }
 
         RuleVariableValue variableValue;
 
