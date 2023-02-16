@@ -30,6 +30,7 @@ package org.hisp.dhis.rules.gs1;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 public enum GS1Elements {
@@ -282,13 +283,29 @@ public enum GS1Elements {
             default:
                 for ( GS1Elements gs1Elements : GS1Elements.values() )
                 {
-                    if (gs1Elements.getElement().equals( key ))
+                    boolean keyIsGs1Element = gs1Elements.getElement().equals( key );
+                    boolean keyIsGs1Name = keyIsGs1Name(gs1Elements, key);
+                    if ( keyIsGs1Element || keyIsGs1Name )
                     {
                         return gs1Elements;
                     }
                 }
                 throw new IllegalArgumentException( "invalid or not supported gs1 key" );
         }
+    }
+
+    private static boolean keyIsGs1Name( GS1Elements gs1Element, String key )
+    {
+        String gs1ElementSimplified = simplifiedGS1Key( gs1Element.name() );
+        String keySimplified = simplifiedGS1Key( key );
+        return gs1ElementSimplified.equals( keySimplified );
+    }
+
+    private static String simplifiedGS1Key( String value ){
+        return value.toLowerCase()
+                .replace( " ","" )
+                .replace( "_","" )
+                .replace( "-","" );
     }
 
     public static String getApplicationIdentifier( String gs1Group )
