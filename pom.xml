@@ -289,9 +289,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.hisp.dhis.parser</groupId>
-            <artifactId>dhis-expression-parser</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <groupId>org.hisp.dhis.lib.expression</groupId>
+            <artifactId>expression-parser</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
