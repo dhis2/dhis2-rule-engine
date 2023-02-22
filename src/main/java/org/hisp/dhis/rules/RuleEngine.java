@@ -143,23 +143,15 @@ public final class RuleEngine
     @Nonnull
     public RuleValidationResult evaluate( String expression )
     {
-        try {
-            // Rule condition expression should be evaluated against Boolean
-            return getExpressionDescription(expression, Expression.Mode.RULE_ENGINE_CONDITION);
-        } catch (ParseException ex){
-            throw new RuleEngineValidationException(ex.getMessage());
-        }
+        // Rule condition expression should be evaluated against Boolean
+        return getExpressionDescription(expression, Expression.Mode.RULE_ENGINE_CONDITION);
     }
 
     @Nonnull
     public RuleValidationResult evaluateDataFieldExpression( String expression )
     {
-        try{
-            // Rule action data field field should be evaluated against all i.e Boolean, String, Date and Numerical value
-            return getExpressionDescription( expression, Expression.Mode.RULE_ENGINE_ACTION);
-        } catch (ParseException ex){
-            throw new RuleEngineValidationException(ex.getMessage());
-        }
+        // Rule action data field field should be evaluated against all i.e Boolean, String, Date and Numerical value
+        return getExpressionDescription( expression, Expression.Mode.RULE_ENGINE_ACTION);
     }
 
     private RuleValidationResult getExpressionDescription(String expression, Expression.Mode mode)
@@ -178,9 +170,12 @@ public final class RuleEngine
             String description = new Expression(expression, mode).describe(displayNames);
             return RuleValidationResult.builder().isValid( true ).description(description).build();
         } catch (IllegalExpressionException | ParseException ex) {
-            return RuleValidationResult.builder().isValid(false).exception(ex).errorMessage(ex.getMessage()).build();
+            return RuleValidationResult.builder()
+                    .isValid(false)
+                    .exception(new RuleEngineValidationException(ex.getMessage()))
+                    .errorMessage(ex.getMessage())
+                    .build();
         }
-
     }
 
     public static class Builder
