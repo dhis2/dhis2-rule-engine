@@ -7,6 +7,7 @@ import org.hisp.dhis.lib.expression.spi.ValueType;
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleEffect;
 import org.hisp.dhis.rules.models.RuleEffects;
+import org.hisp.dhis.rules.models.RuleEngineValidationException;
 import org.hisp.dhis.rules.models.RuleEnrollment;
 import org.hisp.dhis.rules.models.RuleEvent;
 import org.hisp.dhis.rules.models.RuleValidationResult;
@@ -142,15 +143,23 @@ public final class RuleEngine
     @Nonnull
     public RuleValidationResult evaluate( String expression )
     {
-        // Rule condition expression should be evaluated against Boolean
-        return getExpressionDescription( expression, Expression.Mode.RULE_ENGINE_CONDITION);
+        try {
+            // Rule condition expression should be evaluated against Boolean
+            return getExpressionDescription(expression, Expression.Mode.RULE_ENGINE_CONDITION);
+        } catch (ParseException ex){
+            throw new RuleEngineValidationException(ex.getMessage());
+        }
     }
 
     @Nonnull
     public RuleValidationResult evaluateDataFieldExpression( String expression )
     {
-        // Rule action data field field should be evaluated against all i.e Boolean, String, Date and Numerical value
-        return getExpressionDescription( expression, Expression.Mode.RULE_ENGINE_ACTION);
+        try{
+            // Rule action data field field should be evaluated against all i.e Boolean, String, Date and Numerical value
+            return getExpressionDescription( expression, Expression.Mode.RULE_ENGINE_ACTION);
+        } catch (ParseException ex){
+            throw new RuleEngineValidationException(ex.getMessage());
+        }
     }
 
     private RuleValidationResult getExpressionDescription(String expression, Expression.Mode mode)
