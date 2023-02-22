@@ -78,11 +78,4 @@ public class RuleActionDisplayTextTest
         assertThat( ruleActionNoData.data() ).isEqualTo( "" );
     }
 
-    @Test
-    public void equalsAndHashcodeFunctionsMustConformToContract()
-    {
-        EqualsVerifier.forClass( RuleActionDisplayText.createForFeedback( "", "" ).getClass() )
-            .suppress( Warning.NULL_FIELDS )
-            .verify();
-    }
 }

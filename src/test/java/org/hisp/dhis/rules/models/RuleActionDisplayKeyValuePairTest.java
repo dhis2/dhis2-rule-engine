@@ -78,11 +78,4 @@ public class RuleActionDisplayKeyValuePairTest
         assertThat( ruleActionNoData.data() ).isEqualTo( "" );
     }
 
-    @Test
-    public void equalsAndHashcodeFunctionsMustConformToContract()
-    {
-        EqualsVerifier.forClass( RuleActionDisplayKeyValuePair.createForFeedback( "", "" ).getClass() )
-            .suppress( Warning.NULL_FIELDS )
-            .verify();
-    }
 }

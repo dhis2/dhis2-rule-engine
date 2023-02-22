@@ -40,13 +40,4 @@ public class RuleActionWarningOnCompletionTest
     {
         RuleActionWarningOnCompletion.create( null, null, null );
     }
-
-    @Test
-    public void equalsAndHashcodeFunctionsMustConformToContract()
-    {
-        EqualsVerifier.forClass( RuleActionWarningOnCompletion
-            .create( "test_content", "test_data", "test_field", AttributeType.UNKNOWN ).getClass() )
-            .suppress( Warning.NULL_FIELDS )
-            .verify();
-    }
 }

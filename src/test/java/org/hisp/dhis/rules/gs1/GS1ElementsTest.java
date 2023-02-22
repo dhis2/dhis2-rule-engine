@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules.gs1;
 
+import org.hisp.dhis.lib.expression.math.GS1Elements;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

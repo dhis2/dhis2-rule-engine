@@ -1,18 +1,15 @@
 package org.hisp.dhis.rules;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hisp.dhis.antlr.Parser;
-import org.hisp.dhis.antlr.ParserExceptionWithoutContext;
+import org.hisp.dhis.lib.expression.Expression;
+import org.hisp.dhis.lib.expression.spi.ExpressionData;
+import org.hisp.dhis.lib.expression.spi.IllegalExpressionException;
 import org.hisp.dhis.rules.models.*;
-import org.hisp.dhis.rules.parser.expression.CommonExpressionVisitor;
-import org.hisp.dhis.rules.utils.RuleEngineUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.util.*;
-
-import static org.hisp.dhis.rules.parser.expression.ParserUtils.FUNCTION_EVALUATE;
 
 public class RuleConditionEvaluator
 {
@@ -59,7 +56,7 @@ public class RuleConditionEvaluator
             try {
                 List<RuleEffect> ruleEffects = new ArrayList<>();
 
-            if ( Boolean.parseBoolean( process( rule.condition(), valueMap, supplementaryData ) ) )
+            if ( Boolean.parseBoolean( process( rule.condition(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_CONDITION) ) )
             {
                 for ( RuleAction action : rule.actions() )
                 {
@@ -71,7 +68,7 @@ public class RuleConditionEvaluator
                                 RuleActionAssign ruleActionAssign = (RuleActionAssign) action;
                                 updateValueMap(
                                         Utils.unwrapVariableName(ruleActionAssign.content()),
-                                        RuleVariableValue.create(process( ruleActionAssign.data(), valueMap, supplementaryData),
+                                        RuleVariableValue.create(process( ruleActionAssign.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION),
                                                 RuleValueType.TEXT),
                                         valueMap
                                 );
@@ -110,7 +107,7 @@ public class RuleConditionEvaluator
                                     String targetUid, List<RuleEvaluationResult> ruleEvaluationResults )
     {
         String errorMessage;
-        if ( ruleAction != null && e instanceof ParserExceptionWithoutContext )
+        if ( ruleAction != null && e instanceof IllegalExpressionException)
         {
             errorMessage = "Action " + ruleAction.getClass().getName() +
                     " from rule " + rule.name() + " with id " + rule.uid() +
@@ -126,7 +123,7 @@ public class RuleConditionEvaluator
                     " with condition (" + rule.condition() + ")" +
                     " raised an unexpected exception: " + e.getMessage();
         }
-        else if(e instanceof ParserExceptionWithoutContext)
+        else if(e instanceof IllegalExpressionException)
         {
             errorMessage = "Rule " + rule.name() + " with id " + rule.uid() +
                     " executed for " + targetType.getName() + "(" + targetUid + ")" +
@@ -178,23 +175,23 @@ public class RuleConditionEvaluator
         return ruleList;
     }
 
-    private String process( String condition, Map<String, RuleVariableValue> valueMap,
-                            Map<String, List<String>> supplementaryData )
+    private String process(String condition, Map<String, RuleVariableValue> valueMap,
+                           Map<String, List<String>> supplementaryData, Expression.Mode mode)
     {
         if ( condition.isEmpty() )
         {
             return "";
         }
 
-        CommonExpressionVisitor commonExpressionVisitor = CommonExpressionVisitor.newBuilder()
-            .withFunctionMap( RuleEngineUtils.FUNCTIONS )
-            .withFunctionMethod( FUNCTION_EVALUATE )
-            .withVariablesMap( valueMap )
-            .withSupplementaryData( supplementaryData )
-            .validateCommonProperties();
+        Expression expression = new Expression(condition, mode);
 
-        Object result = Parser.visit( condition, commonExpressionVisitor, !isOldAndroidVersion( valueMap, supplementaryData ) );
-        return convertInteger( result ).toString();
+        ExpressionData build = ExpressionData.builder()
+                .supplementaryValues(supplementaryData)
+                .programRuleVariableValues(valueMap)
+                .build();
+        return convertInteger( expression.evaluate(name -> {
+            throw new UnsupportedOperationException(name);
+        }, build) ).toString();
     }
 
     private Object convertInteger( Object result )
@@ -204,14 +201,6 @@ public class RuleConditionEvaluator
             return ((Double) result).intValue();
         }
         return result;
-    }
-
-    private Boolean isOldAndroidVersion( Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
-    {
-        return valueMap.containsKey( "environment" ) &&
-            Objects.equals( valueMap.get( "environment" ).value(), TriggerEnvironment.ANDROIDCLIENT.getClientName() ) &&
-            supplementaryData.containsKey( "android_version" ) &&
-            Integer.parseInt( supplementaryData.get( "android_version" ).get( 0 ) ) < 21;
     }
 
     private Boolean isAssignToCalculatedValue( RuleAction ruleAction )
@@ -233,7 +222,7 @@ public class RuleConditionEvaluator
         if ( ruleAction instanceof RuleActionAssign )
         {
             RuleActionAssign ruleActionAssign = (RuleActionAssign) ruleAction;
-            String data = process( ruleActionAssign.data(), valueMap, supplementaryData );
+            String data = process( ruleActionAssign.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION);
             updateValueMap( ruleActionAssign.field(), RuleVariableValue.create( data, RuleValueType.TEXT ), valueMap );
             if ( StringUtils.isEmpty( data ) && StringUtils.isEmpty( ruleActionAssign.data() ) )
             {
@@ -245,6 +234,6 @@ public class RuleConditionEvaluator
             }
         }
 
-        return RuleEffect.create( rule.uid(), ruleAction, process( ruleAction.data(), valueMap, supplementaryData ) );
+        return RuleEffect.create( rule.uid(), ruleAction, process( ruleAction.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION) );
     }
 }

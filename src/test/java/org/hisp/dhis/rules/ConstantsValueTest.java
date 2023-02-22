@@ -28,12 +28,23 @@ package org.hisp.dhis.rules;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.google.common.collect.Maps;
-import org.hisp.dhis.rules.models.*;
+import org.hisp.dhis.rules.models.Rule;
+import org.hisp.dhis.rules.models.RuleAction;
+import org.hisp.dhis.rules.models.RuleActionAssign;
+import org.hisp.dhis.rules.models.RuleActionShowError;
+import org.hisp.dhis.rules.models.RuleAttributeValue;
+import org.hisp.dhis.rules.models.RuleDataValue;
+import org.hisp.dhis.rules.models.RuleEffect;
+import org.hisp.dhis.rules.models.RuleEnrollment;
+import org.hisp.dhis.rules.models.RuleEvent;
+import org.hisp.dhis.rules.models.TriggerEnvironment;
+import org.hisp.dhis.rules.util.MockRule;
+import org.hisp.dhis.rules.util.MockRuleVariable;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -51,8 +62,8 @@ public class ConstantsValueTest
     public void shouldThrowExceptionIfConstantsValueMapIsNull()
     {
         RuleEngineContext.builder()
-            .rules( Arrays.asList( mock( org.hisp.dhis.rules.models.Rule.class ) ) )
-            .ruleVariables( Arrays.asList( mock( RuleVariable.class ) ) )
+            .rules( Arrays.asList( new MockRule()) )
+            .ruleVariables( Arrays.asList( new MockRuleVariable()) )
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( null )
             .build();
@@ -103,7 +114,7 @@ public class ConstantsValueTest
             .create( null, 1, "#{test_attribute} > 3", Arrays.asList( action ), "test_program_rule2", "" );
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule, rule2 ),
-            Maps.<String, String>newHashMap() );
+            new HashMap() );
 
         RuleEnrollment enrollment = RuleEnrollment.builder()
             .enrollment( "test_enrollment" )
@@ -138,7 +149,7 @@ public class ConstantsValueTest
             .create( null, 1, "#{test_attribute} > 3", Arrays.asList( action ), "test_program_rule2", "" );
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule, rule2 ),
-            Maps.<String, String>newHashMap() );
+            new HashMap() );
 
         RuleEnrollment enrollment = RuleEnrollment.builder()
             .enrollment( "test_enrollment" )
@@ -201,7 +212,7 @@ public class ConstantsValueTest
         return RuleEngineContext
             .builder()
             .rules( rules )
-            .ruleVariables( Arrays.<RuleVariable>asList() )
+            .ruleVariables( new ArrayList<>())
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( constantsValueMap )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );

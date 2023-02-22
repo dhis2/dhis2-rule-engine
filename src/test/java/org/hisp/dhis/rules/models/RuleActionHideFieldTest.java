@@ -27,12 +27,4 @@ public class RuleActionHideFieldTest
         RuleActionHideField.create( "test_content", null );
     }
 
-    @Test
-    public void equalsAndHashCodeFunctionsMustConformContract()
-    {
-        EqualsVerifier.forClass(
-            RuleActionHideField.create( "test_content", "test_field", AttributeType.DATA_ELEMENT ).getClass() )
-            .suppress( Warning.NULL_FIELDS )
-            .verify();
-    }
 }

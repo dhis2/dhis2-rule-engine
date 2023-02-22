@@ -2,10 +2,13 @@ package org.hisp.dhis.rules;
 
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleVariable;
+import org.hisp.dhis.rules.util.MockRule;
+import org.hisp.dhis.rules.util.MockRuleVariable;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
@@ -21,13 +24,14 @@ import static org.mockito.Mockito.mock;
 @RunWith( JUnit4.class )
 public class RuleEngineContextTest
 {
-    @Before
-    public void setUp()
-        throws Exception
-    {
-        MockitoAnnotations.initMocks( this );
-    }
+    private RuleVariable ruleVariable = new MockRuleVariable();
 
+    private RuleVariable ruleVariableTwo = new MockRuleVariable();
+
+    private Rule rule = new MockRule();
+
+    private Rule ruleTwo = new MockRule();
+    
     @Test( expected = IllegalArgumentException.class )
     public void builderShouldThrowOnNullVariableList()
     {
@@ -47,12 +51,6 @@ public class RuleEngineContextTest
     @Test
     public void builderShouldContainImmutableCopyOfRules()
     {
-        RuleVariable ruleVariableOne = mock( RuleVariable.class );
-        RuleVariable ruleVariableTwo = mock( RuleVariable.class );
-
-        Rule ruleOne = mock( Rule.class );
-        Rule ruleTwo = mock( Rule.class );
-
         List<String> members = Arrays.asList( "one", "two" );
         Map<String, List<String>> supplementaryData = new HashMap<>();
         supplementaryData.put( "text-key", members );
@@ -60,8 +58,8 @@ public class RuleEngineContextTest
         List<RuleVariable> ruleVariables = new ArrayList<>();
         List<Rule> rules = new ArrayList<>();
 
-        ruleVariables.add( ruleVariableOne );
-        rules.add( ruleOne );
+        ruleVariables.add( ruleVariable );
+        rules.add( rule );
 
         RuleEngineContext ruleEngineContext = RuleEngineContext.builder()
             .ruleVariables( ruleVariables )
@@ -73,14 +71,14 @@ public class RuleEngineContextTest
         rules.add( ruleTwo );
 
         assertThat( ruleEngineContext.ruleVariables().size() ).isEqualTo( 1 );
-        assertThat( ruleEngineContext.ruleVariables().get( 0 ) ).isEqualTo( ruleVariableOne );
+        assertThat( ruleEngineContext.ruleVariables().get( 0 ) ).isEqualTo( ruleVariable );
 
         assertThat( ruleEngineContext.supplementaryData().size() ).isEqualTo( 1 );
         assertThat( ruleEngineContext.supplementaryData().get( "text-key" ) ).isNotNull();
         assertThat( ruleEngineContext.supplementaryData().get( "text-key" ) ).isEqualTo( members );
 
         assertThat( ruleEngineContext.rules().size() ).isEqualTo( 1 );
-        assertThat( ruleEngineContext.rules().get( 0 ) ).isEqualTo( ruleOne );
+        assertThat( ruleEngineContext.rules().get( 0 ) ).isEqualTo( rule );
 
         try
         {
@@ -107,9 +105,9 @@ public class RuleEngineContextTest
     public void toEngineBuilderShouldReturnNewInstances()
     {
         RuleEngineContext ruleEngineContext = RuleEngineContext.builder()
-            .ruleVariables( Arrays.asList( mock( RuleVariable.class ) ) )
+            .ruleVariables( Arrays.asList( new MockRuleVariable() ) )
             .supplementaryData( new HashMap<String, List<String>>() )
-            .rules( Arrays.asList( mock( Rule.class ) ) )
+            .rules( Arrays.asList( new MockRule() ) )
             .build();
 
         RuleEngine.Builder ruleEngineBuilderOne = ruleEngineContext.toEngineBuilder();

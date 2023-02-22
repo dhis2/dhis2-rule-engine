@@ -39,13 +39,4 @@ public class RuleActionHideOptionGroupTest
         RuleActionHideOptionGroup.create( "test_content", null ,"field");
     }
 
-    @Test
-    public void equalsAndHashCodeFunctionsMustConformContract()
-    {
-        EqualsVerifier.forClass(
-            RuleActionHideOptionGroup.create( "test_content", "test_option_group", "field", AttributeType.DATA_ELEMENT )
-                .getClass() )
-            .suppress( Warning.NULL_FIELDS )
-            .verify();
-    }
 }

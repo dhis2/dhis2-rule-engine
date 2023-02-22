@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules.models;
 
+import org.hisp.dhis.rules.util.MockRuleAttributeValue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -53,9 +54,9 @@ public class RuleEnrollmentTest
     @Test
     public void createShouldPropagatePropertiesCorrectly()
     {
-        RuleAttributeValue ruleAttributeValueOne = mock( RuleAttributeValue.class );
-        RuleAttributeValue ruleAttributeValueTwo = mock( RuleAttributeValue.class );
-        RuleAttributeValue ruleAttributeValueThree = mock( RuleAttributeValue.class );
+        RuleAttributeValue ruleAttributeValueOne = new MockRuleAttributeValue();
+        RuleAttributeValue ruleAttributeValueTwo = new MockRuleAttributeValue();
+        RuleAttributeValue ruleAttributeValueThree = new MockRuleAttributeValue();
 
         Date incidentDate = new Date();
         Date enrollmentDate = new Date();
@@ -77,9 +78,9 @@ public class RuleEnrollmentTest
     @Test( expected = UnsupportedOperationException.class )
     public void createShouldReturnImmutableList()
     {
-        RuleAttributeValue ruleAttributeValueOne = mock( RuleAttributeValue.class );
-        RuleAttributeValue ruleAttributeValueTwo = mock( RuleAttributeValue.class );
-        RuleAttributeValue ruleAttributeValueThree = mock( RuleAttributeValue.class );
+        RuleAttributeValue ruleAttributeValueOne = new MockRuleAttributeValue();
+        RuleAttributeValue ruleAttributeValueTwo = new MockRuleAttributeValue();
+        RuleAttributeValue ruleAttributeValueThree = new MockRuleAttributeValue();
 
         List<RuleAttributeValue> attributeValues = new ArrayList<>();
         attributeValues.add( ruleAttributeValueOne );

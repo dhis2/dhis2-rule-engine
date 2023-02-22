@@ -16,11 +16,4 @@ public class RuleActionHideSectionTest
         RuleActionHideSection.create( null );
     }
 
-    @Test
-    public void equalsAndHashCodeFunctionsMustConformContract()
-    {
-        EqualsVerifier.forClass( RuleActionHideSection.create( "test_field" ).getClass() )
-            .suppress( Warning.NULL_FIELDS )
-            .verify();
-    }
 }

@@ -1,6 +1,17 @@
 package org.hisp.dhis.rules;
 
-import org.hisp.dhis.rules.models.*;
+import org.hisp.dhis.rules.models.Rule;
+import org.hisp.dhis.rules.models.RuleAction;
+import org.hisp.dhis.rules.models.RuleActionDisplayKeyValuePair;
+import org.hisp.dhis.rules.models.RuleActionDisplayText;
+import org.hisp.dhis.rules.models.RuleDataValue;
+import org.hisp.dhis.rules.models.RuleEffect;
+import org.hisp.dhis.rules.models.RuleEvent;
+import org.hisp.dhis.rules.models.RuleValueType;
+import org.hisp.dhis.rules.models.RuleVariable;
+import org.hisp.dhis.rules.models.RuleVariableCurrentEvent;
+import org.hisp.dhis.rules.models.RuleVariableNewestEvent;
+import org.hisp.dhis.rules.models.TriggerEnvironment;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -490,7 +501,7 @@ public class RuleEngineVariableNameTest
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "5.0" );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "5" );
     }
 
     @Test
@@ -530,7 +541,7 @@ public class RuleEngineVariableNameTest
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "5.0" );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "5" );
     }
 
     private RuleEngine getRuleEngine( Rule rule, List<RuleVariable> ruleVariables )

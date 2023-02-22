@@ -1,13 +1,13 @@
 package org.hisp.dhis.rules.models;
 
 import com.google.auto.value.AutoValue;
-import com.google.common.collect.Maps;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueMapBuilder;
 import org.hisp.dhis.rules.Utils;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +35,7 @@ public abstract class RuleVariableNewestStageEvent
         Map<String, RuleAttributeValue> currentEnrollmentValues,
         Map<String, RuleDataValue> currentEventValues )
     {
-        Map<String, RuleVariableValue> valueMap = Maps.newHashMap();
+        Map<String, RuleVariableValue> valueMap = new HashMap();
         List<RuleDataValue> stageRuleDataValues = new ArrayList<>();
         List<RuleDataValue> sourceRuleDataValues = allEventValues.get( this.dataElement() );
         if ( sourceRuleDataValues != null && !sourceRuleDataValues.isEmpty() )

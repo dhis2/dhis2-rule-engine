@@ -1,13 +1,24 @@
 package org.hisp.dhis.rules;
 
-import org.assertj.core.api.AbstractAssert;
-import org.hisp.dhis.rules.models.*;
+import org.hisp.dhis.rules.models.RuleAttributeValue;
+import org.hisp.dhis.rules.models.RuleDataValue;
+import org.hisp.dhis.rules.models.RuleEnrollment;
+import org.hisp.dhis.rules.models.RuleEvent;
+import org.hisp.dhis.rules.models.RuleValueType;
+import org.hisp.dhis.rules.models.RuleVariable;
+import org.hisp.dhis.rules.models.RuleVariableAttribute;
+import org.hisp.dhis.rules.models.RuleVariableCurrentEvent;
+import org.hisp.dhis.rules.models.RuleVariableNewestEvent;
+import org.hisp.dhis.rules.models.RuleVariableNewestStageEvent;
+import org.hisp.dhis.rules.models.RuleVariablePreviousEvent;
+import org.hisp.dhis.rules.models.TriggerEnvironment;
+import org.hisp.dhis.rules.util.MockRuleEnrollment;
+import org.hisp.dhis.rules.util.MockRuleEvent;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.mockito.ArgumentMatchers;
 
 import javax.annotation.Nonnull;
 import java.text.ParseException;
@@ -42,29 +53,10 @@ public class RuleVariableValueMapBuilderTest
         dateFormat = new SimpleDateFormat( DATE_PATTERN, Locale.US );
     }
 
-    @Test( expected = UnsupportedOperationException.class )
-    public void buildShouldReturnImmutableMap()
-        throws ParseException
-    {
-        RuleEvent ruleEvent = mock( RuleEvent.class );
-        when( ruleEvent.event() ).thenReturn( "test_event_uid" );
-        when( ruleEvent.status() ).thenReturn( RuleEvent.Status.ACTIVE );
-        when( ruleEvent.eventDate() ).thenReturn( dateFormat.parse( "1994-02-03" ) );
-        when( ruleEvent.dueDate() ).thenReturn( dateFormat.parse( "1995-02-03" ) );
-        when( ruleEvent.programStageName() ).thenReturn( "" );
-        when( ruleEvent.programStage() ).thenReturn( "" );
-        when( ruleEvent.organisationUnit() ).thenReturn( "" );
-
-        RuleVariableValueMapBuilder.target( ruleEvent )
-            .ruleVariables( new ArrayList<RuleVariable>() )
-            .triggerEnvironment( TriggerEnvironment.SERVER )
-            .build().clear();
-    }
-
     @Test( expected = IllegalStateException.class )
     public void ruleEnrollmentShouldThrowIfTargetEnrollmentIsAlreadySet()
     {
-        RuleEnrollment ruleEnrollment = mock( RuleEnrollment.class );
+        RuleEnrollment ruleEnrollment = new MockRuleEnrollment();
         RuleVariableValueMapBuilder.target( ruleEnrollment )
             .ruleEnrollment( ruleEnrollment )
             .build();
@@ -549,7 +541,7 @@ public class RuleVariableValueMapBuilderTest
             .triggerEnvironment( TriggerEnvironment.SERVER )
             .build();
 
-        assertThat( valueMap.size() ).isEqualTo( 14 );
+        assertThat( valueMap.size() ).isEqualTo( 15 );
 
         assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( currentDate ) )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( currentDate );

@@ -28,24 +28,19 @@ package org.hisp.dhis.rules.models;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.google.common.collect.Lists;
 import org.hisp.dhis.rules.RuleEngine;
 import org.hisp.dhis.rules.RuleEngineContext;
-import org.hisp.dhis.rules.RuleExpressionEvaluator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 /**
  * @author Zubair Asghar.
@@ -137,7 +132,7 @@ public class CalculatedValueTest
 
     private List<org.hisp.dhis.rules.models.Rule> createRules( int i )
     {
-        ArrayList<org.hisp.dhis.rules.models.Rule> rules = Lists.newArrayList();
+        List<org.hisp.dhis.rules.models.Rule> rules = new ArrayList<>();
         RuleAction assignAction = RuleActionAssign.create( "#{test_calculated_value}", "2+2", null );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
             .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1", "" );

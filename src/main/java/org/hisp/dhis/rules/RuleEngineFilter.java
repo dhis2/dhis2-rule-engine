@@ -28,10 +28,15 @@ package org.hisp.dhis.rules;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
-import org.hisp.dhis.rules.models.*;
+import org.hisp.dhis.rules.models.AttributeType;
+import org.hisp.dhis.rules.models.Rule;
+import org.hisp.dhis.rules.models.RuleAction;
+import org.hisp.dhis.rules.models.RuleActionAttribute;
+import org.hisp.dhis.rules.models.RuleEnrollment;
+import org.hisp.dhis.rules.models.RuleEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,7 +47,7 @@ class RuleEngineFilter
 {
     static List<Rule> filterRules( List<Rule> rules, RuleEnrollment ruleEnrollment )
     {
-        List<Rule> filteredRules = Lists.newArrayList();
+        List<Rule> filteredRules = new ArrayList<>();
 
         for ( Rule rule : rules )
         {
@@ -59,7 +64,7 @@ class RuleEngineFilter
 
     static List<Rule> filterRules( List<Rule> rules, RuleEvent ruleEvent )
     {
-        List<Rule> filteredRules = Lists.newArrayList();
+        List<Rule> filteredRules = new ArrayList<>();
 
         for ( Rule rule : rules )
         {
@@ -77,7 +82,7 @@ class RuleEngineFilter
 
     private static List<RuleAction> filterActionRules( List<RuleAction> ruleActions, AttributeType attributeType )
     {
-        List<RuleAction> filteredRuleActions = Lists.newArrayList();
+        List<RuleAction> filteredRuleActions = new ArrayList<>();
 
         for ( RuleAction ruleAction : ruleActions )
         {

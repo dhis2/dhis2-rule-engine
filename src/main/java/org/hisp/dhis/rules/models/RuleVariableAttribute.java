@@ -1,13 +1,13 @@
 package org.hisp.dhis.rules.models;
 
 import com.google.auto.value.AutoValue;
-import com.google.common.collect.Maps;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueMapBuilder;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,12 +37,7 @@ public abstract class RuleVariableAttribute
         Map<String, RuleAttributeValue> currentEnrollmentValues,
         Map<String, RuleDataValue> currentEventValues )
     {
-        Map<String, RuleVariableValue> valueMap = Maps.newHashMap();
-
-        if ( builder.ruleEnrollment == null )
-        {
-            return valueMap;
-        }
+        Map<String, RuleVariableValue> valueMap = new HashMap();
 
         String currentDate = dateFormat.format( new Date() );
 

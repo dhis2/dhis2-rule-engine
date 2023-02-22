@@ -28,7 +28,12 @@ package org.hisp.dhis.rules;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.rules.models.*;
+import org.hisp.dhis.lib.expression.spi.ParseException;
+import org.hisp.dhis.rules.models.Rule;
+import org.hisp.dhis.rules.models.RuleAction;
+import org.hisp.dhis.rules.models.RuleActionDisplayKeyValuePair;
+import org.hisp.dhis.rules.models.RuleValidationResult;
+import org.hisp.dhis.rules.models.TriggerEnvironment;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -40,9 +45,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Zubair Asghar
@@ -132,7 +140,7 @@ public class RuleEngineGetDescriptionTest
     @Test
     public void getDescriptionForLengthFunction()
     {
-        Rule rule = Rule.create( null, null, "d2:length(#{test_var_one})", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "d2:length(#{test_var_one}) > 0", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( rule.condition() );
@@ -140,19 +148,19 @@ public class RuleEngineGetDescriptionTest
         assertNotNull( result );
         assertTrue( result.isValid() );
 
-        rule = Rule.create( null, null, "d2:length(#{test_var_date_one})", Arrays.asList( ruleAction ), "", "" );
+        rule = Rule.create( null, null, "d2:length(#{test_var_date_one}) > 0 ", Arrays.asList( ruleAction ), "", "" );
 
         result = ruleEngine.evaluate( rule.condition() );
 
         assertNotNull( result );
-        assertTrue( result.isValid() );
+        assertFalse( result.isValid() );
 
-        rule = Rule.create( null, null, "d2:length(#{test_var_number})", Arrays.asList( ruleAction ), "", "" );
+        rule = Rule.create( null, null, "d2:length(#{test_var_number}) > 0 ", Arrays.asList( ruleAction ), "", "" );
 
         result = ruleEngine.evaluate( rule.condition() );
 
         assertNotNull( result );
-        assertTrue( result.isValid() );
+        assertFalse( result.isValid() );
     }
 
     @Test
@@ -179,7 +187,7 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( conditionWithD2FunctionsTEA.condition() );
 
         assertNotNull( result );
-        assertEquals( "Variable_THREE", result.getDescription() );
+        assertEquals( "d2:hasValue(Variable_THREE)", result.getDescription() );
         assertTrue( result.isValid() );
     }
 
@@ -254,7 +262,7 @@ public class RuleEngineGetDescriptionTest
     @Test
     public void testGetDescriptionD2FunctionAttribute()
     {
-        String condition = "A{test_var_one} > 0";
+        String condition = "A{test_var_number} > 0";
         Rule withoutD2AttFunctionRule = Rule.create( null, null, condition, Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
@@ -267,7 +275,7 @@ public class RuleEngineGetDescriptionTest
     @Test
     public void testGetDescriptionWithD2FunctionDataElement()
     {
-        String condition = "#{test_var_one} > 0";
+        String condition = "#{test_var_number} > 0";
         Rule withoutD2DEFunctionRule = Rule.create( null, null, condition, Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
@@ -302,6 +310,7 @@ public class RuleEngineGetDescriptionTest
         assertNotNull( result );
         assertTrue( result.isValid() );
     }
+
     @Test
     public void testGetDescriptionWithSingleD2Function()
     {
@@ -361,12 +370,12 @@ public class RuleEngineGetDescriptionTest
         result = ruleEngine.evaluateDataFieldExpression( "1 + 1 +" );
         assertNotNull( result );
         assertFalse( result.isValid() );
-        assertThat( result.getException(), instanceOf( IllegalStateException.class ) );
+        assertThat( result.getException(), instanceOf( ParseException.class ) );
 
         result = ruleEngine.evaluateDataFieldExpression( "d2:hasValue(#{test_var_two}) && d2:count(#{test_var_one}) > 0 (" );
         assertNotNull( result );
         assertFalse( result.isValid() );
-        assertThat( result.getException(), instanceOf( IllegalStateException.class ) );
+        assertThat( result.getException(), instanceOf( ParseException.class ) );
     }
 
     private RuleEngine.Builder getRuleEngineBuilderForDescription( Map<String, DataItem> itemStore )
