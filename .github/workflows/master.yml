@@ -36,6 +36,8 @@ jobs:
         with:
           java-version: 11
           distribution: temurin
+      - name: Test
+        run: mvn -B versions:set -DremoveSnapshot -DgenerateBackupPoms=false
       - name: Release Maven package
         uses: samuelmeuli/action-maven-publish@v1
         with:
