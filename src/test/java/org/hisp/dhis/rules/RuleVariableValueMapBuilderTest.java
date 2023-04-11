@@ -13,7 +13,6 @@ import org.hisp.dhis.rules.models.RuleVariableNewestStageEvent;
 import org.hisp.dhis.rules.models.RuleVariablePreviousEvent;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
 import org.hisp.dhis.rules.util.MockRuleEnrollment;
-import org.hisp.dhis.rules.util.MockRuleEvent;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +31,6 @@ import java.util.Map;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.hisp.dhis.rules.RuleVariableValueAssert.assertThatVariable;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith( JUnit4.class )
 public class RuleVariableValueMapBuilderTest
@@ -67,9 +65,9 @@ public class RuleVariableValueMapBuilderTest
         throws ParseException
     {
         RuleVariable ruleVariableOne = RuleVariableCurrentEvent.create(
-            "test_variable_one", "test_dataelement_one", RuleValueType.TEXT );
+            "test_variable_one", "test_dataelement_one", RuleValueType.TEXT, true, new ArrayList<>());
         RuleVariable ruleVariableTwo = RuleVariableCurrentEvent.create(
-            "test_variable_two", "test_dataelement_two", RuleValueType.TEXT );
+            "test_variable_two", "test_dataelement_two", RuleValueType.TEXT, true, new ArrayList<>());
 
         Date eventDate = dateFormat.parse( "2015-01-01" );
         Date dueDate = dateFormat.parse( "2016-01-01" );
@@ -134,9 +132,9 @@ public class RuleVariableValueMapBuilderTest
         throws ParseException
     {
         RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
-            "test_variable_one", "test_dataelement_one", RuleValueType.TEXT );
+            "test_variable_one", "test_dataelement_one", RuleValueType.TEXT, true, new ArrayList<>());
         RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
-            "test_variable_two", "test_dataelement_two", RuleValueType.TEXT );
+            "test_variable_two", "test_dataelement_two", RuleValueType.TEXT, true, new ArrayList<>());
 
         Date oldestEventDate = dateFormat.parse( "2013-01-01" );
         Date newestEventDate = dateFormat.parse( "2017-01-01" );
@@ -198,9 +196,9 @@ public class RuleVariableValueMapBuilderTest
         throws ParseException
     {
         RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
-            "test_variable_one", "test_dataelement_one", RuleValueType.TEXT );
+            "test_variable_one", "test_dataelement_one", RuleValueType.TEXT, true, new ArrayList<>());
         RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
-            "test_variable_two", "test_dataelement_two", RuleValueType.TEXT );
+            "test_variable_two", "test_dataelement_two", RuleValueType.TEXT, true, new ArrayList<>());
 
         Date dateEventOne = dateFormat.parse( "2013-01-01" );
         Date dateEventTwo = dateFormat.parse( "2014-01-01" );
@@ -267,7 +265,7 @@ public class RuleVariableValueMapBuilderTest
         throws ParseException
     {
         RuleVariable ruleVariable = RuleVariableNewestStageEvent.create( "test_variable",
-            "test_dataelement", "test_program_stage_one", RuleValueType.TEXT );
+            "test_dataelement", "test_program_stage_one", RuleValueType.TEXT, true, new ArrayList<>());
 
         Date dateEventOne = dateFormat.parse( "2014-02-03" );
         Date dateEventTwo = dateFormat.parse( "2014-03-03" );
@@ -326,7 +324,7 @@ public class RuleVariableValueMapBuilderTest
         throws ParseException
     {
         RuleVariable ruleVariable = RuleVariableNewestStageEvent.create( "test_variable",
-            "test_dataelement", "test_program_stage_one", RuleValueType.TEXT );
+            "test_dataelement", "test_program_stage_one", RuleValueType.TEXT, true, new ArrayList<>());
 
         Date dateEventOne = dateFormat.parse( "2014-03-03" );
         Date dateEventTwo = dateFormat.parse( "2015-02-03" );
@@ -372,7 +370,7 @@ public class RuleVariableValueMapBuilderTest
         throws ParseException
     {
         RuleVariable ruleVariable = RuleVariablePreviousEvent.create( "test_variable",
-            "test_dataelement", RuleValueType.TEXT );
+            "test_dataelement", RuleValueType.TEXT, true, new ArrayList<>());
 
         Date dateEventOne = dateFormat.parse( "2014-02-03" );
         Date dateEventTwo = dateFormat.parse( "2014-03-03" );
@@ -431,9 +429,9 @@ public class RuleVariableValueMapBuilderTest
         throws ParseException
     {
         RuleVariable ruleVariableOne = RuleVariableAttribute.create( "test_variable_one",
-            "test_attribute_one", RuleValueType.TEXT );
+            "test_attribute_one", RuleValueType.TEXT, true, new ArrayList<>());
         RuleVariable ruleVariableTwo = RuleVariableAttribute.create( "test_variable_two",
-            "test_attribute_two", RuleValueType.TEXT );
+            "test_attribute_two", RuleValueType.TEXT, true, new ArrayList<>());
 
         Date eventDate = dateFormat.parse( "2015-01-01" );
         Date enrollmentDate = dateFormat.parse( "2014-03-01" );
@@ -515,11 +513,11 @@ public class RuleVariableValueMapBuilderTest
         throws ParseException
     {
         RuleVariable ruleVariableOne = RuleVariableAttribute.create( "test_variable_one",
-            "test_attribute_one", RuleValueType.NUMERIC );
+            "test_attribute_one", RuleValueType.NUMERIC, true, new ArrayList<>());
         RuleVariable ruleVariableTwo = RuleVariableAttribute.create( "test_variable_two",
-            "test_attribute_two", RuleValueType.TEXT );
+            "test_attribute_two", RuleValueType.TEXT, true, new ArrayList<>());
         RuleVariable ruleVariableThree = RuleVariableCurrentEvent.create( "test_variable_three",
-            "test_dataelement_one", RuleValueType.BOOLEAN );
+            "test_dataelement_one", RuleValueType.BOOLEAN, true, new ArrayList<>());
 
         String currentDate = dateFormat.format( new Date() );
         Date enrollmentDate = dateFormat.parse( "2017-02-02" );
@@ -578,11 +576,11 @@ public class RuleVariableValueMapBuilderTest
         throws ParseException
     {
         RuleVariable ruleVariableOne = RuleVariableAttribute.create( "test_variable_one",
-            "test_attribute_one", RuleValueType.NUMERIC );
+            "test_attribute_one", RuleValueType.NUMERIC, true, new ArrayList<>());
         RuleVariable ruleVariableTwo = RuleVariableAttribute.create( "test_variable_two",
-            "test_attribute_two", RuleValueType.TEXT );
+            "test_attribute_two", RuleValueType.TEXT, true, new ArrayList<>());
         RuleVariable ruleVariableThree = RuleVariableCurrentEvent.create( "test_variable_three",
-            "test_dataelement_one", RuleValueType.BOOLEAN );
+            "test_dataelement_one", RuleValueType.BOOLEAN, true, new ArrayList<>());
 
         String currentDate = dateFormat.format( new Date() );
         Date enrollmentDate = dateFormat.parse( "2017-02-02" );

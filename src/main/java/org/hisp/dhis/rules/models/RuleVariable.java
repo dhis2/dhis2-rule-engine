@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules.models;
 
+import org.hisp.dhis.rules.Option;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueMapBuilder;
 
@@ -20,6 +21,11 @@ public abstract class RuleVariable
      */
     @Nonnull
     public abstract String name();
+
+    public abstract boolean useCodeForOptionSet();
+
+    @Nonnull
+    public abstract List<Option> options();
 
     public abstract Map<String, RuleVariableValue> createValues( RuleVariableValueMapBuilder builder,
         Map<String, List<RuleDataValue>> allEventValues,

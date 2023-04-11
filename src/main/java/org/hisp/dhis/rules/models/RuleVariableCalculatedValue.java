@@ -29,6 +29,7 @@ package org.hisp.dhis.rules.models;
  */
 
 import com.google.auto.value.AutoValue;
+import org.hisp.dhis.rules.Option;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueMapBuilder;
 
@@ -46,10 +47,10 @@ public abstract class RuleVariableCalculatedValue
     extends RuleVariable
 {
     @Nonnull
-    public static RuleVariableCalculatedValue create( @Nonnull String name,
-        @Nonnull String variable, @Nonnull RuleValueType variableType )
+    public static RuleVariableCalculatedValue create(@Nonnull String name,
+                                                     @Nonnull String variable, @Nonnull RuleValueType variableType, boolean useCodeForOptionSet, List<Option> options)
     {
-        return new AutoValue_RuleVariableCalculatedValue( name, variable, variableType );
+        return new AutoValue_RuleVariableCalculatedValue( name, useCodeForOptionSet, options, variable, variableType );
     }
 
     @Nonnull

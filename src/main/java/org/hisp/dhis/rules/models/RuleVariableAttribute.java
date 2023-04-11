@@ -1,6 +1,7 @@
 package org.hisp.dhis.rules.models;
 
 import com.google.auto.value.AutoValue;
+import org.hisp.dhis.rules.Option;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueMapBuilder;
 
@@ -10,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.hisp.dhis.rules.Utils.dateFormat;
 
@@ -19,10 +21,10 @@ public abstract class RuleVariableAttribute
 {
 
     @Nonnull
-    public static RuleVariableAttribute create( @Nonnull String name,
-        @Nonnull String attribute, @Nonnull RuleValueType attributeType )
+    public static RuleVariableAttribute create(@Nonnull String name,
+                                               @Nonnull String attribute, @Nonnull RuleValueType attributeType, boolean useCodeForOptionSet, List<Option> options)
     {
-        return new AutoValue_RuleVariableAttribute( name, attribute, attributeType );
+        return new AutoValue_RuleVariableAttribute( name, useCodeForOptionSet, options, attribute, attributeType );
     }
 
     @Nonnull
@@ -47,8 +49,28 @@ public abstract class RuleVariableAttribute
         {
             RuleAttributeValue value = currentEnrollmentValues
                 .get( this.trackedEntityAttribute() );
-            variableValue = RuleVariableValue.create( value.value(), this.trackedEntityAttributeType(),
-                Arrays.asList( value.value() ), currentDate );
+
+            if ( !this.useCodeForOptionSet() )
+            {
+                // if no option found then existing value in the context will be used
+                String optionName = value.value();
+
+                for ( Option op : options() )
+                {
+                    if (op.getCode().equals( value.value() ) )
+                    {
+                        optionName = op.getName();
+                    }
+                }
+
+                variableValue = RuleVariableValue.create( optionName, this.trackedEntityAttributeType(),
+                        Arrays.asList( value.value() ), currentDate );
+            }
+            else
+            {
+                variableValue = RuleVariableValue.create( value.value(), this.trackedEntityAttributeType(),
+                        Arrays.asList( value.value() ), currentDate );
+            }
         }
         else
         {

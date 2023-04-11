@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -67,19 +68,19 @@ public class RuleEngineVariableNameTest
         RuleAction ruleAction10 = RuleActionDisplayKeyValuePair.createForFeedback(
             "test_action_content", "d2:round(A{" + VARIABLE_NAME + "})" );
         RuleVariable ruleVariable1 = RuleVariableNewestEvent.create(
-            UID01, "test_data_element1", RuleValueType.NUMERIC );
+            UID01, "test_data_element1", RuleValueType.NUMERIC, true, new ArrayList<>());
         RuleVariable ruleVariable2 = RuleVariableNewestEvent.create(
-            VARIABLE_NAME, "test_data_element2", RuleValueType.NUMERIC );
+            VARIABLE_NAME, "test_data_element2", RuleValueType.NUMERIC, true, new ArrayList<>());
         RuleVariable ruleVariable3 = RuleVariableNewestEvent.create(
-            UID0, "test_data_element3", RuleValueType.NUMERIC );
+            UID0, "test_data_element3", RuleValueType.NUMERIC, true, new ArrayList<>());
         RuleVariable ruleVariable4 = RuleVariableNewestEvent.create(
-            UID0WILD, "test_data_element4", RuleValueType.NUMERIC );
+            UID0WILD, "test_data_element4", RuleValueType.NUMERIC, true, new ArrayList<>());
         RuleVariable ruleVariable5 = RuleVariableNewestEvent.create(
-            UID01WILD, "test_data_element5", RuleValueType.NUMERIC );
+            UID01WILD, "test_data_element5", RuleValueType.NUMERIC, true, new ArrayList<>());
         RuleVariable ruleVariable6 = RuleVariableNewestEvent.create(
-            UID012, "test_data_element6", RuleValueType.NUMERIC );
+            UID012, "test_data_element6", RuleValueType.NUMERIC, true, new ArrayList<>());
         RuleVariable ruleVariable7 = RuleVariableNewestEvent.create(
-            UID0WILD2, "test_data_element7", RuleValueType.NUMERIC );
+            UID0WILD2, "test_data_element7", RuleValueType.NUMERIC, true, new ArrayList<>());
 
         List<RuleAction> actions = Arrays
             .asList( ruleAction1, ruleAction2, ruleAction3, ruleAction4, ruleAction5, ruleAction6, ruleAction7,
@@ -139,7 +140,7 @@ public class RuleEngineVariableNameTest
         RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
             "test_action_content", "d2:hasValue(#{" + UID01 + "})" );
         RuleVariable ruleVariable = RuleVariableCurrentEvent.create(
-            UID01, "test_data_element", RuleValueType.TEXT );
+            UID01, "test_data_element", RuleValueType.TEXT, true, new ArrayList<>());
         Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable ) );
@@ -161,7 +162,7 @@ public class RuleEngineVariableNameTest
         RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
             "test_action_content", "d2:hasValue(#{" + VARIABLE_NAME + "})" );
         RuleVariable ruleVariable = RuleVariableCurrentEvent.create(
-            VARIABLE_NAME, "test_data_element", RuleValueType.TEXT );
+            VARIABLE_NAME, "test_data_element", RuleValueType.TEXT, true, new ArrayList<>());
         Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable ) );
@@ -183,7 +184,7 @@ public class RuleEngineVariableNameTest
         RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
             "test_action_content", "d2:countIfValue(#{" + VARIABLE_NAME + "}, 'condition')" );
         RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
-            VARIABLE_NAME, "test_data_element_one", RuleValueType.TEXT );
+            VARIABLE_NAME, "test_data_element_one", RuleValueType.TEXT, true, new ArrayList<>());
 
         Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
@@ -215,7 +216,7 @@ public class RuleEngineVariableNameTest
         RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
             "test_action_content", "d2:countIfValue(#{" + UID01 + "}, 'condition')" );
         RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
-            UID01, "test_data_element_one", RuleValueType.TEXT );
+            UID01, "test_data_element_one", RuleValueType.TEXT, true, new ArrayList<>());
 
         Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
@@ -247,10 +248,10 @@ public class RuleEngineVariableNameTest
         RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
             "test_action_content", "d2:count(#{" + VARIABLE_NAME + "})" );
         RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
-            VARIABLE_NAME, "test_data_element_one", RuleValueType.TEXT );
+            VARIABLE_NAME, "test_data_element_one", RuleValueType.TEXT, true, new ArrayList<>());
 
         RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT );
+            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, new ArrayList<>());
 
         Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
@@ -286,10 +287,10 @@ public class RuleEngineVariableNameTest
         RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
             "test_action_content", "d2:count(#{" + UID01 + "})" );
         RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
-            UID01, "test_data_element_one", RuleValueType.TEXT );
+            UID01, "test_data_element_one", RuleValueType.TEXT, true, new ArrayList<>());
 
         RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT );
+            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, new ArrayList<>());
 
         Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
@@ -325,7 +326,7 @@ public class RuleEngineVariableNameTest
         RuleAction ruleAction = RuleActionDisplayText.createForFeedback(
             "test_action_content", "d2:countIfZeroPos(#{" + VARIABLE_NAME + "})" );
         RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
-            VARIABLE_NAME, "test_data_element_one", RuleValueType.NUMERIC );
+            VARIABLE_NAME, "test_data_element_one", RuleValueType.NUMERIC, true, new ArrayList<>());
 
         Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
@@ -358,7 +359,7 @@ public class RuleEngineVariableNameTest
         RuleAction ruleAction = RuleActionDisplayText.createForFeedback(
             "test_action_content", "d2:countIfZeroPos(#{" + UID01 + "})" );
         RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
-            UID01, "test_data_element_one", RuleValueType.NUMERIC );
+            UID01, "test_data_element_one", RuleValueType.NUMERIC, true, new ArrayList<>());
 
         Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
@@ -391,10 +392,10 @@ public class RuleEngineVariableNameTest
         RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
             "test_action_content", "true" );
         RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
-            VARIABLE_NAME, "test_data_element_one", RuleValueType.NUMERIC );
+            VARIABLE_NAME, "test_data_element_one", RuleValueType.NUMERIC, true, new ArrayList<>());
 
         RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT );
+            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, new ArrayList<>());
 
         Rule rule = Rule
             .create( null, null, "d2:maxValue(#{" + VARIABLE_NAME + "}) == 8.0", Arrays.asList( ruleAction ), "", "" );
@@ -431,10 +432,10 @@ public class RuleEngineVariableNameTest
         RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
             "test_action_content", "true" );
         RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
-            UID01, "test_data_element_one", RuleValueType.NUMERIC );
+            UID01, "test_data_element_one", RuleValueType.NUMERIC, true, new ArrayList<>());
 
         RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT );
+            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, new ArrayList<>());
 
         Rule rule = Rule
             .create( null, null, "d2:maxValue(#{" + UID01 + "}) == 8.0", Arrays.asList( ruleAction ), "", "" );
@@ -471,10 +472,10 @@ public class RuleEngineVariableNameTest
         RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
             "test_action_content", "d2:minValue(#{" + VARIABLE_NAME + "})" );
         RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
-            VARIABLE_NAME, "test_data_element_one", RuleValueType.NUMERIC );
+            VARIABLE_NAME, "test_data_element_one", RuleValueType.NUMERIC, true, new ArrayList<>());
 
         RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT );
+            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, new ArrayList<>());
 
         Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
@@ -511,10 +512,10 @@ public class RuleEngineVariableNameTest
         RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
             "test_action_content", "d2:minValue(#{" + UID01 + "})" );
         RuleVariable ruleVariableOne = RuleVariableNewestEvent.create(
-            UID01, "test_data_element_one", RuleValueType.NUMERIC );
+            UID01, "test_data_element_one", RuleValueType.NUMERIC, true, new ArrayList<>());
 
         RuleVariable ruleVariableTwo = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT );
+            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, new ArrayList<>());
 
         Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
