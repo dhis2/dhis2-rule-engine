@@ -24,9 +24,9 @@ public class Option
         return code;
     }
 
-    public static DataItem.Builder builder()
+    public static Option.Builder builder()
     {
-        return new DataItem.Builder();
+        return new Option.Builder();
     }
 
     public static class Builder
