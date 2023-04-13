@@ -8,11 +8,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 
-/*
- * ToDo - add support for next properties:
- *   1) Boolean useCode()
- *   2) List<Option> options()
- */
+
 public abstract class RuleVariable
 {
     /**
