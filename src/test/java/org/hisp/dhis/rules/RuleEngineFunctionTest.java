@@ -38,8 +38,10 @@ import static org.junit.Assert.assertTrue;
 public class RuleEngineFunctionTest
 {
     private static final String DATE_PATTERN = "yyyy-MM-dd";
+    private static final boolean USE_CODE_FOR_OPTION_SET = true;
+    private static final boolean USE_NAME_FOR_OPTION_SET = !USE_CODE_FOR_OPTION_SET;
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat( DATE_PATTERN, Locale.US );
+    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat( DATE_PATTERN, Locale.US );
 
     @Test
     public void evaluateFailingRule()
@@ -136,6 +138,60 @@ public class RuleEngineFunctionTest
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
         assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "true" );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+    }
+
+    @Test
+    public void optionSetNameShouldBeUsed()
+            throws Exception
+    {
+        Option option1 = Option.builder().name("name1").code("code1").build();
+        Option option2 = Option.builder().name("name2").code("code2").build();
+
+        List<Option> options = Arrays.asList( option1, option2 );
+
+        RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+                "test_action_content", "#{test_variable}" );
+        RuleVariable ruleVariable = RuleVariableCurrentEvent.create(
+                "test_variable", "test_data_element", RuleValueType.TEXT, USE_NAME_FOR_OPTION_SET, options);
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
+
+        RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable ) );
+
+        RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList( RuleDataValue.create(
+                        new Date(), "test_program_stage", "test_data_element", option1.getCode() ) ), "", null);
+        List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
+
+        assertThat( ruleEffects ).hasSize( 1 );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( option1.getName() );
+        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+    }
+
+    @Test
+    public void optionSetCodeShouldBeUsed()
+            throws Exception
+    {
+        Option option1 = Option.builder().name("name1").code("code1").build();
+        Option option2 = Option.builder().name("name2").code("code2").build();
+
+        List<Option> options = Arrays.asList( option1, option2 );
+
+        RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+                "test_action_content", "#{test_variable}" );
+        RuleVariable ruleVariable = RuleVariableCurrentEvent.create(
+                "test_variable", "test_data_element", RuleValueType.TEXT, USE_CODE_FOR_OPTION_SET, options);
+        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
+
+        RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable ) );
+
+        RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
+                RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList( RuleDataValue.create(
+                        new Date(), "test_program_stage", "test_data_element", option2.getCode() ) ), "", null);
+        List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
+
+        assertThat( ruleEffects ).hasSize( 1 );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( option2.getCode() );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
     }
 
@@ -1476,6 +1532,6 @@ public class RuleEngineFunctionTest
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
-        assertEquals( dateFormat.format( dayAfterTomorrow ), ruleEffects.get( 0 ).data() );
+        assertEquals( DATE_FORMAT.format( dayAfterTomorrow ), ruleEffects.get( 0 ).data() );
     }
 }
