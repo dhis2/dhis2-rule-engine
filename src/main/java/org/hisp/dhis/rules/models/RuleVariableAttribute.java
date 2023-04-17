@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.hisp.dhis.rules.Utils.dateFormat;
 
@@ -52,16 +51,7 @@ public abstract class RuleVariableAttribute
 
             if ( !this.useCodeForOptionSet() )
             {
-                // if no option found then existing value in the context will be used
-                String optionName = value.value();
-
-                for ( Option op : options() )
-                {
-                    if (op.getCode().equals( value.value() ) )
-                    {
-                        optionName = op.getName();
-                    }
-                }
+                String optionName = getOptionName( value.value() );
 
                 variableValue = RuleVariableValue.create( optionName, this.trackedEntityAttributeType(),
                         Arrays.asList( value.value() ), currentDate );

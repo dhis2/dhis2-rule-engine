@@ -65,7 +65,7 @@ public abstract class RuleVariableNewestStageEvent
 
             if ( !this.useCodeForOptionSet() )
             {
-                String optionName = getOptionName( options(), value );
+                String optionName = getOptionName( value.value() );
 
                 variableValue = RuleVariableValue.create( optionName,
                         this.dataElementType(), Utils.values( stageRuleDataValues ),

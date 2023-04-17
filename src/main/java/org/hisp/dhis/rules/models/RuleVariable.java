@@ -27,4 +27,20 @@ public abstract class RuleVariable
         Map<String, List<RuleDataValue>> allEventValues,
         Map<String, RuleAttributeValue> currentEnrollmentValues,
         Map<String, RuleDataValue> currentEventValues );
+
+    public String getOptionName( String value )
+    {
+        // if no option found then existing value in the context will be used
+        String optionName = value;
+
+        for ( Option op : options() )
+        {
+            if (op.getCode().equals( value ) )
+            {
+                optionName = op.getName();
+            }
+        }
+
+        return optionName;
+    }
 }

@@ -41,7 +41,7 @@ public abstract class RuleVariableCurrentEvent
 
             if ( !this.useCodeForOptionSet() )
             {
-               String optionName = getOptionName( options(), value );
+               String optionName = getOptionName( value.value() );
 
                variableValue = RuleVariableValue.create( optionName, this.dataElementType(),
                         Arrays.asList( value.value() ), getLastUpdateDate( Arrays.asList( value ) ) );

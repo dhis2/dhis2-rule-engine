@@ -45,7 +45,7 @@ public abstract class RuleVariablePreviousEvent
                 {
                     if ( !this.useCodeForOptionSet() )
                     {
-                        String optionName = getOptionName( options(), ruleDataValue );
+                        String optionName = getOptionName( ruleDataValue.value() );
 
                         variableValue = RuleVariableValue.create( optionName, this.dataElementType(),
                                 Utils.values( ruleDataValues ),

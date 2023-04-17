@@ -7,7 +7,6 @@ import org.hisp.dhis.rules.RuleVariableValueMapBuilder;
 import org.hisp.dhis.rules.Utils;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +46,7 @@ public abstract class RuleVariableNewestEvent
 
             if ( !this.useCodeForOptionSet() )
             {
-                String optionName = getOptionName( options(), value );
+                String optionName = getOptionName( value.value() );
 
                 variableValue = RuleVariableValue.create( optionName,
                         this.dataElementType(), Utils.values( ruleDataValues ), getLastUpdateDate( ruleDataValues ) );
