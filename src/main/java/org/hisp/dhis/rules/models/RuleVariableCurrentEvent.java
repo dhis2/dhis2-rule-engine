@@ -39,18 +39,10 @@ public abstract class RuleVariableCurrentEvent
         {
             RuleDataValue value = currentEventValues.get( this.dataElement() );
 
-            if ( !this.useCodeForOptionSet() )
-            {
-               String optionName = getOptionName( value.value() );
+            String optionValue = this.useCodeForOptionSet() ? value.value() : getOptionName( value.value() );
 
-               variableValue = RuleVariableValue.create( optionName, this.dataElementType(),
-                        Arrays.asList( value.value() ), getLastUpdateDate( Arrays.asList( value ) ) );
-            }
-            else
-            {
-                variableValue = RuleVariableValue.create( value.value(), this.dataElementType(),
-                        Arrays.asList( value.value() ), getLastUpdateDate( Arrays.asList( value ) ) );
-            }
+            variableValue = RuleVariableValue.create( optionValue, this.dataElementType(),
+                List.of( optionValue ), getLastUpdateDate( List.of( value ) ) );
         }
         else
         {

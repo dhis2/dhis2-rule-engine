@@ -43,22 +43,12 @@ public abstract class RuleVariablePreviousEvent
                 // which is assumed to be best candidate.
                 if ( builder.ruleEvent.eventDate().compareTo( ruleDataValue.eventDate() ) > 0 )
                 {
-                    if ( !this.useCodeForOptionSet() )
-                    {
-                        String optionName = getOptionName( ruleDataValue.value() );
+                    String optionValue = this.useCodeForOptionSet() ? ruleDataValue.value() : getOptionName( ruleDataValue.value() );
 
-                        variableValue = RuleVariableValue.create( optionName, this.dataElementType(),
-                                Utils.values( ruleDataValues ),
-                                getLastUpdateDateForPrevious( ruleDataValues, builder.ruleEvent ) );
-                        break;
-                    }
-                    else
-                    {
-                        variableValue = RuleVariableValue.create( ruleDataValue.value(), this.dataElementType(),
-                                Utils.values( ruleDataValues ),
-                                getLastUpdateDateForPrevious( ruleDataValues, builder.ruleEvent ) );
-                        break;
-                    }
+                    variableValue = RuleVariableValue.create( optionValue, this.dataElementType(),
+                        Utils.values( ruleDataValues ),
+                        getLastUpdateDateForPrevious( ruleDataValues, builder.ruleEvent ) );
+
                 }
             }
         }

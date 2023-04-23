@@ -44,18 +44,11 @@ public abstract class RuleVariableNewestEvent
 
             RuleDataValue value = ruleDataValues.get( 0 );
 
-            if ( !this.useCodeForOptionSet() )
-            {
-                String optionName = getOptionName( value.value() );
+            String optionValue = this.useCodeForOptionSet() ? value.value() : getOptionName( value.value() );
 
-                variableValue = RuleVariableValue.create( optionName,
-                        this.dataElementType(), Utils.values( ruleDataValues ), getLastUpdateDate( ruleDataValues ) );
-            }
-            else
-            {
-                variableValue = RuleVariableValue.create( value.value(),
-                        this.dataElementType(), Utils.values( ruleDataValues ), getLastUpdateDate( ruleDataValues ) );
-            }
+            variableValue = RuleVariableValue.create( optionValue,
+                this.dataElementType(), Utils.values( ruleDataValues ), getLastUpdateDate( ruleDataValues ) );
+
 
             valueMap.put( this.name(), variableValue );
         }

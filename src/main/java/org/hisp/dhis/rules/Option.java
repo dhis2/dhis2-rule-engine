@@ -7,9 +7,9 @@ package org.hisp.dhis.rules;
 
 public class Option
 {
-    private String name;
+    private final String name;
 
-    private String code;
+    private final String code;
 
     public Option(String name, String code) {
         this.name = name;
@@ -22,33 +22,5 @@ public class Option
 
     public String getCode() {
         return code;
-    }
-
-    public static Option.Builder builder()
-    {
-        return new Option.Builder();
-    }
-
-    public static class Builder
-    {
-        private String name;
-        private String code;
-
-        public Option.Builder name(String name )
-        {
-            this.name = name;
-            return this;
-        }
-
-        public Option.Builder code(String code )
-        {
-            this.code = code;
-            return this;
-        }
-
-        public Option build()
-        {
-            return new Option(name, code );
-        }
     }
 }

@@ -49,18 +49,10 @@ public abstract class RuleVariableAttribute
             RuleAttributeValue value = currentEnrollmentValues
                 .get( this.trackedEntityAttribute() );
 
-            if ( !this.useCodeForOptionSet() )
-            {
-                String optionName = getOptionName( value.value() );
+            String optionValue = this.useCodeForOptionSet() ? value.value() : getOptionName( value.value() );
 
-                variableValue = RuleVariableValue.create( optionName, this.trackedEntityAttributeType(),
-                        Arrays.asList( value.value() ), currentDate );
-            }
-            else
-            {
-                variableValue = RuleVariableValue.create( value.value(), this.trackedEntityAttributeType(),
-                        Arrays.asList( value.value() ), currentDate );
-            }
+            variableValue = RuleVariableValue.create( optionValue, this.trackedEntityAttributeType(),
+                    List.of(optionValue), currentDate );
         }
         else
         {

@@ -145,14 +145,14 @@ public class RuleEngineFunctionTest
     public void optionSetNameShouldBeUsed()
             throws Exception
     {
-        Option option1 = Option.builder().name("name1").code("code1").build();
-        Option option2 = Option.builder().name("name2").code("code2").build();
+        Option option1 = new Option("name1", "code1");
+        Option option2 = new Option("name2", "code2");
 
         List<Option> options = Arrays.asList( option1, option2 );
 
         RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
                 "test_action_content", "#{test_variable}" );
-        RuleVariable ruleVariable = RuleVariableCurrentEvent.create(
+        RuleVariable ruleVariable = RuleVariableNewestEvent.create(
                 "test_variable", "test_data_element", RuleValueType.TEXT, USE_NAME_FOR_OPTION_SET, options);
         Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
 
@@ -172,8 +172,8 @@ public class RuleEngineFunctionTest
     public void optionSetCodeShouldBeUsed()
             throws Exception
     {
-        Option option1 = Option.builder().name("name1").code("code1").build();
-        Option option2 = Option.builder().name("name2").code("code2").build();
+        Option option1 = new Option("name1", "code1");
+        Option option2 = new Option("name2", "code2");
 
         List<Option> options = Arrays.asList( option1, option2 );
 

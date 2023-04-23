@@ -63,20 +63,11 @@ public abstract class RuleVariableNewestStageEvent
 
             RuleDataValue value = stageRuleDataValues.get( 0 );
 
-            if ( !this.useCodeForOptionSet() )
-            {
-                String optionName = getOptionName( value.value() );
+            String optionValue = this.useCodeForOptionSet() ? value.value() : getOptionName( value.value() );
 
-                variableValue = RuleVariableValue.create( optionName,
+            variableValue = RuleVariableValue.create( optionValue,
                         this.dataElementType(), Utils.values( stageRuleDataValues ),
                         getLastUpdateDate( stageRuleDataValues ) );
-            }
-            else
-            {
-                variableValue = RuleVariableValue.create( value.value(),
-                        this.dataElementType(), Utils.values( stageRuleDataValues ),
-                        getLastUpdateDate( stageRuleDataValues ) );
-            }
 
             valueMap.put( this.name(), variableValue );
         }

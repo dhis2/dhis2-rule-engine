@@ -7,6 +7,7 @@ import org.hisp.dhis.rules.RuleVariableValueMapBuilder;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 public abstract class RuleVariable
@@ -31,16 +32,14 @@ public abstract class RuleVariable
     public String getOptionName( String value )
     {
         // if no option found then existing value in the context will be used
-        String optionName = value;
-
-        for ( Option op : options() )
+        if ( options() == null || options().isEmpty() )
         {
-            if (op.getCode().equals( value ) )
-            {
-                optionName = op.getName();
-            }
+            return value;
         }
-
-        return optionName;
+        return options().stream()
+                .filter( op -> Objects.equals( value, op.getCode() ) )
+                .map( Option::getName )
+                .findAny()
+                .orElse( value );
     }
 }
