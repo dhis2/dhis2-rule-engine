@@ -20,7 +20,7 @@ public abstract class RuleVariablePreviousEvent
 
     @Nonnull
     public static RuleVariablePreviousEvent create(@Nonnull String name,
-                                                   @Nonnull String dataElement, @Nonnull RuleValueType valueType, boolean useCodeForOptionSet, List<Option> options)
+       @Nonnull String dataElement, @Nonnull RuleValueType valueType, boolean useCodeForOptionSet, List<Option> options)
     {
         return new AutoValue_RuleVariablePreviousEvent( name, useCodeForOptionSet, options , dataElement, valueType );
     }
@@ -48,7 +48,7 @@ public abstract class RuleVariablePreviousEvent
                     variableValue = RuleVariableValue.create( optionValue, this.dataElementType(),
                         Utils.values( ruleDataValues ),
                         getLastUpdateDateForPrevious( ruleDataValues, builder.ruleEvent ) );
-
+                    break;
                 }
             }
         }
