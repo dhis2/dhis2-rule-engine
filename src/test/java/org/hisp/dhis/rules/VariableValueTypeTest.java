@@ -42,6 +42,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -60,9 +61,9 @@ public class VariableValueTypeTest
                 .createForFeedback( "test_action_content", "#{test_variable}" );
         Rule rule = Rule.create( null, null, "#{test_variable} > #{test_variable2}", Arrays.asList( ruleAction ), "", "" );
         RuleVariable ruleVariable = RuleVariableCurrentEvent
-                .create( "test_variable", "test_data_element", RuleValueType.NUMERIC );
+                .create( "test_variable", "test_data_element", RuleValueType.NUMERIC, true, new ArrayList<>());
         RuleVariable ruleVariable2 = RuleVariableCurrentEvent
-                .create( "test_variable2", "test_data_element2", RuleValueType.NUMERIC );
+                .create( "test_variable2", "test_data_element2", RuleValueType.NUMERIC, true, new ArrayList<>());
 
         RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable, ruleVariable2 ) );
 
@@ -85,9 +86,9 @@ public class VariableValueTypeTest
                 .createForFeedback( "test_action_content", "#{test_variable}" );
         Rule rule = Rule.create( null, null, "#{test_variable} > #{test_variable2}", Arrays.asList( ruleAction ), "", "" );
         RuleVariable ruleVariable = RuleVariableCurrentEvent
-                .create( "test_variable", "test_data_element", RuleValueType.TEXT );
+                .create( "test_variable", "test_data_element", RuleValueType.TEXT, true, new ArrayList<>());
         RuleVariable ruleVariable2 = RuleVariableCurrentEvent
-                .create( "test_variable2", "test_data_element2", RuleValueType.TEXT );
+                .create( "test_variable2", "test_data_element2", RuleValueType.TEXT, true, new ArrayList<>());
 
         RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable, ruleVariable2 ) );
 

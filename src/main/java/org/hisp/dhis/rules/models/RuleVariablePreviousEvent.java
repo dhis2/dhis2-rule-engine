@@ -1,6 +1,7 @@
 package org.hisp.dhis.rules.models;
 
 import com.google.auto.value.AutoValue;
+import org.hisp.dhis.rules.Option;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueMapBuilder;
 import org.hisp.dhis.rules.Utils;
@@ -18,10 +19,10 @@ public abstract class RuleVariablePreviousEvent
 {
 
     @Nonnull
-    public static RuleVariablePreviousEvent create( @Nonnull String name,
-        @Nonnull String dataElement, @Nonnull RuleValueType valueType )
+    public static RuleVariablePreviousEvent create(@Nonnull String name,
+       @Nonnull String dataElement, @Nonnull RuleValueType valueType, boolean useCodeForOptionSet, List<Option> options)
     {
-        return new AutoValue_RuleVariablePreviousEvent( name, dataElement, valueType );
+        return new AutoValue_RuleVariablePreviousEvent( name, useCodeForOptionSet, options , dataElement, valueType );
     }
 
     @Override
@@ -42,7 +43,9 @@ public abstract class RuleVariablePreviousEvent
                 // which is assumed to be best candidate.
                 if ( builder.ruleEvent.eventDate().compareTo( ruleDataValue.eventDate() ) > 0 )
                 {
-                    variableValue = RuleVariableValue.create( ruleDataValue.value(), this.dataElementType(),
+                    String optionValue = this.useCodeForOptionSet() ? ruleDataValue.value() : getOptionName( ruleDataValue.value() );
+
+                    variableValue = RuleVariableValue.create( optionValue, this.dataElementType(),
                         Utils.values( ruleDataValues ),
                         getLastUpdateDateForPrevious( ruleDataValues, builder.ruleEvent ) );
                     break;

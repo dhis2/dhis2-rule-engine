@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules.util;
 
+import org.hisp.dhis.rules.Option;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueMapBuilder;
 import org.hisp.dhis.rules.models.RuleAttributeValue;
@@ -14,6 +15,18 @@ public class MockRuleVariable extends RuleVariable {
     @Nonnull
     @Override
     public String name() {
+        return null;
+    }
+
+    @Nonnull
+    @Override
+    public boolean useCodeForOptionSet() {
+        return false;
+    }
+
+    @Nonnull
+    @Override
+    public List<Option> options() {
         return null;
     }
 

@@ -1,6 +1,7 @@
 package org.hisp.dhis.rules.models;
 
 import com.google.auto.value.AutoValue;
+import org.hisp.dhis.rules.Option;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueMapBuilder;
 
@@ -18,10 +19,10 @@ public abstract class RuleVariableCurrentEvent
 {
 
     @Nonnull
-    public static RuleVariableCurrentEvent create( @Nonnull String name,
-        @Nonnull String dataElement, @Nonnull RuleValueType dataElementValueType )
+    public static RuleVariableCurrentEvent create(@Nonnull String name,
+                                                  @Nonnull String dataElement, @Nonnull RuleValueType dataElementValueType, boolean useCodeForOptionSet, List<Option> options)
     {
-        return new AutoValue_RuleVariableCurrentEvent( name, dataElement, dataElementValueType );
+        return new AutoValue_RuleVariableCurrentEvent( name, useCodeForOptionSet, options, dataElement, dataElementValueType );
     }
 
     @Override
@@ -37,8 +38,11 @@ public abstract class RuleVariableCurrentEvent
         if ( currentEventValues.containsKey( this.dataElement() ) )
         {
             RuleDataValue value = currentEventValues.get( this.dataElement() );
-            variableValue = RuleVariableValue.create( value.value(), this.dataElementType(),
-                Arrays.asList( value.value() ), getLastUpdateDate( Arrays.asList( value ) ) );
+
+            String optionValue = this.useCodeForOptionSet() ? value.value() : getOptionName( value.value() );
+
+            variableValue = RuleVariableValue.create( optionValue, this.dataElementType(),
+                List.of( optionValue ), getLastUpdateDate( List.of( value ) ) );
         }
         else
         {

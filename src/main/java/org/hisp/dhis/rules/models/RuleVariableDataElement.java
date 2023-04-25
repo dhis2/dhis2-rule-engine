@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules.models;
 
+
 import javax.annotation.Nonnull;
 
 abstract class RuleVariableDataElement
@@ -11,5 +12,4 @@ abstract class RuleVariableDataElement
 
     @Nonnull
     public abstract RuleValueType dataElementType();
-
 }

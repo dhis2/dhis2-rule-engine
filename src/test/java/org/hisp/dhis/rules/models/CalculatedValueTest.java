@@ -200,7 +200,7 @@ public class CalculatedValueTest
     private RuleEngine.Builder getRuleEngine( List<org.hisp.dhis.rules.models.Rule> rules )
     {
         RuleVariable ruleVariable = RuleVariableCalculatedValue
-            .create( "test_calculated_value", "", RuleValueType.TEXT );
+            .create( "test_calculated_value", "", RuleValueType.TEXT, true, new ArrayList<>());
 
         return RuleEngineContext
             .builder()

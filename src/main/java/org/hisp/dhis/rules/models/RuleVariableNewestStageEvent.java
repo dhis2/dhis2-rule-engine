@@ -1,6 +1,7 @@
 package org.hisp.dhis.rules.models;
 
 import com.google.auto.value.AutoValue;
+import org.hisp.dhis.rules.Option;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueMapBuilder;
 import org.hisp.dhis.rules.Utils;
@@ -19,10 +20,10 @@ public abstract class RuleVariableNewestStageEvent
 {
 
     @Nonnull
-    public static RuleVariableNewestStageEvent create( @Nonnull String name, @Nonnull String dataElement,
-        @Nonnull String programStage, @Nonnull RuleValueType dataElementType )
+    public static RuleVariableNewestStageEvent create(@Nonnull String name, @Nonnull String dataElement,
+                                                      @Nonnull String programStage, @Nonnull RuleValueType dataElementType, boolean useCodeForOptionSet, List<Option> options)
     {
-        return new AutoValue_RuleVariableNewestStageEvent( name, dataElement,
+        return new AutoValue_RuleVariableNewestStageEvent( name, useCodeForOptionSet, options, dataElement,
             dataElementType, programStage );
     }
 
@@ -58,9 +59,17 @@ public abstract class RuleVariableNewestStageEvent
         }
         else
         {
-            valueMap.put( this.name(), RuleVariableValue.create( stageRuleDataValues.get( 0 ).value(),
-                this.dataElementType(), Utils.values( stageRuleDataValues ),
-                getLastUpdateDate( stageRuleDataValues ) ) );
+            RuleVariableValue variableValue;
+
+            RuleDataValue value = stageRuleDataValues.get( 0 );
+
+            String optionValue = this.useCodeForOptionSet() ? value.value() : getOptionName( value.value() );
+
+            variableValue = RuleVariableValue.create( optionValue,
+                        this.dataElementType(), Utils.values( stageRuleDataValues ),
+                        getLastUpdateDate( stageRuleDataValues ) );
+
+            valueMap.put( this.name(), variableValue );
         }
 
         return valueMap;
