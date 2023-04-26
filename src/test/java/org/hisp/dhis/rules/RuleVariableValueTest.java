@@ -73,13 +73,13 @@ public class RuleVariableValueTest
         assertThat( variableValue.candidates().get( 1 ) ).isEqualTo( "false" );
     }
 
-    @Test( expected = IllegalArgumentException.class )
+    @Test( expected = NullPointerException.class )
     public void createShouldThrowOnNullValueType()
     {
         RuleVariableValue.create( "test_value", null );
     }
 
-    @Test( expected = IllegalArgumentException.class )
+    @Test( expected = NullPointerException.class )
     public void createShouldThrowOnNullCandidateList()
     {
         RuleVariableValue.create( "test_value", RuleValueType.TEXT, null, dateFormat.format( new Date() ) );
