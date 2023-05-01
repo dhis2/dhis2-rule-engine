@@ -14,7 +14,4 @@ class RuleVariableValue(
 ) {
     val value get() = variableValue.takeIf { it != null }?:ruleValueType.defaultValue
 
-    init {
-        variableValue = variableValue?.replace("'", "")
-    }
 }
