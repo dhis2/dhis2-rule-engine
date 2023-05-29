@@ -35,7 +35,7 @@ public abstract class RuleVariablePreviousEvent
 
         RuleVariableValue variableValue = null;
         List<RuleDataValue> ruleDataValues = allEventValues.get( this.dataElement() );
-        if ( ruleDataValues != null && !ruleDataValues.isEmpty() )
+        if ( builder.ruleEvent != null && ruleDataValues != null && !ruleDataValues.isEmpty() )
         {
             for ( RuleDataValue ruleDataValue : ruleDataValues )
             {

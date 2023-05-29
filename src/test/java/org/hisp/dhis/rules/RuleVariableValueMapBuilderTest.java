@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -58,6 +59,38 @@ public class RuleVariableValueMapBuilderTest
         RuleVariableValueMapBuilder.target( ruleEnrollment )
             .ruleEnrollment( ruleEnrollment )
             .build();
+    }
+
+    @Test
+    public void currentEventVariableShouldContainNullValueForEnrollmentEvaluation()
+            throws ParseException
+    {
+        RuleVariable ruleVariableOne = RuleVariableCurrentEvent.create(
+                "test_variable_one", "test_dataelement_one", RuleValueType.TEXT, true, new ArrayList<>());
+
+        Date eventDate = dateFormat.parse( "2015-01-01" );
+
+        // values from context ruleEvents should be ignored
+        RuleEnrollment ruleEnrollment = RuleEnrollment.create( "test_enrollment",
+                dateFormat.parse( "2015-01-01" ), dateFormat.parse( "2015-01-01" ),
+                RuleEnrollment.Status.ACTIVE, "", null, Arrays.asList(
+                        RuleAttributeValue.create( "test_attribute_one", "test_attribute_value_one" ),
+                        RuleAttributeValue.create( "test_attribute_two", "test_attribute_value_two" ) ), "" );
+        RuleEvent contextEventOne = RuleEvent.create( "test_context_event_one", "test_program_stage",
+                RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                        RuleDataValue.create( eventDate, "test_program_stage",
+                                "test_dataelement_one", "test_context_value_one" ),
+                        RuleDataValue.create( eventDate, "test_program_stage",
+                                "test_dataelement_two", "test_context_value_two" ) ), "", null);
+
+        Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEnrollment )
+                .ruleVariables(List.of(ruleVariableOne))
+                .ruleEvents(List.of(contextEventOne))
+                .triggerEnvironment( TriggerEnvironment.SERVER )
+                .build();
+
+        assertThatVariable( valueMap.get( "test_variable_one" ) ).hasValue( null )
+                .isTypeOf( RuleValueType.TEXT );
     }
 
     @Test
