@@ -224,9 +224,9 @@ public class RuleConditionEvaluator
             RuleActionAssign ruleActionAssign = (RuleActionAssign) ruleAction;
             String data = process( ruleActionAssign.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION);
             updateValueMap( ruleActionAssign.field(), RuleVariableValue.create( data, RuleValueType.TEXT ), valueMap );
-            if ( StringUtils.isEmpty( data ) && StringUtils.isEmpty( ruleActionAssign.data() ) )
+            if ( StringUtils.isEmpty( data ) )
             {
-                return RuleEffect.create( rule.uid(), ruleAction, ruleActionAssign.data() );
+                return RuleEffect.create( rule.uid(), ruleAction, null );
             }
             else
             {
