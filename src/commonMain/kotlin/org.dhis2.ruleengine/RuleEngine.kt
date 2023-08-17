@@ -54,7 +54,7 @@ class RuleEngine(
                             ruleEnrollment = ruleEnrollment,
                             ruleEvent = null,
                             ruleVariables = ruleEngineContext.ruleVariables,
-                            constantsValues = emptyMap()
+                            constantsValues = ruleEngineContext.constantsValues
                         )
                     )
                 )
@@ -65,7 +65,7 @@ class RuleEngine(
                     ruleEnrollment = ruleEnrollment,
                     ruleEvent = ruleEvent,
                     ruleVariables = ruleEngineContext.ruleVariables,
-                    constantsValues = emptyMap()
+                    constantsValues = ruleEngineContext.constantsValues
                 )
             }
         )

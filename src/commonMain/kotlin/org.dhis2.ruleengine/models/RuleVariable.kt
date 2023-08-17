@@ -7,13 +7,17 @@ import org.dhis2.ruleengine.RuleVariableValue
 
 sealed class RuleVariable(
     open val name: String,
-    open val ruleValueType: RuleValueType
+    open val ruleValueType: RuleValueType,
+    open val useCodeForOptionSet: Boolean,
+    open val options: List<Option>
 ) {
     data class RuleVariableAttribute(
         override val name: String,
         val trackedEntityAttribute: String,
-        val trackedEntityAttributeType: RuleValueType
-    ) : RuleVariable(name, trackedEntityAttributeType) {
+        val trackedEntityAttributeType: RuleValueType,
+        override val useCodeForOptionSet: Boolean,
+        override val options: List<Option>
+    ) : RuleVariable(name, trackedEntityAttributeType, useCodeForOptionSet, options) {
         fun getRuleVariableValue(
             ruleEnrollment: RuleEnrollment?,
             currentEnrollmentValues: Map<String, RuleAttributeValue>
@@ -22,8 +26,9 @@ sealed class RuleVariable(
                 val currentDate = Clock.System.now().toLocalDateTime(TimeZone.UTC).date
                 val ruleAttributeValue = currentEnrollmentValues[this.trackedEntityAttribute]
                 val candidates = ruleAttributeValue?.let { listOf(it.value) } ?: emptyList()
+                val value = if (!useCodeForOptionSet) getOptionName(options, ruleAttributeValue?.value ) else ruleAttributeValue?.value;
                 return RuleVariableValue(
-                    variableValue = ruleAttributeValue?.value,
+                    variableValue = value,
                     ruleValueType = trackedEntityAttributeType,
                     candidates = candidates,
                     eventDate = currentDate
@@ -35,8 +40,10 @@ sealed class RuleVariable(
     data class RuleVariableCalculatedValue(
         override val name: String,
         val calculatedValueVariable: String,
-        val calculatedValueType: RuleValueType
-    ) : RuleVariable(name, calculatedValueType) {
+        val calculatedValueType: RuleValueType,
+        override val useCodeForOptionSet: Boolean,
+        override val options: List<Option>
+    ) : RuleVariable(name, calculatedValueType, useCodeForOptionSet, options) {
         fun getRuleVariableValue(): RuleVariableValue {
             val currentDate = Clock.System.now().toLocalDateTime(TimeZone.UTC).date
             return RuleVariableValue(
@@ -51,8 +58,10 @@ sealed class RuleVariable(
     data class RuleVariableCurrentEvent(
         override val name: String,
         val dataElement: String,
-        val dataElementValueType: RuleValueType
-    ) : RuleVariable(name, dataElementValueType) {
+        val dataElementValueType: RuleValueType,
+        override val useCodeForOptionSet: Boolean,
+        override val options: List<Option>
+    ) : RuleVariable(name, dataElementValueType, useCodeForOptionSet, options) {
         fun getRuleVariableValue(
             ruleEvent: RuleEvent?,
             currentEventValues: Map<String, RuleDataValue>
@@ -61,8 +70,9 @@ sealed class RuleVariable(
                 val currentDate = Clock.System.now().toLocalDateTime(TimeZone.UTC).date
                 val ruleValue = currentEventValues[this.dataElement]
                 val candidates = ruleValue?.let { listOf(it.value) } ?: emptyList()
+                val value = if (!useCodeForOptionSet) getOptionName(options, ruleValue?.value ) else ruleValue?.value
                 return RuleVariableValue(
-                    variableValue = ruleValue?.value,
+                    variableValue = value,
                     ruleValueType = dataElementValueType,
                     candidates = candidates,
                     eventDate = currentDate
@@ -74,8 +84,10 @@ sealed class RuleVariable(
     data class RuleVariableNewestEvent(
         override val name: String,
         val dataElement: String,
-        val dataElementValueType: RuleValueType
-    ) : RuleVariable(name, dataElementValueType) {
+        val dataElementValueType: RuleValueType,
+        override val useCodeForOptionSet: Boolean,
+        override val options: List<Option>
+    ) : RuleVariable(name, dataElementValueType, useCodeForOptionSet, options) {
         fun getRuleVariableValue(
             allEventValues: Map<String, MutableList<RuleDataValue>>
         ): RuleVariableValue {
@@ -86,8 +98,9 @@ sealed class RuleVariable(
             }else{
                 ruleDataValues.maxBy { it.eventDate }.eventDate
             }
+            val value = if (!useCodeForOptionSet) getOptionName(options, ruleDataValues?.firstOrNull()?.value ) else ruleDataValues?.firstOrNull()?.value
             return RuleVariableValue(
-                variableValue = ruleDataValues?.firstOrNull()?.value,
+                variableValue = value,
                 ruleValueType = dataElementValueType,
                 candidates = candidates,
                 eventDate = currentDate
@@ -99,8 +112,10 @@ sealed class RuleVariable(
         override val name: String,
         val dataElement: String,
         val dataElementValueType: RuleValueType,
-        val programStage: String
-    ) : RuleVariable(name, dataElementValueType) {
+        val programStage: String,
+        override val useCodeForOptionSet: Boolean,
+        override val options: List<Option>
+    ) : RuleVariable(name, dataElementValueType, useCodeForOptionSet, options) {
         fun getRuleVariableValue(
             allEventValues: Map<String, MutableList<RuleDataValue>>
         ): RuleVariableValue {
@@ -116,7 +131,7 @@ sealed class RuleVariable(
             }
 
             val currentDate = Clock.System.now().toLocalDateTime(TimeZone.UTC).date
-
+            val value = if (!useCodeForOptionSet) getOptionName(options, stageRuleDataValues.firstOrNull()?.value ) else stageRuleDataValues.firstOrNull()?.value
             return if (stageRuleDataValues.isEmpty()) {
                 RuleVariableValue(
                     variableValue = null,
@@ -126,7 +141,7 @@ sealed class RuleVariable(
                 )
             } else {
                 RuleVariableValue(
-                    variableValue = stageRuleDataValues.firstOrNull()?.value,
+                    variableValue = value,
                     ruleValueType = dataElementValueType,
                     candidates = stageRuleDataValues.map { it.value },
                     eventDate = stageRuleDataValues.getLastUpdateList()
@@ -138,8 +153,10 @@ sealed class RuleVariable(
     data class RuleVariablePreviousEvent(
         override val name: String,
         val dataElement: String,
-        val dataElementValueType: RuleValueType
-    ) : RuleVariable(name, dataElementValueType) {
+        val dataElementValueType: RuleValueType,
+        override val useCodeForOptionSet: Boolean,
+        override val options: List<Option>
+    ) : RuleVariable(name, dataElementValueType, useCodeForOptionSet, options) {
         fun getRuleVariableValue(
             ruleEvent: RuleEvent?,
             allEventValues: Map<String, MutableList<RuleDataValue>>
@@ -155,8 +172,9 @@ sealed class RuleVariable(
                     // We found preceding value to the current currentEventValues,
                     // which is assumed to be the best candidate.
                     if (ruleEvent.eventDate > ruleDataValue.eventDate) {
+                        val value = if (!useCodeForOptionSet) getOptionName(options, ruleDataValue.value ) else ruleDataValue.value
                         variableValue = RuleVariableValue(
-                            ruleDataValue.value,
+                            value,
                             dataElementValueType,
                             ruleDataValues.map { it.value },
                             ruleDataValues.getLastUpdateDateForPrevious(ruleEvent)
@@ -178,6 +196,13 @@ sealed class RuleVariable(
             return variableValue
         }
     }
+}
+
+fun getOptionName(
+    options: List<Option>,
+    value: String?
+): String? {
+    return options.filter { option -> option.code == value }.map { option -> option.name }.firstOrNull()?: value
 }
 
 fun RuleVariable.toRuleVariableValue(
