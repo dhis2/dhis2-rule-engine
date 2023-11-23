@@ -160,11 +160,11 @@ public class RuleEngineFunctionTest
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                 RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList( RuleDataValue.create(
-                        new Date(), "test_program_stage", "test_data_element", option1.getCode() ) ), "", null);
+                        new Date(), "test_program_stage", "test_data_element", option1.code() ) ), "", null);
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
         assertThat( ruleEffects ).hasSize( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( option1.getName() );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( option1.name() );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
     }
 
@@ -187,11 +187,11 @@ public class RuleEngineFunctionTest
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                 RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList( RuleDataValue.create(
-                        new Date(), "test_program_stage", "test_data_element", option2.getCode() ) ), "", null);
+                        new Date(), "test_program_stage", "test_data_element", option2.code() ) ), "", null);
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
         assertThat( ruleEffects ).hasSize( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( option2.getCode() );
+        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( option2.code() );
         assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
     }
 

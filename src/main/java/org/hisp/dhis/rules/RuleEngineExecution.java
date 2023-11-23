@@ -6,51 +6,37 @@ import org.hisp.dhis.rules.models.RuleEnrollment;
 import org.hisp.dhis.rules.models.RuleEvent;
 import org.hisp.dhis.rules.models.TrackerObjectType;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-class RuleEngineExecution
-    implements Callable<List<RuleEffect>>
-{
-    private final RuleEvent event;
-
-    private final RuleEnrollment enrollment;
-
+record RuleEngineExecution(
+    @CheckForNull
+    RuleEvent event,
+    @CheckForNull
+    RuleEnrollment enrollment,
     @Nonnull
-    private final Map<String, List<String>> supplementaryData;
-
+    Map<String, List<String>> supplementaryData,
     @Nonnull
-    private final List<Rule> rules;
-
+    List<Rule> rules,
     @Nonnull
-    private Map<String, RuleVariableValue> valueMap;
-
+    Map<String, RuleVariableValue> valueMap,
     @Nonnull
-    private RuleConditionEvaluator ruleConditionEvaluator;
+    RuleConditionEvaluator ruleConditionEvaluator) implements Callable<List<RuleEffect>> {
 
-    RuleEngineExecution( @Nonnull RuleEvent event, @Nonnull List<Rule> rules,
-        @Nonnull Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    RuleEngineExecution(@Nonnull RuleEvent event, @Nonnull List<Rule> rules,
+                        @Nonnull Map<String, RuleVariableValue> valueMap, @Nonnull Map<String, List<String>> supplementaryData )
     {
-        this.event = event;
-        this.enrollment = null;
-        this.valueMap = new HashMap<>( valueMap );
-        this.rules = rules;
-        this.supplementaryData = supplementaryData;
-        this.ruleConditionEvaluator = new RuleConditionEvaluator();
+        this(event, null, supplementaryData, rules, new HashMap<>( valueMap ), new RuleConditionEvaluator());
     }
 
-    RuleEngineExecution( @Nonnull RuleEnrollment enrollment, @Nonnull List<Rule> rules,
-                         @Nonnull Map<String, RuleVariableValue> valueMap, Map<String, List<String>> supplementaryData )
+    RuleEngineExecution(@Nonnull RuleEnrollment enrollment, @Nonnull List<Rule> rules,
+                        @Nonnull Map<String, RuleVariableValue> valueMap, @Nonnull Map<String, List<String>> supplementaryData )
     {
-        this.event = null;
-        this.enrollment = enrollment;
-        this.valueMap = new HashMap<>( valueMap );
-        this.rules = rules;
-        this.supplementaryData = supplementaryData;
-        this.ruleConditionEvaluator = new RuleConditionEvaluator();
+        this(null, enrollment, supplementaryData, rules, new HashMap<>( valueMap ), new RuleConditionEvaluator());
     }
 
     @Override
@@ -59,9 +45,11 @@ class RuleEngineExecution
         if (event != null) {
             return ruleConditionEvaluator.getRuleEffects(TrackerObjectType.EVENT, event.event(), valueMap,
                     supplementaryData, this.rules );
-        } else {
+        }
+        if (enrollment != null) {
             return ruleConditionEvaluator.getRuleEffects( TrackerObjectType.ENROLLMENT, enrollment.enrollment(), valueMap,
                     supplementaryData, this.rules );
         }
+        throw new IllegalStateException("event and enrollment were null");
     }
 }

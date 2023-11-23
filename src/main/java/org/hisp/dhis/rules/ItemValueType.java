@@ -40,7 +40,7 @@ public enum ItemValueType
     TEXT( "Sample_text_string" ),
     BOOLEAN( "true" );
 
-    private String value;
+    private final String value;
 
     ItemValueType( String value )
     {
@@ -53,12 +53,11 @@ public enum ItemValueType
     }
 
     public ValueType toValueType(){
-        switch (this) {
-            case NUMBER: return ValueType.NUMBER;
-            case DATE: return ValueType.DATE;
-            case TEXT: return ValueType.STRING;
-            case BOOLEAN: return ValueType.BOOLEAN;
-        }
-        return ValueType.MIXED;
+        return switch (this) {
+            case NUMBER -> ValueType.NUMBER;
+            case DATE -> ValueType.DATE;
+            case TEXT -> ValueType.STRING;
+            case BOOLEAN -> ValueType.BOOLEAN;
+        };
     }
 }

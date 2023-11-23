@@ -37,8 +37,8 @@ public abstract class RuleVariable
             return value;
         }
         return options().stream()
-                .filter( op -> Objects.equals( value, op.getCode() ) )
-                .map( Option::getName )
+                .filter( op -> Objects.equals( value, op.code() ) )
+                .map( Option::name)
                 .findAny()
                 .orElse( value );
     }
