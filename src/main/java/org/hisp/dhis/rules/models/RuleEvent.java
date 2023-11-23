@@ -1,20 +1,37 @@
 package org.hisp.dhis.rules.models;
 
-import com.google.auto.value.AutoValue;
-
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javax.annotation.CheckForNull;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-@AutoValue
-public abstract class RuleEvent
-{
+public record RuleEvent(
+        @Nonnull
+        String event,
+        @Nonnull
+        String programStage,
+        @Nonnull
+        String programStageName,
+        @Nonnull
+        Status status,
+        @Nonnull
+        Date eventDate,
+        @CheckForNull
+        Date dueDate,
+        @CheckForNull
+        Date completedDate,
+        @Nonnull
+        String organisationUnit,
+        @CheckForNull
+        String organisationUnitCode,
+        @Nonnull
+        List<RuleDataValue> dataValues
+) {
     public static final Comparator<RuleEvent> EVENT_DATE_COMPARATOR = new EventDateComparator();
+
+    public static final RuleEvent MOCK = new RuleEvent(null, null, null, null, null, null, null, null, null, null);
 
     @Nonnull
     public static RuleEvent create(
@@ -24,12 +41,12 @@ public abstract class RuleEvent
         @Nonnull Date eventDate,
         @Nonnull Date dueDate,
         @Nonnull String organisationUnit,
-        @Nullable String organisationUnitCode,
+        @CheckForNull String organisationUnitCode,
         @Nonnull List<RuleDataValue> ruleDataValues,
         @Nonnull String programStageName,
-        @Nullable Date completedDate )
+        @CheckForNull Date completedDate )
     {
-        return new AutoValue_RuleEvent.Builder()
+        return new Builder()
             .event( event )
             .programStage( programStage )
             .programStageName( programStageName )
@@ -39,74 +56,88 @@ public abstract class RuleEvent
             .organisationUnit( organisationUnit )
             .organisationUnitCode( organisationUnitCode )
             .completedDate( completedDate )
-            .dataValues( Collections.unmodifiableList( new ArrayList<>( ruleDataValues ) ) )
+            .dataValues( List.copyOf(ruleDataValues ) )
             .build();
     }
 
     public static Builder builder()
     {
-        return new AutoValue_RuleEvent.Builder();
+        return new Builder();
     }
-
-    @Nonnull
-    public abstract String event();
-
-    @Nonnull
-    public abstract String programStage();
-
-    @Nonnull
-    public abstract String programStageName();
-
-    @Nonnull
-    public abstract Status status();
-
-    @Nonnull
-    public abstract Date eventDate();
-
-    @Nullable
-    public abstract Date dueDate();
-
-    @Nullable
-    public abstract Date completedDate();
-
-    @Nonnull
-    public abstract String organisationUnit();
-
-    @Nullable
-    public abstract String organisationUnitCode();
-
-    @Nonnull
-    public abstract List<RuleDataValue> dataValues();
 
     public enum Status
     {
         ACTIVE, COMPLETED, SCHEDULE, SKIPPED, VISITED, OVERDUE
     }
 
-    @AutoValue.Builder
-    public static abstract class Builder
+    @Deprecated // use data class copy/named assign once this is KMP
+    public static class Builder
     {
-        public abstract Builder event( String event );
+        String event;
+        String programStage;
+        String programStageName;
+        Status status;
+        Date eventDate;
+        Date dueDate;
+        Date completedDate;
+        String organisationUnit;
+        String organisationUnitCode;
+        List<RuleDataValue> dataValues;
 
-        public abstract Builder programStage( String programStage );
+        public Builder event( String event ) {
+            this.event = event;
+            return this;
+        }
 
-        public abstract Builder programStageName( String programStageName );
+        public Builder programStage( String programStage ) {
+            this.programStage = programStage;
+            return this;
+        }
 
-        public abstract Builder status( Status status );
 
-        public abstract Builder eventDate( Date eventDate );
+        public Builder programStageName( String programStageName ) {
+            this.programStageName = programStageName;
+            return this;
+        }
 
-        public abstract Builder dueDate( Date dueDate );
+        public Builder status( Status status ) {
+            this.status = status;
+            return this;
+        }
 
-        public abstract Builder completedDate( Date completedDate );
+        public Builder eventDate( Date eventDate ) {
+            this.eventDate = eventDate;
+            return this;
+        }
 
-        public abstract Builder organisationUnit( String organisationUnit );
+        public Builder dueDate( Date dueDate ) {
+            this.dueDate = dueDate;
+            return this;
+        }
 
-        public abstract Builder organisationUnitCode( String organisationUnitCode );
+        public Builder completedDate( Date completedDate ) {
+            this.completedDate = completedDate;
+            return this;
+        }
 
-        public abstract Builder dataValues( List<RuleDataValue> dataValues );
+        public Builder organisationUnit( String organisationUnit ) {
+            this.organisationUnit = organisationUnit;
+            return this;
+        }
 
-        public abstract RuleEvent build();
+        public Builder organisationUnitCode( String organisationUnitCode ) {
+            this.organisationUnitCode = organisationUnitCode;
+            return this;
+        }
+
+        public Builder dataValues( List<RuleDataValue> dataValues ) {
+            this.dataValues = dataValues;
+            return this;
+        }
+
+        public RuleEvent build() {
+            return new RuleEvent(event, programStage, programStageName, status, eventDate, dueDate, completedDate, organisationUnit, organisationUnitCode, dataValues);
+        }
     }
 
     private static class EventDateComparator

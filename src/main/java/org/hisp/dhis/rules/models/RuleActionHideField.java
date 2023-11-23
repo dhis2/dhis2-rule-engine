@@ -2,8 +2,9 @@ package org.hisp.dhis.rules.models;
 
 import com.google.auto.value.AutoValue;
 
+import javax.annotation.CheckForNull;;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javax.annotation.CheckForNull;
 
 import static org.hisp.dhis.rules.models.AttributeType.UNKNOWN;
 
@@ -14,13 +15,13 @@ public abstract class RuleActionHideField
 
     @Nonnull
     public static RuleActionHideField create(
-        @Nullable String content, @Nonnull String field, @Nullable AttributeType attributeType )
+            @CheckForNull String content, @Nonnull String field, @CheckForNull AttributeType attributeType )
     {
         return new AutoValue_RuleActionHideField( "", attributeType, content == null ? "" : content, field );
     }
 
     @Nonnull
-    public static RuleActionHideField create( @Nullable String content, @Nonnull String field )
+    public static RuleActionHideField create( @CheckForNull String content, @Nonnull String field )
     {
         return create( content, field, UNKNOWN );
     }

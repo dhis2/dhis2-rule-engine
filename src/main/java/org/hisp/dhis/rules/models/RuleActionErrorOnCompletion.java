@@ -2,8 +2,9 @@ package org.hisp.dhis.rules.models;
 
 import com.google.auto.value.AutoValue;
 
+import javax.annotation.CheckForNull;;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javax.annotation.CheckForNull;
 
 import static org.hisp.dhis.rules.models.AttributeType.UNKNOWN;
 
@@ -13,8 +14,8 @@ public abstract class RuleActionErrorOnCompletion
 {
 
     @Nonnull
-    public static RuleActionErrorOnCompletion create( @Nullable String content,
-        @Nullable String data, @Nullable String field, @Nullable AttributeType attributeType )
+    public static RuleActionErrorOnCompletion create( @CheckForNull String content,
+        @CheckForNull String data, @CheckForNull String field, @CheckForNull AttributeType attributeType )
     {
         if ( content == null && data == null && field == null )
         {
@@ -27,8 +28,8 @@ public abstract class RuleActionErrorOnCompletion
     }
 
     @Nonnull
-    public static RuleActionErrorOnCompletion create( @Nullable String content, @Nullable String data,
-        @Nullable String field )
+    public static RuleActionErrorOnCompletion create( @CheckForNull String content, @CheckForNull String data,
+        @CheckForNull String field )
     {
         return create( content, data, field, UNKNOWN );
     }

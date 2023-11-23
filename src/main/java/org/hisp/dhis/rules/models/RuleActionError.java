@@ -3,7 +3,7 @@ package org.hisp.dhis.rules.models;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javax.annotation.CheckForNull;
 
 import static org.hisp.dhis.rules.models.AttributeType.UNKNOWN;
 

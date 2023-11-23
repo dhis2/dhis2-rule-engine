@@ -3,7 +3,7 @@ package org.hisp.dhis.rules.models;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javax.annotation.CheckForNull;
 
 @AutoValue
 public abstract class RuleActionCreateEvent
@@ -11,8 +11,8 @@ public abstract class RuleActionCreateEvent
 {
 
     @Nonnull
-    public static RuleActionCreateEvent create( @Nullable String content,
-        @Nullable String data, @Nonnull String programStage )
+    public static RuleActionCreateEvent create( @CheckForNull String content,
+        @CheckForNull String data, @Nonnull String programStage )
     {
         return new AutoValue_RuleActionCreateEvent( data == null ? "" : data, content == null ? "" : content,
             programStage );

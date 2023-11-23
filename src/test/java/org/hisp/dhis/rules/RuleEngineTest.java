@@ -4,9 +4,6 @@ import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleDataValue;
 import org.hisp.dhis.rules.models.RuleEnrollment;
 import org.hisp.dhis.rules.models.RuleEvent;
-import org.hisp.dhis.rules.models.RuleVariable;
-import org.hisp.dhis.rules.util.MockRule;
-import org.hisp.dhis.rules.util.MockRuleEvent;
 import org.hisp.dhis.rules.util.MockRuleVariable;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +18,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 @RunWith( JUnit4.class )
 public class RuleEngineTest
@@ -33,7 +29,7 @@ public class RuleEngineTest
     {
         ruleEngineContext = RuleEngineContext.builder()
             .ruleVariables( Arrays.asList( new MockRuleVariable() ) )
-            .rules( Arrays.asList( new MockRule() ) )
+            .rules( List.of(Rule.MOCK) )
             .build();
     }
 
@@ -58,8 +54,8 @@ public class RuleEngineTest
     @Test( expected = UnsupportedOperationException.class )
     public void builderShouldPropagateImmutableEventsList()
     {
-        RuleEvent ruleEventOne = new MockRuleEvent();
-        RuleEvent ruleEventTwo = new MockRuleEvent();
+        RuleEvent ruleEventOne = RuleEvent.MOCK;
+        RuleEvent ruleEventTwo = RuleEvent.MOCK;
 
         List<RuleEvent> ruleEvents = new ArrayList<>();
         ruleEvents.add( ruleEventOne );
@@ -129,7 +125,7 @@ public class RuleEngineTest
         throws InterruptedException
     {
         final RuleEngine ruleEngine = RuleEngineContext.builder()
-            .rules( Arrays.asList( new MockRule(), new MockRule() ) )
+            .rules( List.of(Rule.MOCK, Rule.MOCK) )
             .build().toEngineBuilder().build();
 
         final CountDownLatch threadOneLatch = new CountDownLatch( 1 );

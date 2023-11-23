@@ -1,45 +1,38 @@
 package org.hisp.dhis.rules.models;
 
-import com.google.auto.value.AutoValue;
-
+import javax.annotation.CheckForNull;;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
+import javax.annotation.CheckForNull;
 import java.util.List;
 
-@AutoValue
-public abstract class Rule
-{
+public record Rule(
+    @CheckForNull
+    String name,
+    @CheckForNull
+    String programStage,
+    @CheckForNull
+    Integer priority,
+    @Nonnull
+    String condition,
+    @Nonnull
+    List<RuleAction> actions,
+    @Nonnull
+    String uid) {
+
+    public static final Rule MOCK = new Rule(null, null, null, "true", List.of(), null);
+
     public static Rule copy( @Nonnull Rule rule, @Nonnull List<RuleAction> actions )
     {
-        return new AutoValue_Rule( rule.name(), rule.programStage(), rule.priority(), rule.condition(),
-            Collections.unmodifiableList( new ArrayList<>( actions ) ), rule.uid() );
+        return new Rule(rule.name(), rule.programStage(), rule.priority(), rule.condition(),
+                List.copyOf(actions), rule.uid());
     }
 
     @Nonnull
-    public static Rule create( @Nullable String programStage, @Nullable Integer priority,
-        @Nonnull String condition, @Nonnull List<RuleAction> actions, @Nullable String name, @Nonnull String uid )
+    public static Rule create( @CheckForNull String programStage, @CheckForNull Integer priority,
+        @Nonnull String condition, @Nonnull List<RuleAction> actions, @CheckForNull String name, @Nonnull String uid )
     {
-        return new AutoValue_Rule( name, programStage, priority, condition,
-            Collections.unmodifiableList( new ArrayList<>( actions ) ), uid );
+        return new Rule(name, programStage, priority, condition, List.copyOf(actions), uid);
     }
 
-    @Nullable
-    public abstract String name();
 
-    @Nullable
-    public abstract String programStage();
-
-    @Nullable
-    public abstract Integer priority();
-
-    @Nonnull
-    public abstract String condition();
-
-    @Nonnull
-    public abstract List<RuleAction> actions();
-
-    @Nonnull
-    public abstract String uid();
 }

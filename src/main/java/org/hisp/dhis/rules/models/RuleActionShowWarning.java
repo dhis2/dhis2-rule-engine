@@ -3,7 +3,7 @@ package org.hisp.dhis.rules.models;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javax.annotation.CheckForNull;
 
 import static org.hisp.dhis.rules.models.AttributeType.UNKNOWN;
 
@@ -13,8 +13,8 @@ public abstract class RuleActionShowWarning
 {
 
     @Nonnull
-    public static RuleActionShowWarning create( @Nullable String content, @Nullable String data, @Nonnull String field,
-        @Nullable AttributeType attributeType )
+    public static RuleActionShowWarning create( @CheckForNull String content, @CheckForNull String data, @Nonnull String field,
+        @CheckForNull AttributeType attributeType )
     {
         if ( content == null && data == null )
         {
@@ -26,7 +26,7 @@ public abstract class RuleActionShowWarning
     }
 
     @Nonnull
-    public static RuleActionShowWarning create( @Nullable String content, @Nullable String data, @Nonnull String field )
+    public static RuleActionShowWarning create( @CheckForNull String content, @CheckForNull String data, @Nonnull String field )
     {
         return create( content, data, field, UNKNOWN );
     }

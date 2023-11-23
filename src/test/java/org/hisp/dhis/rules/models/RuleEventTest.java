@@ -22,42 +22,6 @@ public class RuleEventTest
 {
     private static final String DATE_PATTERN = "yyyy-MM-dd";
 
-    @Test( expected = IllegalStateException.class )
-    public void createShouldThrowExceptionIfEventIsNull()
-    {
-        RuleEvent.create( null, "test_programstage", RuleEvent.Status.ACTIVE,
-            new Date(), new Date(), null, null, Arrays.<RuleDataValue>asList(), "", null);
-    }
-
-    @Test( expected = IllegalStateException.class )
-    public void createShouldThrowExceptionIfProgramStageIsNull()
-    {
-        RuleEvent.create( "test_event", null, RuleEvent.Status.ACTIVE,
-            new Date(), new Date(), null, null, Arrays.<RuleDataValue>asList(), "", null);
-    }
-
-    @Test( expected = IllegalStateException.class )
-    public void createShouldThrowExceptionIfStatusIsNull()
-    {
-        RuleEvent.create( "test_event", "test_programstage", null,
-            new Date(), new Date(), null, null, Arrays.<RuleDataValue>asList(), "", null);
-    }
-
-    @Test( expected = IllegalStateException.class )
-    public void createShouldThrowExceptionIfEventDateIsNull()
-    {
-        RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE,
-            null, new Date(), null, null, Arrays.<RuleDataValue>asList(), "", null);
-    }
-
-    @Test( expected = IllegalStateException.class )
-    public void createShouldThrowExceptionIfDueDateIsNull()
-    {
-        RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE,
-            new Date(), null, null, null, Arrays.<RuleDataValue>asList(), "", null);
-
-    }
-
     @Test( expected = NullPointerException.class )
     public void createShouldThrowExceptionIfListOfDataValuesIsNull()
     {

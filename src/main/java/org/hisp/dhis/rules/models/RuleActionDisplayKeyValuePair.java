@@ -3,7 +3,7 @@ package org.hisp.dhis.rules.models;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javax.annotation.CheckForNull;
 
 @AutoValue
 public abstract class RuleActionDisplayKeyValuePair
@@ -12,7 +12,7 @@ public abstract class RuleActionDisplayKeyValuePair
 
     @Nonnull
     public static RuleActionDisplayKeyValuePair createForFeedback(
-        @Nullable String content, @Nullable String data )
+        @CheckForNull String content, @CheckForNull String data )
     {
         if ( content == null && data == null )
         {
@@ -25,7 +25,7 @@ public abstract class RuleActionDisplayKeyValuePair
 
     @Nonnull
     public static RuleActionDisplayKeyValuePair createForIndicators(
-        @Nullable String content, @Nullable String data )
+        @CheckForNull String content, @CheckForNull String data )
     {
         if ( content == null && data == null )
         {

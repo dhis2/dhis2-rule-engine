@@ -3,7 +3,7 @@ package org.hisp.dhis.rules.models;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javax.annotation.CheckForNull;
 
 import static org.hisp.dhis.rules.models.AttributeType.UNKNOWN;
 
@@ -14,13 +14,13 @@ public abstract class RuleActionHideOption
 
     @Nonnull
     public static RuleActionHideOption create(
-        @Nullable String content, @Nonnull String option, @Nonnull String field, @Nullable AttributeType attributeType )
+        @CheckForNull String content, @Nonnull String option, @Nonnull String field, @CheckForNull AttributeType attributeType )
     {
         return new AutoValue_RuleActionHideOption( "", attributeType, content == null ? "" : content, option, field );
     }
 
     @Nonnull
-    public static RuleActionHideOption create( @Nullable String content, @Nonnull String option, @Nonnull String field )
+    public static RuleActionHideOption create( @CheckForNull String content, @Nonnull String option, @Nonnull String field )
     {
         return create( content, option, field, UNKNOWN );
     }

@@ -2,14 +2,10 @@ package org.hisp.dhis.rules;
 
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleVariable;
-import org.hisp.dhis.rules.util.MockRule;
 import org.hisp.dhis.rules.util.MockRuleVariable;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +15,6 @@ import java.util.Map;
 
 import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 @RunWith( JUnit4.class )
 public class RuleEngineContextTest
@@ -28,9 +23,9 @@ public class RuleEngineContextTest
 
     private RuleVariable ruleVariableTwo = new MockRuleVariable();
 
-    private Rule rule = new MockRule();
+    private Rule rule = Rule.MOCK;
 
-    private Rule ruleTwo = new MockRule();
+    private Rule ruleTwo = Rule.MOCK;
     
     @Test( expected = IllegalArgumentException.class )
     public void builderShouldThrowOnNullVariableList()
@@ -107,7 +102,7 @@ public class RuleEngineContextTest
         RuleEngineContext ruleEngineContext = RuleEngineContext.builder()
             .ruleVariables( Arrays.asList( new MockRuleVariable() ) )
             .supplementaryData( new HashMap<String, List<String>>() )
-            .rules( Arrays.asList( new MockRule() ) )
+            .rules( List.of(Rule.MOCK) )
             .build();
 
         RuleEngine.Builder ruleEngineBuilderOne = ruleEngineContext.toEngineBuilder();

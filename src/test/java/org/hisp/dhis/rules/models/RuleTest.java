@@ -15,13 +15,6 @@ import static org.mockito.Mockito.mock;
 @RunWith( JUnit4.class )
 public class RuleTest
 {
-
-    @Test( expected = NullPointerException.class )
-    public void createShouldThrowOnNullCondition()
-    {
-        Rule.create( "test_program_stage", 1, null, new ArrayList<RuleAction>(), "", "" );
-    }
-
     @Test( expected = NullPointerException.class )
     public void createShouldThrowOnNullActionsList()
     {

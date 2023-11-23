@@ -57,7 +57,7 @@ public class RuleEngineFunctionTest
         RuleEngine ruleEngine = getRuleEngine( List.of( failingRule, validRule ) );
 
         RuleEnrollment ruleEnrollment = RuleEnrollment.create( "test_enrollment",
-            enrollmentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE, "", null,
+            enrollmentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE, "", "",
             List.of(),
             "" );
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEnrollment ).call();

@@ -31,7 +31,7 @@ package org.hisp.dhis.rules.models;
 import com.google.auto.value.AutoValue;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javax.annotation.CheckForNull;
 
 /**
  * Created by zubair@dhis2.org on 24.11.17.
@@ -42,7 +42,7 @@ public abstract class RuleActionSendMessage
     extends RuleAction
 {
     @Nonnull
-    public static RuleActionSendMessage create( @Nullable String notification, @Nullable String data )
+    public static RuleActionSendMessage create( @CheckForNull String notification, @CheckForNull String data )
     {
         return new AutoValue_RuleActionSendMessage( data == null ? "" : data,
             notification == null ? "" : notification );

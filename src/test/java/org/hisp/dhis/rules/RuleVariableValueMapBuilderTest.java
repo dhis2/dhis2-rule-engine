@@ -12,7 +12,6 @@ import org.hisp.dhis.rules.models.RuleVariableNewestEvent;
 import org.hisp.dhis.rules.models.RuleVariableNewestStageEvent;
 import org.hisp.dhis.rules.models.RuleVariablePreviousEvent;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
-import org.hisp.dhis.rules.util.MockRuleEnrollment;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,7 +54,7 @@ public class RuleVariableValueMapBuilderTest
     @Test( expected = IllegalStateException.class )
     public void ruleEnrollmentShouldThrowIfTargetEnrollmentIsAlreadySet()
     {
-        RuleEnrollment ruleEnrollment = new MockRuleEnrollment();
+        RuleEnrollment ruleEnrollment = RuleEnrollment.MOCK;
         RuleVariableValueMapBuilder.target( ruleEnrollment )
             .ruleEnrollment( ruleEnrollment )
             .build();

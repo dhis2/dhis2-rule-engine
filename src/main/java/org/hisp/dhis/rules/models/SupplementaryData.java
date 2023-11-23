@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
+import javax.annotation.CheckForNull;;
+import javax.annotation.CheckForNull;
 
 public class SupplementaryData
 {
@@ -68,7 +69,7 @@ public class SupplementaryData
             return this;
         }
 
-        public Builder setOrgUnitGroups( String orgUnitGroupUid, @Nullable String orgUnitGroupCode, List<String> orgUnitUids ) {
+        public Builder setOrgUnitGroups(String orgUnitGroupUid, @CheckForNull String orgUnitGroupCode, List<String> orgUnitUids ) {
             if ( this.orgUnitGroups == null )
             {
                 this.orgUnitGroups = new HashMap<>();

@@ -16,34 +16,6 @@ import static org.mockito.Mockito.mock;
 @RunWith( JUnit4.class )
 public class RuleEnrollmentTest
 {
-    @Test( expected = IllegalStateException.class )
-    public void createShouldThrowOnNullEnrollment()
-    {
-        RuleEnrollment.create( null, new Date(), new Date(),
-            RuleEnrollment.Status.ACTIVE, null, null, new ArrayList<RuleAttributeValue>(), "" );
-    }
-
-    @Test( expected = IllegalStateException.class )
-    public void createShouldThrowOnNullIncidentDate()
-    {
-        RuleEnrollment.create( "test_enrollment", null, new Date(),
-            RuleEnrollment.Status.ACTIVE, null, null, new ArrayList<RuleAttributeValue>(), "" );
-    }
-
-    @Test( expected = IllegalStateException.class )
-    public void createShouldThrowOnNullEnrollmentDate()
-    {
-        RuleEnrollment.create( "test_enrollment", new Date(), null,
-            RuleEnrollment.Status.ACTIVE, null, null, new ArrayList<RuleAttributeValue>(), "" );
-    }
-
-    @Test( expected = IllegalStateException.class )
-    public void createShouldThrowOnNullStatus()
-    {
-        RuleEnrollment.create( "test_enrollment", new Date(), new Date(),
-            null, null, null, new ArrayList<RuleAttributeValue>(), "" );
-    }
-
     @Test( expected = NullPointerException.class )
     public void createShouldThrowOnNullValueList()
     {

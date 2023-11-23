@@ -38,7 +38,6 @@ import org.hisp.dhis.rules.models.RuleEffect;
 import org.hisp.dhis.rules.models.RuleEnrollment;
 import org.hisp.dhis.rules.models.RuleEvent;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
-import org.hisp.dhis.rules.util.MockRule;
 import org.hisp.dhis.rules.util.MockRuleVariable;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,7 +51,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 @RunWith( JUnit4.class )
 public class ConstantsValueTest
@@ -62,7 +60,7 @@ public class ConstantsValueTest
     public void shouldThrowExceptionIfConstantsValueMapIsNull()
     {
         RuleEngineContext.builder()
-            .rules( Arrays.asList( new MockRule()) )
+            .rules( List.of(Rule.MOCK) )
             .ruleVariables( Arrays.asList( new MockRuleVariable()) )
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( null )
