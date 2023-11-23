@@ -1,44 +1,46 @@
 package org.hisp.dhis.rules;
 
-import com.google.auto.value.AutoValue;
 import org.hisp.dhis.lib.expression.spi.ValueType;
 import org.hisp.dhis.lib.expression.spi.VariableValue;
 import org.hisp.dhis.rules.models.RuleValueType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
-@AutoValue
-public abstract class RuleVariableValue implements VariableValue
-{
+public record RuleVariableValue(
+        @Nullable
+        String value,
+        @Nonnull
+        RuleValueType type,
+        @Nonnull
+        List<String> candidates,
+        @Nullable
+        String eventDate
+) implements VariableValue {
     private static final String DATE_PATTERN = "yyyy-MM-dd";
-
-    private static final String NUMBER_PATTERN = "0.0";
 
     @Nonnull
     public static RuleVariableValue create( @Nonnull RuleValueType ruleValueType )
     {
-        return new AutoValue_RuleVariableValue( null, ruleValueType, List.of(), getFormattedDate( new Date() ) );
+        return new RuleVariableValue( null, ruleValueType, List.of(), getFormattedDate( new Date() ) );
     }
 
     @Nonnull
     public static RuleVariableValue create( @Nonnull String value,
         @Nonnull RuleValueType ruleValueType )
     {
-        return new AutoValue_RuleVariableValue( value, ruleValueType,
+        return new RuleVariableValue( value, ruleValueType,
             List.of(), getFormattedDate( new Date() ) );
     }
 
     @Nonnull
     public static RuleVariableValue create( @Nonnull String value,
-        @Nonnull RuleValueType ruleValueType, @Nonnull List<String> candidates, @Nonnull String eventDate )
-    {
-        return new AutoValue_RuleVariableValue( value, ruleValueType,
-            Collections.unmodifiableList( candidates ), eventDate );
+        @Nonnull RuleValueType ruleValueType, @Nonnull List<String> candidates, @Nonnull String eventDate ) {
+        return new RuleVariableValue(value, ruleValueType,
+                List.copyOf(candidates), eventDate);
     }
 
     private static String getFormattedDate( Date date )
@@ -49,26 +51,14 @@ public abstract class RuleVariableValue implements VariableValue
         return format.format( date );
     }
 
-    @Nullable
-    public abstract String value();
-
-    @Nonnull
-    public abstract RuleValueType type();
-
-    @Nonnull
-    public abstract List<String> candidates();
-
-    @Nullable
-    public abstract String eventDate();
-
     @Override
     public final ValueType valueType() {
-        switch (type()) {
-            case DATE: return ValueType.DATE;
-            case NUMERIC: return ValueType.NUMBER;
-            case BOOLEAN: return ValueType.BOOLEAN;
-            default: return ValueType.STRING;
-        }
+        return switch (type()) {
+            case DATE -> ValueType.DATE;
+            case NUMERIC -> ValueType.NUMBER;
+            case BOOLEAN -> ValueType.BOOLEAN;
+            default -> ValueType.STRING;
+        };
     }
 
     @Override

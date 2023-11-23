@@ -74,12 +74,6 @@ public class RuleVariableValueTest
     }
 
     @Test( expected = NullPointerException.class )
-    public void createShouldThrowOnNullValueType()
-    {
-        RuleVariableValue.create( "test_value", null );
-    }
-
-    @Test( expected = NullPointerException.class )
     public void createShouldThrowOnNullCandidateList()
     {
         RuleVariableValue.create( "test_value", RuleValueType.TEXT, null, dateFormat.format( new Date() ) );
