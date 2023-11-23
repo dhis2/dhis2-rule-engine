@@ -24,11 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-// ToDo: logging
 public final class RuleEngine
 {
-    private static final Logger log = LoggerFactory.getLogger( RuleEngine.class.getName() );
-
     @Nonnull
     private final RuleEngineContext ruleEngineContext;
 

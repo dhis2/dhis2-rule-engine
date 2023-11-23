@@ -36,7 +36,7 @@ public enum TriggerEnvironment
     ANDROIDCLIENT( "AndroidClient" ),
     SERVER( "Server" );
 
-    private String clientName;
+    private final String clientName;
 
     TriggerEnvironment( String clientName )
     {
