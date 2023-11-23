@@ -116,13 +116,13 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( incorrectRuleHasValue.condition() );
 
         assertNotNull( result );
-        assertFalse( result.isValid() );
+        assertFalse( result.valid() );
 
         ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         result = ruleEngine.evaluate( incorrectSyntaxRule.condition() );
 
         assertNotNull( result );
-        assertFalse( result.isValid() );
+        assertFalse( result.valid() );
     }
 
     @Test
@@ -134,7 +134,7 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( rule.condition() );
 
         assertNotNull( result );
-        assertFalse( result.isValid() );
+        assertFalse( result.valid() );
     }
 
     @Test
@@ -146,21 +146,21 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( rule.condition() );
 
         assertNotNull( result );
-        assertTrue( result.isValid() );
+        assertTrue( result.valid() );
 
         rule = Rule.create( null, null, "d2:length(#{test_var_date_one}) > 0 ", Arrays.asList( ruleAction ), "", "" );
 
         result = ruleEngine.evaluate( rule.condition() );
 
         assertNotNull( result );
-        assertFalse( result.isValid() );
+        assertFalse( result.valid() );
 
         rule = Rule.create( null, null, "d2:length(#{test_var_number}) > 0 ", Arrays.asList( ruleAction ), "", "" );
 
         result = ruleEngine.evaluate( rule.condition() );
 
         assertNotNull( result );
-        assertFalse( result.isValid() );
+        assertFalse( result.valid() );
     }
 
     @Test
@@ -174,7 +174,7 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( correctMultipleD2FunctionRule.condition() );
 
         assertNotNull( result );
-        assertTrue( result.isValid() );
+        assertTrue( result.valid() );
     }
 
     @Test
@@ -187,8 +187,8 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( conditionWithD2FunctionsTEA.condition() );
 
         assertNotNull( result );
-        assertEquals( "d2:hasValue(Variable_THREE)", result.getDescription() );
-        assertTrue( result.isValid() );
+        assertEquals( "d2:hasValue(Variable_THREE)", result.description() );
+        assertTrue( result.valid() );
     }
 
     @Test
@@ -201,8 +201,8 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( conditionWithD2FunctionsTEA.condition() );
 
         assertNotNull( result );
-        assertEquals( "'test_var_three' == 'email'", result.getDescription() );
-        assertTrue( result.isValid() );
+        assertEquals( "'test_var_three' == 'email'", result.description() );
+        assertTrue( result.valid() );
     }
 
     @Test
@@ -215,8 +215,8 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( conditionWithD2FunctionsTEA.condition() );
 
         assertNotNull( result );
-        assertEquals( "Variable_THREE == 'email'", result.getDescription() );
-        assertTrue( result.isValid() );
+        assertEquals( "Variable_THREE == 'email'", result.description() );
+        assertTrue( result.valid() );
     }
 
     @Test
@@ -229,7 +229,7 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( literalStringRule.condition() );
 
         assertNotNull( result );
-        assertTrue( result.isValid() );
+        assertTrue( result.valid() );
 
     }
 
@@ -243,7 +243,7 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( correctD2betweenFunctionRule.condition() );
 
         assertNotNull( result );
-        assertTrue( result.isValid() );
+        assertTrue( result.valid() );
     }
 
     @Test
@@ -256,7 +256,7 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( correctD2betweenFunctionRule.condition() );
 
         assertNotNull( result );
-        assertTrue( result.isValid() );
+        assertTrue( result.valid() );
     }
 
     @Test
@@ -269,7 +269,7 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( withoutD2AttFunctionRule.condition() );
 
         assertNotNull( result );
-        assertTrue( result.isValid() );
+        assertTrue( result.valid() );
     }
 
     @Test
@@ -282,7 +282,7 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( withoutD2DEFunctionRule.condition() );
 
         assertNotNull( result );
-        assertTrue( result.isValid() );
+        assertTrue( result.valid() );
     }
 
     @Test
@@ -295,7 +295,7 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( constantRule.condition() );
 
         assertNotNull( result );
-        assertTrue( result.isValid() );
+        assertTrue( result.valid() );
     }
 
     @Test
@@ -308,7 +308,7 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( programEnvVariableRule.condition() );
 
         assertNotNull( result );
-        assertTrue( result.isValid() );
+        assertTrue( result.valid() );
     }
 
     @Test
@@ -321,7 +321,7 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( correctRuleHasValue.condition() );
 
         assertNotNull( result );
-        assertTrue( result.isValid() );
+        assertTrue( result.valid() );
     }
 
     @Test
@@ -336,7 +336,7 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( correctMultipleD2FunctionRuleWithOr.condition() );
 
         assertNotNull( result );
-        assertTrue( result.isValid() );
+        assertTrue( result.valid() );
     }
 
     @Test
@@ -351,7 +351,7 @@ public class RuleEngineGetDescriptionTest
         RuleValidationResult result = ruleEngine.evaluate( correctMultipleD2FunctionRuleWithAnd.condition() );
 
         assertNotNull( result );
-        assertTrue( result.isValid() );
+        assertTrue( result.valid() );
     }
 
     @Test
@@ -361,21 +361,21 @@ public class RuleEngineGetDescriptionTest
 
         RuleValidationResult result = ruleEngine.evaluateDataFieldExpression( "1 + 1" );
         assertNotNull( result );
-        assertTrue( result.isValid() );
+        assertTrue( result.valid() );
 
         result = ruleEngine.evaluateDataFieldExpression( "d2:hasValue(#{test_var_two}) && d2:count(#{test_var_one}) > 0 " );
         assertNotNull( result );
-        assertTrue( result.isValid() );
+        assertTrue( result.valid() );
 
         result = ruleEngine.evaluateDataFieldExpression( "1 + 1 +" );
         assertNotNull( result );
-        assertFalse( result.isValid() );
-        assertThat( result.getException(), instanceOf( ParseException.class ) );
+        assertFalse( result.valid() );
+        assertThat( result.exception(), instanceOf( ParseException.class ) );
 
         result = ruleEngine.evaluateDataFieldExpression( "d2:hasValue(#{test_var_two}) && d2:count(#{test_var_one}) > 0 (" );
         assertNotNull( result );
-        assertFalse( result.isValid() );
-        assertThat( result.getException(), instanceOf( ParseException.class ) );
+        assertFalse( result.valid() );
+        assertThat( result.exception(), instanceOf( ParseException.class ) );
     }
 
     private RuleEngine.Builder getRuleEngineBuilderForDescription( Map<String, DataItem> itemStore )

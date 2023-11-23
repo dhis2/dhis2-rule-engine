@@ -31,40 +31,11 @@ package org.hisp.dhis.rules.models;
 /**
  * @author Zubair Asghar
  */
-public class RuleValidationResult
-{
-    private String description;
-    private boolean isValid;
-    private String errorMessage;
-    private Throwable exception;
-
-    public RuleValidationResult( String description, boolean isValid, String errorMessage, Throwable exception )
-    {
-        this.description = description;
-        this.isValid = isValid;
-        this.errorMessage = errorMessage;
-        this.exception = exception;
-    }
-
-    public String getDescription()
-    {
-        return description;
-    }
-
-    public boolean isValid()
-    {
-        return isValid;
-    }
-
-    public String getErrorMessage()
-    {
-        return errorMessage;
-    }
-
-    public Throwable getException()
-    {
-        return exception;
-    }
+public record RuleValidationResult(
+    String description,
+    boolean valid,
+    String errorMessage,
+    Throwable exception) {
 
     public static Builder builder()
     {
