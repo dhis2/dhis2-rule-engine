@@ -20,7 +20,7 @@ public class RuleConditionEvaluator
     {
         List<RuleEffect> ruleEffects = new ArrayList<>();
         for (RuleEvaluationResult ruleEvaluationResult : getRuleEvaluationResults( targetType, targetUid, valueMap, supplementaryData, rules)) {
-                ruleEffects.addAll( ruleEvaluationResult.getRuleEffects() );
+                ruleEffects.addAll( ruleEvaluationResult.ruleEffects() );
         }
 
         return ruleEffects;
@@ -32,8 +32,8 @@ public class RuleConditionEvaluator
         List<RuleEffect> ruleEffects = new ArrayList<>();
         for (RuleEvaluationResult ruleEvaluationResult : getRuleEvaluationResults( targetType, targetUid, valueMap, supplementaryData, rules)) {
 
-            if ( !ruleEvaluationResult.isError() ) {
-                ruleEffects.addAll( ruleEvaluationResult.getRuleEffects() );
+            if ( !ruleEvaluationResult.error() ) {
+                ruleEffects.addAll( ruleEvaluationResult.ruleEffects() );
             }
         }
 
@@ -93,10 +93,10 @@ public class RuleConditionEvaluator
 
         for (RuleEvaluationResult ruleEvaluationResult : ruleEvaluationResults) {
 
-            log.debug("Rule " + ruleEvaluationResult.getRule().name() + " with id " + ruleEvaluationResult.getRule().uid() +
+            log.debug("Rule " + ruleEvaluationResult.rule().name() + " with id " + ruleEvaluationResult.rule().uid() +
                     " executed for " + targetType.getName() + "(" + targetUid + ")" +
-                    " with condition (" + ruleEvaluationResult.getRule().condition() + ")" +
-                    " was evaluated " + ruleEvaluationResult.isEvaluatedAs());
+                    " with condition (" + ruleEvaluationResult.rule().condition() + ")" +
+                    " was evaluated " + ruleEvaluationResult.evaluatedAs());
         }
 
         return ruleEvaluationResults;
