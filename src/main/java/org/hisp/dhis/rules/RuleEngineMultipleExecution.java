@@ -13,29 +13,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-class RuleEngineMultipleExecution
-    implements Callable<List<RuleEffects>>
-{
-
+record RuleEngineMultipleExecution(
     @Nonnull
-    private final Map<String, List<String>> supplementaryData;
-
+    List<Rule> rules,
     @Nonnull
-    private final List<Rule> rules;
-
+    RuleVariableValueMap ruleVariableValueMap,
     @Nonnull
-    private RuleVariableValueMap ruleVariableValueMap;
-
+    Map<String, List<String>> supplementaryData,
     @Nonnull
-    private RuleConditionEvaluator ruleConditionEvaluator;
+    RuleConditionEvaluator ruleConditionEvaluator) implements Callable<List<RuleEffects>> {
 
-    RuleEngineMultipleExecution( @Nonnull List<Rule> rules,
-        @Nonnull RuleVariableValueMap ruleVariableValueMap, Map<String, List<String>> supplementaryData )
+    RuleEngineMultipleExecution(@Nonnull List<Rule> rules,
+                                @Nonnull RuleVariableValueMap ruleVariableValueMap, @Nonnull Map<String, List<String>> supplementaryData )
     {
-        this.ruleVariableValueMap = ruleVariableValueMap;
-        this.rules = rules;
-        this.supplementaryData = supplementaryData;
-        this.ruleConditionEvaluator = new RuleConditionEvaluator();
+        this(rules, ruleVariableValueMap, supplementaryData, new RuleConditionEvaluator());
     }
 
     @Override
