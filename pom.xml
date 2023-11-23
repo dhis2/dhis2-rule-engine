@@ -292,7 +292,7 @@
         <dependency>
             <groupId>org.hisp.dhis.lib.expression</groupId>
             <artifactId>expression-parser</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </dependency>
     </dependencies>
 

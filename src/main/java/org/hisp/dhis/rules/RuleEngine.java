@@ -158,13 +158,13 @@ public final class RuleEngine
     {
         try {
             Map<String, ValueType> validationMap = new HashMap<>();
-            for (Map.Entry<String, DataItem> e : ruleEngineContext.getDataItemStore().entrySet()) {
+            for (Map.Entry<String, DataItem> e : ruleEngineContext.dataItemStore().entrySet()) {
                 validationMap.put(e.getKey(), e.getValue().getValueType().toValueType());
             }
             new Expression(expression, mode).validate( validationMap );
 
             Map<String, String> displayNames = new HashMap<>();
-            for (Map.Entry<String, DataItem> e : ruleEngineContext.getDataItemStore().entrySet()) {
+            for (Map.Entry<String, DataItem> e : ruleEngineContext.dataItemStore().entrySet()) {
                 displayNames.put(e.getKey(), e.getValue().getDisplayName());
             }
             String description = new Expression(expression, mode).describe(displayNames);

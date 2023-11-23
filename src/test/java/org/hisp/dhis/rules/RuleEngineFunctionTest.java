@@ -98,11 +98,11 @@ public class RuleEngineFunctionTest
         List<RuleEffects> ruleEffects = ruleEngine.evaluate().call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 3 );
-        assertThat( getRuleEffectsByUid( ruleEffects, "test_event" ).getRuleEffects() ).isEmpty();
-        assertThat( getRuleEffectsByUid( ruleEffects, "test_not_failing_event" ).getRuleEffects() ).isNotEmpty();
-        assertThat( getRuleEffectsByUid( ruleEffects, "test_not_failing_event" ).getRuleEffects().get( 0 ).data() )
+        assertThat( getRuleEffectsByUid( ruleEffects, "test_event" ).ruleEffects() ).isEmpty();
+        assertThat( getRuleEffectsByUid( ruleEffects, "test_not_failing_event" ).ruleEffects() ).isNotEmpty();
+        assertThat( getRuleEffectsByUid( ruleEffects, "test_not_failing_event" ).ruleEffects().get( 0 ).data() )
             .isEqualTo( "4" );
-        assertThat( getRuleEffectsByUid( ruleEffects, "test_enrollment" ).getRuleEffects() ).isNotEmpty();
+        assertThat( getRuleEffectsByUid( ruleEffects, "test_enrollment" ).ruleEffects() ).isNotEmpty();
 
         ;
     }
@@ -111,7 +111,7 @@ public class RuleEngineFunctionTest
     {
         for ( RuleEffects ruleEffect : ruleEffects )
         {
-            if ( ruleEffect.getTrackerObjectUid().equals( uid ) )
+            if ( ruleEffect.trackerObjectUid().equals( uid ) )
             {
                 return ruleEffect;
             }

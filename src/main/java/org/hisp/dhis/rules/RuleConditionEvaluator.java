@@ -226,14 +226,14 @@ public class RuleConditionEvaluator
             updateValueMap( ruleActionAssign.field(), RuleVariableValue.create( data, RuleValueType.TEXT ), valueMap );
             if ( StringUtils.isEmpty( data ) )
             {
-                return RuleEffect.create( rule.uid(), ruleAction, null );
+                return new RuleEffect( rule.uid(), ruleAction, null );
             }
             else
             {
-                return RuleEffect.create( rule.uid(), ruleAction, data );
+                return new RuleEffect( rule.uid(), ruleAction, data );
             }
         }
 
-        return RuleEffect.create( rule.uid(), ruleAction, process( ruleAction.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION) );
+        return new RuleEffect( rule.uid(), ruleAction, process( ruleAction.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION) );
     }
 }

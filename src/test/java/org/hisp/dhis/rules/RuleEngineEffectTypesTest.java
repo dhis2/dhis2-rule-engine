@@ -86,8 +86,8 @@ public class RuleEngineEffectTypesTest
         List<RuleEffects> ruleEffects = ruleEngine.evaluate().call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).getRuleEffects().get( 0 ).data() ).isEqualTo( "test_string" );
-        assertThat( ruleEffects.get( 0 ).getRuleEffects().get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertThat( ruleEffects.get( 0 ).ruleEffects().get( 0 ).data() ).isEqualTo( "test_string" );
+        assertThat( ruleEffects.get( 0 ).ruleEffects().get( 0 ).ruleAction() ).isEqualTo( ruleAction );
     }
 
     @Test

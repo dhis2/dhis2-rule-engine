@@ -3,6 +3,7 @@ package org.hisp.dhis.rules;
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleVariable;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -12,47 +13,23 @@ import java.util.Map;
 
 import static java.util.Collections.unmodifiableList;
 
-public final class RuleEngineContext
-{
-    private final RuleEngineIntent ruleEngineIntent;
-
+public record RuleEngineContext(
     @Nonnull
-    private final List<Rule> rules;
-
+    List<Rule> rules,
     @Nonnull
-    private final List<RuleVariable> ruleVariables;
-
+    List<RuleVariable> ruleVariables,
     @Nonnull
-    private final Map<String, List<String>> supplementaryData;
-
+    Map<String, List<String>> supplementaryData,
     @Nonnull
-    private final Map<String, String> constantsValues;
+    Map<String, String> constantsValues,
+    @Nonnull
+    RuleEngineIntent ruleEngineIntent,
+    @CheckForNull
+    Map<String, DataItem> dataItemStore) {
 
-    @Nullable
-    private final Map<String, DataItem> dataItemStore;
-
-
-    RuleEngineContext( @Nonnull List<Rule> rules, @Nonnull List<RuleVariable> ruleVariables,
-        Map<String, List<String>> supplementaryData, Map<String, String> constantsValues, RuleEngineIntent intent,
-        Map<String, DataItem> itemStore )
-    {
-        this.rules = rules;
-        this.ruleVariables = ruleVariables;
-        this.supplementaryData = supplementaryData;
-        this.constantsValues = constantsValues;
-        this.ruleEngineIntent = intent;
-        this.dataItemStore = itemStore;
-    }
-
-    RuleEngineContext( @Nonnull List<Rule> rules, @Nonnull List<RuleVariable> ruleVariables,
-       Map<String, List<String>> supplementaryData, Map<String, String> constantsValues )
-    {
-        this.rules = rules;
-        this.ruleVariables = ruleVariables;
-        this.supplementaryData = supplementaryData;
-        this.constantsValues = constantsValues;
-        this.ruleEngineIntent = RuleEngineIntent.EVALUATION;
-        this.dataItemStore = new HashMap<>();
+    RuleEngineContext(@Nonnull List<Rule> rules, @Nonnull List<RuleVariable> ruleVariables,
+                      @Nonnull Map<String, List<String>> supplementaryData, @Nonnull Map<String, String> constantsValues) {
+        this(rules, ruleVariables, supplementaryData, constantsValues, RuleEngineIntent.EVALUATION, new HashMap<>());
     }
 
     @Nonnull
@@ -66,42 +43,6 @@ public final class RuleEngineContext
     public static Builder builder( @Nonnull RuleExpressionEvaluator evaluator )
     {
         return new Builder( evaluator );
-    }
-
-    @Nonnull
-    public List<Rule> rules()
-    {
-        return rules;
-    }
-
-    @Nonnull
-    public List<RuleVariable> ruleVariables()
-    {
-        return ruleVariables;
-    }
-
-    @Nonnull
-    public Map<String, List<String>> supplementaryData()
-    {
-        return supplementaryData;
-    }
-
-    @Nonnull
-    public Map<String, String> constantsValues()
-    {
-        return constantsValues;
-    }
-
-    @Nullable
-    public Map<String, DataItem> getDataItemStore()
-    {
-        return dataItemStore;
-    }
-
-    @Nullable
-    public RuleEngineIntent getRuleEngineIntent()
-    {
-        return ruleEngineIntent;
     }
 
     @Nonnull
@@ -138,26 +79,26 @@ public final class RuleEngineContext
         }
 
         @Nonnull
-        public Builder rules( @Nonnull List<Rule> rules )
+        public Builder rules( List<Rule> rules )
         {
             if ( rules == null )
             {
                 throw new IllegalArgumentException( "rules == null" );
             }
 
-            this.rules = unmodifiableList( new ArrayList<>( rules ) );
+            this.rules = List.copyOf(rules);
             return this;
         }
 
         @Nonnull
-        public Builder ruleVariables( @Nonnull List<RuleVariable> ruleVariables )
+        public Builder ruleVariables( List<RuleVariable> ruleVariables )
         {
             if ( ruleVariables == null )
             {
                 throw new IllegalArgumentException( "ruleVariables == null" );
             }
 
-            this.ruleVariables = unmodifiableList( new ArrayList<>( ruleVariables ) );
+            this.ruleVariables = List.copyOf(ruleVariables);
             return this;
         }
 
@@ -208,15 +149,11 @@ public final class RuleEngineContext
         public RuleEngineContext build()
         {
             if ( rules == null )
-            {
-                rules = unmodifiableList( new ArrayList<Rule>() );
-            }
-
+                rules = List.of();
             if ( ruleVariables == null )
-            {
-                ruleVariables = unmodifiableList( new ArrayList<RuleVariable>() );
-            }
-
+                ruleVariables = List.of();
+            if (supplementaryData == null) supplementaryData = Map.of();
+            if (constantsValues == null) constantsValues = Map.of();
             if ( intent == null )
             {
                 // For evaluation

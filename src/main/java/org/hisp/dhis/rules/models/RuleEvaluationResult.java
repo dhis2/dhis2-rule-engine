@@ -25,7 +25,7 @@ public class RuleEvaluationResult
     public static RuleEvaluationResult errorRule( Rule rule, String errorMessage ) {
         ArrayList<RuleEffect> effects = new ArrayList<>();
 
-        effects.add(RuleEffect.create(rule.uid(), RuleActionError.create(errorMessage), errorMessage));
+        effects.add(new RuleEffect(rule.uid(), RuleActionError.create(errorMessage), errorMessage));
         return new RuleEvaluationResult( rule, effects, false, true );
     }
 
