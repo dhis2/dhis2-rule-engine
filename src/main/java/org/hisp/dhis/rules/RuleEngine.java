@@ -12,8 +12,6 @@ import org.hisp.dhis.rules.models.RuleEnrollment;
 import org.hisp.dhis.rules.models.RuleEvent;
 import org.hisp.dhis.rules.models.RuleValidationResult;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -156,13 +154,13 @@ public final class RuleEngine
         try {
             Map<String, ValueType> validationMap = new HashMap<>();
             for (Map.Entry<String, DataItem> e : ruleEngineContext.dataItemStore().entrySet()) {
-                validationMap.put(e.getKey(), e.getValue().getValueType().toValueType());
+                validationMap.put(e.getKey(), e.getValue().valueType().toValueType());
             }
             new Expression(expression, mode).validate( validationMap );
 
             Map<String, String> displayNames = new HashMap<>();
             for (Map.Entry<String, DataItem> e : ruleEngineContext.dataItemStore().entrySet()) {
-                displayNames.put(e.getKey(), e.getValue().getDisplayName());
+                displayNames.put(e.getKey(), e.getValue().displayName());
             }
             String description = new Expression(expression, mode).describe(displayNames);
             return RuleValidationResult.builder().isValid( true ).description(description).build();

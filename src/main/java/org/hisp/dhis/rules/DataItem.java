@@ -32,27 +32,7 @@ package org.hisp.dhis.rules;
  * Class is place holder for program rule variable, Constant and program environment variable display name and type.
  * @author Zubair Asghar
  */
-public class DataItem
-{
-    private String displayName;
-
-    private ItemValueType valueType;
-
-    public DataItem( String value, ItemValueType valueType )
-    {
-        this.displayName = value;
-        this.valueType = valueType;
-    }
-
-    public String getDisplayName()
-    {
-        return displayName;
-    }
-
-    public ItemValueType getValueType()
-    {
-        return valueType;
-    }
+public record DataItem(String displayName, ItemValueType valueType) {
 
     public static Builder builder()
     {
