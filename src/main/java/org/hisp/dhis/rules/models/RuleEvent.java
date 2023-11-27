@@ -1,8 +1,7 @@
 package org.hisp.dhis.rules.models;
 
-import javax.annotation.Nonnull;
 import javax.annotation.CheckForNull;
-import java.io.Serializable;
+import javax.annotation.Nonnull;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;

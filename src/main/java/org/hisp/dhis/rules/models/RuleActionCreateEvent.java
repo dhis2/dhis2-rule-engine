@@ -1,7 +1,7 @@
 package org.hisp.dhis.rules.models;
 
-import javax.annotation.Nonnull;
 import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 public record RuleActionCreateEvent(
         @Nonnull String data,

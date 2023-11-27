@@ -1,10 +1,12 @@
 package org.hisp.dhis.rules.models;
 
-import javax.annotation.CheckForNull;;
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+;
 
 public record RuleEnrollment(
         @Nonnull String enrollment,

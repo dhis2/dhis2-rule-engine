@@ -6,12 +6,9 @@ import org.hisp.dhis.rules.models.RuleVariable;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static java.util.Collections.unmodifiableList;
 
 public record RuleEngineContext(
     @Nonnull

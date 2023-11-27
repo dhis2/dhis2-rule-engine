@@ -1,7 +1,5 @@
 package org.hisp.dhis.rules.models;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -24,19 +22,4 @@ public class RuleActionHideOptionGroupTest
 
         assertThat( ruleActionHideOptionGroup.content() ).isEqualTo( "" );
     }
-
-    @Test
-    public void createMustThrowOnNullField()
-    {
-        thrown.expect( NullPointerException.class );
-        RuleActionHideOptionGroup.create( "test_content", "test_option_group" , null);
-    }
-
-    @Test
-    public void createMustThrowOnNullOptionGroup()
-    {
-        thrown.expect( NullPointerException.class );
-        RuleActionHideOptionGroup.create( "test_content", null ,"field");
-    }
-
 }

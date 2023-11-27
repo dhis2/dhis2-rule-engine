@@ -4,12 +4,21 @@ import org.apache.commons.lang3.StringUtils;
 import org.hisp.dhis.lib.expression.Expression;
 import org.hisp.dhis.lib.expression.spi.ExpressionData;
 import org.hisp.dhis.lib.expression.spi.IllegalExpressionException;
-import org.hisp.dhis.rules.models.*;
+import org.hisp.dhis.rules.models.Rule;
+import org.hisp.dhis.rules.models.RuleAction;
+import org.hisp.dhis.rules.models.RuleActionAssign;
+import org.hisp.dhis.rules.models.RuleEffect;
+import org.hisp.dhis.rules.models.RuleEvaluationResult;
+import org.hisp.dhis.rules.models.RuleValueType;
+import org.hisp.dhis.rules.models.TrackerObjectType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class RuleConditionEvaluator
 {

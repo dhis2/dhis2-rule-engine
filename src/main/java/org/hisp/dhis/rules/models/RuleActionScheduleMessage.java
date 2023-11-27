@@ -28,8 +28,8 @@ package org.hisp.dhis.rules.models;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import javax.annotation.Nonnull;
 import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 /**
  * Created by zubair@dhis2.org on 07.02.18.

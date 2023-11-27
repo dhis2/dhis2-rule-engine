@@ -1,29 +1,23 @@
 package org.hisp.dhis.rules.models;
 
-import com.google.auto.value.AutoValue;
-
-import javax.annotation.Nonnull;
 import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 import static org.hisp.dhis.rules.models.AttributeType.UNKNOWN;
 
-@AutoValue
-public abstract class RuleActionSetMandatoryField
-    implements RuleActionAttribute
-{
+public record RuleActionSetMandatoryField(
+        @Nonnull String data,
+        @Nonnull AttributeType attributeType,
+        @Nonnull String field
+) implements RuleActionAttribute {
 
     @Nonnull
-    public static RuleActionSetMandatoryField create( @Nonnull String field, @CheckForNull AttributeType attributeType )
-    {
-        return new AutoValue_RuleActionSetMandatoryField( "", attributeType, field );
+    public static RuleActionSetMandatoryField create(@Nonnull String field, @CheckForNull AttributeType attributeType) {
+        return new RuleActionSetMandatoryField("", attributeType == null ? UNKNOWN : attributeType, field);
     }
 
     @Nonnull
-    public static RuleActionSetMandatoryField create( @Nonnull String field )
-    {
-        return create( field, UNKNOWN );
+    public static RuleActionSetMandatoryField create(@Nonnull String field) {
+        return create(field, UNKNOWN);
     }
-
-    @Nonnull
-    public abstract String field();
 }

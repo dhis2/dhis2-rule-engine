@@ -1,9 +1,10 @@
 package org.hisp.dhis.rules.models;
 
-import javax.annotation.CheckForNull;;
-import javax.annotation.Nonnull;
 import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 import java.util.List;
+
+;
 
 public record Rule(
     @CheckForNull

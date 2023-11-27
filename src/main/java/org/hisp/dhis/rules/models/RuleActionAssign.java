@@ -1,9 +1,11 @@
 package org.hisp.dhis.rules.models;
 
-import javax.annotation.CheckForNull;;
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 import static org.hisp.dhis.rules.models.AttributeType.UNKNOWN;
+
+;
 
 public record RuleActionAssign(
         @Nonnull String data,
