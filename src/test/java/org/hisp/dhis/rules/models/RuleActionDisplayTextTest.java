@@ -15,11 +15,11 @@ public class RuleActionDisplayTextTest
     @Test
     public void createForFeedbackMustSubstituteCorrectLocation()
     {
-        RuleActionDisplayText displayTextAction = RuleActionDisplayText
+        RuleActionText displayTextAction = RuleActionText
             .createForFeedback( "test_content", "test_data" );
 
         assertThat( displayTextAction.location() )
-            .isEqualTo( RuleActionDisplayText.LOCATION_FEEDBACK_WIDGET );
+            .isEqualTo( RuleActionText.LOCATION_FEEDBACK_WIDGET );
         assertThat( displayTextAction.content() ).isEqualTo( "test_content" );
         assertThat( displayTextAction.data() ).isEqualTo( "test_data" );
     }
@@ -27,11 +27,11 @@ public class RuleActionDisplayTextTest
     @Test
     public void createForIndicatorsMustSubstituteCorrectLocation()
     {
-        RuleActionDisplayText displayTextAction = RuleActionDisplayText
+        RuleActionText displayTextAction = RuleActionText
             .createForIndicators( "test_content", "test_data" );
 
         assertThat( displayTextAction.location() )
-            .isEqualTo( RuleActionDisplayText.LOCATION_INDICATOR_WIDGET );
+            .isEqualTo( RuleActionText.LOCATION_INDICATOR_WIDGET );
         assertThat( displayTextAction.content() ).isEqualTo( "test_content" );
         assertThat( displayTextAction.data() ).isEqualTo( "test_data" );
     }
@@ -39,21 +39,21 @@ public class RuleActionDisplayTextTest
     @Test( expected = IllegalArgumentException.class )
     public void createForFeedbackMustThrowWhenBothArgumentsNull()
     {
-        RuleActionDisplayText.createForFeedback( null, null );
+        RuleActionText.createForFeedback( null, null );
     }
 
     @Test( expected = IllegalArgumentException.class )
     public void createForIndicatorsMustThrowWhenBothArgumentsNull()
     {
-        RuleActionDisplayText.createForIndicators( null, null );
+        RuleActionText.createForIndicators( null, null );
     }
 
     @Test
     public void createForFeedbackMustSubstituteEmptyStringsForNullArguments()
     {
-        RuleActionDisplayText ruleActionNoContent = RuleActionDisplayText
+        RuleActionText ruleActionNoContent = RuleActionText
             .createForFeedback( null, "test_data" );
-        RuleActionDisplayText ruleActionNoData = RuleActionDisplayText
+        RuleActionText ruleActionNoData = RuleActionText
             .createForFeedback( "test_content", null );
 
         assertThat( ruleActionNoContent.content() ).isEqualTo( "" );
@@ -66,9 +66,9 @@ public class RuleActionDisplayTextTest
     @Test
     public void createForIndicatorsMustSubstituteEmptyStringsForNullArguments()
     {
-        RuleActionDisplayText ruleActionNoContent = RuleActionDisplayText
+        RuleActionText ruleActionNoContent = RuleActionText
             .createForIndicators( null, "test_data" );
-        RuleActionDisplayText ruleActionNoData = RuleActionDisplayText
+        RuleActionText ruleActionNoData = RuleActionText
             .createForIndicators( "test_content", null );
 
         assertThat( ruleActionNoContent.content() ).isEqualTo( "" );

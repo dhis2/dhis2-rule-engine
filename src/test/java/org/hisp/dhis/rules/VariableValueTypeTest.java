@@ -30,7 +30,7 @@ package org.hisp.dhis.rules;
 
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleAction;
-import org.hisp.dhis.rules.models.RuleActionDisplayKeyValuePair;
+import org.hisp.dhis.rules.models.RuleActionText;
 import org.hisp.dhis.rules.models.RuleDataValue;
 import org.hisp.dhis.rules.models.RuleEffect;
 import org.hisp.dhis.rules.models.RuleEvent;
@@ -44,6 +44,7 @@ import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -57,9 +58,9 @@ public class VariableValueTypeTest
     public void testNumericVariablesAreComparedCorrectly()
             throws Exception
     {
-        RuleAction ruleAction = RuleActionDisplayKeyValuePair
+        RuleAction ruleAction = RuleActionText
                 .createForFeedback( "test_action_content", "#{test_variable}" );
-        Rule rule = Rule.create( null, null, "#{test_variable} > #{test_variable2}", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "#{test_variable} > #{test_variable2}", List.of(ruleAction), "", "" );
         RuleVariable ruleVariable = RuleVariableCurrentEvent
                 .create( "test_variable", "test_data_element", RuleValueType.NUMERIC, true, new ArrayList<>());
         RuleVariable ruleVariable2 = RuleVariableCurrentEvent
@@ -82,9 +83,9 @@ public class VariableValueTypeTest
     public void testTextVariablesAreComparedCorrectly()
             throws Exception
     {
-        RuleAction ruleAction = RuleActionDisplayKeyValuePair
+        RuleAction ruleAction = RuleActionText
                 .createForFeedback( "test_action_content", "#{test_variable}" );
-        Rule rule = Rule.create( null, null, "#{test_variable} > #{test_variable2}", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "#{test_variable} > #{test_variable2}", List.of(ruleAction), "", "" );
         RuleVariable ruleVariable = RuleVariableCurrentEvent
                 .create( "test_variable", "test_data_element", RuleValueType.TEXT, true, new ArrayList<>());
         RuleVariable ruleVariable2 = RuleVariableCurrentEvent
@@ -105,7 +106,7 @@ public class VariableValueTypeTest
     {
         return RuleEngineContext
                 .builder()
-                .rules( Arrays.asList( rule ) )
+                .rules(Collections.singletonList(rule))
                 .ruleVariables( ruleVariables )
                 .supplementaryData( new HashMap<String, List<String>>() )
                 .constantsValue( new HashMap<String, String>() )

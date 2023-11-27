@@ -1,7 +1,5 @@
 package org.hisp.dhis.rules.models;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -14,10 +12,10 @@ public class RuleActionShowErrorTest
     @Test
     public void createMustSubstituteEmptyStringsForNullArguments()
     {
-        RuleActionShowError ruleActionAssignNoContent = RuleActionShowError
-            .create( null, "test_data", "test_field" );
-        RuleActionShowError ruleActionAssignNoData = RuleActionShowError
-            .create( "test_content", null, "test_field" );
+        RuleActionMessage ruleActionAssignNoContent = RuleActionMessage
+            .create( null, "test_data", "test_field", RuleActionMessage.Type.SHOW_ERROR );
+        RuleActionMessage ruleActionAssignNoData = RuleActionMessage
+            .create( "test_content", null, "test_field", RuleActionMessage.Type.SHOW_ERROR );
 
         assertThat( ruleActionAssignNoContent.content() ).isEqualTo( "" );
         assertThat( ruleActionAssignNoContent.data() ).isEqualTo( "test_data" );
@@ -27,17 +25,4 @@ public class RuleActionShowErrorTest
         assertThat( ruleActionAssignNoData.data() ).isEqualTo( "" );
         assertThat( ruleActionAssignNoData.field() ).isEqualTo( "test_field" );
     }
-
-    @Test( expected = IllegalArgumentException.class )
-    public void createMustThrowWhenContentAndDataAreNull()
-    {
-        RuleActionShowError.create( null, null, "test_field" );
-    }
-
-    @Test( expected = NullPointerException.class )
-    public void createMustThrowWhenFieldIsNull()
-    {
-        RuleActionShowError.create( "test_content", "test_data", null );
-    }
-
 }

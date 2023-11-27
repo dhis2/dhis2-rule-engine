@@ -34,10 +34,4 @@ public class RuleActionAssignTest
         RuleActionAssign.create( null, "test_data", null );
     }
 
-    @Test( expected = NullPointerException.class )
-    public void createMustThrowWhenDataIsNull()
-    {
-        RuleActionAssign.create( "test_content", null, "test_field" );
-    }
-
 }

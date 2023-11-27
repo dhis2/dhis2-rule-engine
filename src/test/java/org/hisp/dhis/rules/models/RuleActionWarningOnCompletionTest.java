@@ -1,7 +1,5 @@
 package org.hisp.dhis.rules.models;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -11,16 +9,15 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 @RunWith( JUnit4.class )
 public class RuleActionWarningOnCompletionTest
 {
-
     @Test
     public void createMustSubstituteEmptyStringsForNullArguments()
     {
-        RuleActionWarningOnCompletion ruleActionNoContent = RuleActionWarningOnCompletion
-            .create( null, "test_data", "test_field" );
-        RuleActionWarningOnCompletion ruleActionNoData = RuleActionWarningOnCompletion
-            .create( "test_content", null, "test_field" );
-        RuleActionWarningOnCompletion ruleActionNoField = RuleActionWarningOnCompletion
-            .create( "test_content", "test_data", null );
+        RuleActionMessage ruleActionNoContent = RuleActionMessage
+            .create( null, "test_data", "test_field", RuleActionMessage.Type.WARNING_ON_COMPILATION );
+        RuleActionMessage ruleActionNoData = RuleActionMessage
+            .create( "test_content", null, "test_field", RuleActionMessage.Type.WARNING_ON_COMPILATION );
+        RuleActionMessage ruleActionNoField = RuleActionMessage
+            .create( "test_content", "test_data", null, RuleActionMessage.Type.WARNING_ON_COMPILATION );
 
         assertThat( ruleActionNoContent.content() ).isEqualTo( "" );
         assertThat( ruleActionNoContent.data() ).isEqualTo( "test_data" );
@@ -38,6 +35,6 @@ public class RuleActionWarningOnCompletionTest
     @Test( expected = IllegalArgumentException.class )
     public void createMustThrowWhenContentDataFieldAreNull()
     {
-        RuleActionWarningOnCompletion.create( null, null, null );
+        RuleActionMessage.create( null, null, null, RuleActionMessage.Type.WARNING_ON_COMPILATION );
     }
 }

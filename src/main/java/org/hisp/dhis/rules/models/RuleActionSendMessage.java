@@ -28,26 +28,19 @@ package org.hisp.dhis.rules.models;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.google.auto.value.AutoValue;
-
 import javax.annotation.Nonnull;
 import javax.annotation.CheckForNull;
 
 /**
  * Created by zubair@dhis2.org on 24.11.17.
  */
-
-@AutoValue
-public abstract class RuleActionSendMessage
-    extends RuleAction
-{
+public record RuleActionSendMessage(
+        @Nonnull String data,
+        @Nonnull String notification
+) implements RuleAction {
     @Nonnull
-    public static RuleActionSendMessage create( @CheckForNull String notification, @CheckForNull String data )
-    {
-        return new AutoValue_RuleActionSendMessage( data == null ? "" : data,
-            notification == null ? "" : notification );
+    public static RuleActionSendMessage create(@CheckForNull String notification, @CheckForNull String data) {
+        return new RuleActionSendMessage(data == null ? "" : data,
+                notification == null ? "" : notification);
     }
-
-    @Nonnull
-    public abstract String notification();
 }

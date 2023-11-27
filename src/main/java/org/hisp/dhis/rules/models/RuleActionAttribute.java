@@ -2,10 +2,7 @@ package org.hisp.dhis.rules.models;
 
 import javax.annotation.Nonnull;
 
-public abstract class RuleActionAttribute
-    extends RuleAction
-{
-
+public interface RuleActionAttribute extends RuleAction {
     @Nonnull
-    public abstract AttributeType attributeType();
+    AttributeType attributeType();
 }

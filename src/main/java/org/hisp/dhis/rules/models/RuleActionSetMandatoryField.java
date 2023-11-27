@@ -9,7 +9,7 @@ import static org.hisp.dhis.rules.models.AttributeType.UNKNOWN;
 
 @AutoValue
 public abstract class RuleActionSetMandatoryField
-    extends RuleActionAttribute
+    implements RuleActionAttribute
 {
 
     @Nonnull

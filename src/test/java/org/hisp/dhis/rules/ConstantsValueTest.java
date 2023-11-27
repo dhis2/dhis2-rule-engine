@@ -31,7 +31,7 @@ package org.hisp.dhis.rules;
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleAction;
 import org.hisp.dhis.rules.models.RuleActionAssign;
-import org.hisp.dhis.rules.models.RuleActionShowError;
+import org.hisp.dhis.rules.models.RuleActionMessage;
 import org.hisp.dhis.rules.models.RuleAttributeValue;
 import org.hisp.dhis.rules.models.RuleDataValue;
 import org.hisp.dhis.rules.models.RuleEffect;
@@ -61,8 +61,8 @@ public class ConstantsValueTest
     {
         RuleEngineContext.builder()
             .rules( List.of(Rule.MOCK) )
-            .ruleVariables( Arrays.asList( new MockRuleVariable()) )
-            .supplementaryData( new HashMap<String, List<String>>() )
+            .ruleVariables(List.of(new MockRuleVariable()))
+            .supplementaryData(new HashMap<>() )
             .constantsValue( null )
             .build();
 
@@ -74,12 +74,12 @@ public class ConstantsValueTest
     {
         RuleAction assignAction = RuleActionAssign.create( null, "C{A1234567890}", "#{test_attribute}" );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
-            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1", "" );
+            .create( null, 1, "true", List.of(assignAction), "test_program_rule1", "" );
 
         Map<String, String> constantsValueMap = new HashMap<>();
         constantsValueMap.put( "A1234567890", "3.14" );
 
-        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule ), constantsValueMap );
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngine(List.of(rule), constantsValueMap );
 
         RuleEnrollment enrollment = RuleEnrollment.builder()
             .enrollment( "test_enrollment" )
@@ -89,7 +89,7 @@ public class ConstantsValueTest
             .status( RuleEnrollment.Status.ACTIVE )
             .organisationUnit( "test_ou" )
             .organisationUnitCode( "test_ou_code" )
-            .attributeValues( Arrays.asList( RuleAttributeValue.create( "test_attribute", "test_value" ) ) )
+            .attributeValues(List.of(RuleAttributeValue.create("test_attribute", "test_value")))
             .build();
 
         RuleEngine ruleEngine = ruleEngineBuilder.build();
@@ -105,14 +105,14 @@ public class ConstantsValueTest
         throws Exception
     {
         RuleAction assignAction = RuleActionAssign.create( null, "4", "test_attribute" );
-        RuleAction action = RuleActionShowError.create( null, "#{test_attribute}", "" );
+        RuleAction action = RuleActionMessage.create( null, "#{test_attribute}", "", RuleActionMessage.Type.SHOW_ERROR );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
-            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1", "" );
+            .create( null, 1, "true", List.of(assignAction), "test_program_rule1", "" );
         org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule
-            .create( null, 1, "#{test_attribute} > 3", Arrays.asList( action ), "test_program_rule2", "" );
+            .create( null, 1, "#{test_attribute} > 3", List.of(action), "test_program_rule2", "" );
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule, rule2 ),
-            new HashMap() );
+            new HashMap<>() );
 
         RuleEnrollment enrollment = RuleEnrollment.builder()
             .enrollment( "test_enrollment" )
@@ -122,7 +122,7 @@ public class ConstantsValueTest
             .status( RuleEnrollment.Status.ACTIVE )
             .organisationUnit( "test_ou" )
             .organisationUnitCode( "test_ou_code" )
-            .attributeValues( Arrays.asList( RuleAttributeValue.create( "test_attribute", "test_value" ) ) )
+            .attributeValues(List.of(RuleAttributeValue.create("test_attribute", "test_value")))
             .build();
 
         RuleEngine ruleEngine = ruleEngineBuilder.build();
@@ -140,14 +140,14 @@ public class ConstantsValueTest
         throws Exception
     {
         RuleAction assignAction = RuleActionAssign.create( "#{test_attribute}", "4", null );
-        RuleAction action = RuleActionShowError.create( null, "#{test_attribute}", "" );
+        RuleAction action = RuleActionMessage.create( null, "#{test_attribute}", "", RuleActionMessage.Type.SHOW_ERROR );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
-            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1", "" );
+            .create( null, 1, "true", List.of(assignAction), "test_program_rule1", "" );
         org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule
-            .create( null, 1, "#{test_attribute} > 3", Arrays.asList( action ), "test_program_rule2", "" );
+            .create( null, 1, "#{test_attribute} > 3", List.of(action), "test_program_rule2", "" );
 
         RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule, rule2 ),
-            new HashMap() );
+            new HashMap<>() );
 
         RuleEnrollment enrollment = RuleEnrollment.builder()
             .enrollment( "test_enrollment" )
@@ -157,7 +157,7 @@ public class ConstantsValueTest
             .status( RuleEnrollment.Status.ACTIVE )
             .organisationUnit( "test_ou" )
             .organisationUnitCode( "test_ou_code" )
-            .attributeValues( Arrays.asList( RuleAttributeValue.create( "test_attribute", "test_value" ) ) )
+            .attributeValues(List.of(RuleAttributeValue.create("test_attribute", "test_value")))
             .build();
 
         RuleEngine ruleEngine = ruleEngineBuilder.build();
@@ -174,12 +174,12 @@ public class ConstantsValueTest
     {
         RuleAction assignAction = RuleActionAssign.create( null, "C{A1234567890}", "#{test_data_element}" );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
-            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1", "" );
+            .create( null, 1, "true", List.of(assignAction), "test_program_rule1", "" );
 
         Map<String, String> constantsValueMap = new HashMap<>();
         constantsValueMap.put( "A1234567890", "3.14" );
 
-        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule ), constantsValueMap );
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngine(List.of(rule), constantsValueMap );
 
         RuleEvent ruleEvent = RuleEvent.builder()
             .event( "test_event" )
@@ -191,8 +191,8 @@ public class ConstantsValueTest
             .organisationUnit( "" )
             .organisationUnitCode( "" )
             .completedDate( new Date() )
-            .dataValues( Arrays.asList( RuleDataValue.create(
-                new Date(), "test_program_stage", "test_data_element", "test_value" ) ) )
+            .dataValues(List.of(RuleDataValue.create(
+                    new Date(), "test_program_stage", "test_data_element", "test_value")))
             .build();
 
         RuleEngine ruleEngine = ruleEngineBuilder.build();
@@ -211,7 +211,7 @@ public class ConstantsValueTest
             .builder()
             .rules( rules )
             .ruleVariables( new ArrayList<>())
-            .supplementaryData( new HashMap<String, List<String>>() )
+            .supplementaryData(new HashMap<>() )
             .constantsValue( constantsValueMap )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );
     }

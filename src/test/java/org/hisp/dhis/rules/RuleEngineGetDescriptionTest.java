@@ -31,7 +31,7 @@ package org.hisp.dhis.rules;
 import org.hisp.dhis.lib.expression.spi.ParseException;
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleAction;
-import org.hisp.dhis.rules.models.RuleActionDisplayKeyValuePair;
+import org.hisp.dhis.rules.models.RuleActionText;
 import org.hisp.dhis.rules.models.RuleValidationResult;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
 import org.junit.Before;
@@ -40,7 +40,6 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,19 +59,19 @@ import static org.junit.Assert.assertTrue;
 
 public class RuleEngineGetDescriptionTest
 {
-    private String test_var_one = "Variable_ONE";
-    private String test_var_two = "Variable_TWO";
-    private String test_var_three = "Variable_THREE";
-    private String test_var_date_one = "2020-01-01";
-    private String test_var_date_two = "2020-02-02";
-    private String completionDate = "Completion date";
-    private String currentDate = "Current date";
-    private String constant = "PI";
-    private String test_var_number = "9";
+    private static final String test_var_one = "Variable_ONE";
+    private static final String test_var_two = "Variable_TWO";
+    private static final String test_var_three = "Variable_THREE";
+    private static final String test_var_date_one = "2020-01-01";
+    private static final String test_var_date_two = "2020-02-02";
+    private static final String completionDate = "Completion date";
+    private static final String currentDate = "Current date";
+    private static final String constant = "PI";
+    private static final String test_var_number = "9";
 
     private Map<String, DataItem> itemStore = new HashMap<>();
 
-    private RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback("", "" );
+    private final RuleAction ruleAction = RuleActionText.createForFeedback("", "" );
 
     @org.junit.Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -107,10 +106,10 @@ public class RuleEngineGetDescriptionTest
     public void evaluateGetDescriptionWithIncorrectRules()
     {
         Rule incorrectRuleHasValue = Rule
-            .create( null, null, "d2:hasValue(#{test_var_one} + 1)", Arrays.asList( ruleAction ), "", "" );
+            .create( null, null, "d2:hasValue(#{test_var_one} + 1)", List.of(ruleAction), "", "" );
         Rule incorrectSyntaxRule = Rule
             .create( null, null, "d2:daysBetween((#{test_var_date_one},#{test_var_date_two})",
-                Arrays.asList( ruleAction ), "", "" );
+                    List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( incorrectRuleHasValue.condition() );
@@ -128,7 +127,7 @@ public class RuleEngineGetDescriptionTest
     @Test
     public void evaluateGetDescriptionWithInvalidProgramRuleVariable()
     {
-        Rule rule = Rule.create( null, null, "d2:hasValue(#{test_var_one1})", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "d2:hasValue(#{test_var_one1})", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( rule.condition() );
@@ -140,7 +139,7 @@ public class RuleEngineGetDescriptionTest
     @Test
     public void getDescriptionForLengthFunction()
     {
-        Rule rule = Rule.create( null, null, "d2:length(#{test_var_one}) > 0", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "d2:length(#{test_var_one}) > 0", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( rule.condition() );
@@ -148,14 +147,14 @@ public class RuleEngineGetDescriptionTest
         assertNotNull( result );
         assertTrue( result.valid() );
 
-        rule = Rule.create( null, null, "d2:length(#{test_var_date_one}) > 0 ", Arrays.asList( ruleAction ), "", "" );
+        rule = Rule.create( null, null, "d2:length(#{test_var_date_one}) > 0 ", List.of(ruleAction), "", "" );
 
         result = ruleEngine.evaluate( rule.condition() );
 
         assertNotNull( result );
         assertFalse( result.valid() );
 
-        rule = Rule.create( null, null, "d2:length(#{test_var_number}) > 0 ", Arrays.asList( ruleAction ), "", "" );
+        rule = Rule.create( null, null, "d2:length(#{test_var_number}) > 0 ", List.of(ruleAction), "", "" );
 
         result = ruleEngine.evaluate( rule.condition() );
 
@@ -168,7 +167,7 @@ public class RuleEngineGetDescriptionTest
     {
         Rule correctMultipleD2FunctionRule = Rule
             .create( null, null, "d2:count(#{test_var_one}) > 0 && d2:hasValue(#{test_var_two})",
-                Arrays.asList( ruleAction ), "", "" );
+                    List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( correctMultipleD2FunctionRule.condition() );
@@ -181,7 +180,7 @@ public class RuleEngineGetDescriptionTest
     public void testGetDescriptionWithD2FunctionsTEA()
     {
         Rule conditionWithD2FunctionsTEA = Rule
-            .create( null, null, "d2:hasValue('test_var_three')", Arrays.asList( ruleAction ), "", "" );
+            .create( null, null, "d2:hasValue('test_var_three')", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( conditionWithD2FunctionsTEA.condition() );
@@ -195,7 +194,7 @@ public class RuleEngineGetDescriptionTest
     public void testGetDescriptionWithPlainAttributeComparisonWithName()
     {
         Rule conditionWithD2FunctionsTEA = Rule
-            .create( null, null, "'test_var_three' == 'email'", Arrays.asList( ruleAction ), "", "" );
+            .create( null, null, "'test_var_three' == 'email'", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( conditionWithD2FunctionsTEA.condition() );
@@ -209,7 +208,7 @@ public class RuleEngineGetDescriptionTest
     public void testGetDescriptionWithPlainAttributeComparison()
     {
         Rule conditionWithD2FunctionsTEA = Rule
-            .create( null, null, "A{test_var_three} == 'email'", Arrays.asList( ruleAction ), "", "" );
+            .create( null, null, "A{test_var_three} == 'email'", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( conditionWithD2FunctionsTEA.condition() );
@@ -223,7 +222,7 @@ public class RuleEngineGetDescriptionTest
     public void testGetDescriptionStringLiterals()
     {
         String condition = " true && false || 1 > 3";
-        Rule literalStringRule = Rule.create( null, null, condition, Arrays.asList( ruleAction ), "", "" );
+        Rule literalStringRule = Rule.create( null, null, condition, List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( literalStringRule.condition() );
@@ -237,7 +236,7 @@ public class RuleEngineGetDescriptionTest
     public void testGetDescriptionD2BetweenFunction()
     {
         String condition = "d2:daysBetween(#{test_var_date_one},#{test_var_date_two}) > 0";
-        Rule correctD2betweenFunctionRule = Rule.create( null, null, condition, Arrays.asList( ruleAction ), "", "" );
+        Rule correctD2betweenFunctionRule = Rule.create( null, null, condition, List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( correctD2betweenFunctionRule.condition() );
@@ -250,7 +249,7 @@ public class RuleEngineGetDescriptionTest
     public void testGetDescriptionD2BetweenFunctionWithEnvironmentVariables()
     {
         String condition = "d2:daysBetween(V{completed_date},V{current_date}) > 0";
-        Rule correctD2betweenFunctionRule = Rule.create( null, null, condition, Arrays.asList( ruleAction ), "", "" );
+        Rule correctD2betweenFunctionRule = Rule.create( null, null, condition, List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( correctD2betweenFunctionRule.condition() );
@@ -263,7 +262,7 @@ public class RuleEngineGetDescriptionTest
     public void testGetDescriptionD2FunctionAttribute()
     {
         String condition = "A{test_var_number} > 0";
-        Rule withoutD2AttFunctionRule = Rule.create( null, null, condition, Arrays.asList( ruleAction ), "", "" );
+        Rule withoutD2AttFunctionRule = Rule.create( null, null, condition, List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( withoutD2AttFunctionRule.condition() );
@@ -276,7 +275,7 @@ public class RuleEngineGetDescriptionTest
     public void testGetDescriptionWithD2FunctionDataElement()
     {
         String condition = "#{test_var_number} > 0";
-        Rule withoutD2DEFunctionRule = Rule.create( null, null, condition, Arrays.asList( ruleAction ), "", "" );
+        Rule withoutD2DEFunctionRule = Rule.create( null, null, condition, List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( withoutD2DEFunctionRule.condition() );
@@ -289,7 +288,7 @@ public class RuleEngineGetDescriptionTest
     public void testGetDescriptionWithConstant()
     {
         String condition = "C{NAgjOfWMXg6} == 0";
-        Rule constantRule = Rule.create( null, null, condition, Arrays.asList( ruleAction ), "", "" );
+        Rule constantRule = Rule.create( null, null, condition, List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( constantRule.condition() );
@@ -302,7 +301,7 @@ public class RuleEngineGetDescriptionTest
     public void testGetDescriptionWithProgramEnvironmentVariable()
     {
         String condition = "d2:hasValue(V{completed_date})";
-        Rule programEnvVariableRule = Rule.create( null, null, condition, Arrays.asList( ruleAction ), "", "" );
+        Rule programEnvVariableRule = Rule.create( null, null, condition, List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( programEnvVariableRule.condition() );
@@ -315,7 +314,7 @@ public class RuleEngineGetDescriptionTest
     public void testGetDescriptionWithSingleD2Function()
     {
         String condition = "d2:hasValue(#{test_var_one})";
-        Rule correctRuleHasValue = Rule.create( null, null, condition, Arrays.asList( ruleAction ), "", "" );
+        Rule correctRuleHasValue = Rule.create( null, null, condition, List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( correctRuleHasValue.condition() );
@@ -330,7 +329,7 @@ public class RuleEngineGetDescriptionTest
         String condition = "d2:hasValue(#{test_var_two}) || d2:count(#{test_var_one}) > 0 ";
 
         Rule correctMultipleD2FunctionRuleWithOr = Rule
-            .create( null, null, condition, Arrays.asList( ruleAction ), "", "" );
+            .create( null, null, condition, List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( correctMultipleD2FunctionRuleWithOr.condition() );
@@ -345,7 +344,7 @@ public class RuleEngineGetDescriptionTest
         String condition = "d2:hasValue(#{test_var_two}) && d2:count(#{test_var_one}) > 0 ";
 
         Rule correctMultipleD2FunctionRuleWithAnd = Rule
-            .create( null, null, condition, Arrays.asList( ruleAction ), "", "" );
+            .create( null, null, condition, List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineBuilderForDescription( itemStore ).build();
         RuleValidationResult result = ruleEngine.evaluate( correctMultipleD2FunctionRuleWithAnd.condition() );

@@ -5,9 +5,8 @@ import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleAction;
 import org.hisp.dhis.rules.models.RuleActionAssign;
 import org.hisp.dhis.rules.models.RuleActionCreateEvent;
-import org.hisp.dhis.rules.models.RuleActionDisplayKeyValuePair;
-import org.hisp.dhis.rules.models.RuleActionDisplayText;
-import org.hisp.dhis.rules.models.RuleActionErrorOnCompletion;
+import org.hisp.dhis.rules.models.RuleActionMessage;
+import org.hisp.dhis.rules.models.RuleActionText;
 import org.hisp.dhis.rules.models.RuleActionHideField;
 import org.hisp.dhis.rules.models.RuleActionHideOption;
 import org.hisp.dhis.rules.models.RuleActionHideOptionGroup;
@@ -15,9 +14,6 @@ import org.hisp.dhis.rules.models.RuleActionHideProgramStage;
 import org.hisp.dhis.rules.models.RuleActionHideSection;
 import org.hisp.dhis.rules.models.RuleActionScheduleMessage;
 import org.hisp.dhis.rules.models.RuleActionSetMandatoryField;
-import org.hisp.dhis.rules.models.RuleActionShowError;
-import org.hisp.dhis.rules.models.RuleActionShowWarning;
-import org.hisp.dhis.rules.models.RuleActionWarningOnCompletion;
 import org.hisp.dhis.rules.models.RuleDataValue;
 import org.hisp.dhis.rules.models.RuleEffect;
 import org.hisp.dhis.rules.models.RuleEffects;
@@ -27,7 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -51,8 +47,8 @@ public class RuleEngineEffectTypesTest
             .dueDate( new Date() )
             .organisationUnit( "" )
             .organisationUnitCode( "" )
-            .dataValues( Arrays.asList( RuleDataValue.create(
-                new Date(), "test_program_stage", "test_data_element", "test_value" ) ) )
+            .dataValues(List.of(RuleDataValue.create(
+                    new Date(), "test_program_stage", "test_data_element", "test_value")))
             .build();
     }
 
@@ -62,7 +58,7 @@ public class RuleEngineEffectTypesTest
     {
         RuleAction ruleAction = RuleActionAssign.create(
             null, "'test_string'", "#{test_data_element}" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "true", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -79,7 +75,7 @@ public class RuleEngineEffectTypesTest
     {
         RuleAction ruleAction = RuleActionAssign.create(
             null, "'test_string'", "#{test_data_element}" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "true", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngineMultiple( rule, getTestRuleEvent( RuleEvent.Status.ACTIVE ) );
 
@@ -96,7 +92,7 @@ public class RuleEngineEffectTypesTest
     {
         RuleAction ruleAction = RuleActionCreateEvent.create(
             "test_action_content", "'event_uid;test_data_value_one'", "test_program_stage" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "true", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -111,9 +107,9 @@ public class RuleEngineEffectTypesTest
     public void simpleConditionMustResultInDisplayKeyValuePairEffect()
         throws Exception
     {
-        RuleAction ruleAction = RuleActionDisplayKeyValuePair.createForFeedback(
+        RuleAction ruleAction = RuleActionText.createForFeedback(
             "test_action_content", "2 + 2" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "true", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -128,9 +124,9 @@ public class RuleEngineEffectTypesTest
     public void simpleConditionMustResultInDisplayTextEffect()
         throws Exception
     {
-        RuleAction ruleAction = RuleActionDisplayText.createForFeedback(
+        RuleAction ruleAction = RuleActionText.createForFeedback(
             "test_action_content", "2 + 2" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "true", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -145,9 +141,9 @@ public class RuleEngineEffectTypesTest
     public void simpleConditionMustResultInErrorOnCompletionEffect()
         throws Exception
     {
-        RuleAction ruleAction = RuleActionErrorOnCompletion.create(
-            "test_action_content", "2 + 2", "test_data_element" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
+        RuleAction ruleAction = RuleActionMessage.create(
+            "test_action_content", "2 + 2", "test_data_element", RuleActionMessage.Type.ERROR_ON_COMPILATION );
+        Rule rule = Rule.create( null, null, "true", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -164,11 +160,11 @@ public class RuleEngineEffectTypesTest
     {
         RuleAction ruleAction = RuleActionHideField.create(
             "test_action_content", "test_data_element" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "true", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = RuleEngineContext
             .builder()
-            .rules( Arrays.asList( rule ) )
+            .rules(List.of(rule))
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( new HashMap<String, String>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
@@ -187,7 +183,7 @@ public class RuleEngineEffectTypesTest
     {
         RuleAction ruleAction = RuleActionHideField.create(
             "test_action_content", "test_data_element" );
-        Rule rule = Rule.create( null, null, "V{event_status} =='COMPLETED'", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "V{event_status} =='COMPLETED'", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -204,7 +200,7 @@ public class RuleEngineEffectTypesTest
     {
         RuleAction ruleAction = RuleActionHideField.create(
             "test_action_content", "test_data_element" );
-        Rule rule = Rule.create( null, null, "V{environment} =='Server'", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "V{environment} =='Server'", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -220,7 +216,7 @@ public class RuleEngineEffectTypesTest
         throws Exception
     {
         RuleAction ruleAction = RuleActionHideProgramStage.create( "test_program_stage" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "true", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -236,7 +232,7 @@ public class RuleEngineEffectTypesTest
         throws Exception
     {
         RuleAction ruleAction = RuleActionScheduleMessage.create( "", "'2018-04-24'" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "true", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -252,7 +248,7 @@ public class RuleEngineEffectTypesTest
         throws Exception
     {
         RuleAction ruleAction = RuleActionHideSection.create( "test_section" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "true", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -268,7 +264,7 @@ public class RuleEngineEffectTypesTest
         throws Exception
     {
         RuleAction ruleAction = RuleActionHideOption.create( "test_content", "test_option", "test_field" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "true", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -284,7 +280,7 @@ public class RuleEngineEffectTypesTest
         throws Exception
     {
         RuleAction ruleAction = RuleActionHideOptionGroup.create( "test_content", "test_option_group", "field" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "true", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -300,7 +296,7 @@ public class RuleEngineEffectTypesTest
         throws Exception
     {
         RuleAction ruleAction = RuleActionSetMandatoryField.create( "test_data_element" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
+        Rule rule = Rule.create( null, null, "true", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -315,9 +311,9 @@ public class RuleEngineEffectTypesTest
     public void simpleConditionMustResultInWarningEffect()
         throws Exception
     {
-        RuleAction ruleAction = RuleActionShowWarning.create(
-            "test_warning_message", null, "target_field" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
+        RuleAction ruleAction = RuleActionMessage.create(
+            "test_warning_message", null, "target_field", RuleActionMessage.Type.SHOW_WARNING );
+        Rule rule = Rule.create( null, null, "true", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -332,9 +328,9 @@ public class RuleEngineEffectTypesTest
     public void simpleConditionMustResultInErrorEffect()
         throws Exception
     {
-        RuleAction ruleAction = RuleActionShowError.create(
-            "test_error_message", "2 + 2", "target_field" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
+        RuleAction ruleAction = RuleActionMessage.create(
+            "test_error_message", "2 + 2", "target_field", RuleActionMessage.Type.SHOW_ERROR );
+        Rule rule = Rule.create( null, null, "true", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -349,9 +345,9 @@ public class RuleEngineEffectTypesTest
     public void simpleConditionMustResultInOnCompletionWarningEffect()
         throws Exception
     {
-        RuleAction ruleAction = RuleActionWarningOnCompletion.create(
-            "test_warning_message", "2 + 2", "target_field" );
-        Rule rule = Rule.create( null, null, "true", Arrays.asList( ruleAction ), "", "" );
+        RuleAction ruleAction = RuleActionMessage.create(
+            "test_warning_message", "2 + 2", "target_field", RuleActionMessage.Type.WARNING_ON_COMPILATION );
+        Rule rule = Rule.create( null, null, "true", List.of(ruleAction), "", "" );
 
         RuleEngine ruleEngine = getRuleEngine( rule );
 
@@ -366,7 +362,7 @@ public class RuleEngineEffectTypesTest
     {
         return RuleEngineContext
             .builder()
-            .rules( Arrays.asList( rule ) )
+            .rules(Collections.singletonList(rule))
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( new HashMap<String, String>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
@@ -377,7 +373,7 @@ public class RuleEngineEffectTypesTest
     {
         return RuleEngineContext
             .builder()
-            .rules( Arrays.asList( rule ) )
+            .rules(Collections.singletonList(rule))
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( new HashMap<String, String>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )

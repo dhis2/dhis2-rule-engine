@@ -1,20 +1,16 @@
 package org.hisp.dhis.rules.models;
 
-import com.google.auto.value.AutoValue;
-
 import javax.annotation.Nonnull;
 
-@AutoValue
-public abstract class RuleActionHideProgramStage
-    extends RuleAction
-{
+public record RuleActionHideProgramStage(
+        @Nonnull
+        String data,
+        @Nonnull
+        String programStage
+) implements RuleAction {
 
     @Nonnull
-    public static RuleActionHideProgramStage create( @Nonnull String programStage )
-    {
-        return new AutoValue_RuleActionHideProgramStage("", programStage );
+    public static RuleActionHideProgramStage create(@Nonnull String programStage) {
+        return new RuleActionHideProgramStage("", programStage);
     }
-
-    @Nonnull
-    public abstract String programStage();
 }

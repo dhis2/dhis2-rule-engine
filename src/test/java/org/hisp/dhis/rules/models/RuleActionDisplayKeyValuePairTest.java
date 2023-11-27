@@ -1,7 +1,5 @@
 package org.hisp.dhis.rules.models;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -15,11 +13,11 @@ public class RuleActionDisplayKeyValuePairTest
     @Test
     public void createForFeedbackMustSubstituteCorrectLocation()
     {
-        RuleActionDisplayKeyValuePair displayTextAction = RuleActionDisplayKeyValuePair
+        RuleActionText displayTextAction = RuleActionText
             .createForFeedback( "test_content", "test_data" );
 
         assertThat( displayTextAction.location() )
-            .isEqualTo( RuleActionDisplayKeyValuePair.LOCATION_FEEDBACK_WIDGET );
+            .isEqualTo( RuleActionText.LOCATION_FEEDBACK_WIDGET );
         assertThat( displayTextAction.content() ).isEqualTo( "test_content" );
         assertThat( displayTextAction.data() ).isEqualTo( "test_data" );
     }
@@ -27,11 +25,11 @@ public class RuleActionDisplayKeyValuePairTest
     @Test
     public void createForIndicatorsMustSubstituteCorrectLocation()
     {
-        RuleActionDisplayKeyValuePair displayTextAction = RuleActionDisplayKeyValuePair
+        RuleActionText displayTextAction = RuleActionText
             .createForIndicators( "test_content", "test_data" );
 
         assertThat( displayTextAction.location() )
-            .isEqualTo( RuleActionDisplayKeyValuePair.LOCATION_INDICATOR_WIDGET );
+            .isEqualTo( RuleActionText.LOCATION_INDICATOR_WIDGET );
         assertThat( displayTextAction.content() ).isEqualTo( "test_content" );
         assertThat( displayTextAction.data() ).isEqualTo( "test_data" );
     }
@@ -39,21 +37,21 @@ public class RuleActionDisplayKeyValuePairTest
     @Test( expected = IllegalArgumentException.class )
     public void createForFeedbackMustThrowWhenBothArgumentsNull()
     {
-        RuleActionDisplayKeyValuePair.createForFeedback( null, null );
+        RuleActionText.createForFeedback( null, null );
     }
 
     @Test( expected = IllegalArgumentException.class )
     public void createForIndicatorsMustThrowWhenBothArgumentsNull()
     {
-        RuleActionDisplayKeyValuePair.createForIndicators( null, null );
+        RuleActionText.createForIndicators( null, null );
     }
 
     @Test
     public void createForFeedbackMustSubstituteEmptyStringsForNullArguments()
     {
-        RuleActionDisplayKeyValuePair ruleActionNoContent = RuleActionDisplayKeyValuePair
+        RuleActionText ruleActionNoContent = RuleActionText
             .createForFeedback( null, "test_data" );
-        RuleActionDisplayKeyValuePair ruleActionNoData = RuleActionDisplayKeyValuePair
+        RuleActionText ruleActionNoData = RuleActionText
             .createForFeedback( "test_content", null );
 
         assertThat( ruleActionNoContent.content() ).isEqualTo( "" );
@@ -66,9 +64,9 @@ public class RuleActionDisplayKeyValuePairTest
     @Test
     public void createForIndicatorsMustSubstituteEmptyStringsForNullArguments()
     {
-        RuleActionDisplayKeyValuePair ruleActionNoContent = RuleActionDisplayKeyValuePair
+        RuleActionText ruleActionNoContent = RuleActionText
             .createForIndicators( null, "test_data" );
-        RuleActionDisplayKeyValuePair ruleActionNoData = RuleActionDisplayKeyValuePair
+        RuleActionText ruleActionNoData = RuleActionText
             .createForIndicators( "test_content", null );
 
         assertThat( ruleActionNoContent.content() ).isEqualTo( "" );
