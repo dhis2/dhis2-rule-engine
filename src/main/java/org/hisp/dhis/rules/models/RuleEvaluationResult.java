@@ -15,7 +15,7 @@ public record RuleEvaluationResult(
     }
 
     public static RuleEvaluationResult notEvaluatedResult(Rule rule) {
-        return new RuleEvaluationResult( rule, new ArrayList<RuleEffect>(), false, false );
+        return new RuleEvaluationResult( rule, new ArrayList<>(), false, false );
     }
 
     public static RuleEvaluationResult errorRule( Rule rule, String errorMessage ) {

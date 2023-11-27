@@ -7,59 +7,46 @@ import java.util.Date;
 import java.util.List;
 
 public record RuleEnrollment(
-        @Nonnull
-        String enrollment,
-        @Nonnull
-        String programName,
-        @Nonnull
-        Date incidentDate,
-        @Nonnull
-        Date enrollmentDate,
-        @Nonnull
-        Status status,
-        @Nonnull
-        String organisationUnit,
-        @CheckForNull
-        String organisationUnitCode,
-        @Nonnull
-        List<RuleAttributeValue> attributeValues
-)
-{
+        @Nonnull String enrollment,
+        @Nonnull String programName,
+        @Nonnull Date incidentDate,
+        @Nonnull Date enrollmentDate,
+        @Nonnull Status status,
+        @Nonnull String organisationUnit,
+        @CheckForNull String organisationUnitCode,
+        @Nonnull List<RuleAttributeValue> attributeValues
+) {
 
     public static final RuleEnrollment MOCK = new RuleEnrollment(null, null, null, null, null, null, null, null);
 
     @Nonnull
-    public static RuleEnrollment create( @Nonnull String enrollment, @Nonnull Date incidentDate,
-                                         @Nonnull Date enrollmentDate, @Nonnull Status status, @Nonnull String organisationUnit,
-                                         @CheckForNull String organisationUnitCode,
-                                         @Nonnull List<RuleAttributeValue> attributeValues, String programName )
-    {
+    public static RuleEnrollment create(@Nonnull String enrollment, @Nonnull Date incidentDate,
+                                        @Nonnull Date enrollmentDate, @Nonnull Status status, @Nonnull String organisationUnit,
+                                        @CheckForNull String organisationUnitCode,
+                                        @Nonnull List<RuleAttributeValue> attributeValues, String programName) {
 
         return builder()
-                .enrollment( enrollment )
-                .programName( programName )
-                .incidentDate( incidentDate )
-                .enrollmentDate( enrollmentDate )
-                .status( status )
-                .organisationUnit( organisationUnit )
-                .organisationUnitCode( organisationUnitCode )
-                .attributeValues( Collections.unmodifiableList( attributeValues ) )
+                .enrollment(enrollment)
+                .programName(programName)
+                .incidentDate(incidentDate)
+                .enrollmentDate(enrollmentDate)
+                .status(status)
+                .organisationUnit(organisationUnit)
+                .organisationUnitCode(organisationUnitCode)
+                .attributeValues(Collections.unmodifiableList(attributeValues))
                 .build();
     }
 
-    public static Builder builder()
-    {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public enum Status
-    {
+    public enum Status {
         ACTIVE, COMPLETED, CANCELLED
     }
 
     @Deprecated // use KMP data class
-    public static class Builder
-    {
+    public static class Builder {
         String enrollment;
         String programName;
         Date incidentDate;
@@ -69,42 +56,42 @@ public record RuleEnrollment(
         String organisationUnitCode;
         List<RuleAttributeValue> attributeValues;
 
-        public RuleEnrollment.Builder enrollment( String enrollment ) {
+        public RuleEnrollment.Builder enrollment(String enrollment) {
             this.enrollment = enrollment;
             return this;
         }
 
-        public RuleEnrollment.Builder programName( String programName ) {
+        public RuleEnrollment.Builder programName(String programName) {
             this.programName = programName;
             return this;
         }
 
-        public RuleEnrollment.Builder incidentDate( Date incidentDate ) {
+        public RuleEnrollment.Builder incidentDate(Date incidentDate) {
             this.incidentDate = incidentDate;
             return this;
         }
 
-        public RuleEnrollment.Builder enrollmentDate( Date enrollmentDate ) {
+        public RuleEnrollment.Builder enrollmentDate(Date enrollmentDate) {
             this.enrollmentDate = enrollmentDate;
             return this;
         }
 
-        public RuleEnrollment.Builder status( RuleEnrollment.Status status ) {
+        public RuleEnrollment.Builder status(RuleEnrollment.Status status) {
             this.status = status;
             return this;
         }
 
-        public RuleEnrollment.Builder organisationUnit( String organisationUnit ) {
+        public RuleEnrollment.Builder organisationUnit(String organisationUnit) {
             this.organisationUnit = organisationUnit;
             return this;
         }
 
-        public RuleEnrollment.Builder organisationUnitCode( String organisationUnitCode ) {
+        public RuleEnrollment.Builder organisationUnitCode(String organisationUnitCode) {
             this.organisationUnitCode = organisationUnitCode;
             return this;
         }
 
-        public RuleEnrollment.Builder attributeValues( List<RuleAttributeValue> attributeValues ) {
+        public RuleEnrollment.Builder attributeValues(List<RuleAttributeValue> attributeValues) {
             this.attributeValues = attributeValues;
             return this;
         }
