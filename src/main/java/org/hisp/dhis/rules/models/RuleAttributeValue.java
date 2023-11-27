@@ -1,22 +1,16 @@
 package org.hisp.dhis.rules.models;
 
-import com.google.auto.value.AutoValue;
-
 import javax.annotation.Nonnull;
 
-@AutoValue
-public abstract class RuleAttributeValue
-{
+public record RuleAttributeValue(
+        @Nonnull String trackedEntityAttribute,
+        @Nonnull String value
+) {
+
+    public static final RuleAttributeValue MOCK = new RuleAttributeValue(null, null);
 
     @Nonnull
-    public static RuleAttributeValue create( @Nonnull String attribute, @Nonnull String value )
-    {
-        return new AutoValue_RuleAttributeValue( attribute, value );
+    public static RuleAttributeValue create(@Nonnull String attribute, @Nonnull String value) {
+        return new RuleAttributeValue(attribute, value);
     }
-
-    @Nonnull
-    public abstract String trackedEntityAttribute();
-
-    @Nonnull
-    public abstract String value();
 }

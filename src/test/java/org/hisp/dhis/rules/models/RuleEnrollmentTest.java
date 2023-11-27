@@ -1,6 +1,5 @@
 package org.hisp.dhis.rules.models;
 
-import org.hisp.dhis.rules.util.MockRuleAttributeValue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -11,7 +10,6 @@ import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 @RunWith( JUnit4.class )
 public class RuleEnrollmentTest
@@ -26,9 +24,9 @@ public class RuleEnrollmentTest
     @Test
     public void createShouldPropagatePropertiesCorrectly()
     {
-        RuleAttributeValue ruleAttributeValueOne = new MockRuleAttributeValue();
-        RuleAttributeValue ruleAttributeValueTwo = new MockRuleAttributeValue();
-        RuleAttributeValue ruleAttributeValueThree = new MockRuleAttributeValue();
+        RuleAttributeValue ruleAttributeValueOne = RuleAttributeValue.MOCK;
+        RuleAttributeValue ruleAttributeValueTwo = RuleAttributeValue.MOCK;
+        RuleAttributeValue ruleAttributeValueThree = RuleAttributeValue.MOCK;
 
         Date incidentDate = new Date();
         Date enrollmentDate = new Date();
@@ -50,9 +48,9 @@ public class RuleEnrollmentTest
     @Test( expected = UnsupportedOperationException.class )
     public void createShouldReturnImmutableList()
     {
-        RuleAttributeValue ruleAttributeValueOne = new MockRuleAttributeValue();
-        RuleAttributeValue ruleAttributeValueTwo = new MockRuleAttributeValue();
-        RuleAttributeValue ruleAttributeValueThree = new MockRuleAttributeValue();
+        RuleAttributeValue ruleAttributeValueOne = RuleAttributeValue.MOCK;
+        RuleAttributeValue ruleAttributeValueTwo = RuleAttributeValue.MOCK;
+        RuleAttributeValue ruleAttributeValueThree = RuleAttributeValue.MOCK;
 
         List<RuleAttributeValue> attributeValues = new ArrayList<>();
         attributeValues.add( ruleAttributeValueOne );
