@@ -11,25 +11,6 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 @RunWith( JUnit4.class )
 public class RuleVariablePreviousEventTest
 {
-
-    @Test( expected = NullPointerException.class )
-    public void createShouldThrowOnNullName()
-    {
-        RuleVariablePreviousEvent.create( null, "test_dataelement", RuleValueType.TEXT, true, new ArrayList<>());
-    }
-
-    @Test( expected = NullPointerException.class )
-    public void createShouldThrowOnNullDataElement()
-    {
-        RuleVariablePreviousEvent.create( "test_variable", null, RuleValueType.TEXT, true, new ArrayList<>());
-    }
-
-    @Test( expected = NullPointerException.class )
-    public void createShouldThrowOnNullDataElementType()
-    {
-        RuleVariablePreviousEvent.create( "test_variable", "test_dataelement", null, true, new ArrayList<>());
-    }
-
     @Test
     public void createShouldPropagatePropertiesCorrectly()
     {

@@ -10,26 +10,26 @@ import java.util.Map;
 import java.util.Objects;
 
 
-public abstract class RuleVariable
+public interface RuleVariable
 {
     /**
      * @return Name of the variable. Something what users refer to
      * when building program rules.
      */
     @Nonnull
-    public abstract String name();
+    String name();
 
-    public abstract boolean useCodeForOptionSet();
+    boolean useCodeForOptionSet();
 
     @Nonnull
-    public abstract List<Option> options();
+    List<Option> options();
 
-    public abstract Map<String, RuleVariableValue> createValues( RuleVariableValueMapBuilder builder,
+    Map<String, RuleVariableValue> createValues( RuleVariableValueMapBuilder builder,
         Map<String, List<RuleDataValue>> allEventValues,
         Map<String, RuleAttributeValue> currentEnrollmentValues,
         Map<String, RuleDataValue> currentEventValues );
 
-    public String getOptionName( String value )
+    default String getOptionName( String value )
     {
         // if no option found then existing value in the context will be used
         if ( options() == null || options().isEmpty() )

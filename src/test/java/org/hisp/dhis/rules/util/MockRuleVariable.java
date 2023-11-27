@@ -11,14 +11,13 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 
-public class MockRuleVariable extends RuleVariable {
+public class MockRuleVariable implements RuleVariable {
     @Nonnull
     @Override
     public String name() {
         return null;
     }
 
-    @Nonnull
     @Override
     public boolean useCodeForOptionSet() {
         return false;

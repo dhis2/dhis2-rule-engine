@@ -28,7 +28,6 @@ package org.hisp.dhis.rules.models;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.google.auto.value.AutoValue;
 import org.hisp.dhis.rules.Option;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueMapBuilder;
@@ -42,32 +41,27 @@ import java.util.Map;
  * @author Zubair Asghar.
  */
 
-@AutoValue
-public abstract class RuleVariableCalculatedValue
-    extends RuleVariable
-{
+public record RuleVariableCalculatedValue(
+        @Nonnull String name,
+        boolean useCodeForOptionSet,
+        @Nonnull List<Option> options,
+        @Nonnull String calculatedValueVariable,
+        @Nonnull RuleValueType calculatedValueType
+) implements RuleVariable {
     @Nonnull
     public static RuleVariableCalculatedValue create(@Nonnull String name,
-                                                     @Nonnull String variable, @Nonnull RuleValueType variableType, boolean useCodeForOptionSet, List<Option> options)
-    {
-        return new AutoValue_RuleVariableCalculatedValue( name, useCodeForOptionSet, options, variable, variableType );
+                                                     @Nonnull String variable, @Nonnull RuleValueType variableType, boolean useCodeForOptionSet, List<Option> options) {
+        return new RuleVariableCalculatedValue(name, useCodeForOptionSet, options, variable, variableType);
     }
 
-    @Nonnull
-    public abstract String calculatedValueVariable();
-
-    @Nonnull
-    public abstract RuleValueType calculatedValueType();
-
     @Override
-    public Map<String, RuleVariableValue> createValues( RuleVariableValueMapBuilder builder,
-        Map<String, List<RuleDataValue>> allEventValues,
-        Map<String, RuleAttributeValue> currentEnrollmentValues,
-        Map<String, RuleDataValue> currentEventValues )
-    {
-        Map<String, RuleVariableValue> valueMap = new HashMap();
+    public Map<String, RuleVariableValue> createValues(RuleVariableValueMapBuilder builder,
+                                                       Map<String, List<RuleDataValue>> allEventValues,
+                                                       Map<String, RuleAttributeValue> currentEnrollmentValues,
+                                                       Map<String, RuleDataValue> currentEventValues) {
+        Map<String, RuleVariableValue> valueMap = new HashMap<>();
 
-        valueMap.put( this.name(), RuleVariableValue.create( this.calculatedValueType() ) );
+        valueMap.put(this.name(), RuleVariableValue.create(this.calculatedValueType()));
         return valueMap;
     }
 }

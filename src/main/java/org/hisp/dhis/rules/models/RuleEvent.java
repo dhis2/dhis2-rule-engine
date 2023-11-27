@@ -19,7 +19,7 @@ public record RuleEvent(
         @CheckForNull String organisationUnitCode,
         @Nonnull List<RuleDataValue> dataValues
 ) {
-    public static final Comparator<RuleEvent> EVENT_DATE_COMPARATOR = Comparator.comparing(RuleEvent::eventDate);
+    public static final Comparator<RuleEvent> EVENT_DATE_COMPARATOR = Comparator.comparing(RuleEvent::eventDate).reversed();
 
     public static final RuleEvent MOCK = new RuleEvent(null, null, null, null, null, null, null, null, null, null);
 
