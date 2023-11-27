@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 @RunWith( JUnit4.class )
 public class RuleTest

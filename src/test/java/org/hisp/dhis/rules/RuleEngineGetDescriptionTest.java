@@ -56,7 +56,6 @@ import static org.junit.Assert.assertTrue;
  */
 
 @RunWith( JUnit4.class )
-
 public class RuleEngineGetDescriptionTest
 {
     private static final String test_var_one = "Variable_ONE";
@@ -72,9 +71,6 @@ public class RuleEngineGetDescriptionTest
     private Map<String, DataItem> itemStore = new HashMap<>();
 
     private final RuleAction ruleAction = RuleActionText.createForFeedback("", "" );
-
-    @org.junit.Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     @Before
     public void setUp()

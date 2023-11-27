@@ -11,9 +11,6 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 @RunWith( JUnit4.class )
 public class RuleActionHideOptionGroupTest
 {
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
     @Test
     public void createMustSubstituteEmptyStringIfArgumentsNull()
     {

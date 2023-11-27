@@ -9,7 +9,6 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 @RunWith( JUnit4.class )
 public class RuleActionDisplayKeyValuePairTest
 {
-
     @Test
     public void createForFeedbackMustSubstituteCorrectLocation()
     {

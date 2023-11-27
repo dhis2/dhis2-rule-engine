@@ -19,13 +19,13 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 @RunWith( JUnit4.class )
 public class RuleEngineContextTest
 {
-    private RuleVariable ruleVariable = new MockRuleVariable();
+    private final RuleVariable ruleVariable = new MockRuleVariable();
 
-    private RuleVariable ruleVariableTwo = new MockRuleVariable();
+    private final RuleVariable ruleVariableTwo = new MockRuleVariable();
 
-    private Rule rule = Rule.MOCK;
+    private final Rule rule = Rule.MOCK;
 
-    private Rule ruleTwo = Rule.MOCK;
+    private final Rule ruleTwo = Rule.MOCK;
     
     @Test( expected = IllegalArgumentException.class )
     public void builderShouldThrowOnNullVariableList()

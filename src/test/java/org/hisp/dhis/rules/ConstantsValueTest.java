@@ -55,7 +55,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith( JUnit4.class )
 public class ConstantsValueTest
 {
-
     @Test( expected = IllegalArgumentException.class )
     public void shouldThrowExceptionIfConstantsValueMapIsNull()
     {

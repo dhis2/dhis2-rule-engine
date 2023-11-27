@@ -17,7 +17,7 @@ public class RuleVariableValueTest
 {
     private static final String DATE_PATTERN = "yyyy-MM-dd";
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat( DATE_PATTERN, Locale.US );
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat( DATE_PATTERN, Locale.US );
 
     @Test
     public void textValuesMostBeWrapped()

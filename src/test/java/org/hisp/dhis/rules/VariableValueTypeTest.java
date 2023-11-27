@@ -108,8 +108,8 @@ public class VariableValueTypeTest
                 .builder()
                 .rules(Collections.singletonList(rule))
                 .ruleVariables( ruleVariables )
-                .supplementaryData( new HashMap<String, List<String>>() )
-                .constantsValue( new HashMap<String, String>() )
+                .supplementaryData(new HashMap<>() )
+                .constantsValue(new HashMap<>() )
                 .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
                 .build();
     }
