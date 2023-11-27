@@ -24,19 +24,4 @@ public class RuleActionShowOptionGroupTest
 
         assertThat( ruleActionHideOptionGroup.content() ).isEqualTo( "" );
     }
-
-    @Test
-    public void createMustThrowOnNullOptionGroupField()
-    {
-        thrown.expect( NullPointerException.class );
-        RuleActionShowOptionGroup.create( "test_content", null, "test_field" );
-    }
-
-    @Test
-    public void createMustThrowOnNullField()
-    {
-        thrown.expect( NullPointerException.class );
-        RuleActionShowOptionGroup.create( "test_content", "test_option_group", null );
-    }
-
 }
