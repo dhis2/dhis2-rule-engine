@@ -174,12 +174,8 @@ public final class RuleVariableValueMapBuilder
     {
         if ( ruleEvent != null )
         {
-            for ( int i = 0; i < ruleEvents.size(); i++ )
-            {
-                RuleEvent event = ruleEvents.get( i );
-
-                if ( event.event().equals( ruleEvent.event() ) )
-                {
+            for (RuleEvent event : ruleEvents) {
+                if (event.event().equals(ruleEvent.event())) {
                     return true;
                 }
             }
@@ -210,10 +206,8 @@ public final class RuleVariableValueMapBuilder
         if ( ruleEnrollment != null )
         {
             List<RuleAttributeValue> ruleAttributeValues = ruleEnrollment.attributeValues();
-            for ( int index = 0; index < ruleAttributeValues.size(); index++ )
-            {
-                RuleAttributeValue attributeValue = ruleAttributeValues.get( index );
-                currentEnrollmentValues.put( attributeValue.trackedEntityAttribute(), attributeValue );
+            for (RuleAttributeValue attributeValue : ruleAttributeValues) {
+                currentEnrollmentValues.put(attributeValue.trackedEntityAttribute(), attributeValue);
             }
         }
 
@@ -233,7 +227,7 @@ public final class RuleVariableValueMapBuilder
         }
 
         // sort list of events by eventDate:
-        Collections.sort( events, RuleEvent.EVENT_DATE_COMPARATOR );
+        events.sort(RuleEvent.EVENT_DATE_COMPARATOR);
 
         // aggregating values by data element uid
         for ( int i = 0; i < events.size(); i++ )
@@ -276,41 +270,41 @@ public final class RuleVariableValueMapBuilder
         String currentDate = dateFormat.format( new Date() );
 
         valueMap.put( RuleEngineUtils.ENV_VAR_CURRENT_DATE,
-            create( currentDate, RuleValueType.TEXT, Arrays.asList( currentDate ), currentDate ) );
+            create( currentDate, RuleValueType.TEXT, List.of(currentDate), currentDate ) );
 
         if ( triggerEnvironment != null )
         {
             String environment = triggerEnvironment.getClientName();
             valueMap.put( RuleEngineUtils.ENV_VAR_ENVIRONMENT,
-                create( environment, RuleValueType.TEXT, Arrays.asList( environment ), currentDate ) );
+                create( environment, RuleValueType.TEXT, List.of(environment), currentDate ) );
         }
 
         if ( !ruleEvents.isEmpty() )
         {
             valueMap.put( RuleEngineUtils.ENV_VAR_EVENT_COUNT, create( String.valueOf( ruleEvents.size() ),
-                RuleValueType.NUMERIC, Arrays.asList( String.valueOf( ruleEvents.size() ) ), currentDate ) );
+                RuleValueType.NUMERIC, List.of(String.valueOf(ruleEvents.size())), currentDate ) );
         }
 
         if ( ruleEnrollment != null )
         {
             valueMap.put( RuleEngineUtils.ENV_VAR_ENROLLMENT_ID, create( ruleEnrollment.enrollment(),
-                RuleValueType.TEXT, Arrays.asList( ruleEnrollment.enrollment() ), currentDate ) );
+                RuleValueType.TEXT, List.of(ruleEnrollment.enrollment()), currentDate ) );
             valueMap.put( RuleEngineUtils.ENV_VAR_ENROLLMENT_COUNT, create( "1",
-                RuleValueType.NUMERIC, Arrays.asList( "1" ), currentDate ) );
+                RuleValueType.NUMERIC, List.of("1"), currentDate ) );
             valueMap.put( RuleEngineUtils.ENV_VAR_TEI_COUNT, create( "1",
-                RuleValueType.NUMERIC, Arrays.asList( "1" ), currentDate ) );
+                RuleValueType.NUMERIC, List.of("1"), currentDate ) );
 
             String enrollmentDate = dateFormat.format( ruleEnrollment.enrollmentDate() );
             valueMap.put( RuleEngineUtils.ENV_VAR_ENROLLMENT_DATE, create( enrollmentDate,
-                RuleValueType.TEXT, Arrays.asList( enrollmentDate ), currentDate ) );
+                RuleValueType.TEXT, List.of(enrollmentDate), currentDate ) );
 
             String incidentDate = dateFormat.format( ruleEnrollment.incidentDate() );
             valueMap.put( RuleEngineUtils.ENV_VAR_INCIDENT_DATE, create( incidentDate,
-                RuleValueType.TEXT, Arrays.asList( incidentDate ), currentDate ) );
+                RuleValueType.TEXT, List.of(incidentDate), currentDate ) );
 
             String status = ruleEnrollment.status().toString();
             valueMap.put( RuleEngineUtils.ENV_VAR_ENROLLMENT_STATUS, create( status,
-                RuleValueType.TEXT, Arrays.asList( status ), currentDate ) );
+                RuleValueType.TEXT, List.of(status), currentDate ) );
 
             String organisationUnit = ruleEnrollment.organisationUnit();
             valueMap.put( RuleEngineUtils.ENV_VAR_OU, create( organisationUnit, RuleValueType.TEXT ) );
@@ -326,18 +320,18 @@ public final class RuleVariableValueMapBuilder
         {
             String eventDate = dateFormat.format( ruleEvent.eventDate() );
             valueMap.put( RuleEngineUtils.ENV_VAR_EVENT_DATE, create( eventDate, RuleValueType.TEXT,
-                Arrays.asList( eventDate ), currentDate ) );
+                    List.of(eventDate), currentDate ) );
 
             if ( ruleEvent.dueDate() != null ) {
                 String dueDate = dateFormat.format(ruleEvent.dueDate());
                 valueMap.put(RuleEngineUtils.ENV_VAR_DUE_DATE, create(dueDate, RuleValueType.TEXT,
-                        Arrays.asList(dueDate), currentDate));
+                        List.of(dueDate), currentDate));
             }
             if ( ruleEvent.completedDate() != null )
             {
                 String completedDate = dateFormat.format( ruleEvent.completedDate() );
                 valueMap.put( RuleEngineUtils.ENV_VAR_COMPLETED_DATE, create( completedDate, RuleValueType.TEXT,
-                    Arrays.asList( completedDate ), currentDate ) );
+                        List.of(completedDate), currentDate ) );
             }
 
             // override value of event count
@@ -348,13 +342,13 @@ public final class RuleVariableValueMapBuilder
             }
 
             valueMap.put( RuleEngineUtils.ENV_VAR_EVENT_COUNT, create( eventCount,
-                RuleValueType.NUMERIC, Arrays.asList( eventCount ), currentDate ) );
+                RuleValueType.NUMERIC, List.of(eventCount), currentDate ) );
             valueMap.put( RuleEngineUtils.ENV_VAR_EVENT_ID, create( ruleEvent.event(),
-                RuleValueType.TEXT, Arrays.asList( ruleEvent.event() ), currentDate ) );
+                RuleValueType.TEXT, List.of(ruleEvent.event()), currentDate ) );
 
             String status = ruleEvent.status().toString();
             valueMap.put( RuleEngineUtils.ENV_VAR_EVENT_STATUS, create( status,
-                RuleValueType.TEXT, Arrays.asList( status ), currentDate ) );
+                RuleValueType.TEXT, List.of(status), currentDate ) );
 
             String organisationUnit = ruleEvent.organisationUnit();
             valueMap.put( RuleEngineUtils.ENV_VAR_OU, create( organisationUnit, RuleValueType.TEXT ) );
