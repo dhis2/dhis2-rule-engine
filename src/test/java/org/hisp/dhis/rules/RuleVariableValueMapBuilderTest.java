@@ -69,7 +69,7 @@ public class RuleVariableValueMapBuilderTest
 
         Date eventDate = dateFormat.parse( "2015-01-01" );
 
-        // values from context ruleEvents should be ignored
+        // values from context events should be ignored
         RuleEnrollment ruleEnrollment = RuleEnrollment.create( "test_enrollment",
                 dateFormat.parse( "2015-01-01" ), dateFormat.parse( "2015-01-01" ),
                 RuleEnrollment.Status.ACTIVE, "", null, Arrays.asList(
@@ -104,7 +104,7 @@ public class RuleVariableValueMapBuilderTest
         Date eventDate = dateFormat.parse( "2015-01-01" );
         Date dueDate = dateFormat.parse( "2016-01-01" );
 
-        // values from context ruleEvents should be ignored
+        // values from context events should be ignored
         RuleEvent contextEventOne = RuleEvent.create( "test_context_event_one", "test_program_stage",
             RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( eventDate, "test_program_stage",
@@ -468,13 +468,13 @@ public class RuleVariableValueMapBuilderTest
         Date eventDate = dateFormat.parse( "2015-01-01" );
         Date enrollmentDate = dateFormat.parse( "2014-03-01" );
 
-        // values from ruleEnrollment should end up in ruleVariables
+        // values from enrollment should end up in ruleVariables
         RuleEnrollment ruleEnrollment = RuleEnrollment.create( "test_enrollment",
             enrollmentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE, "", null, Arrays.asList(
                 RuleAttributeValue.create( "test_attribute_one", "test_attribute_value_one" ),
                 RuleAttributeValue.create( "test_attribute_two", "test_attribute_value_two" ) ), "" );
 
-        // values from context ruleEvents should be ignored
+        // values from context events should be ignored
         RuleEvent contextEvent = RuleEvent.create( "test_context_event_one", "test_program_stage",
             RuleEvent.Status.ACTIVE, eventDate, new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( eventDate, "test_program_stage",

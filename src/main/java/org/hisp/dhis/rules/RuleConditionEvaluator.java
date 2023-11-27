@@ -146,31 +146,19 @@ public class RuleConditionEvaluator
     {
         List<Rule> ruleList = new ArrayList<>( rules );
 
-        Collections.sort( ruleList, new Comparator<Rule>()
-        {
-            @Override
-            public int compare( Rule rule1, Rule rule2 )
-            {
-                Integer priority1 = rule1.priority();
-                Integer priority2 = rule2.priority();
-                if ( priority1 != null && priority2 != null )
-                {
-                    return priority1.compareTo( priority2 );
-                }
-                else if ( priority1 != null )
-                {
-                    return -1;
-                }
-                else if ( priority2 != null )
-                {
-                    return 1;
-                }
-                else
-                {
-                    return 0;
-                }
+        ruleList.sort((rule1, rule2) -> {
+            Integer priority1 = rule1.priority();
+            Integer priority2 = rule2.priority();
+            if (priority1 != null && priority2 != null) {
+                return priority1.compareTo(priority2);
+            } else if (priority1 != null) {
+                return -1;
+            } else if (priority2 != null) {
+                return 1;
+            } else {
+                return 0;
             }
-        } );
+        });
 
         return ruleList;
     }
@@ -219,9 +207,8 @@ public class RuleConditionEvaluator
                                 Map<String, RuleVariableValue> valueMap,
                                 Map<String, List<String>> supplementaryData )
     {
-        if ( ruleAction instanceof RuleActionAssign )
+        if (ruleAction instanceof RuleActionAssign ruleActionAssign)
         {
-            RuleActionAssign ruleActionAssign = (RuleActionAssign) ruleAction;
             String data = process( ruleActionAssign.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION);
             updateValueMap( ruleActionAssign.field(), RuleVariableValue.create( data, RuleValueType.TEXT ), valueMap );
             if ( StringUtils.isEmpty( data ) )

@@ -118,7 +118,7 @@ public final class RuleVariableValueMapBuilder
         if ( isEventInList( ruleEvents, ruleEvent ) )
         {
             throw new IllegalStateException( String.format( Locale.US, "ruleEvent %s is already set " +
-                "as a target, but also present in the context: ruleEvents list", ruleEvent.event() ) );
+                "as a target, but also present in the context: events list", ruleEvent.event() ) );
         }
 
         this.ruleEvents.addAll( ruleEvents );

@@ -13,8 +13,8 @@ import org.hisp.dhis.rules.models.RuleEvent;
 import org.hisp.dhis.rules.models.RuleValidationResult;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,62 +22,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-public final class RuleEngine
+public record RuleEngine(
+        @Nonnull
+        RuleEngineContext executionContext,
+
+        @Nonnull
+        List<RuleEvent> events,
+
+        @CheckForNull
+        RuleEnrollment enrollment,
+
+        @CheckForNull
+        TriggerEnvironment triggerEnvironment
+)
 {
-    @Nonnull
-    private final RuleEngineContext ruleEngineContext;
-
-    @Nonnull
-    private final List<RuleEvent> ruleEvents;
-
-    @Nullable
-    private final RuleEnrollment ruleEnrollment;
-
-    @Nullable
-    private TriggerEnvironment triggerEnvironment;
-
-    RuleEngine( @Nonnull RuleEngineContext ruleEngineContext,
-        @Nonnull List<RuleEvent> ruleEvents,
-        @Nullable RuleEnrollment ruleEnrollment, @Nullable TriggerEnvironment triggerEnvironment )
-    {
-        this.ruleEngineContext = ruleEngineContext;
-        this.ruleEvents = ruleEvents;
-        this.ruleEnrollment = ruleEnrollment;
-        this.triggerEnvironment = triggerEnvironment;
-    }
-
-    @Nonnull
-    public List<RuleEvent> events()
-    {
-        return ruleEvents;
-    }
-
-    @Nullable
-    public RuleEnrollment enrollment()
-    {
-        return ruleEnrollment;
-    }
-
-    @Nullable
-    public TriggerEnvironment triggerEnvironment()
-    {
-        return triggerEnvironment;
-    }
-
-    @Nonnull
-    public RuleEngineContext executionContext()
-    {
-        return ruleEngineContext;
-    }
-
     @Nonnull
     public Callable<List<RuleEffect>> evaluate( @Nonnull RuleEvent ruleEvent )
     {
-        return evaluate( ruleEvent, ruleEngineContext.rules() );
+        return evaluate( ruleEvent, executionContext.rules() );
     }
 
     @Nonnull
-    public Callable<List<RuleEffect>> evaluate( @Nonnull RuleEvent ruleEvent, @Nonnull List<Rule> rulesToEvaluate )
+    public Callable<List<RuleEffect>> evaluate( @CheckForNull RuleEvent ruleEvent, @Nonnull List<Rule> rulesToEvaluate )
     {
         if ( ruleEvent == null )
         {
@@ -85,54 +51,54 @@ public final class RuleEngine
         }
 
         Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEvent )
-            .ruleVariables( ruleEngineContext.ruleVariables() )
-            .ruleEnrollment( ruleEnrollment )
-            .triggerEnvironment( triggerEnvironment )
-            .ruleEvents( ruleEvents )
-            .constantValueMap( ruleEngineContext.constantsValues() )
-            .build();
+                .ruleVariables( executionContext.ruleVariables() )
+                .ruleEnrollment(enrollment)
+                .triggerEnvironment( triggerEnvironment )
+                .ruleEvents(events)
+                .constantValueMap( executionContext.constantsValues() )
+                .build();
 
-        return new RuleEngineExecution( ruleEvent, rulesToEvaluate, valueMap, ruleEngineContext.supplementaryData() );
+        return new RuleEngineExecution( ruleEvent, rulesToEvaluate, valueMap, executionContext.supplementaryData() );
     }
 
     @Nonnull
-    public Callable<List<RuleEffect>> evaluate( @Nonnull RuleEnrollment ruleEnrollment,
-        @Nonnull List<Rule> rulesToEvaluate )
+    public Callable<List<RuleEffect>> evaluate( @CheckForNull RuleEnrollment ruleEnrollment,
+                                                @Nonnull List<Rule> rulesToEvaluate )
     {
         if ( ruleEnrollment == null )
         {
-            throw new IllegalArgumentException( "ruleEnrollment == null" );
+            throw new IllegalArgumentException( "enrollment == null" );
         }
 
         Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEnrollment )
-            .ruleVariables( ruleEngineContext.ruleVariables() )
-            .triggerEnvironment( triggerEnvironment )
-            .ruleEvents( ruleEvents )
-            .constantValueMap( ruleEngineContext.constantsValues() )
-            .build();
+                .ruleVariables( executionContext.ruleVariables() )
+                .triggerEnvironment( triggerEnvironment )
+                .ruleEvents(events)
+                .constantValueMap( executionContext.constantsValues() )
+                .build();
 
-        return new RuleEngineExecution( ruleEnrollment, rulesToEvaluate, valueMap, ruleEngineContext.supplementaryData() );
+        return new RuleEngineExecution( ruleEnrollment, rulesToEvaluate, valueMap, executionContext.supplementaryData() );
     }
 
     @Nonnull
     public Callable<List<RuleEffects>> evaluate()
     {
         RuleVariableValueMap valueMap = RuleVariableValueMapBuilder.target()
-            .ruleVariables( ruleEngineContext.ruleVariables() )
-            .ruleEnrollment( ruleEnrollment )
-            .triggerEnvironment( triggerEnvironment )
-            .ruleEvents( ruleEvents )
-            .constantValueMap( ruleEngineContext.constantsValues() )
-            .multipleBuild();
+                .ruleVariables( executionContext.ruleVariables() )
+                .ruleEnrollment(enrollment)
+                .triggerEnvironment( triggerEnvironment )
+                .ruleEvents(events)
+                .constantValueMap( executionContext.constantsValues() )
+                .multipleBuild();
 
-        return new RuleEngineMultipleExecution( ruleEngineContext.rules(), valueMap,
-            ruleEngineContext.supplementaryData() );
+        return new RuleEngineMultipleExecution( executionContext.rules(), valueMap,
+                executionContext.supplementaryData() );
     }
 
     @Nonnull
     public Callable<List<RuleEffect>> evaluate( @Nonnull RuleEnrollment ruleEnrollment )
     {
-        return evaluate( ruleEnrollment, ruleEngineContext.rules() );
+        return evaluate( ruleEnrollment, executionContext.rules() );
     }
 
     @Nonnull
@@ -153,13 +119,13 @@ public final class RuleEngine
     {
         try {
             Map<String, ValueType> validationMap = new HashMap<>();
-            for (Map.Entry<String, DataItem> e : ruleEngineContext.dataItemStore().entrySet()) {
+            for (Map.Entry<String, DataItem> e : executionContext.dataItemStore().entrySet()) {
                 validationMap.put(e.getKey(), e.getValue().valueType().toValueType());
             }
             new Expression(expression, mode).validate( validationMap );
 
             Map<String, String> displayNames = new HashMap<>();
-            for (Map.Entry<String, DataItem> e : ruleEngineContext.dataItemStore().entrySet()) {
+            for (Map.Entry<String, DataItem> e : executionContext.dataItemStore().entrySet()) {
                 displayNames.put(e.getKey(), e.getValue().displayName());
             }
             String description = new Expression(expression, mode).describe(displayNames);
@@ -178,13 +144,13 @@ public final class RuleEngine
         @Nonnull
         private final RuleEngineContext ruleEngineContext;
 
-        @Nullable
+        @CheckForNull
         private List<RuleEvent> ruleEvents;
 
-        @Nullable
+        @CheckForNull
         private RuleEnrollment ruleEnrollment;
 
-        @Nullable
+        @CheckForNull
         private TriggerEnvironment triggerEnvironment;
 
         Builder( @Nonnull RuleEngineContext ruleEngineContext )
@@ -193,11 +159,11 @@ public final class RuleEngine
         }
 
         @Nonnull
-        public Builder events( @Nonnull List<RuleEvent> ruleEvents )
+        public Builder events( @CheckForNull List<RuleEvent> ruleEvents )
         {
             if ( ruleEvents == null )
             {
-                throw new IllegalArgumentException( "ruleEvents == null" );
+                throw new IllegalArgumentException( "events == null" );
             }
 
             this.ruleEvents = Collections.unmodifiableList( new ArrayList<>( ruleEvents ) );
@@ -205,11 +171,11 @@ public final class RuleEngine
         }
 
         @Nonnull
-        public Builder enrollment( @Nonnull RuleEnrollment ruleEnrollment )
+        public Builder enrollment( @CheckForNull RuleEnrollment ruleEnrollment )
         {
             if ( ruleEnrollment == null )
             {
-                throw new IllegalArgumentException( "ruleEnrollment == null" );
+                throw new IllegalArgumentException( "enrollment == null" );
             }
 
             this.ruleEnrollment = ruleEnrollment;
@@ -217,7 +183,7 @@ public final class RuleEngine
         }
 
         @Nonnull
-        public Builder triggerEnvironment( @Nonnull TriggerEnvironment triggerEnvironment )
+        public Builder triggerEnvironment( @CheckForNull TriggerEnvironment triggerEnvironment )
         {
             if ( triggerEnvironment == null )
             {
