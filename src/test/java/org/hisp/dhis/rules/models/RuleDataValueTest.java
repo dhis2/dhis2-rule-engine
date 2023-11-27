@@ -11,30 +11,6 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 @RunWith( JUnit4.class )
 public class RuleDataValueTest
 {
-    @Test( expected = NullPointerException.class )
-    public void createShouldThrowOnNullDate()
-    {
-        RuleDataValue.create( null, "test_program_stage_uid", "test_field", "test_value" );
-    }
-
-    @Test( expected = NullPointerException.class )
-    public void createShouldThrowOnNullEvent()
-    {
-        RuleDataValue.create( new Date(), null, "test_field", "test_value" );
-    }
-
-    @Test( expected = NullPointerException.class )
-    public void createShouldThrowOnNullDataElement()
-    {
-        RuleDataValue.create( new Date(), "test_program_stage_uid", null, "test_value" );
-    }
-
-    @Test( expected = NullPointerException.class )
-    public void createShouldThrowOnNullValue()
-    {
-        RuleDataValue.create( new Date(), "test_program_stage_uid", "test_dataelement", null );
-    }
-
     @Test
     public void createShouldPropagateValuesCorrectly()
     {

@@ -1,6 +1,5 @@
 package org.hisp.dhis.rules.models;
 
-import org.hisp.dhis.rules.util.MockRuleDataValue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -33,7 +32,7 @@ public class RuleEventTest
     @Test( expected = UnsupportedOperationException.class )
     public void createShouldPropagateImmutableList()
     {
-        RuleDataValue ruleDataValue = new MockRuleDataValue();
+        RuleDataValue ruleDataValue = RuleDataValue.MOCK;
 
         List<RuleDataValue> ruleDataValues = new ArrayList<>();
         ruleDataValues.add( ruleDataValue );
@@ -53,7 +52,7 @@ public class RuleEventTest
     @Test
     public void createShouldPropagateValuesCorrectly()
     {
-        RuleDataValue ruleDataValue = new MockRuleDataValue();
+        RuleDataValue ruleDataValue = RuleDataValue.MOCK;
 
         List<RuleDataValue> ruleDataValues = new ArrayList<>();
         ruleDataValues.add( ruleDataValue );

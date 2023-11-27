@@ -11,5 +11,4 @@ public interface RuleAction
      */
     @Nonnull
     String data();
-
 }
