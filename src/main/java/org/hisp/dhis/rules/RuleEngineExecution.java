@@ -14,41 +14,33 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 record RuleEngineExecution(
-    @CheckForNull
-    RuleEvent event,
-    @CheckForNull
-    RuleEnrollment enrollment,
-    @Nonnull
-    Map<String, List<String>> supplementaryData,
-    @Nonnull
-    List<Rule> rules,
-    @Nonnull
-    Map<String, RuleVariableValue> valueMap,
-    @Nonnull
-    RuleConditionEvaluator ruleConditionEvaluator) implements Callable<List<RuleEffect>> {
+        @CheckForNull RuleEvent event,
+        @CheckForNull RuleEnrollment enrollment,
+        @Nonnull Map<String, List<String>> supplementaryData,
+        @Nonnull List<Rule> rules,
+        @Nonnull Map<String, RuleVariableValue> valueMap,
+        @Nonnull RuleConditionEvaluator ruleConditionEvaluator
+) implements Callable<List<RuleEffect>> {
 
     RuleEngineExecution(@Nonnull RuleEvent event, @Nonnull List<Rule> rules,
-                        @Nonnull Map<String, RuleVariableValue> valueMap, @Nonnull Map<String, List<String>> supplementaryData )
-    {
-        this(event, null, supplementaryData, rules, new HashMap<>( valueMap ), new RuleConditionEvaluator());
+                        @Nonnull Map<String, RuleVariableValue> valueMap, @Nonnull Map<String, List<String>> supplementaryData) {
+        this(event, null, supplementaryData, rules, new HashMap<>(valueMap), new RuleConditionEvaluator());
     }
 
     RuleEngineExecution(@Nonnull RuleEnrollment enrollment, @Nonnull List<Rule> rules,
-                        @Nonnull Map<String, RuleVariableValue> valueMap, @Nonnull Map<String, List<String>> supplementaryData )
-    {
-        this(null, enrollment, supplementaryData, rules, new HashMap<>( valueMap ), new RuleConditionEvaluator());
+                        @Nonnull Map<String, RuleVariableValue> valueMap, @Nonnull Map<String, List<String>> supplementaryData) {
+        this(null, enrollment, supplementaryData, rules, new HashMap<>(valueMap), new RuleConditionEvaluator());
     }
 
     @Override
-    public List<RuleEffect> call()
-    {
+    public List<RuleEffect> call() {
         if (event != null) {
             return ruleConditionEvaluator.getRuleEffects(TrackerObjectType.EVENT, event.event(), valueMap,
-                    supplementaryData, this.rules );
+                    supplementaryData, this.rules);
         }
         if (enrollment != null) {
-            return ruleConditionEvaluator.getRuleEffects( TrackerObjectType.ENROLLMENT, enrollment.enrollment(), valueMap,
-                    supplementaryData, this.rules );
+            return ruleConditionEvaluator.getRuleEffects(TrackerObjectType.ENROLLMENT, enrollment.enrollment(), valueMap,
+                    supplementaryData, this.rules);
         }
         throw new IllegalStateException("event and enrollment were null");
     }
