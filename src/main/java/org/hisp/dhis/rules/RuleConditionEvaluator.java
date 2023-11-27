@@ -1,6 +1,5 @@
 package org.hisp.dhis.rules;
 
-import org.apache.commons.lang3.StringUtils;
 import org.hisp.dhis.lib.expression.Expression;
 import org.hisp.dhis.lib.expression.spi.ExpressionData;
 import org.hisp.dhis.lib.expression.spi.IllegalExpressionException;
@@ -220,7 +219,7 @@ public class RuleConditionEvaluator
         {
             String data = process( ruleActionAssign.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION);
             updateValueMap( ruleActionAssign.field(), RuleVariableValue.create( data, RuleValueType.TEXT ), valueMap );
-            if ( StringUtils.isEmpty( data ) )
+            if ( data == null || data.isEmpty() )
             {
                 return new RuleEffect( rule.uid(), ruleAction, null );
             }

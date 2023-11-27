@@ -28,7 +28,6 @@ package org.hisp.dhis.rules;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.apache.commons.lang3.StringUtils;
 import org.hisp.dhis.rules.models.AttributeType;
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleAction;
@@ -51,7 +50,8 @@ class RuleEngineFilter
 
         for ( Rule rule : rules )
         {
-            if ( StringUtils.isEmpty( rule.programStage() ) )
+            String programStage = rule.programStage();
+            if ( programStage == null || programStage.isEmpty() )
             {
                 List<RuleAction> ruleActions = filterActionRules( rule.actions(),
                     AttributeType.TRACKED_ENTITY_ATTRIBUTE );
@@ -68,8 +68,9 @@ class RuleEngineFilter
 
         for ( Rule rule : rules )
         {
-            if ( StringUtils.isEmpty( rule.programStage() ) ||
-                Objects.equals( rule.programStage(), ruleEvent.programStage() ) )
+            String programStage = rule.programStage();
+            if ( programStage == null || programStage.isEmpty() ||
+                Objects.equals(programStage, ruleEvent.programStage() ) )
             {
                 List<RuleAction> ruleActions = filterActionRules( rule.actions(),
                     AttributeType.DATA_ELEMENT );
