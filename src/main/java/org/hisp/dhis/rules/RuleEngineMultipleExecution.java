@@ -35,7 +35,7 @@ record RuleEngineMultipleExecution(
         List<RuleEffects> ruleEffects = new ArrayList<>();
 
         for ( Map.Entry<RuleEnrollment, Map<String, RuleVariableValue>> enrollments : ruleVariableValueMap
-            .getEnrollmentMap().entrySet() )
+            .enrollmentMap().entrySet() )
         {
             RuleEnrollment enrollment = enrollments.getKey();
             List<RuleEffect> enrollmentRuleEffects = ruleConditionEvaluator
@@ -46,7 +46,7 @@ record RuleEngineMultipleExecution(
         }
 
         for ( Map.Entry<RuleEvent, Map<String, RuleVariableValue>> events : ruleVariableValueMap
-            .getEventMap().entrySet() )
+            .eventMap().entrySet() )
         {
             RuleEvent event = events.getKey();
             ruleEffects.add( new RuleEffects( TrackerObjectType.EVENT, event.event(),

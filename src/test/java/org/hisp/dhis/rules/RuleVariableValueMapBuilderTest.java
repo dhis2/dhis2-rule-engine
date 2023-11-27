@@ -641,16 +641,16 @@ public class RuleVariableValueMapBuilderTest
             .triggerEnvironment( TriggerEnvironment.SERVER )
             .multipleBuild();
 
-        assertThat( ruleVariableValueMap.getEnrollmentMap().size() ).isEqualTo( 1 );
-        assertThat( ruleVariableValueMap.getEventMap().size() ).isEqualTo( 2 );
+        assertThat( ruleVariableValueMap.enrollmentMap().size() ).isEqualTo( 1 );
+        assertThat( ruleVariableValueMap.eventMap().size() ).isEqualTo( 2 );
 
-        Map<String, RuleVariableValue> enrollmentValueMap = ruleVariableValueMap.getEnrollmentMap()
+        Map<String, RuleVariableValue> enrollmentValueMap = ruleVariableValueMap.enrollmentMap()
             .get( ruleEnrollment );
 
-        Map<String, RuleVariableValue> eventOneValueMap = ruleVariableValueMap.getEventMap()
+        Map<String, RuleVariableValue> eventOneValueMap = ruleVariableValueMap.eventMap()
             .get( ruleEventOne );
 
-        Map<String, RuleVariableValue> eventTwoValueMap = ruleVariableValueMap.getEventMap()
+        Map<String, RuleVariableValue> eventTwoValueMap = ruleVariableValueMap.eventMap()
             .get( ruleEventTwo );
 
         // Enrollment
