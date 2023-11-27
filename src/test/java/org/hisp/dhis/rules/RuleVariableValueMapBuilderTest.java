@@ -12,7 +12,6 @@ import org.hisp.dhis.rules.models.RuleVariableNewestEvent;
 import org.hisp.dhis.rules.models.RuleVariableNewestStageEvent;
 import org.hisp.dhis.rules.models.RuleVariablePreviousEvent;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +20,8 @@ import org.junit.runners.JUnit4;
 import javax.annotation.Nonnull;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -623,10 +624,11 @@ public class RuleVariableValueMapBuilderTest
                 RuleAttributeValue.create( "test_attribute_two", "test_attribute_value_two" ),
                 RuleAttributeValue.create( "test_attribute_three", "test_attribute_value_three" ) ), "" );
 
-        Date eventOneDate = LocalDate.now().minusDays( 1 ).toDate();
-        Date eventOneDueDate = LocalDate.now().minusDays( 2 ).toDate();
-        Date eventTwoDate = LocalDate.now().minusDays( 3 ).toDate();
-        Date eventTwoDueDate = LocalDate.now().minusDays( 4 ).toDate();
+        LocalDate now = LocalDate.now();
+        Date eventOneDate = toDate(now.minusDays( 1 ));
+        Date eventOneDueDate = toDate(now.minusDays( 2 ));
+        Date eventTwoDate = toDate(now.minusDays( 3 ));
+        Date eventTwoDueDate = toDate(now.minusDays( 4 ));
 
         RuleEvent ruleEventOne = RuleEvent.create( "test_event_one", "test_program_stage",
             RuleEvent.Status.ACTIVE, eventOneDate, eventOneDueDate, "", null, new ArrayList<RuleDataValue>(), "",
@@ -770,5 +772,9 @@ public class RuleVariableValueMapBuilderTest
             .ruleVariables( new ArrayList<RuleVariable>() )
             .ruleEvents( Arrays.asList( ruleEvent ) )
             .build();
+    }
+
+    private static Date toDate(LocalDate date) {
+        return Date.from(date.atStartOfDay().toInstant(ZoneOffset.UTC));
     }
 }

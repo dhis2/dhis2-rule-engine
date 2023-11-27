@@ -36,16 +36,15 @@ import org.hisp.dhis.rules.models.RuleDataValue;
 import org.hisp.dhis.rules.models.RuleEffect;
 import org.hisp.dhis.rules.models.RuleEnrollment;
 import org.hisp.dhis.rules.models.RuleEvent;
-import org.hisp.dhis.rules.models.RuleVariable;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
-import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -62,19 +61,19 @@ public class ProgramRuleVariableTest
 
     private final static String DUE_DATE_STRING = "2020-06-01";
 
-    private final static Date DUE_DATE = LocalDate.parse( DUE_DATE_STRING ).toDate();
+    private final static Date DUE_DATE = parseDate( DUE_DATE_STRING );
 
     private final static String ENROLLMENT_DATE_STRING = "2019-01-01";
 
-    private final static Date ENROLLMENT_DATE = LocalDate.parse( ENROLLMENT_DATE_STRING ).toDate();
+    private final static Date ENROLLMENT_DATE = parseDate( ENROLLMENT_DATE_STRING );
 
     private final static String EVENT_DATE_STRING = "2019-02-02";
 
-    private final static Date EVENT_DATE = LocalDate.parse( EVENT_DATE_STRING ).toDate();
+    private final static Date EVENT_DATE = parseDate( EVENT_DATE_STRING );
 
     private final static String INCIDENT_DATE_STRING = "2020-01-01";
 
-    private final static Date INCIDENT_DATE = LocalDate.parse( INCIDENT_DATE_STRING ).toDate();
+    private final static Date INCIDENT_DATE = parseDate( INCIDENT_DATE_STRING );
 
     private static final String PROGRAM_STAGE = "program stage";
 
@@ -93,6 +92,10 @@ public class ProgramRuleVariableTest
     private static final String EVENT_ID = "event id";
 
     private static final String PROGRAM_NAME = "program name";
+
+    private static Date parseDate(String date) {
+        return Date.from(LocalDate.parse( date ).atStartOfDay().toInstant(ZoneOffset.UTC));
+    }
 
     @Test
     public void testCurrentDateProgramVariableIsAssigned()
@@ -296,7 +299,7 @@ public class ProgramRuleVariableTest
     {
         RuleAction assignAction = RuleActionAssign.create( null, variable, "#{test_data_element}" );
         return org.hisp.dhis.rules.models.Rule
-            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1", "" );
+            .create( null, 1, "true", List.of(assignAction), "test_program_rule1", "" );
     }
 
     private void assertProgramRuleVariableAssignment( List<RuleEffect> ruleEffects, Rule rule, String variableValue )
@@ -309,7 +312,7 @@ public class ProgramRuleVariableTest
     private List<RuleEffect> callEnrollmentRuleEngine( Rule rule )
         throws Exception
     {
-        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule ) );
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngine(List.of(rule));
 
         RuleEngine ruleEngine = ruleEngineBuilder.build();
         return ruleEngine.evaluate( getEnrollment() ).call();
@@ -318,7 +321,7 @@ public class ProgramRuleVariableTest
     private List<RuleEffect> callEventRuleEngine( Rule rule )
         throws Exception
     {
-        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule ) );
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngine(List.of(rule));
 
         RuleEvent event = RuleEvent.builder()
             .event( EVENT_ID )
@@ -346,7 +349,7 @@ public class ProgramRuleVariableTest
             .status( RuleEnrollment.Status.ACTIVE )
             .organisationUnit( ORGANISATION_UNIT )
             .organisationUnitCode( ORGANISATION_UNIT_CODE )
-            .attributeValues( Arrays.asList( RuleAttributeValue.create( "test_attribute", "test_value" ) ) )
+            .attributeValues(List.of(RuleAttributeValue.create("test_attribute", "test_value")))
             .build();
     }
 
@@ -355,7 +358,7 @@ public class ProgramRuleVariableTest
         return RuleEngineContext
             .builder()
             .rules( rules )
-            .ruleVariables( Arrays.<RuleVariable>asList() )
+            .ruleVariables(List.of())
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( new HashMap<String, String>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );

@@ -13,12 +13,13 @@ import org.hisp.dhis.rules.models.RuleVariable;
 import org.hisp.dhis.rules.models.RuleVariableCurrentEvent;
 import org.hisp.dhis.rules.models.RuleVariableNewestEvent;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
-import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,7 +33,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine;
 import static org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngineBuilder;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 @RunWith( JUnit4.class )
 public class RuleEngineFunctionTest
@@ -72,7 +72,7 @@ public class RuleEngineFunctionTest
         throws Exception
     {
         final Date today = new Date();
-        final Date yesterday = LocalDate.now().minusDays( 1 ).toDate();
+        final Date yesterday = Date.from(LocalDate.now().minusDays( 1 ).atStartOfDay().toInstant(ZoneOffset.UTC));
         RuleAction ruleAction = RuleActionText.createForFeedback(
             "test_action_content", "2 + 2" );
         Rule failingRule = Rule
