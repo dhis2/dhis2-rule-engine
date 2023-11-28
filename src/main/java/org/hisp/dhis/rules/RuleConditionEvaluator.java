@@ -10,18 +10,18 @@ import org.hisp.dhis.rules.models.RuleEffect;
 import org.hisp.dhis.rules.models.RuleEvaluationResult;
 import org.hisp.dhis.rules.models.RuleValueType;
 import org.hisp.dhis.rules.models.TrackerObjectType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RuleConditionEvaluator
 {
-    private static final Logger log = LoggerFactory.getLogger( RuleConditionEvaluator.class.getName() );
+    private static final Logger log = Logger.getLogger( RuleConditionEvaluator.class.getName() );
 
     public List<RuleEffect> getEvaluatedAndErrorRuleEffects( TrackerObjectType targetType, String targetUid, Map<String, RuleVariableValue> valueMap,
                                             Map<String, List<String>> supplementaryData, List<Rule> rules )
@@ -59,7 +59,7 @@ public class RuleConditionEvaluator
 
         for ( Rule rule : orderRules( rules ) )
         {
-            log.debug( "Evaluating programrule: " + rule.name() );
+            log.fine( "Evaluating programrule: " + rule.name() );
 
             try {
                 List<RuleEffect> ruleEffects = new ArrayList<>();
@@ -101,7 +101,7 @@ public class RuleConditionEvaluator
 
         for (RuleEvaluationResult ruleEvaluationResult : ruleEvaluationResults) {
 
-            log.debug("Rule " + ruleEvaluationResult.rule().name() + " with id " + ruleEvaluationResult.rule().uid() +
+            log.fine("Rule " + ruleEvaluationResult.rule().name() + " with id " + ruleEvaluationResult.rule().uid() +
                     " executed for " + targetType.getName() + "(" + targetUid + ")" +
                     " with condition (" + ruleEvaluationResult.rule().condition() + ")" +
                     " was evaluated " + ruleEvaluationResult.evaluatedAs());
@@ -146,7 +146,7 @@ public class RuleConditionEvaluator
                     " raised an unexpected exception: " + e.getMessage();
         }
 
-        log.error(errorMessage);
+        log.log(Level.SEVERE, errorMessage);
         ruleEvaluationResults.add(RuleEvaluationResult.errorRule(rule, errorMessage));
     }
 
