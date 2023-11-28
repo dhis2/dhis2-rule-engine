@@ -35,7 +35,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -64,7 +63,7 @@ public class CalculatedValueTest
             .status( RuleEnrollment.Status.ACTIVE )
             .organisationUnit( "test_ou" )
             .organisationUnitCode( "test_ou_code" )
-            .attributeValues( Arrays.<RuleAttributeValue>asList() )
+            .attributeValues(List.of())
             .build();
 
         RuleEvent ruleEvent = RuleEvent.builder()
@@ -107,7 +106,7 @@ public class CalculatedValueTest
             .status( RuleEnrollment.Status.ACTIVE )
             .organisationUnit( "test_ou" )
             .organisationUnitCode( "test_ou_code" )
-            .attributeValues( Arrays.<RuleAttributeValue>asList() )
+            .attributeValues(List.of())
             .build();
 
         RuleEvent ruleEvent = RuleEvent.builder()
@@ -172,7 +171,7 @@ public class CalculatedValueTest
             .status( RuleEnrollment.Status.ACTIVE )
             .organisationUnit( "test_ou" )
             .organisationUnitCode( "test_ou_code" )
-            .attributeValues( Arrays.<RuleAttributeValue>asList() )
+            .attributeValues(List.of())
             .build();
 
         RuleEvent ruleEvent = RuleEvent.builder()

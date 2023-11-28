@@ -16,7 +16,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -80,15 +79,13 @@ public class RuleEngineVariableNameTest
         RuleVariable ruleVariable7 = RuleVariableNewestEvent.create(
             UID0WILD2, "test_data_element7", RuleValueType.NUMERIC, true, new ArrayList<>());
 
-        List<RuleAction> actions = Arrays
-            .asList( ruleAction1, ruleAction2, ruleAction3, ruleAction4, ruleAction5, ruleAction6, ruleAction7,
-                ruleAction8, ruleAction9, ruleAction10 );
+        List<RuleAction> actions = List.of(ruleAction1, ruleAction2, ruleAction3, ruleAction4, ruleAction5, ruleAction6, ruleAction7,
+                ruleAction8, ruleAction9, ruleAction10);
         Rule rule = Rule.create( null, null, "true",
             actions, "", "" );
 
-        List<RuleVariable> ruleVariables = Arrays
-            .asList( ruleVariable1, ruleVariable2, ruleVariable3, ruleVariable4, ruleVariable5, ruleVariable6,
-                ruleVariable7 );
+        List<RuleVariable> ruleVariables = List.of(ruleVariable1, ruleVariable2, ruleVariable3, ruleVariable4, ruleVariable5, ruleVariable6,
+                ruleVariable7);
         RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule,
             ruleVariables );
 
