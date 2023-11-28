@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 @RunWith( JUnit4.class )
 public class RuleEnrollmentTest
@@ -35,14 +35,14 @@ public class RuleEnrollmentTest
             incidentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE, "", "",
             Arrays.asList( ruleAttributeValueOne, ruleAttributeValueTwo, ruleAttributeValueThree ), "" );
 
-        assertThat( ruleEnrollment.enrollment() ).isEqualTo( "test_enrollment" );
-        assertThat( ruleEnrollment.incidentDate() ).isEqualTo( incidentDate );
-        assertThat( ruleEnrollment.enrollmentDate() ).isEqualTo( enrollmentDate );
-        assertThat( ruleEnrollment.status() ).isEqualTo( RuleEnrollment.Status.ACTIVE );
-        assertThat( ruleEnrollment.attributeValues().size() ).isEqualTo( 3 );
-        assertThat( ruleEnrollment.attributeValues().get( 0 ) ).isEqualTo( ruleAttributeValueOne );
-        assertThat( ruleEnrollment.attributeValues().get( 1 ) ).isEqualTo( ruleAttributeValueTwo );
-        assertThat( ruleEnrollment.attributeValues().get( 2 ) ).isEqualTo( ruleAttributeValueThree );
+        assertEquals( "test_enrollment" , ruleEnrollment.enrollment() );
+        assertEquals( incidentDate , ruleEnrollment.incidentDate() );
+        assertEquals( enrollmentDate , ruleEnrollment.enrollmentDate() );
+        assertEquals( RuleEnrollment.Status.ACTIVE , ruleEnrollment.status() );
+        assertEquals( 3 , ruleEnrollment.attributeValues().size() );
+        assertEquals( ruleAttributeValueOne , ruleEnrollment.attributeValues().get( 0 ) );
+        assertEquals( ruleAttributeValueTwo , ruleEnrollment.attributeValues().get( 1 ) );
+        assertEquals( ruleAttributeValueThree , ruleEnrollment.attributeValues().get( 2 ) );
     }
 
     @Test( expected = UnsupportedOperationException.class )
@@ -62,9 +62,9 @@ public class RuleEnrollmentTest
         // mutating source array
         attributeValues.add( ruleAttributeValueThree );
 
-        assertThat( ruleEnrollment.attributeValues().size() ).isEqualTo( 3 );
-        assertThat( ruleEnrollment.attributeValues().get( 0 ) ).isEqualTo( ruleAttributeValueOne );
-        assertThat( ruleEnrollment.attributeValues().get( 1 ) ).isEqualTo( ruleAttributeValueTwo );
+        assertEquals( 3 , ruleEnrollment.attributeValues().size() );
+        assertEquals( ruleAttributeValueOne , ruleEnrollment.attributeValues().get( 0 ) );
+        assertEquals( ruleAttributeValueTwo , ruleEnrollment.attributeValues().get( 1 ) );
 
         ruleEnrollment.attributeValues().clear();
     }

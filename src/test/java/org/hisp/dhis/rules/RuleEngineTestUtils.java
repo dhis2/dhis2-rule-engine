@@ -34,7 +34,6 @@ import org.hisp.dhis.rules.models.RuleEvent;
 import org.hisp.dhis.rules.models.RuleVariable;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class RuleEngineTestUtils
 {
     public static RuleEngine getRuleEngine( Rule rule, List<RuleVariable> ruleVariables )
     {
-        return getRuleEngineBuilder( Arrays.asList( rule ), ruleVariables )
+        return getRuleEngineBuilder( List.of( rule ), ruleVariables )
             .build();
     }
 
@@ -64,7 +63,7 @@ public class RuleEngineTestUtils
 
     public static RuleEngine.Builder getRuleEngineBuilder( Rule rule, List<RuleVariable> ruleVariables )
     {
-        return getRuleEngineBuilder( Arrays.asList( rule ), ruleVariables );
+        return getRuleEngineBuilder( List.of( rule ), ruleVariables );
     }
 
     private static RuleEngine.Builder getRuleEngineBuilder( List<Rule> rule, List<RuleVariable> ruleVariables )

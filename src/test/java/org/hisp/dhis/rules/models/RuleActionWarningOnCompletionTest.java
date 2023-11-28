@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 @RunWith( JUnit4.class )
 public class RuleActionWarningOnCompletionTest
@@ -19,17 +19,17 @@ public class RuleActionWarningOnCompletionTest
         RuleActionMessage ruleActionNoField = RuleActionMessage
             .create( "test_content", "test_data", null, RuleActionMessage.Type.WARNING_ON_COMPILATION );
 
-        assertThat( ruleActionNoContent.content() ).isEqualTo( "" );
-        assertThat( ruleActionNoContent.data() ).isEqualTo( "test_data" );
-        assertThat( ruleActionNoContent.field() ).isEqualTo( "test_field" );
+        assertEquals( "" , ruleActionNoContent.content() );
+        assertEquals( "test_data" , ruleActionNoContent.data() );
+        assertEquals( "test_field" , ruleActionNoContent.field() );
 
-        assertThat( ruleActionNoData.content() ).isEqualTo( "test_content" );
-        assertThat( ruleActionNoData.data() ).isEqualTo( "" );
-        assertThat( ruleActionNoData.field() ).isEqualTo( "test_field" );
+        assertEquals( "test_content" , ruleActionNoData.content() );
+        assertEquals( "" , ruleActionNoData.data() );
+        assertEquals( "test_field" , ruleActionNoData.field() );
 
-        assertThat( ruleActionNoField.content() ).isEqualTo( "test_content" );
-        assertThat( ruleActionNoField.data() ).isEqualTo( "test_data" );
-        assertThat( ruleActionNoField.field() ).isEqualTo( "" );
+        assertEquals( "test_content" , ruleActionNoField.content() );
+        assertEquals( "test_data" , ruleActionNoField.data() );
+        assertEquals( "" , ruleActionNoField.field() );
     }
 
     @Test( expected = IllegalArgumentException.class )

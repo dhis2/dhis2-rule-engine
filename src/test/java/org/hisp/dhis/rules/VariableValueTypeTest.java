@@ -38,6 +38,7 @@ import org.hisp.dhis.rules.models.RuleValueType;
 import org.hisp.dhis.rules.models.RuleVariable;
 import org.hisp.dhis.rules.models.RuleVariableCurrentEvent;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -49,7 +50,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 @RunWith( JUnit4.class )
 public class VariableValueTypeTest
@@ -74,9 +75,9 @@ public class VariableValueTypeTest
                         RuleDataValue.create(new Date(), "", "test_data_element2", "4")), "", null);
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "30" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( "30" , ruleEffects.get( 0 ).data() );
+        assertEquals( ruleAction , ruleEffects.get( 0 ).ruleAction() );
     }
 
     @Test
@@ -99,7 +100,7 @@ public class VariableValueTypeTest
                         RuleDataValue.create(new Date(), "", "test_data_element2", "4")), "", null);
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 0 );
+        assertEquals( 0 , ruleEffects.size() );
     }
 
     private RuleEngine getRuleEngine( Rule rule, List<RuleVariable> ruleVariables )

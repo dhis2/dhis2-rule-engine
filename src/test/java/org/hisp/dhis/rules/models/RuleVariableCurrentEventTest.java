@@ -6,7 +6,7 @@ import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 @RunWith( JUnit4.class )
 public class RuleVariableCurrentEventTest
@@ -17,8 +17,8 @@ public class RuleVariableCurrentEventTest
         RuleVariableCurrentEvent ruleVariableCurrentEvent = RuleVariableCurrentEvent.create(
             "test_variable", "test_dataelement", RuleValueType.NUMERIC, true, new ArrayList<>());
 
-        assertThat( ruleVariableCurrentEvent.name() ).isEqualTo( "test_variable" );
-        assertThat( ruleVariableCurrentEvent.dataElement() ).isEqualTo( "test_dataelement" );
-        assertThat( ruleVariableCurrentEvent.dataElementType() ).isEqualTo( RuleValueType.NUMERIC );
+        assertEquals( "test_variable" , ruleVariableCurrentEvent.name() );
+        assertEquals( "test_dataelement" , ruleVariableCurrentEvent.dataElement() );
+        assertEquals( RuleValueType.NUMERIC , ruleVariableCurrentEvent.dataElementType() );
     }
 }

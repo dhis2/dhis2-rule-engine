@@ -40,7 +40,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Zubair Asghar.
@@ -83,7 +83,7 @@ public class CalculatedValueTest
         RuleEngine ruleEngine = ruleEngineBuilder.enrollment( enrollment ).build();
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( i );
+        assertEquals( i , ruleEffects.size() );
     }
 
     @Test
@@ -126,8 +126,8 @@ public class CalculatedValueTest
         RuleEngine ruleEngine = getRuleEngine( Arrays.asList( rule, rule2 ) ).enrollment( enrollment ).build();
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( sendMessageAction );
+        assertEquals( "4" , ruleEffects.get( 0 ).data() );
+        assertEquals( sendMessageAction , ruleEffects.get( 0 ).ruleAction() );
     }
 
     private List<org.hisp.dhis.rules.models.Rule> createRules( int i )
@@ -191,9 +191,9 @@ public class CalculatedValueTest
         RuleEngine ruleEngine = ruleEngineBuilder.enrollment( enrollment ).build();
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( sendMessageAction );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( "4" , ruleEffects.get( 0 ).data() );
+        assertEquals( sendMessageAction , ruleEffects.get( 0 ).ruleAction() );
 
     }
 

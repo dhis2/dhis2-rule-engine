@@ -13,8 +13,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static junit.framework.TestCase.fail;
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 @RunWith( JUnit4.class )
 public class RuleEngineContextTest
@@ -65,15 +67,15 @@ public class RuleEngineContextTest
         ruleVariables.add( ruleVariableTwo );
         rules.add( ruleTwo );
 
-        assertThat( ruleEngineContext.ruleVariables().size() ).isEqualTo( 1 );
-        assertThat( ruleEngineContext.ruleVariables().get( 0 ) ).isEqualTo( ruleVariable );
+        assertEquals( 1 , ruleEngineContext.ruleVariables().size() );
+        assertEquals( ruleVariable , ruleEngineContext.ruleVariables().get( 0 ) );
 
-        assertThat( ruleEngineContext.supplementaryData().size() ).isEqualTo( 1 );
-        assertThat( ruleEngineContext.supplementaryData().get( "text-key" ) ).isNotNull();
-        assertThat( ruleEngineContext.supplementaryData().get( "text-key" ) ).isEqualTo( members );
+        assertEquals( 1 , ruleEngineContext.supplementaryData().size() );
+        assertNotNull( ruleEngineContext.supplementaryData().get( "text-key" ) );
+        assertEquals( members , ruleEngineContext.supplementaryData().get( "text-key" ) );
 
-        assertThat( ruleEngineContext.rules().size() ).isEqualTo( 1 );
-        assertThat( ruleEngineContext.rules().get( 0 ) ).isEqualTo( rule );
+        assertEquals( 1 , ruleEngineContext.rules().size() );
+        assertEquals( rule , ruleEngineContext.rules().get( 0 ) );
 
         try
         {
@@ -100,7 +102,7 @@ public class RuleEngineContextTest
     public void toEngineBuilderShouldReturnNewInstances()
     {
         RuleEngineContext ruleEngineContext = RuleEngineContext.builder()
-            .ruleVariables( Arrays.asList( new MockRuleVariable() ) )
+            .ruleVariables(List.of(new MockRuleVariable()))
             .supplementaryData( new HashMap<String, List<String>>() )
             .rules( List.of(Rule.MOCK) )
             .build();
@@ -108,6 +110,6 @@ public class RuleEngineContextTest
         RuleEngine.Builder ruleEngineBuilderOne = ruleEngineContext.toEngineBuilder();
         RuleEngine.Builder ruleEngineBuilderTwo = ruleEngineContext.toEngineBuilder();
 
-        assertThat( ruleEngineBuilderOne ).isNotEqualTo( ruleEngineBuilderTwo );
+        assertNotEquals( ruleEngineBuilderOne, ruleEngineBuilderTwo );
     }
 }

@@ -6,7 +6,7 @@ import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 @RunWith( JUnit4.class )
 public class RuleVariableAttributeTest
@@ -17,8 +17,8 @@ public class RuleVariableAttributeTest
         RuleVariableAttribute ruleVariableAttribute = RuleVariableAttribute.create(
             "test_variable", "test_attribute", RuleValueType.NUMERIC, true, new ArrayList<>());
 
-        assertThat( ruleVariableAttribute.name() ).isEqualTo( "test_variable" );
-        assertThat( ruleVariableAttribute.trackedEntityAttribute() ).isEqualTo( "test_attribute" );
-        assertThat( ruleVariableAttribute.trackedEntityAttributeType() ).isEqualTo( RuleValueType.NUMERIC );
+        assertEquals( "test_variable" , ruleVariableAttribute.name() );
+        assertEquals( "test_attribute" , ruleVariableAttribute.trackedEntityAttribute() );
+        assertEquals( RuleValueType.NUMERIC , ruleVariableAttribute.trackedEntityAttributeType() );
     }
 }

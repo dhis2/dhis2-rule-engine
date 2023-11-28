@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 @RunWith( JUnit4.class )
 public class RuleVariableValueTest
@@ -26,11 +26,11 @@ public class RuleVariableValueTest
             "test_value", RuleValueType.TEXT, Arrays.asList(
                 "test_value_candidate_one", "test_value_candidate_two" ), dateFormat.format( new Date() ) );
 
-        assertThat( variableValue.value() ).isEqualTo( "test_value" );
-        assertThat( variableValue.type() ).isEqualTo( RuleValueType.TEXT );
-        assertThat( variableValue.candidates().size() ).isEqualTo( 2 );
-        assertThat( variableValue.candidates().get( 0 ) ).isEqualTo( "test_value_candidate_one" );
-        assertThat( variableValue.candidates().get( 1 ) ).isEqualTo( "test_value_candidate_two" );
+        assertEquals( "test_value" , variableValue.value() );
+        assertEquals( RuleValueType.TEXT , variableValue.type() );
+        assertEquals( 2 , variableValue.candidates().size() );
+        assertEquals( "test_value_candidate_one" , variableValue.candidates().get( 0 ) );
+        assertEquals( "test_value_candidate_two" , variableValue.candidates().get( 1 ) );
     }
 
     @Test
@@ -40,11 +40,11 @@ public class RuleVariableValueTest
             "test_value", RuleValueType.TEXT, Arrays.asList(
                 "test_value_candidate_one", "test_value_candidate_two" ), dateFormat.format( new Date() ) );
 
-        assertThat( variableValue.value() ).isEqualTo( "test_value" );
-        assertThat( variableValue.type() ).isEqualTo( RuleValueType.TEXT );
-        assertThat( variableValue.candidates().size() ).isEqualTo( 2 );
-        assertThat( variableValue.candidates().get( 0 ) ).isEqualTo( "test_value_candidate_one" );
-        assertThat( variableValue.candidates().get( 1 ) ).isEqualTo( "test_value_candidate_two" );
+        assertEquals( "test_value" , variableValue.value() );
+        assertEquals( RuleValueType.TEXT , variableValue.type() );
+        assertEquals( 2 , variableValue.candidates().size() );
+        assertEquals( "test_value_candidate_one" , variableValue.candidates().get( 0 ) );
+        assertEquals( "test_value_candidate_two" , variableValue.candidates().get( 1 ) );
     }
 
     @Test
@@ -53,11 +53,11 @@ public class RuleVariableValueTest
         RuleVariableValue variableValue = RuleVariableValue.create(
             "1", RuleValueType.NUMERIC, Arrays.asList( "2", "3" ), dateFormat.format( new Date() ) );
 
-        assertThat( variableValue.value() ).isEqualTo( "1" );
-        assertThat( variableValue.type() ).isEqualTo( RuleValueType.NUMERIC );
-        assertThat( variableValue.candidates().size() ).isEqualTo( 2 );
-        assertThat( variableValue.candidates().get( 0 ) ).isEqualTo( "2" );
-        assertThat( variableValue.candidates().get( 1 ) ).isEqualTo( "3" );
+        assertEquals( "1" , variableValue.value() );
+        assertEquals( RuleValueType.NUMERIC , variableValue.type() );
+        assertEquals( 2 , variableValue.candidates().size() );
+        assertEquals( "2" , variableValue.candidates().get( 0 ) );
+        assertEquals( "3" , variableValue.candidates().get( 1 ) );
     }
 
     @Test
@@ -66,11 +66,11 @@ public class RuleVariableValueTest
         RuleVariableValue variableValue = RuleVariableValue.create(
             "true", RuleValueType.BOOLEAN, Arrays.asList( "false", "false" ), dateFormat.format( new Date() ) );
 
-        assertThat( variableValue.value() ).isEqualTo( "true" );
-        assertThat( variableValue.type() ).isEqualTo( RuleValueType.BOOLEAN );
-        assertThat( variableValue.candidates().size() ).isEqualTo( 2 );
-        assertThat( variableValue.candidates().get( 0 ) ).isEqualTo( "false" );
-        assertThat( variableValue.candidates().get( 1 ) ).isEqualTo( "false" );
+        assertEquals( "true" , variableValue.value() );
+        assertEquals( RuleValueType.BOOLEAN , variableValue.type() );
+        assertEquals( 2 , variableValue.candidates().size() );
+        assertEquals( "false" , variableValue.candidates().get( 0 ) );
+        assertEquals( "false" , variableValue.candidates().get( 1 ) );
     }
 
     @Test( expected = NullPointerException.class )

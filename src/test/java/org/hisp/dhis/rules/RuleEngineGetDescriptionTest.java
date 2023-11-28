@@ -36,7 +36,6 @@ import org.hisp.dhis.rules.models.RuleValidationResult;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -44,8 +43,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -365,12 +362,12 @@ public class RuleEngineGetDescriptionTest
         result = ruleEngine.evaluateDataFieldExpression( "1 + 1 +" );
         assertNotNull( result );
         assertFalse( result.valid() );
-        assertThat( result.exception(), instanceOf( ParseException.class ) );
+        assertTrue(result.exception() instanceof ParseException);
 
         result = ruleEngine.evaluateDataFieldExpression( "d2:hasValue(#{test_var_two}) && d2:count(#{test_var_one}) > 0 (" );
         assertNotNull( result );
         assertFalse( result.valid() );
-        assertThat( result.exception(), instanceOf( ParseException.class ) );
+        assertTrue( result.exception() instanceof ParseException);
     }
 
     private RuleEngine.Builder getRuleEngineBuilderForDescription( Map<String, DataItem> itemStore )

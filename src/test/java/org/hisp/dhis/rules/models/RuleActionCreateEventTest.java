@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 @RunWith( JUnit4.class )
 public class RuleActionCreateEventTest
@@ -17,12 +17,12 @@ public class RuleActionCreateEventTest
         RuleActionCreateEvent ruleActionAssignNoField = RuleActionCreateEvent
             .create( "test_content", null, "test_program_stage" );
 
-        assertThat( ruleActionAssignNoContent.content() ).isEqualTo( "" );
-        assertThat( ruleActionAssignNoContent.data() ).isEqualTo( "test_data" );
-        assertThat( ruleActionAssignNoContent.programStage() ).isEqualTo( "test_program_stage" );
+        assertEquals( "" , ruleActionAssignNoContent.content() );
+        assertEquals( "test_data" , ruleActionAssignNoContent.data() );
+        assertEquals( "test_program_stage" , ruleActionAssignNoContent.programStage() );
 
-        assertThat( ruleActionAssignNoField.content() ).isEqualTo( "test_content" );
-        assertThat( ruleActionAssignNoField.data() ).isEqualTo( "" );
-        assertThat( ruleActionAssignNoField.programStage() ).isEqualTo( "test_program_stage" );
+        assertEquals( "test_content" , ruleActionAssignNoField.content() );
+        assertEquals( "" , ruleActionAssignNoField.data() );
+        assertEquals( "test_program_stage" , ruleActionAssignNoField.programStage() );
     }
 }

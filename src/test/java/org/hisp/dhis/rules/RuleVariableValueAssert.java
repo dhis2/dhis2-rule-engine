@@ -5,7 +5,7 @@ import org.hisp.dhis.rules.models.RuleValueType;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 final class RuleVariableValueAssert
 {
@@ -25,17 +25,17 @@ final class RuleVariableValueAssert
     @Nonnull
     RuleVariableValueAssert hasValue( @Nullable String value )
     {
-        assertThat( variableValue.value() ).isEqualTo( value );
+        assertEquals( value , variableValue.value() );
         return this;
     }
 
     @Nonnull
     RuleVariableValueAssert hasCandidates( @Nonnull String... candidates )
     {
-        assertThat( variableValue.candidates().size() ).isEqualTo( candidates.length );
+        assertEquals( candidates.length , variableValue.candidates().size() );
         for ( int index = 0; index < candidates.length; index++ )
         {
-            assertThat( variableValue.candidates().get( index ) ).isEqualTo( candidates[index] );
+            assertEquals( candidates[index] , variableValue.candidates().get( index ) );
         }
         return this;
     }
@@ -43,7 +43,7 @@ final class RuleVariableValueAssert
     @Nonnull
     RuleVariableValueAssert isTypeOf( @Nonnull RuleValueType valueType )
     {
-        assertThat( variableValue.type() ).isEqualTo( valueType );
+        assertEquals( valueType , variableValue.type() );
         return this;
     }
 }

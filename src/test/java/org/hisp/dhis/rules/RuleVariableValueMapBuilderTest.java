@@ -29,9 +29,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.hisp.dhis.rules.RuleVariableValueAssert.assertThatVariable;
-import static org.mockito.Mockito.mock;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @RunWith( JUnit4.class )
 public class RuleVariableValueMapBuilderTest
@@ -132,7 +132,7 @@ public class RuleVariableValueMapBuilderTest
             .triggerEnvironment( TriggerEnvironment.SERVER )
             .build();
 
-        assertThat( valueMap.size() ).isEqualTo( 13 );
+        assertEquals( valueMap.size() , 13 );
 
         assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -199,7 +199,7 @@ public class RuleVariableValueMapBuilderTest
             .triggerEnvironment( TriggerEnvironment.SERVER )
             .build();
 
-        assertThat( valueMap.size() ).isEqualTo( 12 );
+        assertEquals( valueMap.size() , 12 );
 
         assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -214,7 +214,7 @@ public class RuleVariableValueMapBuilderTest
         assertThatVariable( valueMap.get( "event_id" ) ).hasValue( "test_event_uid_current" )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_event_uid_current" );
 
-        assertThat( valueMap.get( "due_date" ) ).isNull();
+        assertNull( valueMap.get( "due_date" ) );
 
         assertThatVariable( valueMap.get( "test_variable_one" ) ).hasValue( "test_value_one_newest" )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_value_one_newest",
@@ -263,7 +263,7 @@ public class RuleVariableValueMapBuilderTest
             .ruleEvents( Arrays.asList( firstRuleEvent, secondRuleEvent ) )
             .build();
 
-        assertThat( valueMap.size() ).isEqualTo( 13 );
+        assertEquals( 13 , valueMap.size() );
 
         assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -307,29 +307,29 @@ public class RuleVariableValueMapBuilderTest
         Date dateEventDueCurrent = dateFormat.parse( "2011-02-03" );
 
         RuleEvent eventOne = RuleEvent.create( "test_event_uid_one", "test_program_stage_one",
-            RuleEvent.Status.ACTIVE, dateEventOne, dateEventOne, "", null, Arrays.asList(
-                RuleDataValue.create( dateEventOne, "test_program_stage_one",
-                    "test_dataelement", "test_value_one" ) ), "", null);
+            RuleEvent.Status.ACTIVE, dateEventOne, dateEventOne, "", null, List.of(
+                        RuleDataValue.create(dateEventOne, "test_program_stage_one",
+                                "test_dataelement", "test_value_one")), "", null);
         RuleEvent eventTwo = RuleEvent.create( "test_event_uid_two", "test_program_stage_two",
-            RuleEvent.Status.ACTIVE, dateEventTwo, dateEventTwo, "", null, Arrays.asList(
-                RuleDataValue.create( dateEventTwo, "test_program_stage_two",
-                    "test_dataelement", "test_value_two" ) ), "", null);
+            RuleEvent.Status.ACTIVE, dateEventTwo, dateEventTwo, "", null, List.of(
+                        RuleDataValue.create(dateEventTwo, "test_program_stage_two",
+                                "test_dataelement", "test_value_two")), "", null);
         RuleEvent eventThree = RuleEvent.create( "test_event_uid_three", "test_program_stage_two",
-            RuleEvent.Status.ACTIVE, dateEventThree, dateEventThree, "", null, Arrays.asList(
-                RuleDataValue.create( dateEventThree, "test_program_stage_two",
-                    "test_dataelement", "test_value_three" ) ), "", null);
+            RuleEvent.Status.ACTIVE, dateEventThree, dateEventThree, "", null, List.of(
+                        RuleDataValue.create(dateEventThree, "test_program_stage_two",
+                                "test_dataelement", "test_value_three")), "", null);
         RuleEvent eventCurrent = RuleEvent.create( "test_event_uid_current", "test_program_stage_one",
-            RuleEvent.Status.ACTIVE, dateEventCurrent, dateEventDueCurrent, "", null, Arrays.asList(
-                RuleDataValue.create( dateEventCurrent, "test_program_stage_one",
-                    "test_dataelement", "test_value_current" ) ), "", null);
+            RuleEvent.Status.ACTIVE, dateEventCurrent, dateEventDueCurrent, "", null, List.of(
+                        RuleDataValue.create(dateEventCurrent, "test_program_stage_one",
+                                "test_dataelement", "test_value_current")), "", null);
 
         Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( eventCurrent )
-            .ruleVariables( Arrays.asList( ruleVariable ) )
+            .ruleVariables(List.of(ruleVariable))
             .ruleEvents( Arrays.asList( eventOne, eventTwo, eventThree ) )
             .triggerEnvironment( TriggerEnvironment.SERVER )
             .build();
 
-        assertThat( valueMap.size() ).isEqualTo( 12 );
+        assertEquals( 12 , valueMap.size() );
 
         assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -363,21 +363,21 @@ public class RuleVariableValueMapBuilderTest
         Date dateEventTwo = dateFormat.parse( "2015-02-03" );
 
         RuleEvent ruleEventOne = RuleEvent.create( "test_event_uid_one", "test_program_stage_two",
-            RuleEvent.Status.ACTIVE, dateEventOne, dateEventOne, "", null, Arrays.asList(
-                RuleDataValue.create( dateEventOne, "test_program_stage_two",
-                    "test_dataelement", "test_value_one" ) ), "", null);
+            RuleEvent.Status.ACTIVE, dateEventOne, dateEventOne, "", null, List.of(
+                        RuleDataValue.create(dateEventOne, "test_program_stage_two",
+                                "test_dataelement", "test_value_one")), "", null);
         RuleEvent ruleEventTwo = RuleEvent.create( "test_event_uid_two", "test_program_stage_two",
-            RuleEvent.Status.ACTIVE, dateEventTwo, dateEventTwo, "", null, Arrays.asList(
-                RuleDataValue.create( dateEventTwo, "test_program_stage_two",
-                    "test_dataelement", "test_value_two" ) ), "", null);
+            RuleEvent.Status.ACTIVE, dateEventTwo, dateEventTwo, "", null, List.of(
+                        RuleDataValue.create(dateEventTwo, "test_program_stage_two",
+                                "test_dataelement", "test_value_two")), "", null);
 
         Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEventTwo )
-            .ruleVariables( Arrays.asList( ruleVariable ) )
+            .ruleVariables(List.of(ruleVariable))
             .triggerEnvironment( TriggerEnvironment.SERVER )
-            .ruleEvents( Arrays.asList( ruleEventOne ) )
+            .ruleEvents(List.of(ruleEventOne))
             .build();
 
-        assertThat( valueMap.size() ).isEqualTo( 12 );
+        assertEquals( 12 , valueMap.size() );
 
         assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -411,29 +411,29 @@ public class RuleVariableValueMapBuilderTest
         Date dateEventCurrent = dateFormat.parse( "2014-05-03" );
 
         RuleEvent ruleEventOne = RuleEvent.create( "test_event_uid_one", "test_program_stage",
-            RuleEvent.Status.ACTIVE, dateEventOne, dateEventOne, "", null, Arrays.asList(
-                RuleDataValue.create( dateEventOne, "test_program_stage_one",
-                    "test_dataelement", "test_value_one" ) ), "", null);
+            RuleEvent.Status.ACTIVE, dateEventOne, dateEventOne, "", null, List.of(
+                        RuleDataValue.create(dateEventOne, "test_program_stage_one",
+                                "test_dataelement", "test_value_one")), "", null);
         RuleEvent ruleEventTwo = RuleEvent.create( "test_event_uid_two", "test_program_stage",
-            RuleEvent.Status.ACTIVE, dateEventTwo, dateEventTwo, "", null, Arrays.asList(
-                RuleDataValue.create( dateEventTwo, "test_program_stage_two",
-                    "test_dataelement", "test_value_two" ) ), "", null);
+            RuleEvent.Status.ACTIVE, dateEventTwo, dateEventTwo, "", null, List.of(
+                        RuleDataValue.create(dateEventTwo, "test_program_stage_two",
+                                "test_dataelement", "test_value_two")), "", null);
         RuleEvent ruleEventThree = RuleEvent.create( "test_event_uid_three", "test_program_stage",
-            RuleEvent.Status.ACTIVE, dateEventThree, dateEventThree, "", null, Arrays.asList(
-                RuleDataValue.create( dateEventThree, "test_program_stage_two",
-                    "test_dataelement", "test_value_three" ) ), "", null);
+            RuleEvent.Status.ACTIVE, dateEventThree, dateEventThree, "", null, List.of(
+                        RuleDataValue.create(dateEventThree, "test_program_stage_two",
+                                "test_dataelement", "test_value_three")), "", null);
         RuleEvent ruleEventCurrent = RuleEvent.create( "test_event_uid_current", "test_program_stage",
-            RuleEvent.Status.ACTIVE, dateEventCurrent, dateEventCurrent, "", null, Arrays.asList(
-                RuleDataValue.create( dateEventCurrent, "test_program_stage_one",
-                    "test_dataelement", "test_value_current" ) ), "", null);
+            RuleEvent.Status.ACTIVE, dateEventCurrent, dateEventCurrent, "", null, List.of(
+                        RuleDataValue.create(dateEventCurrent, "test_program_stage_one",
+                                "test_dataelement", "test_value_current")), "", null);
 
         Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEventCurrent )
-            .ruleVariables( Arrays.asList( ruleVariable ) )
+            .ruleVariables(List.of(ruleVariable))
             .triggerEnvironment( TriggerEnvironment.SERVER )
             .ruleEvents( Arrays.asList( ruleEventOne, ruleEventTwo, ruleEventThree ) )
             .build();
 
-        assertThat( valueMap.size() ).isEqualTo( 12 );
+        assertEquals( 12 , valueMap.size() );
 
         assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -494,10 +494,10 @@ public class RuleVariableValueMapBuilderTest
             .ruleEnrollment( ruleEnrollment )
             .triggerEnvironment( TriggerEnvironment.SERVER )
             .ruleVariables( Arrays.asList( ruleVariableOne, ruleVariableTwo ) )
-            .ruleEvents( Arrays.asList( contextEvent ) )
+            .ruleEvents(List.of(contextEvent))
             .build();
 
-        assertThat( valueMap.size() ).isEqualTo( 20 );
+        assertEquals( 20 , valueMap.size() );
 
         assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
@@ -572,7 +572,7 @@ public class RuleVariableValueMapBuilderTest
             .triggerEnvironment( TriggerEnvironment.SERVER )
             .build();
 
-        assertThat( valueMap.size() ).isEqualTo( 15 );
+        assertEquals( 15 , valueMap.size() );
 
         assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( currentDate ) )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( currentDate );
@@ -643,8 +643,8 @@ public class RuleVariableValueMapBuilderTest
             .triggerEnvironment( TriggerEnvironment.SERVER )
             .multipleBuild();
 
-        assertThat( ruleVariableValueMap.enrollmentMap().size() ).isEqualTo( 1 );
-        assertThat( ruleVariableValueMap.eventMap().size() ).isEqualTo( 2 );
+        assertEquals( 1 , ruleVariableValueMap.enrollmentMap().size() );
+        assertEquals( 2 , ruleVariableValueMap.eventMap().size() );
 
         Map<String, RuleVariableValue> enrollmentValueMap = ruleVariableValueMap.enrollmentMap()
             .get( ruleEnrollment );
@@ -770,7 +770,7 @@ public class RuleVariableValueMapBuilderTest
 
         RuleVariableValueMapBuilder.target( ruleEvent )
             .ruleVariables( new ArrayList<RuleVariable>() )
-            .ruleEvents( Arrays.asList( ruleEvent ) )
+            .ruleEvents(List.of(ruleEvent))
             .build();
     }
 

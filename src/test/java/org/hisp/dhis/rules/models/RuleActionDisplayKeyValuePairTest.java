@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 @RunWith( JUnit4.class )
 public class RuleActionDisplayKeyValuePairTest
@@ -15,10 +15,9 @@ public class RuleActionDisplayKeyValuePairTest
         RuleActionText displayTextAction = RuleActionText
             .createForFeedback( "test_content", "test_data" );
 
-        assertThat( displayTextAction.location() )
-            .isEqualTo( RuleActionText.LOCATION_FEEDBACK_WIDGET );
-        assertThat( displayTextAction.content() ).isEqualTo( "test_content" );
-        assertThat( displayTextAction.data() ).isEqualTo( "test_data" );
+        assertEquals( RuleActionText.LOCATION_FEEDBACK_WIDGET , displayTextAction.location() );
+        assertEquals( "test_content" , displayTextAction.content() );
+        assertEquals( "test_data" , displayTextAction.data() );
     }
 
     @Test
@@ -27,10 +26,9 @@ public class RuleActionDisplayKeyValuePairTest
         RuleActionText displayTextAction = RuleActionText
             .createForIndicators( "test_content", "test_data" );
 
-        assertThat( displayTextAction.location() )
-            .isEqualTo( RuleActionText.LOCATION_INDICATOR_WIDGET );
-        assertThat( displayTextAction.content() ).isEqualTo( "test_content" );
-        assertThat( displayTextAction.data() ).isEqualTo( "test_data" );
+        assertEquals( RuleActionText.LOCATION_INDICATOR_WIDGET , displayTextAction.location() );
+        assertEquals( "test_content" , displayTextAction.content() );
+        assertEquals( "test_data" , displayTextAction.data() );
     }
 
     @Test( expected = IllegalArgumentException.class )
@@ -53,11 +51,11 @@ public class RuleActionDisplayKeyValuePairTest
         RuleActionText ruleActionNoData = RuleActionText
             .createForFeedback( "test_content", null );
 
-        assertThat( ruleActionNoContent.content() ).isEqualTo( "" );
-        assertThat( ruleActionNoContent.data() ).isEqualTo( "test_data" );
+        assertEquals( "" , ruleActionNoContent.content() );
+        assertEquals( "test_data" , ruleActionNoContent.data() );
 
-        assertThat( ruleActionNoData.content() ).isEqualTo( "test_content" );
-        assertThat( ruleActionNoData.data() ).isEqualTo( "" );
+        assertEquals( "test_content" , ruleActionNoData.content() );
+        assertEquals( "" , ruleActionNoData.data() );
     }
 
     @Test
@@ -68,11 +66,11 @@ public class RuleActionDisplayKeyValuePairTest
         RuleActionText ruleActionNoData = RuleActionText
             .createForIndicators( "test_content", null );
 
-        assertThat( ruleActionNoContent.content() ).isEqualTo( "" );
-        assertThat( ruleActionNoContent.data() ).isEqualTo( "test_data" );
+        assertEquals( "" , ruleActionNoContent.content() );
+        assertEquals( "test_data" , ruleActionNoContent.data() );
 
-        assertThat( ruleActionNoData.content() ).isEqualTo( "test_content" );
-        assertThat( ruleActionNoData.data() ).isEqualTo( "" );
+        assertEquals( "test_content" , ruleActionNoData.content() );
+        assertEquals( "" , ruleActionNoData.data() );
     }
 
 }

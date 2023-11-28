@@ -50,7 +50,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 @RunWith( JUnit4.class )
 public class ConstantsValueTest
@@ -94,9 +94,9 @@ public class ConstantsValueTest
         RuleEngine ruleEngine = ruleEngineBuilder.build();
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( enrollment ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "3.14" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( assignAction );
+        assertEquals(1, ruleEffects.size() );
+        assertEquals( "3.14", ruleEffects.get( 0 ).data()  );
+        assertEquals( assignAction, ruleEffects.get( 0 ).ruleAction() );
     }
 
     @Test
@@ -127,11 +127,11 @@ public class ConstantsValueTest
         RuleEngine ruleEngine = ruleEngineBuilder.build();
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( enrollment ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 2 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( assignAction );
-        assertThat( ruleEffects.get( 1 ).data() ).isEqualTo( "4" );
-        assertThat( ruleEffects.get( 1 ).ruleAction() ).isEqualTo( action );
+        assertEquals( 2 , ruleEffects.size() );
+        assertEquals( "4" , ruleEffects.get( 0 ).data() );
+        assertEquals( assignAction , ruleEffects.get( 0 ).ruleAction() );
+        assertEquals( "4" , ruleEffects.get( 1 ).data() );
+        assertEquals( action , ruleEffects.get( 1 ).ruleAction() );
     }
 
     @Test
@@ -162,9 +162,9 @@ public class ConstantsValueTest
         RuleEngine ruleEngine = ruleEngineBuilder.build();
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( enrollment ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( action );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( "4" , ruleEffects.get( 0 ).data() );
+        assertEquals( action , ruleEffects.get( 0 ).ruleAction() );
     }
 
     @Test
@@ -197,9 +197,9 @@ public class ConstantsValueTest
         RuleEngine ruleEngine = ruleEngineBuilder.build();
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "3.14" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( assignAction );
+        assertEquals( 1, ruleEffects.size() );
+        assertEquals( "3.14" , ruleEffects.get( 0 ).data() );
+        assertEquals( assignAction , ruleEffects.get( 0 ).ruleAction() );
 
     }
 

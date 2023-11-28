@@ -1,6 +1,5 @@
 package org.hisp.dhis.rules;
 
-import org.assertj.core.util.Lists;
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleAction;
 import org.hisp.dhis.rules.models.RuleActionAssign;
@@ -28,7 +27,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 // ToDo: function tests (check that function invocations are producing expected values; check nested function invocation)
 // ToDo: various source type tests (referencing variables from different events)
@@ -63,9 +63,9 @@ public class RuleEngineEffectTypesTest
 
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "test_string" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( "test_string" , ruleEffects.get( 0 ).data() );
+        assertEquals( ruleAction , ruleEffects.get( 0 ).ruleAction() );
     }
 
     @Test
@@ -80,9 +80,9 @@ public class RuleEngineEffectTypesTest
 
         List<RuleEffects> ruleEffects = ruleEngine.evaluate().call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).ruleEffects().get( 0 ).data() ).isEqualTo( "test_string" );
-        assertThat( ruleEffects.get( 0 ).ruleEffects().get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( "test_string" , ruleEffects.get( 0 ).ruleEffects().get( 0 ).data() );
+        assertEquals( ruleAction , ruleEffects.get( 0 ).ruleEffects().get( 0 ).ruleAction() );
     }
 
     @Test
@@ -97,9 +97,9 @@ public class RuleEngineEffectTypesTest
 
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "event_uid;test_data_value_one" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( "event_uid;test_data_value_one" , ruleEffects.get( 0 ).data() );
+        assertEquals( ruleAction , ruleEffects.get( 0 ).ruleAction() );
     }
 
     @Test
@@ -114,9 +114,9 @@ public class RuleEngineEffectTypesTest
 
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( "4" , ruleEffects.get( 0 ).data() );
+        assertEquals( ruleAction , ruleEffects.get( 0 ).ruleAction() );
     }
 
     @Test
@@ -131,9 +131,9 @@ public class RuleEngineEffectTypesTest
 
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( "4" , ruleEffects.get( 0 ).data() );
+        assertEquals( ruleAction , ruleEffects.get( 0 ).ruleAction() );
     }
 
     @Test
@@ -148,9 +148,9 @@ public class RuleEngineEffectTypesTest
 
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( "4" , ruleEffects.get( 0 ).data() );
+        assertEquals( ruleAction , ruleEffects.get( 0 ).ruleAction() );
     }
 
     @Test
@@ -171,9 +171,9 @@ public class RuleEngineEffectTypesTest
 
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( "" , ruleEffects.get( 0 ).data() );
+        assertEquals( ruleAction , ruleEffects.get( 0 ).ruleAction() );
     }
 
     @Test
@@ -188,9 +188,9 @@ public class RuleEngineEffectTypesTest
 
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.COMPLETED ) ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( "" , ruleEffects.get( 0 ).data() );
+        assertEquals( ruleAction , ruleEffects.get( 0 ).ruleAction() );
     }
 
     @Test
@@ -205,9 +205,9 @@ public class RuleEngineEffectTypesTest
 
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( "" , ruleEffects.get( 0 ).data() );
+        assertEquals( ruleAction , ruleEffects.get( 0 ).ruleAction() );
     }
 
     @Test
@@ -221,9 +221,9 @@ public class RuleEngineEffectTypesTest
 
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( "" , ruleEffects.get( 0 ).data() );
+        assertEquals( ruleAction , ruleEffects.get( 0 ).ruleAction() );
     }
 
     @Test
@@ -237,9 +237,9 @@ public class RuleEngineEffectTypesTest
 
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).ruleAction() instanceof RuleActionScheduleMessage );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "2018-04-24" );
+        assertEquals( 1 , ruleEffects.size() );
+        assertTrue( ruleEffects.get( 0 ).ruleAction() instanceof RuleActionScheduleMessage );
+        assertEquals( "2018-04-24" , ruleEffects.get( 0 ).data() );
     }
 
     @Test
@@ -253,9 +253,9 @@ public class RuleEngineEffectTypesTest
 
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( "" , ruleEffects.get( 0 ).data() );
+        assertEquals( ruleAction , ruleEffects.get( 0 ).ruleAction() );
     }
 
     @Test
@@ -269,9 +269,9 @@ public class RuleEngineEffectTypesTest
 
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( "" , ruleEffects.get( 0 ).data() );
+        assertEquals( ruleAction , ruleEffects.get( 0 ).ruleAction() );
     }
 
     @Test
@@ -285,9 +285,9 @@ public class RuleEngineEffectTypesTest
 
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( "" , ruleEffects.get( 0 ).data() );
+        assertEquals( ruleAction , ruleEffects.get( 0 ).ruleAction() );
     }
 
     @Test
@@ -301,9 +301,9 @@ public class RuleEngineEffectTypesTest
 
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( "" , ruleEffects.get( 0 ).data() );
+        assertEquals( ruleAction , ruleEffects.get( 0 ).ruleAction() );
     }
 
     @Test
@@ -318,9 +318,9 @@ public class RuleEngineEffectTypesTest
 
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( "" , ruleEffects.get( 0 ).data() );
+        assertEquals( ruleAction , ruleEffects.get( 0 ).ruleAction() );
     }
 
     @Test
@@ -335,9 +335,9 @@ public class RuleEngineEffectTypesTest
 
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( "4" , ruleEffects.get( 0 ).data() );
+        assertEquals( ruleAction , ruleEffects.get( 0 ).ruleAction() );
     }
 
     @Test
@@ -352,9 +352,9 @@ public class RuleEngineEffectTypesTest
 
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( getTestRuleEvent( RuleEvent.Status.ACTIVE ) ).call();
 
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( "4" );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( ruleAction );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( "4" , ruleEffects.get( 0 ).data() );
+        assertEquals( ruleAction , ruleEffects.get( 0 ).ruleAction() );
     }
 
     private RuleEngine getRuleEngine( Rule rule )
@@ -362,8 +362,8 @@ public class RuleEngineEffectTypesTest
         return RuleEngineContext
             .builder()
             .rules(Collections.singletonList(rule))
-            .supplementaryData( new HashMap<String, List<String>>() )
-            .constantsValue( new HashMap<String, String>() )
+            .supplementaryData(new HashMap<>() )
+            .constantsValue(new HashMap<>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
             .build();
     }
@@ -373,10 +373,10 @@ public class RuleEngineEffectTypesTest
         return RuleEngineContext
             .builder()
             .rules(Collections.singletonList(rule))
-            .supplementaryData( new HashMap<String, List<String>>() )
-            .constantsValue( new HashMap<String, String>() )
+            .supplementaryData(new HashMap<>() )
+            .constantsValue(new HashMap<>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER )
-            .events( Lists.newArrayList( ruleEvent ) )
+            .events( List.of( ruleEvent ) )
             .build();
     }
 }

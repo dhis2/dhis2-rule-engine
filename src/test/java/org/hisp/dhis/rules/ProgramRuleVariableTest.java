@@ -37,6 +37,7 @@ import org.hisp.dhis.rules.models.RuleEffect;
 import org.hisp.dhis.rules.models.RuleEnrollment;
 import org.hisp.dhis.rules.models.RuleEvent;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -50,7 +51,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 @RunWith( JUnit4.class )
 public class ProgramRuleVariableTest
@@ -304,9 +305,9 @@ public class ProgramRuleVariableTest
 
     private void assertProgramRuleVariableAssignment( List<RuleEffect> ruleEffects, Rule rule, String variableValue )
     {
-        assertThat( ruleEffects.size() ).isEqualTo( 1 );
-        assertThat( ruleEffects.get( 0 ).data() ).isEqualTo( variableValue );
-        assertThat( ruleEffects.get( 0 ).ruleAction() ).isEqualTo( rule.actions().get( 0 ) );
+        assertEquals( 1 , ruleEffects.size() );
+        assertEquals( variableValue , ruleEffects.get( 0 ).data() );
+        assertEquals( rule.actions().get( 0 ) , ruleEffects.get( 0 ).ruleAction() );
     }
 
     private List<RuleEffect> callEnrollmentRuleEngine( Rule rule )

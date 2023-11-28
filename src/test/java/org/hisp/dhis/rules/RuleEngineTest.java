@@ -11,13 +11,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith( JUnit4.class )
 public class RuleEngineTest
@@ -28,7 +28,7 @@ public class RuleEngineTest
     public void setUp()
     {
         ruleEngineContext = RuleEngineContext.builder()
-            .ruleVariables( Arrays.asList( new MockRuleVariable() ) )
+            .ruleVariables(List.of(new MockRuleVariable()))
             .rules( List.of(Rule.MOCK) )
             .build();
     }
@@ -66,8 +66,8 @@ public class RuleEngineTest
 
         ruleEvents.add( ruleEventTwo );
 
-        assertThat( ruleEngine.events().size() ).isEqualTo( 1 );
-        assertThat( ruleEngine.events().get( 0 ) ).isEqualTo( ruleEventOne );
+        assertEquals( 1 , ruleEngine.events().size() );
+        assertEquals( ruleEventOne , ruleEngine.events().get( 0 ) );
 
         ruleEngine.events().clear();
     }
@@ -77,7 +77,7 @@ public class RuleEngineTest
     {
         RuleEngine ruleEngine = ruleEngineContext.toEngineBuilder().build();
 
-        assertThat( ruleEngine.events().size() ).isEqualTo( 0 );
+        assertEquals( 0 , ruleEngine.events().size() );
 
         ruleEngine.events().clear();
     }
@@ -86,7 +86,7 @@ public class RuleEngineTest
     public void builderShouldPropagateRuleEngineContext()
     {
         RuleEngine ruleEngine = ruleEngineContext.toEngineBuilder().build();
-        assertThat( ruleEngine.executionContext() ).isEqualTo( ruleEngineContext );
+        assertEquals( ruleEngineContext , ruleEngine.executionContext() );
     }
 
     @Test( expected = IllegalArgumentException.class )
@@ -174,7 +174,7 @@ public class RuleEngineTest
             }
         }.start();
 
-        assertThat( threadOneLatch.await( 4, TimeUnit.SECONDS ) ).isTrue();
-        assertThat( threadTwoLatch.await( 4, TimeUnit.SECONDS ) ).isTrue();
+        assertTrue( threadOneLatch.await( 4, TimeUnit.SECONDS ) );
+        assertTrue( threadTwoLatch.await( 4, TimeUnit.SECONDS ) );
     }
 }

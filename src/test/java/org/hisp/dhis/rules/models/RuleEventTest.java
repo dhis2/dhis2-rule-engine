@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 @RunWith( JUnit4.class )
 public class RuleEventTest
@@ -41,8 +41,8 @@ public class RuleEventTest
         // add another data value
         ruleDataValues.add( ruleDataValue );
 
-        assertThat( ruleEvent.dataValues().size() ).isEqualTo( 1 );
-        assertThat( ruleEvent.dataValues().get( 0 ) ).isEqualTo( ruleDataValue );
+        assertEquals( 1 , ruleEvent.dataValues().size() );
+        assertEquals( ruleDataValue , ruleEvent.dataValues().get( 0 ) );
 
         ruleEvent.dataValues().add( ruleDataValue );
     }
@@ -61,14 +61,14 @@ public class RuleEventTest
         RuleEvent ruleEvent = RuleEvent.create( "test_event_uid", "test_stage_uid",
             RuleEvent.Status.ACTIVE, eventDate, dueDate, "", "", ruleDataValues, "", null);
 
-        assertThat( ruleEvent.event() ).isEqualTo( "test_event_uid" );
-        assertThat( ruleEvent.status() ).isEqualTo( RuleEvent.Status.ACTIVE );
-        assertThat( ruleEvent.programStage() ).isEqualTo( "test_stage_uid" );
-        assertThat( ruleEvent.eventDate() ).isEqualTo( eventDate );
-        assertThat( ruleEvent.dueDate() ).isEqualTo( dueDate );
+        assertEquals( "test_event_uid" , ruleEvent.event() );
+        assertEquals( RuleEvent.Status.ACTIVE , ruleEvent.status() );
+        assertEquals( "test_stage_uid" , ruleEvent.programStage() );
+        assertEquals( eventDate , ruleEvent.eventDate() );
+        assertEquals( dueDate , ruleEvent.dueDate() );
 
-        assertThat( ruleEvent.dataValues().size() ).isEqualTo( 1 );
-        assertThat( ruleEvent.dataValues().get( 0 ) ).isEqualTo( ruleDataValue );
+        assertEquals( 1 , ruleEvent.dataValues().size() );
+        assertEquals( ruleDataValue , ruleEvent.dataValues().get( 0 ) );
     }
 
     @Test
@@ -86,7 +86,7 @@ public class RuleEventTest
 
         ruleEvents.sort(RuleEvent.EVENT_DATE_COMPARATOR);
 
-        assertThat( ruleEvents.get( 0 ).event() ).isEqualTo( "test_event_two" );
-        assertThat( ruleEvents.get( 1 ).event() ).isEqualTo( "test_event_one" );
+        assertEquals( "test_event_two" , ruleEvents.get( 0 ).event() );
+        assertEquals( "test_event_one" , ruleEvents.get( 1 ).event() );
     }
 }

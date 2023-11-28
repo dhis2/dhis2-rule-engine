@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 @RunWith( JUnit4.class )
 public class RuleActionAssignTest
@@ -17,13 +17,13 @@ public class RuleActionAssignTest
         RuleActionAssign ruleActionAssignNoField = RuleActionAssign
             .create( "test_content", "test_data", null );
 
-        assertThat( ruleActionAssignNoContent.content() ).isEqualTo( "" );
-        assertThat( ruleActionAssignNoContent.data() ).isEqualTo( "test_data" );
-        assertThat( ruleActionAssignNoContent.field() ).isEqualTo( "test_field" );
+        assertEquals( "" , ruleActionAssignNoContent.content() );
+        assertEquals( "test_data" , ruleActionAssignNoContent.data() );
+        assertEquals( "test_field" , ruleActionAssignNoContent.field() );
 
-        assertThat( ruleActionAssignNoField.content() ).isEqualTo( "test_content" );
-        assertThat( ruleActionAssignNoField.data() ).isEqualTo( "test_data" );
-        assertThat( ruleActionAssignNoField.field() ).isEqualTo( "" );
+        assertEquals( "test_content" , ruleActionAssignNoField.content() );
+        assertEquals( "test_data" , ruleActionAssignNoField.data() );
+        assertEquals( "" , ruleActionAssignNoField.field() );
     }
 
     @Test( expected = IllegalArgumentException.class )

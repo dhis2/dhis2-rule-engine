@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 @RunWith( JUnit4.class )
 public class RuleActionHideFieldTest
@@ -15,6 +15,6 @@ public class RuleActionHideFieldTest
         RuleActionHideField ruleActionHideField =
             RuleActionHideField.create( null, "test_field" );
 
-        assertThat( ruleActionHideField.content() ).isEqualTo( "" );
+        assertEquals( "" , ruleActionHideField.content() );
     }
 }

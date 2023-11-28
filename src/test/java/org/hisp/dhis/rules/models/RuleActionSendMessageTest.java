@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 @RunWith( JUnit4.class )
 public class RuleActionSendMessageTest
@@ -18,13 +18,13 @@ public class RuleActionSendMessageTest
         RuleActionSendMessage ruleActionSendMessageNoNotification = RuleActionSendMessage
             .create( null, "data" );
 
-        assertThat( ruleActionSendMessage.notification() ).isEqualTo( "notification" );
-        assertThat( ruleActionSendMessage.data() ).isEqualTo( "data" );
+        assertEquals( "notification" , ruleActionSendMessage.notification() );
+        assertEquals( "data" , ruleActionSendMessage.data() );
 
-        assertThat( ruleActionSendMessageNoData.notification() ).isEqualTo( "notification" );
-        assertThat( ruleActionSendMessageNoData.data() ).isEqualTo( "" );
+        assertEquals( "notification" , ruleActionSendMessageNoData.notification() );
+        assertEquals( "" , ruleActionSendMessageNoData.data() );
 
-        assertThat( ruleActionSendMessageNoNotification.notification() ).isEqualTo( "" );
-        assertThat( ruleActionSendMessageNoNotification.data() ).isEqualTo( "data" );
+        assertEquals( "" , ruleActionSendMessageNoNotification.notification() );
+        assertEquals( "data" , ruleActionSendMessageNoNotification.data() );
     }
 }
