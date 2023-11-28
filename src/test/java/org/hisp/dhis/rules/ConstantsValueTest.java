@@ -44,7 +44,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -110,7 +109,7 @@ public class ConstantsValueTest
         org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule
             .create( null, 1, "#{test_attribute} > 3", List.of(action), "test_program_rule2", "" );
 
-        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule, rule2 ),
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( List.of( rule, rule2 ),
             new HashMap<>() );
 
         RuleEnrollment enrollment = RuleEnrollment.builder()
@@ -145,7 +144,7 @@ public class ConstantsValueTest
         org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule
             .create( null, 1, "#{test_attribute} > 3", List.of(action), "test_program_rule2", "" );
 
-        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule, rule2 ),
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( List.of( rule, rule2 ),
             new HashMap<>() );
 
         RuleEnrollment enrollment = RuleEnrollment.builder()

@@ -6,8 +6,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
@@ -23,7 +23,7 @@ public class RuleVariableValueTest
     public void textValuesMostBeWrapped()
     {
         RuleVariableValue variableValue = RuleVariableValue.create(
-            "test_value", RuleValueType.TEXT, Arrays.asList(
+            "test_value", RuleValueType.TEXT, List.of(
                 "test_value_candidate_one", "test_value_candidate_two" ), dateFormat.format( new Date() ) );
 
         assertEquals( "test_value" , variableValue.value() );
@@ -37,7 +37,7 @@ public class RuleVariableValueTest
     public void wrappedTextValuesMustNotBeDoubleWrapped()
     {
         RuleVariableValue variableValue = RuleVariableValue.create(
-            "test_value", RuleValueType.TEXT, Arrays.asList(
+            "test_value", RuleValueType.TEXT, List.of(
                 "test_value_candidate_one", "test_value_candidate_two" ), dateFormat.format( new Date() ) );
 
         assertEquals( "test_value" , variableValue.value() );
@@ -51,7 +51,7 @@ public class RuleVariableValueTest
     public void numericValuesMostNotBeWrapped()
     {
         RuleVariableValue variableValue = RuleVariableValue.create(
-            "1", RuleValueType.NUMERIC, Arrays.asList( "2", "3" ), dateFormat.format( new Date() ) );
+            "1", RuleValueType.NUMERIC, List.of( "2", "3" ), dateFormat.format( new Date() ) );
 
         assertEquals( "1" , variableValue.value() );
         assertEquals( RuleValueType.NUMERIC , variableValue.type() );
@@ -64,7 +64,7 @@ public class RuleVariableValueTest
     public void booleanValuesMostNotBeWrapped()
     {
         RuleVariableValue variableValue = RuleVariableValue.create(
-            "true", RuleValueType.BOOLEAN, Arrays.asList( "false", "false" ), dateFormat.format( new Date() ) );
+            "true", RuleValueType.BOOLEAN, List.of( "false", "false" ), dateFormat.format( new Date() ) );
 
         assertEquals( "true" , variableValue.value() );
         assertEquals( RuleValueType.BOOLEAN , variableValue.type() );

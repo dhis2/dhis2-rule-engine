@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +47,7 @@ public class RuleEngineContextTest
     @Test
     public void builderShouldContainImmutableCopyOfRules()
     {
-        List<String> members = Arrays.asList( "one", "two" );
+        List<String> members = List.of( "one", "two" );
         Map<String, List<String>> supplementaryData = new HashMap<>();
         supplementaryData.put( "text-key", members );
 

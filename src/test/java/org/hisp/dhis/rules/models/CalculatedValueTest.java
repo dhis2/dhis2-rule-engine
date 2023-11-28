@@ -76,7 +76,7 @@ public class CalculatedValueTest
             .dueDate( new Date() )
             .organisationUnit( "" )
             .organisationUnitCode( "" )
-            .dataValues( Arrays.asList( RuleDataValue.create(
+            .dataValues( List.of( RuleDataValue.create(
                 new Date(), "test_program_stage", "test_data_element", "test_value" ) ) )
             .build();
 
@@ -92,11 +92,11 @@ public class CalculatedValueTest
     {
         RuleAction assignAction = RuleActionAssign.create( "#{test_calculated_value}", "2+2", null );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
-            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1", "" );
+            .create( null, 1, "true", List.of( assignAction ), "test_program_rule1", "" );
 
         RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4" );
         org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule
-            .create( null, 4, "#{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2",
+            .create( null, 4, "#{test_calculated_value}==4", List.of( sendMessageAction ), "test_program_rule2",
                 "" );
 
         RuleEnrollment enrollment = RuleEnrollment.builder()
@@ -119,11 +119,11 @@ public class CalculatedValueTest
             .dueDate( new Date() )
             .organisationUnit( "" )
             .organisationUnitCode( "" )
-            .dataValues( Arrays.asList( RuleDataValue.create(
+            .dataValues( List.of( RuleDataValue.create(
                 new Date(), "test_program_stage", "test_data_element", "test_value" ) ) )
             .build();
 
-        RuleEngine ruleEngine = getRuleEngine( Arrays.asList( rule, rule2 ) ).enrollment( enrollment ).build();
+        RuleEngine ruleEngine = getRuleEngine( List.of( rule, rule2 ) ).enrollment( enrollment ).build();
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
         assertEquals( "4" , ruleEffects.get( 0 ).data() );
@@ -135,11 +135,11 @@ public class CalculatedValueTest
         List<org.hisp.dhis.rules.models.Rule> rules = new ArrayList<>();
         RuleAction assignAction = RuleActionAssign.create( "#{test_calculated_value}", "2+2", null );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
-            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1", "" );
+            .create( null, 1, "true", List.of( assignAction ), "test_program_rule1", "" );
 
         RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4" );
         org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule
-            .create( null, 4, "#{test_calculated_value}==4", Arrays.asList( sendMessageAction ), "test_program_rule2",
+            .create( null, 4, "#{test_calculated_value}==4", List.of( sendMessageAction ), "test_program_rule2",
                 "" );
         for ( int j = 0; j < i; j++ )
         {
@@ -155,14 +155,14 @@ public class CalculatedValueTest
     {
         RuleAction assignAction = RuleActionAssign.create( "#{test_calculated_value}", "2+2", null );
         org.hisp.dhis.rules.models.Rule rule = org.hisp.dhis.rules.models.Rule
-            .create( null, 1, "true", Arrays.asList( assignAction ), "test_program_rule1", "" );
+            .create( null, 1, "true", List.of( assignAction ), "test_program_rule1", "" );
 
         RuleAction sendMessageAction = RuleActionSendMessage.create( "test_notification", "4.0" );
         org.hisp.dhis.rules.models.Rule rule2 = org.hisp.dhis.rules.models.Rule
-            .create( null, 4, "#{test_calculated_value}==4.0", Arrays.asList( sendMessageAction ),
+            .create( null, 4, "#{test_calculated_value}==4.0", List.of( sendMessageAction ),
                 "test_program_rule2", "" );
 
-        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( Arrays.asList( rule, rule2 ) );
+        RuleEngine.Builder ruleEngineBuilder = getRuleEngine( List.of( rule, rule2 ) );
 
         RuleEnrollment enrollment = RuleEnrollment.builder()
             .enrollment( "test_enrollment" )
@@ -184,7 +184,7 @@ public class CalculatedValueTest
             .dueDate( new Date() )
             .organisationUnit( "" )
             .organisationUnitCode( "" )
-            .dataValues( Arrays.asList( RuleDataValue.create(
+            .dataValues( List.of( RuleDataValue.create(
                 new Date(), "test_program_stage", "test_data_element", "test_value" ) ) )
             .build();
 
@@ -205,7 +205,7 @@ public class CalculatedValueTest
         return RuleEngineContext
             .builder()
             .rules( rules )
-            .ruleVariables( Arrays.asList( ruleVariable ) )
+            .ruleVariables( List.of( ruleVariable ) )
             .supplementaryData( new HashMap<String, List<String>>() )
             .constantsValue( new HashMap<String, String>() )
             .build().toEngineBuilder().triggerEnvironment( TriggerEnvironment.SERVER );

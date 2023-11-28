@@ -38,13 +38,11 @@ import org.hisp.dhis.rules.models.RuleValueType;
 import org.hisp.dhis.rules.models.RuleVariable;
 import org.hisp.dhis.rules.models.RuleVariableCurrentEvent;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -67,11 +65,11 @@ public class VariableValueTypeTest
         RuleVariable ruleVariable2 = RuleVariableCurrentEvent
                 .create( "test_variable2", "test_data_element2", RuleValueType.NUMERIC, true, new ArrayList<>());
 
-        RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable, ruleVariable2 ) );
+        RuleEngine ruleEngine = getRuleEngine( rule, List.of( ruleVariable, ruleVariable2 ) );
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                 RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null,
-                Arrays.asList(RuleDataValue.create(new Date(), "", "test_data_element", "30"),
+                List.of(RuleDataValue.create(new Date(), "", "test_data_element", "30"),
                         RuleDataValue.create(new Date(), "", "test_data_element2", "4")), "", null);
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
@@ -92,11 +90,11 @@ public class VariableValueTypeTest
         RuleVariable ruleVariable2 = RuleVariableCurrentEvent
                 .create( "test_variable2", "test_data_element2", RuleValueType.TEXT, true, new ArrayList<>());
 
-        RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable, ruleVariable2 ) );
+        RuleEngine ruleEngine = getRuleEngine( rule, List.of( ruleVariable, ruleVariable2 ) );
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                 RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null,
-                Arrays.asList(RuleDataValue.create(new Date(), "", "test_data_element", "30"),
+                List.of(RuleDataValue.create(new Date(), "", "test_data_element", "30"),
                         RuleDataValue.create(new Date(), "", "test_data_element2", "4")), "", null);
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 

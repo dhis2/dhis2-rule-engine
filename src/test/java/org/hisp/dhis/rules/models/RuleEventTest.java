@@ -7,7 +7,6 @@ import org.junit.runners.JUnit4;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -76,13 +75,13 @@ public class RuleEventTest
         throws ParseException
     {
         SimpleDateFormat dateFormat = new SimpleDateFormat( DATE_PATTERN, Locale.US );
-        List<RuleEvent> ruleEvents = Arrays.asList(
+        List<RuleEvent> ruleEvents = new ArrayList<>(List.of(
             RuleEvent.create( "test_event_one", "test_program_stage_one", RuleEvent.Status.ACTIVE,
                 dateFormat.parse( "2014-02-11" ), dateFormat.parse( "2014-02-11" ), "", null,
-                new ArrayList<RuleDataValue>(), "", null),
+                    new ArrayList<>(), "", null),
             RuleEvent.create( "test_event_two", "test_program_stage_two", RuleEvent.Status.ACTIVE,
                 dateFormat.parse( "2017-03-22" ), dateFormat.parse( "2017-03-22" ), "", null,
-                new ArrayList<RuleDataValue>(), "", null) );
+                    new ArrayList<>(), "", null) ));
 
         ruleEvents.sort(RuleEvent.EVENT_DATE_COMPARATOR);
 

@@ -23,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -73,11 +72,11 @@ public class RuleVariableValueMapBuilderTest
         // values from context events should be ignored
         RuleEnrollment ruleEnrollment = RuleEnrollment.create( "test_enrollment",
                 dateFormat.parse( "2015-01-01" ), dateFormat.parse( "2015-01-01" ),
-                RuleEnrollment.Status.ACTIVE, "", null, Arrays.asList(
+                RuleEnrollment.Status.ACTIVE, "", null, List.of(
                         RuleAttributeValue.create( "test_attribute_one", "test_attribute_value_one" ),
                         RuleAttributeValue.create( "test_attribute_two", "test_attribute_value_two" ) ), "" );
         RuleEvent contextEventOne = RuleEvent.create( "test_context_event_one", "test_program_stage",
-                RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+                RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, List.of(
                         RuleDataValue.create( eventDate, "test_program_stage",
                                 "test_dataelement_one", "test_context_value_one" ),
                         RuleDataValue.create( eventDate, "test_program_stage",
@@ -107,28 +106,28 @@ public class RuleVariableValueMapBuilderTest
 
         // values from context events should be ignored
         RuleEvent contextEventOne = RuleEvent.create( "test_context_event_one", "test_program_stage",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, List.of(
                 RuleDataValue.create( eventDate, "test_program_stage",
                     "test_dataelement_one", "test_context_value_one" ),
                 RuleDataValue.create( eventDate, "test_program_stage",
                     "test_dataelement_two", "test_context_value_two" ) ), "", null);
         RuleEvent contextEventTwo = RuleEvent.create( "test_context_event_two", "test_program_stage",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, List.of(
                 RuleDataValue.create( eventDate, "test_program_stage",
                     "test_dataelement_one", "test_context_value_three" ),
                 RuleDataValue.create( eventDate, "test_program_stage",
                     "test_dataelement_two", "test_context_value_four" ) ), "", null);
         // values from current ruleEvent should be propagated to the variable values
         RuleEvent currentEvent = RuleEvent.create( "test_event_uid", "test_program_stage",
-            RuleEvent.Status.ACTIVE, eventDate, dueDate, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, eventDate, dueDate, "", null, List.of(
                 RuleDataValue.create( eventDate, "test_program_stage",
                     "test_dataelement_one", "test_value_one" ),
                 RuleDataValue.create( eventDate, "test_program_stage",
                     "test_dataelement_two", "test_value_two" ) ), "", null);
 
         Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( currentEvent )
-            .ruleVariables( Arrays.asList( ruleVariableOne, ruleVariableTwo ) )
-            .ruleEvents( Arrays.asList( contextEventOne, contextEventTwo ) )
+            .ruleVariables( List.of( ruleVariableOne, ruleVariableTwo ) )
+            .ruleEvents( List.of( contextEventOne, contextEventTwo ) )
             .triggerEnvironment( TriggerEnvironment.SERVER )
             .build();
 
@@ -175,27 +174,27 @@ public class RuleVariableValueMapBuilderTest
         Date currentEventDueDate = null;
 
         RuleEvent oldestRuleEvent = RuleEvent.create( "test_event_uid_oldest", "test_program_stage",
-            RuleEvent.Status.ACTIVE, oldestEventDate, oldestEventDate, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, oldestEventDate, oldestEventDate, "", null, List.of(
                 RuleDataValue.create( oldestEventDate, "test_program_stage",
                     "test_dataelement_one", "test_value_one_oldest" ),
                 RuleDataValue.create( oldestEventDate, "test_program_stage",
                     "test_dataelement_two", "test_value_two_oldest" ) ), "", null);
         RuleEvent newestRuleEvent = RuleEvent.create( "test_event_uid_newest", "test_program_stage",
-            RuleEvent.Status.ACTIVE, newestEventDate, newestEventDate, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, newestEventDate, newestEventDate, "", null, List.of(
                 RuleDataValue.create( newestEventDate, "test_program_stage",
                     "test_dataelement_one", "test_value_one_newest" ),
                 RuleDataValue.create( newestEventDate, "test_program_stage",
                     "test_dataelement_two", "test_value_two_newest" ) ), "", null);
         RuleEvent currentEvent = RuleEvent.create( "test_event_uid_current", "test_program_stage",
-            RuleEvent.Status.ACTIVE, currentEventDate, currentEventDueDate, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, currentEventDate, currentEventDueDate, "", null, List.of(
                 RuleDataValue.create( currentEventDate, "test_program_stage",
                     "test_dataelement_one", "test_value_one_current" ),
                 RuleDataValue.create( currentEventDate, "test_program_stage",
                     "test_dataelement_two", "test_value_two_current" ) ), "", null);
 
         Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( currentEvent )
-            .ruleVariables( Arrays.asList( ruleVariableOne, ruleVariableTwo ) )
-            .ruleEvents( Arrays.asList( oldestRuleEvent, newestRuleEvent ) )
+            .ruleVariables( List.of( ruleVariableOne, ruleVariableTwo ) )
+            .ruleEvents( List.of( oldestRuleEvent, newestRuleEvent ) )
             .triggerEnvironment( TriggerEnvironment.SERVER )
             .build();
 
@@ -239,28 +238,28 @@ public class RuleVariableValueMapBuilderTest
         Date dateEventDueCurrent = dateFormat.parse( "2016-01-01" );
 
         RuleEvent firstRuleEvent = RuleEvent.create( "test_event_uid_one", "test_program_stage",
-            RuleEvent.Status.ACTIVE, dateEventOne, dateEventOne, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, dateEventOne, dateEventOne, "", null, List.of(
                 RuleDataValue.create( dateEventOne, "test_program_stage",
                     "test_dataelement_one", "test_value_dataelement_one_first" ),
                 RuleDataValue.create( dateEventOne, "test_program_stage",
                     "test_dataelement_two", "test_value_dataelement_two_first" ) ), "", null);
         RuleEvent secondRuleEvent = RuleEvent.create( "test_event_uid_two", "test_program_stage",
-            RuleEvent.Status.ACTIVE, dateEventTwo, dateEventTwo, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, dateEventTwo, dateEventTwo, "", null, List.of(
                 RuleDataValue.create( dateEventTwo, "test_program_stage",
                     "test_dataelement_one", "test_value_dataelement_one_second" ),
                 RuleDataValue.create( dateEventTwo, "test_program_stage",
                     "test_dataelement_two", "test_value_dataelement_two_second" ) ), "", null);
         RuleEvent currentEvent = RuleEvent.create( "test_event_uid_current", "test_program_stage",
-            RuleEvent.Status.ACTIVE, dateEventCurrent, dateEventDueCurrent, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, dateEventCurrent, dateEventDueCurrent, "", null, List.of(
                 RuleDataValue.create( dateEventCurrent, "test_program_stage",
                     "test_dataelement_one", "test_value_dataelement_one_current" ),
                 RuleDataValue.create( dateEventCurrent, "test_program_stage",
                     "test_dataelement_two", "test_value_dataelement_two_current" ) ), "", null);
 
         Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( currentEvent )
-            .ruleVariables( Arrays.asList( ruleVariableOne, ruleVariableTwo ) )
+            .ruleVariables( List.of( ruleVariableOne, ruleVariableTwo ) )
             .triggerEnvironment( TriggerEnvironment.SERVER )
-            .ruleEvents( Arrays.asList( firstRuleEvent, secondRuleEvent ) )
+            .ruleEvents( List.of( firstRuleEvent, secondRuleEvent ) )
             .build();
 
         assertEquals( 13 , valueMap.size() );
@@ -325,7 +324,7 @@ public class RuleVariableValueMapBuilderTest
 
         Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( eventCurrent )
             .ruleVariables(List.of(ruleVariable))
-            .ruleEvents( Arrays.asList( eventOne, eventTwo, eventThree ) )
+            .ruleEvents( List.of( eventOne, eventTwo, eventThree ) )
             .triggerEnvironment( TriggerEnvironment.SERVER )
             .build();
 
@@ -430,7 +429,7 @@ public class RuleVariableValueMapBuilderTest
         Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEventCurrent )
             .ruleVariables(List.of(ruleVariable))
             .triggerEnvironment( TriggerEnvironment.SERVER )
-            .ruleEvents( Arrays.asList( ruleEventOne, ruleEventTwo, ruleEventThree ) )
+            .ruleEvents( List.of( ruleEventOne, ruleEventTwo, ruleEventThree ) )
             .build();
 
         assertEquals( 12 , valueMap.size() );
@@ -471,19 +470,19 @@ public class RuleVariableValueMapBuilderTest
 
         // values from enrollment should end up in ruleVariables
         RuleEnrollment ruleEnrollment = RuleEnrollment.create( "test_enrollment",
-            enrollmentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE, "", null, Arrays.asList(
+            enrollmentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE, "", null, List.of(
                 RuleAttributeValue.create( "test_attribute_one", "test_attribute_value_one" ),
                 RuleAttributeValue.create( "test_attribute_two", "test_attribute_value_two" ) ), "" );
 
         // values from context events should be ignored
         RuleEvent contextEvent = RuleEvent.create( "test_context_event_one", "test_program_stage",
-            RuleEvent.Status.ACTIVE, eventDate, new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, eventDate, new Date(), "", null, List.of(
                 RuleDataValue.create( eventDate, "test_program_stage",
                     "test_dataelement_one", "test_context_value_one" ),
                 RuleDataValue.create( eventDate, "test_program_stage",
                     "test_dataelement_two", "test_context_value_two" ) ), "", null);
         RuleEvent currentEvent = RuleEvent.create( "test_event_uid", "test_program_stage",
-            RuleEvent.Status.ACTIVE, eventDate, eventDate, "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, eventDate, eventDate, "", null, List.of(
                 RuleDataValue.create( eventDate, "test_program_stage",
                     "test_dataelement_one", "test_value_one" ),
                 RuleDataValue.create( eventDate, "test_program_stage",
@@ -493,7 +492,7 @@ public class RuleVariableValueMapBuilderTest
         Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( currentEvent )
             .ruleEnrollment( ruleEnrollment )
             .triggerEnvironment( TriggerEnvironment.SERVER )
-            .ruleVariables( Arrays.asList( ruleVariableOne, ruleVariableTwo ) )
+            .ruleVariables( List.of( ruleVariableOne, ruleVariableTwo ) )
             .ruleEvents(List.of(contextEvent))
             .build();
 
@@ -556,7 +555,7 @@ public class RuleVariableValueMapBuilderTest
         Date enrollmentDate = dateFormat.parse( "2017-02-02" );
         Date incidentDate = dateFormat.parse( "2017-04-02" );
         RuleEnrollment ruleEnrollment = RuleEnrollment.create( "test_enrollment", incidentDate,
-            enrollmentDate, RuleEnrollment.Status.ACTIVE, "", null, Arrays.asList(
+            enrollmentDate, RuleEnrollment.Status.ACTIVE, "", null, List.of(
                 RuleAttributeValue.create( "test_attribute_one", "test_attribute_value_one" ),
                 RuleAttributeValue.create( "test_attribute_two", "test_attribute_value_two" ),
                 RuleAttributeValue.create( "test_attribute_three", "test_attribute_value_three" ) ), "" );
@@ -567,8 +566,8 @@ public class RuleVariableValueMapBuilderTest
             RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, new ArrayList<RuleDataValue>(), "", null);
 
         Map<String, RuleVariableValue> valueMap = RuleVariableValueMapBuilder.target( ruleEnrollment )
-            .ruleVariables( Arrays.asList( ruleVariableOne, ruleVariableTwo, ruleVariableThree ) )
-            .ruleEvents( Arrays.asList( ruleEventOne, ruleEventTwo ) )
+            .ruleVariables( List.of( ruleVariableOne, ruleVariableTwo, ruleVariableThree ) )
+            .ruleEvents( List.of( ruleEventOne, ruleEventTwo ) )
             .triggerEnvironment( TriggerEnvironment.SERVER )
             .build();
 
@@ -619,7 +618,7 @@ public class RuleVariableValueMapBuilderTest
         Date enrollmentDate = dateFormat.parse( "2017-02-02" );
         Date incidentDate = dateFormat.parse( "2017-04-02" );
         RuleEnrollment ruleEnrollment = RuleEnrollment.create( "test_enrollment", incidentDate,
-            enrollmentDate, RuleEnrollment.Status.ACTIVE, "", null, Arrays.asList(
+            enrollmentDate, RuleEnrollment.Status.ACTIVE, "", null, List.of(
                 RuleAttributeValue.create( "test_attribute_one", "test_attribute_value_one" ),
                 RuleAttributeValue.create( "test_attribute_two", "test_attribute_value_two" ),
                 RuleAttributeValue.create( "test_attribute_three", "test_attribute_value_three" ) ), "" );
@@ -638,8 +637,8 @@ public class RuleVariableValueMapBuilderTest
             null );
 
         RuleVariableValueMap ruleVariableValueMap = RuleVariableValueMapBuilder.target( ruleEnrollment )
-            .ruleVariables( Arrays.asList( ruleVariableOne, ruleVariableTwo, ruleVariableThree ) )
-            .ruleEvents( Arrays.asList( ruleEventOne, ruleEventTwo ) )
+            .ruleVariables( List.of( ruleVariableOne, ruleVariableTwo, ruleVariableThree ) )
+            .ruleEvents( List.of( ruleEventOne, ruleEventTwo ) )
             .triggerEnvironment( TriggerEnvironment.SERVER )
             .multipleBuild();
 

@@ -5,7 +5,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class RuleEnrollmentTest
 
         RuleEnrollment ruleEnrollment = RuleEnrollment.create( "test_enrollment",
             incidentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE, "", "",
-            Arrays.asList( ruleAttributeValueOne, ruleAttributeValueTwo, ruleAttributeValueThree ), "" );
+            List.of( ruleAttributeValueOne, ruleAttributeValueTwo, ruleAttributeValueThree ), "" );
 
         assertEquals( "test_enrollment" , ruleEnrollment.enrollment() );
         assertEquals( incidentDate , ruleEnrollment.incidentDate() );
