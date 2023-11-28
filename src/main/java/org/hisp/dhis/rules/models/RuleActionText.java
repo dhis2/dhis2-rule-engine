@@ -14,13 +14,9 @@ import javax.annotation.Nonnull;
  *      or 'program indicator' widget.
  */
 public record RuleActionText(
-        @Nonnull
-        String data,
-        @Nonnull
-        String content,
-        @Nonnull
-        String location
-
+        @Nonnull String data,
+        @Nonnull String content,
+        @Nonnull String location
 ) implements RuleAction {
 
     public static final String LOCATION_FEEDBACK_WIDGET = "feedback";

@@ -14,14 +14,11 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 record RuleEngineMultipleExecution(
-    @Nonnull
-    List<Rule> rules,
-    @Nonnull
-    RuleVariableValueMap ruleVariableValueMap,
-    @Nonnull
-    Map<String, List<String>> supplementaryData,
-    @Nonnull
-    RuleConditionEvaluator ruleConditionEvaluator) implements Callable<List<RuleEffects>> {
+        @Nonnull List<Rule> rules,
+        @Nonnull RuleVariableValueMap ruleVariableValueMap,
+        @Nonnull Map<String, List<String>> supplementaryData,
+        @Nonnull RuleConditionEvaluator ruleConditionEvaluator
+) implements Callable<List<RuleEffects>> {
 
     RuleEngineMultipleExecution(@Nonnull List<Rule> rules,
                                 @Nonnull RuleVariableValueMap ruleVariableValueMap, @Nonnull Map<String, List<String>> supplementaryData )

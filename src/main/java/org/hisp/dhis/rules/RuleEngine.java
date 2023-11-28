@@ -23,19 +23,11 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 public record RuleEngine(
-        @Nonnull
-        RuleEngineContext executionContext,
-
-        @Nonnull
-        List<RuleEvent> events,
-
-        @CheckForNull
-        RuleEnrollment enrollment,
-
-        @CheckForNull
-        TriggerEnvironment triggerEnvironment
-)
-{
+        @Nonnull RuleEngineContext executionContext,
+        @Nonnull List<RuleEvent> events,
+        @CheckForNull RuleEnrollment enrollment,
+        @CheckForNull TriggerEnvironment triggerEnvironment
+) {
     @Nonnull
     public Callable<List<RuleEffect>> evaluate( @Nonnull RuleEvent ruleEvent )
     {

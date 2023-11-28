@@ -10,18 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 public record RuleEngineContext(
-    @Nonnull
-    List<Rule> rules,
-    @Nonnull
-    List<RuleVariable> ruleVariables,
-    @Nonnull
-    Map<String, List<String>> supplementaryData,
-    @Nonnull
-    Map<String, String> constantsValues,
-    @Nonnull
-    RuleEngineIntent ruleEngineIntent,
-    @CheckForNull
-    Map<String, DataItem> dataItemStore) {
+        @Nonnull List<Rule> rules,
+        @Nonnull List<RuleVariable> ruleVariables,
+        @Nonnull Map<String, List<String>> supplementaryData,
+        @Nonnull Map<String, String> constantsValues,
+        @Nonnull RuleEngineIntent ruleEngineIntent,
+        @CheckForNull Map<String, DataItem> dataItemStore
+) {
 
     RuleEngineContext(@Nonnull List<Rule> rules, @Nonnull List<RuleVariable> ruleVariables,
                       @Nonnull Map<String, List<String>> supplementaryData, @Nonnull Map<String, String> constantsValues) {

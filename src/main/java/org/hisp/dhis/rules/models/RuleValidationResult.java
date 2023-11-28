@@ -28,54 +28,50 @@ package org.hisp.dhis.rules.models;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import javax.annotation.CheckForNull;
+
 /**
  * @author Zubair Asghar
  */
 public record RuleValidationResult(
-    String description,
-    boolean valid,
-    String errorMessage,
-    Throwable exception) {
+        @CheckForNull String description,
+        boolean valid,
+        @CheckForNull String errorMessage,
+        @CheckForNull Throwable exception
+) {
 
-    public static Builder builder()
-    {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public static class Builder
-    {
+    public static class Builder {
         private String description;
         private boolean isValid;
         private String errorMessage;
         private Throwable exception;
 
-        public Builder description( String description )
-        {
+        public Builder description(String description) {
             this.description = description;
             return this;
         }
 
-        public Builder isValid( boolean isValid )
-        {
+        public Builder isValid(boolean isValid) {
             this.isValid = isValid;
             return this;
         }
 
-        public Builder errorMessage( String errorMessage )
-        {
+        public Builder errorMessage(String errorMessage) {
             this.errorMessage = errorMessage;
             return this;
         }
 
-        public Builder exception( Throwable exception )
-        {
+        public Builder exception(Throwable exception) {
             this.exception = exception;
             return this;
         }
 
-        public RuleValidationResult build()
-        {
-            return new RuleValidationResult( this.description, this.isValid, this.errorMessage, exception );
+        public RuleValidationResult build() {
+            return new RuleValidationResult(this.description, this.isValid, this.errorMessage, exception);
         }
     }
 }

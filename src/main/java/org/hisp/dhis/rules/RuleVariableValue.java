@@ -11,14 +11,10 @@ import java.util.Date;
 import java.util.List;
 
 public record RuleVariableValue(
-        @CheckForNull
-        String value,
-        @Nonnull
-        RuleValueType type,
-        @Nonnull
-        List<String> candidates,
-        @CheckForNull
-        String eventDate
+        @CheckForNull String value,
+        @Nonnull RuleValueType type,
+        @Nonnull List<String> candidates,
+        @CheckForNull String eventDate
 ) implements VariableValue {
     private static final String DATE_PATTERN = "yyyy-MM-dd";
 
