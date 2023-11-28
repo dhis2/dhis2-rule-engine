@@ -4,20 +4,20 @@ import org.hisp.dhis.lib.expression.spi.ValueType;
 import org.hisp.dhis.lib.expression.spi.VariableValue;
 import org.hisp.dhis.rules.models.RuleValueType;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 public record RuleVariableValue(
-        @Nullable
+        @CheckForNull
         String value,
         @Nonnull
         RuleValueType type,
         @Nonnull
         List<String> candidates,
-        @Nullable
+        @CheckForNull
         String eventDate
 ) implements VariableValue {
     private static final String DATE_PATTERN = "yyyy-MM-dd";

@@ -9,8 +9,8 @@ import org.hisp.dhis.rules.models.RuleVariable;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
 import org.hisp.dhis.rules.utils.RuleEngineUtils;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,13 +39,13 @@ public final class RuleVariableValueMapBuilder
     @Nonnull
     private final List<RuleEvent> ruleEvents;
 
-    @Nullable
+    @CheckForNull
     public RuleEnrollment ruleEnrollment;
 
-    @Nullable
+    @CheckForNull
     public RuleEvent ruleEvent;
 
-    @Nullable
+    @CheckForNull
     private TriggerEnvironment triggerEnvironment;
 
     private RuleVariableValueMapBuilder()
@@ -100,7 +100,7 @@ public final class RuleVariableValueMapBuilder
     }
 
     @Nonnull
-    RuleVariableValueMapBuilder ruleEnrollment( @Nullable RuleEnrollment ruleEnrollment )
+    RuleVariableValueMapBuilder ruleEnrollment( @CheckForNull RuleEnrollment ruleEnrollment )
     {
         if ( this.ruleEnrollment != null )
         {
@@ -113,7 +113,7 @@ public final class RuleVariableValueMapBuilder
     }
 
     @Nonnull
-    RuleVariableValueMapBuilder triggerEnvironment( @Nullable TriggerEnvironment triggerEnvironment )
+    RuleVariableValueMapBuilder triggerEnvironment( @CheckForNull TriggerEnvironment triggerEnvironment )
     {
         if ( this.triggerEnvironment != null )
         {
@@ -182,7 +182,7 @@ public final class RuleVariableValueMapBuilder
     }
 
     private boolean isEventInList( @Nonnull List<RuleEvent> ruleEvents,
-        @Nullable RuleEvent ruleEvent )
+        @CheckForNull RuleEvent ruleEvent )
     {
         if ( ruleEvent != null )
         {

@@ -5,7 +5,6 @@ import org.hisp.dhis.rules.models.RuleVariable;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,19 +51,19 @@ public record RuleEngineContext(
     {
         private RuleEngineIntent intent;
 
-        @Nullable
+        @CheckForNull
         private List<Rule> rules;
 
-        @Nullable
+        @CheckForNull
         private List<RuleVariable> ruleVariables;
 
-        @Nullable
+        @CheckForNull
         private Map<String, List<String>> supplementaryData;
 
-        @Nullable
+        @CheckForNull
         private Map<String, String> constantsValues;
 
-        @Nullable
+        @CheckForNull
         private Map<String, DataItem> itemStore;
 
         Builder( @Nonnull RuleExpressionEvaluator evaluator )
@@ -100,14 +99,14 @@ public record RuleEngineContext(
         }
 
         @Nonnull
-        public Builder ruleEngineItent( @Nullable RuleEngineIntent ruleEngineIntent )
+        public Builder ruleEngineItent( @CheckForNull RuleEngineIntent ruleEngineIntent )
         {
             this.intent = ruleEngineIntent;
             return this;
         }
 
         @Nonnull
-        public Builder itemStore( @Nullable Map<String, DataItem> itemStore )
+        public Builder itemStore( @CheckForNull Map<String, DataItem> itemStore )
         {
             this.itemStore = itemStore;
             return this;

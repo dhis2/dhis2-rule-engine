@@ -2,8 +2,8 @@ package org.hisp.dhis.rules;
 
 import org.hisp.dhis.rules.models.RuleValueType;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import static org.junit.Assert.assertEquals;
 
@@ -23,7 +23,7 @@ final class RuleVariableValueAssert
     }
 
     @Nonnull
-    RuleVariableValueAssert hasValue( @Nullable String value )
+    RuleVariableValueAssert hasValue( @CheckForNull String value )
     {
         assertEquals( value , variableValue.value() );
         return this;
