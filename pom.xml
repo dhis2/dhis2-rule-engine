@@ -143,7 +143,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-enforcer-plugin</artifactId>
-                        <version>3.3.0</version>
+                        <version>3.4.1</version>
                         <executions>
                             <execution>
                                 <id>enforce-no-releases</id>
@@ -171,7 +171,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-enforcer-plugin</artifactId>
-                        <version>3.3.0</version>
+                        <version>3.4.1</version>
                         <executions>
                             <execution>
                                 <id>enforce-no-snapshots</id>
@@ -242,8 +242,8 @@
         </dependency>
         <dependency>
             <groupId>org.hisp.dhis.lib.expression</groupId>
-            <artifactId>expression-parser</artifactId>
-            <version>1.0.3</version>
+            <artifactId>expression-parser-jvm</artifactId>
+            <version>1.1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

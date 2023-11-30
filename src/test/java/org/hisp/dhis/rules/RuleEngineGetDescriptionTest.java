@@ -28,10 +28,10 @@ package org.hisp.dhis.rules;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.hisp.dhis.lib.expression.spi.ParseException;
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleAction;
 import org.hisp.dhis.rules.models.RuleActionText;
+import org.hisp.dhis.rules.models.RuleEngineValidationException;
 import org.hisp.dhis.rules.models.RuleValidationResult;
 import org.hisp.dhis.rules.models.TriggerEnvironment;
 import org.junit.Before;
@@ -362,12 +362,12 @@ public class RuleEngineGetDescriptionTest
         result = ruleEngine.evaluateDataFieldExpression( "1 + 1 +" );
         assertNotNull( result );
         assertFalse( result.valid() );
-        assertTrue(result.exception() instanceof ParseException);
+        assertTrue(result.exception() instanceof RuleEngineValidationException);
 
         result = ruleEngine.evaluateDataFieldExpression( "d2:hasValue(#{test_var_two}) && d2:count(#{test_var_one}) > 0 (" );
         assertNotNull( result );
         assertFalse( result.valid() );
-        assertTrue( result.exception() instanceof ParseException);
+        assertTrue( result.exception() instanceof RuleEngineValidationException);
     }
 
     private RuleEngine.Builder getRuleEngineBuilderForDescription( Map<String, DataItem> itemStore )

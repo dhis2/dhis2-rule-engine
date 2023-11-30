@@ -114,18 +114,18 @@ public record RuleEngine(
             for (Map.Entry<String, DataItem> e : executionContext.dataItemStore().entrySet()) {
                 validationMap.put(e.getKey(), e.getValue().valueType().toValueType());
             }
-            new Expression(expression, mode).validate( validationMap );
+            new Expression(expression, mode, false).validate( validationMap );
 
             Map<String, String> displayNames = new HashMap<>();
             for (Map.Entry<String, DataItem> e : executionContext.dataItemStore().entrySet()) {
                 displayNames.put(e.getKey(), e.getValue().displayName());
             }
-            String description = new Expression(expression, mode).describe(displayNames);
+            String description = new Expression(expression, mode, false).describe(displayNames);
             return RuleValidationResult.builder().isValid( true ).description(description).build();
         } catch (IllegalExpressionException | ParseException ex) {
             return RuleValidationResult.builder()
                     .isValid(false)
-                    .exception(new RuleEngineValidationException(ex.getMessage()))
+                    .exception(new RuleEngineValidationException(ex))
                     .errorMessage(ex.getMessage())
                     .build();
         }

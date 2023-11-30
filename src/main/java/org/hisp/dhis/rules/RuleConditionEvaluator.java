@@ -3,6 +3,7 @@ package org.hisp.dhis.rules;
 import org.hisp.dhis.lib.expression.Expression;
 import org.hisp.dhis.lib.expression.spi.ExpressionData;
 import org.hisp.dhis.lib.expression.spi.IllegalExpressionException;
+import org.hisp.dhis.lib.expression.spi.VariableValue;
 import org.hisp.dhis.rules.models.Rule;
 import org.hisp.dhis.rules.models.RuleAction;
 import org.hisp.dhis.rules.models.RuleActionAssign;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class RuleConditionEvaluator
 {
@@ -86,7 +88,7 @@ public class RuleConditionEvaluator
                                 ruleEffects.add( create( rule, action, valueMap, supplementaryData ) );
                             }
                         } catch ( Exception e ) {
-                            addRuleErrorResult( rule,action, e, targetType, targetUid, ruleEvaluationResults );
+                            addRuleErrorResult( rule, action, e, targetType, targetUid, ruleEvaluationResults );
                         }
                     }
 
@@ -179,14 +181,11 @@ public class RuleConditionEvaluator
             return "";
         }
 
-        Expression expression = new Expression(condition, mode);
-
-        ExpressionData build = ExpressionData.builder()
-                .supplementaryValues(supplementaryData)
-                .programRuleVariableValues(valueMap)
-                .build();
+        Expression expression = new Expression(condition, mode, false);
+        Map<String, VariableValue> programRuleVariableValues = valueMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().toVariableValue()));
+        ExpressionData build = new ExpressionData(programRuleVariableValues, Map.of(), supplementaryData, Map.of(), Map.of());
         return convertInteger( expression.evaluate(name -> {
-            throw new UnsupportedOperationException(name);
+            throw new UnsupportedOperationException("function not supported: "+name);
         }, build) ).toString();
     }
 

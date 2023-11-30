@@ -15,7 +15,7 @@ public record RuleVariableValue(
         @Nonnull RuleValueType type,
         @Nonnull List<String> candidates,
         @CheckForNull String eventDate
-) implements VariableValue {
+) {
     private static final String DATE_PATTERN = "yyyy-MM-dd";
 
     @Nonnull
@@ -47,19 +47,16 @@ public record RuleVariableValue(
         return format.format( date );
     }
 
-    @Override
-    public final ValueType valueType() {
+    public VariableValue toVariableValue() {
+        return new VariableValue(valueType(), value, candidates, eventDate);
+    }
+
+    private ValueType valueType() {
         return switch (type()) {
             case DATE -> ValueType.DATE;
             case NUMERIC -> ValueType.NUMBER;
             case BOOLEAN -> ValueType.BOOLEAN;
             default -> ValueType.STRING;
         };
-    }
-
-    @Override
-    public final Object valueOrDefault() {
-        String value = value();
-        return value != null ? value : type().defaultValue();
     }
 }
