@@ -50,7 +50,7 @@ data class RuleEngine(
         return RuleEngineExecution(ruleEnrollment, rulesToEvaluate, valueMap, executionContext.supplementaryData)
     }
 
-    fun evaluate(): Callable<List<RuleEffects>> {
+    fun evaluate(): List<RuleEffects> {
         val valueMap = RuleVariableValueMapBuilder.target()
                 .ruleVariables(executionContext.ruleVariables)
                 .ruleEnrollment(enrollment)
@@ -59,7 +59,7 @@ data class RuleEngine(
                 .constantValueMap(executionContext.constantsValues)
                 .multipleBuild()
         return RuleEngineMultipleExecution(executionContext.rules, valueMap,
-                executionContext.supplementaryData)
+                executionContext.supplementaryData).call()
     }
 
     fun evaluate( ruleEnrollment: RuleEnrollment): Callable<List<RuleEffect>> {

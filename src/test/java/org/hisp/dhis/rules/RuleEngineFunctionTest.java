@@ -95,7 +95,7 @@ public class RuleEngineFunctionTest
 
         RuleEngine ruleEngine = getRuleEngine( List.of( failingRule ), ruleEnrollment,
             List.of( ruleEvent, ruleNotFailingEvent ) );
-        List<RuleEffects> ruleEffects = ruleEngine.evaluate().call();
+        List<RuleEffects> ruleEffects = ruleEngine.evaluate();
 
         assertEquals( 3 , ruleEffects.size() );
         assertTrue( getRuleEffectsByUid( ruleEffects, "test_event" ).ruleEffects().isEmpty() );

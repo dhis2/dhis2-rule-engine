@@ -6,7 +6,7 @@
 
     <groupId>org.hisp.dhis.rules</groupId>
     <artifactId>rule-engine</artifactId>
-    <version>2.1.9</version>
+    <version>3.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>rule-engine</name>
 
@@ -82,7 +82,7 @@
     </distributionManagement>
 
     <properties>
-        <kotlin.version>2.0.0-Beta</kotlin.version>
+        <kotlin.version>1.9.21</kotlin.version>
     </properties>
 
 
@@ -319,6 +319,24 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test-common</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test-annotations-common</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test-junit</artifactId>
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>

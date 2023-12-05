@@ -78,7 +78,7 @@ public class RuleEngineEffectTypesTest
 
         RuleEngine ruleEngine = getRuleEngineMultiple( rule, getTestRuleEvent( RuleEvent.Status.ACTIVE ) );
 
-        List<RuleEffects> ruleEffects = ruleEngine.evaluate().call();
+        List<RuleEffects> ruleEffects = ruleEngine.evaluate();
 
         assertEquals( 1 , ruleEffects.size() );
         assertEquals( "test_string" , ruleEffects.get( 0 ).ruleEffects().get( 0 ).data() );
