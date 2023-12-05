@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules.models;
+package org.hisp.dhis.rules.models
 
 /*
  * Copyright (c) 2004-2020, University of Oslo
@@ -26,52 +26,24 @@ package org.hisp.dhis.rules.models;
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
-import javax.annotation.CheckForNull;
-
-/**
+ */ /**
  * @author Zubair Asghar
  */
-public record RuleValidationResult(
-        @CheckForNull String description,
-        boolean valid,
-        @CheckForNull String errorMessage,
-        @CheckForNull Throwable exception
+data class RuleValidationResult(
+        val valid: Boolean,
+        val errorMessage: String? = null,
+        val exception: Throwable? = null,
+        val description: String? = null
 ) {
-
-    public static Builder builder() {
-        return new Builder();
+    fun valid(): Boolean {
+        return valid
     }
 
-    public static class Builder {
-        private String description;
-        private boolean isValid;
-        private String errorMessage;
-        private Throwable exception;
+    fun description(): String? {
+        return description
+    }
 
-        public Builder description(String description) {
-            this.description = description;
-            return this;
-        }
-
-        public Builder isValid(boolean isValid) {
-            this.isValid = isValid;
-            return this;
-        }
-
-        public Builder errorMessage(String errorMessage) {
-            this.errorMessage = errorMessage;
-            return this;
-        }
-
-        public Builder exception(Throwable exception) {
-            this.exception = exception;
-            return this;
-        }
-
-        public RuleValidationResult build() {
-            return new RuleValidationResult(this.description, this.isValid, this.errorMessage, exception);
-        }
+    fun exception(): Throwable? {
+        return exception
     }
 }

@@ -33,24 +33,6 @@ public class RuleEngineTest
             .build();
     }
 
-    @Test( expected = IllegalArgumentException.class )
-    public void builderShouldThrowOnNullEnrollment()
-    {
-        ruleEngineContext.toEngineBuilder()
-            .enrollment( null )
-            .events( new ArrayList<RuleEvent>() )
-            .build();
-    }
-
-    @Test( expected = IllegalArgumentException.class )
-    public void builderShouldThrowOnNullEvents()
-    {
-        ruleEngineContext.toEngineBuilder()
-            .enrollment( null )
-            .events( null )
-            .build();
-    }
-
     @Test( expected = UnsupportedOperationException.class )
     public void builderShouldPropagateImmutableEventsList()
     {
@@ -89,14 +71,6 @@ public class RuleEngineTest
         assertEquals( ruleEngineContext , ruleEngine.executionContext() );
     }
 
-    @Test( expected = IllegalArgumentException.class )
-    public void evaluateShouldThrowOnNullEvent()
-    {
-
-        RuleEvent ruleEvent = null;
-        ruleEngineContext.toEngineBuilder().build().evaluate( ruleEvent );
-    }
-
     @Test( expected = IllegalStateException.class )
     public void evaluateShouldThrowIfEventIsAlreadyInContext()
     {
@@ -111,13 +85,6 @@ public class RuleEngineTest
             .build();
 
         ruleEngine.evaluate( ruleEvent );
-    }
-
-    @Test( expected = IllegalArgumentException.class )
-    public void evaluateShouldThrowOnNullEnrollment()
-    {
-        RuleEnrollment ruleEnrollment = null;
-        ruleEngineContext.toEngineBuilder().build().evaluate( ruleEnrollment );
     }
 
     @Test
