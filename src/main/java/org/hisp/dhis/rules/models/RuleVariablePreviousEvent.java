@@ -3,14 +3,14 @@ package org.hisp.dhis.rules.models;
 import org.hisp.dhis.rules.Option;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueMapBuilder;
-import org.hisp.dhis.rules.Utils;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.hisp.dhis.rules.Utils.getLastUpdateDateForPrevious;
+import static org.hisp.dhis.rules.UtilsKt.getLastUpdateDateForPrevious;
+import static org.hisp.dhis.rules.UtilsKt.values;
 
 public record RuleVariablePreviousEvent(
         @Nonnull String name,
@@ -43,7 +43,7 @@ public record RuleVariablePreviousEvent(
                     String optionValue = this.useCodeForOptionSet() ? ruleDataValue.value() : getOptionName(ruleDataValue.value());
 
                     variableValue = RuleVariableValue.create(optionValue, this.dataElementType(),
-                            Utils.values(ruleDataValues),
+                            values(ruleDataValues),
                             getLastUpdateDateForPrevious(ruleDataValues, builder.ruleEvent));
                     break;
                 }

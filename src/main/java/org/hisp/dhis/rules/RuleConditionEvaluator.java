@@ -21,6 +21,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import static org.hisp.dhis.rules.UtilsKt.unwrapVariableName;
+
 public class RuleConditionEvaluator
 {
     private static final Logger log = Logger.getLogger( RuleConditionEvaluator.class.getName() );
@@ -77,7 +79,7 @@ public class RuleConditionEvaluator
                             {
                                 RuleActionAssign ruleActionAssign = (RuleActionAssign) action;
                                 updateValueMap(
-                                        Utils.unwrapVariableName(ruleActionAssign.content()),
+                                        unwrapVariableName(ruleActionAssign.content()),
                                         RuleVariableValue.create(process( ruleActionAssign.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION),
                                                 RuleValueType.TEXT),
                                         valueMap

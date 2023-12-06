@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.hisp.dhis.rules.Utils.dateFormat;
+import static org.hisp.dhis.rules.UtilsKt.getDateFormat;
 
 public record RuleVariableAttribute(
         @Nonnull String name,
@@ -33,7 +33,7 @@ public record RuleVariableAttribute(
                                                        Map<String, RuleDataValue> currentEventValues) {
         Map<String, RuleVariableValue> valueMap = new HashMap<>();
 
-        String currentDate = dateFormat.format(new Date());
+        String currentDate = getDateFormat().format(new Date());
 
         RuleVariableValue variableValue;
 

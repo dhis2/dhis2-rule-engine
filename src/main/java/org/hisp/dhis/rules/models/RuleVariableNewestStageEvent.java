@@ -3,7 +3,6 @@ package org.hisp.dhis.rules.models;
 import org.hisp.dhis.rules.Option;
 import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueMapBuilder;
-import org.hisp.dhis.rules.Utils;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -11,7 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.hisp.dhis.rules.Utils.getLastUpdateDate;
+import static org.hisp.dhis.rules.UtilsKt.getLastUpdateDate;
+import static org.hisp.dhis.rules.UtilsKt.values;
 
 public record RuleVariableNewestStageEvent(
         @Nonnull String name,
@@ -57,7 +57,7 @@ public record RuleVariableNewestStageEvent(
             String optionValue = this.useCodeForOptionSet() ? value.value() : getOptionName(value.value());
 
             variableValue = RuleVariableValue.create(optionValue,
-                    this.dataElementType(), Utils.values(stageRuleDataValues),
+                    this.dataElementType(), values(stageRuleDataValues),
                     getLastUpdateDate(stageRuleDataValues));
 
             valueMap.put(this.name(), variableValue);

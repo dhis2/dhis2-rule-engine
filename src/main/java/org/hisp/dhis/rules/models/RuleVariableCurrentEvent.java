@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.hisp.dhis.rules.Utils.getLastUpdateDate;
+import static org.hisp.dhis.rules.UtilsKt.getLastUpdateDate;
 
 public record RuleVariableCurrentEvent(
         @Nonnull String name,
