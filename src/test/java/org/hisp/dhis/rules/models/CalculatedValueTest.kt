@@ -2,11 +2,9 @@ package org.hisp.dhis.rules.models
 
 import org.hisp.dhis.rules.RuleEngine
 import org.hisp.dhis.rules.RuleEngineContext
-import org.junit.Assert
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 import java.util.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /*
 * Copyright (c) 2004-2018, University of Oslo
@@ -34,13 +32,9 @@ import java.util.*
 * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/ /**
- * @author Zubair Asghar.
- */
-@RunWith(JUnit4::class)
+*/
 class CalculatedValueTest {
     @Test
-    @Throws(Exception::class)
     fun evaluateTenThousandRulesTest() {
         val i = 10000
         val ruleEngineBuilder = getRuleEngine(createRules(i))
@@ -73,21 +67,15 @@ class CalculatedValueTest {
             .build()
         val ruleEngine = ruleEngineBuilder.enrollment(enrollment).build()
         val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
-        Assert.assertEquals(i.toLong(), ruleEffects.size.toLong())
+        assertEquals(i.toLong(), ruleEffects.size.toLong())
     }
 
     @Test
-    @Throws(Exception::class)
     fun sendMessageMustGetValueFromAssignAction() {
         val assignAction: RuleAction = RuleActionAssign.create("#{test_calculated_value}", "2+2", null)
-        val rule = Rule
-            .create(null, 1, "true", java.util.List.of(assignAction), "test_program_rule1", "")
+        val rule = Rule("true", listOf(assignAction), "test_program_rule1")
         val sendMessageAction: RuleAction = RuleActionSendMessage.create("test_notification", "4")
-        val rule2 = Rule
-            .create(
-                null, 4, "#{test_calculated_value}==4", java.util.List.of(sendMessageAction), "test_program_rule2",
-                ""
-            )
+        val rule2 = Rule("#{test_calculated_value}==4", listOf(sendMessageAction), "test_program_rule2")
         val enrollment = RuleEnrollment.builder()
             .enrollment("test_enrollment")
             .programName("test_program")
@@ -117,21 +105,16 @@ class CalculatedValueTest {
             .build()
         val ruleEngine = getRuleEngine(java.util.List.of(rule, rule2)).enrollment(enrollment).build()
         val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
-        Assert.assertEquals("4", ruleEffects[0].data())
-        Assert.assertEquals(sendMessageAction, ruleEffects[0].ruleAction())
+        assertEquals("4", ruleEffects[0].data())
+        assertEquals(sendMessageAction, ruleEffects[0].ruleAction())
     }
 
     private fun createRules(i: Int): List<Rule> {
         val rules: MutableList<Rule> = ArrayList()
         val assignAction: RuleAction = RuleActionAssign.create("#{test_calculated_value}", "2+2", null)
-        val rule = Rule
-            .create(null, 1, "true", java.util.List.of(assignAction), "test_program_rule1", "")
+        val rule = Rule("true", listOf(assignAction), "test_program_rule1")
         val sendMessageAction: RuleAction = RuleActionSendMessage.create("test_notification", "4")
-        val rule2 = Rule
-            .create(
-                null, 4, "#{test_calculated_value}==4", java.util.List.of(sendMessageAction), "test_program_rule2",
-                ""
-            )
+        val rule2 = Rule("#{test_calculated_value}==4", java.util.List.of(sendMessageAction), "test_program_rule2")
         for (j in 0 until i) {
             rules.add(rule)
             rules.add(rule2)
@@ -140,15 +123,11 @@ class CalculatedValueTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun sendMessageMustGetValueFromAssignActionInSingleExecution() {
         val assignAction: RuleAction = RuleActionAssign.create("#{test_calculated_value}", "2+2", null)
-        val rule = Rule
-            .create(null, 1, "true", java.util.List.of(assignAction), "test_program_rule1", "")
+        val rule = Rule( "true", listOf(assignAction), "test_program_rule1", "")
         val sendMessageAction: RuleAction = RuleActionSendMessage.create("test_notification", "4.0")
-        val rule2 = Rule
-            .create(
-                null, 4, "#{test_calculated_value}==4.0", java.util.List.of(sendMessageAction),
+        val rule2 = Rule("#{test_calculated_value}==4.0", listOf(sendMessageAction),
                 "test_program_rule2", ""
             )
         val ruleEngineBuilder = getRuleEngine(java.util.List.of(rule, rule2))
@@ -181,9 +160,9 @@ class CalculatedValueTest {
             .build()
         val ruleEngine = ruleEngineBuilder.enrollment(enrollment).build()
         val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
-        Assert.assertEquals(1, ruleEffects.size.toLong())
-        Assert.assertEquals("4", ruleEffects[0].data())
-        Assert.assertEquals(sendMessageAction, ruleEffects[0].ruleAction())
+        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals("4", ruleEffects[0].data())
+        assertEquals(sendMessageAction, ruleEffects[0].ruleAction())
     }
 
     private fun getRuleEngine(rules: List<Rule>): RuleEngine.Builder {

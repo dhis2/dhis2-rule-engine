@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import static org.hisp.dhis.rules.RuleEngineFilterKt.filterRules;
+
 record RuleEngineMultipleExecution(
         @Nonnull List<Rule> rules,
         @Nonnull RuleVariableValueMap ruleVariableValueMap,
@@ -37,7 +39,7 @@ record RuleEngineMultipleExecution(
             RuleEnrollment enrollment = enrollments.getKey();
             List<RuleEffect> enrollmentRuleEffects = ruleConditionEvaluator
                 .getEvaluatedAndErrorRuleEffects( TrackerObjectType.ENROLLMENT, enrollment.enrollment(), enrollments.getValue(),
-                        supplementaryData, RuleEngineFilter.filterRules( rules, enrollment) );
+                        supplementaryData, filterRules( rules, enrollment) );
             ruleEffects.add( new RuleEffects( TrackerObjectType.ENROLLMENT, enrollment.enrollment(),
                 enrollmentRuleEffects ) );
         }
@@ -48,7 +50,7 @@ record RuleEngineMultipleExecution(
             RuleEvent event = events.getKey();
             ruleEffects.add( new RuleEffects( TrackerObjectType.EVENT, event.event(),
                 ruleConditionEvaluator.getEvaluatedAndErrorRuleEffects( TrackerObjectType.EVENT, event.event(), events.getValue(),
-                        supplementaryData, RuleEngineFilter.filterRules( rules, event) ) ) );
+                        supplementaryData, filterRules( rules, event) ) ) );
         }
 
         return ruleEffects;

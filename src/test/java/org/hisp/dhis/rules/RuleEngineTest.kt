@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules
 
+import io.mockk.mockk
 import org.hisp.dhis.rules.models.Rule
 import org.hisp.dhis.rules.models.RuleEvent
 import org.hisp.dhis.rules.util.MockRuleVariable
@@ -17,7 +18,7 @@ internal class RuleEngineTest {
 
     private var ruleEngineContext: RuleEngineContext = RuleEngineContext.builder()
     .ruleVariables(listOf(MockRuleVariable()))
-    .rules(listOf(Rule.MOCK))
+    .rules(listOf(Rule("true", listOf())))
     .build()
 
     @Test
@@ -62,7 +63,7 @@ internal class RuleEngineTest {
     @Throws(InterruptedException::class)
     fun concurrentIterationOverRulesListShouldNotFail() {
         val (executionContext) = RuleEngineContext.builder()
-                .rules(List.of(Rule.MOCK, Rule.MOCK))
+                .rules(listOf(mockk<Rule>(), mockk<Rule>()))
                 .build().toEngineBuilder().build()
         val threadOneLatch = CountDownLatch(1)
         val threadTwoLatch = CountDownLatch(1)

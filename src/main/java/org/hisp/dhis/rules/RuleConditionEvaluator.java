@@ -32,7 +32,7 @@ public class RuleConditionEvaluator
     {
         List<RuleEffect> ruleEffects = new ArrayList<>();
         for (RuleEvaluationResult ruleEvaluationResult : getRuleEvaluationResults( targetType, targetUid, valueMap, supplementaryData, rules)) {
-                ruleEffects.addAll( ruleEvaluationResult.ruleEffects() );
+                ruleEffects.addAll( ruleEvaluationResult.getRuleEffects() );
         }
 
         return ruleEffects;
@@ -94,9 +94,9 @@ public class RuleConditionEvaluator
                         }
                     }
 
-                    ruleEvaluationResults.add(RuleEvaluationResult.evaluatedResult(rule, ruleEffects));
+                    ruleEvaluationResults.add(RuleEvaluationResult.Companion.evaluatedResult(rule, ruleEffects));
                 } else {
-                    ruleEvaluationResults.add(RuleEvaluationResult.notEvaluatedResult(rule));
+                    ruleEvaluationResults.add(RuleEvaluationResult.Companion.notEvaluatedResult(rule));
                 }
             } catch ( Exception e ) {
                 addRuleErrorResult(rule, null, e, targetType, targetUid, ruleEvaluationResults);
@@ -151,7 +151,7 @@ public class RuleConditionEvaluator
         }
 
         log.log(Level.SEVERE, errorMessage);
-        ruleEvaluationResults.add(RuleEvaluationResult.errorRule(rule, errorMessage));
+        ruleEvaluationResults.add(RuleEvaluationResult.Companion.errorRule(rule, errorMessage));
     }
 
     private List<Rule> orderRules( List<Rule> rules )

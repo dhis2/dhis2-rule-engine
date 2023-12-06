@@ -36,10 +36,10 @@ class RuleEngineEffectTypesTest {
         val ruleAction: RuleAction = RuleActionAssign.create(
             null, "'test_string'", "#{test_data_element}"
         )
-        val rule = Rule.create(null, null, "true", List.of(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals("test_string", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
@@ -49,7 +49,7 @@ class RuleEngineEffectTypesTest {
         val ruleAction: RuleAction = RuleActionAssign.create(
             null, "'test_string'", "#{test_data_element}"
         )
-        val rule = Rule.create(null, null, "true", List.of(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngineMultiple(rule, getTestRuleEvent(RuleEvent.Status.ACTIVE))
         val ruleEffects = ruleEngine.evaluate()
         assertEquals(1, ruleEffects.size.toLong())
@@ -62,7 +62,7 @@ class RuleEngineEffectTypesTest {
         val ruleAction: RuleAction = RuleActionCreateEvent.create(
             "test_action_content", "'event_uid;test_data_value_one'", "test_program_stage"
         )
-        val rule = Rule.create(null, null, "true", List.of(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()
         assertEquals(1, ruleEffects.size.toLong())
@@ -75,7 +75,7 @@ class RuleEngineEffectTypesTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "2 + 2"
         )
-        val rule = Rule.create(null, null, "true", List.of(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()
         assertEquals(1, ruleEffects.size.toLong())
@@ -88,7 +88,7 @@ class RuleEngineEffectTypesTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "2 + 2"
         )
-        val rule = Rule.create(null, null, "true", List.of(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()
         assertEquals(1, ruleEffects.size.toLong())
@@ -101,7 +101,7 @@ class RuleEngineEffectTypesTest {
         val ruleAction: RuleAction = RuleActionMessage.create(
             "test_action_content", "2 + 2", "test_data_element", RuleActionMessage.Type.ERROR_ON_COMPILATION
         )
-        val rule = Rule.create(null, null, "true", List.of(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()
         assertEquals(1, ruleEffects.size.toLong())
@@ -112,7 +112,7 @@ class RuleEngineEffectTypesTest {
     @Test
     fun simpleConditionMustResultInHideFieldEffect() {
         val ruleAction: RuleAction = RuleActionHideField("test_data_element", "test_action_content" )
-        val rule = Rule.create(null, null, "true", List.of(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = RuleEngineContext
             .builder()
             .rules(List.of(rule))
@@ -129,7 +129,7 @@ class RuleEngineEffectTypesTest {
     @Test
     fun testEnvironmentVariableExpression() {
         val ruleAction: RuleAction = RuleActionHideField("test_data_element", "test_action_content")
-        val rule = Rule.create(null, null, "V{event_status} =='COMPLETED'", List.of(ruleAction), "", "")
+        val rule = Rule("V{event_status} =='COMPLETED'", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.COMPLETED)).call()
         assertEquals(1, ruleEffects.size.toLong())
@@ -140,7 +140,7 @@ class RuleEngineEffectTypesTest {
     @Test
     fun testTriggerEnvironment() {
         val ruleAction: RuleAction = RuleActionHideField("test_data_element", "test_action_content")
-        val rule = Rule.create(null, null, "V{environment} =='Server'", List.of(ruleAction), "", "")
+        val rule = Rule("V{environment} =='Server'", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()
         assertEquals(1, ruleEffects.size)
@@ -151,7 +151,7 @@ class RuleEngineEffectTypesTest {
     @Test
     fun simpleConditionMustResultInHideProgramStageEffect() {
         val ruleAction: RuleAction = RuleActionHideProgramStage("test_program_stage")
-        val rule = Rule.create(null, null, "true", List.of(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()
         assertEquals(1, ruleEffects.size.toLong())
@@ -162,7 +162,7 @@ class RuleEngineEffectTypesTest {
     @Test
     fun simpleConditionMustResultInScheduleMessage() {
         val ruleAction: RuleAction = RuleActionScheduleMessage.create("", "'2018-04-24'")
-        val rule = Rule.create(null, null, "true", List.of(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()
         assertEquals(1, ruleEffects.size.toLong())
@@ -173,7 +173,7 @@ class RuleEngineEffectTypesTest {
     @Test
     fun simpleConditionMustResultInHideSectionEffect() {
         val ruleAction: RuleAction = RuleActionHideSection.create("test_section")
-        val rule = Rule.create(null, null, "true", List.of(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()
         assertEquals(1, ruleEffects.size.toLong())
@@ -184,7 +184,7 @@ class RuleEngineEffectTypesTest {
     @Test
     fun simpleConditionMustResultInHideOptionEffect() {
         val ruleAction: RuleAction = RuleActionHideOption.create("test_content", "test_option", "test_field")
-        val rule = Rule.create(null, null, "true", List.of(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()
         assertEquals(1, ruleEffects.size.toLong())
@@ -195,7 +195,7 @@ class RuleEngineEffectTypesTest {
     @Test
     fun simpleConditionMustResultInHideOptionGroupEffect() {
         val ruleAction: RuleAction = RuleActionHideOptionGroup.create("test_content", "test_option_group", "field")
-        val rule = Rule.create(null, null, "true", List.of(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()
         assertEquals(1, ruleEffects.size.toLong())
@@ -206,7 +206,7 @@ class RuleEngineEffectTypesTest {
     @Test
     fun simpleConditionMustResultInSetMandatoryFieldEffect() {
         val ruleAction: RuleAction = RuleActionSetMandatoryField.create("test_data_element")
-        val rule = Rule.create(null, null, "true", List.of(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()
         assertEquals(1, ruleEffects.size.toLong())
@@ -219,7 +219,7 @@ class RuleEngineEffectTypesTest {
         val ruleAction: RuleAction = RuleActionMessage.create(
             "test_warning_message", null, "target_field", RuleActionMessage.Type.SHOW_WARNING
         )
-        val rule = Rule.create(null, null, "true", List.of(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()
         assertEquals(1, ruleEffects.size.toLong())
@@ -232,7 +232,7 @@ class RuleEngineEffectTypesTest {
         val ruleAction: RuleAction = RuleActionMessage.create(
             "test_error_message", "2 + 2", "target_field", RuleActionMessage.Type.SHOW_ERROR
         )
-        val rule = Rule.create(null, null, "true", List.of(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()
         assertEquals(1, ruleEffects.size.toLong())
@@ -245,7 +245,7 @@ class RuleEngineEffectTypesTest {
         val ruleAction: RuleAction = RuleActionMessage.create(
             "test_warning_message", "2 + 2", "target_field", RuleActionMessage.Type.WARNING_ON_COMPILATION
         )
-        val rule = Rule.create(null, null, "true", List.of(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()
         assertEquals(1, ruleEffects.size.toLong())
