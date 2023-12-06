@@ -1,7 +1,6 @@
-package org.hisp.dhis.rules.models;
-
+package org.hisp.dhis.rules
 /*
- * Copyright (c) 2004-2018, University of Oslo
+ * Copyright (c) 2004-2020, University of Oslo
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,22 +28,9 @@ package org.hisp.dhis.rules.models;
  */
 
 /**
- * @author Zubair Asghar.
+ * @author Zubair Asghar
  */
-public enum TriggerEnvironment
-{
-    ANDROIDCLIENT( "AndroidClient" ),
-    SERVER( "Server" );
-
-    private final String clientName;
-
-    TriggerEnvironment( String clientName )
-    {
-        this.clientName = clientName;
-    }
-
-    public String getClientName()
-    {
-        return clientName;
-    }
+enum class RuleEngineIntent {
+    EVALUATION,
+    DESCRIPTION
 }

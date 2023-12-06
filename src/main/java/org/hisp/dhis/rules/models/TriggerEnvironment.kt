@@ -1,7 +1,6 @@
-package org.hisp.dhis.rules;
-
+package org.hisp.dhis.rules.models
 /*
- * Copyright (c) 2004-2020, University of Oslo
+ * Copyright (c) 2004-2018, University of Oslo
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,10 +28,10 @@ package org.hisp.dhis.rules;
  */
 
 /**
- * @author Zubair Asghar
+ * @author Zubair Asghar.
  */
-public enum RuleEngineIntent
-{
-    EVALUATION,
-    DESCRIPTION
+enum class TriggerEnvironment(val clientName: String) {
+    ANDROIDCLIENT("AndroidClient"),
+    SERVER("Server")
+
 }

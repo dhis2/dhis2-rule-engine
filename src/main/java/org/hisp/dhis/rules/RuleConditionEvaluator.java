@@ -104,7 +104,7 @@ public class RuleConditionEvaluator
         for (RuleEvaluationResult ruleEvaluationResult : ruleEvaluationResults) {
 
             log.fine("Rule " + ruleEvaluationResult.rule().name() + " with id " + ruleEvaluationResult.rule().uid() +
-                    " executed for " + targetType.getName() + "(" + targetUid + ")" +
+                    " executed for " + targetType.name() + "(" + targetUid + ")" +
                     " with condition (" + ruleEvaluationResult.rule().condition() + ")" +
                     " was evaluated " + ruleEvaluationResult.evaluatedAs());
         }
@@ -121,7 +121,7 @@ public class RuleConditionEvaluator
         {
             errorMessage = "Action " + ruleAction.getClass().getName() +
                     " from rule " + rule.name() + " with id " + rule.uid() +
-                    " executed for " + targetType.getName() + "(" + targetUid + ")" +
+                    " executed for " + targetType.name() + "(" + targetUid + ")" +
                     " with condition (" + rule.condition() + ")" +
                     " raised an error: " + e.getMessage();
         }
@@ -129,21 +129,21 @@ public class RuleConditionEvaluator
         {
             errorMessage = "Action " + ruleAction.getClass().getName() +
                     " from rule " + rule.name() + " with id " + rule.uid() +
-                    " executed for " + targetType.getName() + "(" + targetUid + ")" +
+                    " executed for " + targetType.name() + "(" + targetUid + ")" +
                     " with condition (" + rule.condition() + ")" +
                     " raised an unexpected exception: " + e.getMessage();
         }
         else if(e instanceof IllegalExpressionException)
         {
             errorMessage = "Rule " + rule.name() + " with id " + rule.uid() +
-                    " executed for " + targetType.getName() + "(" + targetUid + ")" +
+                    " executed for " + targetType.name() + "(" + targetUid + ")" +
                     " with condition (" + rule.condition() + ")" +
                     " raised an error: " + e.getMessage();
         }
         else
         {
             errorMessage = "Rule " + rule.name() + " with id " + rule.uid() +
-                    " executed for " + targetType.getName() + "(" + targetUid + ")" +
+                    " executed for " + targetType.name() + "(" + targetUid + ")" +
                     " with condition (" + rule.condition() + ")" +
                     " raised an unexpected exception: " + e.getMessage();
         }
