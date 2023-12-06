@@ -150,7 +150,7 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInHideProgramStageEffect() {
-        val ruleAction: RuleAction = RuleActionHideProgramStage.create("test_program_stage")
+        val ruleAction: RuleAction = RuleActionHideProgramStage("test_program_stage")
         val rule = Rule.create(null, null, "true", List.of(ruleAction), "", "")
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()
