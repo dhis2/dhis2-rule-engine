@@ -174,21 +174,19 @@ class ProgramRuleVariableTest {
     }
     
     private fun callEnrollmentRuleEngine(rule: Rule): List<RuleEffect> {
-        val ruleEngineBuilder = getRuleEngine(java.util.List.of(rule))
-        val ruleEngine = ruleEngineBuilder.build()
+        val ruleEngine = getRuleEngine(java.util.List.of(rule))
         return ruleEngine.evaluate(enrollment).call()
     }
     
     private fun callEventRuleEngine(rule: Rule): List<RuleEffect> {
-        val ruleEngineBuilder = getRuleEngine(java.util.List.of(rule))
+        val ruleEngine = getRuleEngine(java.util.List.of(rule))
         val event = RuleEvent(event = EVENT_ID, programStage = PROGRAM_STAGE,
             programStageName = PROGRAM_STAGE_NAME, status = RULE_EVENT_STATUS,
             eventDate = EVENT_DATE, dueDate = DUE_DATE,
             organisationUnit = ORGANISATION_UNIT, organisationUnitCode = ORGANISATION_UNIT_CODE,
             completedDate = null,
             dataValues = emptyList())
-        val ruleEngine = ruleEngineBuilder.enrollment(enrollment).build()
-        return ruleEngine.evaluate(event).call()
+        return ruleEngine.copy(enrollment = enrollment).evaluate(event).call()
     }
 
     private val enrollment: RuleEnrollment
@@ -203,14 +201,9 @@ class ProgramRuleVariableTest {
             .attributeValues(java.util.List.of(RuleAttributeValue.create("test_attribute", "test_value")))
             .build()
 
-    private fun getRuleEngine(rules: List<Rule>): RuleEngine.Builder {
-        return RuleEngineContext
-            .builder()
-            .rules(rules)
-            .ruleVariables(listOf())
-            .supplementaryData(HashMap())
-            .constantsValue(HashMap())
-            .build().toEngineBuilder().triggerEnvironment(TriggerEnvironment.SERVER)
+    private fun getRuleEngine(rules: List<Rule>): RuleEngine {
+        return RuleEngine(RuleEngineContext(rules, listOf(), emptyMap(), emptyMap()),
+            emptyList(), null, TriggerEnvironment.SERVER)
     }
 
     companion object {

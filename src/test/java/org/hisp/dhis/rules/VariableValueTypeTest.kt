@@ -37,16 +37,16 @@ class VariableValueTypeTest {
     fun testNumericVariablesAreComparedCorrectly() {
         val ruleAction: RuleAction = RuleActionText
             .createForFeedback("test_action_content", "#{test_variable}")
-        val rule: Rule = Rule("#{test_variable} > #{test_variable2}", java.util.List.of(ruleAction), "", "")
+        val rule = Rule("#{test_variable} > #{test_variable2}", listOf(ruleAction), "", "")
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent
             .create("test_variable", "test_data_element", RuleValueType.NUMERIC, true, ArrayList())
         val ruleVariable2: RuleVariable = RuleVariableCurrentEvent
             .create("test_variable2", "test_data_element2", RuleValueType.NUMERIC, true, ArrayList())
-        val ruleEngine = getRuleEngine(rule, java.util.List.of(ruleVariable, ruleVariable2))
+        val ruleEngine = getRuleEngine(rule, listOf(ruleVariable, ruleVariable2))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
             RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null,
-            java.util.List.of(
+            listOf(
                 RuleDataValue.create(Date(), "", "test_data_element", "30"),
                 RuleDataValue.create(Date(), "", "test_data_element2", "4")
             )
@@ -61,12 +61,12 @@ class VariableValueTypeTest {
     fun testTextVariablesAreComparedCorrectly() {
         val ruleAction: RuleAction = RuleActionText
             .createForFeedback("test_action_content", "#{test_variable}")
-        val rule: Rule = Rule("#{test_variable} > #{test_variable2}", java.util.List.of(ruleAction), "", "")
+        val rule = Rule("#{test_variable} > #{test_variable2}", listOf(ruleAction), "", "")
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent
             .create("test_variable", "test_data_element", RuleValueType.TEXT, true, ArrayList())
         val ruleVariable2: RuleVariable = RuleVariableCurrentEvent
             .create("test_variable2", "test_data_element2", RuleValueType.TEXT, true, ArrayList())
-        val ruleEngine = getRuleEngine(rule, java.util.List.of(ruleVariable, ruleVariable2))
+        val ruleEngine = getRuleEngine(rule, listOf(ruleVariable, ruleVariable2))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
             RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null,
@@ -80,13 +80,6 @@ class VariableValueTypeTest {
     }
 
     private fun getRuleEngine(rule: Rule, ruleVariables: List<RuleVariable>): RuleEngine {
-        return RuleEngineContext
-            .builder()
-            .rules(listOf(rule))
-            .ruleVariables(ruleVariables)
-            .supplementaryData(HashMap())
-            .constantsValue(HashMap())
-            .build().toEngineBuilder().triggerEnvironment(TriggerEnvironment.SERVER)
-            .build()
+        return RuleEngine(RuleEngineContext(listOf(rule),ruleVariables))
     }
 }

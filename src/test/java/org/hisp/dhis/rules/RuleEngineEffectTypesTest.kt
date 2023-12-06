@@ -105,13 +105,7 @@ class RuleEngineEffectTypesTest {
     fun simpleConditionMustResultInHideFieldEffect() {
         val ruleAction: RuleAction = RuleActionHideField("test_data_element", "test_action_content" )
         val rule = Rule("true", listOf(ruleAction))
-        val ruleEngine = RuleEngineContext
-            .builder()
-            .rules(List.of(rule))
-            .supplementaryData(HashMap())
-            .constantsValue(HashMap())
-            .build().toEngineBuilder().triggerEnvironment(TriggerEnvironment.SERVER)
-            .build()
+        val ruleEngine = RuleEngine(RuleEngineContext(listOf(rule), emptyList()), emptyList(), null, TriggerEnvironment.SERVER)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()
         assertEquals(1, ruleEffects.size)
         assertEquals("", ruleEffects[0].data)
@@ -246,23 +240,10 @@ class RuleEngineEffectTypesTest {
     }
 
     private fun getRuleEngine(rule: Rule): RuleEngine {
-        return RuleEngineContext
-            .builder()
-            .rules(listOf(rule))
-            .supplementaryData(HashMap())
-            .constantsValue(HashMap())
-            .build().toEngineBuilder().triggerEnvironment(TriggerEnvironment.SERVER)
-            .build()
+        return RuleEngine(RuleEngineContext(listOf(rule), emptyList()))
     }
 
     private fun getRuleEngineMultiple(rule: Rule, ruleEvent: RuleEvent): RuleEngine {
-        return RuleEngineContext
-            .builder()
-            .rules(listOf(rule))
-            .supplementaryData(HashMap())
-            .constantsValue(HashMap())
-            .build().toEngineBuilder().triggerEnvironment(TriggerEnvironment.SERVER)
-            .events(List.of(ruleEvent))
-            .build()
+        return RuleEngine(RuleEngineContext(listOf(rule), emptyList()), listOf(ruleEvent))
     }
 }

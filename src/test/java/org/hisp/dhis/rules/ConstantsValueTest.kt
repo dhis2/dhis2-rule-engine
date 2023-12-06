@@ -40,7 +40,7 @@ class ConstantsValueTest {
         val rule: Rule = Rule("true", java.util.List.of(assignAction), "test_program_rule1", "")
         val constantsValueMap: MutableMap<String, String> = HashMap()
         constantsValueMap["A1234567890"] = "3.14"
-        val ruleEngineBuilder = getRuleEngine(java.util.List.of(rule), constantsValueMap)
+        val ruleEngine = getRuleEngine(listOf(rule), constantsValueMap)
         val enrollment = RuleEnrollment.builder()
             .enrollment("test_enrollment")
             .programName("test_program")
@@ -51,7 +51,6 @@ class ConstantsValueTest {
             .organisationUnitCode("test_ou_code")
             .attributeValues(java.util.List.of(RuleAttributeValue.create("test_attribute", "test_value")))
             .build()
-        val ruleEngine = ruleEngineBuilder.build()
         val ruleEffects = ruleEngine.evaluate(enrollment).call()
         assertEquals(1, ruleEffects.size)
         assertEquals("3.14", ruleEffects[0].data())
@@ -65,7 +64,7 @@ class ConstantsValueTest {
             RuleActionMessage.create(null, "#{test_attribute}", "", RuleActionMessage.Type.SHOW_ERROR)
         val rule: Rule = Rule("true", java.util.List.of(assignAction), "test_program_rule1", "")
         val rule2: Rule = Rule("#{test_attribute} > 3", java.util.List.of(action), "test_program_rule2", "")
-        val ruleEngineBuilder = getRuleEngine(
+        val ruleEngine = getRuleEngine(
             java.util.List.of(rule, rule2),
             HashMap()
         )
@@ -79,7 +78,6 @@ class ConstantsValueTest {
             .organisationUnitCode("test_ou_code")
             .attributeValues(java.util.List.of(RuleAttributeValue.create("test_attribute", "test_value")))
             .build()
-        val ruleEngine = ruleEngineBuilder.build()
         val ruleEffects = ruleEngine.evaluate(enrollment).call()
         assertEquals(2, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data())
@@ -95,8 +93,8 @@ class ConstantsValueTest {
             RuleActionMessage.create(null, "#{test_attribute}", "", RuleActionMessage.Type.SHOW_ERROR)
         val rule: Rule = Rule("true", java.util.List.of(assignAction), "test_program_rule1", "")
         val rule2: Rule = Rule("#{test_attribute} > 3", java.util.List.of(action), "test_program_rule2", "")
-        val ruleEngineBuilder = getRuleEngine(
-            java.util.List.of(rule, rule2),
+        val ruleEngine = getRuleEngine(
+            listOf(rule, rule2),
             HashMap()
         )
         val enrollment = RuleEnrollment.builder()
@@ -109,7 +107,6 @@ class ConstantsValueTest {
             .organisationUnitCode("test_ou_code")
             .attributeValues(java.util.List.of(RuleAttributeValue.create("test_attribute", "test_value")))
             .build()
-        val ruleEngine = ruleEngineBuilder.build()
         val ruleEffects = ruleEngine.evaluate(enrollment).call()
         assertEquals(1, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data())
@@ -122,7 +119,7 @@ class ConstantsValueTest {
         val rule: Rule = Rule("true", java.util.List.of(assignAction), "test_program_rule1", "")
         val constantsValueMap: MutableMap<String, String> = HashMap()
         constantsValueMap["A1234567890"] = "3.14"
-        val ruleEngineBuilder = getRuleEngine(java.util.List.of(rule), constantsValueMap)
+        val ruleEngine = getRuleEngine(listOf(rule), constantsValueMap)
         val ruleEvent = RuleEvent(event ="test_event", programStage = "test_program_stage", programStageName = "",
             status = RuleEvent.Status.ACTIVE, eventDate = Date(), dueDate = Date(), organisationUnit = "", organisationUnitCode = "", completedDate = Date(), dataValues =
             listOf(
@@ -131,7 +128,6 @@ class ConstantsValueTest {
                     )
                 )
             )
-        val ruleEngine = ruleEngineBuilder.build()
         val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
         assertEquals(1, ruleEffects.size)
         assertEquals("3.14", ruleEffects[0].data())
@@ -141,13 +137,7 @@ class ConstantsValueTest {
     private fun getRuleEngine(
         rules: List<Rule>,
         constantsValueMap: Map<String, String>
-    ): RuleEngine.Builder {
-        return RuleEngineContext
-            .builder()
-            .rules(rules)
-            .ruleVariables(ArrayList())
-            .supplementaryData(HashMap())
-            .constantsValue(constantsValueMap)
-            .build().toEngineBuilder().triggerEnvironment(TriggerEnvironment.SERVER)
+    ): RuleEngine {
+        return RuleEngine(RuleEngineContext(rules, emptyList(), emptyMap(), constantsValueMap), emptyList(), null, TriggerEnvironment.SERVER)
     }
 }

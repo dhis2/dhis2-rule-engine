@@ -16,36 +16,8 @@ import kotlin.test.assertTrue
 
 internal class RuleEngineTest {
 
-    private var ruleEngineContext: RuleEngineContext = RuleEngineContext.builder()
-    .ruleVariables(listOf(MockRuleVariable()))
-    .rules(listOf(Rule("true", listOf())))
-    .build()
-
-    @Test
-    fun builderShouldPropagateImmutableEventsList() {
-        val ruleEventOne = mockk<RuleEvent>()
-        val ruleEventTwo = mockk<RuleEvent>()
-        val ruleEvents: MutableList<RuleEvent> = ArrayList()
-        ruleEvents.add(ruleEventOne)
-        val engine: RuleEngine = ruleEngineContext.toEngineBuilder()
-                .events(ruleEvents)
-                .build()
-        ruleEvents.add(ruleEventTwo)
-        assertEquals(1, engine.events.size)
-        assertEquals(ruleEventOne, engine.events[0])
-    }
-
-    @Test
-    fun builderShouldPropagateImmutableEmptyListIfNoEventsProvided() {
-        val engine: RuleEngine = ruleEngineContext.toEngineBuilder().build()
-        assertEquals(0, engine.events.size)
-    }
-
-    @Test
-    fun builderShouldPropagateRuleEngineContext() {
-        val (executionContext) = ruleEngineContext.toEngineBuilder().build()
-        assertEquals(ruleEngineContext, executionContext)
-    }
+    private val ruleEngineContext: RuleEngineContext = RuleEngineContext(
+        listOf(Rule("true", listOf())),listOf(MockRuleVariable()))
 
     @Test(expected = IllegalStateException::class)
     fun evaluateShouldThrowIfEventIsAlreadyInContext() {
@@ -53,18 +25,14 @@ internal class RuleEngineTest {
                 RuleEvent.Status.ACTIVE, Date(), Date(), null,"", null, ArrayList())
         val ruleEvents: MutableList<RuleEvent> = ArrayList()
         ruleEvents.add(ruleEvent)
-        val ruleEngine = ruleEngineContext.toEngineBuilder()
-                .events(ruleEvents)
-                .build()
+        val ruleEngine = RuleEngine(ruleEngineContext, ruleEvents)
         ruleEngine.evaluate(ruleEvent)
     }
 
     @Test
     @Throws(InterruptedException::class)
     fun concurrentIterationOverRulesListShouldNotFail() {
-        val (executionContext) = RuleEngineContext.builder()
-                .rules(listOf(mockk<Rule>(), mockk<Rule>()))
-                .build().toEngineBuilder().build()
+        val executionContext = RuleEngineContext(listOf(mockk<Rule>(), mockk<Rule>()), emptyList())
         val threadOneLatch = CountDownLatch(1)
         val threadTwoLatch = CountDownLatch(1)
         object : Thread() {

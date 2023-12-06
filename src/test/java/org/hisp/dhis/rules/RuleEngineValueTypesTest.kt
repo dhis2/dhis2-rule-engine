@@ -61,13 +61,6 @@ class RuleEngineValueTypesTest {
     }
 
     private fun getRuleEngine(rule: Rule, ruleVariables: List<RuleVariable>): RuleEngine {
-        return RuleEngineContext
-            .builder()
-            .rules(listOf(rule))
-            .ruleVariables(ruleVariables)
-            .supplementaryData(HashMap())
-            .constantsValue(HashMap())
-            .build().toEngineBuilder().triggerEnvironment(TriggerEnvironment.SERVER)
-            .build()
+        return RuleEngine(RuleEngineContext(listOf(rule), ruleVariables))
     }
 }

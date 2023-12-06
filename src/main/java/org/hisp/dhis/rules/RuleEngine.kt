@@ -9,10 +9,10 @@ import java.util.*
 import java.util.concurrent.Callable
 
 data class RuleEngine(
-        val executionContext: RuleEngineContext,
-        val events: List<RuleEvent>,
-        val enrollment: RuleEnrollment?,
-        val triggerEnvironment: TriggerEnvironment?) {
+    val executionContext: RuleEngineContext,
+    val events: List<RuleEvent> = emptyList(),
+    val enrollment: RuleEnrollment? = null,
+    val triggerEnvironment: TriggerEnvironment? = TriggerEnvironment.SERVER) {
 
     @Deprecated("use kotlin property")
     fun executionContext(): RuleEngineContext {

@@ -37,7 +37,7 @@ class CalculatedValueTest {
     @Test
     fun evaluateTenThousandRulesTest() {
         val i = 10000
-        val ruleEngineBuilder = getRuleEngine(createRules(i))
+        val ruleEngine = getRuleEngine(createRules(i))
         val enrollment = RuleEnrollment.builder()
             .enrollment("test_enrollment")
             .programName("test_program")
@@ -57,8 +57,7 @@ class CalculatedValueTest {
                 )
             )
         )
-        val ruleEngine = ruleEngineBuilder.enrollment(enrollment).build()
-        val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
+        val ruleEffects = ruleEngine.copy(enrollment = enrollment).evaluate(ruleEvent).call()
         assertEquals(i, ruleEffects.size)
     }
 
@@ -87,7 +86,7 @@ class CalculatedValueTest {
                 )
             )
         )
-        val ruleEngine = getRuleEngine(java.util.List.of(rule, rule2)).enrollment(enrollment).build()
+        val ruleEngine = getRuleEngine(java.util.List.of(rule, rule2)).copy(enrollment = enrollment)
         val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
         assertEquals("4", ruleEffects[0].data())
         assertEquals(sendMessageAction, ruleEffects[0].ruleAction())
@@ -114,7 +113,7 @@ class CalculatedValueTest {
         val rule2 = Rule("#{test_calculated_value}==4.0", listOf(sendMessageAction),
                 "test_program_rule2", ""
             )
-        val ruleEngineBuilder = getRuleEngine(java.util.List.of(rule, rule2))
+        val ruleEngine = getRuleEngine(java.util.List.of(rule, rule2))
         val enrollment = RuleEnrollment.builder()
             .enrollment("test_enrollment")
             .programName("test_program")
@@ -134,22 +133,15 @@ class CalculatedValueTest {
                 )
             )
         )
-        val ruleEngine = ruleEngineBuilder.enrollment(enrollment).build()
-        val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
+        val ruleEffects = ruleEngine.copy(enrollment = enrollment).evaluate(ruleEvent).call()
         assertEquals(1, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data())
         assertEquals(sendMessageAction, ruleEffects[0].ruleAction())
     }
 
-    private fun getRuleEngine(rules: List<Rule>): RuleEngine.Builder {
+    private fun getRuleEngine(rules: List<Rule>): RuleEngine {
         val ruleVariable: RuleVariable = RuleVariableCalculatedValue
             .create("test_calculated_value", "", RuleValueType.TEXT, true, ArrayList())
-        return RuleEngineContext
-            .builder()
-            .rules(rules)
-            .ruleVariables(java.util.List.of(ruleVariable))
-            .supplementaryData(HashMap())
-            .constantsValue(HashMap())
-            .build().toEngineBuilder().triggerEnvironment(TriggerEnvironment.SERVER)
+        return RuleEngine(RuleEngineContext(rules, listOf(ruleVariable)))
     }
 }
