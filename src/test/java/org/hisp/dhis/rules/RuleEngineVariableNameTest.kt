@@ -75,9 +75,9 @@ class RuleEngineVariableNameTest {
             rule,
             ruleVariables
         )
-        val ruleEvent = RuleEvent.create(
-            "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent = RuleEvent(
+            "test_event", "test_program_stage", "",
+            RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element1", "2.6"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element2", "2.6"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element3", "2.6"),
@@ -88,10 +88,10 @@ class RuleEngineVariableNameTest {
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element8", "2.6"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element9", "2.6"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element10", "2.6")
-            ), "", null
+            )
         )
         val ruleEffects = ruleEngineBuilder.build().evaluate(ruleEvent).call()
-        assertEquals(10, ruleEffects.size.toLong())
+        assertEquals(10, ruleEffects.size)
         assertEquals(ruleAction1, ruleEffects[0].ruleAction())
         assertEquals("3", ruleEffects[0].data())
         assertEquals(ruleAction2, ruleEffects[1].ruleAction())
@@ -124,16 +124,16 @@ class RuleEngineVariableNameTest {
         )
         val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
         val ruleEngine = getRuleEngine(rule, java.util.List.of(ruleVariable))
-        val ruleEvent = RuleEvent.create(
-            "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent = RuleEvent(
+            "test_event", "test_program_stage", "",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(
                     Date(), "test_program_stage", "test_data_element", "test_value"
                 )
-            ), "", null
+            )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals("true", ruleEffects[0].data())
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
     }
@@ -148,16 +148,16 @@ class RuleEngineVariableNameTest {
         )
         val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
         val ruleEngine = getRuleEngine(rule, java.util.List.of(ruleVariable))
-        val ruleEvent = RuleEvent.create(
-            "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent = RuleEvent(
+            "test_event", "test_program_stage","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(
                     Date(), "test_program_stage", "test_data_element", "test_value"
                 )
-            ), "", null
+            )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals("true", ruleEffects[0].data())
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
     }
@@ -172,27 +172,27 @@ class RuleEngineVariableNameTest {
         )
         val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
         val ruleEngineBuilder = getRuleEngineBuilder(rule, java.util.List.of(ruleVariableOne))
-        val ruleEvent = RuleEvent.create(
-            "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent = RuleEvent(
+            "test_event", "test_program_stage","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
-            ), "", null
+            )
         )
-        val ruleEvent2 = RuleEvent.create(
-            "test_event2", "test_program_stage2",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent2 = RuleEvent(
+            "test_event2", "test_program_stage2","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition2")
-            ), "", null
+            )
         )
-        val ruleEvent3 = RuleEvent.create(
-            "test_event3", "test_program_stage3",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent3 = RuleEvent(
+            "test_event3", "test_program_stage3","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
-            ), "", null
+            )
         )
         ruleEngineBuilder.events(java.util.List.of(ruleEvent2, ruleEvent3))
         val ruleEffects = ruleEngineBuilder.build().evaluate(ruleEvent).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
         assertEquals("2", ruleEffects[0].data())
     }
@@ -207,27 +207,27 @@ class RuleEngineVariableNameTest {
         )
         val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
         val ruleEngineBuilder = getRuleEngineBuilder(rule, java.util.List.of(ruleVariableOne))
-        val ruleEvent = RuleEvent.create(
-            "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent = RuleEvent(
+            "test_event", "test_program_stage","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
-            ), "", null
+            )
         )
-        val ruleEvent2 = RuleEvent.create(
-            "test_event2", "test_program_stage2",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent2 = RuleEvent(
+            "test_event2", "test_program_stage2","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition2")
-            ), "", null
+            )
         )
-        val ruleEvent3 = RuleEvent.create(
-            "test_event3", "test_program_stage3",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent3 = RuleEvent(
+            "test_event3", "test_program_stage3","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
-            ), "", null
+            )
         )
         ruleEngineBuilder.events(java.util.List.of(ruleEvent2, ruleEvent3))
         val ruleEffects = ruleEngineBuilder.build().evaluate(ruleEvent).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
         assertEquals("2", ruleEffects[0].data())
     }
@@ -245,33 +245,33 @@ class RuleEngineVariableNameTest {
         )
         val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
         val ruleEngineBuilder = getRuleEngineBuilder(rule, java.util.List.of(ruleVariableOne))
-        val ruleEvent = RuleEvent.create(
-            "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent = RuleEvent(
+            "test_event", "test_program_stage","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
-            ), "", null
+            )
         )
-        val ruleEvent2 = RuleEvent.create(
-            "test_event2", "test_program_stage2",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent2 = RuleEvent(
+            "test_event2", "test_program_stage2","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition2")
-            ), "", null
+            )
         )
-        val ruleEvent3 = RuleEvent.create(
-            "test_event3", "test_program_stage3",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent3 = RuleEvent(
+            "test_event3", "test_program_stage3","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
-            ), "", null
+            )
         )
-        val ruleEvent4 = RuleEvent.create(
-            "test_event3", "test_program_stage3",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent4 = RuleEvent(
+            "test_event3", "test_program_stage3","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "condition")
-            ), "", null
+            )
         )
         ruleEngineBuilder.events(java.util.List.of(ruleEvent2, ruleEvent3, ruleEvent4))
         val ruleEffects = ruleEngineBuilder.build().evaluate(ruleEvent).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
         assertEquals("3", ruleEffects[0].data())
     }
@@ -289,33 +289,33 @@ class RuleEngineVariableNameTest {
         )
         val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
         val ruleEngineBuilder = getRuleEngineBuilder(rule, java.util.List.of(ruleVariableOne))
-        val ruleEvent = RuleEvent.create(
-            "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent = RuleEvent(
+            "test_event", "test_program_stage","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
-            ), "", null
+            )
         )
-        val ruleEvent2 = RuleEvent.create(
-            "test_event2", "test_program_stage2",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent2 = RuleEvent(
+            "test_event2", "test_program_stage2","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition2")
-            ), "", null
+            )
         )
-        val ruleEvent3 = RuleEvent.create(
-            "test_event3", "test_program_stage3",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent3 = RuleEvent(
+            "test_event3", "test_program_stage3","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
-            ), "", null
+            )
         )
-        val ruleEvent4 = RuleEvent.create(
-            "test_event3", "test_program_stage3",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent4 = RuleEvent(
+            "test_event3", "test_program_stage3","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "condition")
-            ), "", null
+            )
         )
         ruleEngineBuilder.events(java.util.List.of(ruleEvent2, ruleEvent3, ruleEvent4))
         val ruleEffects = ruleEngineBuilder.build().evaluate(ruleEvent).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
         assertEquals("3", ruleEffects[0].data())
     }
@@ -330,27 +330,27 @@ class RuleEngineVariableNameTest {
         )
         val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
         val ruleEngineBuilder = getRuleEngineBuilder(rule, java.util.List.of(ruleVariableOne))
-        val ruleEvent = RuleEvent.create(
-            "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent = RuleEvent(
+            "test_event", "test_program_stage","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "0")
-            ), "", null
+            )
         )
-        val ruleEvent1 = RuleEvent.create(
-            "test_event1", "test_program_stage",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent1 = RuleEvent(
+            "test_event1", "test_program_stage","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "1")
-            ), "", null
+            )
         )
-        val ruleEvent2 = RuleEvent.create(
-            "test_event1", "test_program_stage",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent2 = RuleEvent(
+            "test_event1", "test_program_stage","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "-3")
-            ), "", null
+            )
         )
         val ruleEffects = ruleEngineBuilder.events(java.util.List.of(ruleEvent1, ruleEvent2)).build()
             .evaluate(ruleEvent).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
         assertEquals("2", ruleEffects[0].data())
     }
@@ -365,27 +365,27 @@ class RuleEngineVariableNameTest {
         )
         val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
         val ruleEngineBuilder = getRuleEngineBuilder(rule, java.util.List.of(ruleVariableOne))
-        val ruleEvent = RuleEvent.create(
-            "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent = RuleEvent(
+            "test_event", "test_program_stage","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "0")
-            ), "", null
+            )
         )
-        val ruleEvent1 = RuleEvent.create(
-            "test_event1", "test_program_stage",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent1 = RuleEvent(
+            "test_event1", "test_program_stage","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "1")
-            ), "", null
+            )
         )
-        val ruleEvent2 = RuleEvent.create(
-            "test_event1", "test_program_stage",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent2 = RuleEvent(
+            "test_event1", "test_program_stage","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "-3")
-            ), "", null
+            )
         )
         val ruleEffects = ruleEngineBuilder.events(java.util.List.of(ruleEvent1, ruleEvent2)).build()
             .evaluate(ruleEvent).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
         assertEquals("2", ruleEffects[0].data())
     }
@@ -406,30 +406,30 @@ class RuleEngineVariableNameTest {
             rule,
             java.util.List.of(ruleVariableOne, ruleVariableTwo)
         )
-        val ruleEvent1 = RuleEvent.create(
-            "test_event1", "test_program_stage1",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent1 = RuleEvent(
+            "test_event1", "test_program_stage1","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "5"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
-            ), "", null
+            )
         )
-        val ruleEvent2 = RuleEvent.create(
-            "test_event2", "test_program_stage2",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent2 = RuleEvent(
+            "test_event2", "test_program_stage2","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "7"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
-            ), "", null
+            )
         )
-        val ruleEvent3 = RuleEvent.create(
-            "test_event3", "test_program_stage3",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent3 = RuleEvent(
+            "test_event3", "test_program_stage3","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "8"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
-            ), "", null
+            )
         )
         val ruleEffects = ruleEngineBuilder.events(java.util.List.of(ruleEvent1, ruleEvent2)).build()
             .evaluate(ruleEvent3).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
     }
 
@@ -449,30 +449,30 @@ class RuleEngineVariableNameTest {
             rule,
             java.util.List.of(ruleVariableOne, ruleVariableTwo)
         )
-        val ruleEvent1 = RuleEvent.create(
-            "test_event1", "test_program_stage1",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent1 = RuleEvent(
+            "test_event1", "test_program_stage1","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "5"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
-            ), "", null
+            )
         )
-        val ruleEvent2 = RuleEvent.create(
-            "test_event2", "test_program_stage2",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent2 = RuleEvent(
+            "test_event2", "test_program_stage2","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "7"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
-            ), "", null
+            )
         )
-        val ruleEvent3 = RuleEvent.create(
-            "test_event3", "test_program_stage3",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent3 = RuleEvent(
+            "test_event3", "test_program_stage3","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "8"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
-            ), "", null
+            )
         )
         val ruleEffects = ruleEngineBuilder.events(java.util.List.of(ruleEvent1, ruleEvent2)).build()
             .evaluate(ruleEvent3).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
     }
 
@@ -492,30 +492,30 @@ class RuleEngineVariableNameTest {
             rule,
             java.util.List.of(ruleVariableOne, ruleVariableTwo)
         )
-        val ruleEvent1 = RuleEvent.create(
-            "test_event1", "test_program_stage1",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent1 = RuleEvent(
+            "test_event1", "test_program_stage1","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "5"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
-            ), "", null
+            )
         )
-        val ruleEvent2 = RuleEvent.create(
-            "test_event2", "test_program_stage2",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent2 = RuleEvent(
+            "test_event2", "test_program_stage2","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "7"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
-            ), "", null
+            )
         )
-        val ruleEvent3 = RuleEvent.create(
-            "test_event3", "test_program_stage3",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent3 = RuleEvent(
+            "test_event3", "test_program_stage3","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "8"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
-            ), "", null
+            )
         )
         val ruleEffects = ruleEngineBuilder.events(java.util.List.of(ruleEvent1, ruleEvent2)).build()
             .evaluate(ruleEvent3).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
         assertEquals("5", ruleEffects[0].data())
     }
@@ -536,30 +536,30 @@ class RuleEngineVariableNameTest {
             rule,
             java.util.List.of(ruleVariableOne, ruleVariableTwo)
         )
-        val ruleEvent1 = RuleEvent.create(
-            "test_event1", "test_program_stage1",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent1 = RuleEvent(
+            "test_event1", "test_program_stage1","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "5"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
-            ), "", null
+            )
         )
-        val ruleEvent2 = RuleEvent.create(
-            "test_event2", "test_program_stage2",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent2 = RuleEvent(
+            "test_event2", "test_program_stage2","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "7"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
-            ), "", null
+            )
         )
-        val ruleEvent3 = RuleEvent.create(
-            "test_event3", "test_program_stage3",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, java.util.List.of(
+        val ruleEvent3 = RuleEvent(
+            "test_event3", "test_program_stage3","",
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "8"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
-            ), "", null
+            )
         )
         val ruleEffects = ruleEngineBuilder.events(java.util.List.of(ruleEvent1, ruleEvent2)).build()
             .evaluate(ruleEvent3).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
         assertEquals("5", ruleEffects[0].data())
     }

@@ -239,7 +239,7 @@ public final class RuleVariableValueMapBuilder
         }
 
         // sort list of events by eventDate:
-        events.sort(RuleEvent.EVENT_DATE_COMPARATOR);
+        events.sort(RuleEvent.Companion.getEVENT_DATE_COMPARATOR());
 
         // aggregating values by data element uid
         for ( int i = 0; i < events.size(); i++ )

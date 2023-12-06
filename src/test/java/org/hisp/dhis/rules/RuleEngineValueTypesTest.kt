@@ -14,12 +14,11 @@ class RuleEngineValueTypesTest {
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent
             .create("test_variable", "test_data_element", RuleValueType.BOOLEAN, true, ArrayList())
         val ruleEngine = getRuleEngine(rule, java.util.List.of(ruleVariable))
-        val ruleEvent = RuleEvent.create(
-            "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, ArrayList(), "", null
-        )
+        val ruleEvent = RuleEvent(
+            "test_event", "test_program_stage", "",
+            RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null, ArrayList())
         val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals("false", ruleEffects[0].data())
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
     }
@@ -33,12 +32,11 @@ class RuleEngineValueTypesTest {
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent
             .create("test_variable", "test_data_element", RuleValueType.NUMERIC, true, ArrayList())
         val ruleEngine = getRuleEngine(rule, java.util.List.of(ruleVariable))
-        val ruleEvent = RuleEvent.create(
-            "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, ArrayList(), "", null
-        )
+        val ruleEvent = RuleEvent(
+            "test_event", "test_program_stage", "",
+            RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null, ArrayList())
         val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals("0", ruleEffects[0].data())
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
     }
@@ -52,12 +50,12 @@ class RuleEngineValueTypesTest {
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent
             .create("test_variable", "test_data_element", RuleValueType.TEXT, true, ArrayList())
         val ruleEngine = getRuleEngine(rule, java.util.List.of(ruleVariable))
-        val ruleEvent = RuleEvent.create(
-            "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null, ArrayList(), "", null
+        val ruleEvent = RuleEvent(
+            "test_event", "test_program_stage","",
+            RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null, ArrayList()
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals("", ruleEffects[0].data())
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
     }

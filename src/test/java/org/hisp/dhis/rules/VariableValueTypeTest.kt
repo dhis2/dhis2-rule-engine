@@ -43,16 +43,16 @@ class VariableValueTypeTest {
         val ruleVariable2: RuleVariable = RuleVariableCurrentEvent
             .create("test_variable2", "test_data_element2", RuleValueType.NUMERIC, true, ArrayList())
         val ruleEngine = getRuleEngine(rule, java.util.List.of(ruleVariable, ruleVariable2))
-        val ruleEvent = RuleEvent.create(
-            "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null,
+        val ruleEvent = RuleEvent(
+            "test_event", "test_program_stage", "",
+            RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null,
             java.util.List.of(
                 RuleDataValue.create(Date(), "", "test_data_element", "30"),
                 RuleDataValue.create(Date(), "", "test_data_element2", "4")
-            ), "", null
+            )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals("30", ruleEffects[0].data())
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
     }
@@ -67,16 +67,16 @@ class VariableValueTypeTest {
         val ruleVariable2: RuleVariable = RuleVariableCurrentEvent
             .create("test_variable2", "test_data_element2", RuleValueType.TEXT, true, ArrayList())
         val ruleEngine = getRuleEngine(rule, java.util.List.of(ruleVariable, ruleVariable2))
-        val ruleEvent = RuleEvent.create(
-            "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, Date(), Date(), "", null,
+        val ruleEvent = RuleEvent(
+            "test_event", "test_program_stage", "",
+            RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null,
             listOf(
                 RuleDataValue.create(Date(), "", "test_data_element", "30"),
                 RuleDataValue.create(Date(), "", "test_data_element2", "4")
-            ), "", null
+            )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
-        assertEquals(0, ruleEffects.size.toLong())
+        assertEquals(0, ruleEffects.size)
     }
 
     private fun getRuleEngine(rule: Rule, ruleVariables: List<RuleVariable>): RuleEngine {

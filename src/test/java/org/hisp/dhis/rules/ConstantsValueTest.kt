@@ -1,7 +1,6 @@
 package org.hisp.dhis.rules
 
 import org.hisp.dhis.rules.models.*
-import org.hisp.dhis.rules.util.MockRuleVariable
 import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -54,13 +53,12 @@ class ConstantsValueTest {
             .build()
         val ruleEngine = ruleEngineBuilder.build()
         val ruleEffects = ruleEngine.evaluate(enrollment).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals("3.14", ruleEffects[0].data())
         assertEquals(assignAction, ruleEffects[0].ruleAction())
     }
 
     @Test
-    @Throws(Exception::class)
     fun assignValue() {
         val assignAction: RuleAction = RuleActionAssign.create(null, "4", "test_attribute")
         val action: RuleAction =
@@ -83,7 +81,7 @@ class ConstantsValueTest {
             .build()
         val ruleEngine = ruleEngineBuilder.build()
         val ruleEffects = ruleEngine.evaluate(enrollment).call()
-        assertEquals(2, ruleEffects.size.toLong())
+        assertEquals(2, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data())
         assertEquals(assignAction, ruleEffects[0].ruleAction())
         assertEquals("4", ruleEffects[1].data())
@@ -91,7 +89,6 @@ class ConstantsValueTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun assignValueThroughVariable() {
         val assignAction: RuleAction = RuleActionAssign.create("#{test_attribute}", "4", null)
         val action: RuleAction =
@@ -114,40 +111,29 @@ class ConstantsValueTest {
             .build()
         val ruleEngine = ruleEngineBuilder.build()
         val ruleEffects = ruleEngine.evaluate(enrollment).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data())
         assertEquals(action, ruleEffects[0].ruleAction())
     }
 
     @Test
-    @Throws(Exception::class)
     fun assignConstantValueFromAssignActionInEvent() {
         val assignAction: RuleAction = RuleActionAssign.create(null, "C{A1234567890}", "#{test_data_element}")
         val rule: Rule = Rule("true", java.util.List.of(assignAction), "test_program_rule1", "")
         val constantsValueMap: MutableMap<String, String> = HashMap()
         constantsValueMap["A1234567890"] = "3.14"
         val ruleEngineBuilder = getRuleEngine(java.util.List.of(rule), constantsValueMap)
-        val ruleEvent = RuleEvent.builder()
-            .event("test_event")
-            .programStage("test_program_stage")
-            .programStageName("")
-            .status(RuleEvent.Status.ACTIVE)
-            .eventDate(Date())
-            .dueDate(Date())
-            .organisationUnit("")
-            .organisationUnitCode("")
-            .completedDate(Date())
-            .dataValues(
-                java.util.List.of(
+        val ruleEvent = RuleEvent(event ="test_event", programStage = "test_program_stage", programStageName = "",
+            status = RuleEvent.Status.ACTIVE, eventDate = Date(), dueDate = Date(), organisationUnit = "", organisationUnitCode = "", completedDate = Date(), dataValues =
+            listOf(
                     RuleDataValue.create(
                         Date(), "test_program_stage", "test_data_element", "test_value"
                     )
                 )
             )
-            .build()
         val ruleEngine = ruleEngineBuilder.build()
         val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals("3.14", ruleEffects[0].data())
         assertEquals(assignAction, ruleEffects[0].ruleAction())
     }

@@ -48,26 +48,18 @@ class CalculatedValueTest {
             .organisationUnitCode("test_ou_code")
             .attributeValues(listOf())
             .build()
-        val ruleEvent = RuleEvent.builder()
-            .event("test_event")
-            .programStage("test_program_stage")
-            .programStageName("")
-            .status(RuleEvent.Status.ACTIVE)
-            .eventDate(Date())
-            .dueDate(Date())
-            .organisationUnit("")
-            .organisationUnitCode("")
-            .dataValues(
-                java.util.List.of(
-                    RuleDataValue.create(
-                        Date(), "test_program_stage", "test_data_element", "test_value"
-                    )
+        val ruleEvent = RuleEvent(event = "test_event", programStage = "test_program_stage",
+            programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = Date(), dueDate = Date(),
+            organisationUnit = "", organisationUnitCode = "", completedDate = null,
+            dataValues = java.util.List.of(
+                RuleDataValue.create(
+                    Date(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
-            .build()
+        )
         val ruleEngine = ruleEngineBuilder.enrollment(enrollment).build()
         val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
-        assertEquals(i.toLong(), ruleEffects.size.toLong())
+        assertEquals(i, ruleEffects.size)
     }
 
     @Test
@@ -86,23 +78,15 @@ class CalculatedValueTest {
             .organisationUnitCode("test_ou_code")
             .attributeValues(listOf())
             .build()
-        val ruleEvent = RuleEvent.builder()
-            .event("test_event")
-            .programStage("test_program_stage")
-            .programStageName("")
-            .status(RuleEvent.Status.ACTIVE)
-            .eventDate(Date())
-            .dueDate(Date())
-            .organisationUnit("")
-            .organisationUnitCode("")
-            .dataValues(
-                java.util.List.of(
-                    RuleDataValue.create(
-                        Date(), "test_program_stage", "test_data_element", "test_value"
-                    )
+        val ruleEvent = RuleEvent(event = "test_event", programStage = "test_program_stage",
+            programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = Date(), dueDate = Date(),
+            organisationUnit = "", organisationUnitCode = "", completedDate = null,
+            dataValues = java.util.List.of(
+                RuleDataValue.create(
+                    Date(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
-            .build()
+        )
         val ruleEngine = getRuleEngine(java.util.List.of(rule, rule2)).enrollment(enrollment).build()
         val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
         assertEquals("4", ruleEffects[0].data())
@@ -141,26 +125,18 @@ class CalculatedValueTest {
             .organisationUnitCode("test_ou_code")
             .attributeValues(listOf())
             .build()
-        val ruleEvent = RuleEvent.builder()
-            .event("test_event")
-            .programStage("test_program_stage")
-            .programStageName("")
-            .status(RuleEvent.Status.ACTIVE)
-            .eventDate(Date())
-            .dueDate(Date())
-            .organisationUnit("")
-            .organisationUnitCode("")
-            .dataValues(
-                java.util.List.of(
-                    RuleDataValue.create(
-                        Date(), "test_program_stage", "test_data_element", "test_value"
-                    )
+        val ruleEvent = RuleEvent(event = "test_event", programStage = "test_program_stage",
+            programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = Date(), dueDate = Date(),
+            organisationUnit = "", organisationUnitCode = "", completedDate = null,
+            dataValues = java.util.List.of(
+                RuleDataValue.create(
+                    Date(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
-            .build()
+        )
         val ruleEngine = ruleEngineBuilder.enrollment(enrollment).build()
         val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
-        assertEquals(1, ruleEffects.size.toLong())
+        assertEquals(1, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data())
         assertEquals(sendMessageAction, ruleEffects[0].ruleAction())
     }

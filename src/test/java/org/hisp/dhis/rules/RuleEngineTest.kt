@@ -23,8 +23,8 @@ internal class RuleEngineTest {
 
     @Test
     fun builderShouldPropagateImmutableEventsList() {
-        val ruleEventOne = RuleEvent.MOCK
-        val ruleEventTwo = RuleEvent.MOCK
+        val ruleEventOne = mockk<RuleEvent>()
+        val ruleEventTwo = mockk<RuleEvent>()
         val ruleEvents: MutableList<RuleEvent> = ArrayList()
         ruleEvents.add(ruleEventOne)
         val engine: RuleEngine = ruleEngineContext.toEngineBuilder()
@@ -49,8 +49,8 @@ internal class RuleEngineTest {
 
     @Test(expected = IllegalStateException::class)
     fun evaluateShouldThrowIfEventIsAlreadyInContext() {
-        val ruleEvent = RuleEvent.create("test_event", "test_programstage",
-                RuleEvent.Status.ACTIVE, Date(), Date(), "", null, ArrayList(), "", null)
+        val ruleEvent = RuleEvent("test_event", "test_programstage","",
+                RuleEvent.Status.ACTIVE, Date(), Date(), null,"", null, ArrayList())
         val ruleEvents: MutableList<RuleEvent> = ArrayList()
         ruleEvents.add(ruleEvent)
         val ruleEngine = ruleEngineContext.toEngineBuilder()
