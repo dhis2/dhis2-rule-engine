@@ -74,15 +74,15 @@ public class RuleEngineGetDescriptionTest
     {
         itemStore = new HashMap<>();
 
-        DataItem var_1 = DataItem.builder().value( test_var_one ).valueType( ItemValueType.TEXT ).build();
-        DataItem var_2 = DataItem.builder().value( test_var_two ).valueType( ItemValueType.TEXT ).build();
-        DataItem var_8 = DataItem.builder().value( test_var_three ).valueType( ItemValueType.TEXT ).build();
-        DataItem var_3 = DataItem.builder().value( test_var_date_one ).valueType( ItemValueType.DATE ).build();
-        DataItem var_4 = DataItem.builder().value( test_var_date_two ).valueType( ItemValueType.DATE ).build();
-        DataItem var_5 = DataItem.builder().value( completionDate ).valueType( ItemValueType.DATE ).build();
-        DataItem var_6 = DataItem.builder().value( constant ).valueType( ItemValueType.TEXT ).build();
-        DataItem var_7 = DataItem.builder().value( currentDate ).valueType( ItemValueType.DATE ).build();
-        DataItem var_9 = DataItem.builder().value( test_var_number ).valueType( ItemValueType.NUMBER ).build();
+        DataItem var_1 = new DataItem( test_var_one, ItemValueType.TEXT);
+        DataItem var_2 = new DataItem( test_var_two, ItemValueType.TEXT );
+        DataItem var_8 = new DataItem( test_var_three, ItemValueType.TEXT );
+        DataItem var_3 = new DataItem( test_var_date_one, ItemValueType.DATE );
+        DataItem var_4 = new DataItem( test_var_date_two, ItemValueType.DATE );
+        DataItem var_5 = new DataItem( completionDate, ItemValueType.DATE );
+        DataItem var_6 = new DataItem( constant, ItemValueType.TEXT );
+        DataItem var_7 = new DataItem( currentDate, ItemValueType.DATE );
+        DataItem var_9 = new DataItem( test_var_number, ItemValueType.NUMBER );
 
         itemStore.put( "test_var_one", var_1 );
         itemStore.put( "test_var_two", var_2 );

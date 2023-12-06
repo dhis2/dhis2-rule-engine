@@ -158,11 +158,11 @@ public class RuleEngineFunctionTest
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                 RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, List.of(RuleDataValue.create(
-                        new Date(), "test_program_stage", "test_data_element", option1.code())), "", null);
+                        new Date(), "test_program_stage", "test_data_element", option1.getCode())), "", null);
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
         assertEquals( 1, ruleEffects.size() );
-        assertEquals( option1.name() , ruleEffects.get( 0 ).data() );
+        assertEquals( option1.getName() , ruleEffects.get( 0 ).data() );
         assertEquals( ruleAction , ruleEffects.get( 0 ).ruleAction() );
     }
 
@@ -185,11 +185,11 @@ public class RuleEngineFunctionTest
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
                 RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, List.of(RuleDataValue.create(
-                        new Date(), "test_program_stage", "test_data_element", option2.code())), "", null);
+                        new Date(), "test_program_stage", "test_data_element", option2.getCode())), "", null);
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
         assertEquals(1, ruleEffects.size() );
-        assertEquals( option2.code() , ruleEffects.get( 0 ).data() );
+        assertEquals( option2.getCode() , ruleEffects.get( 0 ).data() );
         assertEquals( ruleAction , ruleEffects.get( 0 ).ruleAction() );
     }
 

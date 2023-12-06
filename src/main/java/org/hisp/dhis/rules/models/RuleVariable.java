@@ -37,8 +37,8 @@ public interface RuleVariable
             return value;
         }
         return options().stream()
-                .filter( op -> Objects.equals( value, op.code() ) )
-                .map( Option::name)
+                .filter( op -> Objects.equals( value, op.getCode() ) )
+                .map( Option::getName)
                 .findAny()
                 .orElse( value );
     }
