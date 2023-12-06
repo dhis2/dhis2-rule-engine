@@ -21,12 +21,12 @@ class RuleEngineFunctionTest {
         val failingRule: Rule = Rule("d2:daysBetween(V{enrollment_date},V{event_date}) < 0",
                 listOf(ruleAction), "", ""
             )
-        val validRule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
+        val validRule: Rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = RuleEngineTestUtils.getRuleEngine(listOf(failingRule, validRule))
-        val ruleEnrollment = RuleEnrollment.create(
-            "test_enrollment",
-            enrollmentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE, "", "", listOf(),
-            ""
+        val ruleEnrollment = RuleEnrollment(
+            "test_enrollment", "",
+            enrollmentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE,
+            "", "", listOf(),
         )
         val ruleEffects = ruleEngine.evaluate(ruleEnrollment).call()
         assertEquals(1, ruleEffects.size)
@@ -42,12 +42,11 @@ class RuleEngineFunctionTest {
             "test_action_content", "2 + 2"
         )
         val failingRule: Rule = Rule("d2:daysBetween(V{enrollment_date},V{event_date}) < 0",
-                java.util.List.of(ruleAction), "", ""
+                listOf(ruleAction), "", ""
             )
-        val ruleEnrollment = RuleEnrollment.create(
-            "test_enrollment",
-            today, today, RuleEnrollment.Status.ACTIVE, "", null, listOf(),
-            ""
+        val ruleEnrollment = RuleEnrollment(
+            "test_enrollment", "",
+            today, today, RuleEnrollment.Status.ACTIVE, "", "", listOf()
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",

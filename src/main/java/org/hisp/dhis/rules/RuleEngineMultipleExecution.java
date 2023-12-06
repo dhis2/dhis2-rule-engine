@@ -38,9 +38,9 @@ record RuleEngineMultipleExecution(
         {
             RuleEnrollment enrollment = enrollments.getKey();
             List<RuleEffect> enrollmentRuleEffects = ruleConditionEvaluator
-                .getEvaluatedAndErrorRuleEffects( TrackerObjectType.ENROLLMENT, enrollment.enrollment(), enrollments.getValue(),
+                .getEvaluatedAndErrorRuleEffects( TrackerObjectType.ENROLLMENT, enrollment.getEnrollment(), enrollments.getValue(),
                         supplementaryData, filterRules( rules, enrollment) );
-            ruleEffects.add( new RuleEffects( TrackerObjectType.ENROLLMENT, enrollment.enrollment(),
+            ruleEffects.add( new RuleEffects( TrackerObjectType.ENROLLMENT, enrollment.getEnrollment(),
                 enrollmentRuleEffects ) );
         }
 

@@ -38,16 +38,8 @@ class CalculatedValueTest {
     fun evaluateTenThousandRulesTest() {
         val i = 10000
         val ruleEngine = getRuleEngine(createRules(i))
-        val enrollment = RuleEnrollment.builder()
-            .enrollment("test_enrollment")
-            .programName("test_program")
-            .incidentDate(Date())
-            .enrollmentDate(Date())
-            .status(RuleEnrollment.Status.ACTIVE)
-            .organisationUnit("test_ou")
-            .organisationUnitCode("test_ou_code")
-            .attributeValues(listOf())
-            .build()
+        val enrollment = RuleEnrollment("test_enrollment", "test_program", Date(),
+            Date(), RuleEnrollment.Status.ACTIVE, "test_ou", "test_ou_code", listOf())
         val ruleEvent = RuleEvent(event = "test_event", programStage = "test_program_stage",
             programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = Date(), dueDate = Date(),
             organisationUnit = "", organisationUnitCode = "", completedDate = null,
@@ -67,16 +59,8 @@ class CalculatedValueTest {
         val rule = Rule("true", listOf(assignAction), "test_program_rule1")
         val sendMessageAction: RuleAction = RuleActionSendMessage.create("test_notification", "4")
         val rule2 = Rule("#{test_calculated_value}==4", listOf(sendMessageAction), "test_program_rule2")
-        val enrollment = RuleEnrollment.builder()
-            .enrollment("test_enrollment")
-            .programName("test_program")
-            .incidentDate(Date())
-            .enrollmentDate(Date())
-            .status(RuleEnrollment.Status.ACTIVE)
-            .organisationUnit("test_ou")
-            .organisationUnitCode("test_ou_code")
-            .attributeValues(listOf())
-            .build()
+        val enrollment = RuleEnrollment("test_enrollment", "test_program", Date(),
+            Date(), RuleEnrollment.Status.ACTIVE, "test_ou", "test_ou_code", listOf())
         val ruleEvent = RuleEvent(event = "test_event", programStage = "test_program_stage",
             programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = Date(), dueDate = Date(),
             organisationUnit = "", organisationUnitCode = "", completedDate = null,
@@ -114,16 +98,8 @@ class CalculatedValueTest {
                 "test_program_rule2", ""
             )
         val ruleEngine = getRuleEngine(java.util.List.of(rule, rule2))
-        val enrollment = RuleEnrollment.builder()
-            .enrollment("test_enrollment")
-            .programName("test_program")
-            .incidentDate(Date())
-            .enrollmentDate(Date())
-            .status(RuleEnrollment.Status.ACTIVE)
-            .organisationUnit("test_ou")
-            .organisationUnitCode("test_ou_code")
-            .attributeValues(listOf())
-            .build()
+        val enrollment = RuleEnrollment("test_enrollment", "test_program", Date(),
+            Date(), RuleEnrollment.Status.ACTIVE, "test_ou", "test_ou_code", listOf())
         val ruleEvent = RuleEvent(event = "test_event", programStage = "test_program_stage",
             programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = Date(), dueDate = Date(),
             organisationUnit = "", organisationUnitCode = "", completedDate = null,

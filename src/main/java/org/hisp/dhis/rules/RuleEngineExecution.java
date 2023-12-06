@@ -39,7 +39,7 @@ record RuleEngineExecution(
                     supplementaryData, this.rules);
         }
         if (enrollment != null) {
-            return ruleConditionEvaluator.getRuleEffects(TrackerObjectType.ENROLLMENT, enrollment.enrollment(), valueMap,
+            return ruleConditionEvaluator.getRuleEffects(TrackerObjectType.ENROLLMENT, enrollment.getEnrollment(), valueMap,
                     supplementaryData, this.rules);
         }
         throw new IllegalStateException("event and enrollment were null");

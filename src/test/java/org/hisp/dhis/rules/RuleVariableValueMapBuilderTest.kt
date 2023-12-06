@@ -28,13 +28,13 @@ class RuleVariableValueMapBuilderTest {
         val eventDate = dateFormat!!.parse("2015-01-01")
 
         // values from context events should be ignored
-        val ruleEnrollment = RuleEnrollment.create(
-            "test_enrollment",
+        val ruleEnrollment = RuleEnrollment(
+            "test_enrollment", "",
             dateFormat!!.parse("2015-01-01"), dateFormat!!.parse("2015-01-01"),
-            RuleEnrollment.Status.ACTIVE, "", null, List.of(
+            RuleEnrollment.Status.ACTIVE, "", "", List.of(
                 RuleAttributeValue.create("test_attribute_one", "test_attribute_value_one"),
                 RuleAttributeValue.create("test_attribute_two", "test_attribute_value_two")
-            ), ""
+            )
         )
         val contextEventOne = RuleEvent(
             "test_context_event_one", "test_program_stage", "",
@@ -544,12 +544,12 @@ class RuleVariableValueMapBuilderTest {
         val enrollmentDate = dateFormat!!.parse("2014-03-01")
 
         // values from enrollment should end up in ruleVariables
-        val ruleEnrollment = RuleEnrollment.create(
-            "test_enrollment",
-            enrollmentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE, "", null, List.of(
+        val ruleEnrollment = RuleEnrollment(
+            "test_enrollment", "",
+            enrollmentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE, "",  "", List.of(
                 RuleAttributeValue.create("test_attribute_one", "test_attribute_value_one"),
                 RuleAttributeValue.create("test_attribute_two", "test_attribute_value_two")
-            ), ""
+            )
         )
 
         // values from context events should be ignored
@@ -649,13 +649,13 @@ class RuleVariableValueMapBuilderTest {
         val currentDate = dateFormat!!.format(Date())
         val enrollmentDate = dateFormat!!.parse("2017-02-02")
         val incidentDate = dateFormat!!.parse("2017-04-02")
-        val ruleEnrollment = RuleEnrollment.create(
-            "test_enrollment", incidentDate,
-            enrollmentDate, RuleEnrollment.Status.ACTIVE, "", null, List.of(
+        val ruleEnrollment = RuleEnrollment(
+            "test_enrollment",  "", incidentDate,
+            enrollmentDate, RuleEnrollment.Status.ACTIVE, "",  "", List.of(
                 RuleAttributeValue.create("test_attribute_one", "test_attribute_value_one"),
                 RuleAttributeValue.create("test_attribute_two", "test_attribute_value_two"),
                 RuleAttributeValue.create("test_attribute_three", "test_attribute_value_three")
-            ), ""
+            )
         )
         val ruleEventOne = RuleEvent(
             "test_event_one", "test_program_stage", "",
@@ -711,13 +711,13 @@ class RuleVariableValueMapBuilderTest {
         val currentDate = dateFormat!!.format(Date())
         val enrollmentDate = dateFormat!!.parse("2017-02-02")
         val incidentDate = dateFormat!!.parse("2017-04-02")
-        val ruleEnrollment = RuleEnrollment.create(
-            "test_enrollment", incidentDate,
-            enrollmentDate, RuleEnrollment.Status.ACTIVE, "", null, List.of(
+        val ruleEnrollment = RuleEnrollment(
+            "test_enrollment",  "", incidentDate,
+            enrollmentDate, RuleEnrollment.Status.ACTIVE, "", "", List.of(
                 RuleAttributeValue.create("test_attribute_one", "test_attribute_value_one"),
                 RuleAttributeValue.create("test_attribute_two", "test_attribute_value_two"),
                 RuleAttributeValue.create("test_attribute_three", "test_attribute_value_three")
-            ), ""
+            )
         )
         val now = LocalDate.now()
         val eventOneDate = toDate(now.minusDays(1))

@@ -190,16 +190,10 @@ class ProgramRuleVariableTest {
     }
 
     private val enrollment: RuleEnrollment
-        private get() = RuleEnrollment.builder()
-            .enrollment(ENROLLMENT_ID)
-            .programName(PROGRAM_NAME)
-            .incidentDate(INCIDENT_DATE)
-            .enrollmentDate(ENROLLMENT_DATE)
-            .status(RuleEnrollment.Status.ACTIVE)
-            .organisationUnit(ORGANISATION_UNIT)
-            .organisationUnitCode(ORGANISATION_UNIT_CODE)
-            .attributeValues(java.util.List.of(RuleAttributeValue.create("test_attribute", "test_value")))
-            .build()
+        get() = RuleEnrollment( ENROLLMENT_ID, PROGRAM_NAME, INCIDENT_DATE, ENROLLMENT_DATE,
+            RuleEnrollment.Status.ACTIVE, ORGANISATION_UNIT, ORGANISATION_UNIT_CODE,
+            listOf(RuleAttributeValue.create("test_attribute", "test_value"))
+        )
 
     private fun getRuleEngine(rules: List<Rule>): RuleEngine {
         return RuleEngine(RuleEngineContext(rules, listOf(), emptyMap(), emptyMap()),

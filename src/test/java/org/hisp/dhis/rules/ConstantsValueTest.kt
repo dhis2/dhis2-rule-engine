@@ -41,16 +41,11 @@ class ConstantsValueTest {
         val constantsValueMap: MutableMap<String, String> = HashMap()
         constantsValueMap["A1234567890"] = "3.14"
         val ruleEngine = getRuleEngine(listOf(rule), constantsValueMap)
-        val enrollment = RuleEnrollment.builder()
-            .enrollment("test_enrollment")
-            .programName("test_program")
-            .incidentDate(Date())
-            .enrollmentDate(Date())
-            .status(RuleEnrollment.Status.ACTIVE)
-            .organisationUnit("test_ou")
-            .organisationUnitCode("test_ou_code")
-            .attributeValues(java.util.List.of(RuleAttributeValue.create("test_attribute", "test_value")))
-            .build()
+        val enrollment = RuleEnrollment(enrollment= "test_enrollment",
+            programName = "test_program", incidentDate = Date(),
+            enrollmentDate = Date(), status = RuleEnrollment.Status.ACTIVE,
+            organisationUnit = "test_ou", organisationUnitCode = "test_ou_code",
+            attributeValues = listOf(RuleAttributeValue.create("test_attribute", "test_value")))
         val ruleEffects = ruleEngine.evaluate(enrollment).call()
         assertEquals(1, ruleEffects.size)
         assertEquals("3.14", ruleEffects[0].data())
@@ -68,16 +63,11 @@ class ConstantsValueTest {
             java.util.List.of(rule, rule2),
             HashMap()
         )
-        val enrollment = RuleEnrollment.builder()
-            .enrollment("test_enrollment")
-            .programName("test_program")
-            .incidentDate(Date())
-            .enrollmentDate(Date())
-            .status(RuleEnrollment.Status.ACTIVE)
-            .organisationUnit("test_ou")
-            .organisationUnitCode("test_ou_code")
-            .attributeValues(java.util.List.of(RuleAttributeValue.create("test_attribute", "test_value")))
-            .build()
+        val enrollment = RuleEnrollment(enrollment= "test_enrollment",
+            programName = "test_program", incidentDate = Date(),
+            enrollmentDate = Date(), status = RuleEnrollment.Status.ACTIVE,
+            organisationUnit = "test_ou", organisationUnitCode = "test_ou_code",
+            attributeValues = listOf(RuleAttributeValue.create("test_attribute", "test_value")))
         val ruleEffects = ruleEngine.evaluate(enrollment).call()
         assertEquals(2, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data())
@@ -97,16 +87,11 @@ class ConstantsValueTest {
             listOf(rule, rule2),
             HashMap()
         )
-        val enrollment = RuleEnrollment.builder()
-            .enrollment("test_enrollment")
-            .programName("test_program")
-            .incidentDate(Date())
-            .enrollmentDate(Date())
-            .status(RuleEnrollment.Status.ACTIVE)
-            .organisationUnit("test_ou")
-            .organisationUnitCode("test_ou_code")
-            .attributeValues(java.util.List.of(RuleAttributeValue.create("test_attribute", "test_value")))
-            .build()
+        val enrollment = RuleEnrollment(enrollment= "test_enrollment",
+            programName = "test_program", incidentDate = Date(),
+            enrollmentDate = Date(), status = RuleEnrollment.Status.ACTIVE,
+            organisationUnit = "test_ou", organisationUnitCode = "test_ou_code",
+            attributeValues = listOf(RuleAttributeValue.create("test_attribute", "test_value")))
         val ruleEffects = ruleEngine.evaluate(enrollment).call()
         assertEquals(1, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data())

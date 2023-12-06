@@ -217,7 +217,7 @@ public final class RuleVariableValueMapBuilder
         Map<String, RuleAttributeValue> currentEnrollmentValues = new HashMap<>();
         if ( ruleEnrollment != null )
         {
-            List<RuleAttributeValue> ruleAttributeValues = ruleEnrollment.attributeValues();
+            List<RuleAttributeValue> ruleAttributeValues = ruleEnrollment.getAttributeValues();
             for (RuleAttributeValue attributeValue : ruleAttributeValues) {
                 currentEnrollmentValues.put(attributeValue.trackedEntityAttribute(), attributeValue);
             }
@@ -299,32 +299,32 @@ public final class RuleVariableValueMapBuilder
 
         if ( ruleEnrollment != null )
         {
-            valueMap.put( RuleEngineUtils.ENV_VAR_ENROLLMENT_ID, create( ruleEnrollment.enrollment(),
-                RuleValueType.TEXT, List.of(ruleEnrollment.enrollment()), currentDate ) );
+            valueMap.put( RuleEngineUtils.ENV_VAR_ENROLLMENT_ID, create( ruleEnrollment.getEnrollment(),
+                RuleValueType.TEXT, List.of(ruleEnrollment.getEnrollment()), currentDate ) );
             valueMap.put( RuleEngineUtils.ENV_VAR_ENROLLMENT_COUNT, create( "1",
                 RuleValueType.NUMERIC, List.of("1"), currentDate ) );
             valueMap.put( RuleEngineUtils.ENV_VAR_TEI_COUNT, create( "1",
                 RuleValueType.NUMERIC, List.of("1"), currentDate ) );
 
-            String enrollmentDate = dateFormat.format( ruleEnrollment.enrollmentDate() );
+            String enrollmentDate = dateFormat.format( ruleEnrollment.getEnrollmentDate() );
             valueMap.put( RuleEngineUtils.ENV_VAR_ENROLLMENT_DATE, create( enrollmentDate,
                 RuleValueType.TEXT, List.of(enrollmentDate), currentDate ) );
 
-            String incidentDate = dateFormat.format( ruleEnrollment.incidentDate() );
+            String incidentDate = dateFormat.format( ruleEnrollment.getIncidentDate() );
             valueMap.put( RuleEngineUtils.ENV_VAR_INCIDENT_DATE, create( incidentDate,
                 RuleValueType.TEXT, List.of(incidentDate), currentDate ) );
 
-            String status = ruleEnrollment.status().toString();
+            String status = ruleEnrollment.getStatus().toString();
             valueMap.put( RuleEngineUtils.ENV_VAR_ENROLLMENT_STATUS, create( status,
                 RuleValueType.TEXT, List.of(status), currentDate ) );
 
-            String organisationUnit = ruleEnrollment.organisationUnit();
+            String organisationUnit = ruleEnrollment.getOrganisationUnit();
             valueMap.put( RuleEngineUtils.ENV_VAR_OU, create( organisationUnit, RuleValueType.TEXT ) );
 
-            String programName = ruleEnrollment.programName();
+            String programName = ruleEnrollment.getProgramName();
             valueMap.put( RuleEngineUtils.ENV_VAR_PROGRAM_NAME, create( programName, RuleValueType.TEXT ) );
 
-            String organisationUnitCode = ruleEnrollment.organisationUnitCode();
+            String organisationUnitCode = ruleEnrollment.getOrganisationUnitCode();
             valueMap.put( RuleEngineUtils.ENV_VAR_OU_CODE, create( organisationUnitCode, RuleValueType.TEXT ) );
         }
 
