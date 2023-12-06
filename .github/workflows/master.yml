@@ -15,12 +15,7 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
-      - uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+          cache: maven
       - name: Test
         run: mvn clean install -DskipTests=false --update-snapshots -q
 
@@ -36,6 +31,7 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
+          cache: maven
       - name: Remove snapshot
         run: mvn -B versions:set -DremoveSnapshot -DgenerateBackupPoms=false
       - name: Release Maven package
