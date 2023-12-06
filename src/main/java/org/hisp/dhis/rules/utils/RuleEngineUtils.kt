@@ -54,4 +54,27 @@ object RuleEngineUtils {
     const val ENV_VAR_PROGRAM_NAME = "program_name"
     const val ENV_VAR_ENVIRONMENT = "environment"
     const val ENV_VAR_OU_CODE = "orgunit_code"
+
+    // new environment variable must be added in this map
+    val ENV_VARIABLES = Map.ofEntries(
+        Map.entry(ENV_VAR_COMPLETED_DATE, ItemValueType.DATE),
+        Map.entry(ENV_VAR_CURRENT_DATE, ItemValueType.DATE),
+        Map.entry(ENV_VAR_EVENT_DATE, ItemValueType.DATE),
+        Map.entry(ENV_VAR_INCIDENT_DATE, ItemValueType.DATE),
+        Map.entry(ENV_VAR_ENROLLMENT_DATE, ItemValueType.DATE),
+        Map.entry(ENV_VAR_DUE_DATE, ItemValueType.DATE),
+        Map.entry(ENV_VAR_EVENT_COUNT, ItemValueType.NUMBER),
+        Map.entry(ENV_VAR_TEI_COUNT, ItemValueType.NUMBER),
+        Map.entry(ENV_VAR_ENROLLMENT_COUNT, ItemValueType.NUMBER),
+        Map.entry(ENV_VAR_EVENT_ID, ItemValueType.NUMBER),
+        Map.entry(ENV_VAR_PROGRAM_STAGE_ID, ItemValueType.NUMBER),
+        Map.entry(ENV_VAR_ENROLLMENT_ID, ItemValueType.NUMBER),
+        Map.entry(ENV_VAR_ENROLLMENT_STATUS, ItemValueType.TEXT),
+        Map.entry(ENV_VAR_EVENT_STATUS, ItemValueType.TEXT),
+        Map.entry(ENV_VAR_OU, ItemValueType.TEXT),
+        Map.entry(ENV_VAR_OU_CODE, ItemValueType.TEXT),
+        Map.entry(ENV_VAR_ENVIRONMENT, ItemValueType.TEXT),
+        Map.entry(ENV_VAR_PROGRAM_NAME, ItemValueType.TEXT),
+        Map.entry(ENV_VAR_PROGRAM_STAGE_NAME, ItemValueType.TEXT)
+    )
 }
