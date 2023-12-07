@@ -31,14 +31,14 @@ class RuleVariableNewestEvent(
         val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
         val ruleDataValues = allEventValues[dataElement]
         if (ruleDataValues == null || ruleDataValues.isEmpty()) {
-            valueMap[name] = RuleVariableValue.create(dataElementType)
+            valueMap[name] = RuleVariableValue(dataElementType)
         } else {
             val variableValue: RuleVariableValue
             val value = ruleDataValues[0]
             val optionValue = if (useCodeForOptionSet) value.value else getOptionName(value.value)!!
-            variableValue = RuleVariableValue.create(
-                optionValue,
-                dataElementType, values(ruleDataValues), getLastUpdateDate(ruleDataValues)
+            variableValue = RuleVariableValue(
+                dataElementType, optionValue,
+                values(ruleDataValues), getLastUpdateDate(ruleDataValues)
             )
             valueMap[name] = variableValue
         }

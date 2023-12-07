@@ -33,12 +33,12 @@ class RuleVariableCurrentEvent(
         variableValue = if (currentEventValues.containsKey(dataElement)) {
             val value = currentEventValues[dataElement]
             val optionValue = if (useCodeForOptionSet) value!!.value else getOptionName(value!!.value)!!
-            RuleVariableValue.create(
-                optionValue, dataElementType,
+            RuleVariableValue(
+                dataElementType, optionValue,
                 java.util.List.of(optionValue), getLastUpdateDate(java.util.List.of(value))
             )
         } else {
-            RuleVariableValue.create(dataElementType)
+            RuleVariableValue(dataElementType)
         }
         valueMap[name] = variableValue
         return valueMap

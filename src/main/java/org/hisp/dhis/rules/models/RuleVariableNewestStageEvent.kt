@@ -42,14 +42,14 @@ class RuleVariableNewestStageEvent(
             }
         }
         if (stageRuleDataValues.isEmpty()) {
-            valueMap[name] = RuleVariableValue.create(dataElementType)
+            valueMap[name] = RuleVariableValue(dataElementType)
         } else {
             val variableValue: RuleVariableValue
             val value = stageRuleDataValues[0]
             val optionValue = if (useCodeForOptionSet) value.value else getOptionName(value.value)!!
-            variableValue = RuleVariableValue.create(
-                optionValue,
-                dataElementType, values(stageRuleDataValues),
+            variableValue = RuleVariableValue(
+                dataElementType, optionValue,
+                values(stageRuleDataValues),
                 getLastUpdateDate(stageRuleDataValues)
             )
             valueMap[name] = variableValue

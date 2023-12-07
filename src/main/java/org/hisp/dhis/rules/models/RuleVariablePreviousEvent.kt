@@ -38,8 +38,8 @@ class RuleVariablePreviousEvent(
                 if (builder.ruleEvent!!.eventDate().compareTo(ruleDataValue.eventDate) > 0) {
                     val optionValue =
                         if (useCodeForOptionSet) ruleDataValue.value else getOptionName(ruleDataValue.value)!!
-                    variableValue = RuleVariableValue.create(
-                        optionValue, dataElementType,
+                    variableValue = RuleVariableValue(
+                        dataElementType, optionValue,
                         values(ruleDataValues),
                         getLastUpdateDateForPrevious(ruleDataValues, builder.ruleEvent!!)
                     )
@@ -48,7 +48,7 @@ class RuleVariablePreviousEvent(
             }
         }
         if (variableValue == null) {
-            variableValue = RuleVariableValue.create(dataElementType)
+            variableValue = RuleVariableValue(dataElementType)
         }
         valueMap[name] = variableValue
         return valueMap

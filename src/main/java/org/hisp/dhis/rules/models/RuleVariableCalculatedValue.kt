@@ -50,7 +50,7 @@ class RuleVariableCalculatedValue(
         currentEventValues: Map<String, RuleDataValue>
     ): Map<String, RuleVariableValue> {
         val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
-        valueMap[name] = RuleVariableValue.create(calculatedValueType)
+        valueMap[name] = RuleVariableValue(calculatedValueType)
         return valueMap
     }
 }

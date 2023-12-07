@@ -30,12 +30,12 @@ data class RuleVariableAttribute(
         variableValue = if (currentEnrollmentValues.containsKey(trackedEntityAttribute)) {
             val value = currentEnrollmentValues[trackedEntityAttribute]
             val optionValue = if (useCodeForOptionSet) value!!.value else getOptionName(value!!.value)!!
-            RuleVariableValue.create(
-                optionValue, trackedEntityAttributeType,
+            RuleVariableValue(
+                trackedEntityAttributeType, optionValue,
                 java.util.List.of(optionValue), currentDate
             )
         } else {
-            RuleVariableValue.create(trackedEntityAttributeType)
+            RuleVariableValue(trackedEntityAttributeType)
         }
         valueMap[name] = variableValue
         return valueMap

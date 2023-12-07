@@ -80,8 +80,7 @@ public class RuleConditionEvaluator
                                 RuleActionAssign ruleActionAssign = (RuleActionAssign) action;
                                 updateValueMap(
                                         unwrapVariableName(ruleActionAssign.content()),
-                                        RuleVariableValue.create(process( ruleActionAssign.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION),
-                                                RuleValueType.TEXT),
+                                        new RuleVariableValue(RuleValueType.TEXT, process( ruleActionAssign.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION), List.of(), null),
                                         valueMap
                                 );
                             }
@@ -219,7 +218,7 @@ public class RuleConditionEvaluator
         if (ruleAction instanceof RuleActionAssign ruleActionAssign)
         {
             String data = process( ruleActionAssign.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION);
-            updateValueMap( ruleActionAssign.field(), RuleVariableValue.create( data, RuleValueType.TEXT ), valueMap );
+            updateValueMap( ruleActionAssign.field(), new RuleVariableValue( RuleValueType.TEXT, data, List.of(), null ), valueMap );
             if ( data == null || data.isEmpty() )
             {
                 return new RuleEffect( rule.uid(), ruleAction, null );
