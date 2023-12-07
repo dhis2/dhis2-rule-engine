@@ -148,7 +148,7 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInScheduleMessage() {
-        val ruleAction: RuleAction = RuleActionScheduleMessage.create("", "'2018-04-24'")
+        val ruleAction: RuleAction = RuleActionScheduleMessage( "", "'2018-04-24'")
         val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()

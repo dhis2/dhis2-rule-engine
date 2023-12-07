@@ -174,12 +174,12 @@ class ProgramRuleVariableTest {
     }
     
     private fun callEnrollmentRuleEngine(rule: Rule): List<RuleEffect> {
-        val ruleEngine = getRuleEngine(java.util.List.of(rule))
+        val ruleEngine = getRuleEngine(listOf(rule))
         return ruleEngine.evaluate(enrollment).call()
     }
     
     private fun callEventRuleEngine(rule: Rule): List<RuleEffect> {
-        val ruleEngine = getRuleEngine(java.util.List.of(rule))
+        val ruleEngine = getRuleEngine(listOf(rule))
         val event = RuleEvent(event = EVENT_ID, programStage = PROGRAM_STAGE,
             programStageName = PROGRAM_STAGE_NAME, status = RULE_EVENT_STATUS,
             eventDate = EVENT_DATE, dueDate = DUE_DATE,

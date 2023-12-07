@@ -37,7 +37,7 @@ class ConstantsValueTest {
     @Test
     fun assignConstantValueFromAssignActionInEnrollment() {
         val assignAction: RuleAction = RuleActionAssign.create(null, "C{A1234567890}", "#{test_attribute}")
-        val rule: Rule = Rule("true", java.util.List.of(assignAction), "test_program_rule1", "")
+        val rule: Rule = Rule("true", listOf(assignAction), "test_program_rule1", "")
         val constantsValueMap: MutableMap<String, String> = HashMap()
         constantsValueMap["A1234567890"] = "3.14"
         val ruleEngine = getRuleEngine(listOf(rule), constantsValueMap)
@@ -57,10 +57,10 @@ class ConstantsValueTest {
         val assignAction: RuleAction = RuleActionAssign.create(null, "4", "test_attribute")
         val action: RuleAction =
             RuleActionMessage.create(null, "#{test_attribute}", "", RuleActionMessage.Type.SHOW_ERROR)
-        val rule: Rule = Rule("true", java.util.List.of(assignAction), "test_program_rule1", "")
-        val rule2: Rule = Rule("#{test_attribute} > 3", java.util.List.of(action), "test_program_rule2", "")
+        val rule: Rule = Rule("true", listOf(assignAction), "test_program_rule1", "")
+        val rule2: Rule = Rule("#{test_attribute} > 3", listOf(action), "test_program_rule2", "")
         val ruleEngine = getRuleEngine(
-            java.util.List.of(rule, rule2),
+            listOf(rule, rule2),
             HashMap()
         )
         val enrollment = RuleEnrollment(enrollment= "test_enrollment",
@@ -81,8 +81,8 @@ class ConstantsValueTest {
         val assignAction: RuleAction = RuleActionAssign.create("#{test_attribute}", "4", null)
         val action: RuleAction =
             RuleActionMessage.create(null, "#{test_attribute}", "", RuleActionMessage.Type.SHOW_ERROR)
-        val rule: Rule = Rule("true", java.util.List.of(assignAction), "test_program_rule1", "")
-        val rule2: Rule = Rule("#{test_attribute} > 3", java.util.List.of(action), "test_program_rule2", "")
+        val rule: Rule = Rule("true", listOf(assignAction), "test_program_rule1", "")
+        val rule2: Rule = Rule("#{test_attribute} > 3", listOf(action), "test_program_rule2", "")
         val ruleEngine = getRuleEngine(
             listOf(rule, rule2),
             HashMap()
@@ -101,7 +101,7 @@ class ConstantsValueTest {
     @Test
     fun assignConstantValueFromAssignActionInEvent() {
         val assignAction: RuleAction = RuleActionAssign.create(null, "C{A1234567890}", "#{test_data_element}")
-        val rule: Rule = Rule("true", java.util.List.of(assignAction), "test_program_rule1", "")
+        val rule: Rule = Rule("true", listOf(assignAction), "test_program_rule1", "")
         val constantsValueMap: MutableMap<String, String> = HashMap()
         constantsValueMap["A1234567890"] = "3.14"
         val ruleEngine = getRuleEngine(listOf(rule), constantsValueMap)

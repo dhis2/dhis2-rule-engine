@@ -195,7 +195,7 @@ class RuleVariableValueMapBuilder private constructor() {
         valueMap[RuleEngineUtils.ENV_VAR_CURRENT_DATE] = RuleVariableValue(
             RuleValueType.TEXT,
             currentDate,
-            java.util.List.of(currentDate),
+            listOf(currentDate),
             currentDate
         )
         if (triggerEnvironment != null) {
@@ -203,20 +203,20 @@ class RuleVariableValueMapBuilder private constructor() {
             valueMap[RuleEngineUtils.ENV_VAR_ENVIRONMENT] = RuleVariableValue(
                 RuleValueType.TEXT,
                 environment,
-                java.util.List.of(environment),
+                listOf(environment),
                 currentDate
             )
         }
         if (!ruleEvents.isEmpty()) {
             valueMap[RuleEngineUtils.ENV_VAR_EVENT_COUNT] = RuleVariableValue(
                 RuleValueType.NUMERIC, ruleEvents.size.toString(),
-                java.util.List.of(ruleEvents.size.toString()), currentDate
+                listOf(ruleEvents.size.toString()), currentDate
             )
         }
         if (ruleEnrollment != null) {
             valueMap[RuleEngineUtils.ENV_VAR_ENROLLMENT_ID] = RuleVariableValue(
                 RuleValueType.TEXT, ruleEnrollment!!.enrollment,
-                java.util.List.of(ruleEnrollment!!.enrollment), currentDate
+                listOf(ruleEnrollment!!.enrollment), currentDate
             )
             valueMap[RuleEngineUtils.ENV_VAR_ENROLLMENT_COUNT] = RuleVariableValue(
                 RuleValueType.NUMERIC, "1",
@@ -229,17 +229,17 @@ class RuleVariableValueMapBuilder private constructor() {
             val enrollmentDate = dateFormat.format(ruleEnrollment!!.enrollmentDate)
             valueMap[RuleEngineUtils.ENV_VAR_ENROLLMENT_DATE] = RuleVariableValue(
                 RuleValueType.TEXT, enrollmentDate,
-                java.util.List.of(enrollmentDate), currentDate
+                listOf(enrollmentDate), currentDate
             )
             val incidentDate = dateFormat.format(ruleEnrollment!!.incidentDate)
             valueMap[RuleEngineUtils.ENV_VAR_INCIDENT_DATE] = RuleVariableValue(
                 RuleValueType.TEXT, incidentDate,
-                java.util.List.of(incidentDate), currentDate
+                listOf(incidentDate), currentDate
             )
             val status = ruleEnrollment!!.status.toString()
             valueMap[RuleEngineUtils.ENV_VAR_ENROLLMENT_STATUS] = RuleVariableValue(
                 RuleValueType.TEXT, status,
-                java.util.List.of(status), currentDate
+                listOf(status), currentDate
             )
             val organisationUnit = ruleEnrollment!!.organisationUnit
             valueMap[RuleEngineUtils.ENV_VAR_OU] = RuleVariableValue(RuleValueType.TEXT, organisationUnit)
@@ -253,20 +253,20 @@ class RuleVariableValueMapBuilder private constructor() {
             val eventDate = dateFormat.format(ruleEvent!!.eventDate())
             valueMap[RuleEngineUtils.ENV_VAR_EVENT_DATE] = RuleVariableValue(
                 RuleValueType.TEXT, eventDate,
-                java.util.List.of(eventDate), currentDate
+                listOf(eventDate), currentDate
             )
             if (ruleEvent!!.dueDate() != null) {
                 val dueDate = dateFormat.format(ruleEvent!!.dueDate())
                 valueMap[RuleEngineUtils.ENV_VAR_DUE_DATE] = RuleVariableValue(
                     RuleValueType.TEXT, dueDate,
-                    java.util.List.of(dueDate), currentDate
+                    listOf(dueDate), currentDate
                 )
             }
             if (ruleEvent!!.completedDate() != null) {
                 val completedDate = dateFormat.format(ruleEvent!!.completedDate())
                 valueMap[RuleEngineUtils.ENV_VAR_COMPLETED_DATE] = RuleVariableValue(
                     RuleValueType.TEXT, completedDate,
-                    java.util.List.of(completedDate), currentDate
+                    listOf(completedDate), currentDate
                 )
             }
 
@@ -277,15 +277,15 @@ class RuleVariableValueMapBuilder private constructor() {
             }
             valueMap[RuleEngineUtils.ENV_VAR_EVENT_COUNT] = RuleVariableValue(
                 RuleValueType.NUMERIC, eventCount,
-                java.util.List.of(eventCount), currentDate
+                listOf(eventCount), currentDate
             )
             valueMap[RuleEngineUtils.ENV_VAR_EVENT_ID] = RuleVariableValue(
                 RuleValueType.TEXT, ruleEvent!!.event(),
-                java.util.List.of(ruleEvent!!.event()), currentDate
+                listOf(ruleEvent!!.event()), currentDate
             )
             val status = ruleEvent!!.status().toString()
             valueMap[RuleEngineUtils.ENV_VAR_EVENT_STATUS] = RuleVariableValue(
-                RuleValueType.TEXT, status, java.util.List.of(status), currentDate
+                RuleValueType.TEXT, status, listOf(status), currentDate
             )
             val organisationUnit = ruleEvent!!.organisationUnit()
             valueMap[RuleEngineUtils.ENV_VAR_OU] = RuleVariableValue(RuleValueType.TEXT, organisationUnit)

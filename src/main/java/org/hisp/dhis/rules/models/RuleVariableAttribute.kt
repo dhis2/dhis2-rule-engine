@@ -32,7 +32,7 @@ data class RuleVariableAttribute(
             val optionValue = if (useCodeForOptionSet) value!!.value else getOptionName(value!!.value)!!
             RuleVariableValue(
                 trackedEntityAttributeType, optionValue,
-                java.util.List.of(optionValue), currentDate
+                listOf(optionValue), currentDate
             )
         } else {
             RuleVariableValue(trackedEntityAttributeType)

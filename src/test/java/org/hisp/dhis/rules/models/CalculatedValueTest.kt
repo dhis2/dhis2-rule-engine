@@ -43,7 +43,7 @@ class CalculatedValueTest {
         val ruleEvent = RuleEvent(event = "test_event", programStage = "test_program_stage",
             programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = Date(), dueDate = Date(),
             organisationUnit = "", organisationUnitCode = "", completedDate = null,
-            dataValues = java.util.List.of(
+            dataValues = listOf(
                 RuleDataValue.create(
                     Date(), "test_program_stage", "test_data_element", "test_value"
                 )
@@ -57,20 +57,20 @@ class CalculatedValueTest {
     fun sendMessageMustGetValueFromAssignAction() {
         val assignAction: RuleAction = RuleActionAssign.create("#{test_calculated_value}", "2+2", null)
         val rule = Rule("true", listOf(assignAction), "test_program_rule1")
-        val sendMessageAction: RuleAction = RuleActionSendMessage.create("test_notification", "4")
+        val sendMessageAction: RuleAction = RuleActionSendMessage("test_notification", "4")
         val rule2 = Rule("#{test_calculated_value}==4", listOf(sendMessageAction), "test_program_rule2")
         val enrollment = RuleEnrollment("test_enrollment", "test_program", Date(),
             Date(), RuleEnrollment.Status.ACTIVE, "test_ou", "test_ou_code", listOf())
         val ruleEvent = RuleEvent(event = "test_event", programStage = "test_program_stage",
             programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = Date(), dueDate = Date(),
             organisationUnit = "", organisationUnitCode = "", completedDate = null,
-            dataValues = java.util.List.of(
+            dataValues = listOf(
                 RuleDataValue.create(
                     Date(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
         )
-        val ruleEngine = getRuleEngine(java.util.List.of(rule, rule2)).copy(enrollment = enrollment)
+        val ruleEngine = getRuleEngine(listOf(rule, rule2)).copy(enrollment = enrollment)
         val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
         assertEquals("4", ruleEffects[0].data())
         assertEquals(sendMessageAction, ruleEffects[0].ruleAction())
@@ -80,8 +80,8 @@ class CalculatedValueTest {
         val rules: MutableList<Rule> = ArrayList()
         val assignAction: RuleAction = RuleActionAssign.create("#{test_calculated_value}", "2+2", null)
         val rule = Rule("true", listOf(assignAction), "test_program_rule1")
-        val sendMessageAction: RuleAction = RuleActionSendMessage.create("test_notification", "4")
-        val rule2 = Rule("#{test_calculated_value}==4", java.util.List.of(sendMessageAction), "test_program_rule2")
+        val sendMessageAction: RuleAction = RuleActionSendMessage("test_notification", "4")
+        val rule2 = Rule("#{test_calculated_value}==4", listOf(sendMessageAction), "test_program_rule2")
         for (j in 0 until i) {
             rules.add(rule)
             rules.add(rule2)
@@ -93,17 +93,17 @@ class CalculatedValueTest {
     fun sendMessageMustGetValueFromAssignActionInSingleExecution() {
         val assignAction: RuleAction = RuleActionAssign.create("#{test_calculated_value}", "2+2", null)
         val rule = Rule( "true", listOf(assignAction), "test_program_rule1", "")
-        val sendMessageAction: RuleAction = RuleActionSendMessage.create("test_notification", "4.0")
+        val sendMessageAction: RuleAction = RuleActionSendMessage("test_notification", "4.0")
         val rule2 = Rule("#{test_calculated_value}==4.0", listOf(sendMessageAction),
                 "test_program_rule2", ""
             )
-        val ruleEngine = getRuleEngine(java.util.List.of(rule, rule2))
+        val ruleEngine = getRuleEngine(listOf(rule, rule2))
         val enrollment = RuleEnrollment("test_enrollment", "test_program", Date(),
             Date(), RuleEnrollment.Status.ACTIVE, "test_ou", "test_ou_code", listOf())
         val ruleEvent = RuleEvent(event = "test_event", programStage = "test_program_stage",
             programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = Date(), dueDate = Date(),
             organisationUnit = "", organisationUnitCode = "", completedDate = null,
-            dataValues = java.util.List.of(
+            dataValues = listOf(
                 RuleDataValue.create(
                     Date(), "test_program_stage", "test_data_element", "test_value"
                 )

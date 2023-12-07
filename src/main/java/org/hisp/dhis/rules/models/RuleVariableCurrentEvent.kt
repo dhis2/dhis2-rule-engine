@@ -35,7 +35,7 @@ class RuleVariableCurrentEvent(
             val optionValue = if (useCodeForOptionSet) value!!.value else getOptionName(value!!.value)!!
             RuleVariableValue(
                 dataElementType, optionValue,
-                java.util.List.of(optionValue), getLastUpdateDate(java.util.List.of(value))
+                listOf(optionValue), getLastUpdateDate(listOf(value))
             )
         } else {
             RuleVariableValue(dataElementType)
