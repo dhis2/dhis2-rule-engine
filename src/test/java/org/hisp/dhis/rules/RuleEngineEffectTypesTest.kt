@@ -158,7 +158,7 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInHideSectionEffect() {
-        val ruleAction: RuleAction = RuleActionHideSection.create("test_section")
+        val ruleAction: RuleAction = RuleActionHideSection("test_section")
         val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()
@@ -169,7 +169,7 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInHideOptionEffect() {
-        val ruleAction: RuleAction = RuleActionHideOption.create("test_content", "test_option", "test_field")
+        val ruleAction: RuleAction = RuleActionHideOption("test_field","test_option", "test_content")
         val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()
@@ -180,7 +180,7 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInHideOptionGroupEffect() {
-        val ruleAction: RuleAction = RuleActionHideOptionGroup.create("test_content", "test_option_group", "field")
+        val ruleAction: RuleAction = RuleActionHideOptionGroup("field", "test_option_group", "test_content" )
         val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()

@@ -11,8 +11,8 @@ package org.hisp.dhis.rules.models
 data class RuleActionHideField(
                 val field: String,
                 val content: String = "",
-                val data: String = "",
-                val attributeType: AttributeType = AttributeType.UNKNOWN
+                val attributeType: AttributeType = AttributeType.UNKNOWN,
+                val data: String = ""
 ) : RuleActionAttribute {
     override fun data(): String {
         return data
