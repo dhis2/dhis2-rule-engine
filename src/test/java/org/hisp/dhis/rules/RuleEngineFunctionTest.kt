@@ -51,20 +51,20 @@ class RuleEngineFunctionTest {
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
             RuleEvent.Status.ACTIVE, Date(), Date(),  null, "",
-            null, java.util.List.of(
+            null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleNotFailingEvent = RuleEvent(
             "test_not_failing_event", "test_program_stage", "",
             RuleEvent.Status.ACTIVE, yesterday, yesterday,  null, "",
-            null, java.util.List.of(
+            null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEngine = RuleEngineTestUtils.getRuleEngine(
-            java.util.List.of(failingRule), ruleEnrollment,
-            java.util.List.of(ruleEvent, ruleNotFailingEvent)
+            listOf(failingRule), ruleEnrollment,
+            listOf(ruleEvent, ruleNotFailingEvent)
         )
         val ruleEffects = ruleEngine.evaluate()
         assertEquals(3, ruleEffects.size)
@@ -88,15 +88,15 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:hasValue(#{test_variable})"
         )
-        val ruleVariable: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_variable", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariable: RuleVariable = RuleVariableCurrentEvent(
+            "test_variable", true, emptyList(),"test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariable))
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
             RuleEvent.Status.ACTIVE, Date(), Date(),  null, "",
-            null, java.util.List.of(
+            null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "test_value")
             )
         )
@@ -110,19 +110,18 @@ class RuleEngineFunctionTest {
     fun optionSetNameShouldBeUsed() {
         val option1 = Option("name1", "code1")
         val option2 = Option("name2", "code2")
-        val options = java.util.List.of(option1, option2)
+        val options = listOf(option1, option2)
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "#{test_variable}"
         )
-        val ruleVariable: RuleVariable = RuleVariableNewestEvent.create(
-            "test_variable", "test_data_element", RuleValueType.TEXT, USE_NAME_FOR_OPTION_SET, options
-        )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariable))
+        val ruleVariable: RuleVariable = RuleVariableNewestEvent("test_variable",
+            USE_NAME_FOR_OPTION_SET, options, "test_data_element", RuleValueType.TEXT)
+        val rule = Rule("true", listOf(ruleAction), "", "")
+        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
             RuleEvent.Status.ACTIVE, Date(), Date(),  null, "",
-            null, java.util.List.of(
+            null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element", option1.code)
             )
         )
@@ -136,19 +135,19 @@ class RuleEngineFunctionTest {
     fun optionSetCodeShouldBeUsed() {
         val option1 = Option("name1", "code1")
         val option2 = Option("name2", "code2")
-        val options = java.util.List.of(option1, option2)
+        val options = listOf(option1, option2)
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "#{test_variable}"
         )
-        val ruleVariable: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_variable", "test_data_element", RuleValueType.TEXT, USE_CODE_FOR_OPTION_SET, options
+        val ruleVariable: RuleVariable = RuleVariableCurrentEvent(
+            "test_variable", USE_CODE_FOR_OPTION_SET, options, "test_data_element", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariable))
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
             RuleEvent.Status.ACTIVE, Date(), Date(),  null, "",
-            null, java.util.List.of(
+            null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element", option2.code)
             )
         )
@@ -164,15 +163,15 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:hasValue('test_variable')"
         )
-        val ruleVariable: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_variable", "test_data_element", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariable: RuleVariable = RuleVariableCurrentEvent(
+            "test_variable", true, ArrayList(),"test_data_element", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariable))
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
             RuleEvent.Status.ACTIVE, Date(), Date(),  null, "",
-            null, java.util.List.of(
+            null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element", "test_value")
             )
         )
@@ -187,15 +186,15 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:hasValue(#{test_variable})"
         )
-        val ruleVariable: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_variable", "test_data_element", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariable: RuleVariable = RuleVariableCurrentEvent(
+            "test_variable", true, ArrayList(), "test_data_element", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariable))
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
             RuleEvent.Status.ACTIVE, Date(), Date(),  null, "",
-            null, java.util.List.of(
+            null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
@@ -210,14 +209,13 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "V{program_stage_name}"
         )
-        val ruleVariable: RuleVariable = RuleVariableCurrentEvent
-            .create("variable", "test_data_element", RuleValueType.TEXT, true, ArrayList())
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariable))
+        val ruleVariable: RuleVariable = RuleVariableCurrentEvent("variable", true, ArrayList(), "test_data_element", RuleValueType.TEXT)
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage_id", "test_program_stage_name",
             RuleEvent.Status.ACTIVE, Date(), Date(),  null, "",
-            null, java.util.List.of(
+            null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
@@ -232,17 +230,17 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:daysBetween(#{test_var_one}, #{test_var_two})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableCurrentEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne, ruleVariableTwo))
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne, ruleVariableTwo))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "2017-01-01"),
                 RuleDataValue
                     .create(Date(), "test_program_stage", "test_data_element_two", "2017-02-01")
@@ -259,17 +257,17 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:daysBetween(#{test_var_one}, '2018-01-01')"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableCurrentEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne, ruleVariableTwo))
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne, ruleVariableTwo))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "2017-01-01"),
                 RuleDataValue
                     .create(Date(), "test_program_stage", "test_data_element_two", "2017-02-01")
@@ -289,14 +287,14 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:inOrgUnitGroup(#{test_var_one})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = RuleEngine(RuleEngineContext(listOf(rule),listOf(ruleVariableOne),supplementaryData))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date(), null, "location1", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date(), null, "location1", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "OU_GROUP_ID")
             )
         )
@@ -315,14 +313,14 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:inOrgUnitGroup('OU_GROUP_ID')"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = RuleEngine(RuleEngineContext(listOf(rule),listOf(ruleVariableOne),supplementaryData))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date(), null, "location1", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date(), null, "location1", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "OU_GROUP_ID")
             )
         )
@@ -340,14 +338,14 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:hasUserRole(#{test_var_one})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = RuleEngine(RuleEngineContext(listOf(rule),listOf(ruleVariableOne),supplementaryData))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date(), null, "location1", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date(), null, "location1", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "role1")
             )
         )
@@ -366,14 +364,14 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:hasUserRole('role1')"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = RuleEngine(RuleEngineContext(listOf(rule),listOf(ruleVariableOne),supplementaryData))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date(), null, "location1", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date(), null, "location1", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "role1")
             )
         )
@@ -388,17 +386,17 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:addDays(#{test_var_one}, #{test_var_two})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableCurrentEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne, ruleVariableTwo))
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne, ruleVariableTwo))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "2017-01-01"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "2")
             )
@@ -409,7 +407,7 @@ class RuleEngineFunctionTest {
         assertEquals(ruleEffects[0].data(), "2017-01-03")
         val ruleEvent2 = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "2017-01-03"),
                 RuleDataValue
                     .create(Date(), "test_program_stage", "test_data_element_two", "-2")
@@ -426,26 +424,26 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:countIfValue(#{test_var_one}, 'condition')"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne))
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition2")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
@@ -461,26 +459,26 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:countIfValue('test_var_one', 'condition')"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne))
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition2")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
@@ -495,35 +493,35 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:count(#{test_var_one})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne))
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition2")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent4 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "condition")
             )
         )
@@ -538,23 +536,23 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:count(#{test_var_one})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule: Rule = Rule(
             "d2:hasValue(V{current_date}) && d2:count(#{test_var_one}) > 0",
-            java.util.List.of(ruleAction), "", ""
+            listOf(ruleAction), "", ""
         )
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne))
+        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition2")
             )
         )
@@ -569,23 +567,23 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:count(#{test_var_one})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule: Rule = Rule(
             "d2:hasValue(V{current_date}) || d2:count(#{test_var_one}) > 0",
-            java.util.List.of(ruleAction), "", ""
+            listOf(ruleAction), "", ""
         )
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne))
+        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition2")
             )
         )
@@ -601,35 +599,35 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:count('test_var_one')"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne))
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition2")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent4 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "condition")
             )
         )
@@ -644,14 +642,14 @@ class RuleEngineFunctionTest {
         val ruleAction1: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:round(#{test_var_one})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction1), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne))
+        val rule: Rule = Rule("true", listOf(ruleAction1), "", "")
+        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "2.6")
             )
         )
@@ -666,14 +664,14 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:modulus(#{test_var_one}, 2)"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne))
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "2.6")
             )
         )
@@ -688,14 +686,14 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:substring(#{test_var_one}, 1, 3)"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne))
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "ABCD")
             )
         )
@@ -710,20 +708,20 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:weeksBetween(#{test_var_one}, #{test_var_two})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
             rule,
-            java.util.List.of(ruleVariableOne, ruleVariableTwo)
+            listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "2018-01-01"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "2018-02-01")
             )
@@ -739,20 +737,20 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:monthsBetween(#{test_var_one}, #{test_var_two})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
             rule,
-            java.util.List.of(ruleVariableOne, ruleVariableTwo)
+            listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "2018-01-01"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "2018-09-01")
             )
@@ -768,22 +766,22 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:yearsBetween(#{test_var_one}, #{test_var_two})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("d2:yearsBetween('2016-01-01', '2018-09-01') == 2", java.util.List.of(ruleAction), "",
+        val rule: Rule = Rule("d2:yearsBetween('2016-01-01', '2018-09-01') == 2", listOf(ruleAction), "",
                 ""
             )
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
             rule,
-            java.util.List.of(ruleVariableOne, ruleVariableTwo)
+            listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "2016-01-01"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "2018-09-01")
             )
@@ -799,19 +797,19 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:zpvc( '1', '0', '-1' )"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.NUMERIC
         )
-        val ruleVariableThree: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_three", "test_data_element_two", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableThree: RuleVariable = RuleVariableNewestEvent(
+            "test_var_three", true, ArrayList(), "test_data_element_two", RuleValueType.NUMERIC
         )
         val rule: Rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
             rule,
-            java.util.List.of(ruleVariableOne, ruleVariableTwo)
+            listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -861,26 +859,26 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:countIfZeroPos(#{test_var_one})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
         val rule: Rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne))
+        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "0")
             )
         )
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "1")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event1", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "-3")
             )
         )
@@ -897,26 +895,26 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:countIfZeroPos('test_var_one')"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
         val rule: Rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne))
+        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "0")
             )
         )
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "1")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event1", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "-3")
             )
         )
@@ -932,14 +930,14 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:left(#{test_var_one}, 4)"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule: Rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne))
+        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "yyyy-mm-dd")
             )
         )
@@ -954,14 +952,14 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:right(#{test_var_one}, 2)"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule: Rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne))
+        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "yyyy-mm-dd")
             )
         )
@@ -976,14 +974,14 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:concatenate(#{test_var_one}, '+days')"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule: Rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne))
+        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "weeks")
             )
         )
@@ -998,14 +996,14 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:validatePattern(#{test_var_one}, '.*555.*')"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule: Rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne))
+        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "44455545454")
             )
         )
@@ -1015,7 +1013,7 @@ class RuleEngineFunctionTest {
         assertEquals("true", ruleEffects[0].data())
         val ruleEvent2 = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "444887777")
             )
         )
@@ -1030,14 +1028,14 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:length(#{test_var_one})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne))
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "testString")
             )
         )
@@ -1052,14 +1050,14 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:split(#{test_var_one},'-',2)"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne))
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue
                     .create(Date(), "test_program_stage", "test_data_element_one", "test-String-for-split")
             )
@@ -1076,23 +1074,23 @@ class RuleEngineFunctionTest {
             "test_action_content", "d2:floor(#{test_var_one} + d2:ceil(#{test_var_three})) " +
                     "/ 5 * d2:ceil(#{test_var_two})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableCurrentEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.NUMERIC
         )
-        val ruleVariableThree: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_var_three", "test_data_element_three", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableThree: RuleVariable = RuleVariableCurrentEvent(
+            "test_var_three", true, ArrayList(), "test_data_element_three", RuleValueType.NUMERIC
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = RuleEngineTestUtils.getRuleEngine(
             rule,
-            java.util.List.of(ruleVariableOne, ruleVariableTwo, ruleVariableThree)
+            listOf(ruleVariableOne, ruleVariableTwo, ruleVariableThree)
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "19.9"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "0.9"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_three", "10.6")
@@ -1109,22 +1107,22 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "true"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("d2:zScoreWFA(1,#{test_var_one},#{test_var_two}) == 0", java.util.List.of(ruleAction),
+        val rule: Rule = Rule("d2:zScoreWFA(1,#{test_var_one},#{test_var_two}) == 0", listOf(ruleAction),
                 "", ""
             )
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
             rule,
-            java.util.List.of(ruleVariableOne, ruleVariableTwo)
+            listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "4.5"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
             )
@@ -1139,22 +1137,22 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "true"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("d2:zScoreHFA(12,#{test_var_one},#{test_var_two}) == -3", java.util.List.of(ruleAction),
+        val rule: Rule = Rule("d2:zScoreHFA(12,#{test_var_one},#{test_var_two}) == -3", listOf(ruleAction),
                 "", ""
             )
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
             rule,
-            java.util.List.of(ruleVariableOne, ruleVariableTwo)
+            listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "66.3"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "1")
             )
@@ -1169,22 +1167,22 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "true"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("d2:zScoreHFA(10,#{test_var_one},#{test_var_two}) == -2", java.util.List.of(ruleAction),
+        val rule: Rule = Rule("d2:zScoreHFA(10,#{test_var_one},#{test_var_two}) == -2", listOf(ruleAction),
                 "", ""
             )
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
             rule,
-            java.util.List.of(ruleVariableOne, ruleVariableTwo)
+            listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "68.7"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
             )
@@ -1199,22 +1197,22 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "true"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("d2:zScoreWFH(52,#{test_var_one},A{test_var_two}) < 2", java.util.List.of(ruleAction),
+        val rule: Rule = Rule("d2:zScoreWFH(52,#{test_var_one},A{test_var_two}) < 2", listOf(ruleAction),
                 "", ""
             )
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
             rule,
-            java.util.List.of(ruleVariableOne, ruleVariableTwo)
+            listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "3"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
             )
@@ -1229,22 +1227,22 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:zScoreWFH(81.5,9.6,'female') == 2"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("d2:zScoreWFH(81.5,#{test_var_one},#{test_var_two}) == 2", java.util.List.of(ruleAction),
+        val rule: Rule = Rule("d2:zScoreWFH(81.5,#{test_var_one},#{test_var_two}) == 2", listOf(ruleAction),
                 "", ""
             )
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
             rule,
-            java.util.List.of(ruleVariableOne, ruleVariableTwo)
+            listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "12.5"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "1")
             )
@@ -1259,34 +1257,34 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "true"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("d2:maxValue(#{test_var_one}) == 8.0", java.util.List.of(ruleAction), "", "")
+        val rule: Rule = Rule("d2:maxValue(#{test_var_one}) == 8.0", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
             rule,
-            java.util.List.of(ruleVariableOne, ruleVariableTwo)
+            listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage1","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "5"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "7"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "8"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
             )
@@ -1303,34 +1301,34 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "true"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("d2:maxValue('test_var_one') == 8.0", java.util.List.of(ruleAction), "", "")
+        val rule: Rule = Rule("d2:maxValue('test_var_one') == 8.0", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
             rule,
-            java.util.List.of(ruleVariableOne, ruleVariableTwo)
+            listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage1","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "5"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "7"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "8"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
             )
@@ -1346,34 +1344,34 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:minValue(#{test_var_one})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
             rule,
-            java.util.List.of(ruleVariableOne, ruleVariableTwo)
+            listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage1","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "5"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "7"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "8"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
             )
@@ -1390,34 +1388,34 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:minValue('test_var_one')"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
+        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
             rule,
-            java.util.List.of(ruleVariableOne, ruleVariableTwo)
+            listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage1","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "5"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "7"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_one", "8"),
                 RuleDataValue.create(Date(), "test_program_stage", "test_data_element_two", "male")
             )
@@ -1441,26 +1439,26 @@ class RuleEngineFunctionTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:lastEventDate('test_var_one')"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_one", "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule: Rule = Rule("true", listOf(ruleAction), "test_rule", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, java.util.List.of(ruleVariableOne))
+        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage1","",RuleEvent.Status.ACTIVE, dayBeforeYesterday, Date(), 
-            null, "", null, java.util.List.of(
+            null, "", null, listOf(
                 RuleDataValue.create(dayBeforeYesterday, "test_program_stage1", "test_data_element_one", "value1")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, yesterday, Date (), null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, yesterday, Date (), null, "", null, listOf(
                 RuleDataValue.create(yesterday, "test_program_stage2", "test_data_element_one", "value2")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, dayAfterTomorrow, dayAfterTomorrow, null, "", null, java.util.List.of(
+            RuleEvent.Status.ACTIVE, dayAfterTomorrow, dayAfterTomorrow, null, "", null, listOf(
                 RuleDataValue.create(dayAfterTomorrow, "test_program_stage3", "test_data_element_one", "value3")
             )
         )

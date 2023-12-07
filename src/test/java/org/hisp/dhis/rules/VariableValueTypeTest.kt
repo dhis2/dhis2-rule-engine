@@ -38,10 +38,8 @@ class VariableValueTypeTest {
         val ruleAction: RuleAction = RuleActionText
             .createForFeedback("test_action_content", "#{test_variable}")
         val rule = Rule("#{test_variable} > #{test_variable2}", listOf(ruleAction), "", "")
-        val ruleVariable: RuleVariable = RuleVariableCurrentEvent
-            .create("test_variable", "test_data_element", RuleValueType.NUMERIC, true, ArrayList())
-        val ruleVariable2: RuleVariable = RuleVariableCurrentEvent
-            .create("test_variable2", "test_data_element2", RuleValueType.NUMERIC, true, ArrayList())
+        val ruleVariable: RuleVariable = RuleVariableCurrentEvent("test_variable", true, ArrayList(), "test_data_element", RuleValueType.NUMERIC)
+        val ruleVariable2: RuleVariable = RuleVariableCurrentEvent("test_variable2", true, ArrayList(), "test_data_element2", RuleValueType.NUMERIC)
         val ruleEngine = getRuleEngine(rule, listOf(ruleVariable, ruleVariable2))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
@@ -62,10 +60,8 @@ class VariableValueTypeTest {
         val ruleAction: RuleAction = RuleActionText
             .createForFeedback("test_action_content", "#{test_variable}")
         val rule = Rule("#{test_variable} > #{test_variable2}", listOf(ruleAction), "", "")
-        val ruleVariable: RuleVariable = RuleVariableCurrentEvent
-            .create("test_variable", "test_data_element", RuleValueType.TEXT, true, ArrayList())
-        val ruleVariable2: RuleVariable = RuleVariableCurrentEvent
-            .create("test_variable2", "test_data_element2", RuleValueType.TEXT, true, ArrayList())
+        val ruleVariable: RuleVariable = RuleVariableCurrentEvent("test_variable", true, ArrayList(), "test_data_element", RuleValueType.TEXT)
+        val ruleVariable2: RuleVariable = RuleVariableCurrentEvent("test_variable2", true, ArrayList(), "test_data_element2", RuleValueType.TEXT)
         val ruleEngine = getRuleEngine(rule, listOf(ruleVariable, ruleVariable2))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",

@@ -39,26 +39,26 @@ class RuleEngineVariableNameTest {
         val ruleAction10: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:round(A{" + VARIABLE_NAME + "})"
         )
-        val ruleVariable1: RuleVariable = RuleVariableNewestEvent.create(
-            UID01, "test_data_element1", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariable1: RuleVariable = RuleVariableNewestEvent(
+            UID01, true, ArrayList(), "test_data_element1", RuleValueType.NUMERIC
         )
-        val ruleVariable2: RuleVariable = RuleVariableNewestEvent.create(
-            VARIABLE_NAME, "test_data_element2", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariable2: RuleVariable = RuleVariableNewestEvent(
+            VARIABLE_NAME, true, ArrayList(), "test_data_element2", RuleValueType.NUMERIC
         )
-        val ruleVariable3: RuleVariable = RuleVariableNewestEvent.create(
-            UID0, "test_data_element3", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariable3: RuleVariable = RuleVariableNewestEvent(
+            UID0, true, ArrayList(), "test_data_element3", RuleValueType.NUMERIC
         )
-        val ruleVariable4: RuleVariable = RuleVariableNewestEvent.create(
-            UID0WILD, "test_data_element4", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariable4: RuleVariable = RuleVariableNewestEvent(
+            UID0WILD, true, ArrayList(), "test_data_element4", RuleValueType.NUMERIC
         )
-        val ruleVariable5: RuleVariable = RuleVariableNewestEvent.create(
-            UID01WILD, "test_data_element5", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariable5: RuleVariable = RuleVariableNewestEvent(
+            UID01WILD, true, ArrayList(), "test_data_element5", RuleValueType.NUMERIC
         )
-        val ruleVariable6: RuleVariable = RuleVariableNewestEvent.create(
-            UID012, "test_data_element6", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariable6: RuleVariable = RuleVariableNewestEvent(
+            UID012, true, ArrayList(), "test_data_element6", RuleValueType.NUMERIC
         )
-        val ruleVariable7: RuleVariable = RuleVariableNewestEvent.create(
-            UID0WILD2, "test_data_element7", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariable7: RuleVariable = RuleVariableNewestEvent(
+            UID0WILD2, true, ArrayList(), "test_data_element7", RuleValueType.NUMERIC
         )
         val actions = of(
             ruleAction1, ruleAction2, ruleAction3, ruleAction4, ruleAction5, ruleAction6, ruleAction7,
@@ -120,8 +120,8 @@ class RuleEngineVariableNameTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:hasValue(#{" + UID01 + "})"
         )
-        val ruleVariable: RuleVariable = RuleVariableCurrentEvent.create(
-            UID01, "test_data_element", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariable: RuleVariable = RuleVariableCurrentEvent(
+            UID01, true, ArrayList(), "test_data_element", RuleValueType.TEXT
         )
         val rule: Rule = Rule("true", of(ruleAction), "", "")
         val ruleEngine = getRuleEngine(rule, of(ruleVariable))
@@ -144,8 +144,8 @@ class RuleEngineVariableNameTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:hasValue(#{" + VARIABLE_NAME + "})"
         )
-        val ruleVariable: RuleVariable = RuleVariableCurrentEvent.create(
-            VARIABLE_NAME, "test_data_element", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariable: RuleVariable = RuleVariableCurrentEvent(
+            VARIABLE_NAME, true, ArrayList(), "test_data_element", RuleValueType.TEXT
         )
         val rule: Rule = Rule("true", of(ruleAction), "", "")
         val ruleEngine = getRuleEngine(rule, of(ruleVariable))
@@ -168,8 +168,8 @@ class RuleEngineVariableNameTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:countIfValue(#{" + VARIABLE_NAME + "}, 'condition')"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            VARIABLE_NAME, "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule: Rule = Rule("true", of(ruleAction), "", "")
         val ruleEngine = getRuleEngine(rule, of(ruleVariableOne))
@@ -202,8 +202,8 @@ class RuleEngineVariableNameTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:countIfValue(#{" + UID01 + "}, 'condition')"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            UID01, "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            UID01, true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule: Rule = Rule("true", of(ruleAction), "", "")
         val ruleEngine = getRuleEngine(rule, of(ruleVariableOne))
@@ -236,11 +236,11 @@ class RuleEngineVariableNameTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:count(#{" + VARIABLE_NAME + "})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            VARIABLE_NAME, "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule: Rule = Rule("true", of(ruleAction), "", "")
         val ruleEngine = getRuleEngine(rule, of(ruleVariableOne))
@@ -279,11 +279,8 @@ class RuleEngineVariableNameTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:count(#{" + UID01 + "})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            UID01, "test_data_element_one", RuleValueType.TEXT, true, ArrayList()
-        )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            UID01, true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule: Rule = Rule("true", of(ruleAction), "", "")
         val ruleEngine = getRuleEngine(rule, of(ruleVariableOne))
@@ -322,8 +319,8 @@ class RuleEngineVariableNameTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:countIfZeroPos(#{" + VARIABLE_NAME + "})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            VARIABLE_NAME, "test_data_element_one", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
         val rule: Rule = Rule("true", of(ruleAction), "", "")
         val ruleEngine = getRuleEngine(rule, of(ruleVariableOne))
@@ -357,8 +354,8 @@ class RuleEngineVariableNameTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:countIfZeroPos(#{" + UID01 + "})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            UID01, "test_data_element_one", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            UID01, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
         val rule: Rule = Rule("true", of(ruleAction), "", "")
         val ruleEngine = getRuleEngine(rule, of(ruleVariableOne))
@@ -392,11 +389,11 @@ class RuleEngineVariableNameTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "true"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            VARIABLE_NAME, "test_data_element_one", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule: Rule = Rule("d2:maxValue(#{" + VARIABLE_NAME + "}) == 8.0", of(ruleAction), "", "")
         val ruleEngine = getRuleEngine(
@@ -435,11 +432,11 @@ class RuleEngineVariableNameTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "true"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            UID01, "test_data_element_one", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            UID01, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule: Rule = Rule("d2:maxValue(#{" + UID01 + "}) == 8.0", of(ruleAction), "", "")
         val ruleEngine = getRuleEngine(
@@ -478,11 +475,11 @@ class RuleEngineVariableNameTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:minValue(#{" + VARIABLE_NAME + "})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            VARIABLE_NAME, "test_data_element_one", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule: Rule = Rule("true", of(ruleAction), "", "")
         val ruleEngine = getRuleEngine(
@@ -522,11 +519,11 @@ class RuleEngineVariableNameTest {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             "test_action_content", "d2:minValue(#{" + UID01 + "})"
         )
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            UID01, "test_data_element_one", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            UID01, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_var_two", "test_data_element_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule: Rule = Rule("true", of(ruleAction), "", "")
         val ruleEngine = getRuleEngine(

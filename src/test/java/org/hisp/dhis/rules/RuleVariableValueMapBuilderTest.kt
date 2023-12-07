@@ -22,8 +22,8 @@ class RuleVariableValueMapBuilderTest {
 
     @Test
     fun currentEventVariableShouldContainNullValueForEnrollmentEvaluation() {
-        val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_variable_one", "test_dataelement_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent(
+            "test_variable_one", true, ArrayList(), "test_dataelement_one", RuleValueType.TEXT
         )
         val eventDate = dateFormat!!.parse("2015-01-01")
 
@@ -61,11 +61,11 @@ class RuleVariableValueMapBuilderTest {
     @Test
     @Throws(ParseException::class)
     fun currentEventVariableShouldContainValuesFromCurrentEvent() {
-        val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_variable_one", "test_dataelement_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent(
+            "test_variable_one", true, ArrayList(), "test_dataelement_one", RuleValueType.TEXT
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_variable_two", "test_dataelement_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableCurrentEvent(
+            "test_variable_two", true, ArrayList(), "test_dataelement_two", RuleValueType.TEXT
         )
         val eventDate = dateFormat!!.parse("2015-01-01")
         val dueDate = dateFormat!!.parse("2016-01-01")
@@ -153,11 +153,11 @@ class RuleVariableValueMapBuilderTest {
     @Test
     @Throws(ParseException::class)
     fun newestEventProgramVariableShouldContainValueFromNewestContextEvent() {
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_variable_one", "test_dataelement_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_variable_one", true, ArrayList(), "test_dataelement_one", RuleValueType.TEXT
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_variable_two", "test_dataelement_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_variable_two", true, ArrayList(), "test_dataelement_two", RuleValueType.TEXT
         )
         val oldestEventDate = dateFormat!!.parse("2013-01-01")
         val newestEventDate = dateFormat!!.parse("2017-01-01")
@@ -237,11 +237,11 @@ class RuleVariableValueMapBuilderTest {
     @Test
     @Throws(ParseException::class)
     fun newestEventProgramVariableShouldReturnValuesFromCurrentEventWhenIfNewest() {
-        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent.create(
-            "test_variable_one", "test_dataelement_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
+            "test_variable_one", true, ArrayList(), "test_dataelement_one", RuleValueType.TEXT
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent.create(
-            "test_variable_two", "test_dataelement_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
+            "test_variable_two", true, ArrayList(), "test_dataelement_two", RuleValueType.TEXT
         )
         val dateEventOne = dateFormat!!.parse("2013-01-01")
         val dateEventTwo = dateFormat!!.parse("2014-01-01")
@@ -325,9 +325,9 @@ class RuleVariableValueMapBuilderTest {
     @Test
     @Throws(ParseException::class)
     fun newestEventProgramStageVariableShouldContainValueFromNewestContextEvent() {
-        val ruleVariable: RuleVariable = RuleVariableNewestStageEvent.create(
-            "test_variable",
-            "test_dataelement", "test_program_stage_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariable: RuleVariable = RuleVariableNewestStageEvent(
+            "test_variable", true, ArrayList(),
+            "test_dataelement", RuleValueType.TEXT, "test_program_stage_one"
         )
         val dateEventOne = dateFormat!!.parse("2014-02-03")
         val dateEventTwo = dateFormat!!.parse("2014-03-03")
@@ -399,9 +399,9 @@ class RuleVariableValueMapBuilderTest {
     @Test
     @Throws(ParseException::class)
     fun newestEventProgramStageVariableShouldNotContainAnyValues() {
-        val ruleVariable: RuleVariable = RuleVariableNewestStageEvent.create(
-            "test_variable",
-            "test_dataelement", "test_program_stage_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariable: RuleVariable = RuleVariableNewestStageEvent(
+            "test_variable", true, ArrayList(),
+            "test_dataelement", RuleValueType.TEXT, "test_program_stage_one"
         )
         val dateEventOne = dateFormat!!.parse("2014-03-03")
         val dateEventTwo = dateFormat!!.parse("2015-02-03")
@@ -458,9 +458,9 @@ class RuleVariableValueMapBuilderTest {
     @Test
     @Throws(ParseException::class)
     fun previousEventVariableShouldContainValuesFromPreviousEvent() {
-        val ruleVariable: RuleVariable = RuleVariablePreviousEvent.create(
-            "test_variable",
-            "test_dataelement", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariable: RuleVariable = RuleVariablePreviousEvent(
+            "test_variable", true, ArrayList(),
+            "test_dataelement", RuleValueType.TEXT
         )
         val dateEventOne = dateFormat!!.parse("2014-02-03")
         val dateEventTwo = dateFormat!!.parse("2014-03-03")
@@ -532,13 +532,13 @@ class RuleVariableValueMapBuilderTest {
     @Test
     @Throws(ParseException::class)
     fun attributeVariableShouldContainValuesFromContextEnrollment() {
-        val ruleVariableOne: RuleVariable = RuleVariableAttribute.create(
-            "test_variable_one",
-            "test_attribute_one", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableAttribute(
+            "test_variable_one", true, ArrayList(),
+            "test_attribute_one", RuleValueType.TEXT
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableAttribute.create(
-            "test_variable_two",
-            "test_attribute_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableAttribute(
+            "test_variable_two", true, ArrayList(),
+            "test_attribute_two", RuleValueType.TEXT
         )
         val eventDate = dateFormat!!.parse("2015-01-01")
         val enrollmentDate = dateFormat!!.parse("2014-03-01")
@@ -634,17 +634,17 @@ class RuleVariableValueMapBuilderTest {
     @Test
     @Throws(ParseException::class)
     fun ruleEnrollmentValuesShouldBePropagatedToMapCorrectly() {
-        val ruleVariableOne: RuleVariable = RuleVariableAttribute.create(
-            "test_variable_one",
-            "test_attribute_one", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableAttribute(
+            "test_variable_one", true, ArrayList(),
+            "test_attribute_one", RuleValueType.NUMERIC
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableAttribute.create(
-            "test_variable_two",
-            "test_attribute_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableAttribute(
+            "test_variable_two", true, ArrayList(),
+            "test_attribute_two", RuleValueType.TEXT
         )
-        val ruleVariableThree: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_variable_three",
-            "test_dataelement_one", RuleValueType.BOOLEAN, true, ArrayList()
+        val ruleVariableThree: RuleVariable = RuleVariableCurrentEvent(
+            "test_variable_three", true, ArrayList(),
+            "test_dataelement_one", RuleValueType.BOOLEAN
         )
         val currentDate = dateFormat!!.format(Date())
         val enrollmentDate = dateFormat!!.parse("2017-02-02")
@@ -696,17 +696,17 @@ class RuleVariableValueMapBuilderTest {
     @Test
     @Throws(ParseException::class)
     fun MultipleMapBuilderShoulCreateCorrectMapForEnrollmentAndEvents() {
-        val ruleVariableOne: RuleVariable = RuleVariableAttribute.create(
-            "test_variable_one",
-            "test_attribute_one", RuleValueType.NUMERIC, true, ArrayList()
+        val ruleVariableOne: RuleVariable = RuleVariableAttribute(
+            "test_variable_one", true, ArrayList(),
+            "test_attribute_one", RuleValueType.NUMERIC
         )
-        val ruleVariableTwo: RuleVariable = RuleVariableAttribute.create(
-            "test_variable_two",
-            "test_attribute_two", RuleValueType.TEXT, true, ArrayList()
+        val ruleVariableTwo: RuleVariable = RuleVariableAttribute(
+            "test_variable_two", true, ArrayList(),
+            "test_attribute_two", RuleValueType.TEXT
         )
-        val ruleVariableThree: RuleVariable = RuleVariableCurrentEvent.create(
-            "test_variable_three",
-            "test_dataelement_one", RuleValueType.BOOLEAN, true, ArrayList()
+        val ruleVariableThree: RuleVariable = RuleVariableCurrentEvent(
+            "test_variable_three", true, ArrayList(),
+            "test_dataelement_one", RuleValueType.BOOLEAN
         )
         val currentDate = dateFormat!!.format(Date())
         val enrollmentDate = dateFormat!!.parse("2017-02-02")

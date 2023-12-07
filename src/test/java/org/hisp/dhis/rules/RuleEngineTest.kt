@@ -3,11 +3,9 @@ package org.hisp.dhis.rules
 import io.mockk.mockk
 import org.hisp.dhis.rules.models.Rule
 import org.hisp.dhis.rules.models.RuleEvent
-import org.hisp.dhis.rules.util.MockRuleVariable
+import org.hisp.dhis.rules.models.RuleVariable
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import java.util.*
-import java.util.List
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
@@ -17,7 +15,7 @@ import kotlin.test.assertTrue
 internal class RuleEngineTest {
 
     private val ruleEngineContext: RuleEngineContext = RuleEngineContext(
-        listOf(Rule("true", listOf())),listOf(MockRuleVariable()))
+        listOf(Rule("true", listOf())),listOf(mockk<RuleVariable>()))
 
     @Test(expected = IllegalStateException::class)
     fun evaluateShouldThrowIfEventIsAlreadyInContext() {

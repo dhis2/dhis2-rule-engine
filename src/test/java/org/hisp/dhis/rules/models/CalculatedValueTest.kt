@@ -116,8 +116,7 @@ class CalculatedValueTest {
     }
 
     private fun getRuleEngine(rules: List<Rule>): RuleEngine {
-        val ruleVariable: RuleVariable = RuleVariableCalculatedValue
-            .create("test_calculated_value", "", RuleValueType.TEXT, true, ArrayList())
+        val ruleVariable: RuleVariable = RuleVariableCalculatedValue("test_calculated_value", true, ArrayList(), "", RuleValueType.TEXT)
         return RuleEngine(RuleEngineContext(rules, listOf(ruleVariable)))
     }
 }

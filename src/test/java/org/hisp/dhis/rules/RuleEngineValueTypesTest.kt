@@ -11,8 +11,7 @@ class RuleEngineValueTypesTest {
         val ruleAction: RuleAction = RuleActionText
             .createForFeedback("test_action_content", "#{test_variable}")
         val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
-        val ruleVariable: RuleVariable = RuleVariableCurrentEvent
-            .create("test_variable", "test_data_element", RuleValueType.BOOLEAN, true, ArrayList())
+        val ruleVariable: RuleVariable = RuleVariableCurrentEvent("test_variable", true, ArrayList(), "test_data_element", RuleValueType.BOOLEAN)
         val ruleEngine = getRuleEngine(rule, java.util.List.of(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
@@ -29,8 +28,7 @@ class RuleEngineValueTypesTest {
         val ruleAction: RuleAction = RuleActionText
             .createForFeedback("test_action_content", "#{test_variable}")
         val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
-        val ruleVariable: RuleVariable = RuleVariableCurrentEvent
-            .create("test_variable", "test_data_element", RuleValueType.NUMERIC, true, ArrayList())
+        val ruleVariable: RuleVariable = RuleVariableCurrentEvent("test_variable", true, ArrayList(), "test_data_element", RuleValueType.NUMERIC)
         val ruleEngine = getRuleEngine(rule, java.util.List.of(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
@@ -47,8 +45,7 @@ class RuleEngineValueTypesTest {
         val ruleAction: RuleAction = RuleActionText
             .createForFeedback("test_action_content", "#{test_variable}")
         val rule: Rule = Rule("true", java.util.List.of(ruleAction), "", "")
-        val ruleVariable: RuleVariable = RuleVariableCurrentEvent
-            .create("test_variable", "test_data_element", RuleValueType.TEXT, true, ArrayList())
+        val ruleVariable: RuleVariable = RuleVariableCurrentEvent("test_variable", true, ArrayList(), "test_data_element", RuleValueType.TEXT)
         val ruleEngine = getRuleEngine(rule, java.util.List.of(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",

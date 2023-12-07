@@ -1,8 +1,6 @@
 package org.hisp.dhis.rules.models
 
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.MutableList
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
