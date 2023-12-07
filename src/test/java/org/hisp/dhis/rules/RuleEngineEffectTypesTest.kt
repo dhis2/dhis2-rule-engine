@@ -51,8 +51,9 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInCreateEventEffect() {
-        val ruleAction: RuleAction = RuleActionCreateEvent.create(
-            "test_action_content", "'event_uid;test_data_value_one'", "test_program_stage"
+        val ruleAction: RuleAction = RuleActionCreateEvent(
+            "test_program_stage",
+            "test_action_content", "'event_uid;test_data_value_one'"
         )
         val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)

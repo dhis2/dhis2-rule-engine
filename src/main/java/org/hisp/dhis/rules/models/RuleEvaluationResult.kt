@@ -33,7 +33,7 @@ data class RuleEvaluationResult(
         }
 
         fun errorRule(rule: Rule, errorMessage: String): RuleEvaluationResult {
-            val effects = listOf(RuleEffect(rule.uid, RuleActionError.create(errorMessage), errorMessage))
+            val effects = listOf(RuleEffect(rule.uid, RuleActionError(errorMessage), errorMessage))
             return RuleEvaluationResult(rule, effects, false, true)
         }
     }
