@@ -1,7 +1,6 @@
 package org.hisp.dhis.rules
 
 import org.hisp.dhis.rules.models.RuleValueType
-import javax.annotation.Nonnull
 import kotlin.test.assertEquals
 
 internal class RuleVariableValueAssert private constructor(private val variableValue: RuleVariableValue) {

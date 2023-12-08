@@ -3,8 +3,6 @@ package org.hisp.dhis.rules.models
 import org.hisp.dhis.rules.Option
 import org.hisp.dhis.rules.RuleVariableValue
 import org.hisp.dhis.rules.RuleVariableValueMapBuilder
-import java.util.function.Predicate
-import javax.annotation.Nonnull
 
 interface RuleVariable {
     fun options(): List<Option>

@@ -3,7 +3,6 @@ package org.hisp.dhis.rules
 import org.hisp.dhis.rules.models.*
 import java.util.*
 import java.util.List
-import kotlin.collections.listOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -192,7 +191,7 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInSetMandatoryFieldEffect() {
-        val ruleAction: RuleAction = RuleActionSetMandatoryField.create("test_data_element")
+        val ruleAction: RuleAction = RuleActionSetMandatoryField("test_data_element")
         val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
         val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE)).call()

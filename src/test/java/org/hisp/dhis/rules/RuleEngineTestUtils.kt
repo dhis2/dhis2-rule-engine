@@ -1,6 +1,9 @@
 package org.hisp.dhis.rules
 
-import org.hisp.dhis.rules.models.*
+import org.hisp.dhis.rules.models.Rule
+import org.hisp.dhis.rules.models.RuleEnrollment
+import org.hisp.dhis.rules.models.RuleEvent
+import org.hisp.dhis.rules.models.RuleVariable
 
 /*
 * Copyright (c) 2004-2020, University of Oslo

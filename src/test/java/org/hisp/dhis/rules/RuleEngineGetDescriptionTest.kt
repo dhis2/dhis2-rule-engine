@@ -1,6 +1,9 @@
 package org.hisp.dhis.rules
 
-import org.hisp.dhis.rules.models.*
+import org.hisp.dhis.rules.models.Rule
+import org.hisp.dhis.rules.models.RuleAction
+import org.hisp.dhis.rules.models.RuleActionText
+import org.hisp.dhis.rules.models.RuleEngineValidationException
 import kotlin.test.*
 
 /*

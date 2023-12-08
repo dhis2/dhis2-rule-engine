@@ -1,7 +1,5 @@
 package org.hisp.dhis.rules.models
 
-import javax.annotation.Nonnull
-
 /*
 * Copyright (c) 2004-2017, University of Oslo
 * All rights reserved.

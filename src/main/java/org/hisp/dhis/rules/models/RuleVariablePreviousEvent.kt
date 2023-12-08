@@ -1,7 +1,6 @@
 package org.hisp.dhis.rules.models
 
 import org.hisp.dhis.rules.*
-import javax.annotation.Nonnull
 
 class RuleVariablePreviousEvent(
     val name: String,

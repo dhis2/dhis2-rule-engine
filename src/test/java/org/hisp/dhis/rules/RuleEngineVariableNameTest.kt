@@ -2,7 +2,7 @@ package org.hisp.dhis.rules
 
 import org.hisp.dhis.rules.models.*
 import java.util.*
-import java.util.List.*
+import java.util.List.of
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

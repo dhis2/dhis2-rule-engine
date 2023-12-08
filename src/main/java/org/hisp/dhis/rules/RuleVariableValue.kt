@@ -5,7 +5,7 @@ import org.hisp.dhis.lib.expression.spi.VariableValue
 import org.hisp.dhis.rules.models.RuleValueType
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.annotation.Nonnull
+
 fun getFormattedDate(date: Date): String {
     val format = SimpleDateFormat()
     format.applyPattern("yyyy-MM-dd")

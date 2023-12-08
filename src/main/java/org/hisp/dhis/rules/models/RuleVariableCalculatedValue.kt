@@ -1,7 +1,8 @@
 package org.hisp.dhis.rules.models
 
-import org.hisp.dhis.rules.*
-import javax.annotation.Nonnull
+import org.hisp.dhis.rules.Option
+import org.hisp.dhis.rules.RuleVariableValue
+import org.hisp.dhis.rules.RuleVariableValueMapBuilder
 
 /*
 * Copyright (c) 2004-2018, University of Oslo

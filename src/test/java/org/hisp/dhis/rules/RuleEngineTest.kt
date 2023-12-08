@@ -4,12 +4,10 @@ import io.mockk.mockk
 import org.hisp.dhis.rules.models.Rule
 import org.hisp.dhis.rules.models.RuleEvent
 import org.hisp.dhis.rules.models.RuleVariable
-import kotlin.test.Test
 import java.util.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
-import kotlin.collections.MutableList
+import kotlin.test.Test
 import kotlin.test.assertTrue
 
 internal class RuleEngineTest {

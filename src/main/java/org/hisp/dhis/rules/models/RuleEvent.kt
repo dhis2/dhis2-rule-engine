@@ -1,8 +1,6 @@
 package org.hisp.dhis.rules.models
 
 import java.util.*
-import java.util.Comparator.comparing
-import kotlin.Comparator
 
 data class RuleEvent(
     val event: String,
