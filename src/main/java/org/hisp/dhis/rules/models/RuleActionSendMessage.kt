@@ -29,9 +29,9 @@ package org.hisp.dhis.rules.models
 */
 data class RuleActionSendMessage(
     val notification: String,
-    val data: String
+    val data: String?
 ) : RuleAction {
-    override fun data(): String {
+    override fun data(): String? {
         return data
     }
 }

@@ -139,9 +139,12 @@ class RuleConditionEvaluator {
     }
 
     private fun process(
-        condition: String, valueMap: Map<String, RuleVariableValue>,
+        condition: String?, valueMap: Map<String, RuleVariableValue>,
         supplementaryData: Map<String, List<String>>, mode: Expression.Mode
     ): String {
+        if (condition==null) {
+            return ""
+        }
         if (condition.isEmpty()) {
             return ""
         }
