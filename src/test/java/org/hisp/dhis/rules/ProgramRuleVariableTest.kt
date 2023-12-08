@@ -192,7 +192,7 @@ class ProgramRuleVariableTest {
     private val enrollment: RuleEnrollment
         get() = RuleEnrollment( ENROLLMENT_ID, PROGRAM_NAME, INCIDENT_DATE, ENROLLMENT_DATE,
             RuleEnrollment.Status.ACTIVE, ORGANISATION_UNIT, ORGANISATION_UNIT_CODE,
-            listOf(RuleAttributeValue.create("test_attribute", "test_value"))
+            listOf(RuleAttributeValue("test_attribute", "test_value"))
         )
 
     private fun getRuleEngine(rules: List<Rule>): RuleEngine {

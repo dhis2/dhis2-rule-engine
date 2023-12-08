@@ -45,7 +45,7 @@ class ConstantsValueTest {
             programName = "test_program", incidentDate = Date(),
             enrollmentDate = Date(), status = RuleEnrollment.Status.ACTIVE,
             organisationUnit = "test_ou", organisationUnitCode = "test_ou_code",
-            attributeValues = listOf(RuleAttributeValue.create("test_attribute", "test_value")))
+            attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value")))
         val ruleEffects = ruleEngine.evaluate(enrollment).call()
         assertEquals(1, ruleEffects.size)
         assertEquals("3.14", ruleEffects[0].data())
@@ -67,7 +67,7 @@ class ConstantsValueTest {
             programName = "test_program", incidentDate = Date(),
             enrollmentDate = Date(), status = RuleEnrollment.Status.ACTIVE,
             organisationUnit = "test_ou", organisationUnitCode = "test_ou_code",
-            attributeValues = listOf(RuleAttributeValue.create("test_attribute", "test_value")))
+            attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value")))
         val ruleEffects = ruleEngine.evaluate(enrollment).call()
         assertEquals(2, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data())
@@ -91,7 +91,7 @@ class ConstantsValueTest {
             programName = "test_program", incidentDate = Date(),
             enrollmentDate = Date(), status = RuleEnrollment.Status.ACTIVE,
             organisationUnit = "test_ou", organisationUnitCode = "test_ou_code",
-            attributeValues = listOf(RuleAttributeValue.create("test_attribute", "test_value")))
+            attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value")))
         val ruleEffects = ruleEngine.evaluate(enrollment).call()
         assertEquals(1, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data())
@@ -108,7 +108,7 @@ class ConstantsValueTest {
         val ruleEvent = RuleEvent(event ="test_event", programStage = "test_program_stage", programStageName = "",
             status = RuleEvent.Status.ACTIVE, eventDate = Date(), dueDate = Date(), organisationUnit = "", organisationUnitCode = "", completedDate = Date(), dataValues =
             listOf(
-                    RuleDataValue.create(
+                    RuleDataValue(
                         Date(), "test_program_stage", "test_data_element", "test_value"
                     )
                 )

@@ -45,8 +45,8 @@ class VariableValueTypeTest {
             "test_event", "test_program_stage", "",
             RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null,
             listOf(
-                RuleDataValue.create(Date(), "", "test_data_element", "30"),
-                RuleDataValue.create(Date(), "", "test_data_element2", "4")
+                RuleDataValue(Date(), "", "test_data_element", "30"),
+                RuleDataValue(Date(), "", "test_data_element2", "4")
             )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
@@ -67,8 +67,8 @@ class VariableValueTypeTest {
             "test_event", "test_program_stage", "",
             RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null,
             listOf(
-                RuleDataValue.create(Date(), "", "test_data_element", "30"),
-                RuleDataValue.create(Date(), "", "test_data_element2", "4")
+                RuleDataValue(Date(), "", "test_data_element", "30"),
+                RuleDataValue(Date(), "", "test_data_element2", "4")
             )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent).call()

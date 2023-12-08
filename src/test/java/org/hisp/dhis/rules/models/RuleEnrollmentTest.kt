@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules.models
 
+import io.mockk.mockk
 import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -7,9 +8,9 @@ import kotlin.test.assertEquals
 class RuleEnrollmentTest {
     @Test
     fun createShouldPropagatePropertiesCorrectly() {
-        val ruleAttributeValueOne = RuleAttributeValue.MOCK
-        val ruleAttributeValueTwo = RuleAttributeValue.MOCK
-        val ruleAttributeValueThree = RuleAttributeValue.MOCK
+        val ruleAttributeValueOne = mockk<RuleAttributeValue>()
+        val ruleAttributeValueTwo = mockk<RuleAttributeValue>()
+        val ruleAttributeValueThree = mockk<RuleAttributeValue>()
         val incidentDate = Date()
         val enrollmentDate = Date()
         val ruleEnrollment = RuleEnrollment(

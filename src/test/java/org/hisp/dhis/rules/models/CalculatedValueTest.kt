@@ -44,7 +44,7 @@ class CalculatedValueTest {
             programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = Date(), dueDate = Date(),
             organisationUnit = "", organisationUnitCode = "", completedDate = null,
             dataValues = listOf(
-                RuleDataValue.create(
+                RuleDataValue(
                     Date(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
@@ -65,7 +65,7 @@ class CalculatedValueTest {
             programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = Date(), dueDate = Date(),
             organisationUnit = "", organisationUnitCode = "", completedDate = null,
             dataValues = listOf(
-                RuleDataValue.create(
+                RuleDataValue(
                     Date(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
@@ -104,7 +104,7 @@ class CalculatedValueTest {
             programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = Date(), dueDate = Date(),
             organisationUnit = "", organisationUnitCode = "", completedDate = null,
             dataValues = listOf(
-                RuleDataValue.create(
+                RuleDataValue(
                     Date(), "test_program_stage", "test_data_element", "test_value"
                 )
             )

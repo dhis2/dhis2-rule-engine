@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules.models
 
+import io.mockk.mockk
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.test.Test
@@ -8,7 +9,7 @@ import kotlin.test.assertEquals
 class RuleEventTest {
     @Test
     fun createShouldPropagateValuesCorrectly() {
-        val ruleDataValue = RuleDataValue.MOCK
+        val ruleDataValue = mockk<RuleDataValue>()
         val ruleDataValues: MutableList<RuleDataValue> = ArrayList()
         ruleDataValues.add(ruleDataValue)
         val eventDate = Date()
