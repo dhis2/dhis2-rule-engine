@@ -2,7 +2,6 @@ package org.hisp.dhis.rules
 
 import org.hisp.dhis.rules.models.*
 import java.util.*
-import java.util.List
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -14,7 +13,7 @@ class RuleEngineEffectTypesTest {
         return RuleEvent(event = "test_event", programStage = "test_program_stage",
             programStageName = "", status = status, eventDate = Date(), dueDate = Date(),
             organisationUnit = "", organisationUnitCode = "", completedDate = null,
-            dataValues = List.of(
+            dataValues = listOf(
                     RuleDataValue.create(
                         Date(), "test_program_stage", "test_data_element", "test_value"
                     )
@@ -91,7 +90,7 @@ class RuleEngineEffectTypesTest {
     @Test
     fun simpleConditionMustResultInErrorOnCompletionEffect() {
         val ruleAction: RuleAction = RuleActionMessage.create(
-            "test_action_content", "2 + 2", "test_data_element", RuleActionMessage.Type.ERROR_ON_COMPILATION
+            "test_action_content", "2 + 2", "test_data_element", null, RuleActionMessage.Type.ERROR_ON_COMPILATION
         )
         val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
@@ -203,7 +202,7 @@ class RuleEngineEffectTypesTest {
     @Test
     fun simpleConditionMustResultInWarningEffect() {
         val ruleAction: RuleAction = RuleActionMessage.create(
-            "test_warning_message", null, "target_field", RuleActionMessage.Type.SHOW_WARNING
+            "test_warning_message", null, "target_field", null, RuleActionMessage.Type.SHOW_WARNING
         )
         val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
@@ -216,7 +215,7 @@ class RuleEngineEffectTypesTest {
     @Test
     fun simpleConditionMustResultInErrorEffect() {
         val ruleAction: RuleAction = RuleActionMessage.create(
-            "test_error_message", "2 + 2", "target_field", RuleActionMessage.Type.SHOW_ERROR
+            "test_error_message", "2 + 2", "target_field", null, RuleActionMessage.Type.SHOW_ERROR
         )
         val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)
@@ -229,7 +228,7 @@ class RuleEngineEffectTypesTest {
     @Test
     fun simpleConditionMustResultInOnCompletionWarningEffect() {
         val ruleAction: RuleAction = RuleActionMessage.create(
-            "test_warning_message", "2 + 2", "target_field", RuleActionMessage.Type.WARNING_ON_COMPILATION
+            "test_warning_message", "2 + 2", "target_field", null, RuleActionMessage.Type.WARNING_ON_COMPILATION
         )
         val rule = Rule("true", listOf(ruleAction))
         val ruleEngine = getRuleEngine(rule)

@@ -56,9 +56,9 @@ class ConstantsValueTest {
     fun assignValue() {
         val assignAction: RuleAction = RuleActionAssign.create(null, "4", "test_attribute")
         val action: RuleAction =
-            RuleActionMessage.create(null, "#{test_attribute}", "", RuleActionMessage.Type.SHOW_ERROR)
-        val rule: Rule = Rule("true", listOf(assignAction), "test_program_rule1", "")
-        val rule2: Rule = Rule("#{test_attribute} > 3", listOf(action), "test_program_rule2", "")
+            RuleActionMessage.create(null, "#{test_attribute}", "", null, RuleActionMessage.Type.SHOW_ERROR)
+        val rule = Rule("true", listOf(assignAction), "test_program_rule1", "")
+        val rule2 = Rule("#{test_attribute} > 3", listOf(action), "test_program_rule2", "")
         val ruleEngine = getRuleEngine(
             listOf(rule, rule2),
             HashMap()
@@ -80,7 +80,7 @@ class ConstantsValueTest {
     fun assignValueThroughVariable() {
         val assignAction: RuleAction = RuleActionAssign.create("#{test_attribute}", "4", null)
         val action: RuleAction =
-            RuleActionMessage.create(null, "#{test_attribute}", "", RuleActionMessage.Type.SHOW_ERROR)
+            RuleActionMessage.create(null, "#{test_attribute}", "", null, RuleActionMessage.Type.SHOW_ERROR)
         val rule: Rule = Rule("true", listOf(assignAction), "test_program_rule1", "")
         val rule2: Rule = Rule("#{test_attribute} > 3", listOf(action), "test_program_rule2", "")
         val ruleEngine = getRuleEngine(
