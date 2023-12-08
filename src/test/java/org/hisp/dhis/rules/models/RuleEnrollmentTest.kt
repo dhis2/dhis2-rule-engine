@@ -1,7 +1,7 @@
 package org.hisp.dhis.rules.models
 
 import io.mockk.mockk
-import java.util.*
+import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

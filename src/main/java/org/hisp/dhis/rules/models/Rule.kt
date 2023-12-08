@@ -7,7 +7,7 @@ data class Rule(
     val name: String? = null,
     val programStage: String? = null,
     val priority: Int? = 0
-){
+):Comparable<Rule>{
 
     fun name(): String? {
         return name
@@ -31,5 +31,17 @@ data class Rule(
 
     fun priority(): Int? {
         return priority
+    }
+
+    override fun compareTo(other: Rule): Int {
+        return if (this.priority != null && other.priority != null) {
+            this.priority.compareTo(other.priority)
+        } else if (this.priority != null) {
+            -1
+        } else if (other.priority != null) {
+            1
+        } else {
+            0
+        }
     }
 }

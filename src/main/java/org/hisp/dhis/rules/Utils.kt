@@ -3,9 +3,10 @@ package org.hisp.dhis.rules
 import org.hisp.dhis.rules.models.RuleDataValue
 import org.hisp.dhis.rules.models.RuleEvent
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+import java.util.Date
 import java.util.regex.Pattern
-import javax.annotation.Nonnull
+import kotlin.collections.ArrayList
 
 val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
     const val VARIABLE_PATTERN = "[#]\\{([\\w -_.]+)\\}"
@@ -15,7 +16,7 @@ val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         for (ruleDataValue in ruleDataValues) {
             values.add(ruleDataValue.value)
         }
-        return Collections.unmodifiableList(values)
+        return values
     }
 
     fun getLastUpdateDateForPrevious(
@@ -29,7 +30,7 @@ val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
                 dates.add(d)
             }
         }
-        return dateFormat.format(Collections.max(dates))
+        return dateFormat.format(dates.max())
     }
 
     fun getLastUpdateDate(ruleDataValues: List<RuleDataValue>): String {
@@ -38,11 +39,10 @@ val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
             val d = date.eventDate
             dates.add(d)
         }
-        return dateFormat.format(Collections.max(dates))
+        return dateFormat.format(dates.max())
     }
 
-    @Nonnull
-    fun unwrapVariableName(@Nonnull variable: String): String {
+    fun unwrapVariableName(variable: String): String {
         val variableNameMatcher = VARIABLE_PATTERN_COMPILED.matcher(variable)
 
         // extract variable name

@@ -3,20 +3,18 @@ package org.hisp.dhis.rules
 import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.RuleEngineUtils
 import java.text.SimpleDateFormat
-import java.util.*
-import javax.annotation.Nonnull
+import java.util.Date
+import java.util.Locale
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class RuleVariableValueMapBuilder private constructor() {
-    @Nonnull
     val dateFormat: SimpleDateFormat
 
-    @Nonnull
     private val allConstantValues: MutableMap<String, String>
 
-    @Nonnull
     private val ruleVariables: MutableList<RuleVariable>
 
-    @Nonnull
     private val ruleEvents: MutableList<RuleEvent>
     var ruleEnrollment: RuleEnrollment? = null
     var ruleEvent: RuleEvent? = null
@@ -31,25 +29,23 @@ class RuleVariableValueMapBuilder private constructor() {
         allConstantValues = HashMap()
     }
 
-    private constructor(@Nonnull ruleEnrollment: RuleEnrollment) : this() {
+    private constructor(ruleEnrollment: RuleEnrollment) : this() {
 
         // enrollment is the target
         this.ruleEnrollment = ruleEnrollment
     }
 
-    private constructor(@Nonnull ruleEvent: RuleEvent) : this() {
+    private constructor(ruleEvent: RuleEvent) : this() {
 
         // event is the target
         this.ruleEvent = ruleEvent
     }
-
-    @Nonnull
-    fun ruleVariables(@Nonnull ruleVariables: List<RuleVariable>?): RuleVariableValueMapBuilder {
+    
+    fun ruleVariables(ruleVariables: List<RuleVariable>?): RuleVariableValueMapBuilder {
         this.ruleVariables.addAll(ruleVariables!!)
         return this
     }
 
-    @Nonnull
     fun ruleEnrollment(ruleEnrollment: RuleEnrollment?): RuleVariableValueMapBuilder {
         check(this.ruleEnrollment == null) {
             "It seems that enrollment has been set as target " +
@@ -59,15 +55,13 @@ class RuleVariableValueMapBuilder private constructor() {
         return this
     }
 
-    @Nonnull
     fun triggerEnvironment(triggerEnvironment: TriggerEnvironment?): RuleVariableValueMapBuilder {
         check(this.triggerEnvironment == null) { "triggerEnvironment == null" }
         this.triggerEnvironment = triggerEnvironment
         return this
     }
 
-    @Nonnull
-    fun ruleEvents(@Nonnull ruleEvents: List<RuleEvent>): RuleVariableValueMapBuilder {
+    fun ruleEvents(ruleEvents: List<RuleEvent>): RuleVariableValueMapBuilder {
         check(!isEventInList(ruleEvents, ruleEvent)) {
             String.format(
                 Locale.US, "ruleEvent %s is already set " +
@@ -78,14 +72,12 @@ class RuleVariableValueMapBuilder private constructor() {
         return this
     }
 
-    @Nonnull
-    fun constantValueMap(@Nonnull constantValues: Map<String, String>?): RuleVariableValueMapBuilder {
+    fun constantValueMap(constantValues: Map<String, String>?): RuleVariableValueMapBuilder {
         allConstantValues.putAll(constantValues!!)
         return this
     }
 
-    @Nonnull
-    fun build(): Map<String, RuleVariableValue> {
+    fun build(): MutableMap<String, RuleVariableValue> {
         val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
 
         // set environment variables
@@ -97,26 +89,24 @@ class RuleVariableValueMapBuilder private constructor() {
         // set constants value map
         valueMap.putAll(buildConstantsValues())
 
-        // do not let outer world to alter variable value map
-        return Collections.unmodifiableMap(valueMap)
+        return valueMap
     }
 
-    @Nonnull
     fun multipleBuild(): RuleVariableValueMap {
-        val enrollmentMap: MutableMap<RuleEnrollment, Map<String, RuleVariableValue>> = HashMap()
+        val enrollmentMap: MutableMap<RuleEnrollment, MutableMap<String, RuleVariableValue>> = HashMap()
         if (ruleEnrollment != null) {
             enrollmentMap[ruleEnrollment!!] = build()
         }
-        val eventMap: MutableMap<RuleEvent, Map<String, RuleVariableValue>> = HashMap()
+        val eventMap: MutableMap<RuleEvent, MutableMap<String, RuleVariableValue>> = HashMap()
         for (event in ruleEvents) {
             ruleEvent = event
             eventMap[event] = build()
         }
-        return RuleVariableValueMap(enrollmentMap, eventMap.toMap())
+        return RuleVariableValueMap(enrollmentMap, eventMap)
     }
 
     private fun isEventInList(
-        @Nonnull ruleEvents: List<RuleEvent>,
+        ruleEvents: List<RuleEvent>,
         ruleEvent: RuleEvent?
     ): Boolean {
         if (ruleEvent != null) {
@@ -321,18 +311,15 @@ class RuleVariableValueMapBuilder private constructor() {
 
     companion object {
         private const val DATE_PATTERN = "yyyy-MM-dd"
-        @Nonnull
-        fun target(@Nonnull ruleEnrollment: RuleEnrollment): RuleVariableValueMapBuilder {
+            fun target(ruleEnrollment: RuleEnrollment): RuleVariableValueMapBuilder {
             return RuleVariableValueMapBuilder(ruleEnrollment)
         }
 
-        @Nonnull
-        fun target(@Nonnull ruleEvent: RuleEvent): RuleVariableValueMapBuilder {
+            fun target(ruleEvent: RuleEvent): RuleVariableValueMapBuilder {
             return RuleVariableValueMapBuilder(ruleEvent)
         }
 
-        @Nonnull
-        fun target(): RuleVariableValueMapBuilder {
+            fun target(): RuleVariableValueMapBuilder {
             return RuleVariableValueMapBuilder()
         }
     }

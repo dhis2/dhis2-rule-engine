@@ -1,7 +1,5 @@
 package org.hisp.dhis.rules.models
 
-import javax.annotation.Nonnull
-
 data class RuleActionMessage(
     val type: Type,
     val field: String = "",

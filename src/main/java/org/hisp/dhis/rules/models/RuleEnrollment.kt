@@ -1,6 +1,6 @@
 package org.hisp.dhis.rules.models
 
-import java.util.*
+import java.util.Date
 
 data class RuleEnrollment(
     val enrollment: String,

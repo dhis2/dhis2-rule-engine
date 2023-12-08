@@ -5,7 +5,7 @@ import org.hisp.dhis.lib.expression.spi.IllegalExpressionException
 import org.hisp.dhis.lib.expression.spi.ParseException
 import org.hisp.dhis.lib.expression.spi.ValueType
 import org.hisp.dhis.rules.models.*
-import java.util.*
+import java.util.Date
 import java.util.concurrent.Callable
 
 data class RuleEngine(
@@ -36,7 +36,7 @@ data class RuleEngine(
                 .ruleEvents(events)
                 .constantValueMap(executionContext.constantsValues)
                 .build()
-        return RuleEngineExecution(ruleEvent, rulesToEvaluate, valueMap, executionContext.supplementaryData)
+        return RuleEngineExecution(ruleEvent, null, rulesToEvaluate, valueMap, executionContext.supplementaryData)
     }
 
     fun evaluate(ruleEnrollment: RuleEnrollment,
@@ -47,7 +47,7 @@ data class RuleEngine(
                 .ruleEvents(events)
                 .constantValueMap(executionContext.constantsValues)
                 .build()
-        return RuleEngineExecution(ruleEnrollment, rulesToEvaluate, valueMap, executionContext.supplementaryData)
+        return RuleEngineExecution(null, ruleEnrollment, rulesToEvaluate, valueMap, executionContext.supplementaryData)
     }
 
     fun evaluate(): List<RuleEffects> {
@@ -103,7 +103,7 @@ data class RuleEngine(
         private var ruleEnrollment: RuleEnrollment? = null
         private var triggerEnvironment: TriggerEnvironment? = null
         fun events(ruleEvents: List<RuleEvent>): Builder {
-            this.ruleEvents = Collections.unmodifiableList(ArrayList(ruleEvents))
+            this.ruleEvents = ruleEvents
             return this
         }
 

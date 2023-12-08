@@ -3,6 +3,7 @@ package org.hisp.dhis.rules.models
 import io.mockk.mockk
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

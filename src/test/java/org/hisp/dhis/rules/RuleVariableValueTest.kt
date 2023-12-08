@@ -2,7 +2,8 @@ package org.hisp.dhis.rules
 
 import org.hisp.dhis.rules.models.RuleValueType
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

@@ -4,7 +4,8 @@ import org.hisp.dhis.rules.models.*
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneOffset
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

@@ -4,7 +4,7 @@ import org.hisp.dhis.rules.Option
 import org.hisp.dhis.rules.RuleVariableValue
 import org.hisp.dhis.rules.RuleVariableValueMapBuilder
 import org.hisp.dhis.rules.dateFormat
-import java.util.*
+import java.util.Date
 
 data class RuleVariableAttribute(
     val name: String,

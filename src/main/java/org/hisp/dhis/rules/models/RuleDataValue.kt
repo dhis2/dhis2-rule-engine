@@ -1,7 +1,6 @@
 package org.hisp.dhis.rules.models
 
-import java.util.*
-import javax.annotation.Nonnull
+import java.util.Date
 
 data class RuleDataValue(
     val eventDate: Date,

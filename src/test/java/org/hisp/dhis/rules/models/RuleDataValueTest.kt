@@ -1,6 +1,6 @@
 package org.hisp.dhis.rules.models
 
-import java.util.*
+import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
