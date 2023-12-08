@@ -36,7 +36,7 @@ class VariableValueTypeTest {
     @Test
     fun testNumericVariablesAreComparedCorrectly() {
         val ruleAction: RuleAction = RuleActionText
-            .createForFeedback("test_action_content", "#{test_variable}")
+            .createForFeedback(RuleActionText.Type.DISPLAYTEXT,"test_action_content", "#{test_variable}")
         val rule = Rule("#{test_variable} > #{test_variable2}", listOf(ruleAction), "", "")
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent("test_variable", true, ArrayList(), "test_data_element", RuleValueType.NUMERIC)
         val ruleVariable2: RuleVariable = RuleVariableCurrentEvent("test_variable2", true, ArrayList(), "test_data_element2", RuleValueType.NUMERIC)
@@ -58,7 +58,7 @@ class VariableValueTypeTest {
     @Test
     fun testTextVariablesAreComparedCorrectly() {
         val ruleAction: RuleAction = RuleActionText
-            .createForFeedback("test_action_content", "#{test_variable}")
+            .createForFeedback(RuleActionText.Type.DISPLAYTEXT,"test_action_content", "#{test_variable}")
         val rule = Rule("#{test_variable} > #{test_variable2}", listOf(ruleAction), "", "")
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent("test_variable", true, ArrayList(), "test_data_element", RuleValueType.TEXT)
         val ruleVariable2: RuleVariable = RuleVariableCurrentEvent("test_variable2", true, ArrayList(), "test_data_element2", RuleValueType.TEXT)

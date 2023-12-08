@@ -64,6 +64,7 @@ class RuleEngineEffectTypesTest {
     @Test
     fun simpleConditionMustResultInDisplayKeyValuePairEffect() {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
+            RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "2 + 2"
         )
         val rule = Rule("true", listOf(ruleAction))
@@ -77,6 +78,7 @@ class RuleEngineEffectTypesTest {
     @Test
     fun simpleConditionMustResultInDisplayTextEffect() {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
+            RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "2 + 2"
         )
         val rule = Rule("true", listOf(ruleAction))

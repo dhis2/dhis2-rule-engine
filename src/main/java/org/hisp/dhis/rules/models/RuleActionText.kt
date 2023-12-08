@@ -11,26 +11,33 @@ package org.hisp.dhis.rules.models
  * or 'program indicator' widget.
  */
 data class RuleActionText(
+    val type: Type,
     val data: String,
     val content: String,
     val location: String
 ) : RuleAction {
+    enum class Type {
+        DISPLAYTEXT,
+        DISPLAYKEYVALUEPAIR
+    }
 
     companion object {
         const val LOCATION_FEEDBACK_WIDGET = "feedback"
         const val LOCATION_INDICATOR_WIDGET = "indicators"
         fun createForFeedback(
+            type: Type,
             content: String?, data: String?
         ): RuleActionText {
             require(!(content == null && data == null)) { "Both content and data must not be null" }
-            return RuleActionText(data ?: "", content ?: "", LOCATION_FEEDBACK_WIDGET)
+            return RuleActionText(type, data ?: "", content ?: "", LOCATION_FEEDBACK_WIDGET)
         }
 
         fun createForIndicators(
+            type: Type,
             content: String?, data: String?
         ): RuleActionText {
             require(!(content == null && data == null)) { "Both content and data must not be null" }
-            return RuleActionText(data ?: "", content ?: "", LOCATION_INDICATOR_WIDGET)
+            return RuleActionText(type, data ?: "", content ?: "", LOCATION_INDICATOR_WIDGET)
         }
     }
 

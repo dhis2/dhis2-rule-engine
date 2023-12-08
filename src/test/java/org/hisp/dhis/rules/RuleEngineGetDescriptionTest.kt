@@ -37,7 +37,7 @@ import kotlin.test.*
  */
 class RuleEngineGetDescriptionTest {
     private var itemStore: MutableMap<String, DataItem> = HashMap()
-    private val ruleAction: RuleAction = RuleActionText.createForFeedback("", "")
+    private val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT, "", "")
     @BeforeTest
     fun setUp() {
         itemStore = HashMap()

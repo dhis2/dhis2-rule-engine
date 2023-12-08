@@ -18,12 +18,13 @@ class RuleEngineFunctionTest {
     fun evaluateFailingRule() {
         val enrollmentDate = Date()
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
+            RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "2 + 2"
         )
-        val failingRule: Rule = Rule("d2:daysBetween(V{enrollment_date},V{event_date}) < 0",
+        val failingRule = Rule("d2:daysBetween(V{enrollment_date},V{event_date}) < 0",
                 listOf(ruleAction), "", ""
             )
-        val validRule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val validRule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = RuleEngineTestUtils.getRuleEngine(listOf(failingRule, validRule))
         val ruleEnrollment = RuleEnrollment(
             "test_enrollment", "",
@@ -41,9 +42,10 @@ class RuleEngineFunctionTest {
         val today = Date()
         val yesterday = Date.from(LocalDate.now().minusDays(1).atStartOfDay().toInstant(ZoneOffset.UTC))
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
+                    RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "2 + 2"
         )
-        val failingRule: Rule = Rule("d2:daysBetween(V{enrollment_date},V{event_date}) < 0",
+        val failingRule = Rule("d2:daysBetween(V{enrollment_date},V{event_date}) < 0",
                 listOf(ruleAction), "", ""
             )
         val ruleEnrollment = RuleEnrollment(
@@ -87,13 +89,13 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateHasValueFunctionMustReturnTrueIfValueSpecified() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:hasValue(#{test_variable})"
         )
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent(
             "test_variable", true, emptyList(),"test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
@@ -113,7 +115,7 @@ class RuleEngineFunctionTest {
         val option1 = Option("name1", "code1")
         val option2 = Option("name2", "code2")
         val options = listOf(option1, option2)
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "#{test_variable}"
         )
         val ruleVariable: RuleVariable = RuleVariableNewestEvent("test_variable",
@@ -138,13 +140,13 @@ class RuleEngineFunctionTest {
         val option1 = Option("name1", "code1")
         val option2 = Option("name2", "code2")
         val options = listOf(option1, option2)
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "#{test_variable}"
         )
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent(
             "test_variable", USE_CODE_FOR_OPTION_SET, options, "test_data_element", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
@@ -162,13 +164,13 @@ class RuleEngineFunctionTest {
     @Test
     @Deprecated("")
     fun evaluateHasValueFunctionWithStringValue() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:hasValue('test_variable')"
         )
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent(
             "test_variable", true, ArrayList(),"test_data_element", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
@@ -185,13 +187,13 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateHasValueFunctionMustReturnTrueIfNoValueSpecified() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:hasValue(#{test_variable})"
         )
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent(
             "test_variable", true, ArrayList(), "test_data_element", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
@@ -208,11 +210,11 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateEnvironmentVariableProgramStageName() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "V{program_stage_name}"
         )
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent("variable", true, ArrayList(), "test_data_element", RuleValueType.TEXT)
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage_id", "test_program_stage_name",
@@ -229,7 +231,7 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateDaysBetweenMustReturnCorrectDiff() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:daysBetween(#{test_var_one}, #{test_var_two})"
         )
         val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent(
@@ -238,7 +240,7 @@ class RuleEngineFunctionTest {
         val ruleVariableTwo: RuleVariable = RuleVariableCurrentEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne, ruleVariableTwo))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -255,7 +257,7 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateDaysBetweenWithSingleQuotedDateMustReturnCorrectDiff() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:daysBetween(#{test_var_one}, '2018-01-01')"
         )
         val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent(
@@ -264,7 +266,7 @@ class RuleEngineFunctionTest {
         val ruleVariableTwo: RuleVariable = RuleVariableCurrentEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne, ruleVariableTwo))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -284,13 +286,13 @@ class RuleEngineFunctionTest {
         val members = listOf("location1", "location2")
         val supplementaryData: MutableMap<String, List<String>> = HashMap()
         supplementaryData["OU_GROUP_ID"] = members
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:inOrgUnitGroup(#{test_var_one})"
         )
         val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent(
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = RuleEngine(RuleEngineContext(listOf(rule),listOf(ruleVariableOne),supplementaryData))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -310,13 +312,13 @@ class RuleEngineFunctionTest {
         val members = listOf("location1", "location2")
         val supplementaryData: MutableMap<String, List<String>> = HashMap()
         supplementaryData["OU_GROUP_ID"] = members
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:inOrgUnitGroup('OU_GROUP_ID')"
         )
         val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent(
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = RuleEngine(RuleEngineContext(listOf(rule),listOf(ruleVariableOne),supplementaryData))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -335,13 +337,13 @@ class RuleEngineFunctionTest {
         val roles = listOf("role1", "role2")
         val supplementaryData: MutableMap<String, List<String>> = HashMap()
         supplementaryData["USER"] = roles
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:hasUserRole(#{test_var_one})"
         )
         val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent(
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = RuleEngine(RuleEngineContext(listOf(rule),listOf(ruleVariableOne),supplementaryData))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -361,13 +363,13 @@ class RuleEngineFunctionTest {
         val roles = listOf("role1", "role2")
         val supplementaryData: MutableMap<String, List<String>> = HashMap()
         supplementaryData["USER"] = roles
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:hasUserRole('role1')"
         )
         val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent(
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = RuleEngine(RuleEngineContext(listOf(rule),listOf(ruleVariableOne),supplementaryData))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -383,7 +385,7 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2AddDays() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:addDays(#{test_var_one}, #{test_var_two})"
         )
         val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent(
@@ -392,7 +394,7 @@ class RuleEngineFunctionTest {
         val ruleVariableTwo: RuleVariable = RuleVariableCurrentEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne, ruleVariableTwo))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -420,13 +422,13 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2CountIfValue() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:countIfValue(#{test_var_one}, 'condition')"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -455,13 +457,13 @@ class RuleEngineFunctionTest {
     @Test
     @Deprecated("")
     fun evaluateD2CountIfValueWithStringValue() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:countIfValue('test_var_one', 'condition')"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -489,7 +491,7 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2Count() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:count(#{test_var_one})"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
@@ -498,7 +500,7 @@ class RuleEngineFunctionTest {
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -532,13 +534,13 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateLogicalAnd() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:count(#{test_var_one})"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule(
+        val rule = Rule(
             "d2:hasValue(V{current_date}) && d2:count(#{test_var_one}) > 0",
             listOf(ruleAction), "", ""
         )
@@ -563,13 +565,13 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateLogicalOr() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:count(#{test_var_one})"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule(
+        val rule = Rule(
             "d2:hasValue(V{current_date}) || d2:count(#{test_var_one}) > 0",
             listOf(ruleAction), "", ""
         )
@@ -595,7 +597,7 @@ class RuleEngineFunctionTest {
     @Test
     @Deprecated("")
     fun evaluateD2CountWithStringValue() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:count('test_var_one')"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
@@ -604,7 +606,7 @@ class RuleEngineFunctionTest {
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -638,13 +640,13 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2Round() {
-        val ruleAction1: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction1: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:round(#{test_var_one})"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
-        val rule: Rule = Rule("true", listOf(ruleAction1), "", "")
+        val rule = Rule("true", listOf(ruleAction1), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -660,13 +662,13 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2Modulus() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:modulus(#{test_var_one}, 2)"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -682,13 +684,13 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2SubString() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:substring(#{test_var_one}, 1, 3)"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -704,7 +706,7 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2WeeksBetween() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:weeksBetween(#{test_var_one}, #{test_var_two})"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
@@ -713,7 +715,7 @@ class RuleEngineFunctionTest {
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
@@ -733,7 +735,7 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2MonthsBetween() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:monthsBetween(#{test_var_one}, #{test_var_two})"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
@@ -742,7 +744,7 @@ class RuleEngineFunctionTest {
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
@@ -762,7 +764,7 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2YearsBetween() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:yearsBetween(#{test_var_one}, #{test_var_two})"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
@@ -771,7 +773,7 @@ class RuleEngineFunctionTest {
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("d2:yearsBetween('2016-01-01', '2018-09-01') == 2", listOf(ruleAction), "",
+        val rule = Rule("d2:yearsBetween('2016-01-01', '2018-09-01') == 2", listOf(ruleAction), "",
                 ""
             )
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
@@ -793,7 +795,7 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2Zpvc() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:zpvc( '1', '0', '-1' )"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
@@ -805,7 +807,7 @@ class RuleEngineFunctionTest {
         val ruleVariableThree: RuleVariable = RuleVariableNewestEvent(
             "test_var_three", true, ArrayList(), "test_data_element_two", RuleValueType.NUMERIC
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
@@ -822,10 +824,10 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2Zing() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:zing( '-1' )"
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf())
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -839,10 +841,10 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2Oizp() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:oizp( '0' )"
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf())
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -855,13 +857,13 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2CountIfZeroPos() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:countIfZeroPos(#{test_var_one})"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -891,13 +893,13 @@ class RuleEngineFunctionTest {
     @Test
     @Deprecated("")
     fun evaluateD2CountIfZeroPosWithStringValue() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:countIfZeroPos('test_var_one')"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -926,13 +928,13 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2Left() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:left(#{test_var_one}, 4)"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -948,13 +950,13 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2Right() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:right(#{test_var_one}, 2)"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -970,13 +972,13 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2Concatenate() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:concatenate(#{test_var_one}, '+days')"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -992,13 +994,13 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2ValidatePattern() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:validatePattern(#{test_var_one}, '.*555.*')"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -1024,13 +1026,13 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2Length() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:length(#{test_var_one})"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -1046,13 +1048,13 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2Split() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:split(#{test_var_one},'-',2)"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
@@ -1068,7 +1070,7 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateNestedFunctionCalls() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:floor(#{test_var_one} + d2:ceil(#{test_var_three})) " +
                     "/ 5 * d2:ceil(#{test_var_two})"
         )
@@ -1081,7 +1083,7 @@ class RuleEngineFunctionTest {
         val ruleVariableThree: RuleVariable = RuleVariableCurrentEvent(
             "test_var_three", true, ArrayList(), "test_data_element_three", RuleValueType.NUMERIC
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo, ruleVariableThree)
@@ -1102,7 +1104,7 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2ZScoreWFA() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "true"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
@@ -1111,7 +1113,7 @@ class RuleEngineFunctionTest {
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("d2:zScoreWFA(1,#{test_var_one},#{test_var_two}) == 0", listOf(ruleAction),
+        val rule = Rule("d2:zScoreWFA(1,#{test_var_one},#{test_var_two}) == 0", listOf(ruleAction),
                 "", ""
             )
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
@@ -1132,7 +1134,7 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2ZScoreHFAGirl() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "true"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
@@ -1141,7 +1143,7 @@ class RuleEngineFunctionTest {
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("d2:zScoreHFA(12,#{test_var_one},#{test_var_two}) == -3", listOf(ruleAction),
+        val rule = Rule("d2:zScoreHFA(12,#{test_var_one},#{test_var_two}) == -3", listOf(ruleAction),
                 "", ""
             )
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
@@ -1162,7 +1164,7 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2ZScoreHFABoy() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "true"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
@@ -1171,7 +1173,7 @@ class RuleEngineFunctionTest {
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("d2:zScoreHFA(10,#{test_var_one},#{test_var_two}) == -2", listOf(ruleAction),
+        val rule = Rule("d2:zScoreHFA(10,#{test_var_one},#{test_var_two}) == -2", listOf(ruleAction),
                 "", ""
             )
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
@@ -1192,7 +1194,7 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2ZScoreWFHBoy() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "true"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
@@ -1201,7 +1203,7 @@ class RuleEngineFunctionTest {
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("d2:zScoreWFH(52,#{test_var_one},A{test_var_two}) < 2", listOf(ruleAction),
+        val rule = Rule("d2:zScoreWFH(52,#{test_var_one},A{test_var_two}) < 2", listOf(ruleAction),
                 "", ""
             )
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
@@ -1222,7 +1224,7 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2ZScoreWFHGirl() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:zScoreWFH(81.5,9.6,'female') == 2"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
@@ -1231,7 +1233,7 @@ class RuleEngineFunctionTest {
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("d2:zScoreWFH(81.5,#{test_var_one},#{test_var_two}) == 2", listOf(ruleAction),
+        val rule = Rule("d2:zScoreWFH(81.5,#{test_var_one},#{test_var_two}) == 2", listOf(ruleAction),
                 "", ""
             )
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
@@ -1252,7 +1254,7 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2MaxValue() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "true"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
@@ -1261,7 +1263,7 @@ class RuleEngineFunctionTest {
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("d2:maxValue(#{test_var_one}) == 8.0", listOf(ruleAction), "", "")
+        val rule = Rule("d2:maxValue(#{test_var_one}) == 8.0", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
@@ -1296,7 +1298,7 @@ class RuleEngineFunctionTest {
     @Test
     @Deprecated("")
     fun evaluateD2MaxValueWithStringValue() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "true"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
@@ -1305,7 +1307,7 @@ class RuleEngineFunctionTest {
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("d2:maxValue('test_var_one') == 8.0", listOf(ruleAction), "", "")
+        val rule = Rule("d2:maxValue('test_var_one') == 8.0", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
@@ -1339,7 +1341,7 @@ class RuleEngineFunctionTest {
 
     @Test
     fun testMinValue() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:minValue(#{test_var_one})"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
@@ -1348,7 +1350,7 @@ class RuleEngineFunctionTest {
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
@@ -1383,7 +1385,7 @@ class RuleEngineFunctionTest {
 
     @Test
     fun testMinValueWithStringValue() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:minValue('test_var_one')"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
@@ -1392,7 +1394,7 @@ class RuleEngineFunctionTest {
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
@@ -1434,13 +1436,13 @@ class RuleEngineFunctionTest {
         val dayBeforeYesterday = cal.time
         cal.add(Calendar.DATE, 4)
         val dayAfterTomorrow = cal.time
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:lastEventDate('test_var_one')"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
-        val rule: Rule = Rule("true", listOf(ruleAction), "test_rule", "")
+        val rule = Rule("true", listOf(ruleAction), "test_rule", "")
         val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage1","",RuleEvent.Status.ACTIVE, dayBeforeYesterday, Date(), 
