@@ -12,9 +12,11 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
-          cache: maven
+          cache: 'gradle'
+      - name: Change wrapper permission
+        run: chmod +x ./gradlew
       - name: Test
-        run: mvn clean install -DskipTests=false --update-snapshots -q
+        run: ./gradlew clean allTests
 
   artifact:
     name: Publish - Nexus
@@ -28,10 +30,11 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
-          cache: maven
+          cache: 'gradle'
+      - name: Change wrapper permission
+        run: chmod +x ./gradlew
       - name: Release Maven package
-        uses: samuelmeuli/action-maven-publish@v1
-        with:
-          nexus_username: ${{ secrets.SONATYPE_OSSRH_USERNAME }}
-          nexus_password: ${{ secrets.SONATYPE_OSSRH_PASSWORD }}
-          maven_profiles: "branch"
+        run: ./gradlew publishAllPublicationsToSonatypeRepository
+        env:
+          OSSRH_USERNAME: ${{ secrets.SONATYPE_OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.SONATYPE_OSSRH_PASSWORD }}
