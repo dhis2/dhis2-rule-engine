@@ -14,8 +14,18 @@ internal class RuleEngineTest {
 
     @Test(expected = IllegalStateException::class)
     fun evaluateShouldThrowIfEventIsAlreadyInContext() {
-        val ruleEvent = RuleEvent("test_event", "test_programstage","",
-                RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null,"", null, ArrayList())
+        val ruleEvent = RuleEvent(
+            "test_event",
+            "test_programstage",
+            "",
+            RuleEvent.Status.ACTIVE,
+            LocalDate.currentDate(),
+            LocalDate.currentDate(),
+            null,
+            "",
+            null,
+            ArrayList()
+        )
         val ruleEvents: MutableList<RuleEvent> = ArrayList()
         ruleEvents.add(ruleEvent)
         val ruleEngine = RuleEngine(ruleEngineContext, ruleEvents)

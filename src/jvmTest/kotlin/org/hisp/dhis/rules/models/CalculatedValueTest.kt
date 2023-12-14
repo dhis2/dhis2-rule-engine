@@ -39,14 +39,29 @@ class CalculatedValueTest {
     fun evaluateTenThousandRulesTest() {
         val i = 10000
         val ruleEngine = getRuleEngine(createRules(i))
-        val enrollment = RuleEnrollment("test_enrollment", "test_program", LocalDate.Companion.currentDate(),
-            LocalDate.Companion.currentDate(), RuleEnrollment.Status.ACTIVE, "test_ou", "test_ou_code", listOf())
-        val ruleEvent = RuleEvent(event = "test_event", programStage = "test_program_stage",
-            programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = LocalDate.Companion.currentDate(), dueDate = LocalDate.Companion.currentDate(),
-            organisationUnit = "", organisationUnitCode = "", completedDate = null,
+        val enrollment = org.hisp.dhis.rules.models.RuleEnrollment(
+            "test_enrollment",
+            "test_program",
+            LocalDate.Companion.currentDate(),
+            LocalDate.Companion.currentDate(),
+            org.hisp.dhis.rules.models.RuleEnrollment.Status.ACTIVE,
+            "test_ou",
+            "test_ou_code",
+            listOf()
+        )
+        val ruleEvent = RuleEvent(
+            event = "test_event",
+            programStage = "test_program_stage",
+            programStageName = "",
+            status = RuleEvent.Status.ACTIVE,
+            eventDate = LocalDate.currentDate(),
+            dueDate = LocalDate.currentDate(),
+            organisationUnit = "",
+            organisationUnitCode = "",
+            completedDate = null,
             dataValues = listOf(
                 RuleDataValue(
-                    LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element", "test_value"
+                    LocalDate.currentDate(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
         )
@@ -56,18 +71,38 @@ class CalculatedValueTest {
 
     @Test
     fun sendMessageMustGetValueFromAssignAction() {
-        val assignAction: RuleAction = RuleActionAssign.create("#{test_calculated_value}", "2+2", null)
+        val assignAction: org.hisp.dhis.rules.models.RuleAction = RuleActionAssign.create("#{test_calculated_value}", "2+2", null)
         val rule = Rule("true", listOf(assignAction), "test_program_rule1")
-        val sendMessageAction: RuleAction = RuleActionSendMessage("test_notification", "4")
-        val rule2 = Rule("#{test_calculated_value}==4", listOf(sendMessageAction), "test_program_rule2")
-        val enrollment = RuleEnrollment("test_enrollment", "test_program", LocalDate.Companion.currentDate(),
-            LocalDate.Companion.currentDate(), RuleEnrollment.Status.ACTIVE, "test_ou", "test_ou_code", listOf())
-        val ruleEvent = RuleEvent(event = "test_event", programStage = "test_program_stage",
-            programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = LocalDate.Companion.currentDate(), dueDate = LocalDate.Companion.currentDate(),
-            organisationUnit = "", organisationUnitCode = "", completedDate = null,
+        val sendMessageAction: org.hisp.dhis.rules.models.RuleAction =
+            RuleActionSendMessage("test_notification", "4")
+        val rule2 = Rule(
+            "#{test_calculated_value}==4",
+            listOf(sendMessageAction),
+            "test_program_rule2"
+        )
+        val enrollment = org.hisp.dhis.rules.models.RuleEnrollment(
+            "test_enrollment",
+            "test_program",
+            LocalDate.Companion.currentDate(),
+            LocalDate.Companion.currentDate(),
+            org.hisp.dhis.rules.models.RuleEnrollment.Status.ACTIVE,
+            "test_ou",
+            "test_ou_code",
+            listOf()
+        )
+        val ruleEvent = RuleEvent(
+            event = "test_event",
+            programStage = "test_program_stage",
+            programStageName = "",
+            status = RuleEvent.Status.ACTIVE,
+            eventDate = LocalDate.currentDate(),
+            dueDate = LocalDate.currentDate(),
+            organisationUnit = "",
+            organisationUnitCode = "",
+            completedDate = null,
             dataValues = listOf(
                 RuleDataValue(
-                    LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element", "test_value"
+                    LocalDate.currentDate(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
         )
@@ -79,10 +114,15 @@ class CalculatedValueTest {
 
     private fun createRules(i: Int): List<Rule> {
         val rules: MutableList<Rule> = ArrayList()
-        val assignAction: RuleAction = RuleActionAssign.create("#{test_calculated_value}", "2+2", null)
+        val assignAction: org.hisp.dhis.rules.models.RuleAction = RuleActionAssign.create("#{test_calculated_value}", "2+2", null)
         val rule = Rule("true", listOf(assignAction), "test_program_rule1")
-        val sendMessageAction: RuleAction = RuleActionSendMessage("test_notification", "4")
-        val rule2 = Rule("#{test_calculated_value}==4", listOf(sendMessageAction), "test_program_rule2")
+        val sendMessageAction: org.hisp.dhis.rules.models.RuleAction =
+            RuleActionSendMessage("test_notification", "4")
+        val rule2 = Rule(
+            "#{test_calculated_value}==4",
+            listOf(sendMessageAction),
+            "test_program_rule2"
+        )
         for (j in 0 until i) {
             rules.add(rule)
             rules.add(rule2)
@@ -92,21 +132,38 @@ class CalculatedValueTest {
 
     @Test
     fun sendMessageMustGetValueFromAssignActionInSingleExecution() {
-        val assignAction: RuleAction = RuleActionAssign.create("#{test_calculated_value}", "2+2", null)
-        val rule = Rule( "true", listOf(assignAction), "test_program_rule1", "")
-        val sendMessageAction: RuleAction = RuleActionSendMessage("test_notification", "4.0")
-        val rule2 = Rule("#{test_calculated_value}==4.0", listOf(sendMessageAction),
-                "test_program_rule2", ""
-            )
+        val assignAction: org.hisp.dhis.rules.models.RuleAction = RuleActionAssign.create("#{test_calculated_value}", "2+2", null)
+        val rule = Rule("true", listOf(assignAction), "test_program_rule1", "")
+        val sendMessageAction: org.hisp.dhis.rules.models.RuleAction =
+            RuleActionSendMessage("test_notification", "4.0")
+        val rule2 = Rule(
+            "#{test_calculated_value}==4.0", listOf(sendMessageAction),
+            "test_program_rule2", ""
+        )
         val ruleEngine = getRuleEngine(listOf(rule, rule2))
-        val enrollment = RuleEnrollment("test_enrollment", "test_program", LocalDate.Companion.currentDate(),
-            LocalDate.Companion.currentDate(), RuleEnrollment.Status.ACTIVE, "test_ou", "test_ou_code", listOf())
-        val ruleEvent = RuleEvent(event = "test_event", programStage = "test_program_stage",
-            programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = LocalDate.Companion.currentDate(), dueDate = LocalDate.Companion.currentDate(),
-            organisationUnit = "", organisationUnitCode = "", completedDate = null,
+        val enrollment = org.hisp.dhis.rules.models.RuleEnrollment(
+            "test_enrollment",
+            "test_program",
+            LocalDate.Companion.currentDate(),
+            LocalDate.Companion.currentDate(),
+            org.hisp.dhis.rules.models.RuleEnrollment.Status.ACTIVE,
+            "test_ou",
+            "test_ou_code",
+            listOf()
+        )
+        val ruleEvent = RuleEvent(
+            event = "test_event",
+            programStage = "test_program_stage",
+            programStageName = "",
+            status = RuleEvent.Status.ACTIVE,
+            eventDate = LocalDate.currentDate(),
+            dueDate = LocalDate.currentDate(),
+            organisationUnit = "",
+            organisationUnitCode = "",
+            completedDate = null,
             dataValues = listOf(
                 RuleDataValue(
-                    LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element", "test_value"
+                    LocalDate.currentDate(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
         )

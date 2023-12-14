@@ -1,6 +1,5 @@
 package org.hisp.dhis.rules
 
-import org.hisp.dhis.rules.models.RuleValueType
 import kotlin.test.assertEquals
 
 internal class RuleVariableValueAssert private constructor(private val variableValue: RuleVariableValue) {
@@ -17,7 +16,7 @@ internal class RuleVariableValueAssert private constructor(private val variableV
         return this
     }
 
-    fun isTypeOf( valueType: RuleValueType?): org.hisp.dhis.rules.RuleVariableValueAssert {
+    fun isTypeOf( valueType: org.hisp.dhis.rules.models.RuleValueType?): org.hisp.dhis.rules.RuleVariableValueAssert {
         assertEquals(valueType, variableValue.type)
         return this
     }

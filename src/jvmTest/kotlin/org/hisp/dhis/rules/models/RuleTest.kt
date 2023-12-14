@@ -7,7 +7,7 @@ import kotlin.test.assertEquals
 class RuleTest {
     @Test
     fun createShouldPropagatePropertiesCorrectly() {
-        val ruleAction: RuleAction = mockk<RuleAction>()
+        val ruleAction: org.hisp.dhis.rules.models.RuleAction = mockk<org.hisp.dhis.rules.models.RuleAction>()
         val (condition, actions, uid, _, programStage, priority) = Rule(
             "test_condition",
             listOf(ruleAction),

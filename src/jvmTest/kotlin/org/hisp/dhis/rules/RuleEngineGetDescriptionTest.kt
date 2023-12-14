@@ -1,9 +1,7 @@
 package org.hisp.dhis.rules
 
 import org.hisp.dhis.rules.models.Rule
-import org.hisp.dhis.rules.models.RuleAction
 import org.hisp.dhis.rules.models.RuleActionText
-import org.hisp.dhis.rules.models.RuleEngineValidationException
 import kotlin.test.*
 
 /*
@@ -37,7 +35,8 @@ import kotlin.test.*
  */
 class RuleEngineGetDescriptionTest {
     private var itemStore: MutableMap<String, org.hisp.dhis.rules.DataItem> = HashMap()
-    private val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT, "", "")
+    private val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        RuleActionText.Type.DISPLAYTEXT, "", "")
     @BeforeTest
     fun setUp() {
         itemStore = HashMap()
@@ -91,7 +90,10 @@ class RuleEngineGetDescriptionTest {
     @Test
     fun evaluateGetDescriptionWithIncorrectRules() {
         val rule= Rule("d2:hasValue(#{test_var_one} + 1)", listOf(ruleAction))
-        val rule1= Rule("d2:daysBetween((#{test_var_date_one},#{test_var_date_two})", listOf(ruleAction))
+        val rule1= Rule(
+            "d2:daysBetween((#{test_var_date_one},#{test_var_date_two})",
+            listOf(ruleAction)
+        )
         var ruleEngine = getRuleEngineForDescription(itemStore)
         var result = ruleEngine.evaluate(rule.condition)
         assertNotNull(result)
@@ -130,7 +132,10 @@ class RuleEngineGetDescriptionTest {
 
     @Test
     fun testGetDescriptionWithD2FunctionsAndLogicalAnd() {
-        val rule = Rule("d2:count(#{test_var_one}) > 0 && d2:hasValue(#{test_var_two})", listOf(ruleAction))
+        val rule = Rule(
+            "d2:count(#{test_var_one}) > 0 && d2:hasValue(#{test_var_two})",
+            listOf(ruleAction)
+        )
         val ruleEngine = getRuleEngineForDescription(itemStore)
         val result = ruleEngine.evaluate(rule.condition)
         assertNotNull(result)
@@ -280,12 +285,12 @@ class RuleEngineGetDescriptionTest {
         result = ruleEngine.evaluateDataFieldExpression("1 + 1 +")
         assertNotNull(result)
         assertFalse(result.valid())
-        assertTrue(result.exception() is RuleEngineValidationException)
+        assertTrue(result.exception() is org.hisp.dhis.rules.models.RuleEngineValidationException)
         result =
             ruleEngine.evaluateDataFieldExpression("d2:hasValue(#{test_var_two}) && d2:count(#{test_var_one}) > 0 (")
         assertNotNull(result)
         assertFalse(result.valid())
-        assertTrue(result.exception() is RuleEngineValidationException)
+        assertTrue(result.exception() is org.hisp.dhis.rules.models.RuleEngineValidationException)
     }
 
     private fun getRuleEngineForDescription(itemStore: Map<String, org.hisp.dhis.rules.DataItem>): RuleEngine {

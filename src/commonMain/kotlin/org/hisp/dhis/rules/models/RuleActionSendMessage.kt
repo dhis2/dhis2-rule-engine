@@ -1,11 +1,7 @@
-package org.hisp.dhis.rules
-
-import org.hisp.dhis.rules.models.Rule
-import org.hisp.dhis.rules.models.RuleEvent
-import org.hisp.dhis.rules.models.RuleVariable
+package org.hisp.dhis.rules.models
 
 /*
-* Copyright (c) 2004-2020, University of Oslo
+* Copyright (c) 2004-2017, University of Oslo
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -30,22 +26,12 @@ import org.hisp.dhis.rules.models.RuleVariable
 * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/ /**
- * @author Zubair Asghar
- */
-object RuleEngineTestUtils {
-    fun getRuleEngine(
-        rules: List<Rule>, ruleEnrollment: org.hisp.dhis.rules.models.RuleEnrollment,
-        ruleEvents: List<RuleEvent>
-    ): RuleEngine {
-        return RuleEngine(RuleEngineContext(rules, emptyList()), ruleEvents, ruleEnrollment)
-    }
-
-    fun getRuleEngine(rule: Rule, ruleVariables: List<RuleVariable>): RuleEngine {
-        return RuleEngine(RuleEngineContext(listOf(rule), ruleVariables))
-    }
-
-    fun getRuleEngine(rules: List<Rule>): RuleEngine {
-        return RuleEngine(RuleEngineContext(rules, emptyList()))
+*/
+data class RuleActionSendMessage(
+    val notification: String,
+    val data2: String?
+) : RuleAction {
+    override fun data(): String? {
+        return data2
     }
 }

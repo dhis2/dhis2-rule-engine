@@ -36,16 +36,21 @@ class ConstantsValueTest {
 
     @Test
     fun assignConstantValueFromAssignActionInEnrollment() {
-        val assignAction: RuleAction = RuleActionAssign.create(null, "C{A1234567890}", "#{test_attribute}")
+        val assignAction: org.hisp.dhis.rules.models.RuleAction = RuleActionAssign.create(null, "C{A1234567890}", "#{test_attribute}")
         val rule = Rule("true", listOf(assignAction), "test_program_rule1", "")
         val constantsValueMap: MutableMap<String, String> = HashMap()
         constantsValueMap["A1234567890"] = "3.14"
         val ruleEngine = getRuleEngine(listOf(rule), constantsValueMap)
-        val enrollment = RuleEnrollment(enrollment= "test_enrollment",
-            programName = "test_program", incidentDate = LocalDate.Companion.currentDate(),
-            enrollmentDate = LocalDate.Companion.currentDate(), status = RuleEnrollment.Status.ACTIVE,
-            organisationUnit = "test_ou", organisationUnitCode = "test_ou_code",
-            attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value")))
+        val enrollment = org.hisp.dhis.rules.models.RuleEnrollment(
+            enrollment = "test_enrollment",
+            programName = "test_program",
+            incidentDate = LocalDate.Companion.currentDate(),
+            enrollmentDate = LocalDate.Companion.currentDate(),
+            status = org.hisp.dhis.rules.models.RuleEnrollment.Status.ACTIVE,
+            organisationUnit = "test_ou",
+            organisationUnitCode = "test_ou_code",
+            attributeValues = listOf(org.hisp.dhis.rules.models.RuleAttributeValue("test_attribute", "test_value"))
+        )
         val ruleEffects = ruleEngine.evaluate(enrollment)
         assertEquals(1, ruleEffects.size)
         assertEquals("3.14", ruleEffects[0].data())
@@ -54,8 +59,8 @@ class ConstantsValueTest {
 
     @Test
     fun assignValue() {
-        val assignAction: RuleAction = RuleActionAssign.create(null, "4", "test_attribute")
-        val action: RuleAction =
+        val assignAction: org.hisp.dhis.rules.models.RuleAction = RuleActionAssign.create(null, "4", "test_attribute")
+        val action: org.hisp.dhis.rules.models.RuleAction =
             RuleActionMessage.create(null, "#{test_attribute}", "", null, RuleActionMessage.Type.SHOW_ERROR)
         val rule = Rule("true", listOf(assignAction), "test_program_rule1", "")
         val rule2 = Rule("#{test_attribute} > 3", listOf(action), "test_program_rule2", "")
@@ -63,11 +68,16 @@ class ConstantsValueTest {
             listOf(rule, rule2),
             HashMap()
         )
-        val enrollment = RuleEnrollment(enrollment= "test_enrollment",
-            programName = "test_program", incidentDate = LocalDate.Companion.currentDate(),
-            enrollmentDate = LocalDate.Companion.currentDate(), status = RuleEnrollment.Status.ACTIVE,
-            organisationUnit = "test_ou", organisationUnitCode = "test_ou_code",
-            attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value")))
+        val enrollment = org.hisp.dhis.rules.models.RuleEnrollment(
+            enrollment = "test_enrollment",
+            programName = "test_program",
+            incidentDate = LocalDate.Companion.currentDate(),
+            enrollmentDate = LocalDate.Companion.currentDate(),
+            status = org.hisp.dhis.rules.models.RuleEnrollment.Status.ACTIVE,
+            organisationUnit = "test_ou",
+            organisationUnitCode = "test_ou_code",
+            attributeValues = listOf(org.hisp.dhis.rules.models.RuleAttributeValue("test_attribute", "test_value"))
+        )
         val ruleEffects = ruleEngine.evaluate(enrollment)
         assertEquals(2, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data())
@@ -78,20 +88,26 @@ class ConstantsValueTest {
 
     @Test
     fun assignValueThroughVariable() {
-        val assignAction: RuleAction = RuleActionAssign.create("#{test_attribute}", "4", null)
-        val action: RuleAction =
+        val assignAction: org.hisp.dhis.rules.models.RuleAction = RuleActionAssign.create("#{test_attribute}", "4", null)
+        val action: org.hisp.dhis.rules.models.RuleAction =
             RuleActionMessage.create(null, "#{test_attribute}", "", null, RuleActionMessage.Type.SHOW_ERROR)
         val rule = Rule("true", listOf(assignAction), "test_program_rule1", "")
-        val rule2: Rule = Rule("#{test_attribute} > 3", listOf(action), "test_program_rule2", "")
+        val rule2: Rule =
+            Rule("#{test_attribute} > 3", listOf(action), "test_program_rule2", "")
         val ruleEngine = getRuleEngine(
             listOf(rule, rule2),
             HashMap()
         )
-        val enrollment = RuleEnrollment(enrollment= "test_enrollment",
-            programName = "test_program", incidentDate = LocalDate.Companion.currentDate(),
-            enrollmentDate = LocalDate.Companion.currentDate(), status = RuleEnrollment.Status.ACTIVE,
-            organisationUnit = "test_ou", organisationUnitCode = "test_ou_code",
-            attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value")))
+        val enrollment = org.hisp.dhis.rules.models.RuleEnrollment(
+            enrollment = "test_enrollment",
+            programName = "test_program",
+            incidentDate = LocalDate.Companion.currentDate(),
+            enrollmentDate = LocalDate.Companion.currentDate(),
+            status = org.hisp.dhis.rules.models.RuleEnrollment.Status.ACTIVE,
+            organisationUnit = "test_ou",
+            organisationUnitCode = "test_ou_code",
+            attributeValues = listOf(org.hisp.dhis.rules.models.RuleAttributeValue("test_attribute", "test_value"))
+        )
         val ruleEffects = ruleEngine.evaluate(enrollment)
         assertEquals(1, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data())
@@ -100,19 +116,28 @@ class ConstantsValueTest {
 
     @Test
     fun assignConstantValueFromAssignActionInEvent() {
-        val assignAction: RuleAction = RuleActionAssign.create(null, "C{A1234567890}", "#{test_data_element}")
+        val assignAction: org.hisp.dhis.rules.models.RuleAction = RuleActionAssign.create(null, "C{A1234567890}", "#{test_data_element}")
         val rule = Rule("true", listOf(assignAction), "test_program_rule1", "")
         val constantsValueMap: MutableMap<String, String> = HashMap()
         constantsValueMap["A1234567890"] = "3.14"
         val ruleEngine = getRuleEngine(listOf(rule), constantsValueMap)
-        val ruleEvent = RuleEvent(event ="test_event", programStage = "test_program_stage", programStageName = "",
-            status = RuleEvent.Status.ACTIVE, eventDate = LocalDate.Companion.currentDate(), dueDate = LocalDate.Companion.currentDate(), organisationUnit = "", organisationUnitCode = "", completedDate = LocalDate.Companion.currentDate(), dataValues =
+        val ruleEvent = RuleEvent(
+            event = "test_event",
+            programStage = "test_program_stage",
+            programStageName = "",
+            status = RuleEvent.Status.ACTIVE,
+            eventDate = LocalDate.currentDate(),
+            dueDate = LocalDate.currentDate(),
+            organisationUnit = "",
+            organisationUnitCode = "",
+            completedDate = LocalDate.currentDate(),
+            dataValues =
             listOf(
-                    RuleDataValue(
-                        LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element", "test_value"
-                    )
+                RuleDataValue(
+                    LocalDate.currentDate(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
+        )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
         assertEquals("3.14", ruleEffects[0].data())

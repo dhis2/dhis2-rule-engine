@@ -11,6 +11,6 @@ class RuleVariableNewestStageEventTest {
         assertEquals("test_variable", ruleVariablePreviousEvent.name)
         assertEquals("test_dataelement", ruleVariablePreviousEvent.dataElement)
         assertEquals("test_programstage", ruleVariablePreviousEvent.programStage)
-        assertEquals(RuleValueType.NUMERIC, ruleVariablePreviousEvent.dataElementType)
+        assertEquals(org.hisp.dhis.rules.models.RuleValueType.NUMERIC, ruleVariablePreviousEvent.dataElementType)
     }
 }

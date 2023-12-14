@@ -1,11 +1,11 @@
-package org.hisp.dhis.rules
+package org.hisp.dhis.rules.models
 
-import org.hisp.dhis.rules.models.Rule
-import org.hisp.dhis.rules.models.RuleEvent
-import org.hisp.dhis.rules.models.RuleVariable
+import org.hisp.dhis.rules.Option
+import org.hisp.dhis.rules.RuleVariableValue
+import org.hisp.dhis.rules.RuleVariableValueMapBuilder
 
 /*
-* Copyright (c) 2004-2020, University of Oslo
+* Copyright (c) 2004-2018, University of Oslo
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -31,21 +31,27 @@ import org.hisp.dhis.rules.models.RuleVariable
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */ /**
- * @author Zubair Asghar
+ * @author Zubair Asghar.
  */
-object RuleEngineTestUtils {
-    fun getRuleEngine(
-        rules: List<Rule>, ruleEnrollment: org.hisp.dhis.rules.models.RuleEnrollment,
-        ruleEvents: List<RuleEvent>
-    ): RuleEngine {
-        return RuleEngine(RuleEngineContext(rules, emptyList()), ruleEvents, ruleEnrollment)
+class RuleVariableCalculatedValue(
+    val name: String,
+    val useCodeForOptionSet: Boolean,
+    val options2: List<Option>,
+    val calculatedValueVariable: String,
+    val calculatedValueType: RuleValueType
+) : RuleVariable {
+    override fun options(): List<Option> {
+        return options2
     }
 
-    fun getRuleEngine(rule: Rule, ruleVariables: List<RuleVariable>): RuleEngine {
-        return RuleEngine(RuleEngineContext(listOf(rule), ruleVariables))
-    }
-
-    fun getRuleEngine(rules: List<Rule>): RuleEngine {
-        return RuleEngine(RuleEngineContext(rules, emptyList()))
+    override fun createValues(
+        builder: RuleVariableValueMapBuilder,
+        allEventValues: Map<String, List<RuleDataValue>>,
+        currentEnrollmentValues: Map<String, RuleAttributeValue>,
+        currentEventValues: Map<String, RuleDataValue>
+    ): Map<String, RuleVariableValue> {
+        val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
+        valueMap[name] = RuleVariableValue(calculatedValueType)
+        return valueMap
     }
 }

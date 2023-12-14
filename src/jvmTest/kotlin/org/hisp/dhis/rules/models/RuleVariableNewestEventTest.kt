@@ -10,6 +10,6 @@ class RuleVariableNewestEventTest {
         )
         assertEquals("test_variable", ruleVariableNewestEvent.name)
         assertEquals("test_dataelement", ruleVariableNewestEvent.dataElement)
-        assertEquals(RuleValueType.NUMERIC, ruleVariableNewestEvent.dataElementType)
+        assertEquals(org.hisp.dhis.rules.models.RuleValueType.NUMERIC, ruleVariableNewestEvent.dataElementType)
     }
 }

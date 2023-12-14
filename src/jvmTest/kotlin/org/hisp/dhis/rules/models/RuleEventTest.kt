@@ -10,8 +10,8 @@ import kotlin.test.assertEquals
 class RuleEventTest {
     @Test
     fun createShouldPropagateValuesCorrectly() {
-        val ruleDataValue = mockk<RuleDataValue>()
-        val ruleDataValues: MutableList<RuleDataValue> = ArrayList()
+        val ruleDataValue = mockk<org.hisp.dhis.rules.models.RuleDataValue>()
+        val ruleDataValues: MutableList<org.hisp.dhis.rules.models.RuleDataValue> = ArrayList()
         ruleDataValues.add(ruleDataValue)
         val eventDate = LocalDate.Companion.currentDate()
         val dueDate = LocalDate.Companion.currentDate()
