@@ -5,7 +5,6 @@ import org.hisp.dhis.lib.expression.spi.IllegalExpressionException
 import org.hisp.dhis.lib.expression.spi.ParseException
 import org.hisp.dhis.lib.expression.spi.ValueType
 import org.hisp.dhis.rules.models.*
-import java.util.Date
 
 data class RuleEngine(
     val executionContext: RuleEngineContext,

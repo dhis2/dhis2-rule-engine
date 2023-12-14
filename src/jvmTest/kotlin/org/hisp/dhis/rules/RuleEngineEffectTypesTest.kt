@@ -1,7 +1,7 @@
 package org.hisp.dhis.rules
 
+import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.models.*
-import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -11,11 +11,11 @@ import kotlin.test.assertTrue
 class RuleEngineEffectTypesTest {
     private fun getTestRuleEvent(status: RuleEvent.Status): RuleEvent {
         return RuleEvent(event = "test_event", programStage = "test_program_stage",
-            programStageName = "", status = status, eventDate = Date(), dueDate = Date(),
+            programStageName = "", status = status, eventDate = LocalDate.Companion.currentDate(), dueDate = LocalDate.Companion.currentDate(),
             organisationUnit = "", organisationUnitCode = "", completedDate = null,
             dataValues = listOf(
                     RuleDataValue(
-                        Date(), "test_program_stage", "test_data_element", "test_value"
+                        LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element", "test_value"
                     )
                 )
             )

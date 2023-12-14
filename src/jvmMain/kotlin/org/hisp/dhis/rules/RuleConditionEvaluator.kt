@@ -7,8 +7,6 @@ import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.models.RuleEvaluationResult.Companion.errorRule
 import org.hisp.dhis.rules.models.RuleEvaluationResult.Companion.evaluatedResult
 import org.hisp.dhis.rules.models.RuleEvaluationResult.Companion.notEvaluatedResult
-import java.util.logging.Level
-import java.util.logging.Logger
 
 class RuleConditionEvaluator {
     fun getEvaluatedAndErrorRuleEffects(
@@ -134,7 +132,7 @@ class RuleConditionEvaluator {
                     " with condition (" + rule.condition() + ")" +
                     " raised an unexpected exception: " + e.message
         }
-        log.log(Level.SEVERE, errorMessage)
+        log.severe(errorMessage)
         ruleEvaluationResults.add(errorRule(rule, errorMessage))
     }
 
@@ -205,6 +203,6 @@ class RuleConditionEvaluator {
     }
 
     companion object {
-        private val log = Logger.getLogger(RuleConditionEvaluator::class.java.name)
+        private val log = createLogger(RuleConditionEvaluator::class.java.name)
     }
 }

@@ -36,20 +36,47 @@ import kotlin.test.*
  * @author Zubair Asghar
  */
 class RuleEngineGetDescriptionTest {
-    private var itemStore: MutableMap<String, DataItem> = HashMap()
+    private var itemStore: MutableMap<String, org.hisp.dhis.rules.DataItem> = HashMap()
     private val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT, "", "")
     @BeforeTest
     fun setUp() {
         itemStore = HashMap()
-        val var_1 = DataItem(test_var_one, ItemValueType.TEXT)
-        val var_2 = DataItem(test_var_two, ItemValueType.TEXT)
-        val var_8 = DataItem(test_var_three, ItemValueType.TEXT)
-        val var_3 = DataItem(test_var_date_one, ItemValueType.DATE)
-        val var_4 = DataItem(test_var_date_two, ItemValueType.DATE)
-        val var_5 = DataItem(completionDate, ItemValueType.DATE)
-        val var_6 = DataItem(constant, ItemValueType.TEXT)
-        val var_7 = DataItem(currentDate, ItemValueType.DATE)
-        val var_9 = DataItem(test_var_number, ItemValueType.NUMBER)
+        val var_1 = org.hisp.dhis.rules.DataItem(
+            org.hisp.dhis.rules.RuleEngineGetDescriptionTest.Companion.test_var_one,
+            org.hisp.dhis.rules.ItemValueType.TEXT
+        )
+        val var_2 = org.hisp.dhis.rules.DataItem(
+            org.hisp.dhis.rules.RuleEngineGetDescriptionTest.Companion.test_var_two,
+            org.hisp.dhis.rules.ItemValueType.TEXT
+        )
+        val var_8 = org.hisp.dhis.rules.DataItem(
+            org.hisp.dhis.rules.RuleEngineGetDescriptionTest.Companion.test_var_three,
+            org.hisp.dhis.rules.ItemValueType.TEXT
+        )
+        val var_3 = org.hisp.dhis.rules.DataItem(
+            org.hisp.dhis.rules.RuleEngineGetDescriptionTest.Companion.test_var_date_one,
+            org.hisp.dhis.rules.ItemValueType.DATE
+        )
+        val var_4 = org.hisp.dhis.rules.DataItem(
+            org.hisp.dhis.rules.RuleEngineGetDescriptionTest.Companion.test_var_date_two,
+            org.hisp.dhis.rules.ItemValueType.DATE
+        )
+        val var_5 = org.hisp.dhis.rules.DataItem(
+            org.hisp.dhis.rules.RuleEngineGetDescriptionTest.Companion.completionDate,
+            org.hisp.dhis.rules.ItemValueType.DATE
+        )
+        val var_6 = org.hisp.dhis.rules.DataItem(
+            org.hisp.dhis.rules.RuleEngineGetDescriptionTest.Companion.constant,
+            org.hisp.dhis.rules.ItemValueType.TEXT
+        )
+        val var_7 = org.hisp.dhis.rules.DataItem(
+            org.hisp.dhis.rules.RuleEngineGetDescriptionTest.Companion.currentDate,
+            org.hisp.dhis.rules.ItemValueType.DATE
+        )
+        val var_9 = org.hisp.dhis.rules.DataItem(
+            org.hisp.dhis.rules.RuleEngineGetDescriptionTest.Companion.test_var_number,
+            org.hisp.dhis.rules.ItemValueType.NUMBER
+        )
         itemStore["test_var_one"] = var_1
         itemStore["test_var_two"] = var_2
         itemStore["test_var_date_one"] = var_3
@@ -261,7 +288,7 @@ class RuleEngineGetDescriptionTest {
         assertTrue(result.exception() is RuleEngineValidationException)
     }
 
-    private fun getRuleEngineForDescription(itemStore: Map<String, DataItem>): RuleEngine {
+    private fun getRuleEngineForDescription(itemStore: Map<String, org.hisp.dhis.rules.DataItem>): RuleEngine {
         return RuleEngine(RuleEngineContext(emptyList(), emptyList(), emptyMap(),
             emptyMap(), RuleEngineIntent.DESCRIPTION, itemStore))
     }

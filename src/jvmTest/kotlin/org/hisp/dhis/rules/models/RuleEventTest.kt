@@ -1,8 +1,8 @@
 package org.hisp.dhis.rules.models
 
 import io.mockk.mockk
-import java.text.SimpleDateFormat
-import java.util.*
+import kotlinx.datetime.LocalDate
+import org.hisp.dhis.rules.currentDate
 import kotlin.collections.ArrayList
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -13,8 +13,8 @@ class RuleEventTest {
         val ruleDataValue = mockk<RuleDataValue>()
         val ruleDataValues: MutableList<RuleDataValue> = ArrayList()
         ruleDataValues.add(ruleDataValue)
-        val eventDate = Date()
-        val dueDate = Date()
+        val eventDate = LocalDate.Companion.currentDate()
+        val dueDate = LocalDate.Companion.currentDate()
         val (event, programStage, _, status, eventDate1, dueDate1, _, _, _, dataValues) = RuleEvent(
             "test_event_uid", "test_stage_uid", "",
             RuleEvent.Status.ACTIVE, eventDate, dueDate, null, "", "", ruleDataValues
@@ -30,17 +30,16 @@ class RuleEventTest {
 
     @Test
     fun eventDateComparatorTest() {
-        val dateFormat = SimpleDateFormat(DATE_PATTERN, Locale.US)
         val ruleEvents: List<RuleEvent> =
             listOf(
                 RuleEvent(
                     "test_event_one", "test_program_stage_one", "", RuleEvent.Status.ACTIVE,
-                    dateFormat.parse("2014-02-11"), dateFormat.parse("2014-02-11"), null, "", null,
+                    LocalDate.parse("2014-02-11"), LocalDate.parse("2014-02-11"), null, "", null,
                     emptyList()
                 ),
                 RuleEvent(
                     "test_event_two", "test_program_stage_two", "", RuleEvent.Status.ACTIVE,
-                    dateFormat.parse("2017-03-22"), dateFormat.parse("2017-03-22"), null, "", null,
+                    LocalDate.parse("2017-03-22"), LocalDate.parse("2017-03-22"), null, "", null,
                     emptyList()
                 )
             )

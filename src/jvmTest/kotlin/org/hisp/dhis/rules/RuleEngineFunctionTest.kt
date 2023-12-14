@@ -1,10 +1,10 @@
 package org.hisp.dhis.rules
 
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import org.hisp.dhis.rules.models.*
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.ZoneOffset
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.test.Test
@@ -13,10 +13,9 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class RuleEngineFunctionTest {
-    private val DATE_FORMAT = SimpleDateFormat(DATE_PATTERN, Locale.US)
     @Test
     fun evaluateFailingRule() {
-        val enrollmentDate = Date()
+        val enrollmentDate = LocalDate.Companion.currentDate()
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "2 + 2"
@@ -25,7 +24,7 @@ class RuleEngineFunctionTest {
                 listOf(ruleAction), "", ""
             )
         val validRule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(listOf(failingRule, validRule))
+        val ruleEngine = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(listOf(failingRule, validRule))
         val ruleEnrollment = RuleEnrollment(
             "test_enrollment", "",
             enrollmentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE,
@@ -39,8 +38,8 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateFailingRuleInMultipleContext() {
-        val today = Date()
-        val yesterday = Date.from(LocalDate.now().minusDays(1).atStartOfDay().toInstant(ZoneOffset.UTC))
+        val today = LocalDate.Companion.currentDate()
+        val yesterday = today.minus(1, DateTimeUnit.DAY)
         val ruleAction: RuleAction = RuleActionText.createForFeedback(
                     RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "2 + 2"
@@ -54,19 +53,19 @@ class RuleEngineFunctionTest {
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, Date(), Date(),  null, "",
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(),  null, "",
             null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleNotFailingEvent = RuleEvent(
             "test_not_failing_event", "test_program_stage", "",
             RuleEvent.Status.ACTIVE, yesterday, yesterday,  null, "",
             null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngine = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(
             listOf(failingRule), ruleEnrollment,
             listOf(ruleEvent, ruleNotFailingEvent)
         )
@@ -96,12 +95,12 @@ class RuleEngineFunctionTest {
             "test_variable", true, emptyList(),"test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
+        val ruleEngine = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, Date(), Date(),  null, "",
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(),  null, "",
             null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "test_value")
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "test_value")
             )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
@@ -119,14 +118,14 @@ class RuleEngineFunctionTest {
             "test_action_content", "#{test_variable}"
         )
         val ruleVariable: RuleVariable = RuleVariableNewestEvent("test_variable",
-            USE_NAME_FOR_OPTION_SET, options, "test_data_element", RuleValueType.TEXT)
+            org.hisp.dhis.rules.RuleEngineFunctionTest.Companion.USE_NAME_FOR_OPTION_SET, options, "test_data_element", RuleValueType.TEXT)
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
+        val ruleEngine = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, Date(), Date(),  null, "",
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(),  null, "",
             null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element", option1.code)
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element", option1.code)
             )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
@@ -144,15 +143,16 @@ class RuleEngineFunctionTest {
             "test_action_content", "#{test_variable}"
         )
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent(
-            "test_variable", USE_CODE_FOR_OPTION_SET, options, "test_data_element", RuleValueType.TEXT
+            "test_variable",
+            org.hisp.dhis.rules.RuleEngineFunctionTest.Companion.USE_CODE_FOR_OPTION_SET, options, "test_data_element", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
+        val ruleEngine = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, Date(), Date(),  null, "",
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(),  null, "",
             null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element", option2.code)
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element", option2.code)
             )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
@@ -171,12 +171,12 @@ class RuleEngineFunctionTest {
             "test_variable", true, ArrayList(),"test_data_element", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
+        val ruleEngine = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, Date(), Date(),  null, "",
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(),  null, "",
             null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element", "test_value")
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element", "test_value")
             )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
@@ -194,12 +194,12 @@ class RuleEngineFunctionTest {
             "test_variable", true, ArrayList(), "test_data_element", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
+        val ruleEngine = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, Date(), Date(),  null, "",
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(),  null, "",
             null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
@@ -215,12 +215,12 @@ class RuleEngineFunctionTest {
         )
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent("variable", true, ArrayList(), "test_data_element", RuleValueType.TEXT)
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
+        val ruleEngine = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage_id", "test_program_stage_name",
-            RuleEvent.Status.ACTIVE, Date(), Date(),  null, "",
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(),  null, "",
             null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
@@ -241,12 +241,13 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne, ruleVariableTwo))
+        val ruleEngine =
+            org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne, ruleVariableTwo))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "2017-01-01"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "2017-02-01")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "2017-01-01"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "2017-02-01")
             )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
@@ -267,12 +268,13 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne, ruleVariableTwo))
+        val ruleEngine =
+            org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne, ruleVariableTwo))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "2017-01-01"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "2017-02-01")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "2017-01-01"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "2017-02-01")
             )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
@@ -296,8 +298,8 @@ class RuleEngineFunctionTest {
         val ruleEngine = RuleEngine(RuleEngineContext(listOf(rule),listOf(ruleVariableOne),supplementaryData))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date(), null, "location1", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "OU_GROUP_ID")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "location1", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "OU_GROUP_ID")
             )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
@@ -322,8 +324,8 @@ class RuleEngineFunctionTest {
         val ruleEngine = RuleEngine(RuleEngineContext(listOf(rule),listOf(ruleVariableOne),supplementaryData))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date(), null, "location1", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "OU_GROUP_ID")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "location1", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "OU_GROUP_ID")
             )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
@@ -347,8 +349,8 @@ class RuleEngineFunctionTest {
         val ruleEngine = RuleEngine(RuleEngineContext(listOf(rule),listOf(ruleVariableOne),supplementaryData))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date(), null, "location1", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "role1")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "location1", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "role1")
             )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
@@ -373,8 +375,8 @@ class RuleEngineFunctionTest {
         val ruleEngine = RuleEngine(RuleEngineContext(listOf(rule),listOf(ruleVariableOne),supplementaryData))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date(), null, "location1", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "role1")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "location1", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "role1")
             )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
@@ -395,12 +397,13 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne, ruleVariableTwo))
+        val ruleEngine =
+            org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne, ruleVariableTwo))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "2017-01-01"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "2")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "2017-01-01"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "2")
             )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
@@ -409,9 +412,9 @@ class RuleEngineFunctionTest {
         assertEquals(ruleEffects[0].data(), "2017-01-03")
         val ruleEvent2 = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "2017-01-03"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "-2")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "2017-01-03"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "-2")
             )
         )
         val ruleEffects2 = ruleEngine.evaluate(ruleEvent2)
@@ -429,23 +432,23 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition2")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition2")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent2, ruleEvent3)).evaluate(ruleEvent)
@@ -464,23 +467,23 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition2")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition2")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent2, ruleEvent3)).evaluate(ruleEvent)
@@ -501,29 +504,29 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition2")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition2")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent4 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "condition")
             )
         )
         val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent2, ruleEvent3, ruleEvent4)).evaluate(ruleEvent)
@@ -544,17 +547,17 @@ class RuleEngineFunctionTest {
             "d2:hasValue(V{current_date}) && d2:count(#{test_var_one}) > 0",
             listOf(ruleAction), "", ""
         )
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition2")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition2")
             )
         )
         val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent2)).evaluate(ruleEvent)
@@ -575,17 +578,17 @@ class RuleEngineFunctionTest {
             "d2:hasValue(V{current_date}) || d2:count(#{test_var_one}) > 0",
             listOf(ruleAction), "", ""
         )
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition2")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition2")
             )
         )
         val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent2)).evaluate(ruleEvent)
@@ -607,29 +610,29 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition2")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition2")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent4 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "condition")
             )
         )
         val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent2, ruleEvent3, ruleEvent4)).evaluate(ruleEvent)
@@ -647,11 +650,11 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
         val rule = Rule("true", listOf(ruleAction1), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "2.6")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "2.6")
             )
         )
         val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
@@ -669,11 +672,11 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "2.6")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "2.6")
             )
         )
         val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
@@ -691,11 +694,11 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "ABCD")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "ABCD")
             )
         )
         val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
@@ -716,15 +719,15 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "2018-01-01"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "2018-02-01")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "2018-01-01"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "2018-02-01")
             )
         )
         val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
@@ -745,15 +748,15 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "2018-01-01"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "2018-09-01")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "2018-01-01"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "2018-09-01")
             )
         )
         val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
@@ -776,15 +779,15 @@ class RuleEngineFunctionTest {
         val rule = Rule("d2:yearsBetween('2016-01-01', '2018-09-01') == 2", listOf(ruleAction), "",
                 ""
             )
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "2016-01-01"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "2018-09-01")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "2016-01-01"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "2018-09-01")
             )
         )
         val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
@@ -808,13 +811,13 @@ class RuleEngineFunctionTest {
             "test_var_three", true, ArrayList(), "test_data_element_two", RuleValueType.NUMERIC
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf()
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf()
         )
         val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
@@ -828,10 +831,10 @@ class RuleEngineFunctionTest {
             "test_action_content", "d2:zing( '-1' )"
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf())
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf())
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf()
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf()
         )
         val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
@@ -845,10 +848,10 @@ class RuleEngineFunctionTest {
             "test_action_content", "d2:oizp( '0' )"
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf())
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf())
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf())
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf())
         val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
@@ -864,23 +867,23 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "0")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "0")
             )
         )
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "1")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "1")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event1", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "-3")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "-3")
             )
         )
         val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent1, ruleEvent2))
@@ -900,23 +903,23 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "0")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "0")
             )
         )
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "1")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "1")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event1", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "-3")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "-3")
             )
         )
         val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent1, ruleEvent2))
@@ -935,11 +938,11 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "yyyy-mm-dd")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "yyyy-mm-dd")
             )
         )
         val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
@@ -957,11 +960,11 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "yyyy-mm-dd")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "yyyy-mm-dd")
             )
         )
         val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
@@ -979,11 +982,11 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "weeks")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "weeks")
             )
         )
         val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
@@ -1001,11 +1004,11 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "44455545454")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "44455545454")
             )
         )
         val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
@@ -1014,8 +1017,8 @@ class RuleEngineFunctionTest {
         assertEquals("true", ruleEffects[0].data())
         val ruleEvent2 = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "444887777")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "444887777")
             )
         )
         val ruleEffects2 = ruleEngineBuilder.evaluate(ruleEvent2)
@@ -1033,11 +1036,11 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "testString")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "testString")
             )
         )
         val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
@@ -1055,11 +1058,11 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "test-String-for-split")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "test-String-for-split")
             )
         )
         val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
@@ -1084,16 +1087,16 @@ class RuleEngineFunctionTest {
             "test_var_three", true, ArrayList(), "test_data_element_three", RuleValueType.NUMERIC
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngine = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo, ruleVariableThree)
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "19.9"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "0.9"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_three", "10.6")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "19.9"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "0.9"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_three", "10.6")
             )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
@@ -1116,15 +1119,15 @@ class RuleEngineFunctionTest {
         val rule = Rule("d2:zScoreWFA(1,#{test_var_one},#{test_var_two}) == 0", listOf(ruleAction),
                 "", ""
             )
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "4.5"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "4.5"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
@@ -1146,15 +1149,15 @@ class RuleEngineFunctionTest {
         val rule = Rule("d2:zScoreHFA(12,#{test_var_one},#{test_var_two}) == -3", listOf(ruleAction),
                 "", ""
             )
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "66.3"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "1")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "66.3"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "1")
             )
         )
         val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
@@ -1176,15 +1179,15 @@ class RuleEngineFunctionTest {
         val rule = Rule("d2:zScoreHFA(10,#{test_var_one},#{test_var_two}) == -2", listOf(ruleAction),
                 "", ""
             )
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "68.7"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "68.7"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
@@ -1206,15 +1209,15 @@ class RuleEngineFunctionTest {
         val rule = Rule("d2:zScoreWFH(52,#{test_var_one},A{test_var_two}) < 2", listOf(ruleAction),
                 "", ""
             )
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "3"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "3"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
@@ -1236,15 +1239,15 @@ class RuleEngineFunctionTest {
         val rule = Rule("d2:zScoreWFH(81.5,#{test_var_one},#{test_var_two}) == 2", listOf(ruleAction),
                 "", ""
             )
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "12.5"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "1")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "12.5"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "1")
             )
         )
         val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
@@ -1264,29 +1267,29 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("d2:maxValue(#{test_var_one}) == 8.0", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage1","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "5"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "5"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "7"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "7"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "8"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "8"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent1, ruleEvent2))
@@ -1308,29 +1311,29 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("d2:maxValue('test_var_one') == 8.0", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage1","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "5"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "5"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "7"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "7"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "8"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "8"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent1, ruleEvent2))
@@ -1351,29 +1354,29 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage1","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "5"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "5"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "7"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "7"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "8"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "8"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent1, ruleEvent2))
@@ -1395,29 +1398,29 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage1","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "5"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "5"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "7"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "7"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "8"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "8"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent1, ruleEvent2))
@@ -1429,13 +1432,9 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateLastEventDate() {
-        val cal = Calendar.getInstance()
-        cal.add(Calendar.DATE, -1)
-        val yesterday = cal.time
-        cal.add(Calendar.DATE, -1)
-        val dayBeforeYesterday = cal.time
-        cal.add(Calendar.DATE, 4)
-        val dayAfterTomorrow = cal.time
+        val yesterday = LocalDate.Companion.currentDate().minus(1, DateTimeUnit.DAY)
+        val dayBeforeYesterday = LocalDate.Companion.currentDate().minus(2, DateTimeUnit.DAY)
+        val dayAfterTomorrow = LocalDate.Companion.currentDate().plus(2, DateTimeUnit.DAY)
         val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:lastEventDate('test_var_one')"
         )
@@ -1443,16 +1442,16 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "test_rule", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineBuilder = org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent1 = RuleEvent(
-            "test_event1", "test_program_stage1","",RuleEvent.Status.ACTIVE, dayBeforeYesterday, Date(), 
+            "test_event1", "test_program_stage1","",RuleEvent.Status.ACTIVE, dayBeforeYesterday, LocalDate.Companion.currentDate(), 
             null, "", null, listOf(
                 RuleDataValue(dayBeforeYesterday, "test_program_stage1", "test_data_element_one", "value1")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, yesterday, Date (), null, "", null, listOf(
+            RuleEvent.Status.ACTIVE, yesterday, LocalDate.Companion.currentDate(), null, "", null, listOf(
                 RuleDataValue(yesterday, "test_program_stage2", "test_data_element_one", "value2")
             )
         )
@@ -1466,12 +1465,12 @@ class RuleEngineFunctionTest {
             .evaluate(ruleEvent3)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
-        assertEquals(DATE_FORMAT.format(dayAfterTomorrow), ruleEffects[0].data())
+        assertEquals(dayAfterTomorrow.toString(), ruleEffects[0].data())
     }
 
     companion object {
         private const val DATE_PATTERN = "yyyy-MM-dd"
         private const val USE_CODE_FOR_OPTION_SET = true
-        private const val USE_NAME_FOR_OPTION_SET = !USE_CODE_FOR_OPTION_SET
+        private const val USE_NAME_FOR_OPTION_SET = !org.hisp.dhis.rules.RuleEngineFunctionTest.Companion.USE_CODE_FOR_OPTION_SET
     }
 }

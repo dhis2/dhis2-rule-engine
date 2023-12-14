@@ -1,15 +1,15 @@
 package org.hisp.dhis.rules.models
 
-import java.util.Date
+import kotlinx.datetime.LocalDate
 
 data class RuleEvent(
     val event: String,
     val programStage: String,
     val programStageName: String,
     val status: Status,
-    val eventDate: Date,
-    val dueDate: Date?,
-    val completedDate: Date?,
+    val eventDate: LocalDate,
+    val dueDate: LocalDate?,
+    val completedDate: LocalDate?,
     val organisationUnit: String,
     val organisationUnitCode: String?,
     val dataValues: List<RuleDataValue>
@@ -39,15 +39,15 @@ data class RuleEvent(
         return status
     }
 
-    fun eventDate(): Date {
+    fun eventDate(): LocalDate {
         return eventDate
     }
 
-    fun dueDate(): Date? {
+    fun dueDate(): LocalDate? {
         return dueDate
     }
 
-    fun completedDate(): Date? {
+    fun completedDate(): LocalDate? {
         return completedDate
     }
 
@@ -61,9 +61,5 @@ data class RuleEvent(
 
     fun dataValues(): List<RuleDataValue> {
         return dataValues
-    }
-
-    companion object {
-        val EVENT_DATE_COMPARATOR: Comparator<RuleEvent> = Comparator.comparing{e: RuleEvent-> e.eventDate()}.reversed()
     }
 }

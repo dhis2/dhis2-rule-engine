@@ -1,10 +1,10 @@
 package org.hisp.dhis.rules.models
 
+import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.Option
 import org.hisp.dhis.rules.RuleVariableValue
 import org.hisp.dhis.rules.RuleVariableValueMapBuilder
-import org.hisp.dhis.rules.dateFormat
-import java.util.Date
+import org.hisp.dhis.rules.currentDate
 
 data class RuleVariableAttribute(
     val name: String,
@@ -24,14 +24,14 @@ data class RuleVariableAttribute(
         currentEventValues: Map<String, RuleDataValue>
     ): Map<String, RuleVariableValue> {
         val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
-        val currentDate = dateFormat.format(Date())
+        val currentDate = LocalDate.Companion.currentDate()
         val variableValue: RuleVariableValue
         variableValue = if (currentEnrollmentValues.containsKey(trackedEntityAttribute)) {
             val value = currentEnrollmentValues[trackedEntityAttribute]
             val optionValue = if (useCodeForOptionSet) value!!.value else getOptionName(value!!.value)!!
             RuleVariableValue(
                 trackedEntityAttributeType, optionValue,
-                listOf(optionValue), currentDate
+                listOf(optionValue), currentDate.toString()
             )
         } else {
             RuleVariableValue(trackedEntityAttributeType)

@@ -1,12 +1,12 @@
 package org.hisp.dhis.rules.models
 
-import java.util.Date
+import kotlinx.datetime.LocalDate
 
 data class RuleEnrollment(
     val enrollment: String,
     val programName: String,
-    val incidentDate: Date,
-    val enrollmentDate: Date,
+    val incidentDate: LocalDate,
+    val enrollmentDate: LocalDate,
     val status: Status,
     val organisationUnit: String,
     val organisationUnitCode: String,

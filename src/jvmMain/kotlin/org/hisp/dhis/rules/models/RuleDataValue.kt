@@ -1,9 +1,9 @@
 package org.hisp.dhis.rules.models
 
-import java.util.Date
+import kotlinx.datetime.LocalDate
 
 data class RuleDataValue(
-    val eventDate: Date,
+    val eventDate: LocalDate,
     val programStage: String,
     val dataElement: String,
     val value: String

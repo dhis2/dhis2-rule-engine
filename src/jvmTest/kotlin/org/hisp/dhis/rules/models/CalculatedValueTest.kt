@@ -1,8 +1,9 @@
 package org.hisp.dhis.rules.models
 
+import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.RuleEngine
 import org.hisp.dhis.rules.RuleEngineContext
-import java.util.Date
+import org.hisp.dhis.rules.currentDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -38,14 +39,14 @@ class CalculatedValueTest {
     fun evaluateTenThousandRulesTest() {
         val i = 10000
         val ruleEngine = getRuleEngine(createRules(i))
-        val enrollment = RuleEnrollment("test_enrollment", "test_program", Date(),
-            Date(), RuleEnrollment.Status.ACTIVE, "test_ou", "test_ou_code", listOf())
+        val enrollment = RuleEnrollment("test_enrollment", "test_program", LocalDate.Companion.currentDate(),
+            LocalDate.Companion.currentDate(), RuleEnrollment.Status.ACTIVE, "test_ou", "test_ou_code", listOf())
         val ruleEvent = RuleEvent(event = "test_event", programStage = "test_program_stage",
-            programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = Date(), dueDate = Date(),
+            programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = LocalDate.Companion.currentDate(), dueDate = LocalDate.Companion.currentDate(),
             organisationUnit = "", organisationUnitCode = "", completedDate = null,
             dataValues = listOf(
                 RuleDataValue(
-                    Date(), "test_program_stage", "test_data_element", "test_value"
+                    LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
         )
@@ -59,14 +60,14 @@ class CalculatedValueTest {
         val rule = Rule("true", listOf(assignAction), "test_program_rule1")
         val sendMessageAction: RuleAction = RuleActionSendMessage("test_notification", "4")
         val rule2 = Rule("#{test_calculated_value}==4", listOf(sendMessageAction), "test_program_rule2")
-        val enrollment = RuleEnrollment("test_enrollment", "test_program", Date(),
-            Date(), RuleEnrollment.Status.ACTIVE, "test_ou", "test_ou_code", listOf())
+        val enrollment = RuleEnrollment("test_enrollment", "test_program", LocalDate.Companion.currentDate(),
+            LocalDate.Companion.currentDate(), RuleEnrollment.Status.ACTIVE, "test_ou", "test_ou_code", listOf())
         val ruleEvent = RuleEvent(event = "test_event", programStage = "test_program_stage",
-            programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = Date(), dueDate = Date(),
+            programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = LocalDate.Companion.currentDate(), dueDate = LocalDate.Companion.currentDate(),
             organisationUnit = "", organisationUnitCode = "", completedDate = null,
             dataValues = listOf(
                 RuleDataValue(
-                    Date(), "test_program_stage", "test_data_element", "test_value"
+                    LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
         )
@@ -98,14 +99,14 @@ class CalculatedValueTest {
                 "test_program_rule2", ""
             )
         val ruleEngine = getRuleEngine(listOf(rule, rule2))
-        val enrollment = RuleEnrollment("test_enrollment", "test_program", Date(),
-            Date(), RuleEnrollment.Status.ACTIVE, "test_ou", "test_ou_code", listOf())
+        val enrollment = RuleEnrollment("test_enrollment", "test_program", LocalDate.Companion.currentDate(),
+            LocalDate.Companion.currentDate(), RuleEnrollment.Status.ACTIVE, "test_ou", "test_ou_code", listOf())
         val ruleEvent = RuleEvent(event = "test_event", programStage = "test_program_stage",
-            programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = Date(), dueDate = Date(),
+            programStageName = "", status = RuleEvent.Status.ACTIVE, eventDate = LocalDate.Companion.currentDate(), dueDate = LocalDate.Companion.currentDate(),
             organisationUnit = "", organisationUnitCode = "", completedDate = null,
             dataValues = listOf(
                 RuleDataValue(
-                    Date(), "test_program_stage", "test_data_element", "test_value"
+                    LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
         )

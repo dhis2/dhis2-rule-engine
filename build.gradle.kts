@@ -50,6 +50,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation("org.hisp.dhis.lib.expression:expression-parser:1.1.0-SNAPSHOT")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
             }
         }
         val commonTest by getting {

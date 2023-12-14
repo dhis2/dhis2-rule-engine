@@ -1,7 +1,7 @@
 package org.hisp.dhis.rules
 
+import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.models.*
-import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -42,8 +42,8 @@ class ConstantsValueTest {
         constantsValueMap["A1234567890"] = "3.14"
         val ruleEngine = getRuleEngine(listOf(rule), constantsValueMap)
         val enrollment = RuleEnrollment(enrollment= "test_enrollment",
-            programName = "test_program", incidentDate = Date(),
-            enrollmentDate = Date(), status = RuleEnrollment.Status.ACTIVE,
+            programName = "test_program", incidentDate = LocalDate.Companion.currentDate(),
+            enrollmentDate = LocalDate.Companion.currentDate(), status = RuleEnrollment.Status.ACTIVE,
             organisationUnit = "test_ou", organisationUnitCode = "test_ou_code",
             attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value")))
         val ruleEffects = ruleEngine.evaluate(enrollment)
@@ -64,8 +64,8 @@ class ConstantsValueTest {
             HashMap()
         )
         val enrollment = RuleEnrollment(enrollment= "test_enrollment",
-            programName = "test_program", incidentDate = Date(),
-            enrollmentDate = Date(), status = RuleEnrollment.Status.ACTIVE,
+            programName = "test_program", incidentDate = LocalDate.Companion.currentDate(),
+            enrollmentDate = LocalDate.Companion.currentDate(), status = RuleEnrollment.Status.ACTIVE,
             organisationUnit = "test_ou", organisationUnitCode = "test_ou_code",
             attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value")))
         val ruleEffects = ruleEngine.evaluate(enrollment)
@@ -88,8 +88,8 @@ class ConstantsValueTest {
             HashMap()
         )
         val enrollment = RuleEnrollment(enrollment= "test_enrollment",
-            programName = "test_program", incidentDate = Date(),
-            enrollmentDate = Date(), status = RuleEnrollment.Status.ACTIVE,
+            programName = "test_program", incidentDate = LocalDate.Companion.currentDate(),
+            enrollmentDate = LocalDate.Companion.currentDate(), status = RuleEnrollment.Status.ACTIVE,
             organisationUnit = "test_ou", organisationUnitCode = "test_ou_code",
             attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value")))
         val ruleEffects = ruleEngine.evaluate(enrollment)
@@ -106,10 +106,10 @@ class ConstantsValueTest {
         constantsValueMap["A1234567890"] = "3.14"
         val ruleEngine = getRuleEngine(listOf(rule), constantsValueMap)
         val ruleEvent = RuleEvent(event ="test_event", programStage = "test_program_stage", programStageName = "",
-            status = RuleEvent.Status.ACTIVE, eventDate = Date(), dueDate = Date(), organisationUnit = "", organisationUnitCode = "", completedDate = Date(), dataValues =
+            status = RuleEvent.Status.ACTIVE, eventDate = LocalDate.Companion.currentDate(), dueDate = LocalDate.Companion.currentDate(), organisationUnit = "", organisationUnitCode = "", completedDate = LocalDate.Companion.currentDate(), dataValues =
             listOf(
                     RuleDataValue(
-                        Date(), "test_program_stage", "test_data_element", "test_value"
+                        LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element", "test_value"
                     )
                 )
             )

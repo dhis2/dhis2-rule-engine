@@ -1,7 +1,7 @@
 package org.hisp.dhis.rules
 
+import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.models.*
-import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -15,7 +15,7 @@ class RuleEngineValueTypesTest {
         val ruleEngine = getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null, ArrayList())
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, ArrayList())
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
         assertEquals("false", ruleEffects[0].data())
@@ -32,7 +32,7 @@ class RuleEngineValueTypesTest {
         val ruleEngine = getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null, ArrayList())
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, ArrayList())
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
         assertEquals("0", ruleEffects[0].data())
@@ -49,7 +49,7 @@ class RuleEngineValueTypesTest {
         val ruleEngine = getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null, ArrayList()
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, ArrayList()
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)

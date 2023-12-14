@@ -1,7 +1,7 @@
 package org.hisp.dhis.rules
 
+import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.models.*
-import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -9,55 +9,55 @@ class RuleEngineVariableNameTest {
     @Test
     fun evaluateD2Round() {
         val ruleAction1: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:round(#{" + UID01 + "})"
+            "test_action_content", "d2:round(#{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID01 + "})"
         )
         val ruleAction2: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:round(#{" + VARIABLE_NAME + "})"
+            "test_action_content", "d2:round(#{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.VARIABLE_NAME + "})"
         )
         val ruleAction3: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:round(#{" + UID0 + "})"
+            "test_action_content", "d2:round(#{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID0 + "})"
         )
         val ruleAction4: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:round(#{" + UID0WILD + "})"
+            "test_action_content", "d2:round(#{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID0WILD + "})"
         )
         val ruleAction5: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:round(#{" + UID01WILD + "})"
+            "test_action_content", "d2:round(#{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID01WILD + "})"
         )
         val ruleAction6: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:round(#{" + UID012 + "})"
+            "test_action_content", "d2:round(#{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID012 + "})"
         )
         val ruleAction7: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:round(#{" + UID0WILD2 + "})"
+            "test_action_content", "d2:round(#{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID0WILD2 + "})"
         )
         val ruleAction8: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:round(A{" + UID0 + "})"
+            "test_action_content", "d2:round(A{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID0 + "})"
         )
         val ruleAction9: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:round(A{" + UID01 + "})"
+            "test_action_content", "d2:round(A{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID01 + "})"
         )
         val ruleAction10: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:round(A{" + VARIABLE_NAME + "})"
+            "test_action_content", "d2:round(A{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.VARIABLE_NAME + "})"
         )
         val ruleVariable1: RuleVariable = RuleVariableNewestEvent(
-            UID01, true, ArrayList(), "test_data_element1", RuleValueType.NUMERIC
+            org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID01, true, ArrayList(), "test_data_element1", RuleValueType.NUMERIC
         )
         val ruleVariable2: RuleVariable = RuleVariableNewestEvent(
-            VARIABLE_NAME, true, ArrayList(), "test_data_element2", RuleValueType.NUMERIC
+            org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.VARIABLE_NAME, true, ArrayList(), "test_data_element2", RuleValueType.NUMERIC
         )
         val ruleVariable3: RuleVariable = RuleVariableNewestEvent(
-            UID0, true, ArrayList(), "test_data_element3", RuleValueType.NUMERIC
+            org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID0, true, ArrayList(), "test_data_element3", RuleValueType.NUMERIC
         )
         val ruleVariable4: RuleVariable = RuleVariableNewestEvent(
-            UID0WILD, true, ArrayList(), "test_data_element4", RuleValueType.NUMERIC
+            org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID0WILD, true, ArrayList(), "test_data_element4", RuleValueType.NUMERIC
         )
         val ruleVariable5: RuleVariable = RuleVariableNewestEvent(
-            UID01WILD, true, ArrayList(), "test_data_element5", RuleValueType.NUMERIC
+            org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID01WILD, true, ArrayList(), "test_data_element5", RuleValueType.NUMERIC
         )
         val ruleVariable6: RuleVariable = RuleVariableNewestEvent(
-            UID012, true, ArrayList(), "test_data_element6", RuleValueType.NUMERIC
+            org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID012, true, ArrayList(), "test_data_element6", RuleValueType.NUMERIC
         )
         val ruleVariable7: RuleVariable = RuleVariableNewestEvent(
-            UID0WILD2, true, ArrayList(), "test_data_element7", RuleValueType.NUMERIC
+            org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID0WILD2, true, ArrayList(), "test_data_element7", RuleValueType.NUMERIC
         )
         val actions = listOf(
             ruleAction1, ruleAction2, ruleAction3, ruleAction4, ruleAction5, ruleAction6, ruleAction7,
@@ -77,17 +77,17 @@ class RuleEngineVariableNameTest {
         )
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element1", "2.6"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element2", "2.6"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element3", "2.6"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element4", "2.6"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element5", "2.6"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element6", "2.6"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element7", "2.6"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element8", "2.6"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element9", "2.6"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element10", "2.6")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element1", "2.6"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element2", "2.6"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element3", "2.6"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element4", "2.6"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element5", "2.6"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element6", "2.6"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element7", "2.6"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element8", "2.6"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element9", "2.6"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element10", "2.6")
             )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
@@ -117,18 +117,18 @@ class RuleEngineVariableNameTest {
     @Test
     fun evaluateHasValueFunctionMustReturnTrueIfVariableIsComposedUIDs() {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:hasValue(#{" + UID01 + "})"
+            "test_action_content", "d2:hasValue(#{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID01 + "})"
         )
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent(
-            UID01, true, ArrayList(), "test_data_element", RuleValueType.TEXT
+            org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID01, true, ArrayList(), "test_data_element", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
                 RuleDataValue(
-                    Date(), "test_program_stage", "test_data_element", "test_value"
+                    LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
         )
@@ -141,18 +141,18 @@ class RuleEngineVariableNameTest {
     @Test
     fun evaluateHasValueFunctionMustReturnTrueIfVariableIsVariableName() {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:hasValue(#{" + VARIABLE_NAME + "})"
+            "test_action_content", "d2:hasValue(#{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.VARIABLE_NAME + "})"
         )
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent(
-            VARIABLE_NAME, true, ArrayList(), "test_data_element", RuleValueType.TEXT
+            org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.VARIABLE_NAME, true, ArrayList(), "test_data_element", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = getRuleEngine(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
                 RuleDataValue(
-                    Date(), "test_program_stage", "test_data_element", "test_value"
+                    LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
         )
@@ -165,29 +165,29 @@ class RuleEngineVariableNameTest {
     @Test
     fun evaluateD2CountIfValueIsVariableName() {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:countIfValue(#{" + VARIABLE_NAME + "}, 'condition')"
+            "test_action_content", "d2:countIfValue(#{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.VARIABLE_NAME + "}, 'condition')"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
-            VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
+            org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition2")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition2")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent2, ruleEvent3)).evaluate(ruleEvent)
@@ -199,29 +199,29 @@ class RuleEngineVariableNameTest {
     @Test
     fun evaluateD2CountIfValueIsComposedUid() {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:countIfValue(#{" + UID01 + "}, 'condition')"
+            "test_action_content", "d2:countIfValue(#{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID01 + "}, 'condition')"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
-            UID01, true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
+            org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID01, true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition2")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition2")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent2, ruleEvent3)).evaluate(ruleEvent)
@@ -233,10 +233,10 @@ class RuleEngineVariableNameTest {
     @Test
     fun evaluateD2CountIfVariableName() {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:count(#{" + VARIABLE_NAME + "})"
+            "test_action_content", "d2:count(#{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.VARIABLE_NAME + "})"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
-            VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
+            org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
@@ -245,26 +245,26 @@ class RuleEngineVariableNameTest {
         val ruleEngine = getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition2")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition2")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent4 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "condition")
             )
         )
         val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent2, ruleEvent3, ruleEvent4)).evaluate(ruleEvent)
@@ -276,35 +276,35 @@ class RuleEngineVariableNameTest {
     @Test
     fun evaluateD2CountIfVariableNameIfComposedUid() {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:count(#{" + UID01 + "})"
+            "test_action_content", "d2:count(#{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID01 + "})"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
-            UID01, true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
+            org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID01, true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition2")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition2")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "condition")
             )
         )
         val ruleEvent4 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "condition")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "condition")
             )
         )
         val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent2, ruleEvent3, ruleEvent4)).evaluate(ruleEvent)
@@ -316,29 +316,29 @@ class RuleEngineVariableNameTest {
     @Test
     fun evaluateD2CountIfZeroPosIfVariableName() {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:countIfZeroPos(#{" + VARIABLE_NAME + "})"
+            "test_action_content", "d2:countIfZeroPos(#{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.VARIABLE_NAME + "})"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
-            VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
+            org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "0")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "0")
             )
         )
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "1")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "1")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event1", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "-3")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "-3")
             )
         )
         val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent1, ruleEvent2))
@@ -351,29 +351,29 @@ class RuleEngineVariableNameTest {
     @Test
     fun evaluateD2CountIfZeroPosIfComposedUid() {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:countIfZeroPos(#{" + UID01 + "})"
+            "test_action_content", "d2:countIfZeroPos(#{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID01 + "})"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
-            UID01, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
+            org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID01, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngine = getRuleEngine(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "0")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "0")
             )
         )
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "1")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "1")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event1", "test_program_stage","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "-3")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "-3")
             )
         )
         val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent1, ruleEvent2))
@@ -389,35 +389,35 @@ class RuleEngineVariableNameTest {
             "test_action_content", "true"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
-            VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
+            org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule = Rule("d2:maxValue(#{" + VARIABLE_NAME + "}) == 8.0", listOf(ruleAction), "", "")
+        val rule = Rule("d2:maxValue(#{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.VARIABLE_NAME + "}) == 8.0", listOf(ruleAction), "", "")
         val ruleEngine = getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage1","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "5"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "5"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "7"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "7"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "8"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "8"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent1, ruleEvent2))
@@ -432,35 +432,35 @@ class RuleEngineVariableNameTest {
             "test_action_content", "true"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
-            UID01, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
+            org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID01, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
-        val rule = Rule("d2:maxValue(#{" + UID01 + "}) == 8.0", listOf(ruleAction), "", "")
+        val rule = Rule("d2:maxValue(#{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID01 + "}) == 8.0", listOf(ruleAction), "", "")
         val ruleEngine = getRuleEngine(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage1","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "5"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "5"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "7"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "7"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "8"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "8"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent1, ruleEvent2))
@@ -472,10 +472,10 @@ class RuleEngineVariableNameTest {
     @Test
     fun testMinValueIfVariableName() {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:minValue(#{" + VARIABLE_NAME + "})"
+            "test_action_content", "d2:minValue(#{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.VARIABLE_NAME + "})"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
-            VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
+            org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
@@ -487,23 +487,23 @@ class RuleEngineVariableNameTest {
         )
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage1","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "5"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "5"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "7"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "7"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "8"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "8"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent1, ruleEvent2))
@@ -516,10 +516,10 @@ class RuleEngineVariableNameTest {
     @Test
     fun testMinValueIfComposedUid() {
         val ruleAction: RuleAction = RuleActionText.createForFeedback(RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:minValue(#{" + UID01 + "})"
+            "test_action_content", "d2:minValue(#{" + org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID01 + "})"
         )
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
-            UID01, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
+            org.hisp.dhis.rules.RuleEngineVariableNameTest.Companion.UID01, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
@@ -531,23 +531,23 @@ class RuleEngineVariableNameTest {
         )
         val ruleEvent1 = RuleEvent(
             "test_event1", "test_program_stage1","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "5"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "5"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent2 = RuleEvent(
             "test_event2", "test_program_stage2","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "7"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "7"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEvent3 = RuleEvent(
             "test_event3", "test_program_stage3","",
-            RuleEvent.Status.ACTIVE, Date(), Date (), null, "", null, listOf(
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_one", "8"),
-                RuleDataValue(Date(), "test_program_stage", "test_data_element_two", "male")
+            RuleEvent.Status.ACTIVE, LocalDate.Companion.currentDate(), LocalDate.Companion.currentDate(), null, "", null, listOf(
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_one", "8"),
+                RuleDataValue(LocalDate.Companion.currentDate(), "test_program_stage", "test_data_element_two", "male")
             )
         )
         val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent1, ruleEvent2))

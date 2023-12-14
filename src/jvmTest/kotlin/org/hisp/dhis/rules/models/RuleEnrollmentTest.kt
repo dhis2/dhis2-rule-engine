@@ -1,7 +1,8 @@
 package org.hisp.dhis.rules.models
 
 import io.mockk.mockk
-import java.util.Date
+import kotlinx.datetime.LocalDate
+import org.hisp.dhis.rules.currentDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -11,8 +12,8 @@ class RuleEnrollmentTest {
         val ruleAttributeValueOne = mockk<RuleAttributeValue>()
         val ruleAttributeValueTwo = mockk<RuleAttributeValue>()
         val ruleAttributeValueThree = mockk<RuleAttributeValue>()
-        val incidentDate = Date()
-        val enrollmentDate = Date()
+        val incidentDate = LocalDate.Companion.currentDate()
+        val enrollmentDate = LocalDate.Companion.currentDate()
         val ruleEnrollment = RuleEnrollment(
             "test_enrollment", "",
             incidentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE, "", "",

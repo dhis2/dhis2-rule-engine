@@ -1,7 +1,7 @@
 package org.hisp.dhis.rules
 
+import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.models.*
-import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -43,10 +43,10 @@ class VariableValueTypeTest {
         val ruleEngine = getRuleEngine(rule, listOf(ruleVariable, ruleVariable2))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null,
+            RuleEvent.Status.ACTIVE, LocalDate.fromEpochDays(1), LocalDate.fromEpochDays(1), null, "", null,
             listOf(
-                RuleDataValue(Date(), "", "test_data_element", "30"),
-                RuleDataValue(Date(), "", "test_data_element2", "4")
+                RuleDataValue(LocalDate.fromEpochDays(1), "", "test_data_element", "30"),
+                RuleDataValue(LocalDate.fromEpochDays(1), "", "test_data_element2", "4")
             )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
@@ -65,10 +65,10 @@ class VariableValueTypeTest {
         val ruleEngine = getRuleEngine(rule, listOf(ruleVariable, ruleVariable2))
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null,
+            RuleEvent.Status.ACTIVE, LocalDate.fromEpochDays(1), LocalDate.fromEpochDays(1), null, "", null,
             listOf(
-                RuleDataValue(Date(), "", "test_data_element", "30"),
-                RuleDataValue(Date(), "", "test_data_element2", "4")
+                RuleDataValue(LocalDate.fromEpochDays(1), "", "test_data_element", "30"),
+                RuleDataValue(LocalDate.fromEpochDays(1), "", "test_data_element2", "4")
             )
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
