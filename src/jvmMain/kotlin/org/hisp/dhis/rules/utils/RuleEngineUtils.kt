@@ -1,7 +1,6 @@
 package org.hisp.dhis.rules.utils
 
 import org.hisp.dhis.rules.ItemValueType
-import java.util.Map
 
 /*
 * Copyright (c) 2004-2020, University of Oslo
@@ -56,25 +55,25 @@ object RuleEngineUtils {
     const val ENV_VAR_OU_CODE = "orgunit_code"
 
     // new environment variable must be added in this map
-    val ENV_VARIABLES = Map.ofEntries(
-        Map.entry(ENV_VAR_COMPLETED_DATE, ItemValueType.DATE),
-        Map.entry(ENV_VAR_CURRENT_DATE, ItemValueType.DATE),
-        Map.entry(ENV_VAR_EVENT_DATE, ItemValueType.DATE),
-        Map.entry(ENV_VAR_INCIDENT_DATE, ItemValueType.DATE),
-        Map.entry(ENV_VAR_ENROLLMENT_DATE, ItemValueType.DATE),
-        Map.entry(ENV_VAR_DUE_DATE, ItemValueType.DATE),
-        Map.entry(ENV_VAR_EVENT_COUNT, ItemValueType.NUMBER),
-        Map.entry(ENV_VAR_TEI_COUNT, ItemValueType.NUMBER),
-        Map.entry(ENV_VAR_ENROLLMENT_COUNT, ItemValueType.NUMBER),
-        Map.entry(ENV_VAR_EVENT_ID, ItemValueType.NUMBER),
-        Map.entry(ENV_VAR_PROGRAM_STAGE_ID, ItemValueType.NUMBER),
-        Map.entry(ENV_VAR_ENROLLMENT_ID, ItemValueType.NUMBER),
-        Map.entry(ENV_VAR_ENROLLMENT_STATUS, ItemValueType.TEXT),
-        Map.entry(ENV_VAR_EVENT_STATUS, ItemValueType.TEXT),
-        Map.entry(ENV_VAR_OU, ItemValueType.TEXT),
-        Map.entry(ENV_VAR_OU_CODE, ItemValueType.TEXT),
-        Map.entry(ENV_VAR_ENVIRONMENT, ItemValueType.TEXT),
-        Map.entry(ENV_VAR_PROGRAM_NAME, ItemValueType.TEXT),
-        Map.entry(ENV_VAR_PROGRAM_STAGE_NAME, ItemValueType.TEXT)
+    val ENV_VARIABLES = mapOf(
+        Pair(ENV_VAR_COMPLETED_DATE, ItemValueType.DATE),
+        Pair(ENV_VAR_CURRENT_DATE, ItemValueType.DATE),
+        Pair(ENV_VAR_EVENT_DATE, ItemValueType.DATE),
+        Pair(ENV_VAR_INCIDENT_DATE, ItemValueType.DATE),
+        Pair(ENV_VAR_ENROLLMENT_DATE, ItemValueType.DATE),
+        Pair(ENV_VAR_DUE_DATE, ItemValueType.DATE),
+        Pair(ENV_VAR_EVENT_COUNT, ItemValueType.NUMBER),
+        Pair(ENV_VAR_TEI_COUNT, ItemValueType.NUMBER),
+        Pair(ENV_VAR_ENROLLMENT_COUNT, ItemValueType.NUMBER),
+        Pair(ENV_VAR_EVENT_ID, ItemValueType.NUMBER),
+        Pair(ENV_VAR_PROGRAM_STAGE_ID, ItemValueType.NUMBER),
+        Pair(ENV_VAR_ENROLLMENT_ID, ItemValueType.NUMBER),
+        Pair(ENV_VAR_ENROLLMENT_STATUS, ItemValueType.TEXT),
+        Pair(ENV_VAR_EVENT_STATUS, ItemValueType.TEXT),
+        Pair(ENV_VAR_OU, ItemValueType.TEXT),
+        Pair(ENV_VAR_OU_CODE, ItemValueType.TEXT),
+        Pair(ENV_VAR_ENVIRONMENT, ItemValueType.TEXT),
+        Pair(ENV_VAR_PROGRAM_NAME, ItemValueType.TEXT),
+        Pair(ENV_VAR_PROGRAM_STAGE_NAME, ItemValueType.TEXT)
     )
 }

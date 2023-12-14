@@ -152,10 +152,10 @@ class RuleConditionEvaluator {
 
         val build = ExpressionData(
             valueMap.mapValues { v -> v.value.toVariableValue() },
-            java.util.Map.of(),
+            emptyMap(),
             supplementaryData,
-            java.util.Map.of(),
-            java.util.Map.of()
+            emptyMap(),
+            emptyMap()
         )
         return convertInteger(expression.evaluate({ name: String ->
             throw UnsupportedOperationException(
