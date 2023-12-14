@@ -1,13 +1,12 @@
 package org.hisp.dhis.rules.models
 
-import io.mockk.mockk
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class RuleTest {
     @Test
     fun createShouldPropagatePropertiesCorrectly() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = mockk<org.hisp.dhis.rules.models.RuleAction>()
+        val ruleAction: RuleAction = RuleActionError("data")
         val (condition, actions, uid, _, programStage, priority) = Rule(
             "test_condition",
             listOf(ruleAction),

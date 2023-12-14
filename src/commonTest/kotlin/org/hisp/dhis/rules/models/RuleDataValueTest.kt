@@ -9,7 +9,7 @@ class RuleDataValueTest {
     @Test
     fun createShouldPropagateValuesCorrectly() {
         val eventDate = LocalDate.Companion.currentDate()
-        val ruleDataValue = org.hisp.dhis.rules.models.RuleDataValue(
+        val ruleDataValue = RuleDataValue(
             eventDate,
             "test_program_stage_uid", "test_dataelement", "test_value"
         )

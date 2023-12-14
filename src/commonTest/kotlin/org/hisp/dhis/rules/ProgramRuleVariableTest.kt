@@ -37,7 +37,7 @@ class ProgramRuleVariableTest {
     fun testCurrentDateProgramVariableIsAssigned() {
         val rule = getRule("V{current_date}")
         val ruleEffects = callEnrollmentRuleEngine(rule)
-        assertProgramRuleVariableAssignment(ruleEffects, rule, org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.CURRENT_DATE.toString())
+        assertProgramRuleVariableAssignment(ruleEffects, rule, CURRENT_DATE.toString())
     }
 
     @Test
@@ -45,7 +45,7 @@ class ProgramRuleVariableTest {
         val rule = getRule("V{due_date}")
         val ruleEffects = callEventRuleEngine(rule)
         assertProgramRuleVariableAssignment(ruleEffects, rule,
-            org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.DUE_DATE_STRING
+            DUE_DATE_STRING
         )
     }
 
@@ -61,7 +61,7 @@ class ProgramRuleVariableTest {
         val rule = getRule("V{enrollment_date}")
         val ruleEffects = callEnrollmentRuleEngine(rule)
         assertProgramRuleVariableAssignment(ruleEffects, rule,
-            org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.ENROLLMENT_DATE_STRING
+            ENROLLMENT_DATE_STRING
         )
     }
 
@@ -70,7 +70,7 @@ class ProgramRuleVariableTest {
         val rule = getRule("V{enrollment_id}")
         val ruleEffects = callEnrollmentRuleEngine(rule)
         assertProgramRuleVariableAssignment(ruleEffects, rule,
-            org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.ENROLLMENT_ID
+            ENROLLMENT_ID
         )
     }
 
@@ -78,7 +78,7 @@ class ProgramRuleVariableTest {
     fun testEnrollmentStatusProgramVariableIsAssigned() {
         val rule = getRule("V{enrollment_status}")
         val ruleEffects = callEnrollmentRuleEngine(rule)
-        assertProgramRuleVariableAssignment(ruleEffects, rule, org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.ENROLLMENT_STATUS.name)
+        assertProgramRuleVariableAssignment(ruleEffects, rule, ENROLLMENT_STATUS.name)
     }
 
     @Test
@@ -100,7 +100,7 @@ class ProgramRuleVariableTest {
         val rule = getRule("V{event_date}")
         val ruleEffects = callEventRuleEngine(rule)
         assertProgramRuleVariableAssignment(ruleEffects, rule,
-            org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.EVENT_DATE_STRING
+            EVENT_DATE_STRING
         )
     }
 
@@ -109,7 +109,7 @@ class ProgramRuleVariableTest {
         val rule = getRule("V{event_id}")
         val ruleEffects = callEventRuleEngine(rule)
         assertProgramRuleVariableAssignment(ruleEffects, rule,
-            org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.EVENT_ID
+            EVENT_ID
         )
     }
 
@@ -117,7 +117,7 @@ class ProgramRuleVariableTest {
     fun testEventStatusProgramVariableIsAssigned() {
         val rule = getRule("V{event_status}")
         val ruleEffects = callEventRuleEngine(rule)
-        assertProgramRuleVariableAssignment(ruleEffects, rule, org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.RULE_EVENT_STATUS.name)
+        assertProgramRuleVariableAssignment(ruleEffects, rule, RULE_EVENT_STATUS.name)
     }
 
     @Test
@@ -125,7 +125,7 @@ class ProgramRuleVariableTest {
         val rule = getRule("V{incident_date}")
         val ruleEffects = callEventRuleEngine(rule)
         assertProgramRuleVariableAssignment(ruleEffects, rule,
-            org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.INCIDENT_DATE_STRING
+            INCIDENT_DATE_STRING
         )
     }
 
@@ -134,7 +134,7 @@ class ProgramRuleVariableTest {
         val rule = getRule("V{org_unit}")
         val ruleEffects = callEnrollmentRuleEngine(rule)
         assertProgramRuleVariableAssignment(ruleEffects, rule,
-            org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.ORGANISATION_UNIT
+            ORGANISATION_UNIT
         )
     }
 
@@ -143,7 +143,7 @@ class ProgramRuleVariableTest {
         val rule = getRule("V{orgunit_code}")
         val ruleEffects = callEventRuleEngine(rule)
         assertProgramRuleVariableAssignment(ruleEffects, rule,
-            org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.ORGANISATION_UNIT_CODE
+            ORGANISATION_UNIT_CODE
         )
     }
 
@@ -152,7 +152,7 @@ class ProgramRuleVariableTest {
         val rule = getRule("V{program_name}")
         val ruleEffects = callEnrollmentRuleEngine(rule)
         assertProgramRuleVariableAssignment(ruleEffects, rule,
-            org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.PROGRAM_NAME
+            PROGRAM_NAME
         )
     }
 
@@ -161,7 +161,7 @@ class ProgramRuleVariableTest {
         val rule = getRule("V{program_stage_id}")
         val ruleEffects = callEventRuleEngine(rule)
         assertProgramRuleVariableAssignment(ruleEffects, rule,
-            org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.PROGRAM_STAGE
+            PROGRAM_STAGE
         )
     }
 
@@ -170,7 +170,7 @@ class ProgramRuleVariableTest {
         val rule = getRule("V{program_stage_name}")
         val ruleEffects = callEventRuleEngine(rule)
         assertProgramRuleVariableAssignment(ruleEffects, rule,
-            org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.PROGRAM_STAGE_NAME
+            PROGRAM_STAGE_NAME
         )
     }
 
@@ -216,31 +216,32 @@ class ProgramRuleVariableTest {
 
     private val enrollment: org.hisp.dhis.rules.models.RuleEnrollment
         get() = org.hisp.dhis.rules.models.RuleEnrollment(
-            org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.ENROLLMENT_ID,
-            org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.PROGRAM_NAME,
-            org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.INCIDENT_DATE,
-            org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.ENROLLMENT_DATE,
+            ENROLLMENT_ID,
+            PROGRAM_NAME,
+            INCIDENT_DATE,
+            ENROLLMENT_DATE,
             org.hisp.dhis.rules.models.RuleEnrollment.Status.ACTIVE,
-            org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.ORGANISATION_UNIT,
-            org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.ORGANISATION_UNIT_CODE,
+            ORGANISATION_UNIT,
+            ORGANISATION_UNIT_CODE,
             listOf(org.hisp.dhis.rules.models.RuleAttributeValue("test_attribute", "test_value"))
         )
 
     private fun getRuleEngine(rules: List<Rule>): RuleEngine {
-        return RuleEngine(RuleEngineContext(rules, listOf(), emptyMap(), emptyMap()),
+        return RuleEngine(
+            RuleEngineContext(rules, listOf(), emptyMap(), emptyMap()),
             emptyList(), null, TriggerEnvironment.SERVER)
     }
 
     companion object {
         private val CURRENT_DATE = LocalDate.Companion.currentDate()
         private const val DUE_DATE_STRING = "2020-06-01"
-        private val DUE_DATE = LocalDate.parse(org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.DUE_DATE_STRING)
+        private val DUE_DATE = LocalDate.parse(DUE_DATE_STRING)
         private const val ENROLLMENT_DATE_STRING = "2019-01-01"
-        private val ENROLLMENT_DATE = LocalDate.parse(org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.ENROLLMENT_DATE_STRING)
+        private val ENROLLMENT_DATE = LocalDate.parse(ENROLLMENT_DATE_STRING)
         private const val EVENT_DATE_STRING = "2019-02-02"
-        private val EVENT_DATE = LocalDate.parse(org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.EVENT_DATE_STRING)
+        private val EVENT_DATE = LocalDate.parse(EVENT_DATE_STRING)
         private const val INCIDENT_DATE_STRING = "2020-01-01"
-        private val INCIDENT_DATE = LocalDate.parse(org.hisp.dhis.rules.ProgramRuleVariableTest.Companion.INCIDENT_DATE_STRING)
+        private val INCIDENT_DATE = LocalDate.parse(INCIDENT_DATE_STRING)
         private const val PROGRAM_STAGE = "program stage"
         private const val PROGRAM_STAGE_NAME = "program stage name"
         private val RULE_EVENT_STATUS = RuleEvent.Status.ACTIVE

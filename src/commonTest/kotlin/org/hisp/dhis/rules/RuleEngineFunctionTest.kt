@@ -2628,6 +2628,6 @@ class RuleEngineFunctionTest {
     companion object {
         private const val DATE_PATTERN = "yyyy-MM-dd"
         private const val USE_CODE_FOR_OPTION_SET = true
-        private const val USE_NAME_FOR_OPTION_SET = !org.hisp.dhis.rules.RuleEngineFunctionTest.Companion.USE_CODE_FOR_OPTION_SET
+        private const val USE_NAME_FOR_OPTION_SET = !USE_CODE_FOR_OPTION_SET
     }
 }

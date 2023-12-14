@@ -1,17 +1,15 @@
 package org.hisp.dhis.rules.models
 
-import io.mockk.mockk
 import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.currentDate
-import kotlin.collections.ArrayList
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class RuleEventTest {
     @Test
     fun createShouldPropagateValuesCorrectly() {
-        val ruleDataValue = mockk<org.hisp.dhis.rules.models.RuleDataValue>()
-        val ruleDataValues: MutableList<org.hisp.dhis.rules.models.RuleDataValue> = ArrayList()
+        val ruleDataValue = RuleDataValue(LocalDate.currentDate(), "programStage", "dataElement", "value")
+        val ruleDataValues: MutableList<RuleDataValue> = ArrayList()
         ruleDataValues.add(ruleDataValue)
         val eventDate = LocalDate.Companion.currentDate()
         val dueDate = LocalDate.Companion.currentDate()

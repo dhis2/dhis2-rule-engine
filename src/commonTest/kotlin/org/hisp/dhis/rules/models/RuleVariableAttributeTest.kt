@@ -11,6 +11,6 @@ class RuleVariableAttributeTest {
         )
         assertEquals("test_variable", ruleVariableAttribute.name)
         assertEquals("test_attribute", ruleVariableAttribute.trackedEntityAttribute)
-        assertEquals(org.hisp.dhis.rules.models.RuleValueType.NUMERIC, ruleVariableAttribute.trackedEntityAttributeType)
+        assertEquals(RuleValueType.NUMERIC, ruleVariableAttribute.trackedEntityAttributeType)
     }
 }

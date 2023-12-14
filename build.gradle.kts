@@ -59,11 +59,7 @@ kotlin {
             }
         }
         val jvmMain by getting
-        val jvmTest by getting {
-            dependencies {
-                implementation("io.mockk:mockk:1.13.8")
-            }
-        }
+        val jvmTest by getting
         val jsMain by getting
         val jsTest by getting
         val nativeMain by getting
