@@ -108,8 +108,8 @@ class CalculatedValueTest {
         )
         val ruleEngine = getRuleEngine(listOf(rule, rule2)).copy(enrollment = enrollment)
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
-        assertEquals("4", ruleEffects[0].data())
-        assertEquals(sendMessageAction, ruleEffects[0].ruleAction())
+        assertEquals("4", ruleEffects[0].data)
+        assertEquals(sendMessageAction, ruleEffects[0].ruleAction)
     }
 
     private fun createRules(i: Int): List<Rule> {
@@ -169,8 +169,8 @@ class CalculatedValueTest {
         )
         val ruleEffects = ruleEngine.copy(enrollment = enrollment).evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
-        assertEquals("4", ruleEffects[0].data())
-        assertEquals(sendMessageAction, ruleEffects[0].ruleAction())
+        assertEquals("4", ruleEffects[0].data)
+        assertEquals(sendMessageAction, ruleEffects[0].ruleAction)
     }
 
     private fun getRuleEngine(rules: List<Rule>): RuleEngine {

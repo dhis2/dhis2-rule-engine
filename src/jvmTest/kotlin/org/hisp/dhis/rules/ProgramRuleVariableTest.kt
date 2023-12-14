@@ -188,8 +188,8 @@ class ProgramRuleVariableTest {
 
     private fun assertProgramRuleVariableAssignment(ruleEffects: List<RuleEffect>, rule: Rule, variableValue: String) {
         assertEquals(1, ruleEffects.size)
-        assertEquals(variableValue, ruleEffects[0].data())
-        assertEquals(rule.actions()[0], ruleEffects[0].ruleAction())
+        assertEquals(variableValue, ruleEffects[0].data)
+        assertEquals(rule.actions[0], ruleEffects[0].ruleAction)
     }
     
     private fun callEnrollmentRuleEngine(rule: Rule): List<RuleEffect> {

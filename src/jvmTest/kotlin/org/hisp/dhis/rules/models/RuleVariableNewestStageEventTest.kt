@@ -5,12 +5,12 @@ import kotlin.test.assertEquals
 class RuleVariableNewestStageEventTest {
     @Test
     fun createShouldPropagatePropertiesCorrectly() {
-        val ruleVariablePreviousEvent = RuleVariableNewestStageEvent(
+        val ruleVariableNewestStageEvent = RuleVariableNewestStageEvent(
             "test_variable", true, ArrayList(), "test_dataelement", RuleValueType.NUMERIC, "test_programstage"
         )
-        assertEquals("test_variable", ruleVariablePreviousEvent.name)
-        assertEquals("test_dataelement", ruleVariablePreviousEvent.dataElement)
-        assertEquals("test_programstage", ruleVariablePreviousEvent.programStage)
-        assertEquals(org.hisp.dhis.rules.models.RuleValueType.NUMERIC, ruleVariablePreviousEvent.dataElementType)
+        assertEquals("test_variable", ruleVariableNewestStageEvent.name)
+        assertEquals("test_programstage", ruleVariableNewestStageEvent.programStage)
+        assertEquals("test_dataelement", ruleVariableNewestStageEvent.dataElement())
+        assertEquals(RuleValueType.NUMERIC, ruleVariableNewestStageEvent.dataElementType())
     }
 }

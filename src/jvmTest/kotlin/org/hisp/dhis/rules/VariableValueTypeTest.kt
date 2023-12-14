@@ -58,8 +58,8 @@ class VariableValueTypeTest {
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
-        assertEquals("30", ruleEffects[0].data())
-        assertEquals(ruleAction, ruleEffects[0].ruleAction())
+        assertEquals("30", ruleEffects[0].data)
+        assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
 
     @Test

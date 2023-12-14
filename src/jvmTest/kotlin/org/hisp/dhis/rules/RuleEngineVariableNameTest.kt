@@ -160,26 +160,26 @@ class RuleEngineVariableNameTest {
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
         assertEquals(10, ruleEffects.size)
-        assertEquals(ruleAction1, ruleEffects[0].ruleAction())
-        assertEquals("3", ruleEffects[0].data())
-        assertEquals(ruleAction2, ruleEffects[1].ruleAction())
-        assertEquals("3", ruleEffects[1].data())
-        assertEquals(ruleAction3, ruleEffects[2].ruleAction())
-        assertEquals("3", ruleEffects[2].data())
-        assertEquals(ruleAction4, ruleEffects[3].ruleAction())
-        assertEquals("3", ruleEffects[3].data())
-        assertEquals(ruleAction5, ruleEffects[4].ruleAction())
-        assertEquals("3", ruleEffects[4].data())
-        assertEquals(ruleAction6, ruleEffects[5].ruleAction())
-        assertEquals("3", ruleEffects[5].data())
-        assertEquals(ruleAction7, ruleEffects[6].ruleAction())
-        assertEquals("3", ruleEffects[6].data())
-        assertEquals(ruleAction8, ruleEffects[7].ruleAction())
-        assertEquals("3", ruleEffects[7].data())
-        assertEquals(ruleAction9, ruleEffects[8].ruleAction())
-        assertEquals("3", ruleEffects[8].data())
-        assertEquals(ruleAction10, ruleEffects[9].ruleAction())
-        assertEquals("3", ruleEffects[9].data())
+        assertEquals(ruleAction1, ruleEffects[0].ruleAction)
+        assertEquals("3", ruleEffects[0].data)
+        assertEquals(ruleAction2, ruleEffects[1].ruleAction)
+        assertEquals("3", ruleEffects[1].data)
+        assertEquals(ruleAction3, ruleEffects[2].ruleAction)
+        assertEquals("3", ruleEffects[2].data)
+        assertEquals(ruleAction4, ruleEffects[3].ruleAction)
+        assertEquals("3", ruleEffects[3].data)
+        assertEquals(ruleAction5, ruleEffects[4].ruleAction)
+        assertEquals("3", ruleEffects[4].data)
+        assertEquals(ruleAction6, ruleEffects[5].ruleAction)
+        assertEquals("3", ruleEffects[5].data)
+        assertEquals(ruleAction7, ruleEffects[6].ruleAction)
+        assertEquals("3", ruleEffects[6].data)
+        assertEquals(ruleAction8, ruleEffects[7].ruleAction)
+        assertEquals("3", ruleEffects[7].data)
+        assertEquals(ruleAction9, ruleEffects[8].ruleAction)
+        assertEquals("3", ruleEffects[8].data)
+        assertEquals(ruleAction10, ruleEffects[9].ruleAction)
+        assertEquals("3", ruleEffects[9].data)
     }
 
     @Test
@@ -211,8 +211,8 @@ class RuleEngineVariableNameTest {
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
-        assertEquals("true", ruleEffects[0].data())
-        assertEquals(ruleAction, ruleEffects[0].ruleAction())
+        assertEquals("true", ruleEffects[0].data)
+        assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
 
     @Test
@@ -244,8 +244,8 @@ class RuleEngineVariableNameTest {
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
-        assertEquals("true", ruleEffects[0].data())
-        assertEquals(ruleAction, ruleEffects[0].ruleAction())
+        assertEquals("true", ruleEffects[0].data)
+        assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
 
     @Test
@@ -318,8 +318,8 @@ class RuleEngineVariableNameTest {
         )
         val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent2, ruleEvent3)).evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
-        assertEquals(ruleAction, ruleEffects[0].ruleAction())
-        assertEquals("2", ruleEffects[0].data())
+        assertEquals(ruleAction, ruleEffects[0].ruleAction)
+        assertEquals("2", ruleEffects[0].data)
     }
 
     @Test
@@ -392,8 +392,8 @@ class RuleEngineVariableNameTest {
         )
         val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent2, ruleEvent3)).evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
-        assertEquals(ruleAction, ruleEffects[0].ruleAction())
-        assertEquals("2", ruleEffects[0].data())
+        assertEquals(ruleAction, ruleEffects[0].ruleAction)
+        assertEquals("2", ruleEffects[0].data)
     }
 
     @Test
@@ -488,8 +488,8 @@ class RuleEngineVariableNameTest {
         )
         val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent2, ruleEvent3, ruleEvent4)).evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
-        assertEquals(ruleAction, ruleEffects[0].ruleAction())
-        assertEquals("3", ruleEffects[0].data())
+        assertEquals(ruleAction, ruleEffects[0].ruleAction)
+        assertEquals("3", ruleEffects[0].data)
     }
 
     @Test
@@ -581,8 +581,8 @@ class RuleEngineVariableNameTest {
         )
         val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent2, ruleEvent3, ruleEvent4)).evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
-        assertEquals(ruleAction, ruleEffects[0].ruleAction())
-        assertEquals("3", ruleEffects[0].data())
+        assertEquals(ruleAction, ruleEffects[0].ruleAction)
+        assertEquals("3", ruleEffects[0].data)
     }
 
     @Test
@@ -656,8 +656,8 @@ class RuleEngineVariableNameTest {
         val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent1, ruleEvent2))
             .evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
-        assertEquals(ruleAction, ruleEffects[0].ruleAction())
-        assertEquals("2", ruleEffects[0].data())
+        assertEquals(ruleAction, ruleEffects[0].ruleAction)
+        assertEquals("2", ruleEffects[0].data)
     }
 
     @Test
@@ -731,8 +731,8 @@ class RuleEngineVariableNameTest {
         val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent1, ruleEvent2))
             .evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
-        assertEquals(ruleAction, ruleEffects[0].ruleAction())
-        assertEquals("2", ruleEffects[0].data())
+        assertEquals(ruleAction, ruleEffects[0].ruleAction)
+        assertEquals("2", ruleEffects[0].data)
     }
 
     @Test
@@ -835,7 +835,7 @@ class RuleEngineVariableNameTest {
         val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent1, ruleEvent2))
             .evaluate(ruleEvent3)
         assertEquals(1, ruleEffects.size)
-        assertEquals(ruleAction, ruleEffects[0].ruleAction())
+        assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
 
     @Test
@@ -938,7 +938,7 @@ class RuleEngineVariableNameTest {
         val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent1, ruleEvent2))
             .evaluate(ruleEvent3)
         assertEquals(1, ruleEffects.size)
-        assertEquals(ruleAction, ruleEffects[0].ruleAction())
+        assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
 
     @Test
@@ -1036,8 +1036,8 @@ class RuleEngineVariableNameTest {
         val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent1, ruleEvent2))
             .evaluate(ruleEvent3)
         assertEquals(1, ruleEffects.size)
-        assertEquals(ruleAction, ruleEffects[0].ruleAction())
-        assertEquals("5", ruleEffects[0].data())
+        assertEquals(ruleAction, ruleEffects[0].ruleAction)
+        assertEquals("5", ruleEffects[0].data)
     }
 
     @Test
@@ -1135,8 +1135,8 @@ class RuleEngineVariableNameTest {
         val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent1, ruleEvent2))
             .evaluate(ruleEvent3)
         assertEquals(1, ruleEffects.size)
-        assertEquals(ruleAction, ruleEffects[0].ruleAction())
-        assertEquals("5", ruleEffects[0].data())
+        assertEquals(ruleAction, ruleEffects[0].ruleAction)
+        assertEquals("5", ruleEffects[0].data)
     }
 
     private fun getRuleEngine(rule: Rule, ruleVariables: List<RuleVariable>): RuleEngine {

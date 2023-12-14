@@ -44,8 +44,8 @@ class RuleEventTest {
                 )
             )
         val reversed = ruleEvents.sortedBy { e -> e.eventDate }.reversed()
-        assertEquals("test_event_two", reversed[0].event())
-        assertEquals("test_event_one", reversed[1].event())
+        assertEquals("test_event_two", reversed[0].event)
+        assertEquals("test_event_one", reversed[1].event)
     }
 
     companion object {

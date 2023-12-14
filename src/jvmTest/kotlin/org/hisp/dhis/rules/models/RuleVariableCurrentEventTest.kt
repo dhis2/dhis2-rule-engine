@@ -10,7 +10,7 @@ class RuleVariableCurrentEventTest {
             "test_variable", true, ArrayList(), "test_dataelement", RuleValueType.NUMERIC
         )
         assertEquals("test_variable", ruleVariableCurrentEvent.name)
-        assertEquals("test_dataelement", ruleVariableCurrentEvent.dataElement)
-        assertEquals(org.hisp.dhis.rules.models.RuleValueType.NUMERIC, ruleVariableCurrentEvent.dataElementType)
+        assertEquals("test_dataelement", ruleVariableCurrentEvent.dataElement())
+        assertEquals(RuleValueType.NUMERIC, ruleVariableCurrentEvent.dataElementType())
     }
 }

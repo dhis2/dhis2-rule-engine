@@ -53,8 +53,8 @@ class ConstantsValueTest {
         )
         val ruleEffects = ruleEngine.evaluate(enrollment)
         assertEquals(1, ruleEffects.size)
-        assertEquals("3.14", ruleEffects[0].data())
-        assertEquals(assignAction, ruleEffects[0].ruleAction())
+        assertEquals("3.14", ruleEffects[0].data)
+        assertEquals(assignAction, ruleEffects[0].ruleAction)
     }
 
     @Test
@@ -80,10 +80,10 @@ class ConstantsValueTest {
         )
         val ruleEffects = ruleEngine.evaluate(enrollment)
         assertEquals(2, ruleEffects.size)
-        assertEquals("4", ruleEffects[0].data())
-        assertEquals(assignAction, ruleEffects[0].ruleAction())
-        assertEquals("4", ruleEffects[1].data())
-        assertEquals(action, ruleEffects[1].ruleAction())
+        assertEquals("4", ruleEffects[0].data)
+        assertEquals(assignAction, ruleEffects[0].ruleAction)
+        assertEquals("4", ruleEffects[1].data)
+        assertEquals(action, ruleEffects[1].ruleAction)
     }
 
     @Test
@@ -110,8 +110,8 @@ class ConstantsValueTest {
         )
         val ruleEffects = ruleEngine.evaluate(enrollment)
         assertEquals(1, ruleEffects.size)
-        assertEquals("4", ruleEffects[0].data())
-        assertEquals(action, ruleEffects[0].ruleAction())
+        assertEquals("4", ruleEffects[0].data)
+        assertEquals(action, ruleEffects[0].ruleAction)
     }
 
     @Test
@@ -140,8 +140,8 @@ class ConstantsValueTest {
         )
         val ruleEffects = ruleEngine.evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
-        assertEquals("3.14", ruleEffects[0].data())
-        assertEquals(assignAction, ruleEffects[0].ruleAction())
+        assertEquals("3.14", ruleEffects[0].data)
+        assertEquals(assignAction, ruleEffects[0].ruleAction)
     }
 
     private fun getRuleEngine(
