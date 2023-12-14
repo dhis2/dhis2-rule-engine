@@ -1,7 +1,6 @@
 package org.hisp.dhis.rules
 
 import org.hisp.dhis.rules.models.*
-import java.util.concurrent.Callable
 
 
 internal data class RuleEngineExecution(
@@ -10,8 +9,8 @@ internal data class RuleEngineExecution(
     val rules: List<Rule>,
     val valueMap: MutableMap<String, RuleVariableValue>,
     val supplementaryData: Map<String, List<String>>
-) : Callable<List<RuleEffect>> {
-    override fun call(): List<RuleEffect> {
+) {
+    fun execute(): List<RuleEffect> {
         if (event != null) {
             return RuleConditionEvaluator().getRuleEffects(
                 TrackerObjectType.EVENT, event.event(), valueMap,

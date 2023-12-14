@@ -176,7 +176,7 @@ class ProgramRuleVariableTest {
     
     private fun callEnrollmentRuleEngine(rule: Rule): List<RuleEffect> {
         val ruleEngine = getRuleEngine(listOf(rule))
-        return ruleEngine.evaluate(enrollment).call()
+        return ruleEngine.evaluate(enrollment)
     }
     
     private fun callEventRuleEngine(rule: Rule): List<RuleEffect> {
@@ -187,7 +187,7 @@ class ProgramRuleVariableTest {
             organisationUnit = ORGANISATION_UNIT, organisationUnitCode = ORGANISATION_UNIT_CODE,
             completedDate = null,
             dataValues = emptyList())
-        return ruleEngine.copy(enrollment = enrollment).evaluate(event).call()
+        return ruleEngine.copy(enrollment = enrollment).evaluate(event)
     }
 
     private val enrollment: RuleEnrollment

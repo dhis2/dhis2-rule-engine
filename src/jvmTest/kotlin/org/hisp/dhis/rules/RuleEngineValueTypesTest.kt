@@ -16,7 +16,7 @@ class RuleEngineValueTypesTest {
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
             RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null, ArrayList())
-        val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
+        val ruleEffects = ruleEngine.evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
         assertEquals("false", ruleEffects[0].data())
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
@@ -33,7 +33,7 @@ class RuleEngineValueTypesTest {
         val ruleEvent = RuleEvent(
             "test_event", "test_program_stage", "",
             RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null, ArrayList())
-        val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
+        val ruleEffects = ruleEngine.evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
         assertEquals("0", ruleEffects[0].data())
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
@@ -51,7 +51,7 @@ class RuleEngineValueTypesTest {
             "test_event", "test_program_stage","",
             RuleEvent.Status.ACTIVE, Date(), Date(), null, "", null, ArrayList()
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
+        val ruleEffects = ruleEngine.evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
         assertEquals("", ruleEffects[0].data())
         assertEquals(ruleAction, ruleEffects[0].ruleAction())

@@ -49,7 +49,7 @@ class CalculatedValueTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.copy(enrollment = enrollment).evaluate(ruleEvent).call()
+        val ruleEffects = ruleEngine.copy(enrollment = enrollment).evaluate(ruleEvent)
         assertEquals(i, ruleEffects.size)
     }
 
@@ -71,7 +71,7 @@ class CalculatedValueTest {
             )
         )
         val ruleEngine = getRuleEngine(listOf(rule, rule2)).copy(enrollment = enrollment)
-        val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
+        val ruleEffects = ruleEngine.evaluate(ruleEvent)
         assertEquals("4", ruleEffects[0].data())
         assertEquals(sendMessageAction, ruleEffects[0].ruleAction())
     }
@@ -109,7 +109,7 @@ class CalculatedValueTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.copy(enrollment = enrollment).evaluate(ruleEvent).call()
+        val ruleEffects = ruleEngine.copy(enrollment = enrollment).evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data())
         assertEquals(sendMessageAction, ruleEffects[0].ruleAction())

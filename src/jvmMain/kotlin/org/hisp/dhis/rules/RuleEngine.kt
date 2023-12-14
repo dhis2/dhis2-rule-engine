@@ -6,7 +6,6 @@ import org.hisp.dhis.lib.expression.spi.ParseException
 import org.hisp.dhis.lib.expression.spi.ValueType
 import org.hisp.dhis.rules.models.*
 import java.util.Date
-import java.util.concurrent.Callable
 
 data class RuleEngine(
     val executionContext: RuleEngineContext,
@@ -24,11 +23,11 @@ data class RuleEngine(
         return events
     }
 
-    fun evaluate(ruleEvent: RuleEvent): Callable<List<RuleEffect>> {
+    fun evaluate(ruleEvent: RuleEvent): List<RuleEffect> {
         return evaluate(ruleEvent, executionContext.rules)
     }
 
-    fun evaluate(ruleEvent: RuleEvent, rulesToEvaluate: List<Rule>): Callable<List<RuleEffect>> {
+    fun evaluate(ruleEvent: RuleEvent, rulesToEvaluate: List<Rule>): List<RuleEffect> {
         val valueMap = RuleVariableValueMapBuilder.target(ruleEvent)
                 .ruleVariables(executionContext.ruleVariables)
                 .ruleEnrollment(enrollment)
@@ -36,18 +35,18 @@ data class RuleEngine(
                 .ruleEvents(events)
                 .constantValueMap(executionContext.constantsValues)
                 .build()
-        return RuleEngineExecution(ruleEvent, null, rulesToEvaluate, valueMap, executionContext.supplementaryData)
+        return RuleEngineExecution(ruleEvent, null, rulesToEvaluate, valueMap, executionContext.supplementaryData).execute()
     }
 
     fun evaluate(ruleEnrollment: RuleEnrollment,
-                 rulesToEvaluate: List<Rule>): Callable<List<RuleEffect>> {
+                 rulesToEvaluate: List<Rule>): List<RuleEffect> {
         val valueMap = RuleVariableValueMapBuilder.target(ruleEnrollment)
                 .ruleVariables(executionContext.ruleVariables)
                 .triggerEnvironment(triggerEnvironment)
                 .ruleEvents(events)
                 .constantValueMap(executionContext.constantsValues)
                 .build()
-        return RuleEngineExecution(null, ruleEnrollment, rulesToEvaluate, valueMap, executionContext.supplementaryData)
+        return RuleEngineExecution(null, ruleEnrollment, rulesToEvaluate, valueMap, executionContext.supplementaryData).execute()
     }
 
     fun evaluate(): List<RuleEffects> {
@@ -59,10 +58,10 @@ data class RuleEngine(
                 .constantValueMap(executionContext.constantsValues)
                 .multipleBuild()
         return RuleEngineMultipleExecution(executionContext.rules, valueMap,
-                executionContext.supplementaryData).call()
+                executionContext.supplementaryData).execute()
     }
 
-    fun evaluate( ruleEnrollment: RuleEnrollment): Callable<List<RuleEffect>> {
+    fun evaluate( ruleEnrollment: RuleEnrollment): List<RuleEffect> {
         return evaluate(ruleEnrollment, executionContext.rules)
     }
 

@@ -46,7 +46,7 @@ class ConstantsValueTest {
             enrollmentDate = Date(), status = RuleEnrollment.Status.ACTIVE,
             organisationUnit = "test_ou", organisationUnitCode = "test_ou_code",
             attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value")))
-        val ruleEffects = ruleEngine.evaluate(enrollment).call()
+        val ruleEffects = ruleEngine.evaluate(enrollment)
         assertEquals(1, ruleEffects.size)
         assertEquals("3.14", ruleEffects[0].data())
         assertEquals(assignAction, ruleEffects[0].ruleAction())
@@ -68,7 +68,7 @@ class ConstantsValueTest {
             enrollmentDate = Date(), status = RuleEnrollment.Status.ACTIVE,
             organisationUnit = "test_ou", organisationUnitCode = "test_ou_code",
             attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value")))
-        val ruleEffects = ruleEngine.evaluate(enrollment).call()
+        val ruleEffects = ruleEngine.evaluate(enrollment)
         assertEquals(2, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data())
         assertEquals(assignAction, ruleEffects[0].ruleAction())
@@ -92,7 +92,7 @@ class ConstantsValueTest {
             enrollmentDate = Date(), status = RuleEnrollment.Status.ACTIVE,
             organisationUnit = "test_ou", organisationUnitCode = "test_ou_code",
             attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value")))
-        val ruleEffects = ruleEngine.evaluate(enrollment).call()
+        val ruleEffects = ruleEngine.evaluate(enrollment)
         assertEquals(1, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data())
         assertEquals(action, ruleEffects[0].ruleAction())
@@ -113,7 +113,7 @@ class ConstantsValueTest {
                     )
                 )
             )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
+        val ruleEffects = ruleEngine.evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
         assertEquals("3.14", ruleEffects[0].data())
         assertEquals(assignAction, ruleEffects[0].ruleAction())

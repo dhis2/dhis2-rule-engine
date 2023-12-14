@@ -49,7 +49,7 @@ class VariableValueTypeTest {
                 RuleDataValue(Date(), "", "test_data_element2", "4")
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
+        val ruleEffects = ruleEngine.evaluate(ruleEvent)
         assertEquals(1, ruleEffects.size)
         assertEquals("30", ruleEffects[0].data())
         assertEquals(ruleAction, ruleEffects[0].ruleAction())
@@ -71,7 +71,7 @@ class VariableValueTypeTest {
                 RuleDataValue(Date(), "", "test_data_element2", "4")
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent).call()
+        val ruleEffects = ruleEngine.evaluate(ruleEvent)
         assertEquals(0, ruleEffects.size)
     }
 
