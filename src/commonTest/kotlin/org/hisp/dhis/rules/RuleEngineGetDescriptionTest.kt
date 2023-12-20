@@ -37,6 +37,7 @@ class RuleEngineGetDescriptionTest {
     private var itemStore: MutableMap<String, DataItem> = HashMap()
     private val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
         RuleActionText.Type.DISPLAYTEXT, "", "")
+    private val ruleEngine: RuleEngineAPI = DefaultRuleEngineAPI()
     @BeforeTest
     fun setUp() {
         itemStore = HashMap()
@@ -94,12 +95,11 @@ class RuleEngineGetDescriptionTest {
             "d2:daysBetween((#{test_var_date_one},#{test_var_date_two})",
             listOf(ruleAction)
         )
-        var ruleEngine = getRuleEngineForDescription(itemStore)
-        var result = ruleEngine.evaluate(rule.condition)
+        var result = ruleEngine.validate(rule.condition, itemStore)
         assertNotNull(result)
         assertFalse(result.valid)
-        ruleEngine = getRuleEngineForDescription(itemStore)
-        result = ruleEngine.evaluate(rule1.condition)
+
+        result = ruleEngine.validate(rule1.condition, itemStore)
         assertNotNull(result)
         assertFalse(result.valid)
     }
@@ -107,8 +107,7 @@ class RuleEngineGetDescriptionTest {
     @Test
     fun evaluateGetDescriptionWithInvalidProgramRuleVariable() {
         val rule = Rule("d2:hasValue(#{test_var_one1})", listOf(ruleAction))
-        val ruleEngine = getRuleEngineForDescription(itemStore)
-        val result = ruleEngine.evaluate(rule.condition)
+        val result = ruleEngine.validate(rule.condition, itemStore)
         assertNotNull(result)
         assertFalse(result.valid)
     }
@@ -116,16 +115,16 @@ class RuleEngineGetDescriptionTest {
     @Test
     fun descriptionForLengthFunction() {
         var rule = Rule("d2:length(#{test_var_one}) > 0", listOf(ruleAction))
-        val ruleEngine = getRuleEngineForDescription(itemStore)
-        var result = ruleEngine.evaluate(rule.condition)
+        
+        var result = ruleEngine.validate(rule.condition, itemStore)
         assertNotNull(result)
         assertTrue(result.valid)
         rule = Rule("d2:length(#{test_var_date_one}) > 0 ", listOf(ruleAction))
-        result = ruleEngine.evaluate(rule.condition)
+        result = ruleEngine.validate(rule.condition, itemStore)
         assertNotNull(result)
         assertFalse(result.valid)
         rule = Rule("d2:length(#{test_var_number}) > 0 ", listOf(ruleAction))
-        result = ruleEngine.evaluate(rule.condition)
+        result = ruleEngine.validate(rule.condition, itemStore)
         assertNotNull(result)
         assertFalse(result.valid)
         }
@@ -136,8 +135,8 @@ class RuleEngineGetDescriptionTest {
             "d2:count(#{test_var_one}) > 0 && d2:hasValue(#{test_var_two})",
             listOf(ruleAction)
         )
-        val ruleEngine = getRuleEngineForDescription(itemStore)
-        val result = ruleEngine.evaluate(rule.condition)
+        
+        val result = ruleEngine.validate(rule.condition, itemStore)
         assertNotNull(result)
         assertTrue(result.valid)
     }
@@ -145,8 +144,8 @@ class RuleEngineGetDescriptionTest {
     @Test
     fun testGetDescriptionWithD2FunctionsTEA() {
         val rule= Rule("d2:hasValue('test_var_three')", listOf(ruleAction))
-        val ruleEngine = getRuleEngineForDescription(itemStore)
-        val result = ruleEngine.evaluate(rule.condition)
+        
+        val result = ruleEngine.validate(rule.condition, itemStore)
         assertNotNull(result)
         assertEquals("d2:hasValue(Variable_THREE)", result.description)
         assertTrue(result.valid)
@@ -155,8 +154,8 @@ class RuleEngineGetDescriptionTest {
     @Test
     fun testGetDescriptionWithPlainAttributeComparisonWithName() {
         val rule= Rule("'test_var_three' == 'email'", listOf(ruleAction))
-        val ruleEngine = getRuleEngineForDescription(itemStore)
-        val result = ruleEngine.evaluate(rule.condition)
+        
+        val result = ruleEngine.validate(rule.condition, itemStore)
         assertNotNull(result)
         assertEquals("'test_var_three' == 'email'", result.description)
         assertTrue(result.valid)
@@ -165,8 +164,8 @@ class RuleEngineGetDescriptionTest {
     @Test
     fun testGetDescriptionWithPlainAttributeComparison() {
         val rule= Rule("A{test_var_three} == 'email'", listOf(ruleAction))
-        val ruleEngine = getRuleEngineForDescription(itemStore)
-        val result = ruleEngine.evaluate(rule.condition)
+        
+        val result = ruleEngine.validate(rule.condition, itemStore)
         assertNotNull(result)
         assertEquals("Variable_THREE == 'email'", result.description)
         assertTrue(result.valid)
@@ -176,8 +175,8 @@ class RuleEngineGetDescriptionTest {
     fun testGetDescriptionStringLiterals() {
         val condition = " true && false || 1 > 3"
         val rule= Rule(condition, listOf(ruleAction))
-        val ruleEngine = getRuleEngineForDescription(itemStore)
-        val result = ruleEngine.evaluate(rule.condition)
+        
+        val result = ruleEngine.validate(rule.condition, itemStore)
         assertNotNull(result)
         assertTrue(result.valid)
     }
@@ -186,8 +185,8 @@ class RuleEngineGetDescriptionTest {
     fun testGetDescriptionD2BetweenFunction() {
         val condition = "d2:daysBetween(#{test_var_date_one},#{test_var_date_two}) > 0"
         val rule= Rule(condition, listOf(ruleAction))
-        val ruleEngine = getRuleEngineForDescription(itemStore)
-        val result = ruleEngine.evaluate(rule.condition)
+        
+        val result = ruleEngine.validate(rule.condition, itemStore)
         assertNotNull(result)
         assertTrue(result.valid)
     }
@@ -196,8 +195,8 @@ class RuleEngineGetDescriptionTest {
     fun testGetDescriptionD2BetweenFunctionWithEnvironmentVariables() {
         val condition = "d2:daysBetween(V{completed_date},V{current_date}) > 0"
         val rule= Rule(condition, listOf(ruleAction))
-        val ruleEngine = getRuleEngineForDescription(itemStore)
-        val result = ruleEngine.evaluate(rule.condition)
+        
+        val result = ruleEngine.validate(rule.condition, itemStore)
         assertNotNull(result)
         assertTrue(result.valid)
     }
@@ -206,8 +205,8 @@ class RuleEngineGetDescriptionTest {
     fun testGetDescriptionD2FunctionAttribute() {
         val condition = "A{test_var_number} > 0"
         val rule= Rule(condition, listOf(ruleAction))
-        val ruleEngine = getRuleEngineForDescription(itemStore)
-        val result = ruleEngine.evaluate(rule.condition)
+        
+        val result = ruleEngine.validate(rule.condition, itemStore)
         assertNotNull(result)
         assertTrue(result.valid)
     }
@@ -216,8 +215,8 @@ class RuleEngineGetDescriptionTest {
     fun testGetDescriptionWithD2FunctionDataElement() {
         val condition = "#{test_var_number} > 0"
         val rule= Rule(condition, listOf(ruleAction))
-        val ruleEngine = getRuleEngineForDescription(itemStore)
-        val result = ruleEngine.evaluate(rule.condition)
+        
+        val result = ruleEngine.validate(rule.condition, itemStore)
         assertNotNull(result)
         assertTrue(result.valid)
     }
@@ -226,8 +225,8 @@ class RuleEngineGetDescriptionTest {
     fun testGetDescriptionWithConstant() {
         val condition = "C{NAgjOfWMXg6} == 0"
         val rule= Rule(condition, listOf(ruleAction))
-        val ruleEngine = getRuleEngineForDescription(itemStore)
-        val result = ruleEngine.evaluate(rule.condition)
+        
+        val result = ruleEngine.validate(rule.condition, itemStore)
         assertNotNull(result)
         assertTrue(result.valid)
     }
@@ -236,8 +235,8 @@ class RuleEngineGetDescriptionTest {
     fun testGetDescriptionWithProgramEnvironmentVariable() {
         val condition = "d2:hasValue(V{completed_date})"
         val rule= Rule(condition, listOf(ruleAction))
-        val ruleEngine = getRuleEngineForDescription(itemStore)
-        val result = ruleEngine.evaluate(rule.condition)
+        
+        val result = ruleEngine.validate(rule.condition, itemStore)
         assertNotNull(result)
         assertTrue(result.valid)
     }
@@ -246,8 +245,8 @@ class RuleEngineGetDescriptionTest {
     fun testGetDescriptionWithSingleD2Function() {
         val condition = "d2:hasValue(#{test_var_one})"
         val rule= Rule(condition, listOf(ruleAction))
-        val ruleEngine = getRuleEngineForDescription(itemStore)
-        val result = ruleEngine.evaluate(rule.condition)
+        
+        val result = ruleEngine.validate(rule.condition, itemStore)
         assertNotNull(result)
         assertTrue(result.valid)
     }
@@ -256,8 +255,8 @@ class RuleEngineGetDescriptionTest {
     fun testGetDescriptionWithMultipleD2FunctionsAndLogicalOROperator() {
         val condition = "d2:hasValue(#{test_var_two}) || d2:count(#{test_var_one}) > 0 "
         val rule= Rule(condition, listOf(ruleAction))
-        val ruleEngine = getRuleEngineForDescription(itemStore)
-        val result = ruleEngine.evaluate(rule.condition)
+        
+        val result = ruleEngine.validate(rule.condition, itemStore)
         assertNotNull(result)
         assertTrue(result.valid)
     }
@@ -266,38 +265,29 @@ class RuleEngineGetDescriptionTest {
     fun testGetDescriptionWithMultipleD2FunctionsAndLogicalANDOperator() {
         val condition = "d2:hasValue(#{test_var_two}) && d2:count(#{test_var_one}) > 0 "
         val rule = Rule(condition, listOf(ruleAction))
-        val ruleEngine = getRuleEngineForDescription(itemStore)
-        val result = ruleEngine.evaluate(rule.condition)
+        
+        val result = ruleEngine.validate(rule.condition, itemStore)
         assertNotNull(result)
         assertTrue(result.valid)
     }
 
     @Test
     fun testGetDescriptionForDataFieldExpression() {
-        val ruleEngine = getRuleEngineForDescription(itemStore)
-        var result = ruleEngine.evaluateDataFieldExpression("1 + 1")
+        
+        var result = ruleEngine.validateDataFieldExpression("1 + 1", itemStore)
         assertNotNull(result)
         assertTrue(result.valid)
-        result =
-            ruleEngine.evaluateDataFieldExpression("d2:hasValue(#{test_var_two}) && d2:count(#{test_var_one}) > 0 ")
+        result = ruleEngine.validateDataFieldExpression("d2:hasValue(#{test_var_two}) && d2:count(#{test_var_one}) > 0 ", itemStore)
         assertNotNull(result)
         assertTrue(result.valid)
-        result = ruleEngine.evaluateDataFieldExpression("1 + 1 +")
+        result = ruleEngine.validateDataFieldExpression("1 + 1 +", itemStore)
         assertNotNull(result)
         assertFalse(result.valid)
         assertTrue(result.exception is org.hisp.dhis.rules.models.RuleEngineValidationException)
-        result =
-            ruleEngine.evaluateDataFieldExpression("d2:hasValue(#{test_var_two}) && d2:count(#{test_var_one}) > 0 (")
+        result = ruleEngine.validateDataFieldExpression("d2:hasValue(#{test_var_two}) && d2:count(#{test_var_one}) > 0 (", itemStore)
         assertNotNull(result)
         assertFalse(result.valid)
         assertTrue(result.exception is org.hisp.dhis.rules.models.RuleEngineValidationException)
-    }
-
-    private fun getRuleEngineForDescription(itemStore: Map<String, DataItem>): RuleEngine {
-        return RuleEngine(
-            RuleEngineContext(emptyList(), emptyList(), emptyMap(),
-            emptyMap(), RuleEngineIntent.DESCRIPTION, itemStore)
-        )
     }
 
     companion object {

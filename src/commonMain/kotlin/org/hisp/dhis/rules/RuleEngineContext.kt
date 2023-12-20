@@ -8,6 +8,5 @@ data class RuleEngineContext(
     val ruleVariables: List<RuleVariable>,
     val supplementaryData: Map<String, List<String>> = emptyMap(),
     val constantsValues: Map<String, String> = emptyMap(),
-    val ruleEngineIntent: RuleEngineIntent = RuleEngineIntent.EVALUATION,
-    val dataItemStore: Map<String, DataItem> = emptyMap()
+    val ruleEngineIntent: RuleEngineIntent = RuleEngineIntent.EVALUATION
 )

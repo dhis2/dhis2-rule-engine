@@ -85,7 +85,7 @@ class RuleVariableValueMapBuilder private constructor() {
     }
 
     fun multipleBuild(): RuleVariableValueMap {
-        val enrollmentMap: MutableMap<org.hisp.dhis.rules.models.RuleEnrollment, MutableMap<String, RuleVariableValue>> = HashMap()
+        val enrollmentMap: MutableMap<RuleEnrollment, MutableMap<String, RuleVariableValue>> = HashMap()
         if (ruleEnrollment != null) {
             enrollmentMap[ruleEnrollment!!] = build()
         }

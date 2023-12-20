@@ -9,7 +9,7 @@ import org.hisp.dhis.rules.models.*
 data class RuleEngine(
     val executionContext: RuleEngineContext,
     val events: List<RuleEvent> = emptyList(),
-    val enrollment: org.hisp.dhis.rules.models.RuleEnrollment? = null,
+    val enrollment: RuleEnrollment? = null,
     val triggerEnvironment: TriggerEnvironment? = TriggerEnvironment.SERVER) {
 
     fun evaluate(ruleEvent: RuleEvent): List<RuleEffect> {
@@ -27,7 +27,7 @@ data class RuleEngine(
         return RuleEngineExecution(ruleEvent, null, rulesToEvaluate, valueMap, executionContext.supplementaryData).execute()
     }
 
-    fun evaluate(ruleEnrollment: org.hisp.dhis.rules.models.RuleEnrollment,
+    fun evaluate(ruleEnrollment: RuleEnrollment,
                  rulesToEvaluate: List<Rule>): List<RuleEffect> {
         val valueMap = RuleVariableValueMapBuilder.target(ruleEnrollment)
                 .ruleVariables(executionContext.ruleVariables)
@@ -50,47 +50,8 @@ data class RuleEngine(
                 executionContext.supplementaryData).execute()
     }
 
-    fun evaluate( ruleEnrollment: org.hisp.dhis.rules.models.RuleEnrollment): List<RuleEffect> {
+    fun evaluate( ruleEnrollment: RuleEnrollment): List<RuleEffect> {
         return evaluate(ruleEnrollment, executionContext.rules)
-    }
-
-    fun evaluate(expression: String): RuleValidationResult {
-        // Rule condition expression should be evaluated against Boolean
-        return getExpressionDescription(expression, Expression.Mode.RULE_ENGINE_CONDITION)
-    }
-
-    fun evaluateDataFieldExpression(expression: String): RuleValidationResult {
-        // Rule action data field field should be evaluated against all i.e Boolean, String, Date and Numerical value
-        return getExpressionDescription(expression, Expression.Mode.RULE_ENGINE_ACTION)
-    }
-
-    private fun getExpressionDescription(expression: String, mode: Expression.Mode): RuleValidationResult {
-        return try {
-            val validationMap: MutableMap<String, ValueType> = HashMap()
-            val dataItemStore = executionContext.dataItemStore
-            for ((key, value) in dataItemStore!!) {
-                validationMap[key] = value.valueType.toValueType()
-            }
-            Expression(expression, mode, false).validate(validationMap)
-            val displayNames: MutableMap<String, String> = HashMap()
-            for ((key, value) in dataItemStore) {
-                displayNames[key] = value.displayName
-            }
-            val description = Expression(expression, mode, false).describe(displayNames)
-            RuleValidationResult(valid = true, description = description)
-        } catch (ex: IllegalExpressionException) {
-            RuleValidationResult(
-                valid = false,
-                exception = RuleEngineValidationException(ex),
-                errorMessage = ex.message
-            )
-        } catch (ex: ParseException) {
-            RuleValidationResult(
-                valid = false,
-                exception = RuleEngineValidationException(ex),
-                errorMessage = ex.message
-            )
-        }
     }
 
     @Deprecated("use data copy")
