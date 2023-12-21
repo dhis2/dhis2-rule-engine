@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules
 
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.models.*
 import kotlin.test.Test
@@ -237,7 +238,7 @@ class ProgramRuleVariableTest {
         private const val ENROLLMENT_DATE_STRING = "2019-01-01"
         private val ENROLLMENT_DATE = LocalDate.parse(ENROLLMENT_DATE_STRING)
         private const val EVENT_DATE_STRING = "2019-02-02"
-        private val EVENT_DATE = LocalDate.parse(EVENT_DATE_STRING)
+        private val EVENT_DATE = Instant.parse(EVENT_DATE_STRING + "T01:00:00Z")
         private const val INCIDENT_DATE_STRING = "2020-01-01"
         private val INCIDENT_DATE = LocalDate.parse(INCIDENT_DATE_STRING)
         private const val PROGRAM_STAGE = "program stage"

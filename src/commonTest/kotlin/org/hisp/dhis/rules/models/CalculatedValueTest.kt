@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules.models
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.RuleEngine
 import org.hisp.dhis.rules.RuleEngineContext
@@ -54,14 +55,14 @@ class CalculatedValueTest {
             programStage = "test_program_stage",
             programStageName = "",
             status = RuleEvent.Status.ACTIVE,
-            eventDate = LocalDate.currentDate(),
+            eventDate = Clock.System.now(),
             dueDate = LocalDate.currentDate(),
             organisationUnit = "",
             organisationUnitCode = "",
             completedDate = null,
             dataValues = listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(), "test_program_stage", "test_data_element", "test_value"
+                    Clock.System.now(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
         )
@@ -95,14 +96,14 @@ class CalculatedValueTest {
             programStage = "test_program_stage",
             programStageName = "",
             status = RuleEvent.Status.ACTIVE,
-            eventDate = LocalDate.currentDate(),
+            eventDate = Clock.System.now(),
             dueDate = LocalDate.currentDate(),
             organisationUnit = "",
             organisationUnitCode = "",
             completedDate = null,
             dataValues = listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(), "test_program_stage", "test_data_element", "test_value"
+                    Clock.System.now(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
         )
@@ -155,14 +156,14 @@ class CalculatedValueTest {
             programStage = "test_program_stage",
             programStageName = "",
             status = RuleEvent.Status.ACTIVE,
-            eventDate = LocalDate.currentDate(),
+            eventDate = Clock.System.now(),
             dueDate = LocalDate.currentDate(),
             organisationUnit = "",
             organisationUnitCode = "",
             completedDate = null,
             dataValues = listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(), "test_program_stage", "test_data_element", "test_value"
+                    Clock.System.now(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
         )

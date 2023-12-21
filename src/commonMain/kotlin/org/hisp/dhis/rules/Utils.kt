@@ -1,9 +1,6 @@
 package org.hisp.dhis.rules
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.*
 import org.hisp.dhis.rules.models.RuleEvent
 
 fun values(ruleDataValues: List<org.hisp.dhis.rules.models.RuleDataValue>): List<String> {
@@ -18,23 +15,23 @@ fun values(ruleDataValues: List<org.hisp.dhis.rules.models.RuleDataValue>): List
         ruleDataValues: List<org.hisp.dhis.rules.models.RuleDataValue>,
         ruleEvent: RuleEvent
     ): String {
-        val dates: MutableList<LocalDate> = ArrayList()
+        val dates: MutableList<Instant> = ArrayList()
         for (date in ruleDataValues) {
             val d = date.eventDate
             if (d < ruleEvent.eventDate) {
                 dates.add(d)
             }
         }
-        return dates.max().toString()
+        return dates.max().toLocalDateTime(TimeZone.currentSystemDefault()).date.toString()
     }
 
     fun getLastUpdateDate(ruleDataValues: List<org.hisp.dhis.rules.models.RuleDataValue>): String {
-        val dates: MutableList<LocalDate> = ArrayList()
+        val dates: MutableList<Instant> = ArrayList()
         for (date in ruleDataValues) {
             val d = date.eventDate
             dates.add(d)
         }
-        return dates.max().toString()
+        return dates.max().toLocalDateTime(TimeZone.currentSystemDefault()).date.toString()
     }
 
     fun unwrapVariableName(variable: String): String {

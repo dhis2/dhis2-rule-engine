@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngineContext
 import org.hisp.dhis.rules.models.*
@@ -91,68 +92,68 @@ class RuleEngineVariableNameTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element1",
                     "2.6"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element2",
                     "2.6"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element3",
                     "2.6"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element4",
                     "2.6"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element5",
                     "2.6"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element6",
                     "2.6"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element7",
                     "2.6"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element8",
                     "2.6"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element9",
                     "2.6"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element10",
                     "2.6"
@@ -199,14 +200,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(), "test_program_stage", "test_data_element", "test_value"
+                    Clock.System.now(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
         )
@@ -232,14 +233,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(), "test_program_stage", "test_data_element", "test_value"
+                    Clock.System.now(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
         )
@@ -265,14 +266,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "condition"
@@ -284,14 +285,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage2",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "condition2"
@@ -303,14 +304,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage3",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "condition"
@@ -339,14 +340,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "condition"
@@ -358,14 +359,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage2",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "condition2"
@@ -377,14 +378,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage3",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "condition"
@@ -416,14 +417,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "condition"
@@ -435,14 +436,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage2",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "condition2"
@@ -454,14 +455,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage3",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "condition"
@@ -473,14 +474,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage3",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_two",
                     "condition"
@@ -509,14 +510,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "condition"
@@ -528,14 +529,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage2",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "condition2"
@@ -547,14 +548,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage3",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "condition"
@@ -566,14 +567,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage3",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_two",
                     "condition"
@@ -602,14 +603,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "0"
@@ -621,14 +622,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "1"
@@ -640,14 +641,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "-3"
@@ -676,14 +677,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "0"
@@ -695,14 +696,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "1"
@@ -714,14 +715,14 @@ class RuleEngineVariableNameTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "-3"
@@ -761,20 +762,20 @@ class RuleEngineVariableNameTest {
             "test_program_stage1",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "5"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_two",
                     "male"
@@ -786,20 +787,20 @@ class RuleEngineVariableNameTest {
             "test_program_stage2",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "7"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_two",
                     "male"
@@ -811,20 +812,20 @@ class RuleEngineVariableNameTest {
             "test_program_stage3",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "8"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_two",
                     "male"
@@ -863,20 +864,20 @@ class RuleEngineVariableNameTest {
             "test_program_stage1",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "5"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_two",
                     "male"
@@ -888,20 +889,20 @@ class RuleEngineVariableNameTest {
             "test_program_stage2",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "7"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_two",
                     "male"
@@ -913,20 +914,20 @@ class RuleEngineVariableNameTest {
             "test_program_stage3",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "8"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_two",
                     "male"
@@ -960,20 +961,20 @@ class RuleEngineVariableNameTest {
             "test_program_stage1",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "5"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_two",
                     "male"
@@ -985,20 +986,20 @@ class RuleEngineVariableNameTest {
             "test_program_stage2",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "7"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_two",
                     "male"
@@ -1010,20 +1011,20 @@ class RuleEngineVariableNameTest {
             "test_program_stage3",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "8"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_two",
                     "male"
@@ -1058,20 +1059,20 @@ class RuleEngineVariableNameTest {
             "test_program_stage1",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "5"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_two",
                     "male"
@@ -1083,20 +1084,20 @@ class RuleEngineVariableNameTest {
             "test_program_stage2",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "7"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_two",
                     "male"
@@ -1108,20 +1109,20 @@ class RuleEngineVariableNameTest {
             "test_program_stage3",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_one",
                     "8"
                 ),
                 RuleDataValue(
-                    LocalDate.currentDate(),
+                    Clock.System.now(),
                     "test_program_stage",
                     "test_data_element_two",
                     "male"

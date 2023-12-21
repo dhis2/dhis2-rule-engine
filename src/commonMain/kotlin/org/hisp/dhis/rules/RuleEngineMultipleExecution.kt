@@ -1,22 +1,16 @@
 package org.hisp.dhis.rules
 
-import org.hisp.dhis.rules.models.Rule
-import org.hisp.dhis.rules.models.RuleEffects
-import org.hisp.dhis.rules.models.TrackerObjectType
+import org.hisp.dhis.rules.models.*
 
-internal data class RuleEngineMultipleExecution(
-    val rules: List<Rule>,
-    val ruleVariableValueMap: RuleVariableValueMap,
-    val supplementaryData: Map<String, List<String>>
-) {
-    fun execute(): List<RuleEffects> {
+internal class RuleEngineMultipleExecution {
+    fun execute(rules: List<Rule>, ruleVariableValueMap: RuleVariableValueMap,
+                supplementaryData: Map<String, List<String>>): List<RuleEffects> {
         val ruleEffects: MutableList<RuleEffects> = ArrayList()
-        for ((enrollment, value) in ruleVariableValueMap
-            .enrollmentMap) {
+        for ((enrollment, value) in ruleVariableValueMap.enrollmentMap) {
             val enrollmentRuleEffects = RuleConditionEvaluator()
                 .getEvaluatedAndErrorRuleEffects(
                     TrackerObjectType.ENROLLMENT, enrollment.enrollment, value,
-                    supplementaryData, filterRules(rules, enrollment)
+                    supplementaryData, filterRules(rules)
                 )
             ruleEffects.add(
                 RuleEffects(
@@ -25,8 +19,7 @@ internal data class RuleEngineMultipleExecution(
                 )
             )
         }
-        for ((event, value) in ruleVariableValueMap
-            .eventMap) {
+        for ((event, value) in ruleVariableValueMap.eventMap) {
             ruleEffects.add(
                 RuleEffects(
                     TrackerObjectType.EVENT, event.event,
@@ -38,5 +31,45 @@ internal data class RuleEngineMultipleExecution(
             )
         }
         return ruleEffects
+    }
+
+    private fun filterRules(rules: List<Rule>): List<Rule> {
+        val filteredRules: MutableList<Rule> = mutableListOf()
+        for (rule in rules) {
+            val programStage: String? = rule.programStage
+            if (programStage.isNullOrEmpty()) {
+                val ruleActions = filterActionRules(
+                    rule.actions,
+                    AttributeType.TRACKED_ENTITY_ATTRIBUTE
+                )
+                filteredRules.add(rule.copy(actions = ruleActions))
+            }
+        }
+        return filteredRules
+    }
+
+    private fun filterRules(rules: List<Rule>, ruleEvent: RuleEvent): List<Rule> {
+        val filteredRules: MutableList<Rule> = mutableListOf()
+        for (rule in rules) {
+            val programStage: String? = rule.programStage
+            if (programStage.isNullOrEmpty() || programStage == ruleEvent.programStage) {
+                val ruleActions = filterActionRules(
+                    rule.actions,
+                    AttributeType.DATA_ELEMENT
+                )
+                filteredRules.add(rule.copy(actions = ruleActions))
+            }
+        }
+        return filteredRules
+    }
+
+    private fun filterActionRules(ruleActions: List<RuleAction>, attributeType: AttributeType): List<RuleAction> {
+        val filteredRuleActions: MutableList<RuleAction> = mutableListOf()
+        for (ruleAction in ruleActions) {
+            if (ruleAction !is RuleActionAttribute || ruleAction.attributeType() == attributeType || ruleAction.attributeType() == AttributeType.UNKNOWN) {
+                filteredRuleActions.add(ruleAction)
+            }
+        }
+        return filteredRuleActions
     }
 }

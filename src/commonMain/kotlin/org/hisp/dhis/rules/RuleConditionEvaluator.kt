@@ -16,11 +16,9 @@ class RuleConditionEvaluator {
         supplementaryData: Map<String, List<String>>,
         rules: List<Rule>
     ): List<RuleEffect> {
-        val ruleEffects: MutableList<RuleEffect> = ArrayList()
-        for ((_, ruleEffects1) in getRuleEvaluationResults(targetType, targetUid, valueMap, supplementaryData, rules)) {
-            ruleEffects.addAll(ruleEffects1)
-        }
-        return ruleEffects
+        val ruleEvaluationResults = getRuleEvaluationResults(targetType, targetUid, valueMap, supplementaryData, rules)
+        return ruleEvaluationResults
+            .flatMap { result -> result.ruleEffects }
     }
 
     fun getRuleEffects(
@@ -30,19 +28,16 @@ class RuleConditionEvaluator {
         supplementaryData: Map<String, List<String>>,
         rules: List<Rule>
     ): List<RuleEffect> {
-        val ruleEffects: MutableList<RuleEffect> = ArrayList()
-        for ((_, ruleEffects1, _, error) in getRuleEvaluationResults(
+        val ruleEvaluationResults = getRuleEvaluationResults(
             targetType,
             targetUid,
             valueMap,
             supplementaryData,
             rules
-        )) {
-            if (!error) {
-                ruleEffects.addAll(ruleEffects1)
-            }
-        }
-        return ruleEffects
+        )
+        return ruleEvaluationResults
+            .filter { result -> !result.error }
+            .flatMap { result -> result.ruleEffects }
     }
 
     fun getRuleEvaluationResults(
@@ -140,10 +135,7 @@ class RuleConditionEvaluator {
         condition: String?, valueMap: Map<String, RuleVariableValue>,
         supplementaryData: Map<String, List<String>>, mode: Expression.Mode
     ): String {
-        if (condition==null) {
-            return ""
-        }
-        if (condition.isEmpty()) {
+        if (condition==null || condition.isEmpty()) {
             return ""
         }
         val expression = Expression(condition, mode, false)
@@ -189,7 +181,7 @@ class RuleConditionEvaluator {
         if (ruleAction is RuleActionAssign) {
             val data = process(ruleAction.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION)
             updateValueMap(ruleAction.field, RuleVariableValue(RuleValueType.TEXT, data, listOf(), null), valueMap)
-            return if (data == null || data.isEmpty()) {
+            return if (data.isEmpty()) {
                 RuleEffect(rule.uid, ruleAction, null)
             } else {
                 RuleEffect(rule.uid, ruleAction, data)

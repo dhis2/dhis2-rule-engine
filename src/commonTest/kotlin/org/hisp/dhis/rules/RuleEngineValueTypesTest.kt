@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.models.*
 import kotlin.test.Test
@@ -18,7 +19,7 @@ class RuleEngineValueTypesTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
@@ -44,7 +45,7 @@ class RuleEngineValueTypesTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
@@ -70,7 +71,7 @@ class RuleEngineValueTypesTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",

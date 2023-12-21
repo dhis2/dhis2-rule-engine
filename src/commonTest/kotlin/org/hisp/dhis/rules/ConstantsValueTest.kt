@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.models.*
 import kotlin.test.Test
@@ -126,7 +127,7 @@ class ConstantsValueTest {
             programStage = "test_program_stage",
             programStageName = "",
             status = RuleEvent.Status.ACTIVE,
-            eventDate = LocalDate.currentDate(),
+            eventDate = Clock.System.now(),
             dueDate = LocalDate.currentDate(),
             organisationUnit = "",
             organisationUnitCode = "",
@@ -134,7 +135,7 @@ class ConstantsValueTest {
             dataValues =
             listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(), "test_program_stage", "test_data_element", "test_value"
+                    Clock.System.now(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
         )

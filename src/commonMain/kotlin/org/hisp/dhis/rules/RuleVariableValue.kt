@@ -16,9 +16,9 @@ data class RuleVariableValue(
 
     private fun valueType(): ValueType {
         return when (type) {
-            org.hisp.dhis.rules.models.RuleValueType.DATE -> ValueType.DATE
-            org.hisp.dhis.rules.models.RuleValueType.NUMERIC -> ValueType.NUMBER
-            org.hisp.dhis.rules.models.RuleValueType.BOOLEAN -> ValueType.BOOLEAN
+            RuleValueType.DATE -> ValueType.DATE
+            RuleValueType.NUMERIC -> ValueType.NUMBER
+            RuleValueType.BOOLEAN -> ValueType.BOOLEAN
             else -> ValueType.STRING
         }
     }

@@ -1,6 +1,8 @@
 package org.hisp.dhis.rules
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.atStartOfDayIn
 import org.hisp.dhis.rules.models.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -41,19 +43,20 @@ class VariableValueTypeTest {
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent("test_variable", true, ArrayList(), "test_data_element", RuleValueType.NUMERIC)
         val ruleVariable2: RuleVariable = RuleVariableCurrentEvent("test_variable2", true, ArrayList(), "test_data_element2", RuleValueType.NUMERIC)
         val ruleEngineContext = getRuleEngineContext(rule, listOf(ruleVariable, ruleVariable2))
+        val now = Clock.System.now()
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.fromEpochDays(1),
+            now,
             LocalDate.fromEpochDays(1),
             null,
             "",
             null,
             listOf(
-                RuleDataValue(LocalDate.fromEpochDays(1), "", "test_data_element", "30"),
-                RuleDataValue(LocalDate.fromEpochDays(1), "", "test_data_element2", "4")
+                RuleDataValue(now, "", "test_data_element", "30"),
+                RuleDataValue(now, "", "test_data_element2", "4")
             )
         )
         val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
@@ -70,19 +73,20 @@ class VariableValueTypeTest {
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent("test_variable", true, ArrayList(), "test_data_element", RuleValueType.TEXT)
         val ruleVariable2: RuleVariable = RuleVariableCurrentEvent("test_variable2", true, ArrayList(), "test_data_element2", RuleValueType.TEXT)
         val ruleEngineContext = getRuleEngineContext(rule, listOf(ruleVariable, ruleVariable2))
+        val now = Clock.System.now()
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.fromEpochDays(1),
+            now,
             LocalDate.fromEpochDays(1),
             null,
             "",
             null,
             listOf(
-                RuleDataValue(LocalDate.fromEpochDays(1), "", "test_data_element", "30"),
-                RuleDataValue(LocalDate.fromEpochDays(1), "", "test_data_element2", "4")
+                RuleDataValue(now, "", "test_data_element", "30"),
+                RuleDataValue(now, "", "test_data_element2", "4")
             )
         )
         val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)

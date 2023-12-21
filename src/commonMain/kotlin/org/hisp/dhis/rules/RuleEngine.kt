@@ -7,7 +7,6 @@ import org.hisp.dhis.lib.expression.spi.ValueType
 import org.hisp.dhis.rules.models.*
 
 class RuleEngine: RuleEngineAPI {
-
     override fun evaluate(ruleEvent: RuleEvent, executionContext: RuleEngineContext): List<RuleEffect> {
         val valueMap = RuleVariableValueMapBuilder.target(ruleEvent)
             .ruleVariables(executionContext.ruleVariables)
@@ -16,7 +15,10 @@ class RuleEngine: RuleEngineAPI {
             .ruleEvents(executionContext.events)
             .constantValueMap(executionContext.constantsValues)
             .build()
-        return RuleEngineExecution(ruleEvent, null, executionContext.rules, valueMap, executionContext.supplementaryData).execute()
+        return RuleConditionEvaluator().getRuleEffects(
+            TrackerObjectType.EVENT, ruleEvent.event, valueMap,
+            executionContext.supplementaryData, executionContext.rules
+        )
     }
 
     override fun evaluate(ruleEnrollment: RuleEnrollment, executionContext: RuleEngineContext): List<RuleEffect> {
@@ -26,7 +28,10 @@ class RuleEngine: RuleEngineAPI {
                 .ruleEvents(executionContext.events)
                 .constantValueMap(executionContext.constantsValues)
                 .build()
-        return RuleEngineExecution(null, ruleEnrollment, executionContext.rules, valueMap, executionContext.supplementaryData).execute()
+        return RuleConditionEvaluator().getRuleEffects(
+            TrackerObjectType.ENROLLMENT, ruleEnrollment.enrollment, valueMap,
+            executionContext.supplementaryData, executionContext.rules
+        )
     }
 
     override fun evaluate(executionContext: RuleEngineContext): List<RuleEffects> {
@@ -37,8 +42,8 @@ class RuleEngine: RuleEngineAPI {
                 .ruleEvents(executionContext.events)
                 .constantValueMap(executionContext.constantsValues)
                 .multipleBuild()
-        return RuleEngineMultipleExecution(executionContext.rules, valueMap,
-                executionContext.supplementaryData).execute()
+        return RuleEngineMultipleExecution().execute(executionContext.rules, valueMap,
+                executionContext.supplementaryData)
     }
 
     override fun validate(expression: String, dataItemStore: Map<String, DataItem>): RuleValidationResult {

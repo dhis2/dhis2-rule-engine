@@ -1,7 +1,6 @@
 package org.hisp.dhis.rules.models
 
 import kotlinx.datetime.LocalDate
-import org.hisp.dhis.rules.Option
 import org.hisp.dhis.rules.RuleVariableValue
 import org.hisp.dhis.rules.RuleVariableValueMapBuilder
 import org.hisp.dhis.rules.currentDate

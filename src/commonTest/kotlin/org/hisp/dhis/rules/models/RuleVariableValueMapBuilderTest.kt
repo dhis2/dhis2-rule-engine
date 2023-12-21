@@ -1,8 +1,6 @@
 package org.hisp.dhis.rules.models
 
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.minus
+import kotlinx.datetime.*
 import org.hisp.dhis.rules.RuleVariableValueAssert
 import org.hisp.dhis.rules.RuleVariableValueMapBuilder
 import org.hisp.dhis.rules.currentDate
@@ -17,15 +15,15 @@ class RuleVariableValueMapBuilderTest {
         val ruleVariableOne: RuleVariable = RuleVariableCurrentEvent(
             "test_variable_one", true, ArrayList(), "test_dataelement_one", RuleValueType.TEXT
         )
-        val eventDate = LocalDate.parse("2015-01-01")
+        val eventDate = Instant.parse("2015-01-01T01:00:00Z")
 
         // values from context events should be ignored
-        val ruleEnrollment = org.hisp.dhis.rules.models.RuleEnrollment(
+        val ruleEnrollment = RuleEnrollment(
             "test_enrollment", "",
             LocalDate.parse("2015-01-01"), LocalDate.parse("2015-01-01"),
-            org.hisp.dhis.rules.models.RuleEnrollment.Status.ACTIVE, "", "", listOf(
-                org.hisp.dhis.rules.models.RuleAttributeValue("test_attribute_one", "test_attribute_value_one"),
-                org.hisp.dhis.rules.models.RuleAttributeValue("test_attribute_two", "test_attribute_value_two")
+            RuleEnrollment.Status.ACTIVE, "", "", listOf(
+                RuleAttributeValue("test_attribute_one", "test_attribute_value_one"),
+                RuleAttributeValue("test_attribute_two", "test_attribute_value_two")
             )
         )
         val contextEventOne = RuleEvent(
@@ -33,7 +31,7 @@ class RuleVariableValueMapBuilderTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
@@ -55,7 +53,7 @@ class RuleVariableValueMapBuilderTest {
             .triggerEnvironment(TriggerEnvironment.SERVER)
             .build()
         RuleVariableValueAssert.assertThatVariable(valueMap["test_variable_one"]!!).hasValue(null)
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.TEXT)
     }
 
     @Test
@@ -66,6 +64,7 @@ class RuleVariableValueMapBuilderTest {
         val ruleVariableTwo: RuleVariable = RuleVariableCurrentEvent(
             "test_variable_two", true, ArrayList(), "test_dataelement_two", RuleValueType.TEXT
         )
+        val eventInstant = Instant.parse("2015-01-01T01:00:00Z")
         val eventDate = LocalDate.parse("2015-01-01")
         val dueDate = LocalDate.parse("2016-01-01")
 
@@ -75,18 +74,18 @@ class RuleVariableValueMapBuilderTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    eventDate, "test_program_stage",
+                    eventInstant, "test_program_stage",
                     "test_dataelement_one", "test_context_value_one"
                 ),
                 RuleDataValue(
-                    eventDate, "test_program_stage",
+                    eventInstant, "test_program_stage",
                     "test_dataelement_two", "test_context_value_two"
                 )
             )
@@ -96,18 +95,18 @@ class RuleVariableValueMapBuilderTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    eventDate, "test_program_stage",
+                    eventInstant, "test_program_stage",
                     "test_dataelement_one", "test_context_value_three"
                 ),
                 RuleDataValue(
-                    eventDate, "test_program_stage",
+                    eventInstant, "test_program_stage",
                     "test_dataelement_two", "test_context_value_four"
                 )
             )
@@ -115,13 +114,13 @@ class RuleVariableValueMapBuilderTest {
         // values from current ruleEvent should be propagated to the variable values
         val currentEvent = RuleEvent(
             "test_event_uid", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, eventDate, dueDate, null, "", null, listOf(
+            RuleEvent.Status.ACTIVE, eventInstant, dueDate, null, "", null, listOf(
                 RuleDataValue(
-                    eventDate, "test_program_stage",
+                    eventInstant, "test_program_stage",
                     "test_dataelement_one", "test_value_one"
                 ),
                 RuleDataValue(
-                    eventDate, "test_program_stage",
+                    eventInstant, "test_program_stage",
                     "test_dataelement_two", "test_value_two"
                 )
             )
@@ -135,28 +134,27 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert.assertThatVariable(valueMap["current_date"]!!).hasValue(
             LocalDate.Companion.currentDate().toString()
         )
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(LocalDate.Companion.currentDate().toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(LocalDate.Companion.currentDate().toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["event_date"]!!).hasValue(
-                eventDate.toString()
-        )
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(eventDate.toString())
+            eventDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(eventDate.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["event_status"]!!)
             .hasValue(RuleEvent.Status.ACTIVE.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(RuleEvent.Status.ACTIVE.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(RuleEvent.Status.ACTIVE.toString())
 
         // event count variable should respect current event
         RuleVariableValueAssert.assertThatVariable(valueMap["event_count"]!!).hasValue("3")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("3")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("3")
         RuleVariableValueAssert.assertThatVariable(valueMap["event_id"]!!).hasValue("test_event_uid")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates("test_event_uid")
+            .isTypeOf(RuleValueType.TEXT).hasCandidates("test_event_uid")
         RuleVariableValueAssert.assertThatVariable(valueMap["due_date"]!!).hasValue(
                 dueDate.toString()
         )
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(dueDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(dueDate.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["test_variable_one"]!!).hasValue("test_value_one")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates("test_value_one")
+            .isTypeOf(RuleValueType.TEXT).hasCandidates("test_value_one")
         RuleVariableValueAssert.assertThatVariable(valueMap["test_variable_two"]!!).hasValue("test_value_two")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates("test_value_two")
+            .isTypeOf(RuleValueType.TEXT).hasCandidates("test_value_two")
     }
 
     @Test
@@ -167,8 +165,9 @@ class RuleVariableValueMapBuilderTest {
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_variable_two", true, ArrayList(), "test_dataelement_two", RuleValueType.TEXT
         )
-        val oldestEventDate = LocalDate.parse("2013-01-01")
-        val newestEventDate = LocalDate.parse("2017-01-01")
+        val oldestEventDate = Instant.parse("2013-01-01T01:00:00Z")
+        val newestEventDate = Instant.parse("2017-01-01T01:00:00Z")
+        val currentEventInstant = Instant.parse("2015-01-01T01:00:00Z")
         val currentEventDate = LocalDate.parse("2015-01-01")
         val currentEventDueDate: LocalDate? = null
         val oldestRuleEvent = RuleEvent(
@@ -177,7 +176,7 @@ class RuleVariableValueMapBuilderTest {
             "",
             RuleEvent.Status.ACTIVE,
             oldestEventDate,
-            oldestEventDate,
+            LocalDate.currentDate(),
             null,
             "",
             null,
@@ -198,7 +197,7 @@ class RuleVariableValueMapBuilderTest {
             "",
             RuleEvent.Status.ACTIVE,
             newestEventDate,
-            newestEventDate,
+            LocalDate.currentDate(),
             null,
             "",
             null,
@@ -218,18 +217,18 @@ class RuleVariableValueMapBuilderTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            currentEventDate,
+            currentEventInstant,
             currentEventDueDate,
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    currentEventDate, "test_program_stage",
+                    currentEventInstant, "test_program_stage",
                     "test_dataelement_one", "test_value_one_current"
                 ),
                 RuleDataValue(
-                    currentEventDate, "test_program_stage",
+                    currentEventInstant, "test_program_stage",
                     "test_dataelement_two", "test_value_two_current"
                 )
             )
@@ -243,22 +242,22 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert.assertThatVariable(valueMap["current_date"]!!).hasValue(
                 LocalDate.Companion.currentDate().toString()
         )
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(LocalDate.Companion.currentDate().toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(LocalDate.Companion.currentDate().toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["event_date"]!!)
             .hasValue(currentEventDate.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(currentEventDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(currentEventDate.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["event_count"]!!).hasValue("3")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("3")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("3")
         RuleVariableValueAssert.assertThatVariable(valueMap["event_id"]!!).hasValue("test_event_uid_current")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates("test_event_uid_current")
+            .isTypeOf(RuleValueType.TEXT).hasCandidates("test_event_uid_current")
         assertNull(valueMap["due_date"])
         RuleVariableValueAssert.assertThatVariable(valueMap["test_variable_one"]!!).hasValue("test_value_one_newest")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(
                 "test_value_one_newest",
                 "test_value_one_current", "test_value_one_oldest"
             )
         RuleVariableValueAssert.assertThatVariable(valueMap["test_variable_two"]!!).hasValue("test_value_two_newest")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(
                 "test_value_two_newest",
                 "test_value_two_current", "test_value_two_oldest"
             )
@@ -272,13 +271,14 @@ class RuleVariableValueMapBuilderTest {
         val ruleVariableTwo: RuleVariable = RuleVariableNewestEvent(
             "test_variable_two", true, ArrayList(), "test_dataelement_two", RuleValueType.TEXT
         )
-        val dateEventOne = LocalDate.parse("2013-01-01")
-        val dateEventTwo = LocalDate.parse("2014-01-01")
+        val dateEventOne = Instant.parse("2013-01-01T01:00:00Z")
+        val dateEventTwo = Instant.parse("2014-01-01T01:00:00Z")
+        val instantEventCurrent = Instant.parse("2015-01-01T01:00:00Z")
         val dateEventCurrent = LocalDate.parse("2015-01-01")
         val dateEventDueCurrent = LocalDate.parse("2016-01-01")
         val firstRuleEvent = RuleEvent(
             "test_event_uid_one", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, dateEventOne, dateEventOne, null, "", null, listOf(
+            RuleEvent.Status.ACTIVE, dateEventOne, LocalDate.currentDate(), null, "", null, listOf(
                 RuleDataValue(
                     dateEventOne, "test_program_stage",
                     "test_dataelement_one", "test_value_dataelement_one_first"
@@ -291,7 +291,7 @@ class RuleVariableValueMapBuilderTest {
         )
         val secondRuleEvent = RuleEvent(
             "test_event_uid_two", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, dateEventTwo, dateEventTwo, null, "", null, listOf(
+            RuleEvent.Status.ACTIVE, dateEventTwo, LocalDate.currentDate(), null, "", null, listOf(
                 RuleDataValue(
                     dateEventTwo, "test_program_stage",
                     "test_dataelement_one", "test_value_dataelement_one_second"
@@ -307,18 +307,18 @@ class RuleVariableValueMapBuilderTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            dateEventCurrent,
+            instantEventCurrent,
             dateEventDueCurrent,
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    dateEventCurrent, "test_program_stage",
+                    instantEventCurrent, "test_program_stage",
                     "test_dataelement_one", "test_value_dataelement_one_current"
                 ),
                 RuleDataValue(
-                    dateEventCurrent, "test_program_stage",
+                    instantEventCurrent, "test_program_stage",
                     "test_dataelement_two", "test_value_dataelement_two_current"
                 )
             )
@@ -333,26 +333,26 @@ class RuleVariableValueMapBuilderTest {
                 LocalDate.Companion.currentDate().toString()
 
         )
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(LocalDate.Companion.currentDate().toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(LocalDate.Companion.currentDate().toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["event_date"]!!)
             .hasValue(dateEventCurrent.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(dateEventCurrent.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(dateEventCurrent.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["event_count"]!!).hasValue("3")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("3")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("3")
         RuleVariableValueAssert.assertThatVariable(valueMap["event_id"]!!).hasValue("test_event_uid_current")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates("test_event_uid_current")
+            .isTypeOf(RuleValueType.TEXT).hasCandidates("test_event_uid_current")
         RuleVariableValueAssert.assertThatVariable(valueMap["due_date"]!!)
             .hasValue(dateEventDueCurrent.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(dateEventDueCurrent.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(dateEventDueCurrent.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["test_variable_one"]!!)
             .hasValue("test_value_dataelement_one_current")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(
                 "test_value_dataelement_one_current",
                 "test_value_dataelement_one_second", "test_value_dataelement_one_first"
             )
         RuleVariableValueAssert.assertThatVariable(valueMap["test_variable_two"]!!)
             .hasValue("test_value_dataelement_two_current")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(
                 "test_value_dataelement_two_current",
                 "test_value_dataelement_two_second", "test_value_dataelement_two_first"
             )
@@ -364,14 +364,15 @@ class RuleVariableValueMapBuilderTest {
             "test_variable", true, ArrayList(),
             "test_dataelement", RuleValueType.TEXT, "test_program_stage_one"
         )
-        val dateEventOne = LocalDate.parse("2014-02-03")
-        val dateEventTwo = LocalDate.parse("2014-03-03")
-        val dateEventThree = LocalDate.parse("2015-02-03")
+        val dateEventOne = Instant.parse("2014-02-03T01:00:00Z")
+        val dateEventTwo = Instant.parse("2014-03-03T01:00:00Z")
+        val dateEventThree = Instant.parse("2015-02-03T01:00:00Z")
+        val instantEventCurrent = Instant.parse("2011-02-03T01:00:00Z")
         val dateEventCurrent = LocalDate.parse("2011-02-03")
         val dateEventDueCurrent = LocalDate.parse("2011-02-03")
         val eventOne = RuleEvent(
             "test_event_uid_one", "test_program_stage_one", "",
-            RuleEvent.Status.ACTIVE, dateEventOne, dateEventOne, null, "", null, listOf(
+            RuleEvent.Status.ACTIVE, dateEventOne, LocalDate.currentDate(), null, "", null, listOf(
                 RuleDataValue(
                     dateEventOne, "test_program_stage_one",
                     "test_dataelement", "test_value_one"
@@ -380,7 +381,7 @@ class RuleVariableValueMapBuilderTest {
         )
         val eventTwo = RuleEvent(
             "test_event_uid_two", "test_program_stage_two", "",
-            RuleEvent.Status.ACTIVE, dateEventTwo, dateEventTwo, null, "", null, listOf(
+            RuleEvent.Status.ACTIVE, dateEventTwo, LocalDate.currentDate(), null, "", null, listOf(
                 RuleDataValue(
                     dateEventTwo, "test_program_stage_two",
                     "test_dataelement", "test_value_two"
@@ -389,7 +390,7 @@ class RuleVariableValueMapBuilderTest {
         )
         val eventThree = RuleEvent(
             "test_event_uid_three", "test_program_stage_two", "",
-            RuleEvent.Status.ACTIVE, dateEventThree, dateEventThree, null, "", null, listOf(
+            RuleEvent.Status.ACTIVE, dateEventThree, LocalDate.currentDate(), null, "", null, listOf(
                 RuleDataValue(
                     dateEventThree, "test_program_stage_two",
                     "test_dataelement", "test_value_three"
@@ -401,14 +402,14 @@ class RuleVariableValueMapBuilderTest {
             "test_program_stage_one",
             "",
             RuleEvent.Status.ACTIVE,
-            dateEventCurrent,
+            instantEventCurrent,
             dateEventDueCurrent,
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    dateEventCurrent, "test_program_stage_one",
+                    instantEventCurrent, "test_program_stage_one",
                     "test_dataelement", "test_value_current"
                 )
             )
@@ -422,19 +423,19 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert.assertThatVariable(valueMap["current_date"]!!).hasValue(
                 LocalDate.Companion.currentDate().toString()
         )
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(LocalDate.Companion.currentDate().toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(LocalDate.Companion.currentDate().toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["event_date"]!!)
             .hasValue(dateEventCurrent.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(dateEventCurrent.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(dateEventCurrent.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["event_count"]!!).hasValue("4")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("4")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("4")
         RuleVariableValueAssert.assertThatVariable(valueMap["event_id"]!!).hasValue("test_event_uid_current")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates("test_event_uid_current")
+            .isTypeOf(RuleValueType.TEXT).hasCandidates("test_event_uid_current")
         RuleVariableValueAssert.assertThatVariable(valueMap["due_date"]!!)
             .hasValue(dateEventDueCurrent.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(dateEventDueCurrent.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(dateEventDueCurrent.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["test_variable"]!!).hasValue("test_value_one")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates("test_value_one", "test_value_current")
+            .isTypeOf(RuleValueType.TEXT).hasCandidates("test_value_one", "test_value_current")
     }
 
     @Test
@@ -443,11 +444,13 @@ class RuleVariableValueMapBuilderTest {
             "test_variable", true, ArrayList(),
             "test_dataelement", RuleValueType.TEXT, "test_program_stage_one"
         )
-        val dateEventOne = LocalDate.parse("2014-03-03")
+        val dateEventOne = Instant.parse("2014-03-03T01:00:00Z")
+        val instantEventTwo = Instant.parse("2015-02-03T01:00:00Z")
         val dateEventTwo = LocalDate.parse("2015-02-03")
+        val dueDateEventTwo = LocalDate.parse("2015-02-03")
         val ruleEventOne = RuleEvent(
             "test_event_uid_one", "test_program_stage_two", "",
-            RuleEvent.Status.ACTIVE, dateEventOne, dateEventOne, null, "", null, listOf(
+            RuleEvent.Status.ACTIVE, dateEventOne, dueDateEventTwo, null, "", null, listOf(
                 RuleDataValue(
                     dateEventOne, "test_program_stage_two",
                     "test_dataelement", "test_value_one"
@@ -456,9 +459,9 @@ class RuleVariableValueMapBuilderTest {
         )
         val ruleEventTwo = RuleEvent(
             "test_event_uid_two", "test_program_stage_two", "",
-            RuleEvent.Status.ACTIVE, dateEventTwo, dateEventTwo, null, "", null, listOf(
+            RuleEvent.Status.ACTIVE, instantEventTwo, dueDateEventTwo, null, "", null, listOf(
                 RuleDataValue(
-                    dateEventTwo, "test_program_stage_two",
+                    instantEventTwo, "test_program_stage_two",
                     "test_dataelement", "test_value_two"
                 )
             )
@@ -472,21 +475,20 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert.assertThatVariable(valueMap["current_date"]!!).hasValue(
                 LocalDate.Companion.currentDate().toString()
         )
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(LocalDate.Companion.currentDate().toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(LocalDate.Companion.currentDate().toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["event_date"]!!).hasValue(
-                dateEventTwo.toString()
-        )
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(dateEventTwo.toString())
+            dateEventTwo.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(dateEventTwo.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["event_count"]!!).hasValue("2")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("2")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("2")
         RuleVariableValueAssert.assertThatVariable(valueMap["event_id"]!!).hasValue("test_event_uid_two")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates("test_event_uid_two")
+            .isTypeOf(RuleValueType.TEXT).hasCandidates("test_event_uid_two")
         RuleVariableValueAssert.assertThatVariable(valueMap["due_date"]!!).hasValue(
-            dateEventTwo.toString()
+            dueDateEventTwo.toString()
         )
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(dateEventTwo.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(dueDateEventTwo.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["test_variable"]!!).hasValue(null)
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates()
+            .isTypeOf(RuleValueType.TEXT).hasCandidates()
     }
 
     @Test
@@ -495,13 +497,15 @@ class RuleVariableValueMapBuilderTest {
             "test_variable", true, ArrayList(),
             "test_dataelement", RuleValueType.TEXT
         )
-        val dateEventOne = LocalDate.parse("2014-02-03")
-        val dateEventTwo = LocalDate.parse("2014-03-03")
-        val dateEventThree = LocalDate.parse("2015-02-03")
+        val dateEventOne = Instant.parse("2014-02-03T01:00:00Z")
+        val dateEventTwo = Instant.parse("2014-03-03T01:00:00Z")
+        val dateEventThree = Instant.parse("2015-02-03T01:00:00Z")
+        val instantEventCurrent = Instant.parse("2014-05-03T01:00:00Z")
         val dateEventCurrent = LocalDate.parse("2014-05-03")
+        val dueDateEventCurrent = LocalDate.parse("2014-05-03")
         val ruleEventOne = RuleEvent(
             "test_event_uid_one", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, dateEventOne, dateEventOne, null, "", null, listOf(
+            RuleEvent.Status.ACTIVE, dateEventOne, LocalDate.currentDate(), null, "", null, listOf(
                 RuleDataValue(
                     dateEventOne, "test_program_stage_one",
                     "test_dataelement", "test_value_one"
@@ -510,7 +514,7 @@ class RuleVariableValueMapBuilderTest {
         )
         val ruleEventTwo = RuleEvent(
             "test_event_uid_two", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, dateEventTwo, dateEventTwo, null, "", null, listOf(
+            RuleEvent.Status.ACTIVE, dateEventTwo, LocalDate.currentDate(), null, "", null, listOf(
                 RuleDataValue(
                     dateEventTwo, "test_program_stage_two",
                     "test_dataelement", "test_value_two"
@@ -519,7 +523,7 @@ class RuleVariableValueMapBuilderTest {
         )
         val ruleEventThree = RuleEvent(
             "test_event_uid_three", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, dateEventThree, dateEventThree, null, "", null, listOf(
+            RuleEvent.Status.ACTIVE, dateEventThree, LocalDate.currentDate(), null, "", null, listOf(
                 RuleDataValue(
                     dateEventThree, "test_program_stage_two",
                     "test_dataelement", "test_value_three"
@@ -531,14 +535,14 @@ class RuleVariableValueMapBuilderTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            dateEventCurrent,
-            dateEventCurrent,
+            instantEventCurrent,
+            dueDateEventCurrent,
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    dateEventCurrent, "test_program_stage_one",
+                    instantEventCurrent, "test_program_stage_one",
                     "test_dataelement", "test_value_current"
                 )
             )
@@ -552,19 +556,19 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert.assertThatVariable(valueMap["current_date"]!!).hasValue(
                 LocalDate.Companion.currentDate().toString()
         )
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(LocalDate.Companion.currentDate().toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(LocalDate.Companion.currentDate().toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["event_date"]!!)
             .hasValue(dateEventCurrent.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(dateEventCurrent.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(dateEventCurrent.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["event_count"]!!).hasValue("4")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("4")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("4")
         RuleVariableValueAssert.assertThatVariable(valueMap["event_id"]!!).hasValue("test_event_uid_current")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates("test_event_uid_current")
+            .isTypeOf(RuleValueType.TEXT).hasCandidates("test_event_uid_current")
         RuleVariableValueAssert.assertThatVariable(valueMap["due_date"]!!)
-            .hasValue(dateEventCurrent.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(dateEventCurrent.toString())
+            .hasValue(dueDateEventCurrent.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(dueDateEventCurrent.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["test_variable"]!!).hasValue("test_value_two")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.TEXT)
             .hasCandidates("test_value_three", "test_value_current", "test_value_two", "test_value_one")
     }
 
@@ -578,15 +582,17 @@ class RuleVariableValueMapBuilderTest {
             "test_variable_two", true, ArrayList(),
             "test_attribute_two", RuleValueType.TEXT
         )
+        val eventInstant = Instant.parse("2015-01-01T01:00:00Z")
         val eventDate = LocalDate.parse("2015-01-01")
+        val dueEventDate = LocalDate.parse("2015-01-01")
         val enrollmentDate = LocalDate.parse("2014-03-01")
 
         // values from enrollment should end up in ruleVariables
-        val ruleEnrollment = org.hisp.dhis.rules.models.RuleEnrollment(
+        val ruleEnrollment = RuleEnrollment(
             "test_enrollment", "",
-            enrollmentDate, enrollmentDate, org.hisp.dhis.rules.models.RuleEnrollment.Status.ACTIVE, "", "", listOf(
-                org.hisp.dhis.rules.models.RuleAttributeValue("test_attribute_one", "test_attribute_value_one"),
-                org.hisp.dhis.rules.models.RuleAttributeValue("test_attribute_two", "test_attribute_value_two")
+            enrollmentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE, "", "", listOf(
+                RuleAttributeValue("test_attribute_one", "test_attribute_value_one"),
+                RuleAttributeValue("test_attribute_two", "test_attribute_value_two")
             )
         )
 
@@ -596,31 +602,31 @@ class RuleVariableValueMapBuilderTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            eventDate,
-            LocalDate.currentDate(),
+            eventInstant,
+            dueEventDate,
             null,
             "",
             null,
             listOf(
                 RuleDataValue(
-                    eventDate, "test_program_stage",
+                    eventInstant, "test_program_stage",
                     "test_dataelement_one", "test_context_value_one"
                 ),
                 RuleDataValue(
-                    eventDate, "test_program_stage",
+                    eventInstant, "test_program_stage",
                     "test_dataelement_two", "test_context_value_two"
                 )
             )
         )
         val currentEvent = RuleEvent(
             "test_event_uid", "test_program_stage", "",
-            RuleEvent.Status.ACTIVE, eventDate, eventDate, null, "", null, listOf(
+            RuleEvent.Status.ACTIVE, eventInstant, dueEventDate, null, "", null, listOf(
                 RuleDataValue(
-                    eventDate, "test_program_stage",
+                    eventInstant, "test_program_stage",
                     "test_dataelement_one", "test_value_one"
                 ),
                 RuleDataValue(
-                    eventDate, "test_program_stage",
+                    eventInstant, "test_program_stage",
                     "test_dataelement_two", "test_value_two"
                 )
             )
@@ -637,38 +643,36 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert.assertThatVariable(valueMap["current_date"]!!).hasValue(
                 LocalDate.Companion.currentDate().toString()
         )
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(LocalDate.Companion.currentDate().toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(LocalDate.Companion.currentDate().toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["event_date"]!!).hasValue(
-                eventDate.toString()
-        )
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(eventDate.toString())
+            eventDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(eventDate.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["event_count"]!!).hasValue("2")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("2")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("2")
         RuleVariableValueAssert.assertThatVariable(valueMap["event_id"]!!).hasValue("test_event_uid")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates("test_event_uid")
+            .isTypeOf(RuleValueType.TEXT).hasCandidates("test_event_uid")
         RuleVariableValueAssert.assertThatVariable(valueMap["due_date"]!!).hasValue(
-                eventDate.toString()
-        )
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(eventDate.toString())
+            dueEventDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(dueEventDate.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["enrollment_status"]!!)
-            .hasValue(org.hisp.dhis.rules.models.RuleEnrollment.Status.ACTIVE.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(org.hisp.dhis.rules.models.RuleEnrollment.Status.ACTIVE.toString())
+            .hasValue(RuleEnrollment.Status.ACTIVE.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(RuleEnrollment.Status.ACTIVE.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["enrollment_date"]!!)
             .hasValue(enrollmentDate.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(enrollmentDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(enrollmentDate.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["enrollment_id"]!!).hasValue("test_enrollment")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates("test_enrollment")
+            .isTypeOf(RuleValueType.TEXT).hasCandidates("test_enrollment")
         RuleVariableValueAssert.assertThatVariable(valueMap["enrollment_count"]!!).hasValue("1")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("1")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("1")
         RuleVariableValueAssert.assertThatVariable(valueMap["incident_date"]!!)
             .hasValue(enrollmentDate.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(enrollmentDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(enrollmentDate.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["tei_count"]!!).hasValue("1")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("1")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("1")
         RuleVariableValueAssert.assertThatVariable(valueMap["test_variable_one"]!!).hasValue("test_attribute_value_one")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates("test_attribute_value_one")
+            .isTypeOf(RuleValueType.TEXT).hasCandidates("test_attribute_value_one")
         RuleVariableValueAssert.assertThatVariable(valueMap["test_variable_two"]!!).hasValue("test_attribute_value_two")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates("test_attribute_value_two")
+            .isTypeOf(RuleValueType.TEXT).hasCandidates("test_attribute_value_two")
     }
 
     @Test
@@ -688,12 +692,12 @@ class RuleVariableValueMapBuilderTest {
         val currentDate = LocalDate.Companion.currentDate()
         val enrollmentDate = LocalDate.parse("2017-02-02")
         val incidentDate = LocalDate.parse("2017-04-02")
-        val ruleEnrollment = org.hisp.dhis.rules.models.RuleEnrollment(
+        val ruleEnrollment = RuleEnrollment(
             "test_enrollment", "", incidentDate,
-            enrollmentDate, org.hisp.dhis.rules.models.RuleEnrollment.Status.ACTIVE, "", "", listOf(
-                org.hisp.dhis.rules.models.RuleAttributeValue("test_attribute_one", "test_attribute_value_one"),
-                org.hisp.dhis.rules.models.RuleAttributeValue("test_attribute_two", "test_attribute_value_two"),
-                org.hisp.dhis.rules.models.RuleAttributeValue("test_attribute_three", "test_attribute_value_three")
+            enrollmentDate, RuleEnrollment.Status.ACTIVE, "", "", listOf(
+                RuleAttributeValue("test_attribute_one", "test_attribute_value_one"),
+                RuleAttributeValue("test_attribute_two", "test_attribute_value_two"),
+                RuleAttributeValue("test_attribute_three", "test_attribute_value_three")
             )
         )
         val ruleEventOne = RuleEvent(
@@ -701,7 +705,7 @@ class RuleVariableValueMapBuilderTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
@@ -713,7 +717,7 @@ class RuleVariableValueMapBuilderTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
@@ -727,24 +731,24 @@ class RuleVariableValueMapBuilderTest {
             .build()
         assertEquals(15, valueMap.size.toLong())
         RuleVariableValueAssert.assertThatVariable(valueMap["current_date"]!!).hasValue(currentDate.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(currentDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(currentDate.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["event_count"]!!).hasValue("2")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("2")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("2")
         RuleVariableValueAssert.assertThatVariable(valueMap["enrollment_date"]!!)
             .hasValue(enrollmentDate.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(enrollmentDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(enrollmentDate.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["enrollment_id"]!!).hasValue("test_enrollment")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates("test_enrollment")
+            .isTypeOf(RuleValueType.TEXT).hasCandidates("test_enrollment")
         RuleVariableValueAssert.assertThatVariable(valueMap["enrollment_count"]!!).hasValue("1")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("1")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("1")
         RuleVariableValueAssert.assertThatVariable(valueMap["incident_date"]!!)
             .hasValue(incidentDate.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(incidentDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(incidentDate.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["tei_count"]!!).hasValue("1")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("1")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("1")
         RuleVariableValueAssert.assertThatVariable(valueMap["test_variable_one"]!!).hasValue("test_attribute_value_one")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("test_attribute_value_one")
-        RuleVariableValueAssert.assertThatVariable(valueMap["test_variable_two"]!!).isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("test_attribute_value_one")
+        RuleVariableValueAssert.assertThatVariable(valueMap["test_variable_two"]!!).isTypeOf(RuleValueType.TEXT)
             .hasValue("test_attribute_value_two").hasCandidates("test_attribute_value_two")
     }
 
@@ -765,17 +769,19 @@ class RuleVariableValueMapBuilderTest {
         val currentDate = LocalDate.Companion.currentDate()
         val enrollmentDate = LocalDate.parse("2017-02-02")
         val incidentDate = LocalDate.parse("2017-04-02")
-        val ruleEnrollment = org.hisp.dhis.rules.models.RuleEnrollment(
+        val ruleEnrollment = RuleEnrollment(
             "test_enrollment", "", incidentDate,
-            enrollmentDate, org.hisp.dhis.rules.models.RuleEnrollment.Status.ACTIVE, "", "", listOf(
-                org.hisp.dhis.rules.models.RuleAttributeValue("test_attribute_one", "test_attribute_value_one"),
-                org.hisp.dhis.rules.models.RuleAttributeValue("test_attribute_two", "test_attribute_value_two"),
-                org.hisp.dhis.rules.models.RuleAttributeValue("test_attribute_three", "test_attribute_value_three")
+            enrollmentDate, RuleEnrollment.Status.ACTIVE, "", "", listOf(
+                RuleAttributeValue("test_attribute_one", "test_attribute_value_one"),
+                RuleAttributeValue("test_attribute_two", "test_attribute_value_two"),
+                RuleAttributeValue("test_attribute_three", "test_attribute_value_three")
             )
         )
         val now = LocalDate.Companion.currentDate()
+        val eventOneInstant = now.minus(1, DateTimeUnit.DAY).atStartOfDayIn(TimeZone.currentSystemDefault())
         val eventOneDate = now.minus(1, DateTimeUnit.DAY)
         val eventOneDueDate = now.minus(2, DateTimeUnit.DAY)
+        val eventTwoInstant = now.minus(3, DateTimeUnit.DAY).atStartOfDayIn(TimeZone.currentSystemDefault())
         val eventTwoDate = now.minus(3, DateTimeUnit.DAY)
         val eventTwoDueDate = now.minus(4, DateTimeUnit.DAY)
         val ruleEventOne = RuleEvent(
@@ -783,7 +789,7 @@ class RuleVariableValueMapBuilderTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            eventOneDate,
+            eventOneInstant,
             eventOneDueDate,
             null,
             "",
@@ -795,7 +801,7 @@ class RuleVariableValueMapBuilderTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            eventTwoDate,
+            eventTwoInstant,
             eventTwoDueDate,
             null,
             "",
@@ -815,87 +821,87 @@ class RuleVariableValueMapBuilderTest {
 
         // Enrollment
         RuleVariableValueAssert.assertThatVariable(enrollmentValueMap!!["current_date"]!!).hasValue(currentDate.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(currentDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(currentDate.toString())
         RuleVariableValueAssert.assertThatVariable(enrollmentValueMap["event_count"]!!).hasValue("2")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("2")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("2")
         RuleVariableValueAssert.assertThatVariable(enrollmentValueMap["enrollment_date"]!!)
             .hasValue(enrollmentDate.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(enrollmentDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(enrollmentDate.toString())
         RuleVariableValueAssert.assertThatVariable(enrollmentValueMap["enrollment_id"]!!).hasValue("test_enrollment")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates("test_enrollment")
+            .isTypeOf(RuleValueType.TEXT).hasCandidates("test_enrollment")
         RuleVariableValueAssert.assertThatVariable(enrollmentValueMap["enrollment_count"]!!).hasValue("1")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("1")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("1")
         RuleVariableValueAssert.assertThatVariable(enrollmentValueMap["incident_date"]!!)
             .hasValue(incidentDate.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(incidentDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(incidentDate.toString())
         RuleVariableValueAssert.assertThatVariable(enrollmentValueMap["tei_count"]!!).hasValue("1")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("1")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("1")
         RuleVariableValueAssert.assertThatVariable(enrollmentValueMap["test_variable_one"]!!)
             .hasValue("test_attribute_value_one")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("test_attribute_value_one")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("test_attribute_value_one")
         RuleVariableValueAssert.assertThatVariable(enrollmentValueMap["test_variable_two"]!!)
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.TEXT)
             .hasValue("test_attribute_value_two").hasCandidates("test_attribute_value_two")
 
         // Event one
         RuleVariableValueAssert.assertThatVariable(eventOneValueMap!!["current_date"]!!).hasValue(currentDate.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(currentDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(currentDate.toString())
         RuleVariableValueAssert.assertThatVariable(eventOneValueMap["event_count"]!!).hasValue("2")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("2")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("2")
         RuleVariableValueAssert.assertThatVariable(eventOneValueMap["enrollment_date"]!!)
             .hasValue(enrollmentDate.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(enrollmentDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(enrollmentDate.toString())
         RuleVariableValueAssert.assertThatVariable(eventOneValueMap["enrollment_id"]!!).hasValue("test_enrollment")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates("test_enrollment")
+            .isTypeOf(RuleValueType.TEXT).hasCandidates("test_enrollment")
         RuleVariableValueAssert.assertThatVariable(eventOneValueMap["enrollment_count"]!!).hasValue("1")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("1")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("1")
         RuleVariableValueAssert.assertThatVariable(eventOneValueMap["incident_date"]!!)
             .hasValue(incidentDate.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(incidentDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(incidentDate.toString())
         RuleVariableValueAssert.assertThatVariable(eventOneValueMap["tei_count"]!!).hasValue("1")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("1")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("1")
         RuleVariableValueAssert.assertThatVariable(eventOneValueMap["test_variable_one"]!!)
             .hasValue("test_attribute_value_one")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("test_attribute_value_one")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("test_attribute_value_one")
         RuleVariableValueAssert.assertThatVariable(eventOneValueMap["test_variable_two"]!!).isTypeOf(
-            org.hisp.dhis.rules.models.RuleValueType.TEXT)
+            RuleValueType.TEXT)
             .hasValue("test_attribute_value_two").hasCandidates("test_attribute_value_two")
         RuleVariableValueAssert.assertThatVariable(eventOneValueMap["event_date"]!!)
             .hasValue(eventOneDate.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(eventOneDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(eventOneDate.toString())
         RuleVariableValueAssert.assertThatVariable(eventOneValueMap["due_date"]!!)
             .hasValue(eventOneDueDate.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(eventOneDueDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(eventOneDueDate.toString())
 
         // Event two
         RuleVariableValueAssert.assertThatVariable(eventTwoValueMap!!["current_date"]!!).hasValue(currentDate.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(currentDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(currentDate.toString())
         RuleVariableValueAssert.assertThatVariable(eventTwoValueMap["event_count"]!!).hasValue("2")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("2")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("2")
         RuleVariableValueAssert.assertThatVariable(eventTwoValueMap["enrollment_date"]!!)
             .hasValue(enrollmentDate.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(enrollmentDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(enrollmentDate.toString())
         RuleVariableValueAssert.assertThatVariable(eventTwoValueMap["enrollment_id"]!!).hasValue("test_enrollment")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates("test_enrollment")
+            .isTypeOf(RuleValueType.TEXT).hasCandidates("test_enrollment")
         RuleVariableValueAssert.assertThatVariable(eventTwoValueMap["enrollment_count"]!!).hasValue("1")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("1")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("1")
         RuleVariableValueAssert.assertThatVariable(eventTwoValueMap["incident_date"]!!)
             .hasValue(incidentDate.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(incidentDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(incidentDate.toString())
         RuleVariableValueAssert.assertThatVariable(eventTwoValueMap["tei_count"]!!).hasValue("1")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("1")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("1")
         RuleVariableValueAssert.assertThatVariable(eventTwoValueMap["test_variable_one"]!!)
             .hasValue("test_attribute_value_one")
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.NUMERIC).hasCandidates("test_attribute_value_one")
+            .isTypeOf(RuleValueType.NUMERIC).hasCandidates("test_attribute_value_one")
         RuleVariableValueAssert.assertThatVariable(eventTwoValueMap["test_variable_two"]!!).isTypeOf(
-            org.hisp.dhis.rules.models.RuleValueType.TEXT)
+            RuleValueType.TEXT)
             .hasValue("test_attribute_value_two").hasCandidates("test_attribute_value_two")
         RuleVariableValueAssert.assertThatVariable(eventTwoValueMap["event_date"]!!)
             .hasValue(eventTwoDate.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(eventTwoDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(eventTwoDate.toString())
         RuleVariableValueAssert.assertThatVariable(eventTwoValueMap["due_date"]!!)
             .hasValue(eventTwoDueDate.toString())
-            .isTypeOf(org.hisp.dhis.rules.models.RuleValueType.TEXT).hasCandidates(eventTwoDueDate.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(eventTwoDueDate.toString())
     }
 
     @Test
@@ -905,7 +911,7 @@ class RuleVariableValueMapBuilderTest {
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",

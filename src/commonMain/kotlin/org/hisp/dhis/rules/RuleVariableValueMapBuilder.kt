@@ -1,6 +1,8 @@
 package org.hisp.dhis.rules
 
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.RuleEngineUtils
 import kotlin.collections.ArrayList
@@ -35,8 +37,8 @@ class RuleVariableValueMapBuilder private constructor() {
         this.ruleEvent = ruleEvent
     }
     
-    fun ruleVariables(ruleVariables: List<RuleVariable>?): RuleVariableValueMapBuilder {
-        this.ruleVariables.addAll(ruleVariables!!)
+    fun ruleVariables(ruleVariables: List<RuleVariable>): RuleVariableValueMapBuilder {
+        this.ruleVariables.addAll(ruleVariables)
         return this
     }
 
@@ -64,8 +66,8 @@ class RuleVariableValueMapBuilder private constructor() {
         return this
     }
 
-    fun constantValueMap(constantValues: Map<String, String>?): RuleVariableValueMapBuilder {
-        allConstantValues.putAll(constantValues!!)
+    fun constantValueMap(constantValues: Map<String, String>): RuleVariableValueMapBuilder {
+        allConstantValues.putAll(constantValues)
         return this
     }
 
@@ -153,11 +155,11 @@ class RuleVariableValueMapBuilder private constructor() {
 
                 // push new list if it is not there for the given data element
                 if (!allEventsValues.containsKey(ruleDataValue.dataElement)) {
-                    allEventsValues[ruleDataValue.dataElement] = ArrayList(events.size) //NOPMD
+                    allEventsValues[ruleDataValue.dataElement] = ArrayList(events.size)
                 }
 
                 // append data value to the list
-                allEventsValues[ruleDataValue.dataElement]!!.add(ruleDataValue)
+                allEventsValues[ruleDataValue.dataElement]?.add(ruleDataValue)
             }
         }
         return allEventsValues
@@ -189,7 +191,7 @@ class RuleVariableValueMapBuilder private constructor() {
                 currentDate.toString()
             )
         }
-        if (!ruleEvents.isEmpty()) {
+        if (ruleEvents.isNotEmpty()) {
             valueMap[RuleEngineUtils.ENV_VAR_EVENT_COUNT] = RuleVariableValue(
                 RuleValueType.NUMERIC, ruleEvents.size.toString(),
                 listOf(ruleEvents.size.toString()), currentDate.toString()
@@ -232,10 +234,9 @@ class RuleVariableValueMapBuilder private constructor() {
                 RuleVariableValue(RuleValueType.TEXT, organisationUnitCode)
         }
         if (ruleEvent != null) {
-            val eventDate = ruleEvent!!.eventDate
+            val eventDate = ruleEvent!!.eventDate.toLocalDateTime(TimeZone.currentSystemDefault()).date.toString()
             valueMap[RuleEngineUtils.ENV_VAR_EVENT_DATE] = RuleVariableValue(
-                RuleValueType.TEXT, eventDate.toString(),
-                listOf(eventDate.toString()), currentDate.toString()
+                RuleValueType.TEXT, eventDate, listOf(eventDate), currentDate.toString()
             )
             if (ruleEvent!!.dueDate != null) {
                 val dueDate = ruleEvent!!.dueDate
