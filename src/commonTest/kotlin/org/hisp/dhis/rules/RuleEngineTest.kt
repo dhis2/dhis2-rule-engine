@@ -27,7 +27,6 @@ internal class RuleEngineTest {
         )
         val ruleEvents: MutableList<RuleEvent> = ArrayList()
         ruleEvents.add(ruleEvent)
-        val ruleEngine = RuleEngine(ruleEngineContext, ruleEvents)
-        assertFailsWith(IllegalStateException::class) { ruleEngine.evaluate(ruleEvent) }
+        assertFailsWith(IllegalStateException::class) { RuleEngine().evaluate(ruleEvent, ruleEngineContext.copy(events = ruleEvents)) }
     }
 }

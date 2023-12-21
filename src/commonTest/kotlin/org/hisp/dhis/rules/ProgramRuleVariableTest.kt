@@ -182,7 +182,7 @@ class ProgramRuleVariableTest {
     }
 
     private fun getRule(variable: String): Rule {
-        val assignAction: org.hisp.dhis.rules.models.RuleAction = RuleActionAssign.create(null, variable, "#{test_data_element}")
+        val assignAction: RuleAction = RuleActionAssign.create(null, variable, "#{test_data_element}")
         return Rule("true", listOf(assignAction), "test_program_rule1")
     }
 
@@ -193,12 +193,12 @@ class ProgramRuleVariableTest {
     }
     
     private fun callEnrollmentRuleEngine(rule: Rule): List<RuleEffect> {
-        val ruleEngine = getRuleEngine(listOf(rule))
-        return ruleEngine.evaluate(enrollment)
+        val ruleEngineContext = getRuleEngineContext(listOf(rule))
+        return RuleEngine().evaluate(enrollment, ruleEngineContext)
     }
     
     private fun callEventRuleEngine(rule: Rule): List<RuleEffect> {
-        val ruleEngine = getRuleEngine(listOf(rule))
+        val ruleEngineContext = getRuleEngineContext(listOf(rule))
         val event = RuleEvent(
             event = EVENT_ID,
             programStage = PROGRAM_STAGE,
@@ -211,25 +211,23 @@ class ProgramRuleVariableTest {
             completedDate = null,
             dataValues = emptyList()
         )
-        return ruleEngine.copy(enrollment = enrollment).evaluate(event)
+        return RuleEngine().evaluate(event, ruleEngineContext.copy(enrollment = enrollment))
     }
 
-    private val enrollment: org.hisp.dhis.rules.models.RuleEnrollment
-        get() = org.hisp.dhis.rules.models.RuleEnrollment(
+    private val enrollment: RuleEnrollment
+        get() = RuleEnrollment(
             ENROLLMENT_ID,
             PROGRAM_NAME,
             INCIDENT_DATE,
             ENROLLMENT_DATE,
-            org.hisp.dhis.rules.models.RuleEnrollment.Status.ACTIVE,
+            RuleEnrollment.Status.ACTIVE,
             ORGANISATION_UNIT,
             ORGANISATION_UNIT_CODE,
-            listOf(org.hisp.dhis.rules.models.RuleAttributeValue("test_attribute", "test_value"))
+            listOf(RuleAttributeValue("test_attribute", "test_value"))
         )
 
-    private fun getRuleEngine(rules: List<Rule>): RuleEngine {
-        return RuleEngine(
-            RuleEngineContext(rules, listOf(), emptyMap(), emptyMap()),
-            emptyList(), null, TriggerEnvironment.SERVER)
+    private fun getRuleEngineContext(rules: List<Rule>): RuleEngineContext {
+        return RuleEngineContext(rules)
     }
 
     companion object {
@@ -248,7 +246,7 @@ class ProgramRuleVariableTest {
         private const val ORGANISATION_UNIT = "organisation unit"
         private const val ORGANISATION_UNIT_CODE = "organisation unit code"
         private const val ENROLLMENT_ID = "enrollment id"
-        private val ENROLLMENT_STATUS = org.hisp.dhis.rules.models.RuleEnrollment.Status.ACTIVE
+        private val ENROLLMENT_STATUS = RuleEnrollment.Status.ACTIVE
         private const val EVENT_ID = "event id"
         private const val PROGRAM_NAME = "program name"
     }

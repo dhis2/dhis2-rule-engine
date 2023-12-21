@@ -7,7 +7,7 @@ data class RuleEnrollment(
     val programName: String,
     val incidentDate: LocalDate,
     val enrollmentDate: LocalDate,
-    val status: org.hisp.dhis.rules.models.RuleEnrollment.Status,
+    val status: RuleEnrollment.Status,
     val organisationUnit: String,
     val organisationUnitCode: String,
     val attributeValues: List<org.hisp.dhis.rules.models.RuleAttributeValue>

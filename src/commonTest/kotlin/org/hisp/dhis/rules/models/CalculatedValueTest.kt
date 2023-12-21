@@ -38,7 +38,7 @@ class CalculatedValueTest {
     @Test
     fun evaluateOneThousandRulesTest() {
         val i = 1000
-        val ruleEngine = getRuleEngine(createRules(i))
+        val ruleEngineContext = getRuleEngineContext(createRules(i))
         val enrollment = RuleEnrollment(
             "test_enrollment",
             "test_program",
@@ -65,7 +65,7 @@ class CalculatedValueTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.copy(enrollment = enrollment).evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext.copy(enrollment = enrollment))
         assertEquals(i, ruleEffects.size)
     }
 
@@ -106,8 +106,7 @@ class CalculatedValueTest {
                 )
             )
         )
-        val ruleEngine = getRuleEngine(listOf(rule, rule2)).copy(enrollment = enrollment)
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, getRuleEngineContext(listOf(rule, rule2)).copy(enrollment = enrollment))
         assertEquals("4", ruleEffects[0].data)
         assertEquals(sendMessageAction, ruleEffects[0].ruleAction)
     }
@@ -140,7 +139,7 @@ class CalculatedValueTest {
             "#{test_calculated_value}==4.0", listOf(sendMessageAction),
             "test_program_rule2", ""
         )
-        val ruleEngine = getRuleEngine(listOf(rule, rule2))
+        val ruleEngineContext = getRuleEngineContext(listOf(rule, rule2))
         val enrollment = RuleEnrollment(
             "test_enrollment",
             "test_program",
@@ -167,14 +166,14 @@ class CalculatedValueTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.copy(enrollment = enrollment).evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext.copy(enrollment = enrollment))
         assertEquals(1, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data)
         assertEquals(sendMessageAction, ruleEffects[0].ruleAction)
     }
 
-    private fun getRuleEngine(rules: List<Rule>): RuleEngine {
+    private fun getRuleEngineContext(rules: List<Rule>): RuleEngineContext {
         val ruleVariable: RuleVariable = RuleVariableCalculatedValue("test_calculated_value", true, ArrayList(), "", RuleValueType.TEXT)
-        return RuleEngine(RuleEngineContext(rules, listOf(ruleVariable)))
+        return RuleEngineContext(rules, listOf(ruleVariable))
     }
 }

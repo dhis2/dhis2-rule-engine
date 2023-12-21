@@ -35,12 +35,12 @@ import kotlin.test.assertEquals
 class VariableValueTypeTest {
     @Test
     fun testNumericVariablesAreComparedCorrectly() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText
+        val ruleAction: RuleAction = RuleActionText
             .createForFeedback(RuleActionText.Type.DISPLAYTEXT,"test_action_content", "#{test_variable}")
         val rule = Rule("#{test_variable} > #{test_variable2}", listOf(ruleAction), "", "")
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent("test_variable", true, ArrayList(), "test_data_element", RuleValueType.NUMERIC)
         val ruleVariable2: RuleVariable = RuleVariableCurrentEvent("test_variable2", true, ArrayList(), "test_data_element2", RuleValueType.NUMERIC)
-        val ruleEngine = getRuleEngine(rule, listOf(ruleVariable, ruleVariable2))
+        val ruleEngineContext = getRuleEngineContext(rule, listOf(ruleVariable, ruleVariable2))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -56,7 +56,7 @@ class VariableValueTypeTest {
                 RuleDataValue(LocalDate.fromEpochDays(1), "", "test_data_element2", "4")
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("30", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -64,12 +64,12 @@ class VariableValueTypeTest {
 
     @Test
     fun testTextVariablesAreComparedCorrectly() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText
+        val ruleAction: RuleAction = RuleActionText
             .createForFeedback(RuleActionText.Type.DISPLAYTEXT,"test_action_content", "#{test_variable}")
         val rule = Rule("#{test_variable} > #{test_variable2}", listOf(ruleAction), "", "")
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent("test_variable", true, ArrayList(), "test_data_element", RuleValueType.TEXT)
         val ruleVariable2: RuleVariable = RuleVariableCurrentEvent("test_variable2", true, ArrayList(), "test_data_element2", RuleValueType.TEXT)
-        val ruleEngine = getRuleEngine(rule, listOf(ruleVariable, ruleVariable2))
+        val ruleEngineContext = getRuleEngineContext(rule, listOf(ruleVariable, ruleVariable2))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -85,11 +85,11 @@ class VariableValueTypeTest {
                 RuleDataValue(LocalDate.fromEpochDays(1), "", "test_data_element2", "4")
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(0, ruleEffects.size)
     }
 
-    private fun getRuleEngine(rule: Rule, ruleVariables: List<RuleVariable>): RuleEngine {
-        return RuleEngine(RuleEngineContext(listOf(rule),ruleVariables))
+    private fun getRuleEngineContext(rule: Rule, ruleVariables: List<RuleVariable>): RuleEngineContext {
+        return RuleEngineContext(rules = listOf(rule), ruleVariables = ruleVariables)
     }
 }

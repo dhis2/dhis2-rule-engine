@@ -30,12 +30,11 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInAssignEffect() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionAssign.create(
+        val ruleAction: RuleAction = RuleActionAssign.create(
             null, "'test_string'", "#{test_data_element}"
         )
         val rule = Rule("true", listOf(ruleAction))
-        val ruleEngine = getRuleEngine(rule)
-        val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE))
+        val ruleEffects = RuleEngine().evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE), RuleEngineContext(listOf(rule)))
         assertEquals(1, ruleEffects.size)
         assertEquals("test_string", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -43,12 +42,11 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInAssignEffectMultipleExecution() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionAssign.create(
+        val ruleAction: RuleAction = RuleActionAssign.create(
             null, "'test_string'", "#{test_data_element}"
         )
         val rule = Rule("true", listOf(ruleAction))
-        val ruleEngine = getRuleEngineMultiple(rule, getTestRuleEvent(RuleEvent.Status.ACTIVE))
-        val ruleEffects = ruleEngine.evaluate()
+        val ruleEffects = RuleEngine().evaluate(RuleEngineContext(rules = listOf(rule), events = listOf(getTestRuleEvent(RuleEvent.Status.ACTIVE))))
         assertEquals(1, ruleEffects.size)
         assertEquals("test_string", ruleEffects[0].ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleEffects[0].ruleAction)
@@ -56,13 +54,12 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInCreateEventEffect() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionCreateEvent(
+        val ruleAction: RuleAction = RuleActionCreateEvent(
             "test_program_stage",
             "test_action_content", "'event_uid;test_data_value_one'"
         )
         val rule = Rule("true", listOf(ruleAction))
-        val ruleEngine = getRuleEngine(rule)
-        val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE))
+        val ruleEffects = RuleEngine().evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE), RuleEngineContext(listOf(rule)))
         assertEquals(1, ruleEffects.size)
         assertEquals("event_uid;test_data_value_one", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -70,13 +67,12 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInDisplayKeyValuePairEffect() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "2 + 2"
         )
         val rule = Rule("true", listOf(ruleAction))
-        val ruleEngine = getRuleEngine(rule)
-        val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE))
+        val ruleEffects = RuleEngine().evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE), RuleEngineContext(listOf(rule)))
         assertEquals(1, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -84,13 +80,12 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInDisplayTextEffect() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "2 + 2"
         )
         val rule = Rule("true", listOf(ruleAction))
-        val ruleEngine = getRuleEngine(rule)
-        val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE))
+        val ruleEffects = RuleEngine().evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE), RuleEngineContext(listOf(rule)))
         assertEquals(1, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -98,12 +93,11 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInErrorOnCompletionEffect() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionMessage.create(
+        val ruleAction: RuleAction = RuleActionMessage.create(
             "test_action_content", "2 + 2", "test_data_element", null, RuleActionMessage.Type.ERROR_ON_COMPILATION
         )
         val rule = Rule("true", listOf(ruleAction))
-        val ruleEngine = getRuleEngine(rule)
-        val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE))
+        val ruleEffects = RuleEngine().evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE), RuleEngineContext(listOf(rule)))
         assertEquals(1, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -111,11 +105,10 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInHideFieldEffect() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction =
+        val ruleAction: RuleAction =
             RuleActionHideField("test_data_element", "test_action_content")
         val rule = Rule("true", listOf(ruleAction))
-        val ruleEngine = RuleEngine(RuleEngineContext(listOf(rule), emptyList()), emptyList(), null, TriggerEnvironment.SERVER)
-        val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE))
+        val ruleEffects = RuleEngine().evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE), RuleEngineContext(listOf(rule)))
         assertEquals(1, ruleEffects.size)
         assertEquals("", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -123,11 +116,10 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun testEnvironmentVariableExpression() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction =
+        val ruleAction: RuleAction =
             RuleActionHideField("test_data_element", "test_action_content")
         val rule = Rule("V{event_status} =='COMPLETED'", listOf(ruleAction))
-        val ruleEngine = getRuleEngine(rule)
-        val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.COMPLETED))
+        val ruleEffects = RuleEngine().evaluate(getTestRuleEvent(RuleEvent.Status.COMPLETED), RuleEngineContext(listOf(rule)))
         assertEquals(1, ruleEffects.size)
         assertEquals("", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -135,11 +127,10 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun testTriggerEnvironment() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction =
+        val ruleAction: RuleAction =
             RuleActionHideField("test_data_element", "test_action_content")
         val rule = Rule("V{environment} =='Server'", listOf(ruleAction))
-        val ruleEngine = getRuleEngine(rule)
-        val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE))
+        val ruleEffects = RuleEngine().evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE), RuleEngineContext(listOf(rule)))
         assertEquals(1, ruleEffects.size)
         assertEquals("", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -147,11 +138,10 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInHideProgramStageEffect() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction =
+        val ruleAction: RuleAction =
             RuleActionHideProgramStage("test_program_stage")
         val rule = Rule("true", listOf(ruleAction))
-        val ruleEngine = getRuleEngine(rule)
-        val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE))
+        val ruleEffects = RuleEngine().evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE), RuleEngineContext(listOf(rule)))
         assertEquals(1, ruleEffects.size)
         assertEquals("", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -159,11 +149,10 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInScheduleMessage() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction =
+        val ruleAction: RuleAction =
             RuleActionScheduleMessage("", "'2018-04-24'")
         val rule = Rule("true", listOf(ruleAction))
-        val ruleEngine = getRuleEngine(rule)
-        val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE))
+        val ruleEffects = RuleEngine().evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE), RuleEngineContext(listOf(rule)))
         assertEquals(1, ruleEffects.size)
         assertTrue(ruleEffects[0].ruleAction is RuleActionScheduleMessage)
         assertEquals("2018-04-24", ruleEffects[0].data)
@@ -171,11 +160,10 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInHideSectionEffect() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction =
+        val ruleAction: RuleAction =
             RuleActionHideSection("test_section")
         val rule = Rule("true", listOf(ruleAction))
-        val ruleEngine = getRuleEngine(rule)
-        val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE))
+        val ruleEffects = RuleEngine().evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE), RuleEngineContext(listOf(rule)))
         assertEquals(1, ruleEffects.size)
         assertEquals("", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -183,11 +171,10 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInHideOptionEffect() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction =
+        val ruleAction: RuleAction =
             RuleActionHideOption("test_field", "test_option", "test_content")
         val rule = Rule("true", listOf(ruleAction))
-        val ruleEngine = getRuleEngine(rule)
-        val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE))
+        val ruleEffects = RuleEngine().evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE), RuleEngineContext(listOf(rule)))
         assertEquals(1, ruleEffects.size)
         assertEquals("", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -195,11 +182,10 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInHideOptionGroupEffect() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction =
+        val ruleAction: RuleAction =
             RuleActionHideOptionGroup("field", "test_option_group", "test_content")
         val rule = Rule("true", listOf(ruleAction))
-        val ruleEngine = getRuleEngine(rule)
-        val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE))
+        val ruleEffects = RuleEngine().evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE), RuleEngineContext(listOf(rule)))
         assertEquals(1, ruleEffects.size)
         assertEquals("", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -207,11 +193,10 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInSetMandatoryFieldEffect() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction =
+        val ruleAction: RuleAction =
             RuleActionSetMandatoryField("test_data_element")
         val rule = Rule("true", listOf(ruleAction))
-        val ruleEngine = getRuleEngine(rule)
-        val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE))
+        val ruleEffects = RuleEngine().evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE), RuleEngineContext(listOf(rule)))
         assertEquals(1, ruleEffects.size)
         assertEquals("", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -219,12 +204,11 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInWarningEffect() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionMessage.create(
+        val ruleAction: RuleAction = RuleActionMessage.create(
             "test_warning_message", null, "target_field", null, RuleActionMessage.Type.SHOW_WARNING
         )
         val rule = Rule("true", listOf(ruleAction))
-        val ruleEngine = getRuleEngine(rule)
-        val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE))
+        val ruleEffects = RuleEngine().evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE), RuleEngineContext(listOf(rule)))
         assertEquals(1, ruleEffects.size)
         assertEquals("", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -232,12 +216,11 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInErrorEffect() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionMessage.create(
+        val ruleAction: RuleAction = RuleActionMessage.create(
             "test_error_message", "2 + 2", "target_field", null, RuleActionMessage.Type.SHOW_ERROR
         )
         val rule = Rule("true", listOf(ruleAction))
-        val ruleEngine = getRuleEngine(rule)
-        val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE))
+        val ruleEffects = RuleEngine().evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE), RuleEngineContext(listOf(rule)))
         assertEquals(1, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -245,22 +228,13 @@ class RuleEngineEffectTypesTest {
 
     @Test
     fun simpleConditionMustResultInOnCompletionWarningEffect() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionMessage.create(
+        val ruleAction: RuleAction = RuleActionMessage.create(
             "test_warning_message", "2 + 2", "target_field", null, RuleActionMessage.Type.WARNING_ON_COMPILATION
         )
         val rule = Rule("true", listOf(ruleAction))
-        val ruleEngine = getRuleEngine(rule)
-        val ruleEffects = ruleEngine.evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE))
+        val ruleEffects = RuleEngine().evaluate(getTestRuleEvent(RuleEvent.Status.ACTIVE), RuleEngineContext(listOf(rule)))
         assertEquals(1, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
-    }
-
-    private fun getRuleEngine(rule: Rule): RuleEngine {
-        return RuleEngine(RuleEngineContext(listOf(rule), emptyList()))
-    }
-
-    private fun getRuleEngineMultiple(rule: Rule, ruleEvent: RuleEvent): RuleEngine {
-        return RuleEngine(RuleEngineContext(listOf(rule), emptyList()), listOf(ruleEvent))
     }
 }

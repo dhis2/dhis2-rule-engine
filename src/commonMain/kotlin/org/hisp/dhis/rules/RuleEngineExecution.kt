@@ -5,7 +5,7 @@ import org.hisp.dhis.rules.models.*
 
 internal data class RuleEngineExecution(
     val event: RuleEvent?,
-    val enrollment: org.hisp.dhis.rules.models.RuleEnrollment?,
+    val enrollment: RuleEnrollment?,
     val rules: List<Rule>,
     val valueMap: MutableMap<String, RuleVariableValue>,
     val supplementaryData: Map<String, List<String>>

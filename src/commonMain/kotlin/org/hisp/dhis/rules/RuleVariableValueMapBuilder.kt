@@ -12,7 +12,7 @@ class RuleVariableValueMapBuilder private constructor() {
     private val ruleVariables: MutableList<RuleVariable>
 
     private val ruleEvents: MutableList<RuleEvent>
-    var ruleEnrollment: org.hisp.dhis.rules.models.RuleEnrollment? = null
+    var ruleEnrollment: RuleEnrollment? = null
     var ruleEvent: RuleEvent? = null
     private var triggerEnvironment: TriggerEnvironment? = null
 
@@ -23,7 +23,7 @@ class RuleVariableValueMapBuilder private constructor() {
         allConstantValues = HashMap()
     }
 
-    private constructor(ruleEnrollment: org.hisp.dhis.rules.models.RuleEnrollment) : this() {
+    private constructor(ruleEnrollment: RuleEnrollment) : this() {
 
         // enrollment is the target
         this.ruleEnrollment = ruleEnrollment
@@ -40,7 +40,7 @@ class RuleVariableValueMapBuilder private constructor() {
         return this
     }
 
-    fun ruleEnrollment(ruleEnrollment: org.hisp.dhis.rules.models.RuleEnrollment?): RuleVariableValueMapBuilder {
+    fun ruleEnrollment(ruleEnrollment: RuleEnrollment?): RuleVariableValueMapBuilder {
         check(this.ruleEnrollment == null) {
             "It seems that enrollment has been set as target " +
                     "already. It can't be used as a part of execution context."
@@ -111,8 +111,8 @@ class RuleVariableValueMapBuilder private constructor() {
         return false
     }
 
-    private fun buildCurrentEventValues(): Map<String, org.hisp.dhis.rules.models.RuleDataValue> {
-        val currentEventValues: MutableMap<String, org.hisp.dhis.rules.models.RuleDataValue> = HashMap()
+    private fun buildCurrentEventValues(): Map<String, RuleDataValue> {
+        val currentEventValues: MutableMap<String, RuleDataValue> = HashMap()
         if (ruleEvent != null) {
             for (index in ruleEvent!!.dataValues.indices) {
                 val ruleDataValue = ruleEvent!!.dataValues[index]
@@ -122,8 +122,8 @@ class RuleVariableValueMapBuilder private constructor() {
         return currentEventValues
     }
 
-    private fun buildCurrentEnrollmentValues(): Map<String, org.hisp.dhis.rules.models.RuleAttributeValue> {
-        val currentEnrollmentValues: MutableMap<String, org.hisp.dhis.rules.models.RuleAttributeValue> = HashMap()
+    private fun buildCurrentEnrollmentValues(): Map<String, RuleAttributeValue> {
+        val currentEnrollmentValues: MutableMap<String, RuleAttributeValue> = HashMap()
         if (ruleEnrollment != null) {
             val ruleAttributeValues = ruleEnrollment!!.attributeValues
             for (attributeValue in ruleAttributeValues) {
@@ -133,8 +133,8 @@ class RuleVariableValueMapBuilder private constructor() {
         return currentEnrollmentValues
     }
 
-    private fun buildAllEventValues(): Map<String, MutableList<org.hisp.dhis.rules.models.RuleDataValue>> {
-        val allEventsValues: MutableMap<String, MutableList<org.hisp.dhis.rules.models.RuleDataValue>> = HashMap()
+    private fun buildAllEventValues(): Map<String, MutableList<RuleDataValue>> {
+        val allEventsValues: MutableMap<String, MutableList<RuleDataValue>> = HashMap()
         val events: MutableList<RuleEvent> = ArrayList(ruleEvents)
         if (ruleEvent != null) {
             // target event should be among the list of all
@@ -302,7 +302,7 @@ class RuleVariableValueMapBuilder private constructor() {
     }
 
     companion object {
-            fun target(ruleEnrollment: org.hisp.dhis.rules.models.RuleEnrollment): RuleVariableValueMapBuilder {
+            fun target(ruleEnrollment: RuleEnrollment): RuleVariableValueMapBuilder {
             return RuleVariableValueMapBuilder(ruleEnrollment)
         }
 

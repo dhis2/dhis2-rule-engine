@@ -1,6 +1,7 @@
 package org.hisp.dhis.rules
 
 import kotlinx.datetime.LocalDate
+import org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngineContext
 import org.hisp.dhis.rules.models.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -8,43 +9,43 @@ import kotlin.test.assertEquals
 class RuleEngineVariableNameTest {
     @Test
     fun evaluateD2Round() {
-        val ruleAction1: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction1: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:round(#{" + UID01 + "})"
         )
-        val ruleAction2: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction2: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:round(#{" + VARIABLE_NAME + "})"
         )
-        val ruleAction3: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction3: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:round(#{" + UID0 + "})"
         )
-        val ruleAction4: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction4: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:round(#{" + UID0WILD + "})"
         )
-        val ruleAction5: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction5: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:round(#{" + UID01WILD + "})"
         )
-        val ruleAction6: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction6: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:round(#{" + UID012 + "})"
         )
-        val ruleAction7: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction7: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:round(#{" + UID0WILD2 + "})"
         )
-        val ruleAction8: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction8: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:round(A{" + UID0 + "})"
         )
-        val ruleAction9: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction9: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:round(A{" + UID01 + "})"
         )
-        val ruleAction10: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction10: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:round(A{" + VARIABLE_NAME + "})"
         )
@@ -81,7 +82,7 @@ class RuleEngineVariableNameTest {
             ruleVariable1, ruleVariable2, ruleVariable3, ruleVariable4, ruleVariable5, ruleVariable6,
             ruleVariable7
         )
-        val ruleEngine = getRuleEngine(
+        val ruleEngineContext = getRuleEngineContext(
             rule,
             ruleVariables
         )
@@ -158,7 +159,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(10, ruleEffects.size)
         assertEquals(ruleAction1, ruleEffects[0].ruleAction)
         assertEquals("3", ruleEffects[0].data)
@@ -184,7 +185,7 @@ class RuleEngineVariableNameTest {
 
     @Test
     fun evaluateHasValueFunctionMustReturnTrueIfVariableIsComposedUIDs() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:hasValue(#{" + UID01 + "})"
         )
@@ -192,7 +193,7 @@ class RuleEngineVariableNameTest {
             UID01, true, ArrayList(), "test_data_element", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = getRuleEngine(rule, listOf(ruleVariable))
+        val ruleEngineContext = getRuleEngineContext(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -209,7 +210,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("true", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -217,7 +218,7 @@ class RuleEngineVariableNameTest {
 
     @Test
     fun evaluateHasValueFunctionMustReturnTrueIfVariableIsVariableName() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:hasValue(#{" + VARIABLE_NAME + "})"
         )
@@ -225,7 +226,7 @@ class RuleEngineVariableNameTest {
             VARIABLE_NAME, true, ArrayList(), "test_data_element", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = getRuleEngine(rule, listOf(ruleVariable))
+        val ruleEngineContext = getRuleEngineContext(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -242,7 +243,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("true", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -250,7 +251,7 @@ class RuleEngineVariableNameTest {
 
     @Test
     fun evaluateD2CountIfValueIsVariableName() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:countIfValue(#{" + VARIABLE_NAME + "}, 'condition')"
         )
@@ -258,7 +259,7 @@ class RuleEngineVariableNameTest {
             VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -316,7 +317,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent2, ruleEvent3)).evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext.copy(events = listOf(ruleEvent2, ruleEvent3)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -324,7 +325,7 @@ class RuleEngineVariableNameTest {
 
     @Test
     fun evaluateD2CountIfValueIsComposedUid() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:countIfValue(#{" + UID01 + "}, 'condition')"
         )
@@ -332,7 +333,7 @@ class RuleEngineVariableNameTest {
             UID01, true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -390,7 +391,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent2, ruleEvent3)).evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext.copy(events = listOf(ruleEvent2, ruleEvent3)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -398,7 +399,7 @@ class RuleEngineVariableNameTest {
 
     @Test
     fun evaluateD2CountIfVariableName() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:count(#{" + VARIABLE_NAME + "})"
         )
@@ -409,7 +410,7 @@ class RuleEngineVariableNameTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -486,7 +487,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent2, ruleEvent3, ruleEvent4)).evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext.copy(events = listOf(ruleEvent2, ruleEvent3, ruleEvent4)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("3", ruleEffects[0].data)
@@ -494,7 +495,7 @@ class RuleEngineVariableNameTest {
 
     @Test
     fun evaluateD2CountIfVariableNameIfComposedUid() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:count(#{" + UID01 + "})"
         )
@@ -502,7 +503,7 @@ class RuleEngineVariableNameTest {
             UID01, true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -579,7 +580,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent2, ruleEvent3, ruleEvent4)).evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext.copy(events = listOf(ruleEvent2, ruleEvent3, ruleEvent4)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("3", ruleEffects[0].data)
@@ -587,7 +588,7 @@ class RuleEngineVariableNameTest {
 
     @Test
     fun evaluateD2CountIfZeroPosIfVariableName() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:countIfZeroPos(#{" + VARIABLE_NAME + "})"
         )
@@ -595,7 +596,7 @@ class RuleEngineVariableNameTest {
             VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -653,8 +654,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent1, ruleEvent2))
-            .evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext.copy(events = listOf(ruleEvent1, ruleEvent2)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -662,7 +662,7 @@ class RuleEngineVariableNameTest {
 
     @Test
     fun evaluateD2CountIfZeroPosIfComposedUid() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:countIfZeroPos(#{" + UID01 + "})"
         )
@@ -670,7 +670,7 @@ class RuleEngineVariableNameTest {
             UID01, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -728,8 +728,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent1, ruleEvent2))
-            .evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext.copy(events = listOf(ruleEvent1, ruleEvent2)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -737,7 +736,7 @@ class RuleEngineVariableNameTest {
 
     @Test
     fun evaluateD2MaxValueIfVariableName() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "true"
         )
@@ -753,7 +752,7 @@ class RuleEngineVariableNameTest {
             "",
             ""
         )
-        val ruleEngine = getRuleEngine(
+        val ruleEngineContext = getRuleEngineContext(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
@@ -832,15 +831,14 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent1, ruleEvent2))
-            .evaluate(ruleEvent3)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent3, ruleEngineContext.copy(events = listOf(ruleEvent1, ruleEvent2)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
 
     @Test
     fun evaluateD2MaxValueIfComposedUid() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "true"
         )
@@ -856,7 +854,7 @@ class RuleEngineVariableNameTest {
             "",
             ""
         )
-        val ruleEngine = getRuleEngine(
+        val ruleEngineContext = getRuleEngineContext(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
@@ -935,15 +933,14 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent1, ruleEvent2))
-            .evaluate(ruleEvent3)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent3, ruleEngineContext.copy(events = listOf(ruleEvent1, ruleEvent2)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
 
     @Test
     fun testMinValueIfVariableName() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:minValue(#{" + VARIABLE_NAME + "})"
         )
@@ -954,7 +951,7 @@ class RuleEngineVariableNameTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = getRuleEngine(
+        val ruleEngineContext = getRuleEngineContext(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
@@ -1033,8 +1030,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent1, ruleEvent2))
-            .evaluate(ruleEvent3)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent3, ruleEngineContext.copy(events = listOf(ruleEvent1, ruleEvent2)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("5", ruleEffects[0].data)
@@ -1042,7 +1038,7 @@ class RuleEngineVariableNameTest {
 
     @Test
     fun testMinValueIfComposedUid() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText.createForFeedback(
+        val ruleAction: RuleAction = RuleActionText.createForFeedback(
             RuleActionText.Type.DISPLAYTEXT,
             "test_action_content", "d2:minValue(#{" + UID01 + "})"
         )
@@ -1053,7 +1049,7 @@ class RuleEngineVariableNameTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = getRuleEngine(
+        val ruleEngineContext = getRuleEngineContext(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
@@ -1132,15 +1128,10 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.copy(events = listOf(ruleEvent1, ruleEvent2))
-            .evaluate(ruleEvent3)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent3, ruleEngineContext.copy(events = listOf(ruleEvent1, ruleEvent2)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("5", ruleEffects[0].data)
-    }
-
-    private fun getRuleEngine(rule: Rule, ruleVariables: List<RuleVariable>): RuleEngine {
-        return RuleEngine(RuleEngineContext(listOf(rule),ruleVariables))
     }
 
     companion object {

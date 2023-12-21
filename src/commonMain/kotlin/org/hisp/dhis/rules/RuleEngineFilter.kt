@@ -29,7 +29,7 @@ import org.hisp.dhis.rules.models.*
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-    fun filterRules(rules: List<Rule>, ruleEnrollment: org.hisp.dhis.rules.models.RuleEnrollment?): List<Rule> {
+    fun filterRules(rules: List<Rule>, ruleEnrollment: RuleEnrollment?): List<Rule> {
         val filteredRules: MutableList<Rule> = mutableListOf()
         for (rule in rules) {
             val programStage: String? = rule.programStage
@@ -44,7 +44,7 @@ import org.hisp.dhis.rules.models.*
         return filteredRules
     }
 
-    fun filterRules(rules: List<Rule>, ruleEvent: org.hisp.dhis.rules.models.RuleEvent): List<Rule> {
+    fun filterRules(rules: List<Rule>, ruleEvent: RuleEvent): List<Rule> {
         val filteredRules: MutableList<Rule> = mutableListOf()
         for (rule in rules) {
             val programStage: String? = rule.programStage
@@ -59,7 +59,7 @@ import org.hisp.dhis.rules.models.*
         return filteredRules
     }
 
-    private fun filterActionRules(ruleActions: List<org.hisp.dhis.rules.models.RuleAction>, attributeType: org.hisp.dhis.rules.models.AttributeType): List<org.hisp.dhis.rules.models.RuleAction> {
+    private fun filterActionRules(ruleActions: List<org.hisp.dhis.rules.models.RuleAction>, attributeType: AttributeType): List<org.hisp.dhis.rules.models.RuleAction> {
         val filteredRuleActions: MutableList<org.hisp.dhis.rules.models.RuleAction> = mutableListOf()
         for (ruleAction in ruleActions) {
             if (ruleAction !is RuleActionAttribute || ruleAction.attributeType() == attributeType || ruleAction.attributeType() == org.hisp.dhis.rules.models.AttributeType.UNKNOWN) {

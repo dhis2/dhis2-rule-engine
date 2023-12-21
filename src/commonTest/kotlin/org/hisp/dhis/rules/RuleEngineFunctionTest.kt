@@ -25,13 +25,13 @@ class RuleEngineFunctionTest {
             listOf(ruleAction), "", ""
         )
         val validRule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(listOf(failingRule, validRule))
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(listOf(failingRule, validRule))
         val ruleEnrollment = RuleEnrollment(
             "test_enrollment", "",
             enrollmentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE,
             "", "", listOf(),
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEnrollment)
+        val ruleEffects = RuleEngine().evaluate(ruleEnrollment, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -84,11 +84,11 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(
             listOf(failingRule), ruleEnrollment,
             listOf(ruleEvent, ruleNotFailingEvent)
         )
-        val ruleEffects = ruleEngine.evaluate()
+        val ruleEffects = RuleEngine().evaluate(ruleEngineContext)
         assertEquals(3, ruleEffects.size)
         assertTrue(getRuleEffectsByUid(ruleEffects, "test_event")!!.ruleEffects.isEmpty())
         assertFalse(getRuleEffectsByUid(ruleEffects, "test_not_failing_event")!!.ruleEffects.isEmpty())
@@ -115,7 +115,7 @@ class RuleEngineFunctionTest {
             "test_variable", true, emptyList(),"test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
+        val ruleEngineContext =RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -135,7 +135,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("true", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -153,7 +153,7 @@ class RuleEngineFunctionTest {
         val ruleVariable: RuleVariable = RuleVariableNewestEvent("test_variable",
             USE_NAME_FOR_OPTION_SET, options, "test_data_element", RuleValueType.TEXT)
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
+        val ruleEngineContext =RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -173,7 +173,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(option1.name, ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -193,7 +193,7 @@ class RuleEngineFunctionTest {
             USE_CODE_FOR_OPTION_SET, options, "test_data_element", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
+        val ruleEngineContext =RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -213,7 +213,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(option2.code, ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -230,7 +230,7 @@ class RuleEngineFunctionTest {
             "test_variable", true, ArrayList(),"test_data_element", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
+        val ruleEngineContext =RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -250,7 +250,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("true", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -266,7 +266,7 @@ class RuleEngineFunctionTest {
             "test_variable", true, ArrayList(), "test_data_element", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
+        val ruleEngineContext =RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -286,7 +286,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("false", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -300,7 +300,7 @@ class RuleEngineFunctionTest {
         )
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent("variable", true, ArrayList(), "test_data_element", RuleValueType.TEXT)
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariable))
+        val ruleEngineContext =RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage_id",
@@ -320,7 +320,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("test_program_stage_name", ruleEffects[0].data)
@@ -339,8 +339,8 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine =
-            RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne, ruleVariableTwo))
+        val ruleEngineContext =
+            RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne, ruleVariableTwo))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -366,7 +366,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("31", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -385,8 +385,8 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine =
-            RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne, ruleVariableTwo))
+        val ruleEngineContext =
+            RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne, ruleVariableTwo))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -412,7 +412,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("365", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -431,7 +431,7 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngine(RuleEngineContext(listOf(rule),listOf(ruleVariableOne),supplementaryData))
+        val ruleEngineContext =RuleEngineContext(rules = listOf(rule), ruleVariables = listOf(ruleVariableOne),supplementaryData = supplementaryData)
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -451,7 +451,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("true", ruleEffects[0].data)
@@ -471,7 +471,7 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngine(RuleEngineContext(listOf(rule),listOf(ruleVariableOne),supplementaryData))
+        val ruleEngineContext =RuleEngineContext(rules = listOf(rule), ruleVariables = listOf(ruleVariableOne), supplementaryData = supplementaryData)
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -491,7 +491,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("true", ruleEffects[0].data)
@@ -510,7 +510,7 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngine(RuleEngineContext(listOf(rule),listOf(ruleVariableOne),supplementaryData))
+        val ruleEngineContext =RuleEngineContext(rules = listOf(rule), ruleVariables = listOf(ruleVariableOne), supplementaryData = supplementaryData)
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -530,7 +530,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("true", ruleEffects[0].data)
@@ -550,7 +550,7 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngine(RuleEngineContext(listOf(rule),listOf(ruleVariableOne),supplementaryData))
+        val ruleEngineContext =RuleEngineContext(rules = listOf(rule), ruleVariables = listOf(ruleVariableOne), supplementaryData = supplementaryData)
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -570,7 +570,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("true", ruleEffects[0].data)
@@ -589,8 +589,8 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine =
-            RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne, ruleVariableTwo))
+        val ruleEngineContext =
+            RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne, ruleVariableTwo))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -616,7 +616,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(ruleEffects.size, 1)
         assertEquals(ruleEffects[0].ruleAction, ruleAction)
         assertEquals(ruleEffects[0].data, "2017-01-03")
@@ -645,7 +645,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects2 = ruleEngine.evaluate(ruleEvent2)
+        val ruleEffects2 = RuleEngine().evaluate(ruleEvent2, ruleEngineContext)
         assertEquals(1, ruleEffects2.size)
         assertEquals(ruleAction, ruleEffects2[0].ruleAction)
         assertEquals("2017-01-01", ruleEffects2[0].data)
@@ -661,7 +661,7 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -719,7 +719,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent2, ruleEvent3)).evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext.copy (events = listOf(ruleEvent2, ruleEvent3)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -736,7 +736,7 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -794,7 +794,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent2, ruleEvent3)).evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent,ruleEngineContext.copy (events = listOf(ruleEvent2, ruleEvent3)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -813,7 +813,7 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -890,7 +890,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent2, ruleEvent3, ruleEvent4)).evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent,ruleEngineContext.copy(events = listOf(ruleEvent2, ruleEvent3, ruleEvent4)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("3", ruleEffects[0].data)
@@ -909,7 +909,7 @@ class RuleEngineFunctionTest {
             "d2:hasValue(V{current_date}) && d2:count(#{test_var_one}) > 0",
             listOf(ruleAction), "", ""
         )
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -948,7 +948,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent2)).evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext.copy (events = listOf(ruleEvent2)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -967,7 +967,7 @@ class RuleEngineFunctionTest {
             "d2:hasValue(V{current_date}) || d2:count(#{test_var_one}) > 0",
             listOf(ruleAction), "", ""
         )
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -1006,7 +1006,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent2)).evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext.copy (events = listOf(ruleEvent2)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -1026,7 +1026,7 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -1103,7 +1103,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent2, ruleEvent3, ruleEvent4)).evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext.copy (events = listOf(ruleEvent2, ruleEvent3, ruleEvent4)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("3", ruleEffects[0].data)
@@ -1119,7 +1119,7 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
         val rule = Rule("true", listOf(ruleAction1), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -1139,7 +1139,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent,ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction1, ruleEffects[0].ruleAction)
         assertEquals("3", ruleEffects[0].data)
@@ -1155,7 +1155,7 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -1175,7 +1175,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("0.6", ruleEffects[0].data)
@@ -1191,7 +1191,7 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -1211,7 +1211,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("BC", ruleEffects[0].data)
@@ -1230,7 +1230,7 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
@@ -1259,7 +1259,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("4", ruleEffects[0].data)
@@ -1278,7 +1278,7 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
@@ -1307,7 +1307,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("8", ruleEffects[0].data)
@@ -1329,7 +1329,7 @@ class RuleEngineFunctionTest {
             "d2:yearsBetween('2016-01-01', '2018-09-01') == 2", listOf(ruleAction), "",
             ""
         )
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
@@ -1358,7 +1358,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -1380,7 +1380,7 @@ class RuleEngineFunctionTest {
             "test_var_three", true, ArrayList(), "test_data_element_two", RuleValueType.NUMERIC
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
@@ -1396,7 +1396,7 @@ class RuleEngineFunctionTest {
             null,
             listOf()
         )
-        val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -1409,7 +1409,7 @@ class RuleEngineFunctionTest {
             "test_action_content", "d2:zing( '-1' )"
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf())
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf())
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -1422,7 +1422,7 @@ class RuleEngineFunctionTest {
             null,
             listOf()
         )
-        val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("0", ruleEffects[0].data)
@@ -1435,7 +1435,7 @@ class RuleEngineFunctionTest {
             "test_action_content", "d2:oizp( '0' )"
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf())
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf())
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -1448,7 +1448,7 @@ class RuleEngineFunctionTest {
             null,
             listOf()
         )
-        val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("1", ruleEffects[0].data)
@@ -1464,7 +1464,7 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -1522,8 +1522,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent1, ruleEvent2))
-            .evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext.copy (events = listOf(ruleEvent1, ruleEvent2)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -1540,7 +1539,7 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -1598,8 +1597,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent1, ruleEvent2))
-            .evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext.copy (events = listOf(ruleEvent1, ruleEvent2)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -1615,7 +1613,7 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -1635,7 +1633,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("yyyy", ruleEffects[0].data)
@@ -1651,7 +1649,7 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -1671,7 +1669,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("dd", ruleEffects[0].data)
@@ -1687,7 +1685,7 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -1707,7 +1705,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("weeks+days", ruleEffects[0].data)
@@ -1723,7 +1721,7 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -1743,7 +1741,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(ruleEffects.size, 1)
         assertEquals(ruleEffects[0].ruleAction, ruleAction)
         assertEquals("true", ruleEffects[0].data)
@@ -1766,7 +1764,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects2 = ruleEngineBuilder.evaluate(ruleEvent2)
+        val ruleEffects2 = RuleEngine().evaluate(ruleEvent2, ruleEngineContext)
         assertEquals(1, ruleEffects2.size)
         assertEquals(ruleAction, ruleEffects2[0].ruleAction)
         assertEquals("false", ruleEffects2[0].data)
@@ -1782,7 +1780,7 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -1802,7 +1800,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("10", ruleEffects[0].data)
@@ -1818,7 +1816,7 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
@@ -1838,7 +1836,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("for", ruleEffects[0].data)
@@ -1861,7 +1859,7 @@ class RuleEngineFunctionTest {
             "test_var_three", true, ArrayList(), "test_data_element_three", RuleValueType.NUMERIC
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngine = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineContext =RuleEngineTestUtils.getRuleEngineContext(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo, ruleVariableThree)
         )
@@ -1896,7 +1894,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("6", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -1918,7 +1916,7 @@ class RuleEngineFunctionTest {
             "d2:zScoreWFA(1,#{test_var_one},#{test_var_two}) == 0", listOf(ruleAction),
             "", ""
         )
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
@@ -1947,7 +1945,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
@@ -1968,7 +1966,7 @@ class RuleEngineFunctionTest {
             "d2:zScoreHFA(12,#{test_var_one},#{test_var_two}) == -3", listOf(ruleAction),
             "", ""
         )
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
@@ -1997,7 +1995,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
@@ -2018,7 +2016,7 @@ class RuleEngineFunctionTest {
             "d2:zScoreHFA(10,#{test_var_one},#{test_var_two}) == -2", listOf(ruleAction),
             "", ""
         )
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
@@ -2047,7 +2045,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
@@ -2068,7 +2066,7 @@ class RuleEngineFunctionTest {
             "d2:zScoreWFH(52,#{test_var_one},A{test_var_two}) < 2", listOf(ruleAction),
             "", ""
         )
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
@@ -2097,7 +2095,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
@@ -2118,7 +2116,7 @@ class RuleEngineFunctionTest {
             "d2:zScoreWFH(81.5,#{test_var_one},#{test_var_two}) == 2", listOf(ruleAction),
             "", ""
         )
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
@@ -2147,7 +2145,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
@@ -2165,7 +2163,7 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("d2:maxValue(#{test_var_one}) == 8.0", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
@@ -2244,8 +2242,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent1, ruleEvent2))
-            .evaluate(ruleEvent3)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent3, ruleEngineContext.copy (events = listOf(ruleEvent1, ruleEvent2)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
@@ -2264,7 +2261,7 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("d2:maxValue('test_var_one') == 8.0", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
@@ -2343,8 +2340,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent1, ruleEvent2))
-            .evaluate(ruleEvent3)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent3, ruleEngineContext.copy (events = listOf(ruleEvent1, ruleEvent2)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
@@ -2362,7 +2358,7 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
@@ -2441,8 +2437,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent1, ruleEvent2))
-            .evaluate(ruleEvent3)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent3, ruleEngineContext.copy (events = listOf(ruleEvent1, ruleEvent2)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("5", ruleEffects[0].data)
@@ -2461,7 +2456,7 @@ class RuleEngineFunctionTest {
             "test_var_two", true, ArrayList(), "test_data_element_two", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(
             rule,
             listOf(ruleVariableOne, ruleVariableTwo)
         )
@@ -2540,8 +2535,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent1, ruleEvent2))
-            .evaluate(ruleEvent3)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent3, ruleEngineContext.copy (events = listOf(ruleEvent1, ruleEvent2)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("5", ruleEffects[0].data)
@@ -2560,7 +2554,7 @@ class RuleEngineFunctionTest {
             "test_var_one", true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
         val rule = Rule("true", listOf(ruleAction), "test_rule", "")
-        val ruleEngineBuilder = RuleEngineTestUtils.getRuleEngine(rule, listOf(ruleVariableOne))
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariableOne))
         val ruleEvent1 = RuleEvent(
             "test_event1",
             "test_program_stage1",
@@ -2618,8 +2612,7 @@ class RuleEngineFunctionTest {
                 )
             )
         )
-        val ruleEffects = ruleEngineBuilder.copy(events = listOf(ruleEvent1, ruleEvent2))
-            .evaluate(ruleEvent3)
+        val ruleEffects = RuleEngine().evaluate(ruleEvent3, ruleEngineContext.copy (events = listOf(ruleEvent1, ruleEvent2)))
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals(dayAfterTomorrow.toString(), ruleEffects[0].data)

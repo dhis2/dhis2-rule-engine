@@ -5,7 +5,7 @@ import org.hisp.dhis.lib.expression.spi.VariableValue
 import org.hisp.dhis.rules.models.RuleValueType
 
 data class RuleVariableValue(
-    val type: org.hisp.dhis.rules.models.RuleValueType,
+    val type: RuleValueType,
     val value: String? = null,
     val candidates: List<String> = listOf(),
     val eventDate: String? = null

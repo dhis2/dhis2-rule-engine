@@ -105,7 +105,7 @@ class RuleConditionEvaluator {
     }
 
     private fun addRuleErrorResult(
-        rule: Rule, ruleAction: org.hisp.dhis.rules.models.RuleAction?, e: Exception, targetType: TrackerObjectType,
+        rule: Rule, ruleAction: RuleAction?, e: Exception, targetType: TrackerObjectType,
         targetUid: String, ruleEvaluationResults: MutableList<RuleEvaluationResult>
     ) {
         val errorMessage: String
@@ -168,7 +168,7 @@ class RuleConditionEvaluator {
         } else result
     }
 
-    private fun isAssignToCalculatedValue(ruleAction: org.hisp.dhis.rules.models.RuleAction): Boolean {
+    private fun isAssignToCalculatedValue(ruleAction: RuleAction): Boolean {
         return ruleAction is RuleActionAssign && ruleAction.field.isEmpty()
     }
 
@@ -182,7 +182,7 @@ class RuleConditionEvaluator {
 
     private fun create(
         rule: Rule,
-        ruleAction: org.hisp.dhis.rules.models.RuleAction,
+        ruleAction: RuleAction,
         valueMap: MutableMap<String, RuleVariableValue>,
         supplementaryData: Map<String, List<String>>
     ): RuleEffect {
