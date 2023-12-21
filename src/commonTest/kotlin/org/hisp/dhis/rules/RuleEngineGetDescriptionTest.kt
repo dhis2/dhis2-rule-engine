@@ -38,7 +38,7 @@ class RuleEngineGetDescriptionTest {
     private var itemStore: MutableMap<String, DataItem> = HashMap()
     private val ruleAction: RuleAction = RuleActionText.createForFeedback(
         RuleActionText.Type.DISPLAYTEXT, "", "")
-    private val ruleEngine: RuleEngineAPI = DefaultRuleEngineAPI()
+    private val ruleEngine: RuleEngineAPI = RuleEngine()
     @BeforeTest
     fun setUp() {
         itemStore = HashMap()
