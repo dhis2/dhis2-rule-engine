@@ -2,8 +2,8 @@ package org.hisp.dhis.rules.models
 
 import kotlinx.datetime.*
 import org.hisp.dhis.rules.RuleVariableValueAssert
-import org.hisp.dhis.rules.RuleVariableValueMapBuilder
-import org.hisp.dhis.rules.currentDate
+import org.hisp.dhis.rules.engine.RuleVariableValueMapBuilder
+import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

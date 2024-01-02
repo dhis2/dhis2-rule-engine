@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules
+package org.hisp.dhis.rules.api
 
 import org.hisp.dhis.rules.models.Rule
 import org.hisp.dhis.rules.models.RuleEnrollment

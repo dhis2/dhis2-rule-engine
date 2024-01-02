@@ -2,7 +2,9 @@ package org.hisp.dhis.rules
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.atStartOfDayIn
+import org.hisp.dhis.rules.models.Rule
+import org.hisp.dhis.rules.api.RuleEngineContext
+import org.hisp.dhis.rules.engine.DefaultRuleEngine
 import org.hisp.dhis.rules.models.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -59,7 +61,7 @@ class VariableValueTypeTest {
                 RuleDataValue(now, "", "test_data_element2", "4")
             )
         )
-        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
+        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("30", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -89,7 +91,7 @@ class VariableValueTypeTest {
                 RuleDataValue(now, "", "test_data_element2", "4")
             )
         )
-        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
+        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(0, ruleEffects.size)
     }
 

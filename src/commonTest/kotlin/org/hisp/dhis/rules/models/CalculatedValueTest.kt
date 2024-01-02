@@ -2,9 +2,9 @@ package org.hisp.dhis.rules.models
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
-import org.hisp.dhis.rules.RuleEngine
-import org.hisp.dhis.rules.RuleEngineContext
-import org.hisp.dhis.rules.currentDate
+import org.hisp.dhis.rules.engine.DefaultRuleEngine
+import org.hisp.dhis.rules.api.RuleEngineContext
+import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -66,7 +66,7 @@ class CalculatedValueTest {
                 )
             )
         )
-        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext.copy(enrollment = enrollment))
+        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent, ruleEngineContext.copy(enrollment = enrollment))
         assertEquals(i, ruleEffects.size)
     }
 
@@ -107,7 +107,7 @@ class CalculatedValueTest {
                 )
             )
         )
-        val ruleEffects = RuleEngine().evaluate(ruleEvent, getRuleEngineContext(listOf(rule, rule2)).copy(enrollment = enrollment))
+        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent, getRuleEngineContext(listOf(rule, rule2)).copy(enrollment = enrollment))
         assertEquals("4", ruleEffects[0].data)
         assertEquals(sendMessageAction, ruleEffects[0].ruleAction)
     }
@@ -167,7 +167,7 @@ class CalculatedValueTest {
                 )
             )
         )
-        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext.copy(enrollment = enrollment))
+        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent, ruleEngineContext.copy(enrollment = enrollment))
         assertEquals(1, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data)
         assertEquals(sendMessageAction, ruleEffects[0].ruleAction)

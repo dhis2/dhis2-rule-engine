@@ -1,8 +1,6 @@
 package org.hisp.dhis.rules.models
 
 import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDate
-import org.hisp.dhis.rules.currentDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

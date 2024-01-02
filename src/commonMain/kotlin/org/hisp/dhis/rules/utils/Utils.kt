@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules
+package org.hisp.dhis.rules.utils
 
 import kotlinx.datetime.*
 import org.hisp.dhis.rules.models.RuleEvent

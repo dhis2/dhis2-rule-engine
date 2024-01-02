@@ -2,7 +2,11 @@ package org.hisp.dhis.rules
 
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
+import org.hisp.dhis.rules.models.Rule
+import org.hisp.dhis.rules.api.RuleEngineContext
+import org.hisp.dhis.rules.engine.DefaultRuleEngine
 import org.hisp.dhis.rules.models.*
+import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -195,7 +199,7 @@ class ProgramRuleVariableTest {
     
     private fun callEnrollmentRuleEngine(rule: Rule): List<RuleEffect> {
         val ruleEngineContext = getRuleEngineContext(listOf(rule))
-        return RuleEngine().evaluate(enrollment, ruleEngineContext)
+        return DefaultRuleEngine().evaluate(enrollment, ruleEngineContext)
     }
     
     private fun callEventRuleEngine(rule: Rule): List<RuleEffect> {
@@ -212,7 +216,7 @@ class ProgramRuleVariableTest {
             completedDate = null,
             dataValues = emptyList()
         )
-        return RuleEngine().evaluate(event, ruleEngineContext.copy(enrollment = enrollment))
+        return DefaultRuleEngine().evaluate(event, ruleEngineContext.copy(enrollment = enrollment))
     }
 
     private val enrollment: RuleEnrollment

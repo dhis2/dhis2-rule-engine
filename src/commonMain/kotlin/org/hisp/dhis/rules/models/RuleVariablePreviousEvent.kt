@@ -1,6 +1,9 @@
 package org.hisp.dhis.rules.models
 
-import org.hisp.dhis.rules.*
+import org.hisp.dhis.rules.engine.RuleVariableValue
+import org.hisp.dhis.rules.engine.RuleVariableValueMapBuilder
+import org.hisp.dhis.rules.utils.getLastUpdateDateForPrevious
+import org.hisp.dhis.rules.utils.values
 
 class RuleVariablePreviousEvent(
     val name: String,

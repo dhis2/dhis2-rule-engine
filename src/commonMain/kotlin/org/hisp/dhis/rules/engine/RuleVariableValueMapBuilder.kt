@@ -1,29 +1,21 @@
-package org.hisp.dhis.rules
+package org.hisp.dhis.rules.engine
 
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.RuleEngineUtils
+import org.hisp.dhis.rules.utils.currentDate
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 class RuleVariableValueMapBuilder private constructor() {
-    private val allConstantValues: MutableMap<String, String>
-
-    private val ruleVariables: MutableList<RuleVariable>
-
-    private val ruleEvents: MutableList<RuleEvent>
+    val allConstantValues: MutableMap<String, String> = HashMap()
+    val ruleVariables: MutableList<RuleVariable> = ArrayList()
+    val ruleEvents: MutableList<RuleEvent> = ArrayList()
     var ruleEnrollment: RuleEnrollment? = null
     var ruleEvent: RuleEvent? = null
     private var triggerEnvironment: TriggerEnvironment? = null
-
-    init {
-        // collections used for construction of resulting variable value map
-        ruleVariables = ArrayList()
-        ruleEvents = ArrayList()
-        allConstantValues = HashMap()
-    }
 
     private constructor(ruleEnrollment: RuleEnrollment) : this() {
 
@@ -36,7 +28,7 @@ class RuleVariableValueMapBuilder private constructor() {
         // event is the target
         this.ruleEvent = ruleEvent
     }
-    
+
     fun ruleVariables(ruleVariables: List<RuleVariable>): RuleVariableValueMapBuilder {
         this.ruleVariables.addAll(ruleVariables)
         return this

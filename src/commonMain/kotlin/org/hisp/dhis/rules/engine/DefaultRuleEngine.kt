@@ -1,12 +1,15 @@
-package org.hisp.dhis.rules
+package org.hisp.dhis.rules.engine
 
 import org.hisp.dhis.lib.expression.Expression
 import org.hisp.dhis.lib.expression.spi.IllegalExpressionException
 import org.hisp.dhis.lib.expression.spi.ParseException
 import org.hisp.dhis.lib.expression.spi.ValueType
+import org.hisp.dhis.rules.api.DataItem
+import org.hisp.dhis.rules.api.RuleEngine
+import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.models.*
 
-class RuleEngine: RuleEngineAPI {
+class DefaultRuleEngine: RuleEngine {
     override fun evaluate(ruleEvent: RuleEvent, executionContext: RuleEngineContext): List<RuleEffect> {
         val valueMap = RuleVariableValueMapBuilder.target(ruleEvent)
             .ruleVariables(executionContext.ruleVariables)

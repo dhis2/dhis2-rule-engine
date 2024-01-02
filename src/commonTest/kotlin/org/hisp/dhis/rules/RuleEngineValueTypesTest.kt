@@ -2,7 +2,11 @@ package org.hisp.dhis.rules
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
+import org.hisp.dhis.rules.models.Rule
+import org.hisp.dhis.rules.api.RuleEngineContext
+import org.hisp.dhis.rules.engine.DefaultRuleEngine
 import org.hisp.dhis.rules.models.*
+import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -26,7 +30,7 @@ class RuleEngineValueTypesTest {
             null,
             ArrayList()
         )
-        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
+        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("false", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -52,7 +56,7 @@ class RuleEngineValueTypesTest {
             null,
             ArrayList()
         )
-        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
+        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("0", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -78,7 +82,7 @@ class RuleEngineValueTypesTest {
             null,
             ArrayList()
         )
-        val ruleEffects = RuleEngine().evaluate(ruleEvent, ruleEngineContext)
+        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent, ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)

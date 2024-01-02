@@ -1,8 +1,8 @@
-package org.hisp.dhis.rules
+package org.hisp.dhis.rules.api
 
 import org.hisp.dhis.rules.models.*
 
-interface RuleEngineAPI {
+interface RuleEngine {
     fun validate(expression: String, dataItemStore: Map<String, DataItem>): RuleValidationResult
     fun validateDataFieldExpression(expression: String, dataItemStore: Map<String, DataItem>): RuleValidationResult
     fun evaluate(executionContext: RuleEngineContext): List<RuleEffects>

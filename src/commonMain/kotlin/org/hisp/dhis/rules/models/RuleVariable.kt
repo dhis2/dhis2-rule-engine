@@ -1,7 +1,7 @@
 package org.hisp.dhis.rules.models
 
-import org.hisp.dhis.rules.RuleVariableValue
-import org.hisp.dhis.rules.RuleVariableValueMapBuilder
+import org.hisp.dhis.rules.engine.RuleVariableValue
+import org.hisp.dhis.rules.engine.RuleVariableValueMapBuilder
 
 interface RuleVariable {
     fun options(): List<Option>

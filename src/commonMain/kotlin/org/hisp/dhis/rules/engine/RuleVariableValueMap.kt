@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules
+package org.hisp.dhis.rules.engine
 
 import org.hisp.dhis.rules.models.RuleEvent
 

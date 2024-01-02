@@ -1,4 +1,8 @@
-package org.hisp.dhis.rules.models
+package org.hisp.dhis.rules.engine
+
+import org.hisp.dhis.rules.models.Rule
+import org.hisp.dhis.rules.models.RuleActionError
+import org.hisp.dhis.rules.models.RuleEffect
 
 data class RuleEvaluationResult(
     val rule: Rule,

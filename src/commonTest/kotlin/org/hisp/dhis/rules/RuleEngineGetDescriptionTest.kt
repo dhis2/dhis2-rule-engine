@@ -1,5 +1,10 @@
 package org.hisp.dhis.rules
 
+import org.hisp.dhis.rules.api.DataItem
+import org.hisp.dhis.rules.api.ItemValueType
+import org.hisp.dhis.rules.api.RuleEngine
+import org.hisp.dhis.rules.engine.DefaultRuleEngine
+import org.hisp.dhis.rules.engine.RuleEngineValidationException
 import org.hisp.dhis.rules.models.Rule
 import org.hisp.dhis.rules.models.RuleAction
 import org.hisp.dhis.rules.models.RuleActionText
@@ -38,7 +43,7 @@ class RuleEngineGetDescriptionTest {
     private var itemStore: MutableMap<String, DataItem> = HashMap()
     private val ruleAction: RuleAction = RuleActionText.createForFeedback(
         RuleActionText.Type.DISPLAYTEXT, "", "")
-    private val ruleEngine: RuleEngineAPI = RuleEngine()
+    private val ruleEngine: RuleEngine = DefaultRuleEngine()
     @BeforeTest
     fun setUp() {
         itemStore = HashMap()
@@ -284,11 +289,11 @@ class RuleEngineGetDescriptionTest {
         result = ruleEngine.validateDataFieldExpression("1 + 1 +", itemStore)
         assertNotNull(result)
         assertFalse(result.valid)
-        assertTrue(result.exception is org.hisp.dhis.rules.models.RuleEngineValidationException)
+        assertTrue(result.exception is RuleEngineValidationException)
         result = ruleEngine.validateDataFieldExpression("d2:hasValue(#{test_var_two}) && d2:count(#{test_var_one}) > 0 (", itemStore)
         assertNotNull(result)
         assertFalse(result.valid)
-        assertTrue(result.exception is org.hisp.dhis.rules.models.RuleEngineValidationException)
+        assertTrue(result.exception is RuleEngineValidationException)
     }
 
     companion object {

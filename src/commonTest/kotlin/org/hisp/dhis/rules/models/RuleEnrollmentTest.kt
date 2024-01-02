@@ -1,7 +1,7 @@
 package org.hisp.dhis.rules.models
 
 import kotlinx.datetime.LocalDate
-import org.hisp.dhis.rules.currentDate
+import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

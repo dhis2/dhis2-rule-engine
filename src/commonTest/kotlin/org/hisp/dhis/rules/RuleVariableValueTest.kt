@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules
 
+import org.hisp.dhis.rules.engine.RuleVariableValue
 import org.hisp.dhis.rules.models.RuleValueType
 import kotlin.test.Test
 import kotlin.test.assertEquals

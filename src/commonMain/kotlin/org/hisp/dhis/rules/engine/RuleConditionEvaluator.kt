@@ -1,12 +1,15 @@
-package org.hisp.dhis.rules
+package org.hisp.dhis.rules.engine
 
 import org.hisp.dhis.lib.expression.Expression
 import org.hisp.dhis.lib.expression.spi.ExpressionData
 import org.hisp.dhis.lib.expression.spi.IllegalExpressionException
+import org.hisp.dhis.rules.createLogger
+import org.hisp.dhis.rules.models.Rule
 import org.hisp.dhis.rules.models.*
-import org.hisp.dhis.rules.models.RuleEvaluationResult.Companion.errorRule
-import org.hisp.dhis.rules.models.RuleEvaluationResult.Companion.evaluatedResult
-import org.hisp.dhis.rules.models.RuleEvaluationResult.Companion.notEvaluatedResult
+import org.hisp.dhis.rules.engine.RuleEvaluationResult.Companion.errorRule
+import org.hisp.dhis.rules.engine.RuleEvaluationResult.Companion.evaluatedResult
+import org.hisp.dhis.rules.engine.RuleEvaluationResult.Companion.notEvaluatedResult
+import org.hisp.dhis.rules.utils.unwrapVariableName
 
 class RuleConditionEvaluator {
     fun getEvaluatedAndErrorRuleEffects(
