@@ -5,7 +5,7 @@ data class RuleActionAssign(
     val content: String,
     val attributeType2: AttributeType,
     val data2: String
-) : RuleActionAttribute {
+) : RuleActionAttribute, RuleActionData {
     companion object {
         fun create(
             content: String?,

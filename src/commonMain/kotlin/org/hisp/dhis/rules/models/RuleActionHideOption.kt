@@ -12,13 +12,8 @@ data class RuleActionHideOption(
     val field: String,
     val option: String,
     val content: String = "",
-    val attributeType2: AttributeType = AttributeType.UNKNOWN,
-    val data2: String = ""
+    val attributeType2: AttributeType = AttributeType.UNKNOWN
 ) : RuleActionAttribute {
-    override fun data(): String {
-       return data2
-    }
-
     override fun attributeType(): AttributeType {
         return attributeType2
     }

@@ -4,7 +4,7 @@ data class RuleActionCreateEvent(
     val programStage: String,
     val content: String = "",
     val data2: String = ""
-) : RuleAction {
+) : RuleActionData {
     override fun data(): String {
         return data2
     }

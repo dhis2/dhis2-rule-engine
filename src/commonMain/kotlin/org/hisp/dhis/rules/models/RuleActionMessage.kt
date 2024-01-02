@@ -6,7 +6,7 @@ data class RuleActionMessage(
     val content: String = "",
     val attributeType2: AttributeType = AttributeType.UNKNOWN,
     val data2: String = ""
-) : RuleActionAttribute {
+) : RuleActionAttribute, RuleActionData {
     enum class Type {
         WARNING_ON_COMPILATION,
         ERROR_ON_COMPILATION,

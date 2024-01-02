@@ -190,10 +190,11 @@ class RuleConditionEvaluator {
                 RuleEffect(rule.uid, ruleAction, data)
             }
         }
+        val data = if (ruleAction is RuleActionData) process(ruleAction.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION) else ""
         return RuleEffect(
             rule.uid,
             ruleAction,
-            process(ruleAction.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION)
+            data
         )
     }
 

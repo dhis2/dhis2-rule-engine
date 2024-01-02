@@ -15,7 +15,7 @@ data class RuleActionText(
     val data2: String,
     val content: String,
     val location: String
-) : RuleAction {
+) : RuleActionData {
     enum class Type {
         DISPLAYTEXT,
         DISPLAYKEYVALUEPAIR
