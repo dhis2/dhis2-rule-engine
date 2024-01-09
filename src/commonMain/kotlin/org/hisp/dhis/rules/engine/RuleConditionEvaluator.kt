@@ -65,12 +65,11 @@ class RuleConditionEvaluator {
                         try {
                             //Check if action is assigning value to calculated variable
                             if (isAssignToCalculatedValue(action)) {
-                                val (_, content, _, data) = action as RuleActionAssign
                                 updateValueMap(
-                                    unwrapVariableName(content),
+                                    unwrapVariableName(action.content()!!),
                                     RuleVariableValue(
                                         RuleValueType.TEXT,
-                                        process(data, valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION),
+                                        process(action.data, valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION),
                                         listOf(),
                                         null
                                     ),
@@ -164,7 +163,7 @@ class RuleConditionEvaluator {
     }
 
     private fun isAssignToCalculatedValue(ruleAction: RuleAction): Boolean {
-        return ruleAction is RuleActionAssign && ruleAction.field.isEmpty()
+        return ruleAction.type == "ASSIGN" && ruleAction.field() == null
     }
 
     private fun updateValueMap(
@@ -181,16 +180,16 @@ class RuleConditionEvaluator {
         valueMap: MutableMap<String, RuleVariableValue>,
         supplementaryData: Map<String, List<String>>
     ): RuleEffect {
-        if (ruleAction is RuleActionAssign) {
-            val data = process(ruleAction.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION)
-            updateValueMap(ruleAction.field, RuleVariableValue(RuleValueType.TEXT, data, listOf(), null), valueMap)
+        if (ruleAction.type == "ASSIGN") {
+            val data = process(ruleAction.data, valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION)
+            updateValueMap(ruleAction.field()!!, RuleVariableValue(RuleValueType.TEXT, data, listOf(), null), valueMap)
             return if (data.isEmpty()) {
                 RuleEffect(rule.uid, ruleAction, null)
             } else {
                 RuleEffect(rule.uid, ruleAction, data)
             }
         }
-        val data = if (ruleAction is RuleActionData) process(ruleAction.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION) else ""
+        val data = if (!ruleAction.data.isNullOrEmpty()) process(ruleAction.data, valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION) else ""
         return RuleEffect(
             rule.uid,
             ruleAction,

@@ -2,6 +2,7 @@ package org.hisp.dhis.rules
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
+import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.engine.DefaultRuleEngine
 import org.hisp.dhis.rules.models.Rule
@@ -31,6 +32,6 @@ internal class RuleEngineTest {
         )
         val ruleEvents: MutableList<RuleEvent> = ArrayList()
         ruleEvents.add(ruleEvent)
-        assertFailsWith(IllegalStateException::class) { DefaultRuleEngine().evaluate(ruleEvent, ruleEngineContext.copy(events = ruleEvents)) }
+        assertFailsWith(IllegalStateException::class) { RuleEngine.getInstance().evaluate(ruleEvent, null, ruleEvents, ruleEngineContext) }
     }
 }

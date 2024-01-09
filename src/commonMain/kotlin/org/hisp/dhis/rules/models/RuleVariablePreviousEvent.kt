@@ -8,22 +8,10 @@ import org.hisp.dhis.rules.utils.values
 class RuleVariablePreviousEvent(
     val name: String,
     val useCodeForOptionSet: Boolean,
-    val options2: List<Option>,
-    val dataElement2: String,
-    val dataElementType2: RuleValueType
+    override val options: List<Option>,
+    override val dataElement: String,
+    override val dataElementType: RuleValueType
 ) : RuleVariableDataElement {
-    override fun dataElement(): String {
-        return dataElement2
-    }
-
-    override fun dataElementType(): RuleValueType {
-        return dataElementType2
-    }
-
-    override fun options(): List<Option> {
-        return options2
-    }
-
     override fun createValues(
         builder: RuleVariableValueMapBuilder,
         allEventValues: Map<String, List<RuleDataValue>>,
@@ -32,7 +20,7 @@ class RuleVariablePreviousEvent(
     ): Map<String, RuleVariableValue> {
         val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
         var variableValue: RuleVariableValue? = null
-        val ruleDataValues = allEventValues[dataElement()]
+        val ruleDataValues = allEventValues[dataElement]
         if (builder.ruleEvent != null && ruleDataValues != null && !ruleDataValues.isEmpty()) {
             for (ruleDataValue in ruleDataValues) {
                 // We found preceding value to the current currentEventValues,
@@ -41,7 +29,7 @@ class RuleVariablePreviousEvent(
                     val optionValue =
                         if (useCodeForOptionSet) ruleDataValue.value else getOptionName(ruleDataValue.value)!!
                     variableValue = RuleVariableValue(
-                        dataElementType(), optionValue,
+                        dataElementType, optionValue,
                         values(ruleDataValues),
                         getLastUpdateDateForPrevious(ruleDataValues, builder.ruleEvent!!)
                     )
@@ -50,7 +38,7 @@ class RuleVariablePreviousEvent(
             }
         }
         if (variableValue == null) {
-            variableValue = RuleVariableValue(dataElementType())
+            variableValue = RuleVariableValue(dataElementType)
         }
         valueMap[name] = variableValue
         return valueMap

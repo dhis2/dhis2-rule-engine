@@ -4,7 +4,7 @@ import org.hisp.dhis.rules.engine.RuleVariableValue
 import org.hisp.dhis.rules.engine.RuleVariableValueMapBuilder
 
 interface RuleVariable {
-    fun options(): List<Option>
+    val options: List<Option>
     fun createValues(
         builder: RuleVariableValueMapBuilder,
         allEventValues: Map<String, List<RuleDataValue>>,
@@ -14,7 +14,7 @@ interface RuleVariable {
 
     fun getOptionName(value: String?): String? {
         // if no option found then existing value in the context will be used
-        return options()
+        return options
             .filter{ (_, code): Option -> value == code }
             .map(Option::name)
             .getOrElse(0) {_ -> value}

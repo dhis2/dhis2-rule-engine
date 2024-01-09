@@ -67,7 +67,7 @@ internal class RuleEngineMultipleExecution {
     private fun filterActionRules(ruleActions: List<RuleAction>, attributeType: AttributeType): List<RuleAction> {
         val filteredRuleActions: MutableList<RuleAction> = mutableListOf()
         for (ruleAction in ruleActions) {
-            if (ruleAction !is RuleActionAttribute || ruleAction.attributeType() == attributeType || ruleAction.attributeType() == AttributeType.UNKNOWN) {
+            if (ruleAction.attributeType() == null || ruleAction.attributeType() == attributeType.name || ruleAction.attributeType() == AttributeType.UNKNOWN.name) {
                 filteredRuleActions.add(ruleAction)
             }
         }

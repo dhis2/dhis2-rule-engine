@@ -7,7 +7,6 @@ import org.hisp.dhis.rules.engine.DefaultRuleEngine
 import org.hisp.dhis.rules.models.RuleEngineValidationException
 import org.hisp.dhis.rules.models.Rule
 import org.hisp.dhis.rules.models.RuleAction
-import org.hisp.dhis.rules.models.RuleActionText
 import kotlin.test.*
 
 /*
@@ -41,8 +40,7 @@ import kotlin.test.*
  */
 class RuleEngineGetDescriptionTest {
     private var itemStore: MutableMap<String, DataItem> = HashMap()
-    private val ruleAction: RuleAction = RuleActionText.createForFeedback(
-        RuleActionText.Type.DISPLAYTEXT, "", "")
+    private val ruleAction = RuleAction("", "DISPLAYTEXT")
     private val ruleEngine: RuleEngine = DefaultRuleEngine()
     @BeforeTest
     fun setUp() {

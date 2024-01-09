@@ -36,13 +36,6 @@ import org.hisp.dhis.rules.models.RuleVariable
  * @author Zubair Asghar
  */
 object RuleEngineTestUtils {
-    fun getRuleEngineContext(
-        rules: List<Rule>, ruleEnrollment: RuleEnrollment,
-        ruleEvents: List<RuleEvent>
-    ): RuleEngineContext {
-        return RuleEngineContext(rules, enrollment = ruleEnrollment, events = ruleEvents)
-    }
-
     fun getRuleEngineContext(rule: Rule, ruleVariables: List<RuleVariable>): RuleEngineContext {
         return RuleEngineContext(listOf(rule), ruleVariables)
     }

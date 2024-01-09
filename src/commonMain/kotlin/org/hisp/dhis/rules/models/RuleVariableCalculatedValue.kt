@@ -35,14 +35,10 @@ import org.hisp.dhis.rules.engine.RuleVariableValueMapBuilder
 class RuleVariableCalculatedValue(
     val name: String,
     val useCodeForOptionSet: Boolean,
-    val options2: List<Option>,
+    override val options: List<Option>,
     val calculatedValueVariable: String,
     val calculatedValueType: RuleValueType
 ) : RuleVariable {
-    override fun options(): List<Option> {
-        return options2
-    }
-
     override fun createValues(
         builder: RuleVariableValueMapBuilder,
         allEventValues: Map<String, List<RuleDataValue>>,

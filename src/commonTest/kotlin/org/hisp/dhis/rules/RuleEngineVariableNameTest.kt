@@ -3,6 +3,7 @@ package org.hisp.dhis.rules
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngineContext
+import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.engine.DefaultRuleEngine
 import org.hisp.dhis.rules.models.Rule
 import org.hisp.dhis.rules.models.*
@@ -13,46 +14,16 @@ import kotlin.test.assertEquals
 class RuleEngineVariableNameTest {
     @Test
     fun evaluateD2Round() {
-        val ruleAction1: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:round(#{" + UID01 + "})"
-        )
-        val ruleAction2: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:round(#{" + VARIABLE_NAME + "})"
-        )
-        val ruleAction3: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:round(#{" + UID0 + "})"
-        )
-        val ruleAction4: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:round(#{" + UID0WILD + "})"
-        )
-        val ruleAction5: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:round(#{" + UID01WILD + "})"
-        )
-        val ruleAction6: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:round(#{" + UID012 + "})"
-        )
-        val ruleAction7: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:round(#{" + UID0WILD2 + "})"
-        )
-        val ruleAction8: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:round(A{" + UID0 + "})"
-        )
-        val ruleAction9: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:round(A{" + UID01 + "})"
-        )
-        val ruleAction10: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:round(A{" + VARIABLE_NAME + "})"
-        )
+        val ruleAction1 = RuleAction("d2:round(#{" + UID01 + "})", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction2 = RuleAction("d2:round(#{" + VARIABLE_NAME + "})", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction3 = RuleAction("d2:round(#{" + UID0 + "})", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction4 = RuleAction("d2:round(#{" + UID0WILD + "})", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction5 = RuleAction("d2:round(#{" + UID01WILD + "})", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction6 = RuleAction("d2:round(#{" + UID012 + "})", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction7 = RuleAction("d2:round(#{" + VARIABLE_NAME + "})", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction8 = RuleAction("d2:round(A{" + UID0 + "})", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction9 = RuleAction("d2:round(#{" + UID01 + "})", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction10 = RuleAction("d2:round(A{" + VARIABLE_NAME + "})", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
         val ruleVariable1: RuleVariable = RuleVariableNewestEvent(
             UID01, true, ArrayList(), "test_data_element1", RuleValueType.NUMERIC
         )
@@ -163,7 +134,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent, ruleEngineContext)
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
         assertEquals(10, ruleEffects.size)
         assertEquals(ruleAction1, ruleEffects[0].ruleAction)
         assertEquals("3", ruleEffects[0].data)
@@ -189,10 +160,7 @@ class RuleEngineVariableNameTest {
 
     @Test
     fun evaluateHasValueFunctionMustReturnTrueIfVariableIsComposedUIDs() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:hasValue(#{" + UID01 + "})"
-        )
+        val ruleAction = RuleAction("d2:hasValue(#{" + UID01 + "})", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent(
             UID01, true, ArrayList(), "test_data_element", RuleValueType.TEXT
         )
@@ -214,7 +182,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent, ruleEngineContext)
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("true", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -222,10 +190,7 @@ class RuleEngineVariableNameTest {
 
     @Test
     fun evaluateHasValueFunctionMustReturnTrueIfVariableIsVariableName() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:hasValue(#{" + VARIABLE_NAME + "})"
-        )
+        val ruleAction = RuleAction("d2:hasValue(#{" + VARIABLE_NAME + "})", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent(
             VARIABLE_NAME, true, ArrayList(), "test_data_element", RuleValueType.TEXT
         )
@@ -247,7 +212,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent, ruleEngineContext)
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("true", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -255,10 +220,7 @@ class RuleEngineVariableNameTest {
 
     @Test
     fun evaluateD2CountIfValueIsVariableName() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:countIfValue(#{" + VARIABLE_NAME + "}, 'condition')"
-        )
+        val ruleAction = RuleAction("d2:countIfValue(#{" + VARIABLE_NAME + "}, 'condition')", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
@@ -321,7 +283,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent, ruleEngineContext.copy(events = listOf(ruleEvent2, ruleEvent3)))
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent2, ruleEvent3), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -329,10 +291,7 @@ class RuleEngineVariableNameTest {
 
     @Test
     fun evaluateD2CountIfValueIsComposedUid() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:countIfValue(#{" + UID01 + "}, 'condition')"
-        )
+        val ruleAction = RuleAction("d2:countIfValue(#{" + UID01 + "}, 'condition')", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             UID01, true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
@@ -395,7 +354,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent, ruleEngineContext.copy(events = listOf(ruleEvent2, ruleEvent3)))
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent2, ruleEvent3), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -403,10 +362,7 @@ class RuleEngineVariableNameTest {
 
     @Test
     fun evaluateD2CountIfVariableName() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:count(#{" + VARIABLE_NAME + "})"
-        )
+        val ruleAction = RuleAction("d2:count(#{" + VARIABLE_NAME + "})", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
@@ -491,7 +447,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent, ruleEngineContext.copy(events = listOf(ruleEvent2, ruleEvent3, ruleEvent4)))
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent2, ruleEvent3, ruleEvent4), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("3", ruleEffects[0].data)
@@ -499,10 +455,7 @@ class RuleEngineVariableNameTest {
 
     @Test
     fun evaluateD2CountIfVariableNameIfComposedUid() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:count(#{" + UID01 + "})"
-        )
+        val ruleAction = RuleAction("d2:count(#{" + UID01 + "})", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             UID01, true, ArrayList(), "test_data_element_one", RuleValueType.TEXT
         )
@@ -584,7 +537,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent, ruleEngineContext.copy(events = listOf(ruleEvent2, ruleEvent3, ruleEvent4)))
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent2, ruleEvent3, ruleEvent4), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("3", ruleEffects[0].data)
@@ -592,10 +545,7 @@ class RuleEngineVariableNameTest {
 
     @Test
     fun evaluateD2CountIfZeroPosIfVariableName() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:countIfZeroPos(#{" + VARIABLE_NAME + "})"
-        )
+        val ruleAction = RuleAction("d2:countIfZeroPos(#{" + VARIABLE_NAME + "})", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
@@ -658,7 +608,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent, ruleEngineContext.copy(events = listOf(ruleEvent1, ruleEvent2)))
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -666,10 +616,7 @@ class RuleEngineVariableNameTest {
 
     @Test
     fun evaluateD2CountIfZeroPosIfComposedUid() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:countIfZeroPos(#{" + UID01 + "})"
-        )
+        val ruleAction = RuleAction("d2:countIfZeroPos(#{" + UID01 + "})", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             UID01, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
@@ -732,7 +679,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent, ruleEngineContext.copy(events = listOf(ruleEvent1, ruleEvent2)))
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -740,10 +687,7 @@ class RuleEngineVariableNameTest {
 
     @Test
     fun evaluateD2MaxValueIfVariableName() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "true"
-        )
+        val ruleAction = RuleAction("true", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
@@ -835,17 +779,14 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent3, ruleEngineContext.copy(events = listOf(ruleEvent1, ruleEvent2)))
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
 
     @Test
     fun evaluateD2MaxValueIfComposedUid() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "true"
-        )
+        val ruleAction = RuleAction("true", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             UID01, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
@@ -937,17 +878,14 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent3, ruleEngineContext.copy(events = listOf(ruleEvent1, ruleEvent2)))
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
 
     @Test
     fun testMinValueIfVariableName() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:minValue(#{" + VARIABLE_NAME + "})"
-        )
+        val ruleAction = RuleAction("d2:minValue(#{" + VARIABLE_NAME + "})", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             VARIABLE_NAME, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
@@ -1034,7 +972,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent3, ruleEngineContext.copy(events = listOf(ruleEvent1, ruleEvent2)))
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("5", ruleEffects[0].data)
@@ -1042,10 +980,7 @@ class RuleEngineVariableNameTest {
 
     @Test
     fun testMinValueIfComposedUid() {
-        val ruleAction: RuleAction = RuleActionText.createForFeedback(
-            RuleActionText.Type.DISPLAYTEXT,
-            "test_action_content", "d2:minValue(#{" + UID01 + "})"
-        )
+        val ruleAction = RuleAction("d2:minValue(#{" + UID01 + "})", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
         val ruleVariableOne: RuleVariable = RuleVariableNewestEvent(
             UID01, true, ArrayList(), "test_data_element_one", RuleValueType.NUMERIC
         )
@@ -1132,7 +1067,7 @@ class RuleEngineVariableNameTest {
                 )
             )
         )
-        val ruleEffects = DefaultRuleEngine().evaluate(ruleEvent3, ruleEngineContext.copy(events = listOf(ruleEvent1, ruleEvent2)))
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("5", ruleEffects[0].data)

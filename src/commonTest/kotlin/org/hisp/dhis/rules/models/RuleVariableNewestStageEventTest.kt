@@ -10,7 +10,7 @@ class RuleVariableNewestStageEventTest {
         )
         assertEquals("test_variable", ruleVariableNewestStageEvent.name)
         assertEquals("test_programstage", ruleVariableNewestStageEvent.programStage)
-        assertEquals("test_dataelement", ruleVariableNewestStageEvent.dataElement())
-        assertEquals(RuleValueType.NUMERIC, ruleVariableNewestStageEvent.dataElementType())
+        assertEquals("test_dataelement", ruleVariableNewestStageEvent.dataElement)
+        assertEquals(RuleValueType.NUMERIC, ruleVariableNewestStageEvent.dataElementType)
     }
 }

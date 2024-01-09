@@ -8,22 +8,11 @@ import org.hisp.dhis.rules.utils.values
 class RuleVariableNewestStageEvent(
     val name: String,
     val useCodeForOptionSet: Boolean,
-    val options2: List<Option>,
-    val dataElement2: String,
-    val dataElementType2: RuleValueType,
+    override val options: List<Option>,
+    override val dataElement: String,
+    override val dataElementType: RuleValueType,
     val programStage: String
 ) : RuleVariableDataElement {
-    override fun dataElement(): String {
-        return dataElement2
-    }
-
-    override fun dataElementType(): RuleValueType {
-        return dataElementType2
-    }
-
-    override fun options(): List<Option> {
-        return options2
-    }
 
     override fun createValues(
         builder: RuleVariableValueMapBuilder,
@@ -33,8 +22,8 @@ class RuleVariableNewestStageEvent(
     ): Map<String, RuleVariableValue> {
         val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
         val stageRuleDataValues: MutableList<RuleDataValue> = ArrayList()
-        val sourceRuleDataValues = allEventValues[dataElement()]
-        if (sourceRuleDataValues != null && !sourceRuleDataValues.isEmpty()) {
+        val sourceRuleDataValues = allEventValues[dataElement]
+        if (!sourceRuleDataValues.isNullOrEmpty()) {
 
             // filter data values based on program stage
             for (ruleDataValue in sourceRuleDataValues) {
@@ -44,13 +33,13 @@ class RuleVariableNewestStageEvent(
             }
         }
         if (stageRuleDataValues.isEmpty()) {
-            valueMap[name] = RuleVariableValue(dataElementType())
+            valueMap[name] = RuleVariableValue(dataElementType)
         } else {
             val variableValue: RuleVariableValue
             val value = stageRuleDataValues[0]
             val optionValue = if (useCodeForOptionSet) value.value else getOptionName(value.value)!!
             variableValue = RuleVariableValue(
-                dataElementType(), optionValue,
+                dataElementType, optionValue,
                 values(stageRuleDataValues),
                 getLastUpdateDate(stageRuleDataValues)
             )

@@ -1,7 +1,7 @@
 package org.hisp.dhis.rules.engine
 
 import org.hisp.dhis.rules.models.Rule
-import org.hisp.dhis.rules.models.RuleActionError
+import org.hisp.dhis.rules.models.RuleAction
 import org.hisp.dhis.rules.models.RuleEffect
 
 data class RuleEvaluationResult(
@@ -23,7 +23,7 @@ data class RuleEvaluationResult(
             val effects = listOf(
                 RuleEffect(
                     rule.uid,
-                    RuleActionError(errorMessage),
+                    RuleAction(errorMessage, "ERROR"),
                     errorMessage
                 )
             )

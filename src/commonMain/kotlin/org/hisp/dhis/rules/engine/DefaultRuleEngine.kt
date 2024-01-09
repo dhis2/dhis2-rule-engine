@@ -9,40 +9,40 @@ import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.models.*
 
-class DefaultRuleEngine: RuleEngine {
-    override fun evaluate(ruleEvent: RuleEvent, executionContext: RuleEngineContext): List<RuleEffect> {
-        val valueMap = RuleVariableValueMapBuilder.target(ruleEvent)
+internal class DefaultRuleEngine: RuleEngine {
+    override fun evaluate(target: RuleEvent, ruleEnrollment: RuleEnrollment?, ruleEvents: List<RuleEvent>, executionContext: RuleEngineContext): List<RuleEffect> {
+        val valueMap = RuleVariableValueMapBuilder.target(target)
             .ruleVariables(executionContext.ruleVariables)
-            .ruleEnrollment(executionContext.enrollment)
+            .ruleEnrollment(ruleEnrollment)
             .triggerEnvironment(TriggerEnvironment.SERVER)
-            .ruleEvents(executionContext.events)
+            .ruleEvents(ruleEvents)
             .constantValueMap(executionContext.constantsValues)
             .build()
         return RuleConditionEvaluator().getRuleEffects(
-            TrackerObjectType.EVENT, ruleEvent.event, valueMap,
+            TrackerObjectType.EVENT, target.event, valueMap,
             executionContext.supplementaryData, executionContext.rules
         )
     }
 
-    override fun evaluate(ruleEnrollment: RuleEnrollment, executionContext: RuleEngineContext): List<RuleEffect> {
-        val valueMap = RuleVariableValueMapBuilder.target(ruleEnrollment)
+    override fun evaluate(target: RuleEnrollment, ruleEvents: List<RuleEvent>, executionContext: RuleEngineContext): List<RuleEffect> {
+        val valueMap = RuleVariableValueMapBuilder.target(target)
                 .ruleVariables(executionContext.ruleVariables)
                 .triggerEnvironment(TriggerEnvironment.SERVER)
-                .ruleEvents(executionContext.events)
+                .ruleEvents(ruleEvents)
                 .constantValueMap(executionContext.constantsValues)
                 .build()
         return RuleConditionEvaluator().getRuleEffects(
-            TrackerObjectType.ENROLLMENT, ruleEnrollment.enrollment, valueMap,
+            TrackerObjectType.ENROLLMENT, target.enrollment, valueMap,
             executionContext.supplementaryData, executionContext.rules
         )
     }
 
-    override fun evaluate(executionContext: RuleEngineContext): List<RuleEffects> {
+    override fun evaluateAll(enrollmentTarget: RuleEnrollment?, eventsTarget: List<RuleEvent>, executionContext: RuleEngineContext): List<RuleEffects> {
         val valueMap = RuleVariableValueMapBuilder.target()
                 .ruleVariables(executionContext.ruleVariables)
-                .ruleEnrollment(executionContext.enrollment)
+                .ruleEnrollment(enrollmentTarget)
                 .triggerEnvironment(TriggerEnvironment.SERVER)
-                .ruleEvents(executionContext.events)
+                .ruleEvents(eventsTarget)
                 .constantValueMap(executionContext.constantsValues)
                 .multipleBuild()
         return RuleEngineMultipleExecution().execute(executionContext.rules, valueMap,
