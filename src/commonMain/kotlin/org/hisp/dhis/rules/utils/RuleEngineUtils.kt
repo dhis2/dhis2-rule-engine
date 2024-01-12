@@ -33,7 +33,7 @@ import org.hisp.dhis.rules.api.ItemValueType
 /**
  * @author Zubair Asghar
  */
-object RuleEngineUtils {
+internal object RuleEngineUtils {
     const val ENV_VAR_CURRENT_DATE = "current_date"
     const val ENV_VAR_COMPLETED_DATE = "completed_date"
     const val ENV_VAR_EVENT_DATE = "event_date"

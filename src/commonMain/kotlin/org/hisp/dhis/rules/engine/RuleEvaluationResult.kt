@@ -4,7 +4,7 @@ import org.hisp.dhis.rules.models.Rule
 import org.hisp.dhis.rules.models.RuleAction
 import org.hisp.dhis.rules.models.RuleEffect
 
-data class RuleEvaluationResult(
+internal data class RuleEvaluationResult(
     val rule: Rule,
     val ruleEffects: List<RuleEffect>,
     val evaluatedAs: Boolean,

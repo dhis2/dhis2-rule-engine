@@ -13,7 +13,7 @@ class RuleVariablePreviousEvent(
     override val dataElementType: RuleValueType
 ) : RuleVariableDataElement {
     override fun createValues(
-        builder: RuleVariableValueMapBuilder,
+        ruleEvent: RuleEvent?,
         allEventValues: Map<String, List<RuleDataValue>>,
         currentEnrollmentValues: Map<String, RuleAttributeValue>,
         currentEventValues: Map<String, RuleDataValue>
@@ -21,17 +21,17 @@ class RuleVariablePreviousEvent(
         val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
         var variableValue: RuleVariableValue? = null
         val ruleDataValues = allEventValues[dataElement]
-        if (builder.ruleEvent != null && ruleDataValues != null && !ruleDataValues.isEmpty()) {
+        if (ruleEvent != null && !ruleDataValues.isNullOrEmpty()) {
             for (ruleDataValue in ruleDataValues) {
                 // We found preceding value to the current currentEventValues,
                 // which is assumed to be best candidate.
-                if (builder.ruleEvent!!.eventDate.compareTo(ruleDataValue.eventDate) > 0) {
+                if (ruleEvent.eventDate > ruleDataValue.eventDate) {
                     val optionValue =
                         if (useCodeForOptionSet) ruleDataValue.value else getOptionName(ruleDataValue.value)!!
                     variableValue = RuleVariableValue(
                         dataElementType, optionValue,
                         values(ruleDataValues),
-                        getLastUpdateDateForPrevious(ruleDataValues, builder.ruleEvent!!)
+                        getLastUpdateDateForPrevious(ruleDataValues, ruleEvent)
                     )
                     break
                 }

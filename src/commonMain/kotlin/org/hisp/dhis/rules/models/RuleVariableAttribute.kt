@@ -13,7 +13,7 @@ data class RuleVariableAttribute(
     val trackedEntityAttributeType: RuleValueType
 ) : RuleVariable {
     override fun createValues(
-        builder: RuleVariableValueMapBuilder,
+        ruleEvent: RuleEvent?,
         allEventValues: Map<String, List<RuleDataValue>>,
         currentEnrollmentValues: Map<String, RuleAttributeValue>,
         currentEventValues: Map<String, RuleDataValue>

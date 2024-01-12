@@ -9,7 +9,7 @@ import org.hisp.dhis.rules.utils.currentDate
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class RuleVariableValueMapBuilder private constructor() {
+internal class RuleVariableValueMapBuilder private constructor() {
     val allConstantValues: MutableMap<String, String> = HashMap()
     val ruleVariables: MutableList<RuleVariable> = ArrayList()
     val ruleEvents: MutableList<RuleEvent> = ArrayList()
@@ -288,7 +288,7 @@ class RuleVariableValueMapBuilder private constructor() {
         val currentEventValues = buildCurrentEventValues()
         for (ruleVariable in ruleVariables) {
             valueMap.putAll(
-                ruleVariable.createValues(this, allEventValues, currentEnrollmentValues, currentEventValues)
+                ruleVariable.createValues(ruleEvent, allEventValues, currentEnrollmentValues, currentEventValues)
             )
         }
         return valueMap

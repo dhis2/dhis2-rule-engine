@@ -6,7 +6,7 @@ import org.hisp.dhis.rules.engine.RuleVariableValueMapBuilder
 interface RuleVariable {
     val options: List<Option>
     fun createValues(
-        builder: RuleVariableValueMapBuilder,
+        ruleEvent: RuleEvent?,
         allEventValues: Map<String, List<RuleDataValue>>,
         currentEnrollmentValues: Map<String, RuleAttributeValue>,
         currentEventValues: Map<String, RuleDataValue>

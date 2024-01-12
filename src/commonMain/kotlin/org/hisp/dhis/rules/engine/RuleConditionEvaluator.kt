@@ -11,7 +11,7 @@ import org.hisp.dhis.rules.engine.RuleEvaluationResult.Companion.evaluatedResult
 import org.hisp.dhis.rules.engine.RuleEvaluationResult.Companion.notEvaluatedResult
 import org.hisp.dhis.rules.utils.unwrapVariableName
 
-class RuleConditionEvaluator {
+internal class RuleConditionEvaluator {
     fun getEvaluatedAndErrorRuleEffects(
         targetType: TrackerObjectType,
         targetUid: String,
