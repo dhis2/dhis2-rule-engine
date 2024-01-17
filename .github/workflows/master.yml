@@ -3,7 +3,7 @@ name: Merge to Master
 on:
   push:
     branches:
-      - 'master'
+      - 'java_master'
 
 jobs:
   unit-test:
