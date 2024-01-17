@@ -1,31 +1,36 @@
 package org.hisp.dhis.rules
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
+import org.hisp.dhis.rules.api.RuleEngine
+import org.hisp.dhis.rules.models.Rule
+import org.hisp.dhis.rules.api.RuleEngineContext
+import org.hisp.dhis.rules.engine.DefaultRuleEngine
 import org.hisp.dhis.rules.models.*
+import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class RuleEngineValueTypesTest {
     @Test
     fun booleanVariableWithoutValueMustFallbackToDefaultBooleanValue() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText
-            .createForFeedback(RuleActionText.Type.DISPLAYTEXT,"test_action_content", "#{test_variable}")
+        val ruleAction = RuleAction("#{test_variable}", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent("test_variable", true, ArrayList(), "test_data_element", RuleValueType.BOOLEAN)
-        val ruleEngine = getRuleEngine(rule, listOf(ruleVariable))
+        val ruleEngineContext = getRuleEngineContext(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             ArrayList()
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("false", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -34,24 +39,23 @@ class RuleEngineValueTypesTest {
     @Test
     
     fun numericVariableWithoutValueMustFallbackToDefaultNumericValue() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText
-            .createForFeedback(RuleActionText.Type.DISPLAYTEXT,"test_action_content", "#{test_variable}")
+        val ruleAction = RuleAction("#{test_variable}", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent("test_variable", true, ArrayList(), "test_data_element", RuleValueType.NUMERIC)
-        val ruleEngine = getRuleEngine(rule, listOf(ruleVariable))
+        val ruleEngineContext = getRuleEngineContext(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             ArrayList()
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("0", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -60,30 +64,29 @@ class RuleEngineValueTypesTest {
     @Test
     
     fun textVariableWithoutValueMustFallbackToDefaultTextValue() {
-        val ruleAction: org.hisp.dhis.rules.models.RuleAction = RuleActionText
-            .createForFeedback(RuleActionText.Type.DISPLAYTEXT,"test_action_content", "#{test_variable}")
+        val ruleAction = RuleAction("#{test_variable}", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleVariable: RuleVariable = RuleVariableCurrentEvent("test_variable", true, ArrayList(), "test_data_element", RuleValueType.TEXT)
-        val ruleEngine = getRuleEngine(rule, listOf(ruleVariable))
+        val ruleEngineContext = getRuleEngineContext(rule, listOf(ruleVariable))
         val ruleEvent = RuleEvent(
             "test_event",
             "test_program_stage",
             "",
             RuleEvent.Status.ACTIVE,
-            LocalDate.currentDate(),
+            Clock.System.now(),
             LocalDate.currentDate(),
             null,
             "",
             null,
             ArrayList()
         )
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
 
-    private fun getRuleEngine(rule: Rule, ruleVariables: List<RuleVariable>): RuleEngine {
-        return RuleEngine(RuleEngineContext(listOf(rule), ruleVariables))
+    private fun getRuleEngineContext(rule: Rule, ruleVariables: List<RuleVariable>): RuleEngineContext {
+        return RuleEngineContext(listOf(rule), ruleVariables)
     }
 }

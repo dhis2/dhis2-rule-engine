@@ -1,29 +1,23 @@
-package org.hisp.dhis.rules
+package org.hisp.dhis.rules.engine
 
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.RuleEngineUtils
+import org.hisp.dhis.rules.utils.currentDate
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class RuleVariableValueMapBuilder private constructor() {
-    private val allConstantValues: MutableMap<String, String>
-
-    private val ruleVariables: MutableList<RuleVariable>
-
-    private val ruleEvents: MutableList<RuleEvent>
-    var ruleEnrollment: org.hisp.dhis.rules.models.RuleEnrollment? = null
+internal class RuleVariableValueMapBuilder private constructor() {
+    val allConstantValues: MutableMap<String, String> = HashMap()
+    val ruleVariables: MutableList<RuleVariable> = ArrayList()
+    val ruleEvents: MutableList<RuleEvent> = ArrayList()
+    var ruleEnrollment: RuleEnrollment? = null
     var ruleEvent: RuleEvent? = null
     private var triggerEnvironment: TriggerEnvironment? = null
 
-    init {
-        // collections used for construction of resulting variable value map
-        ruleVariables = ArrayList()
-        ruleEvents = ArrayList()
-        allConstantValues = HashMap()
-    }
-
-    private constructor(ruleEnrollment: org.hisp.dhis.rules.models.RuleEnrollment) : this() {
+    private constructor(ruleEnrollment: RuleEnrollment) : this() {
 
         // enrollment is the target
         this.ruleEnrollment = ruleEnrollment
@@ -34,13 +28,13 @@ class RuleVariableValueMapBuilder private constructor() {
         // event is the target
         this.ruleEvent = ruleEvent
     }
-    
-    fun ruleVariables(ruleVariables: List<RuleVariable>?): RuleVariableValueMapBuilder {
-        this.ruleVariables.addAll(ruleVariables!!)
+
+    fun ruleVariables(ruleVariables: List<RuleVariable>): RuleVariableValueMapBuilder {
+        this.ruleVariables.addAll(ruleVariables)
         return this
     }
 
-    fun ruleEnrollment(ruleEnrollment: org.hisp.dhis.rules.models.RuleEnrollment?): RuleVariableValueMapBuilder {
+    fun ruleEnrollment(ruleEnrollment: RuleEnrollment?): RuleVariableValueMapBuilder {
         check(this.ruleEnrollment == null) {
             "It seems that enrollment has been set as target " +
                     "already. It can't be used as a part of execution context."
@@ -64,8 +58,8 @@ class RuleVariableValueMapBuilder private constructor() {
         return this
     }
 
-    fun constantValueMap(constantValues: Map<String, String>?): RuleVariableValueMapBuilder {
-        allConstantValues.putAll(constantValues!!)
+    fun constantValueMap(constantValues: Map<String, String>): RuleVariableValueMapBuilder {
+        allConstantValues.putAll(constantValues)
         return this
     }
 
@@ -85,7 +79,7 @@ class RuleVariableValueMapBuilder private constructor() {
     }
 
     fun multipleBuild(): RuleVariableValueMap {
-        val enrollmentMap: MutableMap<org.hisp.dhis.rules.models.RuleEnrollment, MutableMap<String, RuleVariableValue>> = HashMap()
+        val enrollmentMap: MutableMap<RuleEnrollment, MutableMap<String, RuleVariableValue>> = HashMap()
         if (ruleEnrollment != null) {
             enrollmentMap[ruleEnrollment!!] = build()
         }
@@ -111,8 +105,8 @@ class RuleVariableValueMapBuilder private constructor() {
         return false
     }
 
-    private fun buildCurrentEventValues(): Map<String, org.hisp.dhis.rules.models.RuleDataValue> {
-        val currentEventValues: MutableMap<String, org.hisp.dhis.rules.models.RuleDataValue> = HashMap()
+    private fun buildCurrentEventValues(): Map<String, RuleDataValue> {
+        val currentEventValues: MutableMap<String, RuleDataValue> = HashMap()
         if (ruleEvent != null) {
             for (index in ruleEvent!!.dataValues.indices) {
                 val ruleDataValue = ruleEvent!!.dataValues[index]
@@ -122,8 +116,8 @@ class RuleVariableValueMapBuilder private constructor() {
         return currentEventValues
     }
 
-    private fun buildCurrentEnrollmentValues(): Map<String, org.hisp.dhis.rules.models.RuleAttributeValue> {
-        val currentEnrollmentValues: MutableMap<String, org.hisp.dhis.rules.models.RuleAttributeValue> = HashMap()
+    private fun buildCurrentEnrollmentValues(): Map<String, RuleAttributeValue> {
+        val currentEnrollmentValues: MutableMap<String, RuleAttributeValue> = HashMap()
         if (ruleEnrollment != null) {
             val ruleAttributeValues = ruleEnrollment!!.attributeValues
             for (attributeValue in ruleAttributeValues) {
@@ -133,8 +127,8 @@ class RuleVariableValueMapBuilder private constructor() {
         return currentEnrollmentValues
     }
 
-    private fun buildAllEventValues(): Map<String, MutableList<org.hisp.dhis.rules.models.RuleDataValue>> {
-        val allEventsValues: MutableMap<String, MutableList<org.hisp.dhis.rules.models.RuleDataValue>> = HashMap()
+    private fun buildAllEventValues(): Map<String, MutableList<RuleDataValue>> {
+        val allEventsValues: MutableMap<String, MutableList<RuleDataValue>> = HashMap()
         val events: MutableList<RuleEvent> = ArrayList(ruleEvents)
         if (ruleEvent != null) {
             // target event should be among the list of all
@@ -153,11 +147,11 @@ class RuleVariableValueMapBuilder private constructor() {
 
                 // push new list if it is not there for the given data element
                 if (!allEventsValues.containsKey(ruleDataValue.dataElement)) {
-                    allEventsValues[ruleDataValue.dataElement] = ArrayList(events.size) //NOPMD
+                    allEventsValues[ruleDataValue.dataElement] = ArrayList(events.size)
                 }
 
                 // append data value to the list
-                allEventsValues[ruleDataValue.dataElement]!!.add(ruleDataValue)
+                allEventsValues[ruleDataValue.dataElement]?.add(ruleDataValue)
             }
         }
         return allEventsValues
@@ -189,7 +183,7 @@ class RuleVariableValueMapBuilder private constructor() {
                 currentDate.toString()
             )
         }
-        if (!ruleEvents.isEmpty()) {
+        if (ruleEvents.isNotEmpty()) {
             valueMap[RuleEngineUtils.ENV_VAR_EVENT_COUNT] = RuleVariableValue(
                 RuleValueType.NUMERIC, ruleEvents.size.toString(),
                 listOf(ruleEvents.size.toString()), currentDate.toString()
@@ -232,10 +226,9 @@ class RuleVariableValueMapBuilder private constructor() {
                 RuleVariableValue(RuleValueType.TEXT, organisationUnitCode)
         }
         if (ruleEvent != null) {
-            val eventDate = ruleEvent!!.eventDate
+            val eventDate = ruleEvent!!.eventDate.toLocalDateTime(TimeZone.currentSystemDefault()).date.toString()
             valueMap[RuleEngineUtils.ENV_VAR_EVENT_DATE] = RuleVariableValue(
-                RuleValueType.TEXT, eventDate.toString(),
-                listOf(eventDate.toString()), currentDate.toString()
+                RuleValueType.TEXT, eventDate, listOf(eventDate), currentDate.toString()
             )
             if (ruleEvent!!.dueDate != null) {
                 val dueDate = ruleEvent!!.dueDate
@@ -295,14 +288,14 @@ class RuleVariableValueMapBuilder private constructor() {
         val currentEventValues = buildCurrentEventValues()
         for (ruleVariable in ruleVariables) {
             valueMap.putAll(
-                ruleVariable.createValues(this, allEventValues, currentEnrollmentValues, currentEventValues)
+                ruleVariable.createValues(ruleEvent, allEventValues, currentEnrollmentValues, currentEventValues)
             )
         }
         return valueMap
     }
 
     companion object {
-            fun target(ruleEnrollment: org.hisp.dhis.rules.models.RuleEnrollment): RuleVariableValueMapBuilder {
+            fun target(ruleEnrollment: RuleEnrollment): RuleVariableValueMapBuilder {
             return RuleVariableValueMapBuilder(ruleEnrollment)
         }
 

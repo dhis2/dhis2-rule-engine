@@ -1,7 +1,13 @@
 package org.hisp.dhis.rules
 
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
+import org.hisp.dhis.rules.api.RuleEngine
+import org.hisp.dhis.rules.models.Rule
+import org.hisp.dhis.rules.api.RuleEngineContext
+import org.hisp.dhis.rules.engine.DefaultRuleEngine
 import org.hisp.dhis.rules.models.*
+import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -182,7 +188,7 @@ class ProgramRuleVariableTest {
     }
 
     private fun getRule(variable: String): Rule {
-        val assignAction: org.hisp.dhis.rules.models.RuleAction = RuleActionAssign.create(null, variable, "#{test_data_element}")
+        val assignAction = RuleAction(variable, "ASSIGN", mapOf(Pair("field","#{test_data_element}")))
         return Rule("true", listOf(assignAction), "test_program_rule1")
     }
 
@@ -193,12 +199,12 @@ class ProgramRuleVariableTest {
     }
     
     private fun callEnrollmentRuleEngine(rule: Rule): List<RuleEffect> {
-        val ruleEngine = getRuleEngine(listOf(rule))
-        return ruleEngine.evaluate(enrollment)
+        val ruleEngineContext = getRuleEngineContext(listOf(rule))
+        return RuleEngine.getInstance().evaluate(enrollment, emptyList(), ruleEngineContext)
     }
     
     private fun callEventRuleEngine(rule: Rule): List<RuleEffect> {
-        val ruleEngine = getRuleEngine(listOf(rule))
+        val ruleEngineContext = getRuleEngineContext(listOf(rule))
         val event = RuleEvent(
             event = EVENT_ID,
             programStage = PROGRAM_STAGE,
@@ -211,25 +217,23 @@ class ProgramRuleVariableTest {
             completedDate = null,
             dataValues = emptyList()
         )
-        return ruleEngine.copy(enrollment = enrollment).evaluate(event)
+        return RuleEngine.getInstance().evaluate(event, enrollment, emptyList(), ruleEngineContext)
     }
 
-    private val enrollment: org.hisp.dhis.rules.models.RuleEnrollment
-        get() = org.hisp.dhis.rules.models.RuleEnrollment(
+    private val enrollment: RuleEnrollment
+        get() = RuleEnrollment(
             ENROLLMENT_ID,
             PROGRAM_NAME,
             INCIDENT_DATE,
             ENROLLMENT_DATE,
-            org.hisp.dhis.rules.models.RuleEnrollment.Status.ACTIVE,
+            RuleEnrollment.Status.ACTIVE,
             ORGANISATION_UNIT,
             ORGANISATION_UNIT_CODE,
-            listOf(org.hisp.dhis.rules.models.RuleAttributeValue("test_attribute", "test_value"))
+            listOf(RuleAttributeValue("test_attribute", "test_value"))
         )
 
-    private fun getRuleEngine(rules: List<Rule>): RuleEngine {
-        return RuleEngine(
-            RuleEngineContext(rules, listOf(), emptyMap(), emptyMap()),
-            emptyList(), null, TriggerEnvironment.SERVER)
+    private fun getRuleEngineContext(rules: List<Rule>): RuleEngineContext {
+        return RuleEngineContext(rules)
     }
 
     companion object {
@@ -239,7 +243,7 @@ class ProgramRuleVariableTest {
         private const val ENROLLMENT_DATE_STRING = "2019-01-01"
         private val ENROLLMENT_DATE = LocalDate.parse(ENROLLMENT_DATE_STRING)
         private const val EVENT_DATE_STRING = "2019-02-02"
-        private val EVENT_DATE = LocalDate.parse(EVENT_DATE_STRING)
+        private val EVENT_DATE = Instant.parse(EVENT_DATE_STRING + "T01:00:00Z")
         private const val INCIDENT_DATE_STRING = "2020-01-01"
         private val INCIDENT_DATE = LocalDate.parse(INCIDENT_DATE_STRING)
         private const val PROGRAM_STAGE = "program stage"
@@ -248,7 +252,7 @@ class ProgramRuleVariableTest {
         private const val ORGANISATION_UNIT = "organisation unit"
         private const val ORGANISATION_UNIT_CODE = "organisation unit code"
         private const val ENROLLMENT_ID = "enrollment id"
-        private val ENROLLMENT_STATUS = org.hisp.dhis.rules.models.RuleEnrollment.Status.ACTIVE
+        private val ENROLLMENT_STATUS = RuleEnrollment.Status.ACTIVE
         private const val EVENT_ID = "event id"
         private const val PROGRAM_NAME = "program name"
     }

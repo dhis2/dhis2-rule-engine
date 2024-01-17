@@ -1,4 +1,4 @@
-package org.hisp.dhis.rules
+package org.hisp.dhis.rules.api
 
 /**
  * Class is place holder for program rule variable, Constant and program environment variable display name and type.

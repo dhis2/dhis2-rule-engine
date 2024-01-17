@@ -1,7 +1,9 @@
-package org.hisp.dhis.rules.models
+package org.hisp.dhis.rules.api
+
+import org.hisp.dhis.lib.expression.spi.ValueType
 
 /*
-* Copyright (c) 2004-2017, University of Oslo
+* Copyright (c) 2004-2020, University of Oslo
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -27,11 +29,22 @@ package org.hisp.dhis.rules.models
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-data class RuleActionSendMessage(
-    val notification: String,
-    val data2: String?
-) : RuleAction {
-    override fun data(): String? {
-        return data2
+
+/**
+ * @author Zubair Asghar
+ */
+enum class ItemValueType(val value: String) {
+    NUMBER("1.0"),
+    DATE("2020-01-01"),
+    TEXT("Sample_text_string"),
+    BOOLEAN("true");
+
+    fun toValueType(): ValueType {
+        return when (this) {
+            NUMBER -> ValueType.NUMBER
+            DATE -> ValueType.DATE
+            TEXT -> ValueType.STRING
+            BOOLEAN -> ValueType.BOOLEAN
+        }
     }
 }

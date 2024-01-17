@@ -1,6 +1,8 @@
 package org.hisp.dhis.rules
 
+import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.models.Rule
+import org.hisp.dhis.rules.models.RuleEnrollment
 import org.hisp.dhis.rules.models.RuleEvent
 import org.hisp.dhis.rules.models.RuleVariable
 
@@ -34,18 +36,11 @@ import org.hisp.dhis.rules.models.RuleVariable
  * @author Zubair Asghar
  */
 object RuleEngineTestUtils {
-    fun getRuleEngine(
-        rules: List<Rule>, ruleEnrollment: org.hisp.dhis.rules.models.RuleEnrollment,
-        ruleEvents: List<RuleEvent>
-    ): RuleEngine {
-        return RuleEngine(RuleEngineContext(rules, emptyList()), ruleEvents, ruleEnrollment)
+    fun getRuleEngineContext(rule: Rule, ruleVariables: List<RuleVariable>): RuleEngineContext {
+        return RuleEngineContext(listOf(rule), ruleVariables)
     }
 
-    fun getRuleEngine(rule: Rule, ruleVariables: List<RuleVariable>): RuleEngine {
-        return RuleEngine(RuleEngineContext(listOf(rule), ruleVariables))
-    }
-
-    fun getRuleEngine(rules: List<Rule>): RuleEngine {
-        return RuleEngine(RuleEngineContext(rules, emptyList()))
+    fun getRuleEngineContext(rules: List<Rule>): RuleEngineContext {
+        return RuleEngineContext(rules, emptyList())
     }
 }

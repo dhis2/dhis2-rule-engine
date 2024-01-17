@@ -1,9 +1,11 @@
 package org.hisp.dhis.rules.models
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
-import org.hisp.dhis.rules.RuleEngine
-import org.hisp.dhis.rules.RuleEngineContext
-import org.hisp.dhis.rules.currentDate
+import org.hisp.dhis.rules.api.RuleEngine
+import org.hisp.dhis.rules.engine.DefaultRuleEngine
+import org.hisp.dhis.rules.api.RuleEngineContext
+import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -38,7 +40,7 @@ class CalculatedValueTest {
     @Test
     fun evaluateOneThousandRulesTest() {
         val i = 1000
-        val ruleEngine = getRuleEngine(createRules(i))
+        val ruleEngineContext = getRuleEngineContext(createRules(i))
         val enrollment = RuleEnrollment(
             "test_enrollment",
             "test_program",
@@ -54,27 +56,27 @@ class CalculatedValueTest {
             programStage = "test_program_stage",
             programStageName = "",
             status = RuleEvent.Status.ACTIVE,
-            eventDate = LocalDate.currentDate(),
+            eventDate = Clock.System.now(),
             dueDate = LocalDate.currentDate(),
             organisationUnit = "",
             organisationUnitCode = "",
             completedDate = null,
             dataValues = listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(), "test_program_stage", "test_data_element", "test_value"
+                    Clock.System.now(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
         )
-        val ruleEffects = ruleEngine.copy(enrollment = enrollment).evaluate(ruleEvent)
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, enrollment, emptyList(), ruleEngineContext)
         assertEquals(i, ruleEffects.size)
     }
 
     @Test
     fun sendMessageMustGetValueFromAssignAction() {
-        val assignAction: RuleAction = RuleActionAssign.create("#{test_calculated_value}", "2+2", null)
+        val assignAction = RuleAction("2+2", "ASSIGN", mapOf(Pair("content", "#{test_calculated_value}")))
         val rule = Rule("true", listOf(assignAction), "test_program_rule1")
-        val sendMessageAction: RuleAction =
-            RuleActionSendMessage("test_notification", "4")
+        val sendMessageAction =
+            RuleAction("4", "SENDMESSAGE",mapOf(Pair("content", "test_notification")))
         val rule2 = Rule(
             "#{test_calculated_value}==4",
             listOf(sendMessageAction),
@@ -95,29 +97,28 @@ class CalculatedValueTest {
             programStage = "test_program_stage",
             programStageName = "",
             status = RuleEvent.Status.ACTIVE,
-            eventDate = LocalDate.currentDate(),
+            eventDate = Clock.System.now(),
             dueDate = LocalDate.currentDate(),
             organisationUnit = "",
             organisationUnitCode = "",
             completedDate = null,
             dataValues = listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(), "test_program_stage", "test_data_element", "test_value"
+                    Clock.System.now(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
         )
-        val ruleEngine = getRuleEngine(listOf(rule, rule2)).copy(enrollment = enrollment)
-        val ruleEffects = ruleEngine.evaluate(ruleEvent)
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, enrollment, emptyList(), getRuleEngineContext(listOf(rule, rule2)))
         assertEquals("4", ruleEffects[0].data)
         assertEquals(sendMessageAction, ruleEffects[0].ruleAction)
     }
 
     private fun createRules(i: Int): List<Rule> {
         val rules: MutableList<Rule> = ArrayList()
-        val assignAction: RuleAction = RuleActionAssign.create("#{test_calculated_value}", "2+2", null)
+        val assignAction = RuleAction("2+2", "ASSIGN", mapOf(Pair("content", "#{test_calculated_value}")))
         val rule = Rule("true", listOf(assignAction), "test_program_rule1")
-        val sendMessageAction: RuleAction =
-            RuleActionSendMessage("test_notification", "4")
+        val sendMessageAction =
+            RuleAction("4", "SENDMESSAGE",mapOf(Pair("content", "test_notification")))
         val rule2 = Rule(
             "#{test_calculated_value}==4",
             listOf(sendMessageAction),
@@ -132,15 +133,15 @@ class CalculatedValueTest {
 
     @Test
     fun sendMessageMustGetValueFromAssignActionInSingleExecution() {
-        val assignAction: RuleAction = RuleActionAssign.create("#{test_calculated_value}", "2+2", null)
+        val assignAction = RuleAction("2+2", "ASSIGN", mapOf(Pair("content", "#{test_calculated_value}")))
         val rule = Rule("true", listOf(assignAction), "test_program_rule1", "")
-        val sendMessageAction: RuleAction =
-            RuleActionSendMessage("test_notification", "4.0")
+        val sendMessageAction =
+            RuleAction("4.0", "SENDMESSAGE",mapOf(Pair("content", "test_notification")))
         val rule2 = Rule(
             "#{test_calculated_value}==4.0", listOf(sendMessageAction),
             "test_program_rule2", ""
         )
-        val ruleEngine = getRuleEngine(listOf(rule, rule2))
+        val ruleEngineContext = getRuleEngineContext(listOf(rule, rule2))
         val enrollment = RuleEnrollment(
             "test_enrollment",
             "test_program",
@@ -156,25 +157,25 @@ class CalculatedValueTest {
             programStage = "test_program_stage",
             programStageName = "",
             status = RuleEvent.Status.ACTIVE,
-            eventDate = LocalDate.currentDate(),
+            eventDate = Clock.System.now(),
             dueDate = LocalDate.currentDate(),
             organisationUnit = "",
             organisationUnitCode = "",
             completedDate = null,
             dataValues = listOf(
                 RuleDataValue(
-                    LocalDate.currentDate(), "test_program_stage", "test_data_element", "test_value"
+                    Clock.System.now(), "test_program_stage", "test_data_element", "test_value"
                 )
             )
         )
-        val ruleEffects = ruleEngine.copy(enrollment = enrollment).evaluate(ruleEvent)
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, enrollment, emptyList(), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data)
         assertEquals(sendMessageAction, ruleEffects[0].ruleAction)
     }
 
-    private fun getRuleEngine(rules: List<Rule>): RuleEngine {
+    private fun getRuleEngineContext(rules: List<Rule>): RuleEngineContext {
         val ruleVariable: RuleVariable = RuleVariableCalculatedValue("test_calculated_value", true, ArrayList(), "", RuleValueType.TEXT)
-        return RuleEngine(RuleEngineContext(rules, listOf(ruleVariable)))
+        return RuleEngineContext(rules, listOf(ruleVariable))
     }
 }

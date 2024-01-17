@@ -1,6 +1,6 @@
 package org.hisp.dhis.rules.utils
 
-import org.hisp.dhis.rules.ItemValueType
+import org.hisp.dhis.rules.api.ItemValueType
 
 /*
 * Copyright (c) 2004-2020, University of Oslo
@@ -33,7 +33,7 @@ import org.hisp.dhis.rules.ItemValueType
 /**
  * @author Zubair Asghar
  */
-object RuleEngineUtils {
+internal object RuleEngineUtils {
     const val ENV_VAR_CURRENT_DATE = "current_date"
     const val ENV_VAR_COMPLETED_DATE = "completed_date"
     const val ENV_VAR_EVENT_DATE = "event_date"
@@ -53,27 +53,4 @@ object RuleEngineUtils {
     const val ENV_VAR_PROGRAM_NAME = "program_name"
     const val ENV_VAR_ENVIRONMENT = "environment"
     const val ENV_VAR_OU_CODE = "orgunit_code"
-
-    // new environment variable must be added in this map
-    val ENV_VARIABLES = mapOf(
-        Pair(ENV_VAR_COMPLETED_DATE, ItemValueType.DATE),
-        Pair(ENV_VAR_CURRENT_DATE, ItemValueType.DATE),
-        Pair(ENV_VAR_EVENT_DATE, ItemValueType.DATE),
-        Pair(ENV_VAR_INCIDENT_DATE, ItemValueType.DATE),
-        Pair(ENV_VAR_ENROLLMENT_DATE, ItemValueType.DATE),
-        Pair(ENV_VAR_DUE_DATE, ItemValueType.DATE),
-        Pair(ENV_VAR_EVENT_COUNT, ItemValueType.NUMBER),
-        Pair(ENV_VAR_TEI_COUNT, ItemValueType.NUMBER),
-        Pair(ENV_VAR_ENROLLMENT_COUNT, ItemValueType.NUMBER),
-        Pair(ENV_VAR_EVENT_ID, ItemValueType.NUMBER),
-        Pair(ENV_VAR_PROGRAM_STAGE_ID, ItemValueType.NUMBER),
-        Pair(ENV_VAR_ENROLLMENT_ID, ItemValueType.NUMBER),
-        Pair(ENV_VAR_ENROLLMENT_STATUS, ItemValueType.TEXT),
-        Pair(ENV_VAR_EVENT_STATUS, ItemValueType.TEXT),
-        Pair(ENV_VAR_OU, ItemValueType.TEXT),
-        Pair(ENV_VAR_OU_CODE, ItemValueType.TEXT),
-        Pair(ENV_VAR_ENVIRONMENT, ItemValueType.TEXT),
-        Pair(ENV_VAR_PROGRAM_NAME, ItemValueType.TEXT),
-        Pair(ENV_VAR_PROGRAM_STAGE_NAME, ItemValueType.TEXT)
-    )
 }

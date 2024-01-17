@@ -1,14 +1,17 @@
-package org.hisp.dhis.rules
+package org.hisp.dhis.rules.engine
 
 import org.hisp.dhis.lib.expression.Expression
 import org.hisp.dhis.lib.expression.spi.ExpressionData
 import org.hisp.dhis.lib.expression.spi.IllegalExpressionException
+import org.hisp.dhis.rules.createLogger
+import org.hisp.dhis.rules.models.Rule
 import org.hisp.dhis.rules.models.*
-import org.hisp.dhis.rules.models.RuleEvaluationResult.Companion.errorRule
-import org.hisp.dhis.rules.models.RuleEvaluationResult.Companion.evaluatedResult
-import org.hisp.dhis.rules.models.RuleEvaluationResult.Companion.notEvaluatedResult
+import org.hisp.dhis.rules.engine.RuleEvaluationResult.Companion.errorRule
+import org.hisp.dhis.rules.engine.RuleEvaluationResult.Companion.evaluatedResult
+import org.hisp.dhis.rules.engine.RuleEvaluationResult.Companion.notEvaluatedResult
+import org.hisp.dhis.rules.utils.unwrapVariableName
 
-class RuleConditionEvaluator {
+internal class RuleConditionEvaluator {
     fun getEvaluatedAndErrorRuleEffects(
         targetType: TrackerObjectType,
         targetUid: String,
@@ -16,11 +19,9 @@ class RuleConditionEvaluator {
         supplementaryData: Map<String, List<String>>,
         rules: List<Rule>
     ): List<RuleEffect> {
-        val ruleEffects: MutableList<RuleEffect> = ArrayList()
-        for ((_, ruleEffects1) in getRuleEvaluationResults(targetType, targetUid, valueMap, supplementaryData, rules)) {
-            ruleEffects.addAll(ruleEffects1)
-        }
-        return ruleEffects
+        val ruleEvaluationResults = getRuleEvaluationResults(targetType, targetUid, valueMap, supplementaryData, rules)
+        return ruleEvaluationResults
+            .flatMap { result -> result.ruleEffects }
     }
 
     fun getRuleEffects(
@@ -30,19 +31,16 @@ class RuleConditionEvaluator {
         supplementaryData: Map<String, List<String>>,
         rules: List<Rule>
     ): List<RuleEffect> {
-        val ruleEffects: MutableList<RuleEffect> = ArrayList()
-        for ((_, ruleEffects1, _, error) in getRuleEvaluationResults(
+        val ruleEvaluationResults = getRuleEvaluationResults(
             targetType,
             targetUid,
             valueMap,
             supplementaryData,
             rules
-        )) {
-            if (!error) {
-                ruleEffects.addAll(ruleEffects1)
-            }
-        }
-        return ruleEffects
+        )
+        return ruleEvaluationResults
+            .filter { result -> !result.error }
+            .flatMap { result -> result.ruleEffects }
     }
 
     fun getRuleEvaluationResults(
@@ -67,12 +65,11 @@ class RuleConditionEvaluator {
                         try {
                             //Check if action is assigning value to calculated variable
                             if (isAssignToCalculatedValue(action)) {
-                                val (_, content, _, data) = action as RuleActionAssign
                                 updateValueMap(
-                                    unwrapVariableName(content),
+                                    unwrapVariableName(action.content()!!),
                                     RuleVariableValue(
                                         RuleValueType.TEXT,
-                                        process(data, valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION),
+                                        process(action.data, valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION),
                                         listOf(),
                                         null
                                     ),
@@ -105,7 +102,7 @@ class RuleConditionEvaluator {
     }
 
     private fun addRuleErrorResult(
-        rule: Rule, ruleAction: org.hisp.dhis.rules.models.RuleAction?, e: Exception, targetType: TrackerObjectType,
+        rule: Rule, ruleAction: RuleAction?, e: Exception, targetType: TrackerObjectType,
         targetUid: String, ruleEvaluationResults: MutableList<RuleEvaluationResult>
     ) {
         val errorMessage: String
@@ -140,10 +137,7 @@ class RuleConditionEvaluator {
         condition: String?, valueMap: Map<String, RuleVariableValue>,
         supplementaryData: Map<String, List<String>>, mode: Expression.Mode
     ): String {
-        if (condition==null) {
-            return ""
-        }
-        if (condition.isEmpty()) {
+        if (condition==null || condition.isEmpty()) {
             return ""
         }
         val expression = Expression(condition, mode, false)
@@ -168,8 +162,8 @@ class RuleConditionEvaluator {
         } else result
     }
 
-    private fun isAssignToCalculatedValue(ruleAction: org.hisp.dhis.rules.models.RuleAction): Boolean {
-        return ruleAction is RuleActionAssign && ruleAction.field.isEmpty()
+    private fun isAssignToCalculatedValue(ruleAction: RuleAction): Boolean {
+        return ruleAction.type == "ASSIGN" && ruleAction.field() == null
     }
 
     private fun updateValueMap(
@@ -182,23 +176,24 @@ class RuleConditionEvaluator {
 
     private fun create(
         rule: Rule,
-        ruleAction: org.hisp.dhis.rules.models.RuleAction,
+        ruleAction: RuleAction,
         valueMap: MutableMap<String, RuleVariableValue>,
         supplementaryData: Map<String, List<String>>
     ): RuleEffect {
-        if (ruleAction is RuleActionAssign) {
-            val data = process(ruleAction.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION)
-            updateValueMap(ruleAction.field, RuleVariableValue(RuleValueType.TEXT, data, listOf(), null), valueMap)
-            return if (data == null || data.isEmpty()) {
+        if (ruleAction.type == "ASSIGN") {
+            val data = process(ruleAction.data, valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION)
+            updateValueMap(ruleAction.field()!!, RuleVariableValue(RuleValueType.TEXT, data, listOf(), null), valueMap)
+            return if (data.isEmpty()) {
                 RuleEffect(rule.uid, ruleAction, null)
             } else {
                 RuleEffect(rule.uid, ruleAction, data)
             }
         }
+        val data = if (!ruleAction.data.isNullOrEmpty()) process(ruleAction.data, valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION) else ""
         return RuleEffect(
             rule.uid,
             ruleAction,
-            process(ruleAction.data(), valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION)
+            data
         )
     }
 

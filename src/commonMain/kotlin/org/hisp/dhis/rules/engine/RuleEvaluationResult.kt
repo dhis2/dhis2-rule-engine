@@ -1,6 +1,10 @@
-package org.hisp.dhis.rules.models
+package org.hisp.dhis.rules.engine
 
-data class RuleEvaluationResult(
+import org.hisp.dhis.rules.models.Rule
+import org.hisp.dhis.rules.models.RuleAction
+import org.hisp.dhis.rules.models.RuleEffect
+
+internal data class RuleEvaluationResult(
     val rule: Rule,
     val ruleEffects: List<RuleEffect>,
     val evaluatedAs: Boolean,
@@ -19,7 +23,7 @@ data class RuleEvaluationResult(
             val effects = listOf(
                 RuleEffect(
                     rule.uid,
-                    RuleActionError(errorMessage),
+                    RuleAction(errorMessage, "ERROR"),
                     errorMessage
                 )
             )

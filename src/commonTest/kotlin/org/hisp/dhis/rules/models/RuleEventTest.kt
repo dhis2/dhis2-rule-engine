@@ -1,17 +1,19 @@
 package org.hisp.dhis.rules.models
 
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
-import org.hisp.dhis.rules.currentDate
+import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class RuleEventTest {
     @Test
     fun createShouldPropagateValuesCorrectly() {
-        val ruleDataValue = RuleDataValue(LocalDate.currentDate(), "programStage", "dataElement", "value")
+        val ruleDataValue = RuleDataValue(Clock.System.now(), "programStage", "dataElement", "value")
         val ruleDataValues: MutableList<RuleDataValue> = ArrayList()
         ruleDataValues.add(ruleDataValue)
-        val eventDate = LocalDate.Companion.currentDate()
+        val eventDate = Clock.System.now()
         val dueDate = LocalDate.Companion.currentDate()
         val (event, programStage, _, status, eventDate1, dueDate1, _, _, _, dataValues) = RuleEvent(
             "test_event_uid", "test_stage_uid", "",
@@ -32,12 +34,12 @@ class RuleEventTest {
             listOf(
                 RuleEvent(
                     "test_event_one", "test_program_stage_one", "", RuleEvent.Status.ACTIVE,
-                    LocalDate.parse("2014-02-11"), LocalDate.parse("2014-02-11"), null, "", null,
+                    Instant.parse("2014-02-11T01:00:00Z"), LocalDate.parse("2014-02-11"), null, "", null,
                     emptyList()
                 ),
                 RuleEvent(
                     "test_event_two", "test_program_stage_two", "", RuleEvent.Status.ACTIVE,
-                    LocalDate.parse("2017-03-22"), LocalDate.parse("2017-03-22"), null, "", null,
+                    Instant.parse("2017-03-22T01:00:00Z"), LocalDate.parse("2017-03-22"), null, "", null,
                     emptyList()
                 )
             )

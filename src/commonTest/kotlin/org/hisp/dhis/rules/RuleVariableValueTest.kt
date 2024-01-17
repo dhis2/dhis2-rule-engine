@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules
 
+import org.hisp.dhis.rules.engine.RuleVariableValue
 import org.hisp.dhis.rules.models.RuleValueType
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -13,7 +14,7 @@ class RuleVariableValueTest {
             ), "2023-12-14"
         )
         assertEquals("test_value", variableValue.value)
-        assertEquals(org.hisp.dhis.rules.models.RuleValueType.TEXT, variableValue.type)
+        assertEquals(RuleValueType.TEXT, variableValue.type)
         assertEquals(2, variableValue.candidates.size)
         assertEquals("test_value_candidate_one", variableValue.candidates.get(0))
         assertEquals("test_value_candidate_two", variableValue.candidates.get(1))
@@ -27,7 +28,7 @@ class RuleVariableValueTest {
             ), "2023-12-14"
         )
         assertEquals("test_value", variableValue.value)
-        assertEquals(org.hisp.dhis.rules.models.RuleValueType.TEXT, variableValue.type)
+        assertEquals(RuleValueType.TEXT, variableValue.type)
         assertEquals(2, variableValue.candidates.size)
         assertEquals("test_value_candidate_one", variableValue.candidates.get(0))
         assertEquals("test_value_candidate_two", variableValue.candidates.get(1))
@@ -39,7 +40,7 @@ class RuleVariableValueTest {
             RuleValueType.NUMERIC, "1", listOf("2", "3"), "2023-12-14"
         )
         assertEquals("1", variableValue.value)
-        assertEquals(org.hisp.dhis.rules.models.RuleValueType.NUMERIC, variableValue.type)
+        assertEquals(RuleValueType.NUMERIC, variableValue.type)
         assertEquals(2, variableValue.candidates.size)
         assertEquals("2", variableValue.candidates.get(0))
         assertEquals("3", variableValue.candidates.get(1))
@@ -51,7 +52,7 @@ class RuleVariableValueTest {
             RuleValueType.BOOLEAN, "true", listOf("false", "false"), "2023-12-14"
         )
         assertEquals("true", variableValue.value)
-        assertEquals(org.hisp.dhis.rules.models.RuleValueType.BOOLEAN, variableValue.type)
+        assertEquals(RuleValueType.BOOLEAN, variableValue.type)
         assertEquals(2, variableValue.candidates.size)
         assertEquals("false", variableValue.candidates.get(0))
         assertEquals("false", variableValue.candidates.get(1))

@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules.models
 
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 
 data class RuleEvent(
@@ -7,7 +8,7 @@ data class RuleEvent(
     val programStage: String,
     val programStageName: String,
     val status: Status,
-    val eventDate: LocalDate,
+    val eventDate: Instant,
     val dueDate: LocalDate?,
     val completedDate: LocalDate?,
     val organisationUnit: String,
