@@ -15,7 +15,7 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
-          cache: maven
+          cache: 'gradle'
       - name: Change wrapper permission
         run: chmod +x ./gradlew
       - name: Test
