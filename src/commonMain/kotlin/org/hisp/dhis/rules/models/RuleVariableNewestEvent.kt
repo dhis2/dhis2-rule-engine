@@ -6,12 +6,12 @@ import org.hisp.dhis.rules.utils.getLastUpdateDate
 import org.hisp.dhis.rules.utils.values
 
 class RuleVariableNewestEvent(
-    val name: String,
-    val useCodeForOptionSet: Boolean,
+    override val name: String,
+    override val useCodeForOptionSet: Boolean,
     override val options: List<Option>,
-    override val dataElement: String,
-    override val dataElementType: RuleValueType,
-) : RuleVariableDataElement {
+    override val field: String,
+    override val fieldType: RuleValueType,
+) : RuleVariable {
     override fun createValues(
         ruleEvent: RuleEvent?,
         allEventValues: Map<String, List<RuleDataValue>>,
@@ -19,15 +19,15 @@ class RuleVariableNewestEvent(
         currentEventValues: Map<String, RuleDataValue>
     ): Map<String, RuleVariableValue> {
         val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
-        val ruleDataValues = allEventValues[dataElement]
+        val ruleDataValues = allEventValues[field]
         if (ruleDataValues.isNullOrEmpty()) {
-            valueMap[name] = RuleVariableValue(dataElementType)
+            valueMap[name] = RuleVariableValue(fieldType)
         } else {
             val variableValue: RuleVariableValue
             val value = ruleDataValues[0]
             val optionValue = if (useCodeForOptionSet) value.value else getOptionName(value.value)!!
             variableValue = RuleVariableValue(
-                dataElementType, optionValue,
+                fieldType, optionValue,
                 values(ruleDataValues), getLastUpdateDate(ruleDataValues)
             )
             valueMap[name] = variableValue

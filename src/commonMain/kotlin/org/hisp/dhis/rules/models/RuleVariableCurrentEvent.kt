@@ -5,12 +5,12 @@ import org.hisp.dhis.rules.engine.RuleVariableValueMapBuilder
 import org.hisp.dhis.rules.utils.getLastUpdateDate
 
 class RuleVariableCurrentEvent(
-    val name: String,
-    val useCodeForOptionSet: Boolean,
+    override val name: String,
+    override val useCodeForOptionSet: Boolean,
     override val options: List<Option>,
-    override val dataElement: String,
-    override val dataElementType: RuleValueType,
-) : RuleVariableDataElement {
+    override val field: String,
+    override val fieldType: RuleValueType,
+) : RuleVariable {
     override fun createValues(
         ruleEvent: RuleEvent?,
         allEventValues: Map<String, List<RuleDataValue>>,
@@ -19,15 +19,15 @@ class RuleVariableCurrentEvent(
     ): Map<String, RuleVariableValue> {
         val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
         val variableValue: RuleVariableValue
-        variableValue = if (currentEventValues.containsKey(dataElement)) {
-            val value = currentEventValues[dataElement]
+        variableValue = if (currentEventValues.containsKey(field)) {
+            val value = currentEventValues[field]
             val optionValue = if (useCodeForOptionSet) value!!.value else getOptionName(value!!.value)!!
             RuleVariableValue(
-                dataElementType, optionValue,
+                fieldType, optionValue,
                 listOf(optionValue), getLastUpdateDate(listOf(value))
             )
         } else {
-            RuleVariableValue(dataElementType)
+            RuleVariableValue(fieldType)
         }
         valueMap[name] = variableValue
         return valueMap

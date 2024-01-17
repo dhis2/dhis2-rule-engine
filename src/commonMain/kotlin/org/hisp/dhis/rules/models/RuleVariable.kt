@@ -4,7 +4,11 @@ import org.hisp.dhis.rules.engine.RuleVariableValue
 import org.hisp.dhis.rules.engine.RuleVariableValueMapBuilder
 
 interface RuleVariable {
+    val name: String
+    val useCodeForOptionSet: Boolean
     val options: List<Option>
+    val field: String
+    val fieldType: RuleValueType
     fun createValues(
         ruleEvent: RuleEvent?,
         allEventValues: Map<String, List<RuleDataValue>>,

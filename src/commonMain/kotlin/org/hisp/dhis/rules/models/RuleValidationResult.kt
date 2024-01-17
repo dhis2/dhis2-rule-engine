@@ -1,5 +1,9 @@
 package org.hisp.dhis.rules.models
 
+import kotlin.js.ExperimentalJsExport
+import kotlin.js.JsExport
+import kotlin.jvm.JvmOverloads
+
 /*
  * Copyright (c) 2004-2020, University of Oslo
  * All rights reserved.
@@ -29,7 +33,9 @@ package org.hisp.dhis.rules.models
  */ /**
  * @author Zubair Asghar
  */
-data class RuleValidationResult(
+@JsExport
+@OptIn(ExperimentalJsExport::class)
+data class RuleValidationResult @JvmOverloads constructor(
         val valid: Boolean,
         val errorMessage: String? = null,
         val exception: Throwable? = null,
