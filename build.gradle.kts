@@ -10,7 +10,7 @@ repositories {
 }
 
 group = "org.hisp.dhis.rules"
-version = "3.0.1-SNAPSHOT"
+version = "3.0.0-SNAPSHOT"
 
 val isReleaseVersion = project.hasProperty("removeSnapshot")
 if (isReleaseVersion) {
