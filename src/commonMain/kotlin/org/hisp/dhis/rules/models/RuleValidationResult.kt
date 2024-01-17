@@ -1,5 +1,7 @@
 package org.hisp.dhis.rules.models
 
+import kotlin.jvm.JvmOverloads
+
 /*
  * Copyright (c) 2004-2020, University of Oslo
  * All rights reserved.
@@ -26,10 +28,9 @@ package org.hisp.dhis.rules.models
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ /**
- * @author Zubair Asghar
  */
-data class RuleValidationResult(
+
+data class RuleValidationResult @JvmOverloads constructor(
         val valid: Boolean,
         val errorMessage: String? = null,
         val exception: Throwable? = null,
