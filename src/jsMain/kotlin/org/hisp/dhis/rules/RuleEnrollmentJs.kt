@@ -1,8 +1,6 @@
 package org.hisp.dhis.rules
 
-import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.models.RuleAttributeValue
-import kotlin.js.Date
 
 @JsExport
 @OptIn(ExperimentalJsExport::class)

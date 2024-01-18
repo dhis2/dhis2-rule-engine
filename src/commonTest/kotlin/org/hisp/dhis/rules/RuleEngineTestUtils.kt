@@ -2,8 +2,6 @@ package org.hisp.dhis.rules
 
 import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.models.Rule
-import org.hisp.dhis.rules.models.RuleEnrollment
-import org.hisp.dhis.rules.models.RuleEvent
 import org.hisp.dhis.rules.models.RuleVariable
 
 /*

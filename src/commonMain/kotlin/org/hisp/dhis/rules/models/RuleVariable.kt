@@ -1,7 +1,6 @@
 package org.hisp.dhis.rules.models
 
 import org.hisp.dhis.rules.engine.RuleVariableValue
-import org.hisp.dhis.rules.engine.RuleVariableValueMapBuilder
 
 interface RuleVariable {
     val name: String

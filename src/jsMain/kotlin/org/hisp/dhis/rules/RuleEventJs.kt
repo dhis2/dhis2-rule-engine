@@ -2,8 +2,6 @@ package org.hisp.dhis.rules
 
 import kotlinx.datetime.internal.JSJoda.Instant
 import kotlinx.datetime.internal.JSJoda.LocalDate
-import org.hisp.dhis.rules.api.ItemValueType
-import org.hisp.dhis.rules.models.RuleEvent
 
 @JsExport
 @OptIn(ExperimentalJsExport::class)

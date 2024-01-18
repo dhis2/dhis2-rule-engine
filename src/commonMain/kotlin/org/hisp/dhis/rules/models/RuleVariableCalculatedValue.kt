@@ -1,7 +1,6 @@
 package org.hisp.dhis.rules.models
 
 import org.hisp.dhis.rules.engine.RuleVariableValue
-import org.hisp.dhis.rules.engine.RuleVariableValueMapBuilder
 
 /*
 * Copyright (c) 2004-2018, University of Oslo
