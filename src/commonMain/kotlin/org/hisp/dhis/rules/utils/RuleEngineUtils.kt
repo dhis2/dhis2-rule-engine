@@ -1,7 +1,5 @@
 package org.hisp.dhis.rules.utils
 
-import org.hisp.dhis.rules.api.ItemValueType
-
 /*
 * Copyright (c) 2004-2020, University of Oslo
 * All rights reserved.

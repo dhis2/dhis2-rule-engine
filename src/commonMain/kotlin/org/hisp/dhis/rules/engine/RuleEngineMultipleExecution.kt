@@ -1,6 +1,5 @@
 package org.hisp.dhis.rules.engine
 
-import org.hisp.dhis.rules.models.Rule
 import org.hisp.dhis.rules.models.*
 
 internal class RuleEngineMultipleExecution {

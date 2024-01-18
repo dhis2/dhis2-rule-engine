@@ -4,14 +4,14 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.RuleEngineTestUtils.getRuleEngineContext
 import org.hisp.dhis.rules.api.RuleEngine
-import org.hisp.dhis.rules.models.Rule
 import org.hisp.dhis.rules.api.RuleEngineContext
-import org.hisp.dhis.rules.engine.DefaultRuleEngine
-import org.hisp.dhis.rules.models.*
+import org.hisp.dhis.rules.models.Rule
+import org.hisp.dhis.rules.models.RuleAction
+import org.hisp.dhis.rules.models.RuleDataValue
+import org.hisp.dhis.rules.models.RuleEvent
 import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 // ToDo: function tests (check that function invocations are producing expected values; check nested function invocation)
 // ToDo: various source type tests (referencing variables from different events)

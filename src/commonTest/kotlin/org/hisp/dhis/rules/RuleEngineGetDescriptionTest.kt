@@ -4,9 +4,9 @@ import org.hisp.dhis.rules.api.DataItem
 import org.hisp.dhis.rules.api.ItemValueType
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.engine.DefaultRuleEngine
-import org.hisp.dhis.rules.models.RuleEngineValidationException
 import org.hisp.dhis.rules.models.Rule
 import org.hisp.dhis.rules.models.RuleAction
+import org.hisp.dhis.rules.models.RuleEngineValidationException
 import kotlin.test.*
 
 /*

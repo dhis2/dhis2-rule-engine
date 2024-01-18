@@ -3,7 +3,6 @@ package org.hisp.dhis.rules.models
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.api.RuleEngine
-import org.hisp.dhis.rules.engine.DefaultRuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.Test

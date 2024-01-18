@@ -1,5 +1,7 @@
 package org.hisp.dhis.rules.models
 
+import kotlin.js.ExperimentalJsExport
+import kotlin.js.JsExport
 import kotlin.jvm.JvmOverloads
 
 /*
@@ -30,6 +32,8 @@ import kotlin.jvm.JvmOverloads
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+@JsExport
+@OptIn(ExperimentalJsExport::class)
 data class RuleValidationResult @JvmOverloads constructor(
         val valid: Boolean,
         val errorMessage: String? = null,

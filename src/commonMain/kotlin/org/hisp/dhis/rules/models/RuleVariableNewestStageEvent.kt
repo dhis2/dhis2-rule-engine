@@ -1,18 +1,17 @@
 package org.hisp.dhis.rules.models
 
 import org.hisp.dhis.rules.engine.RuleVariableValue
-import org.hisp.dhis.rules.engine.RuleVariableValueMapBuilder
 import org.hisp.dhis.rules.utils.getLastUpdateDate
 import org.hisp.dhis.rules.utils.values
 
 class RuleVariableNewestStageEvent(
-    val name: String,
-    val useCodeForOptionSet: Boolean,
+    override val name: String,
+    override val useCodeForOptionSet: Boolean,
     override val options: List<Option>,
-    override val dataElement: String,
-    override val dataElementType: RuleValueType,
+    override val field: String,
+    override val fieldType: RuleValueType,
     val programStage: String
-) : RuleVariableDataElement {
+) : RuleVariable {
 
     override fun createValues(
         ruleEvent: RuleEvent?,
@@ -22,7 +21,7 @@ class RuleVariableNewestStageEvent(
     ): Map<String, RuleVariableValue> {
         val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
         val stageRuleDataValues: MutableList<RuleDataValue> = ArrayList()
-        val sourceRuleDataValues = allEventValues[dataElement]
+        val sourceRuleDataValues = allEventValues[field]
         if (!sourceRuleDataValues.isNullOrEmpty()) {
 
             // filter data values based on program stage
@@ -33,13 +32,13 @@ class RuleVariableNewestStageEvent(
             }
         }
         if (stageRuleDataValues.isEmpty()) {
-            valueMap[name] = RuleVariableValue(dataElementType)
+            valueMap[name] = RuleVariableValue(fieldType)
         } else {
             val variableValue: RuleVariableValue
             val value = stageRuleDataValues[0]
             val optionValue = if (useCodeForOptionSet) value.value else getOptionName(value.value)!!
             variableValue = RuleVariableValue(
-                dataElementType, optionValue,
+                fieldType, optionValue,
                 values(stageRuleDataValues),
                 getLastUpdateDate(stageRuleDataValues)
             )

@@ -2,13 +2,9 @@ package org.hisp.dhis.rules
 
 import kotlinx.datetime.*
 import org.hisp.dhis.rules.api.RuleEngine
-import org.hisp.dhis.rules.models.Rule
 import org.hisp.dhis.rules.api.RuleEngineContext
-import org.hisp.dhis.rules.engine.DefaultRuleEngine
 import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.currentDate
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

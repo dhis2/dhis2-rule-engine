@@ -1,17 +1,16 @@
 package org.hisp.dhis.rules.models
 
 import org.hisp.dhis.rules.engine.RuleVariableValue
-import org.hisp.dhis.rules.engine.RuleVariableValueMapBuilder
 import org.hisp.dhis.rules.utils.getLastUpdateDateForPrevious
 import org.hisp.dhis.rules.utils.values
 
 class RuleVariablePreviousEvent(
-    val name: String,
-    val useCodeForOptionSet: Boolean,
+    override val name: String,
+    override val useCodeForOptionSet: Boolean,
     override val options: List<Option>,
-    override val dataElement: String,
-    override val dataElementType: RuleValueType
-) : RuleVariableDataElement {
+    override val field: String,
+    override val fieldType: RuleValueType
+) : RuleVariable {
     override fun createValues(
         ruleEvent: RuleEvent?,
         allEventValues: Map<String, List<RuleDataValue>>,
@@ -20,7 +19,7 @@ class RuleVariablePreviousEvent(
     ): Map<String, RuleVariableValue> {
         val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
         var variableValue: RuleVariableValue? = null
-        val ruleDataValues = allEventValues[dataElement]
+        val ruleDataValues = allEventValues[field]
         if (ruleEvent != null && !ruleDataValues.isNullOrEmpty()) {
             for (ruleDataValue in ruleDataValues) {
                 // We found preceding value to the current currentEventValues,
@@ -29,7 +28,7 @@ class RuleVariablePreviousEvent(
                     val optionValue =
                         if (useCodeForOptionSet) ruleDataValue.value else getOptionName(ruleDataValue.value)!!
                     variableValue = RuleVariableValue(
-                        dataElementType, optionValue,
+                        fieldType, optionValue,
                         values(ruleDataValues),
                         getLastUpdateDateForPrevious(ruleDataValues, ruleEvent)
                     )
@@ -38,7 +37,7 @@ class RuleVariablePreviousEvent(
             }
         }
         if (variableValue == null) {
-            variableValue = RuleVariableValue(dataElementType)
+            variableValue = RuleVariableValue(fieldType)
         }
         valueMap[name] = variableValue
         return valueMap

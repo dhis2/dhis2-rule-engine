@@ -1,7 +1,6 @@
 package org.hisp.dhis.rules.models
 
 import org.hisp.dhis.rules.engine.RuleVariableValue
-import org.hisp.dhis.rules.engine.RuleVariableValueMapBuilder
 
 /*
 * Copyright (c) 2004-2018, University of Oslo
@@ -33,11 +32,11 @@ import org.hisp.dhis.rules.engine.RuleVariableValueMapBuilder
  * @author Zubair Asghar.
  */
 class RuleVariableCalculatedValue(
-    val name: String,
-    val useCodeForOptionSet: Boolean,
+    override val name: String,
+    override val useCodeForOptionSet: Boolean,
     override val options: List<Option>,
-    val calculatedValueVariable: String,
-    val calculatedValueType: RuleValueType
+    override val field: String,
+    override val fieldType: RuleValueType
 ) : RuleVariable {
     override fun createValues(
         ruleEvent: RuleEvent?,
@@ -46,7 +45,7 @@ class RuleVariableCalculatedValue(
         currentEventValues: Map<String, RuleDataValue>
     ): Map<String, RuleVariableValue> {
         val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
-        valueMap[name] = RuleVariableValue(calculatedValueType)
+        valueMap[name] = RuleVariableValue(fieldType)
         return valueMap
     }
 }

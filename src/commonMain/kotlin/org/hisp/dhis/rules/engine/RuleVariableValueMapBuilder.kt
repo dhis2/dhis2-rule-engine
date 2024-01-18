@@ -6,8 +6,6 @@ import kotlinx.datetime.toLocalDateTime
 import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.RuleEngineUtils
 import org.hisp.dhis.rules.utils.currentDate
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 internal class RuleVariableValueMapBuilder private constructor() {
     val allConstantValues: MutableMap<String, String> = HashMap()

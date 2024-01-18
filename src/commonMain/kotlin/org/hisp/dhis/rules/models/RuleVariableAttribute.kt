@@ -2,15 +2,14 @@ package org.hisp.dhis.rules.models
 
 import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.engine.RuleVariableValue
-import org.hisp.dhis.rules.engine.RuleVariableValueMapBuilder
 import org.hisp.dhis.rules.utils.currentDate
 
 data class RuleVariableAttribute(
-    val name: String,
-    val useCodeForOptionSet: Boolean,
+    override val name: String,
+    override val useCodeForOptionSet: Boolean,
     override val options: List<Option>,
-    val trackedEntityAttribute: String,
-    val trackedEntityAttributeType: RuleValueType
+    override val field: String,
+    override val fieldType: RuleValueType
 ) : RuleVariable {
     override fun createValues(
         ruleEvent: RuleEvent?,
@@ -20,15 +19,15 @@ data class RuleVariableAttribute(
     ): Map<String, RuleVariableValue> {
         val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
         val currentDate = LocalDate.Companion.currentDate()
-        val variableValue = if (currentEnrollmentValues.containsKey(trackedEntityAttribute)) {
-            val value = currentEnrollmentValues[trackedEntityAttribute]
+        val variableValue = if (currentEnrollmentValues.containsKey(field)) {
+            val value = currentEnrollmentValues[field]
             val optionValue = if (useCodeForOptionSet) value!!.value else getOptionName(value!!.value)!!
             RuleVariableValue(
-                trackedEntityAttributeType, optionValue,
+                fieldType, optionValue,
                 listOf(optionValue), currentDate.toString()
             )
         } else {
-            RuleVariableValue(trackedEntityAttributeType)
+            RuleVariableValue(fieldType)
         }
         valueMap[name] = variableValue
         return valueMap
