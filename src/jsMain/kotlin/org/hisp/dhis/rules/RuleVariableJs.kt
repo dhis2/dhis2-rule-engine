@@ -21,11 +21,6 @@ data class RuleVariableJs(
 
     companion object {
         val RULE_VALUE_TYPES = RuleValueType.entries.map { it.name } .toTypedArray()
-        val TYPES = arrayOf("DATAELEMENT_NEWEST_EVENT_PROGRAM_STAGE",
-                            "DATAELEMENT_NEWEST_EVENT_PROGRAM",
-                            "DATAELEMENT_CURRENT_EVENT",
-                            "DATAELEMENT_PREVIOUS_EVENT",
-                            "CALCULATED_VALUE",
-                            "TEI_ATTRIBUTE")
+        val TYPES = RuleVariableType.entries.map { it.name } .toTypedArray()
     }
 }
