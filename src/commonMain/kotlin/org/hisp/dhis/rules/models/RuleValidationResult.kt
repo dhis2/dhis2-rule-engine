@@ -1,8 +1,11 @@
 package org.hisp.dhis.rules.models
 
+import org.hisp.dhis.rules.api.RuleEngine
+import org.hisp.dhis.rules.engine.DefaultRuleEngine
 import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
 import kotlin.jvm.JvmOverloads
+import kotlin.jvm.JvmStatic
 
 /*
  * Copyright (c) 2004-2020, University of Oslo
@@ -34,9 +37,25 @@ import kotlin.jvm.JvmOverloads
 
 @JsExport
 @OptIn(ExperimentalJsExport::class)
-data class RuleValidationResult @JvmOverloads constructor(
+data class RuleValidationResult(
         val valid: Boolean,
         val errorMessage: String? = null,
         val exception: Throwable? = null,
         val description: String? = null
-)
+){
+        companion object {
+                @JvmStatic
+                fun invalid(errorMessage: String): RuleValidationResult {
+                        return RuleValidationResult(
+                                valid = false, errorMessage = errorMessage
+                        )
+                }
+
+                @JvmStatic
+                fun valid(description: String): RuleValidationResult {
+                        return RuleValidationResult(
+                                valid = true, description = description
+                        )
+                }
+        }
+}
