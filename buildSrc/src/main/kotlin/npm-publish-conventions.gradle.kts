@@ -4,8 +4,6 @@ plugins {
     id("dev.petuska.npm.publish")
 }
 
-val npmjsToken: String? = System.getenv("NPMJS_TOKEN")
-
 project.afterEvaluate {
     npmPublish {
         access.set(NpmAccess.PUBLIC)
@@ -15,9 +13,12 @@ project.afterEvaluate {
                 readme.set(File("./README.md"))
                 packageJson {
                     "module" by "${project.name}.mjs"
-                    "main" by ""
+                    "main" by "${project.name}.js"
                     "exports" by {
-                        "import" by "./${project.name}.mjs"
+                        "." by {
+                            "import" by "./${project.name}.mjs"
+                            "require" by "./${project.name}.js"
+                        }
                     }
                     "contributors" by Props.DEVELOPERS.map { developer ->
                         "${developer.name} <${developer.email}>"
@@ -31,22 +32,9 @@ project.afterEvaluate {
                     "publishConfig" by {
                         "access" by "public"
                     }
+                    "private" by false
                 }
             }
-        }
-        registries {
-            npmjs {
-                authToken.set(npmjsToken)
-            }
-        }
-    }
-
-    tasks.named("assembleJsPackage") {
-        doLast {
-            val file = file("${layout.buildDirectory.get()}/packages/js/package.json")
-            val mainRegex = "\n    \"main\": \"\","
-            val removedMain = file.readText().replace(mainRegex, "")
-            file.writeText(removedMain)
         }
     }
 }
