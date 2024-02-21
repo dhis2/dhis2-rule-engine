@@ -1,0 +1,7 @@
+name: Pull request
+
+on: [pull_request]
+
+jobs:
+  unit-test:
+    uses: ./.github/workflows/job-test.yml

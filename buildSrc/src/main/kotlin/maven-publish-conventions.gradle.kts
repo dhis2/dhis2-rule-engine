@@ -10,8 +10,6 @@ val ossrhPassword: String? = System.getenv("OSSRH_PASSWORD")
 val signingPrivateKey: String? = System.getenv("SIGNING_PRIVATE_KEY")
 val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
 
-val isReleaseVersion = (version as String).contains("SNAPSHOT")
-
 val dokkaHtml = tasks.findByName("dokkaHtml")!!
 
 val dokkaHtmlJar = tasks.register<Jar>("dokkaHtmlJar") {
@@ -70,7 +68,7 @@ nexusPublishing {
 }
 
 signing {
-    isRequired = isReleaseVersion
+    setRequired({ !version.toString().endsWith("-SNAPSHOT") })
     useInMemoryPgpKeys(signingPrivateKey, signingPassword)
     sign(publishing.publications)
 }
