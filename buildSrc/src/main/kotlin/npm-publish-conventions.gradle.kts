@@ -10,6 +10,7 @@ project.afterEvaluate {
         packages {
             named("js") {
                 scope.set("dhis2")
+                packageName.set("rule-engine")
                 readme.set(File("./README.md"))
                 packageJson {
                     "module" by "${project.name}.mjs"
