@@ -16,7 +16,7 @@ data class RuleVariableJs(
 ){
     init {
         require(RULE_VALUE_TYPES.contains(fieldType)) { "RuleValueType type must be one of: $RULE_VALUE_TYPES" }
-        require(TYPES.contains(fieldType)) { "RuleVariableType type must be one of: $TYPES" }
+        require(TYPES.contains(type)) { "RuleVariableType type must be one of: $TYPES" }
     }
 
     companion object {
