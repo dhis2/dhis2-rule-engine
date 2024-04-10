@@ -1,6 +1,8 @@
 package org.hisp.dhis.rules.api
 
 import org.hisp.dhis.lib.expression.spi.ValueType
+import kotlin.js.ExperimentalJsExport
+import kotlin.js.JsExport
 
 /*
 * Copyright (c) 2004-2020, University of Oslo
@@ -30,9 +32,8 @@ import org.hisp.dhis.lib.expression.spi.ValueType
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/**
- * @author Zubair Asghar
- */
+@JsExport
+@OptIn(ExperimentalJsExport::class)
 enum class ItemValueType(val value: String) {
     NUMBER("1.0"),
     DATE("2020-01-01"),
