@@ -1,8 +1,9 @@
 package org.hisp.dhis.rules
 
+import js.array.tupleOf
+import js.collections.JsMap
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
-import org.hisp.dhis.lib.expression.js.Entry
 import org.hisp.dhis.rules.api.DataItem
 import org.hisp.dhis.rules.api.ItemValueType
 import org.hisp.dhis.rules.api.RuleEngine
@@ -12,10 +13,10 @@ import org.hisp.dhis.rules.models.*
 @JsExport
 @OptIn(ExperimentalJsExport::class)
 class RuleEngineJs {
-    fun validate(expression: String, dataItemStore: Array<Entry<String, DataItemJs>>): RuleValidationResult{
+    fun validate(expression: String, dataItemStore: JsMap<String, DataItemJs>): RuleValidationResult{
         return RuleEngine.getInstance().validate(expression, toMap(dataItemStore, {it}, ::toDataItemJava))
     }
-    fun validateDataFieldExpression(expression: String, dataItemStore: Array<Entry<String, DataItemJs>>): RuleValidationResult{
+    fun validateDataFieldExpression(expression: String, dataItemStore: JsMap<String, DataItemJs>): RuleValidationResult{
         return RuleEngine.getInstance().validateDataFieldExpression(expression, toMap(dataItemStore, {it}, ::toDataItemJava))
     }
     fun evaluateAll(enrollmentTarget: RuleEnrollmentJs?, eventsTarget: Array<RuleEventJs>, executionContext: RuleEngineContextJs): Array<RuleEffectsJs>{
@@ -38,9 +39,9 @@ class RuleEngineJs {
             .map(::toRuleEffectJs).toTypedArray()
     }
 
-    private fun <Kf, Vf, K, V> toMap(map: Array<Entry<Kf, Vf>>, key: (Kf) -> K, value: (Vf) -> V): Map<K, V> {
+    private fun <Kf, Vf, K, V> toMap(map: JsMap<Kf, Vf>, key: (Kf) -> K, value: (Vf) -> V): Map<K, V> {
         val res : MutableMap<K, V> = mutableMapOf()
-        map.forEach { e -> res[key(e.key)] = value(e.value) }
+        map.forEach { v, k -> res[key(k)] = value(v) }
         return res
     }
 
@@ -122,7 +123,7 @@ class RuleEngineJs {
         return RuleActionJs(
             data = ruleAction.data,
             type = ruleAction.type,
-            values = ruleAction.values.entries.map { e -> Entry(e.key, e.value) }.toTypedArray()
+            values = JsMap(ruleAction.values.entries.map { e -> tupleOf(e.key, e.value) }.toTypedArray())
         )
     }
 

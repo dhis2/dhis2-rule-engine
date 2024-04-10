@@ -1,12 +1,12 @@
 package org.hisp.dhis.rules
 
-import org.hisp.dhis.lib.expression.js.Entry
+import js.collections.JsMap
 
 @JsExport
 @OptIn(ExperimentalJsExport::class)
 data class RuleEngineContextJs(
     val rules: Array<RuleJs>,
     val ruleVariables: Array<RuleVariableJs>,
-    val supplementaryData: Array<Entry<String, Array<String>>> = emptyArray(),
-    val constantsValues: Array<Entry<String, String>> = emptyArray()
+    val supplementaryData: JsMap<String, Array<String>> = JsMap(),
+    val constantsValues: JsMap<String, String> = JsMap()
 )

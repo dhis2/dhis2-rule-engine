@@ -76,7 +76,11 @@ kotlin {
         }
         val jvmMain by getting
         val jvmTest by getting
-        val jsMain by getting
+        val jsMain by getting {
+            dependencies {
+                api("org.jetbrains.kotlin-wrappers:kotlin-js:1.0.0-pre.722")
+            }
+        }
         val jsTest by getting
         val nativeMain by getting
         val nativeTest by getting
