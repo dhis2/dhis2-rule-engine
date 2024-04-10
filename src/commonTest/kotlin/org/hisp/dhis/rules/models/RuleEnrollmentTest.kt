@@ -15,13 +15,13 @@ class RuleEnrollmentTest {
         val enrollmentDate = LocalDate.Companion.currentDate()
         val ruleEnrollment = RuleEnrollment(
             "test_enrollment", "",
-            incidentDate, enrollmentDate, RuleEnrollment.Status.ACTIVE, "", "",
+            incidentDate, enrollmentDate, EnrollmentStatus.ACTIVE, "", "",
             listOf(ruleAttributeValueOne, ruleAttributeValueTwo, ruleAttributeValueThree)
         )
         assertEquals("test_enrollment", ruleEnrollment.enrollment)
         assertEquals(incidentDate, ruleEnrollment.incidentDate)
         assertEquals(enrollmentDate, ruleEnrollment.enrollmentDate)
-        assertEquals(RuleEnrollment.Status.ACTIVE, ruleEnrollment.status)
+        assertEquals(EnrollmentStatus.ACTIVE, ruleEnrollment.status)
         assertEquals(3, ruleEnrollment.attributeValues.size)
         assertEquals(ruleAttributeValueOne, ruleEnrollment.attributeValues[0])
         assertEquals(ruleAttributeValueTwo, ruleEnrollment.attributeValues[1])
