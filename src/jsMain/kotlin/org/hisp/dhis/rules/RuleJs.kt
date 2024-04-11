@@ -1,7 +1,6 @@
 package org.hisp.dhis.rules
 
 @JsExport
-@OptIn(ExperimentalJsExport::class)
 data class RuleJs(
     val condition: String,
     val actions: Array<RuleActionJs>,

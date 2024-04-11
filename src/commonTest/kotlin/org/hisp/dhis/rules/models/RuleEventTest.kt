@@ -17,10 +17,10 @@ class RuleEventTest {
         val dueDate = LocalDate.Companion.currentDate()
         val (event, programStage, _, status, eventDate1, dueDate1, _, _, _, dataValues) = RuleEvent(
             "test_event_uid", "test_stage_uid", "",
-            RuleEvent.Status.ACTIVE, eventDate, dueDate, null, "", "", ruleDataValues
+            RuleEventStatus.ACTIVE, eventDate, dueDate, null, "", "", ruleDataValues
         )
         assertEquals("test_event_uid", event)
-        assertEquals(RuleEvent.Status.ACTIVE, status)
+        assertEquals(RuleEventStatus.ACTIVE, status)
         assertEquals("test_stage_uid", programStage)
         assertEquals(eventDate, eventDate1)
         assertEquals(dueDate, dueDate1)
@@ -33,12 +33,12 @@ class RuleEventTest {
         val ruleEvents: List<RuleEvent> =
             listOf(
                 RuleEvent(
-                    "test_event_one", "test_program_stage_one", "", RuleEvent.Status.ACTIVE,
+                    "test_event_one", "test_program_stage_one", "", RuleEventStatus.ACTIVE,
                     Instant.parse("2014-02-11T01:00:00Z"), LocalDate.parse("2014-02-11"), null, "", null,
                     emptyList()
                 ),
                 RuleEvent(
-                    "test_event_two", "test_program_stage_two", "", RuleEvent.Status.ACTIVE,
+                    "test_event_two", "test_program_stage_two", "", RuleEventStatus.ACTIVE,
                     Instant.parse("2017-03-22T01:00:00Z"), LocalDate.parse("2017-03-22"), null, "", null,
                     emptyList()
                 )

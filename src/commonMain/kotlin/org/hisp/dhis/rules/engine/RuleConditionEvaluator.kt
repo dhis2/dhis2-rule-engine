@@ -1,6 +1,7 @@
 package org.hisp.dhis.rules.engine
 
 import org.hisp.dhis.lib.expression.Expression
+import org.hisp.dhis.lib.expression.ExpressionMode
 import org.hisp.dhis.lib.expression.spi.ExpressionData
 import org.hisp.dhis.lib.expression.spi.IllegalExpressionException
 import org.hisp.dhis.rules.createLogger
@@ -57,7 +58,7 @@ internal class RuleConditionEvaluator {
                         rule.condition,
                         valueMap,
                         supplementaryData,
-                        Expression.Mode.RULE_ENGINE_CONDITION
+                        ExpressionMode.RULE_ENGINE_CONDITION
                     ).toBoolean()
                 ) {
                     for (action in rule.actions) {
@@ -68,7 +69,7 @@ internal class RuleConditionEvaluator {
                                     unwrapVariableName(action.content()!!),
                                     RuleVariableValue(
                                         RuleValueType.TEXT,
-                                        process(action.data, valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION),
+                                        process(action.data, valueMap, supplementaryData, ExpressionMode.RULE_ENGINE_ACTION),
                                         listOf(),
                                         null
                                     ),
@@ -134,7 +135,7 @@ internal class RuleConditionEvaluator {
 
     private fun process(
         condition: String?, valueMap: Map<String, RuleVariableValue>,
-        supplementaryData: Map<String, List<String>>, mode: Expression.Mode
+        supplementaryData: Map<String, List<String>>, mode: ExpressionMode
     ): String {
         if (condition==null || condition.isEmpty()) {
             return ""
@@ -180,7 +181,7 @@ internal class RuleConditionEvaluator {
         supplementaryData: Map<String, List<String>>
     ): RuleEffect {
         if (ruleAction.type == "ASSIGN") {
-            val data = process(ruleAction.data, valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION)
+            val data = process(ruleAction.data, valueMap, supplementaryData, ExpressionMode.RULE_ENGINE_ACTION)
             updateValueMap(ruleAction.field()!!, RuleVariableValue(RuleValueType.TEXT, data, listOf(), null), valueMap)
             return if (data.isEmpty()) {
                 RuleEffect(rule.uid, ruleAction, null)
@@ -188,7 +189,7 @@ internal class RuleConditionEvaluator {
                 RuleEffect(rule.uid, ruleAction, data)
             }
         }
-        val data = if (!ruleAction.data.isNullOrEmpty()) process(ruleAction.data, valueMap, supplementaryData, Expression.Mode.RULE_ENGINE_ACTION) else ""
+        val data = if (!ruleAction.data.isNullOrEmpty()) process(ruleAction.data, valueMap, supplementaryData, ExpressionMode.RULE_ENGINE_ACTION) else ""
         return RuleEffect(
             rule.uid,
             ruleAction,

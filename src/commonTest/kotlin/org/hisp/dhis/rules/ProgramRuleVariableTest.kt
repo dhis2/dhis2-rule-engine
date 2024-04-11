@@ -224,7 +224,7 @@ class ProgramRuleVariableTest {
             PROGRAM_NAME,
             INCIDENT_DATE,
             ENROLLMENT_DATE,
-            RuleEnrollment.Status.ACTIVE,
+            RuleEnrollmentStatus.ACTIVE,
             ORGANISATION_UNIT,
             ORGANISATION_UNIT_CODE,
             listOf(RuleAttributeValue("test_attribute", "test_value"))
@@ -246,11 +246,11 @@ class ProgramRuleVariableTest {
         private val INCIDENT_DATE = LocalDate.parse(INCIDENT_DATE_STRING)
         private const val PROGRAM_STAGE = "program stage"
         private const val PROGRAM_STAGE_NAME = "program stage name"
-        private val RULE_EVENT_STATUS = RuleEvent.Status.ACTIVE
+        private val RULE_EVENT_STATUS = RuleEventStatus.ACTIVE
         private const val ORGANISATION_UNIT = "organisation unit"
         private const val ORGANISATION_UNIT_CODE = "organisation unit code"
         private const val ENROLLMENT_ID = "enrollment id"
-        private val ENROLLMENT_STATUS = RuleEnrollment.Status.ACTIVE
+        private val ENROLLMENT_STATUS = RuleEnrollmentStatus.ACTIVE
         private const val EVENT_ID = "event id"
         private const val PROGRAM_NAME = "program name"
     }
