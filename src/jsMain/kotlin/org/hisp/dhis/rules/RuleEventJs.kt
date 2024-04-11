@@ -5,7 +5,6 @@ import kotlinx.datetime.internal.JSJoda.LocalDate
 import org.hisp.dhis.rules.models.EventStatus
 
 @JsExport
-@OptIn(ExperimentalJsExport::class)
 data class RuleEventJs(
     val event: String,
     val programStage: String,

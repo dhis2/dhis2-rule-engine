@@ -5,13 +5,11 @@ import js.collections.JsMap
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.api.DataItem
-import org.hisp.dhis.rules.api.ItemValueType
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.models.*
 
 @JsExport
-@OptIn(ExperimentalJsExport::class)
 class RuleEngineJs {
     fun validate(expression: String, dataItemStore: JsMap<String, DataItemJs>): RuleValidationResult{
         return RuleEngine.getInstance().validate(expression, toMap(dataItemStore, {it}, ::toDataItemJava))

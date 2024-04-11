@@ -1,10 +1,6 @@
 package org.hisp.dhis.rules.models
 
-import org.hisp.dhis.rules.api.RuleEngine
-import org.hisp.dhis.rules.engine.DefaultRuleEngine
-import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
-import kotlin.jvm.JvmOverloads
 import kotlin.jvm.JvmStatic
 
 /*
@@ -36,7 +32,6 @@ import kotlin.jvm.JvmStatic
  */
 
 @JsExport
-@OptIn(ExperimentalJsExport::class)
 data class RuleValidationResult(
         val valid: Boolean,
         val errorMessage: String? = null,

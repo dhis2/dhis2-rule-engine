@@ -4,7 +4,6 @@ import org.hisp.dhis.rules.models.Option
 import org.hisp.dhis.rules.models.RuleValueType
 
 @JsExport
-@OptIn(ExperimentalJsExport::class)
 data class RuleVariableJs(
     val type: RuleVariableType,
     val name: String,

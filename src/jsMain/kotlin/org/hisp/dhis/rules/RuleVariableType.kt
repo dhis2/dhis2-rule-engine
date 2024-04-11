@@ -1,7 +1,6 @@
 package org.hisp.dhis.rules
 
 @JsExport
-@OptIn(ExperimentalJsExport::class)
 enum class RuleVariableType {
     DATAELEMENT_NEWEST_EVENT_PROGRAM_STAGE,
     DATAELEMENT_NEWEST_EVENT_PROGRAM,

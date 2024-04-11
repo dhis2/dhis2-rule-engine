@@ -3,7 +3,6 @@ package org.hisp.dhis.rules
 import js.collections.JsMap
 
 @JsExport
-@OptIn(ExperimentalJsExport::class)
 data class RuleEngineContextJs(
     val rules: Array<RuleJs>,
     val ruleVariables: Array<RuleVariableJs>,

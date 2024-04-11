@@ -63,6 +63,11 @@ kotlin {
 
 
     sourceSets {
+        all {
+            languageSettings.apply {
+                optIn("kotlin.js.ExperimentalJsExport")
+            }
+        }
         val commonMain by getting {
             dependencies {
                 implementation("org.hisp.dhis.lib.expression:expression-parser:1.1.0-SNAPSHOT")
