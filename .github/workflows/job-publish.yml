@@ -32,6 +32,8 @@ jobs:
         env:
           OSSRH_USERNAME: ${{ secrets.SONATYPE_OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.SONATYPE_OSSRH_PASSWORD }}
+          SIGNING_PRIVATE_KEY: ${{ secrets.PGP_PRIVATE_KEY }}
+          SIGNING_PASSWORD: ${{ secrets.PGP_PASSPHRASE }}
 
       - name: Publish NPMJS
         run: ./.github/workflows/scripts/publish-npm.sh
