@@ -21,7 +21,7 @@ class RuleVariableValueMapBuilderTest {
         val ruleEnrollment = RuleEnrollment(
             "test_enrollment", "",
             LocalDate.parse("2015-01-01"), LocalDate.parse("2015-01-01"),
-            EnrollmentStatus.ACTIVE, "", "", listOf(
+            RuleEnrollmentStatus.ACTIVE, "", "", listOf(
                 RuleAttributeValue("test_attribute_one", "test_attribute_value_one"),
                 RuleAttributeValue("test_attribute_two", "test_attribute_value_two")
             )
@@ -30,7 +30,7 @@ class RuleVariableValueMapBuilderTest {
             "test_context_event_one",
             "test_program_stage",
             "",
-            EventStatus.ACTIVE,
+            RuleEventStatus.ACTIVE,
             Clock.System.now(),
             LocalDate.currentDate(),
             null,
@@ -73,7 +73,7 @@ class RuleVariableValueMapBuilderTest {
             "test_context_event_one",
             "test_program_stage",
             "",
-            EventStatus.ACTIVE,
+            RuleEventStatus.ACTIVE,
             Clock.System.now(),
             LocalDate.currentDate(),
             null,
@@ -94,7 +94,7 @@ class RuleVariableValueMapBuilderTest {
             "test_context_event_two",
             "test_program_stage",
             "",
-            EventStatus.ACTIVE,
+            RuleEventStatus.ACTIVE,
             Clock.System.now(),
             LocalDate.currentDate(),
             null,
@@ -114,7 +114,7 @@ class RuleVariableValueMapBuilderTest {
         // values from current ruleEvent should be propagated to the variable values
         val currentEvent = RuleEvent(
             "test_event_uid", "test_program_stage", "",
-            EventStatus.ACTIVE, eventInstant, dueDate, null, "", null, listOf(
+            RuleEventStatus.ACTIVE, eventInstant, dueDate, null, "", null, listOf(
                 RuleDataValue(
                     eventInstant, "test_program_stage",
                     "test_dataelement_one", "test_value_one"
@@ -139,8 +139,8 @@ class RuleVariableValueMapBuilderTest {
             eventDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(eventDate.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["event_status"]!!)
-            .hasValue(EventStatus.ACTIVE.toString())
-            .isTypeOf(RuleValueType.TEXT).hasCandidates(EventStatus.ACTIVE.toString())
+            .hasValue(RuleEventStatus.ACTIVE.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(RuleEventStatus.ACTIVE.toString())
 
         // event count variable should respect current event
         RuleVariableValueAssert.assertThatVariable(valueMap["event_count"]!!).hasValue("3")
@@ -174,7 +174,7 @@ class RuleVariableValueMapBuilderTest {
             "test_event_uid_oldest",
             "test_program_stage",
             "",
-            EventStatus.ACTIVE,
+            RuleEventStatus.ACTIVE,
             oldestEventDate,
             LocalDate.currentDate(),
             null,
@@ -195,7 +195,7 @@ class RuleVariableValueMapBuilderTest {
             "test_event_uid_newest",
             "test_program_stage",
             "",
-            EventStatus.ACTIVE,
+            RuleEventStatus.ACTIVE,
             newestEventDate,
             LocalDate.currentDate(),
             null,
@@ -216,7 +216,7 @@ class RuleVariableValueMapBuilderTest {
             "test_event_uid_current",
             "test_program_stage",
             "",
-            EventStatus.ACTIVE,
+            RuleEventStatus.ACTIVE,
             currentEventInstant,
             currentEventDueDate,
             null,
@@ -278,7 +278,7 @@ class RuleVariableValueMapBuilderTest {
         val dateEventDueCurrent = LocalDate.parse("2016-01-01")
         val firstRuleEvent = RuleEvent(
             "test_event_uid_one", "test_program_stage", "",
-            EventStatus.ACTIVE, dateEventOne, LocalDate.currentDate(), null, "", null, listOf(
+            RuleEventStatus.ACTIVE, dateEventOne, LocalDate.currentDate(), null, "", null, listOf(
                 RuleDataValue(
                     dateEventOne, "test_program_stage",
                     "test_dataelement_one", "test_value_dataelement_one_first"
@@ -291,7 +291,7 @@ class RuleVariableValueMapBuilderTest {
         )
         val secondRuleEvent = RuleEvent(
             "test_event_uid_two", "test_program_stage", "",
-            EventStatus.ACTIVE, dateEventTwo, LocalDate.currentDate(), null, "", null, listOf(
+            RuleEventStatus.ACTIVE, dateEventTwo, LocalDate.currentDate(), null, "", null, listOf(
                 RuleDataValue(
                     dateEventTwo, "test_program_stage",
                     "test_dataelement_one", "test_value_dataelement_one_second"
@@ -306,7 +306,7 @@ class RuleVariableValueMapBuilderTest {
             "test_event_uid_current",
             "test_program_stage",
             "",
-            EventStatus.ACTIVE,
+            RuleEventStatus.ACTIVE,
             instantEventCurrent,
             dateEventDueCurrent,
             null,
@@ -372,7 +372,7 @@ class RuleVariableValueMapBuilderTest {
         val dateEventDueCurrent = LocalDate.parse("2011-02-03")
         val eventOne = RuleEvent(
             "test_event_uid_one", "test_program_stage_one", "",
-            EventStatus.ACTIVE, dateEventOne, LocalDate.currentDate(), null, "", null, listOf(
+            RuleEventStatus.ACTIVE, dateEventOne, LocalDate.currentDate(), null, "", null, listOf(
                 RuleDataValue(
                     dateEventOne, "test_program_stage_one",
                     "test_dataelement", "test_value_one"
@@ -381,7 +381,7 @@ class RuleVariableValueMapBuilderTest {
         )
         val eventTwo = RuleEvent(
             "test_event_uid_two", "test_program_stage_two", "",
-            EventStatus.ACTIVE, dateEventTwo, LocalDate.currentDate(), null, "", null, listOf(
+            RuleEventStatus.ACTIVE, dateEventTwo, LocalDate.currentDate(), null, "", null, listOf(
                 RuleDataValue(
                     dateEventTwo, "test_program_stage_two",
                     "test_dataelement", "test_value_two"
@@ -390,7 +390,7 @@ class RuleVariableValueMapBuilderTest {
         )
         val eventThree = RuleEvent(
             "test_event_uid_three", "test_program_stage_two", "",
-            EventStatus.ACTIVE, dateEventThree, LocalDate.currentDate(), null, "", null, listOf(
+            RuleEventStatus.ACTIVE, dateEventThree, LocalDate.currentDate(), null, "", null, listOf(
                 RuleDataValue(
                     dateEventThree, "test_program_stage_two",
                     "test_dataelement", "test_value_three"
@@ -401,7 +401,7 @@ class RuleVariableValueMapBuilderTest {
             "test_event_uid_current",
             "test_program_stage_one",
             "",
-            EventStatus.ACTIVE,
+            RuleEventStatus.ACTIVE,
             instantEventCurrent,
             dateEventDueCurrent,
             null,
@@ -450,7 +450,7 @@ class RuleVariableValueMapBuilderTest {
         val dueDateEventTwo = LocalDate.parse("2015-02-03")
         val ruleEventOne = RuleEvent(
             "test_event_uid_one", "test_program_stage_two", "",
-            EventStatus.ACTIVE, dateEventOne, dueDateEventTwo, null, "", null, listOf(
+            RuleEventStatus.ACTIVE, dateEventOne, dueDateEventTwo, null, "", null, listOf(
                 RuleDataValue(
                     dateEventOne, "test_program_stage_two",
                     "test_dataelement", "test_value_one"
@@ -459,7 +459,7 @@ class RuleVariableValueMapBuilderTest {
         )
         val ruleEventTwo = RuleEvent(
             "test_event_uid_two", "test_program_stage_two", "",
-            EventStatus.ACTIVE, instantEventTwo, dueDateEventTwo, null, "", null, listOf(
+            RuleEventStatus.ACTIVE, instantEventTwo, dueDateEventTwo, null, "", null, listOf(
                 RuleDataValue(
                     instantEventTwo, "test_program_stage_two",
                     "test_dataelement", "test_value_two"
@@ -505,7 +505,7 @@ class RuleVariableValueMapBuilderTest {
         val dueDateEventCurrent = LocalDate.parse("2014-05-03")
         val ruleEventOne = RuleEvent(
             "test_event_uid_one", "test_program_stage", "",
-            EventStatus.ACTIVE, dateEventOne, LocalDate.currentDate(), null, "", null, listOf(
+            RuleEventStatus.ACTIVE, dateEventOne, LocalDate.currentDate(), null, "", null, listOf(
                 RuleDataValue(
                     dateEventOne, "test_program_stage_one",
                     "test_dataelement", "test_value_one"
@@ -514,7 +514,7 @@ class RuleVariableValueMapBuilderTest {
         )
         val ruleEventTwo = RuleEvent(
             "test_event_uid_two", "test_program_stage", "",
-            EventStatus.ACTIVE, dateEventTwo, LocalDate.currentDate(), null, "", null, listOf(
+            RuleEventStatus.ACTIVE, dateEventTwo, LocalDate.currentDate(), null, "", null, listOf(
                 RuleDataValue(
                     dateEventTwo, "test_program_stage_two",
                     "test_dataelement", "test_value_two"
@@ -523,7 +523,7 @@ class RuleVariableValueMapBuilderTest {
         )
         val ruleEventThree = RuleEvent(
             "test_event_uid_three", "test_program_stage", "",
-            EventStatus.ACTIVE, dateEventThree, LocalDate.currentDate(), null, "", null, listOf(
+            RuleEventStatus.ACTIVE, dateEventThree, LocalDate.currentDate(), null, "", null, listOf(
                 RuleDataValue(
                     dateEventThree, "test_program_stage_two",
                     "test_dataelement", "test_value_three"
@@ -534,7 +534,7 @@ class RuleVariableValueMapBuilderTest {
             "test_event_uid_current",
             "test_program_stage",
             "",
-            EventStatus.ACTIVE,
+            RuleEventStatus.ACTIVE,
             instantEventCurrent,
             dueDateEventCurrent,
             null,
@@ -590,7 +590,7 @@ class RuleVariableValueMapBuilderTest {
         // values from enrollment should end up in ruleVariables
         val ruleEnrollment = RuleEnrollment(
             "test_enrollment", "",
-            enrollmentDate, enrollmentDate, EnrollmentStatus.ACTIVE, "", "", listOf(
+            enrollmentDate, enrollmentDate, RuleEnrollmentStatus.ACTIVE, "", "", listOf(
                 RuleAttributeValue("test_attribute_one", "test_attribute_value_one"),
                 RuleAttributeValue("test_attribute_two", "test_attribute_value_two")
             )
@@ -601,7 +601,7 @@ class RuleVariableValueMapBuilderTest {
             "test_context_event_one",
             "test_program_stage",
             "",
-            EventStatus.ACTIVE,
+            RuleEventStatus.ACTIVE,
             eventInstant,
             dueEventDate,
             null,
@@ -620,7 +620,7 @@ class RuleVariableValueMapBuilderTest {
         )
         val currentEvent = RuleEvent(
             "test_event_uid", "test_program_stage", "",
-            EventStatus.ACTIVE, eventInstant, dueEventDate, null, "", null, listOf(
+            RuleEventStatus.ACTIVE, eventInstant, dueEventDate, null, "", null, listOf(
                 RuleDataValue(
                     eventInstant, "test_program_stage",
                     "test_dataelement_one", "test_value_one"
@@ -655,8 +655,8 @@ class RuleVariableValueMapBuilderTest {
             dueEventDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(dueEventDate.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["enrollment_status"]!!)
-            .hasValue(EnrollmentStatus.ACTIVE.toString())
-            .isTypeOf(RuleValueType.TEXT).hasCandidates(EnrollmentStatus.ACTIVE.toString())
+            .hasValue(RuleEnrollmentStatus.ACTIVE.toString())
+            .isTypeOf(RuleValueType.TEXT).hasCandidates(RuleEnrollmentStatus.ACTIVE.toString())
         RuleVariableValueAssert.assertThatVariable(valueMap["enrollment_date"]!!)
             .hasValue(enrollmentDate.toString())
             .isTypeOf(RuleValueType.TEXT).hasCandidates(enrollmentDate.toString())
@@ -694,7 +694,7 @@ class RuleVariableValueMapBuilderTest {
         val incidentDate = LocalDate.parse("2017-04-02")
         val ruleEnrollment = RuleEnrollment(
             "test_enrollment", "", incidentDate,
-            enrollmentDate, EnrollmentStatus.ACTIVE, "", "", listOf(
+            enrollmentDate, RuleEnrollmentStatus.ACTIVE, "", "", listOf(
                 RuleAttributeValue("test_attribute_one", "test_attribute_value_one"),
                 RuleAttributeValue("test_attribute_two", "test_attribute_value_two"),
                 RuleAttributeValue("test_attribute_three", "test_attribute_value_three")
@@ -704,7 +704,7 @@ class RuleVariableValueMapBuilderTest {
             "test_event_one",
             "test_program_stage",
             "",
-            EventStatus.ACTIVE,
+            RuleEventStatus.ACTIVE,
             Clock.System.now(),
             LocalDate.currentDate(),
             null,
@@ -716,7 +716,7 @@ class RuleVariableValueMapBuilderTest {
             "test_event_two",
             "test_program_stage",
             "",
-            EventStatus.ACTIVE,
+            RuleEventStatus.ACTIVE,
             Clock.System.now(),
             LocalDate.currentDate(),
             null,
@@ -771,7 +771,7 @@ class RuleVariableValueMapBuilderTest {
         val incidentDate = LocalDate.parse("2017-04-02")
         val ruleEnrollment = RuleEnrollment(
             "test_enrollment", "", incidentDate,
-            enrollmentDate, EnrollmentStatus.ACTIVE, "", "", listOf(
+            enrollmentDate, RuleEnrollmentStatus.ACTIVE, "", "", listOf(
                 RuleAttributeValue("test_attribute_one", "test_attribute_value_one"),
                 RuleAttributeValue("test_attribute_two", "test_attribute_value_two"),
                 RuleAttributeValue("test_attribute_three", "test_attribute_value_three")
@@ -788,7 +788,7 @@ class RuleVariableValueMapBuilderTest {
             "test_event_one",
             "test_program_stage",
             "",
-            EventStatus.ACTIVE,
+            RuleEventStatus.ACTIVE,
             eventOneInstant,
             eventOneDueDate,
             null,
@@ -800,7 +800,7 @@ class RuleVariableValueMapBuilderTest {
             "test_event_two",
             "test_program_stage",
             "",
-            EventStatus.ACTIVE,
+            RuleEventStatus.ACTIVE,
             eventTwoInstant,
             eventTwoDueDate,
             null,
@@ -910,7 +910,7 @@ class RuleVariableValueMapBuilderTest {
             "test_event_two",
             "test_program_stage",
             "",
-            EventStatus.ACTIVE,
+            RuleEventStatus.ACTIVE,
             Clock.System.now(),
             LocalDate.currentDate(),
             null,

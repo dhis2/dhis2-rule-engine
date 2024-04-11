@@ -4,7 +4,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
-import org.hisp.dhis.rules.models.EventStatus
+import org.hisp.dhis.rules.models.RuleEventStatus
 import org.hisp.dhis.rules.models.Rule
 import org.hisp.dhis.rules.models.RuleEvent
 import org.hisp.dhis.rules.utils.currentDate
@@ -22,7 +22,7 @@ internal class RuleEngineTest {
             "test_event",
             "test_programstage",
             "",
-            EventStatus.ACTIVE,
+            RuleEventStatus.ACTIVE,
             Clock.System.now(),
             LocalDate.currentDate(),
             null,

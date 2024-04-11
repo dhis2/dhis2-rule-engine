@@ -50,7 +50,7 @@ class ConstantsValueTest {
             programName = "test_program",
             incidentDate = LocalDate.Companion.currentDate(),
             enrollmentDate = LocalDate.Companion.currentDate(),
-            status = EnrollmentStatus.ACTIVE,
+            status = RuleEnrollmentStatus.ACTIVE,
             organisationUnit = "test_ou",
             organisationUnitCode = "test_ou_code",
             attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value"))
@@ -76,7 +76,7 @@ class ConstantsValueTest {
             programName = "test_program",
             incidentDate = LocalDate.Companion.currentDate(),
             enrollmentDate = LocalDate.Companion.currentDate(),
-            status = EnrollmentStatus.ACTIVE,
+            status = RuleEnrollmentStatus.ACTIVE,
             organisationUnit = "test_ou",
             organisationUnitCode = "test_ou_code",
             attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value"))
@@ -104,7 +104,7 @@ class ConstantsValueTest {
             programName = "test_program",
             incidentDate = LocalDate.Companion.currentDate(),
             enrollmentDate = LocalDate.Companion.currentDate(),
-            status = EnrollmentStatus.ACTIVE,
+            status = RuleEnrollmentStatus.ACTIVE,
             organisationUnit = "test_ou",
             organisationUnitCode = "test_ou_code",
             attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value"))
@@ -126,7 +126,7 @@ class ConstantsValueTest {
             event = "test_event",
             programStage = "test_program_stage",
             programStageName = "",
-            status = EventStatus.ACTIVE,
+            status = RuleEventStatus.ACTIVE,
             eventDate = Clock.System.now(),
             dueDate = LocalDate.currentDate(),
             organisationUnit = "",

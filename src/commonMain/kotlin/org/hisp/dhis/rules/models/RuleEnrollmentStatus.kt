@@ -3,11 +3,8 @@ package org.hisp.dhis.rules.models
 import kotlin.js.JsExport
 
 @JsExport
-enum class EventStatus {
+enum class RuleEnrollmentStatus {
     ACTIVE,
     COMPLETED,
-    SCHEDULE,
-    SKIPPED,
-    VISITED,
-    OVERDUE
+    CANCELLED
 }

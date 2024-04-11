@@ -7,7 +7,7 @@ data class RuleEvent(
     val event: String,
     val programStage: String,
     val programStageName: String,
-    val status: EventStatus,
+    val status: RuleEventStatus,
     val eventDate: Instant,
     val dueDate: LocalDate?,
     val completedDate: LocalDate?,
