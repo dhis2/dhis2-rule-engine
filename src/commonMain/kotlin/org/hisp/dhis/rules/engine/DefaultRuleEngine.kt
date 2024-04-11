@@ -1,6 +1,7 @@
 package org.hisp.dhis.rules.engine
 
 import org.hisp.dhis.lib.expression.Expression
+import org.hisp.dhis.lib.expression.ExpressionMode
 import org.hisp.dhis.lib.expression.spi.IllegalExpressionException
 import org.hisp.dhis.lib.expression.spi.ParseException
 import org.hisp.dhis.lib.expression.spi.ValueType
@@ -51,15 +52,15 @@ internal class DefaultRuleEngine: RuleEngine {
 
     override fun validate(expression: String, dataItemStore: Map<String, DataItem>): RuleValidationResult {
         // Rule condition expression should be evaluated against Boolean
-        return getExpressionDescription(expression, Expression.Mode.RULE_ENGINE_CONDITION, dataItemStore)
+        return getExpressionDescription(expression, ExpressionMode.RULE_ENGINE_CONDITION, dataItemStore)
     }
 
     override fun validateDataFieldExpression(expression: String, dataItemStore: Map<String, DataItem>): RuleValidationResult {
         // Rule action data field should be evaluated against all i.e Boolean, String, Date and Numerical value
-        return getExpressionDescription(expression, Expression.Mode.RULE_ENGINE_ACTION, dataItemStore)
+        return getExpressionDescription(expression, ExpressionMode.RULE_ENGINE_ACTION, dataItemStore)
     }
 
-    private fun getExpressionDescription(expression: String, mode: Expression.Mode, dataItemStore: Map<String, DataItem>): RuleValidationResult {
+    private fun getExpressionDescription(expression: String, mode: ExpressionMode, dataItemStore: Map<String, DataItem>): RuleValidationResult {
         return try {
             val validationMap: Map<String, ValueType> = dataItemStore.mapValues { e -> e.value.valueType.toValueType() }
             Expression(expression, mode, false).validate(validationMap)
