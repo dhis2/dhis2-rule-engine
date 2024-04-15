@@ -1,4 +1,4 @@
-### RuleEngine (WIP)  
+### RuleEngine (WIP)
 
 #### Initialization
 `RuleEngine` is initialized in two steps.
