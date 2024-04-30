@@ -1,5 +1,8 @@
 package org.hisp.dhis.rules.models
 
+import kotlin.js.JsExport
+
+@JsExport
 enum class RuleValueType(private val defaultValue: Any) {
     TEXT(""),
     NUMERIC(0.0),

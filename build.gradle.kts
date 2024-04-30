@@ -1,3 +1,5 @@
+import com.mooltiverse.oss.nyx.gradle.CoreTask
+
 plugins {
     kotlin("multiplatform")
     id("maven-publish-conventions")
@@ -10,11 +12,21 @@ repositories {
 }
 
 group = "org.hisp.dhis.rules"
-version = "3.0.0-SNAPSHOT"
 
-val isReleaseVersion = project.hasProperty("removeSnapshot")
-if (isReleaseVersion) {
-    version = (version as String).replace("-SNAPSHOT", "")
+if (project.hasProperty("betaToSnapshot")) {
+    val mainVersion = (version as String).split("-beta")[0]
+    version = "$mainVersion-SNAPSHOT"
+}
+
+tasks.register("checkIsNewVersion") {
+    val state = project.properties[CoreTask.NYX_STATE_PROPERTY] as com.mooltiverse.oss.nyx.state.State
+
+    if (state.newVersion) {
+        println("This build generates a new version ${state.version}")
+    } else {
+        println("This build does not generate a new version ${state.version}")
+        throw StopExecutionException("There is no new version")
+    }
 }
 
 kotlin {
@@ -29,9 +41,13 @@ kotlin {
     }
     js {
         nodejs()
-        useEsModules()
+        if (project.hasProperty("useCommonJs")) {
+            useCommonJs()
+        } else {
+            useEsModules()
+            generateTypeScriptDefinitions()
+        }
         binaries.library()
-        generateTypeScriptDefinitions()
     }
     val hostOs = System.getProperty("os.name")
     val isArm64 = System.getProperty("os.arch") == "aarch64"
@@ -47,9 +63,14 @@ kotlin {
 
 
     sourceSets {
+        all {
+            languageSettings.apply {
+                optIn("kotlin.js.ExperimentalJsExport")
+            }
+        }
         val commonMain by getting {
             dependencies {
-                implementation("org.hisp.dhis.lib.expression:expression-parser:1.1.0-SNAPSHOT")
+                implementation("org.hisp.dhis.lib.expression:expression-parser:1.1.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
             }
         }
@@ -60,7 +81,11 @@ kotlin {
         }
         val jvmMain by getting
         val jvmTest by getting
-        val jsMain by getting
+        val jsMain by getting {
+            dependencies {
+                api("org.jetbrains.kotlin-wrappers:kotlin-js:1.0.0-pre.722")
+            }
+        }
         val jsTest by getting
         val nativeMain by getting
         val nativeTest by getting

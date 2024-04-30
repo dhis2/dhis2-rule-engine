@@ -81,6 +81,11 @@ class RuleEngineGetDescriptionTest {
             test_var_number,
             ItemValueType.NUMBER
         )
+
+        val var_10 = DataItem(
+            test_var_four,
+            ItemValueType.TEXT
+        )
         itemStore["test_var_one"] = var_1
         itemStore["test_var_two"] = var_2
         itemStore["test_var_date_one"] = var_3
@@ -90,6 +95,7 @@ class RuleEngineGetDescriptionTest {
         itemStore["current_date"] = var_7
         itemStore["test_var_three"] = var_8
         itemStore["test_var_number"] = var_9
+        itemStore["test_var_four"] = var_10
     }
 
     @Test
@@ -294,12 +300,20 @@ class RuleEngineGetDescriptionTest {
         assertTrue(result.exception is RuleEngineValidationException)
     }
 
+    @Test
+    fun testGetDescriptionForNestedExpression() {
+        val result = ruleEngine.validate("d2:validatePattern(d2:right(A{test_var_four},1),'\\/202\\d{1}')",itemStore)
+        assertNotNull(result)
+        assertTrue(result.valid)
+    }
+
     companion object {
         private const val test_var_one = "Variable_ONE"
         private const val test_var_two = "Variable_TWO"
         private const val test_var_three = "Variable_THREE"
         private const val test_var_date_one = "2020-01-01"
         private const val test_var_date_two = "2020-02-02"
+        private const val test_var_four = "Variable_FOUR"
         private const val completionDate = "Completion date"
         private const val currentDate = "Current date"
         private const val constant = "PI"

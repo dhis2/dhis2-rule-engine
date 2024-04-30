@@ -10,14 +10,12 @@ val ossrhPassword: String? = System.getenv("OSSRH_PASSWORD")
 val signingPrivateKey: String? = System.getenv("SIGNING_PRIVATE_KEY")
 val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
 
-val isReleaseVersion = (version as String).contains("SNAPSHOT")
-
 val dokkaHtml = tasks.findByName("dokkaHtml")!!
 
 val dokkaHtmlJar = tasks.register<Jar>("dokkaHtmlJar") {
     dependsOn(dokkaHtml)
     from(dokkaHtml.outputs)
-    archiveClassifier.set("docs")
+    archiveClassifier.set("javadoc")
 }
 
 publishing {
@@ -70,7 +68,14 @@ nexusPublishing {
 }
 
 signing {
-    isRequired = isReleaseVersion
+    setRequired({ !version.toString().endsWith("-SNAPSHOT") })
     useInMemoryPgpKeys(signingPrivateKey, signingPassword)
     sign(publishing.publications)
+}
+
+// Fix Gradle warning about signing tasks using publishing task outputs without explicit dependencies
+// https://github.com/gradle/gradle/issues/26091
+tasks.withType<AbstractPublishToMaven>().configureEach {
+    val signingTasks = tasks.withType<Sign>()
+    mustRunAfter(signingTasks)
 }

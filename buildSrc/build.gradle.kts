@@ -2,7 +2,7 @@ plugins {
     `kotlin-dsl`
 }
 
-val kotlinVersion = "1.9.21"
+val kotlinVersion = "1.9.22"
 val dokkaVersion = "1.9.10"
 val nexusPluginVersion = "1.3.0"
 val npmPluginVersion = "3.4.1"

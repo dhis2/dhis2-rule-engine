@@ -1,21 +1,20 @@
 package org.hisp.dhis.rules
 
+import js.array.tupleOf
+import js.collections.JsMap
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
-import org.hisp.dhis.lib.expression.js.Entry
 import org.hisp.dhis.rules.api.DataItem
-import org.hisp.dhis.rules.api.ItemValueType
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.models.*
 
 @JsExport
-@OptIn(ExperimentalJsExport::class)
 class RuleEngineJs {
-    fun validate(expression: String, dataItemStore: Array<Entry<String, DataItemJs>>): RuleValidationResult{
+    fun validate(expression: String, dataItemStore: JsMap<String, DataItemJs>): RuleValidationResult{
         return RuleEngine.getInstance().validate(expression, toMap(dataItemStore, {it}, ::toDataItemJava))
     }
-    fun validateDataFieldExpression(expression: String, dataItemStore: Array<Entry<String, DataItemJs>>): RuleValidationResult{
+    fun validateDataFieldExpression(expression: String, dataItemStore: JsMap<String, DataItemJs>): RuleValidationResult{
         return RuleEngine.getInstance().validateDataFieldExpression(expression, toMap(dataItemStore, {it}, ::toDataItemJava))
     }
     fun evaluateAll(enrollmentTarget: RuleEnrollmentJs?, eventsTarget: Array<RuleEventJs>, executionContext: RuleEngineContextJs): Array<RuleEffectsJs>{
@@ -38,15 +37,15 @@ class RuleEngineJs {
             .map(::toRuleEffectJs).toTypedArray()
     }
 
-    private fun <Kf, Vf, K, V> toMap(map: Array<Entry<Kf, Vf>>, key: (Kf) -> K, value: (Vf) -> V): Map<K, V> {
+    private fun <Kf, Vf, K, V> toMap(map: JsMap<Kf, Vf>, key: (Kf) -> K, value: (Vf) -> V): Map<K, V> {
         val res : MutableMap<K, V> = mutableMapOf()
-        map.forEach { e -> res[key(e.key)] = value(e.value) }
+        map.forEach { v, k -> res[key(k)] = value(v) }
         return res
     }
 
     private fun toDataItemJava(item: DataItemJs) : DataItem {
         return DataItem(
-            valueType = ItemValueType.valueOf(item.valueType),
+            valueType = item.valueType,
             displayName = item.displayName
         )
     }
@@ -59,7 +58,7 @@ class RuleEngineJs {
             programName = enrollmentTarget.programName,
             incidentDate = LocalDate.fromEpochDays(enrollmentTarget.incidentDate.toEpochDay().toInt()),
             enrollmentDate = LocalDate.fromEpochDays(enrollmentTarget.enrollmentDate.toEpochDay().toInt()),
-            status = RuleEnrollment.Status.valueOf(enrollmentTarget.status),
+            status = enrollmentTarget.status,
             organisationUnit = enrollmentTarget.organisationUnit,
             organisationUnitCode = enrollmentTarget.organisationUnitCode,
             attributeValues = enrollmentTarget.attributeValues.toList()
@@ -71,7 +70,7 @@ class RuleEngineJs {
             event = event.event,
             programStage = event.programStage,
             programStageName = event.programStageName,
-            status = RuleEvent.Status.valueOf(event.status),
+            status = event.status,
             eventDate = Instant.fromEpochMilliseconds(event.eventDate.toEpochMilli().toLong()),
             dueDate = toLocalDate(event.dueDate),
             completedDate = toLocalDate(event.completedDate),
@@ -122,7 +121,7 @@ class RuleEngineJs {
         return RuleActionJs(
             data = ruleAction.data,
             type = ruleAction.type,
-            values = ruleAction.values.entries.map { e -> Entry(e.key, e.value) }.toTypedArray()
+            values = JsMap(ruleAction.values.entries.map { e -> tupleOf(e.key, e.value) }.toTypedArray())
         )
     }
 
@@ -136,7 +135,7 @@ class RuleEngineJs {
 
     private fun toRuleEffectsJs(ruleEffects: RuleEffects): RuleEffectsJs {
         return RuleEffectsJs(
-            trackerObjectType = ruleEffects.trackerObjectType.name,
+            trackerObjectType = ruleEffects.trackerObjectType,
             trackerObjectUid = ruleEffects.trackerObjectUid,
             ruleEffects = ruleEffects.ruleEffects.map(::toRuleEffectJs).toTypedArray()
         )
@@ -153,13 +152,13 @@ class RuleEngineJs {
     }
 
     private fun toRuleVariableJava(ruleVariableJs: RuleVariableJs): RuleVariable {
-        return when(RuleVariableType.valueOf(ruleVariableJs.type)){
+        return when(ruleVariableJs.type){
             RuleVariableType.DATAELEMENT_NEWEST_EVENT_PROGRAM_STAGE -> RuleVariableNewestStageEvent(
                 name = ruleVariableJs.name,
                 useCodeForOptionSet = ruleVariableJs.useCodeForOptionSet,
                 options = ruleVariableJs.options.toList(),
                 field = ruleVariableJs.field,
-                fieldType = RuleValueType.valueOf(ruleVariableJs.fieldType),
+                fieldType = ruleVariableJs.fieldType,
                 programStage = ruleVariableJs.programStage ?: ""
             )
             RuleVariableType.DATAELEMENT_NEWEST_EVENT_PROGRAM -> RuleVariableNewestEvent(
@@ -167,35 +166,35 @@ class RuleEngineJs {
                 useCodeForOptionSet = ruleVariableJs.useCodeForOptionSet,
                 options = ruleVariableJs.options.toList(),
                 field = ruleVariableJs.field,
-                fieldType = RuleValueType.valueOf(ruleVariableJs.fieldType)
+                fieldType = ruleVariableJs.fieldType
             )
             RuleVariableType.DATAELEMENT_CURRENT_EVENT -> RuleVariableCurrentEvent(
                 name = ruleVariableJs.name,
                 useCodeForOptionSet = ruleVariableJs.useCodeForOptionSet,
                 options = ruleVariableJs.options.toList(),
                 field = ruleVariableJs.field,
-                fieldType = RuleValueType.valueOf(ruleVariableJs.fieldType)
+                fieldType = ruleVariableJs.fieldType
             )
             RuleVariableType.DATAELEMENT_PREVIOUS_EVENT -> RuleVariablePreviousEvent(
                 name = ruleVariableJs.name,
                 useCodeForOptionSet = ruleVariableJs.useCodeForOptionSet,
                 options = ruleVariableJs.options.toList(),
                 field = ruleVariableJs.field,
-                fieldType = RuleValueType.valueOf(ruleVariableJs.fieldType)
+                fieldType = ruleVariableJs.fieldType
             )
             RuleVariableType.CALCULATED_VALUE -> RuleVariableCalculatedValue(
                 name = ruleVariableJs.name,
                 useCodeForOptionSet = ruleVariableJs.useCodeForOptionSet,
                 options = ruleVariableJs.options.toList(),
                 field = ruleVariableJs.field,
-                fieldType = RuleValueType.valueOf(ruleVariableJs.fieldType)
+                fieldType = ruleVariableJs.fieldType
             )
             RuleVariableType.TEI_ATTRIBUTE -> RuleVariableAttribute(
                 name = ruleVariableJs.name,
                 useCodeForOptionSet = ruleVariableJs.useCodeForOptionSet,
                 options = ruleVariableJs.options.toList(),
                 field = ruleVariableJs.field,
-                fieldType = RuleValueType.valueOf(ruleVariableJs.fieldType)
+                fieldType = ruleVariableJs.fieldType
             )
         }
     }
