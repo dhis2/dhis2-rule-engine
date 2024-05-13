@@ -1,4 +1,7 @@
 package org.hisp.dhis.rules.models
+
+import kotlin.js.JsExport
+
 /*
  * Copyright (c) 2004-2018, University of Oslo
  * All rights reserved.
@@ -30,8 +33,10 @@ package org.hisp.dhis.rules.models
 /**
  * @author Zubair Asghar.
  */
+@JsExport
 enum class TriggerEnvironment(val clientName: String) {
     ANDROIDCLIENT("AndroidClient"),
-    SERVER("Server")
+    SERVER("Server"),
+    WEBCLIENT("WebClient")
 
 }

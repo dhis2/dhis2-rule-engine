@@ -89,7 +89,7 @@ class ProgramRuleVariableTest {
     fun testEnvironmentProgramVariableIsAssigned() {
         val rule = getRule("V{environment}")
         val ruleEffects = callEnrollmentRuleEngine(rule)
-        assertProgramRuleVariableAssignment(ruleEffects, rule, "Server")
+        assertProgramRuleVariableAssignment(ruleEffects, rule, TriggerEnvironment.valueOf(getEnvironment()).clientName)
     }
 
     @Test
