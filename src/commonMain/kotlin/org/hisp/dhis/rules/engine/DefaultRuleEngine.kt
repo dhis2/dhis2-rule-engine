@@ -8,6 +8,7 @@ import org.hisp.dhis.lib.expression.spi.ValueType
 import org.hisp.dhis.rules.api.DataItem
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
+import org.hisp.dhis.rules.getEnvironment
 import org.hisp.dhis.rules.models.*
 
 internal class DefaultRuleEngine: RuleEngine {
@@ -15,7 +16,7 @@ internal class DefaultRuleEngine: RuleEngine {
         val valueMap = RuleVariableValueMapBuilder.target(target)
             .ruleVariables(executionContext.ruleVariables)
             .ruleEnrollment(ruleEnrollment)
-            .triggerEnvironment(TriggerEnvironment.SERVER)
+            .triggerEnvironment(TriggerEnvironment.valueOf(getEnvironment()))
             .ruleEvents(ruleEvents)
             .constantValueMap(executionContext.constantsValues)
             .build()
@@ -28,7 +29,7 @@ internal class DefaultRuleEngine: RuleEngine {
     override fun evaluate(target: RuleEnrollment, ruleEvents: List<RuleEvent>, executionContext: RuleEngineContext): List<RuleEffect> {
         val valueMap = RuleVariableValueMapBuilder.target(target)
                 .ruleVariables(executionContext.ruleVariables)
-                .triggerEnvironment(TriggerEnvironment.SERVER)
+                .triggerEnvironment(TriggerEnvironment.valueOf(getEnvironment()))
                 .ruleEvents(ruleEvents)
                 .constantValueMap(executionContext.constantsValues)
                 .build()
@@ -42,7 +43,7 @@ internal class DefaultRuleEngine: RuleEngine {
         val valueMap = RuleVariableValueMapBuilder.target()
                 .ruleVariables(executionContext.ruleVariables)
                 .ruleEnrollment(enrollmentTarget)
-                .triggerEnvironment(TriggerEnvironment.SERVER)
+                .triggerEnvironment(TriggerEnvironment.valueOf(getEnvironment()))
                 .ruleEvents(eventsTarget)
                 .constantValueMap(executionContext.constantsValues)
                 .multipleBuild()
