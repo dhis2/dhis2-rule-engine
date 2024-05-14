@@ -1,5 +1,7 @@
 package org.hisp.dhis.rules
 
-actual fun getEnvironment(): String {
-    return "SERVER"
+import org.hisp.dhis.rules.models.TriggerEnvironment
+
+actual fun getEnvironment(): TriggerEnvironment {
+    return TriggerEnvironment.SERVER
 }
