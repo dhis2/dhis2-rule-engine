@@ -36,6 +36,7 @@ import kotlin.js.JsExport
 @JsExport
 enum class TriggerEnvironment(val clientName: String) {
     ANDROIDCLIENT("AndroidClient"),
+    NATIVE("Native"),
     SERVER("Server"),
     WEBCLIENT("WebClient")
 

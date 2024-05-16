@@ -12,11 +12,11 @@ import org.hisp.dhis.rules.getEnvironment
 import org.hisp.dhis.rules.models.*
 
 internal class DefaultRuleEngine: RuleEngine {
-    override fun evaluate(target: RuleEvent, ruleEnrollment: RuleEnrollment?, ruleEvents: List<RuleEvent>, executionContext: RuleEngineContext): List<RuleEffect> {
+    override fun evaluate(target: RuleEvent, ruleEnrollment: RuleEnrollment?, ruleEvents: List<RuleEvent>, executionContext: RuleEngineContext, triggerEnvironment: TriggerEnvironment): List<RuleEffect> {
         val valueMap = RuleVariableValueMapBuilder.target(target)
             .ruleVariables(executionContext.ruleVariables)
             .ruleEnrollment(ruleEnrollment)
-            .triggerEnvironment(TriggerEnvironment.valueOf(getEnvironment()))
+            .triggerEnvironment(triggerEnvironment)
             .ruleEvents(ruleEvents)
             .constantValueMap(executionContext.constantsValues)
             .build()
@@ -26,10 +26,14 @@ internal class DefaultRuleEngine: RuleEngine {
         )
     }
 
-    override fun evaluate(target: RuleEnrollment, ruleEvents: List<RuleEvent>, executionContext: RuleEngineContext): List<RuleEffect> {
+    override fun evaluate(target: RuleEvent, ruleEnrollment: RuleEnrollment?, ruleEvents: List<RuleEvent>, executionContext: RuleEngineContext): List<RuleEffect> {
+        return evaluate(target, ruleEnrollment, ruleEvents, executionContext, getEnvironment())
+    }
+
+    override fun evaluate(target: RuleEnrollment, ruleEvents: List<RuleEvent>, executionContext: RuleEngineContext, triggerEnvironment: TriggerEnvironment): List<RuleEffect> {
         val valueMap = RuleVariableValueMapBuilder.target(target)
                 .ruleVariables(executionContext.ruleVariables)
-                .triggerEnvironment(TriggerEnvironment.valueOf(getEnvironment()))
+                .triggerEnvironment(triggerEnvironment)
                 .ruleEvents(ruleEvents)
                 .constantValueMap(executionContext.constantsValues)
                 .build()
@@ -39,16 +43,24 @@ internal class DefaultRuleEngine: RuleEngine {
         )
     }
 
-    override fun evaluateAll(enrollmentTarget: RuleEnrollment?, eventsTarget: List<RuleEvent>, executionContext: RuleEngineContext): List<RuleEffects> {
+    override fun evaluate(target: RuleEnrollment, ruleEvents: List<RuleEvent>, executionContext: RuleEngineContext): List<RuleEffect> {
+        return evaluate(target, ruleEvents, executionContext, getEnvironment())
+    }
+
+    override fun evaluateAll(enrollmentTarget: RuleEnrollment?, eventsTarget: List<RuleEvent>, executionContext: RuleEngineContext, triggerEnvironment: TriggerEnvironment): List<RuleEffects> {
         val valueMap = RuleVariableValueMapBuilder.target()
                 .ruleVariables(executionContext.ruleVariables)
                 .ruleEnrollment(enrollmentTarget)
-                .triggerEnvironment(TriggerEnvironment.valueOf(getEnvironment()))
+                .triggerEnvironment(triggerEnvironment)
                 .ruleEvents(eventsTarget)
                 .constantValueMap(executionContext.constantsValues)
                 .multipleBuild()
         return RuleEngineMultipleExecution().execute(executionContext.rules, valueMap,
                 executionContext.supplementaryData)
+    }
+
+    override fun evaluateAll(enrollmentTarget: RuleEnrollment?, eventsTarget: List<RuleEvent>, executionContext: RuleEngineContext): List<RuleEffects> {
+        return evaluateAll(enrollmentTarget, eventsTarget, executionContext, getEnvironment())
     }
 
     override fun validate(expression: String, dataItemStore: Map<String, DataItem>): RuleValidationResult {

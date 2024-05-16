@@ -1,7 +1,7 @@
 package org.hisp.dhis.rules
 
-import org.hisp.dhis.rules.models.RuleEnrollmentStatus
 import org.hisp.dhis.rules.models.RuleAttributeValue
+import org.hisp.dhis.rules.models.RuleEnrollmentStatus
 
 @JsExport
 data class RuleEnrollmentJs(

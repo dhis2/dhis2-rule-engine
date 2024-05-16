@@ -1,3 +1,5 @@
 package org.hisp.dhis.rules
 
-expect fun getEnvironment(): String
+import org.hisp.dhis.rules.models.TriggerEnvironment
+
+expect fun getEnvironment(): TriggerEnvironment

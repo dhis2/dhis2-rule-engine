@@ -7,6 +7,9 @@ import kotlin.jvm.JvmStatic
 interface RuleEngine {
     fun validate(expression: String, dataItemStore: Map<String, DataItem>): RuleValidationResult
     fun validateDataFieldExpression(expression: String, dataItemStore: Map<String, DataItem>): RuleValidationResult
+    fun evaluateAll(enrollmentTarget: RuleEnrollment?, eventsTarget: List<RuleEvent>, executionContext: RuleEngineContext, triggerEnvironment: TriggerEnvironment): List<RuleEffects>
+    fun evaluate(target: RuleEnrollment, ruleEvents: List<RuleEvent>, executionContext: RuleEngineContext, triggerEnvironment: TriggerEnvironment): List<RuleEffect>
+    fun evaluate(target: RuleEvent, ruleEnrollment: RuleEnrollment?, ruleEvents: List<RuleEvent>, executionContext: RuleEngineContext, triggerEnvironment: TriggerEnvironment): List<RuleEffect>
     fun evaluateAll(enrollmentTarget: RuleEnrollment?, eventsTarget: List<RuleEvent>, executionContext: RuleEngineContext): List<RuleEffects>
     fun evaluate(target: RuleEnrollment, ruleEvents: List<RuleEvent>, executionContext: RuleEngineContext): List<RuleEffect>
     fun evaluate(target: RuleEvent, ruleEnrollment: RuleEnrollment?, ruleEvents: List<RuleEvent>, executionContext: RuleEngineContext): List<RuleEffect>
