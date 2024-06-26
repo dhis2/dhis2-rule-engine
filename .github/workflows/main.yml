@@ -1,22 +1,62 @@
 name: Main
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
-      - 'main'
-      - 'master'
-      - 'beta'
+      - main
+      - master
 
 jobs:
   unit-test:
-    uses: ./.github/workflows/job-test.yml
+    name: Run tests
+    if: ${{ github.event.pull_request.merged == true }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: temurin
+          cache: 'gradle'
+      - name: Change wrapper permission
+        run: chmod +x ./gradlew
 
-  check-new-version:
-    needs: unit-test
-    uses: ./.github/workflows/job-check-new-version.yml
+      - name: Test
+        run: ./gradlew clean allTests
 
   publish:
-    needs: check-new-version
-    if: ${{ needs.check-new-version.outputs.isNewVersion == 'true' }}
-    uses: ./.github/workflows/job-publish.yml
-    secrets: inherit
+    needs: unit-test
+    if: ${{ github.event.pull_request.merged == true && !contains(github.event.pull_request.title, '[skip publish]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: temurin
+          cache: 'gradle'
+      - name: Change wrapper permission
+        run: chmod +x ./gradlew
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 14.x
+
+      - name: Publish Maven
+        run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository -PremoveSnapshotSuffix
+        env:
+          OSSRH_USERNAME: ${{ secrets.SONATYPE_OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.SONATYPE_OSSRH_PASSWORD }}
+          SIGNING_PRIVATE_KEY: ${{ secrets.PGP_PRIVATE_KEY }}
+          SIGNING_PASSWORD: ${{ secrets.PGP_PASSPHRASE }}
+
+      - name: Publish NPMJS
+        run: ./.github/workflows/scripts/publish-npm-prod.sh
+        env:
+          NPMJS_TOKEN: ${{ secrets.DHIS2_BOT_NPM_TOKEN }}
