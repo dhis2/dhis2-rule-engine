@@ -1,5 +1,3 @@
-import com.mooltiverse.oss.nyx.gradle.CoreTask
-
 plugins {
     kotlin("multiplatform")
     id("maven-publish-conventions")
