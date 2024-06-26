@@ -62,27 +62,26 @@ List of supported environment (contextual) variables:
  - incident_date
  - tei_count
 
-### Development
-This library implements the semantic release setup, which means that version numbers are not manually maintained but
-derived from the commit/PR history.
+## Development
 
-Branches:
-- `main`: a push to `main` branch will trigger a new production release (both Maven and NPMJS).
-- `beta`: a push to `beta` branch will trigger a SNAPSHOT release in Maven and a new beta release in NPMJS.
+### Version
+Library version is defined in the file `build.gradle.kts`. The version must be manually increased
+and include the `-SNAPSHOT` suffix. Please make sure the version is updated before opening the PR.
 
-Version number are determined by the presence of commits with these suffixes:
-- `fix:`: it will increase the patch number.
-- `feat:`: it will increase the minor version number.
-- `feat!:`: it will increase the major version number.
+### Publications
 
-If there is not any commit with any of this tags between the previous version and the current commit, nothing will be published.
+On merged pull request to `main`:
+- Production release to Maven.
+- Production release to NPMJS.
 
-Typical workflow:
-1. Do work in a feature branch. There is no need to add tags to the commits.
-2. Create a PR to `beta` branch including a tag in the PR title depending on the kind of changes.
-3. Merge the PR using **Squash and merge**. It will publish a SNAPSHOT/BETA release if there is a version change.
-4. Create a PR to `main` branch. Once merged, it will publish a production release.
+On pull request creation/update:
+- Snapshot release to Maven.
 
+On demand:
+- Beta releases to NPMJS can be triggered on demand by using the action "Publish NPM beta".
+  Please make sure you select the right branch in the selector.
+
+Publication can be skipped by adding `[skip publish]` to the pull request title.
 
 ---
 WIP
