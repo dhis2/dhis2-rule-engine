@@ -11,6 +11,6 @@ data class RuleEnrollmentJs(
     val enrollmentDate: kotlinx.datetime.internal.JSJoda.LocalDate,
     val status: RuleEnrollmentStatus,
     val organisationUnit: String,
-    val organisationUnitCode: String,
+    val organisationUnitCode: String?,
     val attributeValues: Array<RuleAttributeValue>
 )
