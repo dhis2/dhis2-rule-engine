@@ -9,6 +9,6 @@ data class RuleEnrollment(
     val enrollmentDate: LocalDate,
     val status: RuleEnrollmentStatus,
     val organisationUnit: String,
-    val organisationUnitCode: String,
+    val organisationUnitCode: String?,
     val attributeValues: List<RuleAttributeValue>
 )
