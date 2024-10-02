@@ -72,11 +72,12 @@ class RuleEngineJs {
             programStageName = event.programStageName,
             status = event.status,
             eventDate = Instant.fromEpochMilliseconds(event.eventDate.toEpochMilli().toLong()),
+            createdDate = Instant.fromEpochMilliseconds(event.createdDate.toEpochMilli().toLong()),
             dueDate = toLocalDate(event.dueDate),
             completedDate = toLocalDate(event.completedDate),
             organisationUnit = event.organisationUnit,
             organisationUnitCode = event.organisationUnitCode,
-            dataValues = event.dataValues.map(::toRuleDataValueJava).toList()
+            dataValues = event.dataValues.toList()
         )
     }
 
@@ -88,15 +89,6 @@ class RuleEngineJs {
             name = rule.name,
             programStage = rule.programStage,
             priority = rule.priority
-        )
-    }
-
-    private fun toRuleDataValueJava(ruleDataValue: RuleDataValueJs): RuleDataValue {
-        return RuleDataValue(
-            eventDate = Instant.fromEpochMilliseconds(ruleDataValue.eventDate.toEpochMilli().toLong()),
-            programStage = ruleDataValue.programStage,
-            dataElement = ruleDataValue.dataElement,
-            value = ruleDataValue.value
         )
     }
 

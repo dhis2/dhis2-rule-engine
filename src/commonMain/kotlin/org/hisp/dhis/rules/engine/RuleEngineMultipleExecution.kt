@@ -6,10 +6,10 @@ internal class RuleEngineMultipleExecution {
     fun execute(rules: List<Rule>, ruleVariableValueMap: RuleVariableValueMap,
                 supplementaryData: Map<String, List<String>>): List<RuleEffects> {
         val ruleEffects: MutableList<RuleEffects> = ArrayList()
-        for ((enrollment, value) in ruleVariableValueMap.enrollmentMap) {
+        for ((enrollment, valueMap) in ruleVariableValueMap.enrollmentMap) {
             val enrollmentRuleEffects = RuleConditionEvaluator()
                 .getEvaluatedAndErrorRuleEffects(
-                    TrackerObjectType.ENROLLMENT, enrollment.enrollment, value,
+                    TrackerObjectType.ENROLLMENT, enrollment.enrollment, valueMap,
                     supplementaryData, filterRules(rules)
                 )
             ruleEffects.add(
@@ -19,12 +19,12 @@ internal class RuleEngineMultipleExecution {
                 )
             )
         }
-        for ((event, value) in ruleVariableValueMap.eventMap) {
+        for ((event, valueMap) in ruleVariableValueMap.eventMap) {
             ruleEffects.add(
                 RuleEffects(
                     TrackerObjectType.EVENT, event.event,
                     RuleConditionEvaluator().getEvaluatedAndErrorRuleEffects(
-                        TrackerObjectType.EVENT, event.event, value,
+                        TrackerObjectType.EVENT, event.event, valueMap,
                         supplementaryData, filterRules(rules, event)
                     )
                 )

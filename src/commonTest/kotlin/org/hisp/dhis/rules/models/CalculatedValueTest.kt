@@ -56,15 +56,12 @@ class CalculatedValueTest {
             programStageName = "",
             status = RuleEventStatus.ACTIVE,
             eventDate = Clock.System.now(),
+createdDate = Clock.System.now(),
             dueDate = LocalDate.currentDate(),
             organisationUnit = "",
             organisationUnitCode = "",
             completedDate = null,
-            dataValues = listOf(
-                RuleDataValue(
-                    Clock.System.now(), "test_program_stage", "test_data_element", "test_value"
-                )
-            )
+            dataValues = listOf(RuleDataValue("test_data_element", "test_value"))
         )
         val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, enrollment, emptyList(), ruleEngineContext)
         assertEquals(i, ruleEffects.size)
@@ -97,14 +94,12 @@ class CalculatedValueTest {
             programStageName = "",
             status = RuleEventStatus.ACTIVE,
             eventDate = Clock.System.now(),
+createdDate = Clock.System.now(),
             dueDate = LocalDate.currentDate(),
             organisationUnit = "",
             organisationUnitCode = "",
             completedDate = null,
-            dataValues = listOf(
-                RuleDataValue(
-                    Clock.System.now(), "test_program_stage", "test_data_element", "test_value"
-                )
+            dataValues = listOf(RuleDataValue("test_data_element", "test_value")
             )
         )
         val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, enrollment, emptyList(), getRuleEngineContext(listOf(rule, rule2)))
@@ -157,14 +152,12 @@ class CalculatedValueTest {
             programStageName = "",
             status = RuleEventStatus.ACTIVE,
             eventDate = Clock.System.now(),
+createdDate = Clock.System.now(),
             dueDate = LocalDate.currentDate(),
             organisationUnit = "",
             organisationUnitCode = "",
             completedDate = null,
-            dataValues = listOf(
-                RuleDataValue(
-                    Clock.System.now(), "test_program_stage", "test_data_element", "test_value"
-                )
+            dataValues = listOf(RuleDataValue("test_data_element", "test_value")
             )
         )
         val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, enrollment, emptyList(), ruleEngineContext)

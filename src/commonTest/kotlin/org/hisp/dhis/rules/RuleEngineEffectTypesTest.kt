@@ -20,13 +20,14 @@ class RuleEngineEffectTypesTest {
             programStageName = "",
             status = status,
             eventDate = Clock.System.now(),
+            createdDate = Clock.System.now(),
             dueDate = LocalDate.currentDate(),
             organisationUnit = "",
             organisationUnitCode = "",
             completedDate = null,
             dataValues = listOf(
                 RuleDataValue(
-                    Clock.System.now(), "test_program_stage", "test_data_element", "test_value"
+                    "test_data_element", "test_value"
                 )
             )
         )

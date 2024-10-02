@@ -2,7 +2,6 @@ package org.hisp.dhis.rules.models
 
 import org.hisp.dhis.rules.engine.RuleVariableValue
 import org.hisp.dhis.rules.utils.getLastUpdateDate
-import org.hisp.dhis.rules.utils.values
 
 class RuleVariableNewestStageEvent(
     override val name: String,
@@ -12,38 +11,24 @@ class RuleVariableNewestStageEvent(
     override val fieldType: RuleValueType,
     val programStage: String
 ) : RuleVariable {
-
     override fun createValues(
         ruleEvent: RuleEvent?,
-        allEventValues: Map<String, List<RuleDataValue>>,
+        allEventValues: Map<String, List<RuleDataValueHistory>>,
         currentEnrollmentValues: Map<String, RuleAttributeValue>,
         currentEventValues: Map<String, RuleDataValue>
-    ): Map<String, RuleVariableValue> {
-        val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
-        val stageRuleDataValues: MutableList<RuleDataValue> = ArrayList()
-        val sourceRuleDataValues = allEventValues[field]
-        if (!sourceRuleDataValues.isNullOrEmpty()) {
+    ): RuleVariableValue {
+        val stageRuleDataValues = allEventValues[field]?.filter { it.programStage == programStage }.orEmpty()
 
-            // filter data values based on program stage
-            for (ruleDataValue in sourceRuleDataValues) {
-                if (programStage == ruleDataValue.programStage) {
-                    stageRuleDataValues.add(ruleDataValue)
-                }
-            }
-        }
-        if (stageRuleDataValues.isEmpty()) {
-            valueMap[name] = RuleVariableValue(fieldType)
+        return if (stageRuleDataValues.isEmpty()) {
+            RuleVariableValue(fieldType)
         } else {
-            val variableValue: RuleVariableValue
             val value = stageRuleDataValues[0]
             val optionValue = if (useCodeForOptionSet) value.value else getOptionName(value.value)!!
-            variableValue = RuleVariableValue(
+            RuleVariableValue(
                 fieldType, optionValue,
-                values(stageRuleDataValues),
+                stageRuleDataValues.map { it.value },
                 getLastUpdateDate(stageRuleDataValues)
             )
-            valueMap[name] = variableValue
         }
-        return valueMap
     }
 }

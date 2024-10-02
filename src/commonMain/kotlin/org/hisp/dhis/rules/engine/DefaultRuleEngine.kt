@@ -12,13 +12,7 @@ import org.hisp.dhis.rules.models.*
 
 internal class DefaultRuleEngine: RuleEngine {
     override fun evaluate(target: RuleEvent, ruleEnrollment: RuleEnrollment?, ruleEvents: List<RuleEvent>, executionContext: RuleEngineContext): List<RuleEffect> {
-        val valueMap = RuleVariableValueMapBuilder.target(target)
-            .ruleVariables(executionContext.ruleVariables)
-            .ruleEnrollment(ruleEnrollment)
-            .triggerEnvironment(TriggerEnvironment.SERVER)
-            .ruleEvents(ruleEvents)
-            .constantValueMap(executionContext.constantsValues)
-            .build()
+        val valueMap = RuleVariableValueMapBuilder().build(executionContext.constantsValues, executionContext.ruleVariables, ruleEvents.toSet(), ruleEnrollment, target)
         return RuleConditionEvaluator().getRuleEffects(
             TrackerObjectType.EVENT, target.event, valueMap,
             executionContext.supplementaryData, executionContext.rules
@@ -26,12 +20,7 @@ internal class DefaultRuleEngine: RuleEngine {
     }
 
     override fun evaluate(target: RuleEnrollment, ruleEvents: List<RuleEvent>, executionContext: RuleEngineContext): List<RuleEffect> {
-        val valueMap = RuleVariableValueMapBuilder.target(target)
-                .ruleVariables(executionContext.ruleVariables)
-                .triggerEnvironment(TriggerEnvironment.SERVER)
-                .ruleEvents(ruleEvents)
-                .constantValueMap(executionContext.constantsValues)
-                .build()
+        val valueMap = RuleVariableValueMapBuilder().build(executionContext.constantsValues, executionContext.ruleVariables, ruleEvents.toSet(), target)
         return RuleConditionEvaluator().getRuleEffects(
             TrackerObjectType.ENROLLMENT, target.enrollment, valueMap,
             executionContext.supplementaryData, executionContext.rules
@@ -39,13 +28,8 @@ internal class DefaultRuleEngine: RuleEngine {
     }
 
     override fun evaluateAll(enrollmentTarget: RuleEnrollment?, eventsTarget: List<RuleEvent>, executionContext: RuleEngineContext): List<RuleEffects> {
-        val valueMap = RuleVariableValueMapBuilder.target()
-                .ruleVariables(executionContext.ruleVariables)
-                .ruleEnrollment(enrollmentTarget)
-                .triggerEnvironment(TriggerEnvironment.SERVER)
-                .ruleEvents(eventsTarget)
-                .constantValueMap(executionContext.constantsValues)
-                .multipleBuild()
+        val valueMap = RuleVariableValueMapBuilder()
+                .multipleBuild(executionContext.constantsValues, executionContext.ruleVariables, eventsTarget.toSet(), enrollmentTarget)
         return RuleEngineMultipleExecution().execute(executionContext.rules, valueMap,
                 executionContext.supplementaryData)
     }

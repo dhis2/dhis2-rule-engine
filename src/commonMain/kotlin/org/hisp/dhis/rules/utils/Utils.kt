@@ -1,31 +1,26 @@
 package org.hisp.dhis.rules.utils
 
 import kotlinx.datetime.*
+import org.hisp.dhis.rules.models.RuleDataValue
+import org.hisp.dhis.rules.models.RuleDataValueHistory
 import org.hisp.dhis.rules.models.RuleEvent
 
-fun values(ruleDataValues: List<org.hisp.dhis.rules.models.RuleDataValue>): List<String> {
-        val values: MutableList<String> = ArrayList(ruleDataValues.size)
-        for (ruleDataValue in ruleDataValues) {
-            values.add(ruleDataValue.value)
-        }
-        return values
-    }
-
     fun getLastUpdateDateForPrevious(
-        ruleDataValues: List<org.hisp.dhis.rules.models.RuleDataValue>,
+        ruleDataValues: List<RuleDataValueHistory>,
         ruleEvent: RuleEvent
     ): String {
         val dates: MutableList<Instant> = ArrayList()
         for (date in ruleDataValues) {
             val d = date.eventDate
-            if (d < ruleEvent.eventDate) {
+            if (d < ruleEvent.eventDate ||
+                (ruleEvent.eventDate == d && ruleEvent.createdDate > date.createdDate)) {
                 dates.add(d)
             }
         }
         return dates.max().toLocalDateTime(TimeZone.currentSystemDefault()).date.toString()
     }
 
-    fun getLastUpdateDate(ruleDataValues: List<org.hisp.dhis.rules.models.RuleDataValue>): String {
+    fun getLastUpdateDate(ruleDataValues: List<RuleDataValueHistory>): String {
         val dates: MutableList<Instant> = ArrayList()
         for (date in ruleDataValues) {
             val d = date.eventDate

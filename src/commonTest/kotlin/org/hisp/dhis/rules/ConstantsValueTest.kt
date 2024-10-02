@@ -128,6 +128,7 @@ class ConstantsValueTest {
             programStageName = "",
             status = RuleEventStatus.ACTIVE,
             eventDate = Clock.System.now(),
+            createdDate = Clock.System.now(),
             dueDate = LocalDate.currentDate(),
             organisationUnit = "",
             organisationUnitCode = "",
@@ -135,7 +136,7 @@ class ConstantsValueTest {
             dataValues =
             listOf(
                 RuleDataValue(
-                    Clock.System.now(), "test_program_stage", "test_data_element", "test_value"
+                    "test_data_element", "test_value"
                 )
             )
         )

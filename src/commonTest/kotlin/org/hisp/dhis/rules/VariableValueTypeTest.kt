@@ -50,13 +50,14 @@ class VariableValueTypeTest {
             "",
             RuleEventStatus.ACTIVE,
             now,
+            now,
             LocalDate.fromEpochDays(1),
             null,
             "",
             null,
             listOf(
-                RuleDataValue(now, "", "test_data_element", "30"),
-                RuleDataValue(now, "", "test_data_element2", "4")
+                RuleDataValue("test_data_element", "30"),
+                RuleDataValue("test_data_element2", "4")
             )
         )
         val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
@@ -79,13 +80,14 @@ class VariableValueTypeTest {
             "",
             RuleEventStatus.ACTIVE,
             now,
+            now,
             LocalDate.fromEpochDays(1),
             null,
             "",
             null,
             listOf(
-                RuleDataValue(now, "", "test_data_element", "30"),
-                RuleDataValue(now, "", "test_data_element2", "4")
+                RuleDataValue("test_data_element", "30"),
+                RuleDataValue("test_data_element2", "4")
             )
         )
         val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)

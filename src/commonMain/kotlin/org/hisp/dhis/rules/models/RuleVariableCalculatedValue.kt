@@ -40,12 +40,10 @@ class RuleVariableCalculatedValue(
 ) : RuleVariable {
     override fun createValues(
         ruleEvent: RuleEvent?,
-        allEventValues: Map<String, List<RuleDataValue>>,
+        allEventValues: Map<String, List<RuleDataValueHistory>>,
         currentEnrollmentValues: Map<String, RuleAttributeValue>,
         currentEventValues: Map<String, RuleDataValue>
-    ): Map<String, RuleVariableValue> {
-        val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
-        valueMap[name] = RuleVariableValue(fieldType)
-        return valueMap
+    ): RuleVariableValue {
+        return RuleVariableValue(fieldType)
     }
 }

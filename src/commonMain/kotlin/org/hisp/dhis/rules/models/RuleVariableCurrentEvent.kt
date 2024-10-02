@@ -1,5 +1,7 @@
 package org.hisp.dhis.rules.models
 
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.hisp.dhis.rules.engine.RuleVariableValue
 import org.hisp.dhis.rules.utils.getLastUpdateDate
 
@@ -8,27 +10,23 @@ class RuleVariableCurrentEvent(
     override val useCodeForOptionSet: Boolean,
     override val options: List<Option>,
     override val field: String,
-    override val fieldType: RuleValueType,
+    override val fieldType: RuleValueType
 ) : RuleVariable {
     override fun createValues(
         ruleEvent: RuleEvent?,
-        allEventValues: Map<String, List<RuleDataValue>>,
+        allEventValues: Map<String, List<RuleDataValueHistory>>,
         currentEnrollmentValues: Map<String, RuleAttributeValue>,
         currentEventValues: Map<String, RuleDataValue>
-    ): Map<String, RuleVariableValue> {
-        val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
-        val variableValue: RuleVariableValue
-        variableValue = if (currentEventValues.containsKey(field)) {
+    ): RuleVariableValue {
+        val variableValue = if (currentEventValues.containsKey(field)) {
             val value = currentEventValues[field]
             val optionValue = if (useCodeForOptionSet) value!!.value else getOptionName(value!!.value)!!
             RuleVariableValue(
                 fieldType, optionValue,
-                listOf(optionValue), getLastUpdateDate(listOf(value))
-            )
+                listOf(optionValue), ruleEvent!!.eventDate.toLocalDateTime(TimeZone.currentSystemDefault()).date.toString())
         } else {
             RuleVariableValue(fieldType)
         }
-        valueMap[name] = variableValue
-        return valueMap
+        return variableValue
     }
 }

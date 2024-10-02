@@ -13,11 +13,10 @@ data class RuleVariableAttribute(
 ) : RuleVariable {
     override fun createValues(
         ruleEvent: RuleEvent?,
-        allEventValues: Map<String, List<RuleDataValue>>,
+        allEventValues: Map<String, List<RuleDataValueHistory>>,
         currentEnrollmentValues: Map<String, RuleAttributeValue>,
         currentEventValues: Map<String, RuleDataValue>
-    ): Map<String, RuleVariableValue> {
-        val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
+    ): RuleVariableValue {
         val currentDate = LocalDate.Companion.currentDate()
         val variableValue = if (currentEnrollmentValues.containsKey(field)) {
             val value = currentEnrollmentValues[field]
@@ -29,7 +28,6 @@ data class RuleVariableAttribute(
         } else {
             RuleVariableValue(fieldType)
         }
-        valueMap[name] = variableValue
-        return valueMap
+        return variableValue
     }
 }

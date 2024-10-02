@@ -10,12 +10,12 @@ interface RuleVariable {
     val fieldType: RuleValueType
     fun createValues(
         ruleEvent: RuleEvent?,
-        allEventValues: Map<String, List<RuleDataValue>>,
+        allEventValues: Map<String, List<RuleDataValueHistory>>,
         currentEnrollmentValues: Map<String, RuleAttributeValue>,
         currentEventValues: Map<String, RuleDataValue>
-    ): Map<String, RuleVariableValue>
+    ): RuleVariableValue
 
-    fun getOptionName(value: String?): String? {
+    fun getOptionName(value: String): String {
         // if no option found then existing value in the context will be used
         return options
             .filter{ (_, code): Option -> value == code }

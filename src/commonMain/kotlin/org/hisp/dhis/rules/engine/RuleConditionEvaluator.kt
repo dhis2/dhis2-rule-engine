@@ -15,7 +15,7 @@ internal class RuleConditionEvaluator {
     fun getEvaluatedAndErrorRuleEffects(
         targetType: TrackerObjectType,
         targetUid: String,
-        valueMap: MutableMap<String, RuleVariableValue>,
+        valueMap: Map<String, RuleVariableValue>,
         supplementaryData: Map<String, List<String>>,
         rules: List<Rule>
     ): List<RuleEffect> {
@@ -27,7 +27,7 @@ internal class RuleConditionEvaluator {
     fun getRuleEffects(
         targetType: TrackerObjectType,
         targetUid: String,
-        valueMap: MutableMap<String, RuleVariableValue>,
+        valueMap: Map<String, RuleVariableValue>,
         supplementaryData: Map<String, List<String>>,
         rules: List<Rule>
     ): List<RuleEffect> {
@@ -45,10 +45,11 @@ internal class RuleConditionEvaluator {
 
     fun getRuleEvaluationResults(
         targetType: TrackerObjectType, targetUid: String,
-        valueMap: MutableMap<String, RuleVariableValue>,
+        valueMap: Map<String, RuleVariableValue>,
         supplementaryData: Map<String, List<String>>,
         rules: List<Rule>
     ): List<RuleEvaluationResult> {
+        val mutableValueMap = valueMap.toMutableMap()
         val ruleEvaluationResults: MutableList<RuleEvaluationResult> = ArrayList()
         for (rule in rules.sorted()) {
             log.fine("Evaluating programrule: " + rule.name)
@@ -56,7 +57,7 @@ internal class RuleConditionEvaluator {
                 val ruleEffects: MutableList<RuleEffect> = ArrayList()
                 if (process(
                         rule.condition,
-                        valueMap,
+                        mutableValueMap,
                         supplementaryData,
                         ExpressionMode.RULE_ENGINE_CONDITION
                     ).toBoolean()
@@ -69,14 +70,14 @@ internal class RuleConditionEvaluator {
                                     unwrapVariableName(action.content()!!),
                                     RuleVariableValue(
                                         RuleValueType.TEXT,
-                                        process(action.data, valueMap, supplementaryData, ExpressionMode.RULE_ENGINE_ACTION),
+                                        process(action.data, mutableValueMap, supplementaryData, ExpressionMode.RULE_ENGINE_ACTION),
                                         listOf(),
                                         null
                                     ),
-                                    valueMap
+                                    mutableValueMap
                                 )
                             } else {
-                                ruleEffects.add(create(rule, action, valueMap, supplementaryData))
+                                ruleEffects.add(create(rule, action, mutableValueMap, supplementaryData))
                             }
                         } catch (e: Exception) {
                             addRuleErrorResult(rule, action, e, targetType, targetUid, ruleEvaluationResults)
@@ -137,7 +138,7 @@ internal class RuleConditionEvaluator {
         condition: String?, valueMap: Map<String, RuleVariableValue>,
         supplementaryData: Map<String, List<String>>, mode: ExpressionMode
     ): String {
-        if (condition==null || condition.isEmpty()) {
+        if (condition.isNullOrEmpty()) {
             return ""
         }
         val expression = Expression(condition, mode, false)
