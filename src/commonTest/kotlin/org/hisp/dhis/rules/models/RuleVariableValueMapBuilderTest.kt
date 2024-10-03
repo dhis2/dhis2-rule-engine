@@ -6,7 +6,6 @@ import org.hisp.dhis.rules.engine.RuleVariableValueMapBuilder
 import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
 
 class RuleVariableValueMapBuilderTest {

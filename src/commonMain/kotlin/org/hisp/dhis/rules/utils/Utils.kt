@@ -1,11 +1,10 @@
 package org.hisp.dhis.rules.utils
 
 import kotlinx.datetime.*
-import org.hisp.dhis.rules.models.RuleDataValue
 import org.hisp.dhis.rules.models.RuleDataValueHistory
 import org.hisp.dhis.rules.models.RuleEvent
 
-    fun getLastUpdateDateForPrevious(
+fun getLastUpdateDateForPrevious(
         ruleDataValues: List<RuleDataValueHistory>,
         ruleEvent: RuleEvent
     ): String {

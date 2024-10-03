@@ -3,7 +3,6 @@ package org.hisp.dhis.rules.models
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.hisp.dhis.rules.engine.RuleVariableValue
-import org.hisp.dhis.rules.utils.getLastUpdateDateForPrevious
 
 class RuleVariablePreviousEvent(
     override val name: String,
