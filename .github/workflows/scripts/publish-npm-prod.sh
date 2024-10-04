@@ -1,7 +1,7 @@
 set -x
 
-./gradlew packJsPackage
-./gradlew packJsPackage -PuseCommonJs
+./gradlew packJsPackage -PremoveSnapshotSuffix
+./gradlew packJsPackage -PremoveSnapshotSuffix -PuseCommonJs
 
 cd build/packages/js || exit
 
