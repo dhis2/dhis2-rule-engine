@@ -14,18 +14,19 @@ class RuleVariableCurrentEvent(
     override fun createValues(
         ruleEvent: RuleEvent?,
         allEventValues: Map<String, List<RuleDataValueHistory>>,
-        currentEnrollmentValues: Map<String, RuleAttributeValue>,
-        currentEventValues: Map<String, RuleDataValue>
+        currentEnrollmentValues: Map<String, RuleAttributeValue>
     ): RuleVariableValue {
-        val variableValue = if (currentEventValues.containsKey(field)) {
-            val value = currentEventValues[field]
-            val optionValue = if (useCodeForOptionSet) value!!.value else getOptionName(value!!.value)!!
-            RuleVariableValue(
-                fieldType, optionValue,
-                listOf(optionValue), ruleEvent!!.eventDate.toLocalDateTime(TimeZone.currentSystemDefault()).date.toString())
-        } else {
-            RuleVariableValue(fieldType)
-        }
-        return variableValue
+        return ruleEvent?.let {
+            it.dataValues.filter { d -> d.dataElement == field }
+                .map {
+                    val optionValue = if (useCodeForOptionSet) it.value else getOptionName(it.value)
+                    RuleVariableValue(
+                        fieldType,
+                        optionValue,
+                        listOf(optionValue),
+                        ruleEvent.eventDate.toLocalDateTime(TimeZone.currentSystemDefault()).date.toString()
+                    )
+                }.firstOrNull()
+        } ?:RuleVariableValue(fieldType)
     }
 }

@@ -19,10 +19,6 @@ internal class RuleVariableValueMapBuilder {
         return RuleVariableValueMap(enrollmentMap, ruleEvents.associateBy( {it}, {build(allConstantValues, ruleVariables, ruleEvents, ruleEnrollment, it)} ))
     }
 
-    private fun buildCurrentEventValues(ruleEvent: RuleEvent): Map<String, RuleDataValue> {
-        return ruleEvent.dataValues.associateBy { it.dataElement }
-    }
-
     private fun buildCurrentEnrollmentValues(ruleEnrollment: RuleEnrollment): Map<String, RuleAttributeValue> {
         return ruleEnrollment.attributeValues.associateBy { it.trackedEntityAttribute }
     }
@@ -183,16 +179,12 @@ internal class RuleVariableValueMapBuilder {
         // map tracked entity attributes to values from enrollment
         val currentEnrollmentValues = ruleEnrollment?.let {buildCurrentEnrollmentValues(it)}.orEmpty()
 
-        // build a map of current event values
-        val currentEventValues = ruleEvent?.let { buildCurrentEventValues(it) }.orEmpty()
-
         return ruleVariables.associateBy(
             {it.name},
             {it.createValues(
                 ruleEvent,
                 allEventValues,
-                currentEnrollmentValues,
-                currentEventValues
+                currentEnrollmentValues
             )}
         )
     }

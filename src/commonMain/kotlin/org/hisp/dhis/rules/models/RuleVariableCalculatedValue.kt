@@ -41,8 +41,7 @@ class RuleVariableCalculatedValue(
     override fun createValues(
         ruleEvent: RuleEvent?,
         allEventValues: Map<String, List<RuleDataValueHistory>>,
-        currentEnrollmentValues: Map<String, RuleAttributeValue>,
-        currentEventValues: Map<String, RuleDataValue>
+        currentEnrollmentValues: Map<String, RuleAttributeValue>
     ): RuleVariableValue {
         return RuleVariableValue(fieldType)
     }

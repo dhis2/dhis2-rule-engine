@@ -14,8 +14,7 @@ class RuleVariableNewestStageEvent(
     override fun createValues(
         ruleEvent: RuleEvent?,
         allEventValues: Map<String, List<RuleDataValueHistory>>,
-        currentEnrollmentValues: Map<String, RuleAttributeValue>,
-        currentEventValues: Map<String, RuleDataValue>
+        currentEnrollmentValues: Map<String, RuleAttributeValue>
     ): RuleVariableValue {
         val stageRuleDataValues = allEventValues[field]?.filter { it.programStage == programStage }.orEmpty()
 
@@ -23,7 +22,7 @@ class RuleVariableNewestStageEvent(
             RuleVariableValue(fieldType)
         } else {
             val value = stageRuleDataValues[0]
-            val optionValue = if (useCodeForOptionSet) value.value else getOptionName(value.value)!!
+            val optionValue = if (useCodeForOptionSet) value.value else getOptionName(value.value)
             RuleVariableValue(
                 fieldType, optionValue,
                 stageRuleDataValues.map { it.value },

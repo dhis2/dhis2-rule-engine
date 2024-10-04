@@ -13,15 +13,14 @@ class RuleVariableNewestEvent(
     override fun createValues(
         ruleEvent: RuleEvent?,
         allEventValues: Map<String, List<RuleDataValueHistory>>,
-        currentEnrollmentValues: Map<String, RuleAttributeValue>,
-        currentEventValues: Map<String, RuleDataValue>
+        currentEnrollmentValues: Map<String, RuleAttributeValue>
     ): RuleVariableValue {
         val ruleDataValues = allEventValues[field]
         return if (ruleDataValues.isNullOrEmpty()) {
              RuleVariableValue(fieldType)
         } else {
             val value = ruleDataValues[0]
-            val optionValue = if (useCodeForOptionSet) value.value else getOptionName(value.value)!!
+            val optionValue = if (useCodeForOptionSet) value.value else getOptionName(value.value)
             RuleVariableValue(
                 fieldType, optionValue,
                 ruleDataValues.map { it.value }, getLastUpdateDate(ruleDataValues)

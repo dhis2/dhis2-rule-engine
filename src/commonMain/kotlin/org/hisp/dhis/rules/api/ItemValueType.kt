@@ -32,18 +32,20 @@ import kotlin.js.JsExport
 */
 
 @JsExport
-enum class ItemValueType(val value: String) {
+enum class ItemValueType(
+    val value: String,
+) {
     NUMBER("1.0"),
     DATE("2020-01-01"),
     TEXT("Sample_text_string"),
-    BOOLEAN("true");
+    BOOLEAN("true"),
+    ;
 
-    fun toValueType(): ValueType {
-        return when (this) {
+    fun toValueType(): ValueType =
+        when (this) {
             NUMBER -> ValueType.NUMBER
             DATE -> ValueType.DATE
             TEXT -> ValueType.STRING
             BOOLEAN -> ValueType.BOOLEAN
         }
-    }
 }

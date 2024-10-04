@@ -14,8 +14,7 @@ class RuleVariablePreviousEvent(
     override fun createValues(
         ruleEvent: RuleEvent?,
         allEventValues: Map<String, List<RuleDataValueHistory>>,
-        currentEnrollmentValues: Map<String, RuleAttributeValue>,
-        currentEventValues: Map<String, RuleDataValue>
+        currentEnrollmentValues: Map<String, RuleAttributeValue>
     ): RuleVariableValue {
         val dataValues = allEventValues[field]
         if (ruleEvent != null && !dataValues.isNullOrEmpty()) {

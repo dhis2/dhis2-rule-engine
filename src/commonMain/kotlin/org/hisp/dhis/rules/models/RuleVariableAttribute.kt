@@ -14,20 +14,15 @@ data class RuleVariableAttribute(
     override fun createValues(
         ruleEvent: RuleEvent?,
         allEventValues: Map<String, List<RuleDataValueHistory>>,
-        currentEnrollmentValues: Map<String, RuleAttributeValue>,
-        currentEventValues: Map<String, RuleDataValue>
+        currentEnrollmentValues: Map<String, RuleAttributeValue>
     ): RuleVariableValue {
         val currentDate = LocalDate.Companion.currentDate()
-        val variableValue = if (currentEnrollmentValues.containsKey(field)) {
-            val value = currentEnrollmentValues[field]
-            val optionValue = if (useCodeForOptionSet) value!!.value else getOptionName(value!!.value)!!
+        return currentEnrollmentValues[field]?.let {
+            val optionValue = if (useCodeForOptionSet) it.value else getOptionName(it.value)
             RuleVariableValue(
                 fieldType, optionValue,
                 listOf(optionValue), currentDate.toString()
             )
-        } else {
-            RuleVariableValue(fieldType)
-        }
-        return variableValue
+        } ?: RuleVariableValue(fieldType)
     }
 }

@@ -23,7 +23,7 @@ class RuleVariablePreviousEventTest {
     @Test
     fun shouldCreateEmptyRuleVariableValueWhenNoDataValuesArePresent() {
         val ruleVariableValue =
-            ruleVariablePreviousEvent.createValues(event(tomorrow, tomorrow), emptyMap(), emptyMap(), emptyMap())
+            ruleVariablePreviousEvent.createValues(event(tomorrow, tomorrow), emptyMap(), emptyMap())
 
         assertEquals(RuleValueType.NUMERIC, ruleVariableValue.type)
         assertNull(ruleVariableValue.value)
@@ -34,7 +34,7 @@ class RuleVariablePreviousEventTest {
     @Test
     fun shouldCreateTodayRuleVariableValueWhenEventDateIsTomorrow() {
         val ruleVariableValue =
-            ruleVariablePreviousEvent.createValues(event(tomorrow, tomorrow), allEventsDataValues(), emptyMap(), emptyMap())
+            ruleVariablePreviousEvent.createValues(event(tomorrow, tomorrow), allEventsDataValues(), emptyMap())
 
         assertEquals(RuleValueType.NUMERIC, ruleVariableValue.type)
         assertEquals(todayDataValue().value, ruleVariableValue.value)
@@ -45,7 +45,7 @@ class RuleVariablePreviousEventTest {
     @Test
     fun shouldCreateYesterdayAfternoonRuleVariableValueWhenEventDateIsToday() {
         val ruleVariableValue =
-            ruleVariablePreviousEvent.createValues(event(todayInstant, todayInstant), allEventsDataValues(), emptyMap(), emptyMap())
+            ruleVariablePreviousEvent.createValues(event(todayInstant, todayInstant), allEventsDataValues(), emptyMap())
 
         assertEquals(RuleValueType.NUMERIC, ruleVariableValue.type)
         assertEquals(yesterdayDataValueCreatedThisAfternoon().value, ruleVariableValue.value)
@@ -56,7 +56,7 @@ class RuleVariablePreviousEventTest {
     @Test
     fun shouldCreateYesterdayRuleVariableValueCreateTodayMorningWhenEventDateIsYesterdayAndItWasCreatedTodayAfternoon() {
         val ruleVariableValue =
-            ruleVariablePreviousEvent.createValues(event(yesterdayInstant, todayAfternoon), allEventsDataValues(), emptyMap(), emptyMap())
+            ruleVariablePreviousEvent.createValues(event(yesterdayInstant, todayAfternoon), allEventsDataValues(), emptyMap())
 
         assertEquals(RuleValueType.NUMERIC, ruleVariableValue.type)
         assertEquals(yesterdayDataValueCreatedThisMorning().value, ruleVariableValue.value)
@@ -67,7 +67,7 @@ class RuleVariablePreviousEventTest {
     @Test
     fun shouldCreateDayBeforeYesterdayRuleVariableValueWhenEventDateIsYesterdayAndItWasCreatedYesterday() {
         val ruleVariableValue =
-            ruleVariablePreviousEvent.createValues(event(yesterdayInstant, yesterdayInstant), allEventsDataValues(), emptyMap(), emptyMap())
+            ruleVariablePreviousEvent.createValues(event(yesterdayInstant, yesterdayInstant), allEventsDataValues(), emptyMap())
 
         assertEquals(RuleValueType.NUMERIC, ruleVariableValue.type)
         assertEquals(dayBeforeYesterdayDataValue().value, ruleVariableValue.value)
@@ -78,7 +78,7 @@ class RuleVariablePreviousEventTest {
     @Test
     fun shouldGetNoValueWhenThereIsNoPreviousDataValue() {
         val ruleVariableValue =
-            ruleVariablePreviousEvent.createValues(event(dayBeforeYesterdayInstant, yesterdayInstant), allEventsDataValues(), emptyMap(), emptyMap())
+            ruleVariablePreviousEvent.createValues(event(dayBeforeYesterdayInstant, yesterdayInstant), allEventsDataValues(), emptyMap())
 
         assertEquals(RuleValueType.NUMERIC, ruleVariableValue.type)
         assertNull(ruleVariableValue.value)
