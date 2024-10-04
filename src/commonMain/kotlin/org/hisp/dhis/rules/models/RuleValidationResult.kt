@@ -33,24 +33,24 @@ import kotlin.jvm.JvmStatic
 
 @JsExport
 data class RuleValidationResult(
-        val valid: Boolean,
-        val errorMessage: String? = null,
-        val exception: Throwable? = null,
-        val description: String? = null
-){
-        companion object {
-                @JvmStatic
-                fun invalid(errorMessage: String): RuleValidationResult {
-                        return RuleValidationResult(
-                                valid = false, errorMessage = errorMessage
-                        )
-                }
+    val valid: Boolean,
+    val errorMessage: String? = null,
+    val exception: Throwable? = null,
+    val description: String? = null,
+) {
+    companion object {
+        @JvmStatic
+        fun invalid(errorMessage: String): RuleValidationResult =
+            RuleValidationResult(
+                valid = false,
+                errorMessage = errorMessage,
+            )
 
-                @JvmStatic
-                fun valid(description: String): RuleValidationResult {
-                        return RuleValidationResult(
-                                valid = true, description = description
-                        )
-                }
-        }
+        @JvmStatic
+        fun valid(description: String): RuleValidationResult =
+            RuleValidationResult(
+                valid = true,
+                description = description,
+            )
+    }
 }

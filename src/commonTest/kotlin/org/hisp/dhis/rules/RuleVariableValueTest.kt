@@ -8,11 +8,16 @@ import kotlin.test.assertEquals
 class RuleVariableValueTest {
     @Test
     fun textValuesMostBeWrapped() {
-        val variableValue = RuleVariableValue(
-            RuleValueType.TEXT, "test_value", listOf(
-                "test_value_candidate_one", "test_value_candidate_two"
-            ), "2023-12-14"
-        )
+        val variableValue =
+            RuleVariableValue(
+                RuleValueType.TEXT,
+                "test_value",
+                listOf(
+                    "test_value_candidate_one",
+                    "test_value_candidate_two",
+                ),
+                "2023-12-14",
+            )
         assertEquals("test_value", variableValue.value)
         assertEquals(RuleValueType.TEXT, variableValue.type)
         assertEquals(2, variableValue.candidates.size)
@@ -22,11 +27,16 @@ class RuleVariableValueTest {
 
     @Test
     fun wrappedTextValuesMustNotBeDoubleWrapped() {
-        val variableValue = RuleVariableValue(
-            RuleValueType.TEXT, "test_value", listOf(
-                "test_value_candidate_one", "test_value_candidate_two"
-            ), "2023-12-14"
-        )
+        val variableValue =
+            RuleVariableValue(
+                RuleValueType.TEXT,
+                "test_value",
+                listOf(
+                    "test_value_candidate_one",
+                    "test_value_candidate_two",
+                ),
+                "2023-12-14",
+            )
         assertEquals("test_value", variableValue.value)
         assertEquals(RuleValueType.TEXT, variableValue.type)
         assertEquals(2, variableValue.candidates.size)
@@ -36,9 +46,13 @@ class RuleVariableValueTest {
 
     @Test
     fun numericValuesMostNotBeWrapped() {
-        val variableValue = RuleVariableValue(
-            RuleValueType.NUMERIC, "1", listOf("2", "3"), "2023-12-14"
-        )
+        val variableValue =
+            RuleVariableValue(
+                RuleValueType.NUMERIC,
+                "1",
+                listOf("2", "3"),
+                "2023-12-14",
+            )
         assertEquals("1", variableValue.value)
         assertEquals(RuleValueType.NUMERIC, variableValue.type)
         assertEquals(2, variableValue.candidates.size)
@@ -48,9 +62,13 @@ class RuleVariableValueTest {
 
     @Test
     fun booleanValuesMostNotBeWrapped() {
-        val variableValue = RuleVariableValue(
-            RuleValueType.BOOLEAN, "true", listOf("false", "false"), "2023-12-14"
-        )
+        val variableValue =
+            RuleVariableValue(
+                RuleValueType.BOOLEAN,
+                "true",
+                listOf("false", "false"),
+                "2023-12-14",
+            )
         assertEquals("true", variableValue.value)
         assertEquals(RuleValueType.BOOLEAN, variableValue.type)
         assertEquals(2, variableValue.candidates.size)

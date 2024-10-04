@@ -10,15 +10,25 @@ import kotlin.test.assertEquals
 class RuleEventTest {
     @Test
     fun createShouldPropagateValuesCorrectly() {
-        val ruleDataValue = RuleDataValue(Clock.System.now(), "programStage", "dataElement", "value")
+        val ruleDataValue = RuleDataValue("dataElement", "value")
         val ruleDataValues: MutableList<RuleDataValue> = ArrayList()
         ruleDataValues.add(ruleDataValue)
         val eventDate = Clock.System.now()
         val dueDate = LocalDate.Companion.currentDate()
-        val (event, programStage, _, status, eventDate1, dueDate1, _, _, _, dataValues) = RuleEvent(
-            "test_event_uid", "test_stage_uid", "",
-            RuleEventStatus.ACTIVE, eventDate, dueDate, null, "", "", ruleDataValues
-        )
+        val (event, programStage, _, status, eventDate1, _, dueDate1, _, _, _, dataValues) =
+            RuleEvent(
+                "test_event_uid",
+                "test_stage_uid",
+                "",
+                RuleEventStatus.ACTIVE,
+                eventDate,
+                eventDate,
+                dueDate,
+                null,
+                "",
+                "",
+                ruleDataValues,
+            )
         assertEquals("test_event_uid", event)
         assertEquals(RuleEventStatus.ACTIVE, status)
         assertEquals("test_stage_uid", programStage)
@@ -33,15 +43,31 @@ class RuleEventTest {
         val ruleEvents: List<RuleEvent> =
             listOf(
                 RuleEvent(
-                    "test_event_one", "test_program_stage_one", "", RuleEventStatus.ACTIVE,
-                    Instant.parse("2014-02-11T01:00:00Z"), LocalDate.parse("2014-02-11"), null, "", null,
-                    emptyList()
+                    "test_event_one",
+                    "test_program_stage_one",
+                    "",
+                    RuleEventStatus.ACTIVE,
+                    Instant.parse("2014-02-11T01:00:00Z"),
+                    Instant.parse("2014-02-11T01:00:00Z"),
+                    LocalDate.parse("2014-02-11"),
+                    null,
+                    "",
+                    null,
+                    emptyList(),
                 ),
                 RuleEvent(
-                    "test_event_two", "test_program_stage_two", "", RuleEventStatus.ACTIVE,
-                    Instant.parse("2017-03-22T01:00:00Z"), LocalDate.parse("2017-03-22"), null, "", null,
-                    emptyList()
-                )
+                    "test_event_two",
+                    "test_program_stage_two",
+                    "",
+                    RuleEventStatus.ACTIVE,
+                    Instant.parse("2017-03-22T01:00:00Z"),
+                    Instant.parse("2014-02-11T01:00:00Z"),
+                    LocalDate.parse("2017-03-22"),
+                    null,
+                    "",
+                    null,
+                    emptyList(),
+                ),
             )
         val reversed = ruleEvents.sortedBy { e -> e.eventDate }.reversed()
         assertEquals("test_event_two", reversed[0].event)

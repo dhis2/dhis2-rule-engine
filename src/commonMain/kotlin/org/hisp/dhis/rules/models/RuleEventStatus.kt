@@ -9,5 +9,5 @@ enum class RuleEventStatus {
     SCHEDULE,
     SKIPPED,
     VISITED,
-    OVERDUE
+    OVERDUE,
 }

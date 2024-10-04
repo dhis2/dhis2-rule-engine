@@ -1,10 +1,9 @@
 package org.hisp.dhis.rules.models
 
-import kotlinx.datetime.Instant
+import kotlin.js.JsExport
 
+@JsExport
 data class RuleDataValue(
-    val eventDate: Instant,
-    val programStage: String,
     val dataElement: String,
-    val value: String
+    val value: String,
 )

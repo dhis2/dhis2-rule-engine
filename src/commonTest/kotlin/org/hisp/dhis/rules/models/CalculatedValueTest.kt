@@ -40,32 +40,31 @@ class CalculatedValueTest {
     fun evaluateOneThousandRulesTest() {
         val i = 1000
         val ruleEngineContext = getRuleEngineContext(createRules(i))
-        val enrollment = RuleEnrollment(
-            "test_enrollment",
-            "test_program",
-            LocalDate.currentDate(),
-            LocalDate.currentDate(),
-            RuleEnrollmentStatus.ACTIVE,
-            "test_ou",
-            "test_ou_code",
-            listOf()
-        )
-        val ruleEvent = RuleEvent(
-            event = "test_event",
-            programStage = "test_program_stage",
-            programStageName = "",
-            status = RuleEventStatus.ACTIVE,
-            eventDate = Clock.System.now(),
-            dueDate = LocalDate.currentDate(),
-            organisationUnit = "",
-            organisationUnitCode = "",
-            completedDate = null,
-            dataValues = listOf(
-                RuleDataValue(
-                    Clock.System.now(), "test_program_stage", "test_data_element", "test_value"
-                )
+        val enrollment =
+            RuleEnrollment(
+                "test_enrollment",
+                "test_program",
+                LocalDate.currentDate(),
+                LocalDate.currentDate(),
+                RuleEnrollmentStatus.ACTIVE,
+                "test_ou",
+                "test_ou_code",
+                listOf(),
             )
-        )
+        val ruleEvent =
+            RuleEvent(
+                event = "test_event",
+                programStage = "test_program_stage",
+                programStageName = "",
+                status = RuleEventStatus.ACTIVE,
+                eventDate = Clock.System.now(),
+                createdDate = Clock.System.now(),
+                dueDate = LocalDate.currentDate(),
+                organisationUnit = "",
+                organisationUnitCode = "",
+                completedDate = null,
+                dataValues = listOf(RuleDataValue("test_data_element", "test_value")),
+            )
         val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, enrollment, emptyList(), ruleEngineContext)
         assertEquals(i, ruleEffects.size)
     }
@@ -75,38 +74,41 @@ class CalculatedValueTest {
         val assignAction = RuleAction("2+2", "ASSIGN", mapOf(Pair("content", "#{test_calculated_value}")))
         val rule = Rule("true", listOf(assignAction), "test_program_rule1")
         val sendMessageAction =
-            RuleAction("4", "SENDMESSAGE",mapOf(Pair("content", "test_notification")))
-        val rule2 = Rule(
-            "#{test_calculated_value}==4",
-            listOf(sendMessageAction),
-            "test_program_rule2"
-        )
-        val enrollment = RuleEnrollment(
-            "test_enrollment",
-            "test_program",
-            LocalDate.currentDate(),
-            LocalDate.currentDate(),
-            RuleEnrollmentStatus.ACTIVE,
-            "test_ou",
-            "test_ou_code",
-            listOf()
-        )
-        val ruleEvent = RuleEvent(
-            event = "test_event",
-            programStage = "test_program_stage",
-            programStageName = "",
-            status = RuleEventStatus.ACTIVE,
-            eventDate = Clock.System.now(),
-            dueDate = LocalDate.currentDate(),
-            organisationUnit = "",
-            organisationUnitCode = "",
-            completedDate = null,
-            dataValues = listOf(
-                RuleDataValue(
-                    Clock.System.now(), "test_program_stage", "test_data_element", "test_value"
-                )
+            RuleAction("4", "SENDMESSAGE", mapOf(Pair("content", "test_notification")))
+        val rule2 =
+            Rule(
+                "#{test_calculated_value}==4",
+                listOf(sendMessageAction),
+                "test_program_rule2",
             )
-        )
+        val enrollment =
+            RuleEnrollment(
+                "test_enrollment",
+                "test_program",
+                LocalDate.currentDate(),
+                LocalDate.currentDate(),
+                RuleEnrollmentStatus.ACTIVE,
+                "test_ou",
+                "test_ou_code",
+                listOf(),
+            )
+        val ruleEvent =
+            RuleEvent(
+                event = "test_event",
+                programStage = "test_program_stage",
+                programStageName = "",
+                status = RuleEventStatus.ACTIVE,
+                eventDate = Clock.System.now(),
+                createdDate = Clock.System.now(),
+                dueDate = LocalDate.currentDate(),
+                organisationUnit = "",
+                organisationUnitCode = "",
+                completedDate = null,
+                dataValues =
+                    listOf(
+                        RuleDataValue("test_data_element", "test_value"),
+                    ),
+            )
         val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, enrollment, emptyList(), getRuleEngineContext(listOf(rule, rule2)))
         assertEquals("4", ruleEffects[0].data)
         assertEquals(sendMessageAction, ruleEffects[0].ruleAction)
@@ -117,12 +119,13 @@ class CalculatedValueTest {
         val assignAction = RuleAction("2+2", "ASSIGN", mapOf(Pair("content", "#{test_calculated_value}")))
         val rule = Rule("true", listOf(assignAction), "test_program_rule1")
         val sendMessageAction =
-            RuleAction("4", "SENDMESSAGE",mapOf(Pair("content", "test_notification")))
-        val rule2 = Rule(
-            "#{test_calculated_value}==4",
-            listOf(sendMessageAction),
-            "test_program_rule2"
-        )
+            RuleAction("4", "SENDMESSAGE", mapOf(Pair("content", "test_notification")))
+        val rule2 =
+            Rule(
+                "#{test_calculated_value}==4",
+                listOf(sendMessageAction),
+                "test_program_rule2",
+            )
         for (j in 0 until i) {
             rules.add(rule)
             rules.add(rule2)
@@ -135,38 +138,43 @@ class CalculatedValueTest {
         val assignAction = RuleAction("2+2", "ASSIGN", mapOf(Pair("content", "#{test_calculated_value}")))
         val rule = Rule("true", listOf(assignAction), "test_program_rule1", "")
         val sendMessageAction =
-            RuleAction("4.0", "SENDMESSAGE",mapOf(Pair("content", "test_notification")))
-        val rule2 = Rule(
-            "#{test_calculated_value}==4.0", listOf(sendMessageAction),
-            "test_program_rule2", ""
-        )
-        val ruleEngineContext = getRuleEngineContext(listOf(rule, rule2))
-        val enrollment = RuleEnrollment(
-            "test_enrollment",
-            "test_program",
-            LocalDate.currentDate(),
-            LocalDate.currentDate(),
-            RuleEnrollmentStatus.ACTIVE,
-            "test_ou",
-            "test_ou_code",
-            listOf()
-        )
-        val ruleEvent = RuleEvent(
-            event = "test_event",
-            programStage = "test_program_stage",
-            programStageName = "",
-            status = RuleEventStatus.ACTIVE,
-            eventDate = Clock.System.now(),
-            dueDate = LocalDate.currentDate(),
-            organisationUnit = "",
-            organisationUnitCode = "",
-            completedDate = null,
-            dataValues = listOf(
-                RuleDataValue(
-                    Clock.System.now(), "test_program_stage", "test_data_element", "test_value"
-                )
+            RuleAction("4.0", "SENDMESSAGE", mapOf(Pair("content", "test_notification")))
+        val rule2 =
+            Rule(
+                "#{test_calculated_value}==4.0",
+                listOf(sendMessageAction),
+                "test_program_rule2",
+                "",
             )
-        )
+        val ruleEngineContext = getRuleEngineContext(listOf(rule, rule2))
+        val enrollment =
+            RuleEnrollment(
+                "test_enrollment",
+                "test_program",
+                LocalDate.currentDate(),
+                LocalDate.currentDate(),
+                RuleEnrollmentStatus.ACTIVE,
+                "test_ou",
+                "test_ou_code",
+                listOf(),
+            )
+        val ruleEvent =
+            RuleEvent(
+                event = "test_event",
+                programStage = "test_program_stage",
+                programStageName = "",
+                status = RuleEventStatus.ACTIVE,
+                eventDate = Clock.System.now(),
+                createdDate = Clock.System.now(),
+                dueDate = LocalDate.currentDate(),
+                organisationUnit = "",
+                organisationUnitCode = "",
+                completedDate = null,
+                dataValues =
+                    listOf(
+                        RuleDataValue("test_data_element", "test_value"),
+                    ),
+            )
         val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, enrollment, emptyList(), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data)

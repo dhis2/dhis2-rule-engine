@@ -30,8 +30,9 @@ package org.hisp.dhis.rules.models
 /**
  * @author Zubair Asghar.
  */
-enum class TriggerEnvironment(val clientName: String) {
+enum class TriggerEnvironment(
+    val clientName: String,
+) {
     ANDROIDCLIENT("AndroidClient"),
-    SERVER("Server")
-
+    SERVER("Server"),
 }

@@ -28,7 +28,9 @@ import org.hisp.dhis.rules.engine.RuleVariableValue
 * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/ /**
+*/
+
+/**
  * @author Zubair Asghar.
  */
 class RuleVariableCalculatedValue(
@@ -36,16 +38,11 @@ class RuleVariableCalculatedValue(
     override val useCodeForOptionSet: Boolean,
     override val options: List<Option>,
     override val field: String,
-    override val fieldType: RuleValueType
+    override val fieldType: RuleValueType,
 ) : RuleVariable {
     override fun createValues(
         ruleEvent: RuleEvent?,
-        allEventValues: Map<String, List<RuleDataValue>>,
+        allEventValues: Map<String, List<RuleDataValueHistory>>,
         currentEnrollmentValues: Map<String, RuleAttributeValue>,
-        currentEventValues: Map<String, RuleDataValue>
-    ): Map<String, RuleVariableValue> {
-        val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
-        valueMap[name] = RuleVariableValue(fieldType)
-        return valueMap
-    }
+    ): RuleVariableValue = RuleVariableValue(fieldType)
 }

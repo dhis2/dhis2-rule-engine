@@ -10,5 +10,5 @@ data class RuleEnrollment(
     val status: RuleEnrollmentStatus,
     val organisationUnit: String,
     val organisationUnitCode: String?,
-    val attributeValues: List<RuleAttributeValue>
+    val attributeValues: List<RuleAttributeValue>,
 )

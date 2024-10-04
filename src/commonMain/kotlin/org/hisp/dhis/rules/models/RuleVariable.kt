@@ -8,18 +8,18 @@ interface RuleVariable {
     val options: List<Option>
     val field: String
     val fieldType: RuleValueType
+
     fun createValues(
         ruleEvent: RuleEvent?,
-        allEventValues: Map<String, List<RuleDataValue>>,
+        allEventValues: Map<String, List<RuleDataValueHistory>>,
         currentEnrollmentValues: Map<String, RuleAttributeValue>,
-        currentEventValues: Map<String, RuleDataValue>
-    ): Map<String, RuleVariableValue>
+    ): RuleVariableValue
 
-    fun getOptionName(value: String?): String? {
+    fun getOptionName(value: String): String {
         // if no option found then existing value in the context will be used
         return options
-            .filter{ (_, code): Option -> value == code }
+            .filter { (_, code): Option -> value == code }
             .map(Option::name)
-            .getOrElse(0) {_ -> value}
+            .getOrElse(0) { _ -> value }
     }
 }

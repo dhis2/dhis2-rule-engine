@@ -37,7 +37,6 @@ import kotlin.test.assertEquals
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 class ConstantsValueTest {
-
     @Test
     fun assignConstantValueFromAssignActionInEnrollment() {
         val assignAction = RuleAction("C{A1234567890}", "ASSIGN", mapOf(Pair("field", "#{test_attribute}")))
@@ -45,16 +44,17 @@ class ConstantsValueTest {
         val constantsValueMap: MutableMap<String, String> = HashMap()
         constantsValueMap["A1234567890"] = "3.14"
         val ruleEngineContext = getRuleEngineContext(listOf(rule), constantsValueMap)
-        val enrollment = RuleEnrollment(
-            enrollment = "test_enrollment",
-            programName = "test_program",
-            incidentDate = LocalDate.Companion.currentDate(),
-            enrollmentDate = LocalDate.Companion.currentDate(),
-            status = RuleEnrollmentStatus.ACTIVE,
-            organisationUnit = "test_ou",
-            organisationUnitCode = "test_ou_code",
-            attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value"))
-        )
+        val enrollment =
+            RuleEnrollment(
+                enrollment = "test_enrollment",
+                programName = "test_program",
+                incidentDate = LocalDate.Companion.currentDate(),
+                enrollmentDate = LocalDate.Companion.currentDate(),
+                status = RuleEnrollmentStatus.ACTIVE,
+                organisationUnit = "test_ou",
+                organisationUnitCode = "test_ou_code",
+                attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value")),
+            )
         val ruleEffects = RuleEngine.getInstance().evaluate(enrollment, emptyList(), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("3.14", ruleEffects[0].data)
@@ -67,20 +67,22 @@ class ConstantsValueTest {
         val action = RuleAction("#{test_attribute}", "SHOWERROR")
         val rule = Rule("true", listOf(assignAction), "test_program_rule1", "")
         val rule2 = Rule("#{test_attribute} > 3", listOf(action), "test_program_rule2", "")
-        val ruleEngineContext = getRuleEngineContext(
-            listOf(rule, rule2),
-            HashMap()
-        )
-        val enrollment = RuleEnrollment(
-            enrollment = "test_enrollment",
-            programName = "test_program",
-            incidentDate = LocalDate.Companion.currentDate(),
-            enrollmentDate = LocalDate.Companion.currentDate(),
-            status = RuleEnrollmentStatus.ACTIVE,
-            organisationUnit = "test_ou",
-            organisationUnitCode = "test_ou_code",
-            attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value"))
-        )
+        val ruleEngineContext =
+            getRuleEngineContext(
+                listOf(rule, rule2),
+                HashMap(),
+            )
+        val enrollment =
+            RuleEnrollment(
+                enrollment = "test_enrollment",
+                programName = "test_program",
+                incidentDate = LocalDate.Companion.currentDate(),
+                enrollmentDate = LocalDate.Companion.currentDate(),
+                status = RuleEnrollmentStatus.ACTIVE,
+                organisationUnit = "test_ou",
+                organisationUnitCode = "test_ou_code",
+                attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value")),
+            )
         val ruleEffects = RuleEngine.getInstance().evaluate(enrollment, emptyList(), ruleEngineContext)
         assertEquals(2, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data)
@@ -95,20 +97,22 @@ class ConstantsValueTest {
         val action = RuleAction("#{test_attribute}", "SHOWERROR")
         val rule = Rule("true", listOf(assignAction), "test_program_rule1", "")
         val rule2 = Rule("#{test_attribute} > 3", listOf(action), "test_program_rule2", "")
-        val ruleEngineContext = getRuleEngineContext(
-            listOf(rule, rule2),
-            HashMap()
-        )
-        val enrollment = RuleEnrollment(
-            enrollment = "test_enrollment",
-            programName = "test_program",
-            incidentDate = LocalDate.Companion.currentDate(),
-            enrollmentDate = LocalDate.Companion.currentDate(),
-            status = RuleEnrollmentStatus.ACTIVE,
-            organisationUnit = "test_ou",
-            organisationUnitCode = "test_ou_code",
-            attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value"))
-        )
+        val ruleEngineContext =
+            getRuleEngineContext(
+                listOf(rule, rule2),
+                HashMap(),
+            )
+        val enrollment =
+            RuleEnrollment(
+                enrollment = "test_enrollment",
+                programName = "test_program",
+                incidentDate = LocalDate.Companion.currentDate(),
+                enrollmentDate = LocalDate.Companion.currentDate(),
+                status = RuleEnrollmentStatus.ACTIVE,
+                organisationUnit = "test_ou",
+                organisationUnitCode = "test_ou_code",
+                attributeValues = listOf(RuleAttributeValue("test_attribute", "test_value")),
+            )
         val ruleEffects = RuleEngine.getInstance().evaluate(enrollment, emptyList(), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("4", ruleEffects[0].data)
@@ -122,24 +126,27 @@ class ConstantsValueTest {
         val constantsValueMap: MutableMap<String, String> = HashMap()
         constantsValueMap["A1234567890"] = "3.14"
         val ruleEngineContext = getRuleEngineContext(listOf(rule), constantsValueMap)
-        val ruleEvent = RuleEvent(
-            event = "test_event",
-            programStage = "test_program_stage",
-            programStageName = "",
-            status = RuleEventStatus.ACTIVE,
-            eventDate = Clock.System.now(),
-            dueDate = LocalDate.currentDate(),
-            organisationUnit = "",
-            organisationUnitCode = "",
-            completedDate = LocalDate.currentDate(),
-            dataValues =
-            listOf(
-                RuleDataValue(
-                    Clock.System.now(), "test_program_stage", "test_data_element", "test_value"
-                )
+        val ruleEvent =
+            RuleEvent(
+                event = "test_event",
+                programStage = "test_program_stage",
+                programStageName = "",
+                status = RuleEventStatus.ACTIVE,
+                eventDate = Clock.System.now(),
+                createdDate = Clock.System.now(),
+                dueDate = LocalDate.currentDate(),
+                organisationUnit = "",
+                organisationUnitCode = "",
+                completedDate = LocalDate.currentDate(),
+                dataValues =
+                    listOf(
+                        RuleDataValue(
+                            "test_data_element",
+                            "test_value",
+                        ),
+                    ),
             )
-        )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(),  ruleEngineContext)
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("3.14", ruleEffects[0].data)
         assertEquals(assignAction, ruleEffects[0].ruleAction)
@@ -147,8 +154,6 @@ class ConstantsValueTest {
 
     private fun getRuleEngineContext(
         rules: List<Rule>,
-        constantsValueMap: Map<String, String>
-    ): RuleEngineContext {
-        return RuleEngineContext(rules = rules, constantsValues = constantsValueMap)
-    }
+        constantsValueMap: Map<String, String>,
+    ): RuleEngineContext = RuleEngineContext(rules = rules, constantsValues = constantsValueMap)
 }

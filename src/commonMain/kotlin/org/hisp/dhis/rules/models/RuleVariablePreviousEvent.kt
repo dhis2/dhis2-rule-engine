@@ -1,45 +1,42 @@
 package org.hisp.dhis.rules.models
 
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.hisp.dhis.rules.engine.RuleVariableValue
-import org.hisp.dhis.rules.utils.getLastUpdateDateForPrevious
-import org.hisp.dhis.rules.utils.values
 
 class RuleVariablePreviousEvent(
     override val name: String,
     override val useCodeForOptionSet: Boolean,
     override val options: List<Option>,
     override val field: String,
-    override val fieldType: RuleValueType
+    override val fieldType: RuleValueType,
 ) : RuleVariable {
     override fun createValues(
         ruleEvent: RuleEvent?,
-        allEventValues: Map<String, List<RuleDataValue>>,
+        allEventValues: Map<String, List<RuleDataValueHistory>>,
         currentEnrollmentValues: Map<String, RuleAttributeValue>,
-        currentEventValues: Map<String, RuleDataValue>
-    ): Map<String, RuleVariableValue> {
-        val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
-        var variableValue: RuleVariableValue? = null
-        val ruleDataValues = allEventValues[field]
-        if (ruleEvent != null && !ruleDataValues.isNullOrEmpty()) {
-            for (ruleDataValue in ruleDataValues) {
-                // We found preceding value to the current currentEventValues,
-                // which is assumed to be best candidate.
-                if (ruleEvent.eventDate > ruleDataValue.eventDate) {
+    ): RuleVariableValue {
+        val dataValues = allEventValues[field]
+        if (ruleEvent != null && !dataValues.isNullOrEmpty()) {
+            for (ruleDataValue in dataValues) {
+                if (ruleEvent.eventDate > ruleDataValue.eventDate ||
+                    (ruleEvent.eventDate == ruleDataValue.eventDate && ruleEvent.createdDate > ruleDataValue.createdDate)
+                ) {
                     val optionValue =
-                        if (useCodeForOptionSet) ruleDataValue.value else getOptionName(ruleDataValue.value)!!
-                    variableValue = RuleVariableValue(
-                        fieldType, optionValue,
-                        values(ruleDataValues),
-                        getLastUpdateDateForPrevious(ruleDataValues, ruleEvent)
+                        if (useCodeForOptionSet) ruleDataValue.value else getOptionName(ruleDataValue.value)
+                    return RuleVariableValue(
+                        fieldType,
+                        optionValue,
+                        dataValues.map { it.value },
+                        ruleDataValue.eventDate
+                            .toLocalDateTime(TimeZone.currentSystemDefault())
+                            .date
+                            .toString(),
                     )
-                    break
                 }
             }
         }
-        if (variableValue == null) {
-            variableValue = RuleVariableValue(fieldType)
-        }
-        valueMap[name] = variableValue
-        return valueMap
+
+        return RuleVariableValue(fieldType)
     }
 }
