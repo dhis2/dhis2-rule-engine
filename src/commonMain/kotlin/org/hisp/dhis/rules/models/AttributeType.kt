@@ -6,5 +6,5 @@ package org.hisp.dhis.rules.models
 enum class AttributeType {
     DATA_ELEMENT,
     TRACKED_ENTITY_ATTRIBUTE,
-    UNKNOWN
+    UNKNOWN,
 }

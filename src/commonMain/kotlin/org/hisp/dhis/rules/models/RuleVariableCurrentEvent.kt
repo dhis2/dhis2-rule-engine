@@ -9,24 +9,26 @@ class RuleVariableCurrentEvent(
     override val useCodeForOptionSet: Boolean,
     override val options: List<Option>,
     override val field: String,
-    override val fieldType: RuleValueType
+    override val fieldType: RuleValueType,
 ) : RuleVariable {
     override fun createValues(
         ruleEvent: RuleEvent?,
         allEventValues: Map<String, List<RuleDataValueHistory>>,
-        currentEnrollmentValues: Map<String, RuleAttributeValue>
-    ): RuleVariableValue {
-        return ruleEvent?.let {
-            it.dataValues.filter { d -> d.dataElement == field }
-                .map {
-                    val optionValue = if (useCodeForOptionSet) it.value else getOptionName(it.value)
-                    RuleVariableValue(
-                        fieldType,
-                        optionValue,
-                        listOf(optionValue),
-                        ruleEvent.eventDate.toLocalDateTime(TimeZone.currentSystemDefault()).date.toString()
-                    )
-                }.firstOrNull()
-        } ?:RuleVariableValue(fieldType)
-    }
+        currentEnrollmentValues: Map<String, RuleAttributeValue>,
+    ): RuleVariableValue =
+        ruleEvent
+            ?.dataValues
+            ?.filter { d -> d.dataElement == field }
+            ?.map {
+                val optionValue = if (useCodeForOptionSet) it.value else getOptionName(it.value)
+                RuleVariableValue(
+                    fieldType,
+                    optionValue,
+                    listOf(optionValue),
+                    ruleEvent.eventDate
+                        .toLocalDateTime(TimeZone.currentSystemDefault())
+                        .date
+                        .toString(),
+                )
+            }?.firstOrNull() ?: RuleVariableValue(fieldType)
 }

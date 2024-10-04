@@ -38,28 +38,32 @@ import kotlin.test.assertEquals
 class VariableValueTypeTest {
     @Test
     fun testNumericVariablesAreComparedCorrectly() {
-        val ruleAction = RuleAction("#{test_variable}", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction =
+            RuleAction("#{test_variable}", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
         val rule = Rule("#{test_variable} > #{test_variable2}", listOf(ruleAction), "", "")
-        val ruleVariable: RuleVariable = RuleVariableCurrentEvent("test_variable", true, ArrayList(), "test_data_element", RuleValueType.NUMERIC)
-        val ruleVariable2: RuleVariable = RuleVariableCurrentEvent("test_variable2", true, ArrayList(), "test_data_element2", RuleValueType.NUMERIC)
+        val ruleVariable: RuleVariable =
+            RuleVariableCurrentEvent("test_variable", true, ArrayList(), "test_data_element", RuleValueType.NUMERIC)
+        val ruleVariable2: RuleVariable =
+            RuleVariableCurrentEvent("test_variable2", true, ArrayList(), "test_data_element2", RuleValueType.NUMERIC)
         val ruleEngineContext = getRuleEngineContext(rule, listOf(ruleVariable, ruleVariable2))
         val now = Clock.System.now()
-        val ruleEvent = RuleEvent(
-            "test_event",
-            "test_program_stage",
-            "",
-            RuleEventStatus.ACTIVE,
-            now,
-            now,
-            LocalDate.fromEpochDays(1),
-            null,
-            "",
-            null,
-            listOf(
-                RuleDataValue("test_data_element", "30"),
-                RuleDataValue("test_data_element2", "4")
+        val ruleEvent =
+            RuleEvent(
+                "test_event",
+                "test_program_stage",
+                "",
+                RuleEventStatus.ACTIVE,
+                now,
+                now,
+                LocalDate.fromEpochDays(1),
+                null,
+                "",
+                null,
+                listOf(
+                    RuleDataValue("test_data_element", "30"),
+                    RuleDataValue("test_data_element2", "4"),
+                ),
             )
-        )
         val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("30", ruleEffects[0].data)
@@ -68,33 +72,38 @@ class VariableValueTypeTest {
 
     @Test
     fun testTextVariablesAreComparedCorrectly() {
-        val ruleAction = RuleAction("#{test_variable}", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction =
+            RuleAction("#{test_variable}", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
         val rule = Rule("#{test_variable} > #{test_variable2}", listOf(ruleAction), "", "")
-        val ruleVariable: RuleVariable = RuleVariableCurrentEvent("test_variable", true, ArrayList(), "test_data_element", RuleValueType.TEXT)
-        val ruleVariable2: RuleVariable = RuleVariableCurrentEvent("test_variable2", true, ArrayList(), "test_data_element2", RuleValueType.TEXT)
+        val ruleVariable: RuleVariable =
+            RuleVariableCurrentEvent("test_variable", true, ArrayList(), "test_data_element", RuleValueType.TEXT)
+        val ruleVariable2: RuleVariable =
+            RuleVariableCurrentEvent("test_variable2", true, ArrayList(), "test_data_element2", RuleValueType.TEXT)
         val ruleEngineContext = getRuleEngineContext(rule, listOf(ruleVariable, ruleVariable2))
         val now = Clock.System.now()
-        val ruleEvent = RuleEvent(
-            "test_event",
-            "test_program_stage",
-            "",
-            RuleEventStatus.ACTIVE,
-            now,
-            now,
-            LocalDate.fromEpochDays(1),
-            null,
-            "",
-            null,
-            listOf(
-                RuleDataValue("test_data_element", "30"),
-                RuleDataValue("test_data_element2", "4")
+        val ruleEvent =
+            RuleEvent(
+                "test_event",
+                "test_program_stage",
+                "",
+                RuleEventStatus.ACTIVE,
+                now,
+                now,
+                LocalDate.fromEpochDays(1),
+                null,
+                "",
+                null,
+                listOf(
+                    RuleDataValue("test_data_element", "30"),
+                    RuleDataValue("test_data_element2", "4"),
+                ),
             )
-        )
         val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
         assertEquals(0, ruleEffects.size)
     }
 
-    private fun getRuleEngineContext(rule: Rule, ruleVariables: List<RuleVariable>): RuleEngineContext {
-        return RuleEngineContext(rules = listOf(rule), ruleVariables = ruleVariables)
-    }
+    private fun getRuleEngineContext(
+        rule: Rule,
+        ruleVariables: List<RuleVariable>,
+    ): RuleEngineContext = RuleEngineContext(rules = listOf(rule), ruleVariables = ruleVariables)
 }

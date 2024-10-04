@@ -6,5 +6,5 @@ import kotlin.js.JsExport
 enum class RuleEnrollmentStatus {
     ACTIVE,
     COMPLETED,
-    CANCELLED
+    CANCELLED,
 }

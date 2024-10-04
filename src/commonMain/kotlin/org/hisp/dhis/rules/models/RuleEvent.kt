@@ -14,5 +14,5 @@ data class RuleEvent(
     val completedDate: LocalDate?,
     val organisationUnit: String,
     val organisationUnitCode: String?,
-    val dataValues: List<RuleDataValue>
+    val dataValues: List<RuleDataValue>,
 )

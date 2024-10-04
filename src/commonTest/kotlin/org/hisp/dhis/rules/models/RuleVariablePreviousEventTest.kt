@@ -6,7 +6,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-
 class RuleVariablePreviousEventTest {
     private val today = LocalDate.Companion.currentDate()
     private val yesterday = today.minus(1, DateTimeUnit.DAY)
@@ -18,7 +17,8 @@ class RuleVariablePreviousEventTest {
     private val todayMorning = today.atTime(LocalTime(10, 0, 0)).toInstant(TimeZone.currentSystemDefault())
     private val todayAfternoon = today.atTime(LocalTime(14, 0, 0)).toInstant(TimeZone.currentSystemDefault())
 
-    private val ruleVariablePreviousEvent = RuleVariablePreviousEvent("previous value", true, emptyList(), "data_element", RuleValueType.NUMERIC)
+    private val ruleVariablePreviousEvent =
+        RuleVariablePreviousEvent("previous value", true, emptyList(), "data_element", RuleValueType.NUMERIC)
 
     @Test
     fun shouldCreateEmptyRuleVariableValueWhenNoDataValuesArePresent() {
@@ -86,8 +86,11 @@ class RuleVariablePreviousEventTest {
         assertEquals(emptyList(), ruleVariableValue.candidates)
     }
 
-    private fun event(eventDate: Instant, createdDate: Instant): RuleEvent {
-        return RuleEvent(
+    private fun event(
+        eventDate: Instant,
+        createdDate: Instant,
+    ): RuleEvent =
+        RuleEvent(
             event = "test_event",
             programStage = "test_program_stage",
             programStageName = "",
@@ -99,48 +102,38 @@ class RuleVariablePreviousEventTest {
             organisationUnitCode = "",
             completedDate = LocalDate.currentDate(),
             dataValues =
-            listOf(
-                RuleDataValue("data_element", "1"),
-                RuleDataValue("data_element", "2"),
-                RuleDataValue("data_element", "3"),
-                RuleDataValue("data_element", "4"),
-                RuleDataValue("data_element", "5")
-            )
+                listOf(
+                    RuleDataValue("data_element", "1"),
+                    RuleDataValue("data_element", "2"),
+                    RuleDataValue("data_element", "3"),
+                    RuleDataValue("data_element", "4"),
+                    RuleDataValue("data_element", "5"),
+                ),
         )
-    }
 
     private fun allEventsDataValues(): Map<String, List<RuleDataValueHistory>> {
-        val ruleDataValues = mutableListOf(
-            todayDataValue(),
-            yesterdayDataValueCreatedThisMorning(),
-            yesterdayDataValueCreatedThisAfternoon(),
-            tomorrowDataValue(),
-            dayBeforeYesterdayDataValue()
-        )
-        ruleDataValues.sortWith(compareBy<RuleDataValueHistory>({ it.eventDate}, {it.createdDate }).reversed())
+        val ruleDataValues =
+            mutableListOf(
+                todayDataValue(),
+                yesterdayDataValueCreatedThisMorning(),
+                yesterdayDataValueCreatedThisAfternoon(),
+                tomorrowDataValue(),
+                dayBeforeYesterdayDataValue(),
+            )
+        ruleDataValues.sortWith(compareBy<RuleDataValueHistory>({ it.eventDate }, { it.createdDate }).reversed())
 
         return mapOf(Pair("data_element", ruleDataValues))
     }
 
-    private fun todayDataValue(): RuleDataValueHistory {
-        return RuleDataValueHistory("1", todayInstant, todayInstant, "")
-    }
+    private fun todayDataValue(): RuleDataValueHistory = RuleDataValueHistory("1", todayInstant, todayInstant, "")
 
-    private fun yesterdayDataValueCreatedThisMorning(): RuleDataValueHistory {
-        return RuleDataValueHistory("2", yesterdayInstant, todayMorning, "")
-    }
+    private fun yesterdayDataValueCreatedThisMorning(): RuleDataValueHistory = RuleDataValueHistory("2", yesterdayInstant, todayMorning, "")
 
-    private fun yesterdayDataValueCreatedThisAfternoon(): RuleDataValueHistory {
-        return RuleDataValueHistory("3", yesterdayInstant, todayAfternoon, "")
-    }
+    private fun yesterdayDataValueCreatedThisAfternoon(): RuleDataValueHistory =
+        RuleDataValueHistory("3", yesterdayInstant, todayAfternoon, "")
 
-    private fun dayBeforeYesterdayDataValue(): RuleDataValueHistory {
-        return RuleDataValueHistory("5", dayBeforeYesterdayInstant, todayAfternoon, "")
-    }
+    private fun dayBeforeYesterdayDataValue(): RuleDataValueHistory =
+        RuleDataValueHistory("5", dayBeforeYesterdayInstant, todayAfternoon, "")
 
-    private fun tomorrowDataValue(): RuleDataValueHistory {
-        return RuleDataValueHistory("4", tomorrow, tomorrow, "")
-    }
-
-
+    private fun tomorrowDataValue(): RuleDataValueHistory = RuleDataValueHistory("4", tomorrow, tomorrow, "")
 }

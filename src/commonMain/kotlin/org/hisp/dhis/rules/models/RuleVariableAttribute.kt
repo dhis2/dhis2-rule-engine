@@ -9,19 +9,21 @@ data class RuleVariableAttribute(
     override val useCodeForOptionSet: Boolean,
     override val options: List<Option>,
     override val field: String,
-    override val fieldType: RuleValueType
+    override val fieldType: RuleValueType,
 ) : RuleVariable {
     override fun createValues(
         ruleEvent: RuleEvent?,
         allEventValues: Map<String, List<RuleDataValueHistory>>,
-        currentEnrollmentValues: Map<String, RuleAttributeValue>
+        currentEnrollmentValues: Map<String, RuleAttributeValue>,
     ): RuleVariableValue {
         val currentDate = LocalDate.Companion.currentDate()
         return currentEnrollmentValues[field]?.let {
             val optionValue = if (useCodeForOptionSet) it.value else getOptionName(it.value)
             RuleVariableValue(
-                fieldType, optionValue,
-                listOf(optionValue), currentDate.toString()
+                fieldType,
+                optionValue,
+                listOf(optionValue),
+                currentDate.toString(),
             )
         } ?: RuleVariableValue(fieldType)
     }

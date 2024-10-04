@@ -49,8 +49,10 @@ class ProgramRuleVariableTest {
     fun testDueDateProgramVariableIsAssigned() {
         val rule = getRule("V{due_date}")
         val ruleEffects = callEventRuleEngine(rule)
-        assertProgramRuleVariableAssignment(ruleEffects, rule,
-            DUE_DATE_STRING
+        assertProgramRuleVariableAssignment(
+            ruleEffects,
+            rule,
+            DUE_DATE_STRING,
         )
     }
 
@@ -65,8 +67,10 @@ class ProgramRuleVariableTest {
     fun testEnrollmentDateProgramVariableIsAssigned() {
         val rule = getRule("V{enrollment_date}")
         val ruleEffects = callEnrollmentRuleEngine(rule)
-        assertProgramRuleVariableAssignment(ruleEffects, rule,
-            ENROLLMENT_DATE_STRING
+        assertProgramRuleVariableAssignment(
+            ruleEffects,
+            rule,
+            ENROLLMENT_DATE_STRING,
         )
     }
 
@@ -74,8 +78,10 @@ class ProgramRuleVariableTest {
     fun testEnrollmentIdProgramVariableIsAssigned() {
         val rule = getRule("V{enrollment_id}")
         val ruleEffects = callEnrollmentRuleEngine(rule)
-        assertProgramRuleVariableAssignment(ruleEffects, rule,
-            ENROLLMENT_ID
+        assertProgramRuleVariableAssignment(
+            ruleEffects,
+            rule,
+            ENROLLMENT_ID,
         )
     }
 
@@ -104,8 +110,10 @@ class ProgramRuleVariableTest {
     fun testEventDateProgramVariableIsAssigned() {
         val rule = getRule("V{event_date}")
         val ruleEffects = callEventRuleEngine(rule)
-        assertProgramRuleVariableAssignment(ruleEffects, rule,
-            EVENT_DATE_STRING
+        assertProgramRuleVariableAssignment(
+            ruleEffects,
+            rule,
+            EVENT_DATE_STRING,
         )
     }
 
@@ -113,8 +121,10 @@ class ProgramRuleVariableTest {
     fun testEventIdProgramVariableIsAssigned() {
         val rule = getRule("V{event_id}")
         val ruleEffects = callEventRuleEngine(rule)
-        assertProgramRuleVariableAssignment(ruleEffects, rule,
-            EVENT_ID
+        assertProgramRuleVariableAssignment(
+            ruleEffects,
+            rule,
+            EVENT_ID,
         )
     }
 
@@ -129,8 +139,10 @@ class ProgramRuleVariableTest {
     fun testIncidentDateProgramVariableIsAssigned() {
         val rule = getRule("V{incident_date}")
         val ruleEffects = callEventRuleEngine(rule)
-        assertProgramRuleVariableAssignment(ruleEffects, rule,
-            INCIDENT_DATE_STRING
+        assertProgramRuleVariableAssignment(
+            ruleEffects,
+            rule,
+            INCIDENT_DATE_STRING,
         )
     }
 
@@ -138,8 +150,10 @@ class ProgramRuleVariableTest {
     fun testOrganisationUnitProgramVariableIsAssigned() {
         val rule = getRule("V{org_unit}")
         val ruleEffects = callEnrollmentRuleEngine(rule)
-        assertProgramRuleVariableAssignment(ruleEffects, rule,
-            ORGANISATION_UNIT
+        assertProgramRuleVariableAssignment(
+            ruleEffects,
+            rule,
+            ORGANISATION_UNIT,
         )
     }
 
@@ -147,8 +161,10 @@ class ProgramRuleVariableTest {
     fun testOrganisationUnitCodeProgramVariableIsAssigned() {
         val rule = getRule("V{orgunit_code}")
         val ruleEffects = callEventRuleEngine(rule)
-        assertProgramRuleVariableAssignment(ruleEffects, rule,
-            ORGANISATION_UNIT_CODE
+        assertProgramRuleVariableAssignment(
+            ruleEffects,
+            rule,
+            ORGANISATION_UNIT_CODE,
         )
     }
 
@@ -156,8 +172,10 @@ class ProgramRuleVariableTest {
     fun testProgramNameProgramVariableIsAssigned() {
         val rule = getRule("V{program_name}")
         val ruleEffects = callEnrollmentRuleEngine(rule)
-        assertProgramRuleVariableAssignment(ruleEffects, rule,
-            PROGRAM_NAME
+        assertProgramRuleVariableAssignment(
+            ruleEffects,
+            rule,
+            PROGRAM_NAME,
         )
     }
 
@@ -165,8 +183,10 @@ class ProgramRuleVariableTest {
     fun testProgramStageIdProgramVariableIsAssigned() {
         val rule = getRule("V{program_stage_id}")
         val ruleEffects = callEventRuleEngine(rule)
-        assertProgramRuleVariableAssignment(ruleEffects, rule,
-            PROGRAM_STAGE
+        assertProgramRuleVariableAssignment(
+            ruleEffects,
+            rule,
+            PROGRAM_STAGE,
         )
     }
 
@@ -174,8 +194,10 @@ class ProgramRuleVariableTest {
     fun testProgramStageNameProgramVariableIsAssigned() {
         val rule = getRule("V{program_stage_name}")
         val ruleEffects = callEventRuleEngine(rule)
-        assertProgramRuleVariableAssignment(ruleEffects, rule,
-            PROGRAM_STAGE_NAME
+        assertProgramRuleVariableAssignment(
+            ruleEffects,
+            rule,
+            PROGRAM_STAGE_NAME,
         )
     }
 
@@ -187,54 +209,58 @@ class ProgramRuleVariableTest {
     }
 
     private fun getRule(variable: String): Rule {
-        val assignAction = RuleAction(variable, "ASSIGN", mapOf(Pair("field","#{test_data_element}")))
+        val assignAction = RuleAction(variable, "ASSIGN", mapOf(Pair("field", "#{test_data_element}")))
         return Rule("true", listOf(assignAction), "test_program_rule1")
     }
 
-    private fun assertProgramRuleVariableAssignment(ruleEffects: List<RuleEffect>, rule: Rule, variableValue: String) {
+    private fun assertProgramRuleVariableAssignment(
+        ruleEffects: List<RuleEffect>,
+        rule: Rule,
+        variableValue: String,
+    ) {
         assertEquals(1, ruleEffects.size)
         assertEquals(variableValue, ruleEffects[0].data)
         assertEquals(rule.actions[0], ruleEffects[0].ruleAction)
     }
-    
+
     private fun callEnrollmentRuleEngine(rule: Rule): List<RuleEffect> {
         val ruleEngineContext = getRuleEngineContext(listOf(rule))
         return RuleEngine.getInstance().evaluate(enrollment, emptyList(), ruleEngineContext)
     }
-    
+
     private fun callEventRuleEngine(rule: Rule): List<RuleEffect> {
         val ruleEngineContext = getRuleEngineContext(listOf(rule))
-        val event = RuleEvent(
-            event = EVENT_ID,
-            programStage = PROGRAM_STAGE,
-            programStageName = PROGRAM_STAGE_NAME,
-            status = RULE_EVENT_STATUS,
-            eventDate = EVENT_DATE,
-            createdDate = Clock.System.now(),
-            dueDate = DUE_DATE,
-            organisationUnit = ORGANISATION_UNIT,
-            organisationUnitCode = ORGANISATION_UNIT_CODE,
-            completedDate = null,
-            dataValues = emptyList()
-        )
+        val event =
+            RuleEvent(
+                event = EVENT_ID,
+                programStage = PROGRAM_STAGE,
+                programStageName = PROGRAM_STAGE_NAME,
+                status = RULE_EVENT_STATUS,
+                eventDate = EVENT_DATE,
+                createdDate = Clock.System.now(),
+                dueDate = DUE_DATE,
+                organisationUnit = ORGANISATION_UNIT,
+                organisationUnitCode = ORGANISATION_UNIT_CODE,
+                completedDate = null,
+                dataValues = emptyList(),
+            )
         return RuleEngine.getInstance().evaluate(event, enrollment, emptyList(), ruleEngineContext)
     }
 
     private val enrollment: RuleEnrollment
-        get() = RuleEnrollment(
-            ENROLLMENT_ID,
-            PROGRAM_NAME,
-            INCIDENT_DATE,
-            ENROLLMENT_DATE,
-            RuleEnrollmentStatus.ACTIVE,
-            ORGANISATION_UNIT,
-            ORGANISATION_UNIT_CODE,
-            listOf(RuleAttributeValue("test_attribute", "test_value"))
-        )
+        get() =
+            RuleEnrollment(
+                ENROLLMENT_ID,
+                PROGRAM_NAME,
+                INCIDENT_DATE,
+                ENROLLMENT_DATE,
+                RuleEnrollmentStatus.ACTIVE,
+                ORGANISATION_UNIT,
+                ORGANISATION_UNIT_CODE,
+                listOf(RuleAttributeValue("test_attribute", "test_value")),
+            )
 
-    private fun getRuleEngineContext(rules: List<Rule>): RuleEngineContext {
-        return RuleEngineContext(rules)
-    }
+    private fun getRuleEngineContext(rules: List<Rule>): RuleEngineContext = RuleEngineContext(rules)
 
     companion object {
         private val CURRENT_DATE = LocalDate.Companion.currentDate()

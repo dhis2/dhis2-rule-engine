@@ -6,5 +6,5 @@ data class RuleDataValueHistory(
     val value: String,
     val eventDate: Instant,
     val createdDate: Instant,
-    val programStage: String
+    val programStage: String,
 )
