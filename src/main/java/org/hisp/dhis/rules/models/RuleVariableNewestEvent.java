@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.hisp.dhis.rules.Utils.getLastUpdateDate;
+import static org.hisp.dhis.rules.Utils.getLastUpdateDateForHistory;
 
 @AutoValue
 public abstract class RuleVariableNewestEvent
@@ -27,12 +28,12 @@ public abstract class RuleVariableNewestEvent
 
     @Override
     public Map<String, RuleVariableValue> createValues( RuleVariableValueMapBuilder builder,
-        Map<String, List<RuleDataValue>> allEventValues,
+        Map<String, List<RuleDataValueHistory>> allEventValues,
         Map<String, RuleAttributeValue> currentEnrollmentValues,
         Map<String, RuleDataValue> currentEventValues )
     {
         Map<String, RuleVariableValue> valueMap = new HashMap();
-        List<RuleDataValue> ruleDataValues = allEventValues.get( this.dataElement() );
+        List<RuleDataValueHistory> ruleDataValues = allEventValues.get( this.dataElement() );
 
         if ( ruleDataValues == null || ruleDataValues.isEmpty() )
         {
@@ -42,12 +43,12 @@ public abstract class RuleVariableNewestEvent
         {
             RuleVariableValue variableValue;
 
-            RuleDataValue value = ruleDataValues.get( 0 );
+            RuleDataValueHistory value = ruleDataValues.get( 0 );
 
-            String optionValue = this.useCodeForOptionSet() ? value.value() : getOptionName( value.value() );
+            String optionValue = this.useCodeForOptionSet() ? value.getValue() : getOptionName( value.getValue() );
 
             variableValue = RuleVariableValue.create( optionValue,
-                this.dataElementType(), Utils.values( ruleDataValues ), getLastUpdateDate( ruleDataValues ) );
+                this.dataElementType(), Utils.valuesForHistory( ruleDataValues ), getLastUpdateDateForHistory( ruleDataValues ) );
 
 
             valueMap.put( this.name(), variableValue );

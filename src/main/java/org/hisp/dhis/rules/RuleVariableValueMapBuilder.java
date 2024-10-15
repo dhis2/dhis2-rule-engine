@@ -220,9 +220,9 @@ public final class RuleVariableValueMapBuilder
         return currentEnrollmentValues;
     }
 
-    private Map<String, List<RuleDataValue>> buildAllEventValues()
+    private Map<String, List<RuleDataValueHistory>> buildAllEventValues()
     {
-        Map<String, List<RuleDataValue>> allEventsValues = new HashMap<>();
+        Map<String, List<RuleDataValueHistory>> allEventsValues = new HashMap<>();
         List<RuleEvent> events = new ArrayList<>( ruleEvents );
 
         if ( ruleEvent != null )
@@ -242,17 +242,22 @@ public final class RuleVariableValueMapBuilder
 
             for ( int j = 0; j < ruleEvent.dataValues().size(); j++ )
             {
-                RuleDataValue ruleDataValue = ruleEvent.dataValues().get( j );
+                RuleDataValue ruleDataValue = ruleEvent.dataValues().get(j);
+                RuleDataValueHistory ruleDataValueHistory = new RuleDataValueHistory(
+                        ruleDataValue.value(),
+                        ruleEvent.eventDate(),
+                        ruleEvent.createdDate(),
+                        ruleEvent.programStage() );
 
                 // push new list if it is not there for the given data element
                 if ( !allEventsValues.containsKey( ruleDataValue.dataElement() ) )
                 {
                     allEventsValues.put( ruleDataValue.dataElement(),
-                        new ArrayList<RuleDataValue>( events.size() ) ); //NOPMD
+                        new ArrayList<RuleDataValueHistory>( events.size() ) ); //NOPMD
                 }
 
                 // append data value to the list
-                allEventsValues.get( ruleDataValue.dataElement() ).add( ruleDataValue );
+                allEventsValues.get( ruleDataValue.dataElement() ).add( ruleDataValueHistory );
             }
         }
 
@@ -377,7 +382,7 @@ public final class RuleVariableValueMapBuilder
         Map<String, RuleVariableValue> valueMap = new HashMap<>();
 
         // map data values within all events to data elements
-        Map<String, List<RuleDataValue>> allEventValues = buildAllEventValues();
+        Map<String, List<RuleDataValueHistory>> allEventValues = buildAllEventValues();
 
         // map tracked entity attributes to values from enrollment
         Map<String, RuleAttributeValue> currentEnrollmentValues = buildCurrentEnrollmentValues();

@@ -38,7 +38,7 @@ public class RuleEngineValueTypesTest
         RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable ) );
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, new ArrayList<RuleDataValue>(), "", null);
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, new ArrayList<RuleDataValue>(), "", null);
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
@@ -59,7 +59,7 @@ public class RuleEngineValueTypesTest
         RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable ) );
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, new ArrayList<RuleDataValue>(), "", null);
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, new ArrayList<RuleDataValue>(), "", null);
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );
@@ -80,7 +80,7 @@ public class RuleEngineValueTypesTest
         RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable ) );
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, new ArrayList<RuleDataValue>(), "", null);
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, new ArrayList<RuleDataValue>(), "", null);
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
         assertThat( ruleEffects.size() ).isEqualTo( 1 );

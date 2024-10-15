@@ -25,14 +25,14 @@ public class RuleEventTest
     @Test( expected = IllegalStateException.class )
     public void createShouldThrowExceptionIfEventIsNull()
     {
-        RuleEvent.create( null, "test_programstage", RuleEvent.Status.ACTIVE,
+        RuleEvent.create( null, "test_programstage", RuleEvent.Status.ACTIVE, new Date(),
             new Date(), new Date(), null, null, Arrays.<RuleDataValue>asList(), "", null);
     }
 
     @Test( expected = IllegalStateException.class )
     public void createShouldThrowExceptionIfProgramStageIsNull()
     {
-        RuleEvent.create( "test_event", null, RuleEvent.Status.ACTIVE,
+        RuleEvent.create( "test_event", null, RuleEvent.Status.ACTIVE, new Date(),
             new Date(), new Date(), null, null, Arrays.<RuleDataValue>asList(), "", null);
     }
 
@@ -40,20 +40,20 @@ public class RuleEventTest
     public void createShouldThrowExceptionIfStatusIsNull()
     {
         RuleEvent.create( "test_event", "test_programstage", null,
-            new Date(), new Date(), null, null, Arrays.<RuleDataValue>asList(), "", null);
+            new Date(), new Date(), new Date(), null, null, Arrays.<RuleDataValue>asList(), "", null);
     }
 
     @Test( expected = IllegalStateException.class )
     public void createShouldThrowExceptionIfEventDateIsNull()
     {
-        RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE,
+        RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE, new Date(),
             null, new Date(), null, null, Arrays.<RuleDataValue>asList(), "", null);
     }
 
     @Test( expected = IllegalStateException.class )
     public void createShouldThrowExceptionIfDueDateIsNull()
     {
-        RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE,
+        RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE, new Date(),
             new Date(), null, null, null, Arrays.<RuleDataValue>asList(), "", null);
 
     }
@@ -61,7 +61,7 @@ public class RuleEventTest
     @Test( expected = NullPointerException.class )
     public void createShouldThrowExceptionIfListOfDataValuesIsNull()
     {
-        RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE, new Date(), new Date(),
+        RuleEvent.create( "test_event", "test_programstage", RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(),
             null, null, null, "", null);
 
     }
@@ -75,7 +75,7 @@ public class RuleEventTest
         ruleDataValues.add( ruleDataValue );
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event_uid", "test_stage_uid",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", "", ruleDataValues, "", null);
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", "", ruleDataValues, "", null);
 
         // add another data value
         ruleDataValues.add( ruleDataValue );
@@ -98,7 +98,7 @@ public class RuleEventTest
         Date dueDate = new Date();
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event_uid", "test_stage_uid",
-            RuleEvent.Status.ACTIVE, eventDate, dueDate, "", "", ruleDataValues, "", null);
+            RuleEvent.Status.ACTIVE, new Date(), eventDate, dueDate, "", "", ruleDataValues, "", null);
 
         assertThat( ruleEvent.event() ).isEqualTo( "test_event_uid" );
         assertThat( ruleEvent.status() ).isEqualTo( RuleEvent.Status.ACTIVE );
@@ -117,15 +117,19 @@ public class RuleEventTest
         SimpleDateFormat dateFormat = new SimpleDateFormat( DATE_PATTERN, Locale.US );
         List<RuleEvent> ruleEvents = Arrays.asList(
             RuleEvent.create( "test_event_one", "test_program_stage_one", RuleEvent.Status.ACTIVE,
-                dateFormat.parse( "2014-02-11" ), dateFormat.parse( "2014-02-11" ), "", null,
+                dateFormat.parse( "2014-02-11" ), new Date(), dateFormat.parse( "2014-02-11" ), "", null,
                 new ArrayList<RuleDataValue>(), "", null),
+                RuleEvent.create( "test_event_three", "test_program_stage_three", RuleEvent.Status.ACTIVE,
+                        dateFormat.parse( "2017-03-22" ), dateFormat.parse( "2018-03-22" ), dateFormat.parse( "2017-03-22" ), "", null,
+                        new ArrayList<RuleDataValue>(), "", null),
             RuleEvent.create( "test_event_two", "test_program_stage_two", RuleEvent.Status.ACTIVE,
-                dateFormat.parse( "2017-03-22" ), dateFormat.parse( "2017-03-22" ), "", null,
+                dateFormat.parse( "2017-03-22" ), dateFormat.parse( "2015-03-22" ), dateFormat.parse( "2017-03-22" ), "", null,
                 new ArrayList<RuleDataValue>(), "", null) );
 
         Collections.sort( ruleEvents, RuleEvent.EVENT_DATE_COMPARATOR );
 
-        assertThat( ruleEvents.get( 0 ).event() ).isEqualTo( "test_event_two" );
-        assertThat( ruleEvents.get( 1 ).event() ).isEqualTo( "test_event_one" );
+        assertThat( ruleEvents.get( 0 ).event() ).isEqualTo( "test_event_three" );
+        assertThat( ruleEvents.get( 1 ).event() ).isEqualTo( "test_event_two" );
+        assertThat( ruleEvents.get( 2 ).event() ).isEqualTo( "test_event_one" );
     }
 }

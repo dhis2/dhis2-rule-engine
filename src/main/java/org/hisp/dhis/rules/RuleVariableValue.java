@@ -22,7 +22,7 @@ public abstract class RuleVariableValue implements VariableValue
     @Nonnull
     public static RuleVariableValue create( @Nonnull RuleValueType ruleValueType )
     {
-        return new AutoValue_RuleVariableValue( null, ruleValueType, List.of(), getFormattedDate( new Date() ) );
+        return new AutoValue_RuleVariableValue( null, ruleValueType, List.of(), null );
     }
 
     @Nonnull
@@ -30,7 +30,7 @@ public abstract class RuleVariableValue implements VariableValue
         @Nonnull RuleValueType ruleValueType )
     {
         return new AutoValue_RuleVariableValue( value, ruleValueType,
-            List.of(), getFormattedDate( new Date() ) );
+            List.of(), null );
     }
 
     @Nonnull

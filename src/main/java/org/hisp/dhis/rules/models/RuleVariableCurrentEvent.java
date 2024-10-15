@@ -27,7 +27,7 @@ public abstract class RuleVariableCurrentEvent
 
     @Override
     public Map<String, RuleVariableValue> createValues( RuleVariableValueMapBuilder builder,
-        Map<String, List<RuleDataValue>> allEventValues,
+        Map<String, List<RuleDataValueHistory>> allEventValues,
         Map<String, RuleAttributeValue> currentEnrollmentValues,
         Map<String, RuleDataValue> currentEventValues )
     {

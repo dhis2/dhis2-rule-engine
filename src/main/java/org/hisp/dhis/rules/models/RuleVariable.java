@@ -25,7 +25,7 @@ public abstract class RuleVariable
     public abstract List<Option> options();
 
     public abstract Map<String, RuleVariableValue> createValues( RuleVariableValueMapBuilder builder,
-        Map<String, List<RuleDataValue>> allEventValues,
+        Map<String, List<RuleDataValueHistory>> allEventValues,
         Map<String, RuleAttributeValue> currentEnrollmentValues,
         Map<String, RuleDataValue> currentEventValues );
 

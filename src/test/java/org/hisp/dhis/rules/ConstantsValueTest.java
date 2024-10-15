@@ -189,6 +189,7 @@ public class ConstantsValueTest
             .programStageName( "" )
             .status( RuleEvent.Status.ACTIVE )
             .eventDate( new Date() )
+            .createdDate( new Date() )
             .dueDate( new Date() )
             .organisationUnit( "" )
             .organisationUnitCode( "" )
