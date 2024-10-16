@@ -48,6 +48,7 @@ public class RuleEngineEffectTypesTest
             .programStageName( "" )
             .status( status )
             .eventDate( new Date() )
+            .createdDate( new Date() )
             .dueDate( new Date() )
             .organisationUnit( "" )
             .organisationUnitCode( "" )

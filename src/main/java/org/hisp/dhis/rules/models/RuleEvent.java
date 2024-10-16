@@ -22,6 +22,7 @@ public abstract class RuleEvent
         @Nonnull String programStage,
         @Nonnull Status status,
         @Nonnull Date eventDate,
+        @Nonnull Date createdDate,
         @Nonnull Date dueDate,
         @Nonnull String organisationUnit,
         @Nullable String organisationUnitCode,
@@ -35,6 +36,7 @@ public abstract class RuleEvent
             .programStageName( programStageName )
             .status( status )
             .eventDate( eventDate )
+            .createdDate( createdDate )
             .dueDate( dueDate )
             .organisationUnit( organisationUnit )
             .organisationUnitCode( organisationUnitCode )
@@ -62,6 +64,9 @@ public abstract class RuleEvent
 
     @Nonnull
     public abstract Date eventDate();
+
+    @Nonnull
+    public abstract Date createdDate();
 
     @Nullable
     public abstract Date dueDate();
@@ -98,6 +103,8 @@ public abstract class RuleEvent
 
         public abstract Builder dueDate( Date dueDate );
 
+        public abstract Builder createdDate( Date createdDate );
+
         public abstract Builder completedDate( Date completedDate );
 
         public abstract Builder organisationUnit( String organisationUnit );
@@ -117,7 +124,11 @@ public abstract class RuleEvent
         @Override
         public int compare( RuleEvent first, RuleEvent second )
         {
-            return second.eventDate().compareTo( first.eventDate() );
+            int compare = second.eventDate().compareTo(first.eventDate());
+            if (compare == 0){
+                return second.createdDate().compareTo(first.createdDate());
+            }
+            return compare;
         }
     }
 

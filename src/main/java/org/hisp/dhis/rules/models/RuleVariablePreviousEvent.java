@@ -27,26 +27,30 @@ public abstract class RuleVariablePreviousEvent
 
     @Override
     public Map<String, RuleVariableValue> createValues( RuleVariableValueMapBuilder builder,
-        Map<String, List<RuleDataValue>> allEventValues,
+        Map<String, List<RuleDataValueHistory>> allEventValues,
         Map<String, RuleAttributeValue> currentEnrollmentValues,
         Map<String, RuleDataValue> currentEventValues )
     {
         Map<String, RuleVariableValue> valueMap = new HashMap();
 
         RuleVariableValue variableValue = null;
-        List<RuleDataValue> ruleDataValues = allEventValues.get( this.dataElement() );
+        List<RuleDataValueHistory> ruleDataValues = allEventValues.get( this.dataElement() );
         if ( builder.ruleEvent != null && ruleDataValues != null && !ruleDataValues.isEmpty() )
         {
-            for ( RuleDataValue ruleDataValue : ruleDataValues )
+            for ( RuleDataValueHistory ruleDataValue : ruleDataValues )
             {
                 // We found preceding value to the current currentEventValues,
                 // which is assumed to be best candidate.
-                if ( builder.ruleEvent.eventDate().compareTo( ruleDataValue.eventDate() ) > 0 )
+                if ( builder.ruleEvent.eventDate().compareTo( ruleDataValue.getEventDate() ) > 0
+                    || (
+                        builder.ruleEvent.eventDate().compareTo( ruleDataValue.getEventDate() ) == 0 &&
+                        builder.ruleEvent.createdDate().compareTo( ruleDataValue.getCreatedDate() ) > 0
+                        ))
                 {
-                    String optionValue = this.useCodeForOptionSet() ? ruleDataValue.value() : getOptionName( ruleDataValue.value() );
+                    String optionValue = this.useCodeForOptionSet() ? ruleDataValue.getValue() : getOptionName( ruleDataValue.getValue() );
 
                     variableValue = RuleVariableValue.create( optionValue, this.dataElementType(),
-                        Utils.values( ruleDataValues ),
+                        Utils.valuesForHistory( ruleDataValues ),
                         getLastUpdateDateForPrevious( ruleDataValues, builder.ruleEvent ) );
                     break;
                 }

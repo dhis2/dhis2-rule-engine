@@ -326,6 +326,7 @@ public class ProgramRuleVariableTest
             .programStageName( PROGRAM_STAGE_NAME )
             .status( RULE_EVENT_STATUS )
             .eventDate( EVENT_DATE )
+            .createdDate( new Date() )
             .dueDate( DUE_DATE )
             .organisationUnit( ORGANISATION_UNIT )
             .organisationUnitCode( ORGANISATION_UNIT_CODE )

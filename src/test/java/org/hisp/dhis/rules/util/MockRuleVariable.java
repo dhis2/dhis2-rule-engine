@@ -5,6 +5,7 @@ import org.hisp.dhis.rules.RuleVariableValue;
 import org.hisp.dhis.rules.RuleVariableValueMapBuilder;
 import org.hisp.dhis.rules.models.RuleAttributeValue;
 import org.hisp.dhis.rules.models.RuleDataValue;
+import org.hisp.dhis.rules.models.RuleDataValueHistory;
 import org.hisp.dhis.rules.models.RuleVariable;
 
 import javax.annotation.Nonnull;
@@ -31,7 +32,7 @@ public class MockRuleVariable extends RuleVariable {
     }
 
     @Override
-    public Map<String, RuleVariableValue> createValues(RuleVariableValueMapBuilder builder, Map<String, List<RuleDataValue>> allEventValues, Map<String, RuleAttributeValue> currentEnrollmentValues, Map<String, RuleDataValue> currentEventValues) {
+    public Map<String, RuleVariableValue> createValues(RuleVariableValueMapBuilder builder, Map<String, List<RuleDataValueHistory>> allEventValues, Map<String, RuleAttributeValue> currentEnrollmentValues, Map<String, RuleDataValue> currentEventValues) {
         return Map.of();
     }
 }

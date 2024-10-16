@@ -39,6 +39,12 @@ public class MockRuleEvent extends RuleEvent {
         return null;
     }
 
+    @Nonnull
+    @Override
+    public Date createdDate() {
+        return null;
+    }
+
     @Nullable
     @Override
     public Date dueDate() {
