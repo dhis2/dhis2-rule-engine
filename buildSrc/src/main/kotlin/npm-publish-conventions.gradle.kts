@@ -1,4 +1,5 @@
 import dev.petuska.npm.publish.extension.domain.NpmAccess
+import java.nio.file.Files
 
 plugins {
     id("dev.petuska.npm.publish")
@@ -13,14 +14,15 @@ project.afterEvaluate {
                 packageName.set("rule-engine")
                 readme.set(File("./README.md"))
                 packageJson {
-                    "module" by "${project.name}.mjs"
-                    "main" by "${project.name}.js"
+                    "module" by "mjs/${project.name}.mjs"
+                    "main" by "cjs/${project.name}.js"
                     "exports" by {
                         "." by {
-                            "import" by "./${project.name}.mjs"
-                            "require" by "./${project.name}.js"
+                            "import" by "./mjs/${project.name}.mjs"
+                            "require" by "./cjs/${project.name}.js"
                         }
                     }
+                    "types" by "./mjs/${project.name}.d.ts"
                     "contributors" by Props.DEVELOPERS.map { developer ->
                         "${developer.name} <${developer.email}>"
                     }
@@ -38,4 +40,38 @@ project.afterEvaluate {
             }
         }
     }
+
+    tasks.named("packJsPackage") {
+        doLast {
+            val buildFolder = "./build/packages/js"
+
+            if (project.hasProperty("useCommonJs")) {
+                moveFilesToSubFolder(buildFolder, subFolder = "cjs", packageType = "commonjs")
+            } else {
+                moveFilesToSubFolder(buildFolder, subFolder = "mjs", packageType = "module")
+            }
+        }
+    }
+}
+
+fun moveFilesToSubFolder(buildFolder: String, subFolder: String, packageType: String) {
+    val excludedFiles = listOf("README.md", "package.json")
+    Files.createDirectory(File("$buildFolder/$subFolder").toPath())
+
+    println("\nMoving to final destination folder '$subFolder', type '$packageType'")
+
+    File(buildFolder).listFiles()?.forEach { file ->
+        if (file.isFile && !excludedFiles.contains(file.name)) {
+            val dstPath = "${file.parent}/$subFolder/${file.name}"
+            file.renameTo(File(dstPath))
+        }
+    }
+
+    // Add a package.json file in each subfolder containing the package type
+    File("$buildFolder/$subFolder/package.json")
+        .writeText("""
+            {
+              "type" : "$packageType"
+            }
+        """.trimIndent())
 }

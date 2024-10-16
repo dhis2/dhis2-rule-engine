@@ -9,7 +9,7 @@ repositories {
     maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
 }
 
-version = "3.1.0-SNAPSHOT"
+version = "3.1.1-SNAPSHOT"
 group = "org.hisp.dhis.rules"
 
 if (project.hasProperty("removeSnapshotSuffix")) {
@@ -33,8 +33,8 @@ kotlin {
             useCommonJs()
         } else {
             useEsModules()
-            generateTypeScriptDefinitions()
         }
+        generateTypeScriptDefinitions()
         binaries.library()
     }
     val hostOs = System.getProperty("os.name")
