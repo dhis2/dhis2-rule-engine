@@ -95,7 +95,7 @@ public class RuleEngineVariableNameTest
             ruleVariables );
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element1", "2.6" ),
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element2", "2.6" ),
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element3", "2.6" ),
@@ -146,7 +146,7 @@ public class RuleEngineVariableNameTest
         RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable ) );
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList( RuleDataValue.create(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList( RuleDataValue.create(
                 new Date(), "test_program_stage", "test_data_element", "test_value" ) ), "", null);
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
@@ -168,7 +168,7 @@ public class RuleEngineVariableNameTest
         RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable ) );
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList( RuleDataValue.create(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList( RuleDataValue.create(
                 new Date(), "test_program_stage", "test_data_element", "test_value" ) ), "", null);
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
 
@@ -191,13 +191,13 @@ public class RuleEngineVariableNameTest
         RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition" ) ), "", null);
         RuleEvent ruleEvent2 = RuleEvent.create( "test_event2", "test_program_stage2",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition2" ) ), "", null);
         RuleEvent ruleEvent3 = RuleEvent.create( "test_event3", "test_program_stage3",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition" ) ), "", null);
 
         ruleEngineBuilder.events( Arrays.asList( ruleEvent2, ruleEvent3 ) );
@@ -223,13 +223,13 @@ public class RuleEngineVariableNameTest
         RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition" ) ), "", null);
         RuleEvent ruleEvent2 = RuleEvent.create( "test_event2", "test_program_stage2",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition2" ) ), "", null);
         RuleEvent ruleEvent3 = RuleEvent.create( "test_event3", "test_program_stage3",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition" ) ), "", null);
 
         ruleEngineBuilder.events( Arrays.asList( ruleEvent2, ruleEvent3 ) );
@@ -258,17 +258,17 @@ public class RuleEngineVariableNameTest
         RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition" ) ), "", null);
         RuleEvent ruleEvent2 = RuleEvent.create( "test_event2", "test_program_stage2",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition2" ) ), "", null);
         RuleEvent ruleEvent3 = RuleEvent.create( "test_event3", "test_program_stage3",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition" ) ), "", null);
 
         RuleEvent ruleEvent4 = RuleEvent.create( "test_event3", "test_program_stage3",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "condition" ) ), "", null);
 
         ruleEngineBuilder.events( Arrays.asList( ruleEvent2, ruleEvent3, ruleEvent4 ) );
@@ -297,17 +297,17 @@ public class RuleEngineVariableNameTest
         RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition" ) ), "", null);
         RuleEvent ruleEvent2 = RuleEvent.create( "test_event2", "test_program_stage2",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition2" ) ), "", null);
         RuleEvent ruleEvent3 = RuleEvent.create( "test_event3", "test_program_stage3",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "condition" ) ), "", null);
 
         RuleEvent ruleEvent4 = RuleEvent.create( "test_event3", "test_program_stage3",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "condition" ) ), "", null);
 
         ruleEngineBuilder.events( Arrays.asList( ruleEvent2, ruleEvent3, ruleEvent4 ) );
@@ -333,15 +333,15 @@ public class RuleEngineVariableNameTest
         RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "0" ) ), "", null);
 
         RuleEvent ruleEvent1 = RuleEvent.create( "test_event1", "test_program_stage",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "1" ) ), "", null);
 
         RuleEvent ruleEvent2 = RuleEvent.create( "test_event1", "test_program_stage",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "-3" ) ), "", null);
 
         List<RuleEffect> ruleEffects = ruleEngineBuilder.events( Arrays.asList( ruleEvent1, ruleEvent2 ) ).build()
@@ -366,15 +366,15 @@ public class RuleEngineVariableNameTest
         RuleEngine.Builder ruleEngineBuilder = getRuleEngineBuilder( rule, Arrays.asList( ruleVariableOne ) );
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "0" ) ), "", null);
 
         RuleEvent ruleEvent1 = RuleEvent.create( "test_event1", "test_program_stage",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "1" ) ), "", null);
 
         RuleEvent ruleEvent2 = RuleEvent.create( "test_event1", "test_program_stage",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "-3" ) ), "", null);
 
         List<RuleEffect> ruleEffects = ruleEngineBuilder.events( Arrays.asList( ruleEvent1, ruleEvent2 ) ).build()
@@ -404,17 +404,17 @@ public class RuleEngineVariableNameTest
             Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
 
         RuleEvent ruleEvent1 = RuleEvent.create( "test_event1", "test_program_stage1",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "5" ),
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "", null);
 
         RuleEvent ruleEvent2 = RuleEvent.create( "test_event2", "test_program_stage2",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "7" ),
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "", null);
 
         RuleEvent ruleEvent3 = RuleEvent.create( "test_event3", "test_program_stage3",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "8" ),
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "", null);
 
@@ -444,17 +444,17 @@ public class RuleEngineVariableNameTest
             Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
 
         RuleEvent ruleEvent1 = RuleEvent.create( "test_event1", "test_program_stage1",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "5" ),
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "", null);
 
         RuleEvent ruleEvent2 = RuleEvent.create( "test_event2", "test_program_stage2",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "7" ),
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "", null);
 
         RuleEvent ruleEvent3 = RuleEvent.create( "test_event3", "test_program_stage3",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "8" ),
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "", null);
 
@@ -483,17 +483,17 @@ public class RuleEngineVariableNameTest
             Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
 
         RuleEvent ruleEvent1 = RuleEvent.create( "test_event1", "test_program_stage1",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "5" ),
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "", null);
 
         RuleEvent ruleEvent2 = RuleEvent.create( "test_event2", "test_program_stage2",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "7" ),
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "", null);
 
         RuleEvent ruleEvent3 = RuleEvent.create( "test_event3", "test_program_stage3",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "8" ),
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "", null);
 
@@ -523,17 +523,17 @@ public class RuleEngineVariableNameTest
             Arrays.asList( ruleVariableOne, ruleVariableTwo ) );
 
         RuleEvent ruleEvent1 = RuleEvent.create( "test_event1", "test_program_stage1",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "5" ),
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "", null);
 
         RuleEvent ruleEvent2 = RuleEvent.create( "test_event2", "test_program_stage2",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "7" ),
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "", null);
 
         RuleEvent ruleEvent3 = RuleEvent.create( "test_event3", "test_program_stage3",
-            RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null, Arrays.asList(
+            RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null, Arrays.asList(
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_one", "8" ),
                 RuleDataValue.create( new Date(), "test_program_stage", "test_data_element_two", "male" ) ), "", null);
 

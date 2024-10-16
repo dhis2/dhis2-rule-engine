@@ -1,6 +1,7 @@
 package org.hisp.dhis.rules;
 
 import org.hisp.dhis.rules.models.RuleDataValue;
+import org.hisp.dhis.rules.models.RuleDataValueHistory;
 import org.hisp.dhis.rules.models.RuleEvent;
 
 import java.text.SimpleDateFormat;
@@ -32,17 +33,41 @@ public final class Utils
         return Collections.unmodifiableList( values );
     }
 
-    public static String getLastUpdateDateForPrevious( List<RuleDataValue> ruleDataValues,
+    public static List<String> valuesForHistory( List<RuleDataValueHistory> ruleDataValues )
+    {
+        List<String> values = new ArrayList<>( ruleDataValues.size() );
+        for ( RuleDataValueHistory ruleDataValue : ruleDataValues )
+        {
+            values.add( ruleDataValue.getValue() );
+        }
+        return Collections.unmodifiableList( values );
+    }
+
+    public static String getLastUpdateDateForPrevious( List<RuleDataValueHistory> ruleDataValues,
         RuleEvent ruleEvent )
     {
         List<Date> dates = new ArrayList<>();
-        for ( RuleDataValue date : ruleDataValues )
+        for ( RuleDataValueHistory date : ruleDataValues )
         {
-            Date d = date.eventDate();
-            if ( d.before( ruleEvent.eventDate() ) )
+            Date d = date.getEventDate();
+            if ( d.before( ruleEvent.eventDate() ) ||
+                    (ruleEvent.eventDate().equals(d) && ruleEvent.createdDate().after(date.getCreatedDate()))
+            )
             {
                 dates.add( d );
             }
+        }
+
+        return dateFormat.format( Collections.max( dates ) );
+    }
+
+    public static String getLastUpdateDateForHistory( List<RuleDataValueHistory> ruleDataValues )
+    {
+        List<Date> dates = new ArrayList<>();
+        for ( RuleDataValueHistory date : ruleDataValues )
+        {
+            Date d = date.getEventDate();
+            dates.add( d );
         }
 
         return dateFormat.format( Collections.max( dates ) );

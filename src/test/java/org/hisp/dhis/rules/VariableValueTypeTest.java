@@ -68,7 +68,7 @@ public class VariableValueTypeTest
         RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable, ruleVariable2 ) );
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null,
+                RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null,
                 Arrays.asList(RuleDataValue.create(new Date(), "", "test_data_element", "30"),
                         RuleDataValue.create(new Date(), "", "test_data_element2", "4")), "", null);
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();
@@ -93,7 +93,7 @@ public class VariableValueTypeTest
         RuleEngine ruleEngine = getRuleEngine( rule, Arrays.asList( ruleVariable, ruleVariable2 ) );
 
         RuleEvent ruleEvent = RuleEvent.create( "test_event", "test_program_stage",
-                RuleEvent.Status.ACTIVE, new Date(), new Date(), "", null,
+                RuleEvent.Status.ACTIVE, new Date(), new Date(), new Date(), "", null,
                 Arrays.asList(RuleDataValue.create(new Date(), "", "test_data_element", "30"),
                         RuleDataValue.create(new Date(), "", "test_data_element2", "4")), "", null);
         List<RuleEffect> ruleEffects = ruleEngine.evaluate( ruleEvent ).call();

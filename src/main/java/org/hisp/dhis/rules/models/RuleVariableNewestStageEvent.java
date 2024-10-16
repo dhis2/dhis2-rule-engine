@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.hisp.dhis.rules.Utils.getLastUpdateDate;
+import static org.hisp.dhis.rules.Utils.getLastUpdateDateForHistory;
 
 @AutoValue
 public abstract class RuleVariableNewestStageEvent
@@ -32,21 +33,21 @@ public abstract class RuleVariableNewestStageEvent
 
     @Override
     public Map<String, RuleVariableValue> createValues( RuleVariableValueMapBuilder builder,
-        Map<String, List<RuleDataValue>> allEventValues,
+        Map<String, List<RuleDataValueHistory>> allEventValues,
         Map<String, RuleAttributeValue> currentEnrollmentValues,
         Map<String, RuleDataValue> currentEventValues )
     {
         Map<String, RuleVariableValue> valueMap = new HashMap();
-        List<RuleDataValue> stageRuleDataValues = new ArrayList<>();
-        List<RuleDataValue> sourceRuleDataValues = allEventValues.get( this.dataElement() );
+        List<RuleDataValueHistory> stageRuleDataValues = new ArrayList<>();
+        List<RuleDataValueHistory> sourceRuleDataValues = allEventValues.get( this.dataElement() );
         if ( sourceRuleDataValues != null && !sourceRuleDataValues.isEmpty() )
         {
 
             // filter data values based on program stage
             for ( int i = 0; i < sourceRuleDataValues.size(); i++ )
             {
-                RuleDataValue ruleDataValue = sourceRuleDataValues.get( i );
-                if ( this.programStage().equals( ruleDataValue.programStage() ) )
+                RuleDataValueHistory ruleDataValue = sourceRuleDataValues.get( i );
+                if ( this.programStage().equals( ruleDataValue.getProgramStage() ) )
                 {
                     stageRuleDataValues.add( ruleDataValue );
                 }
@@ -61,13 +62,13 @@ public abstract class RuleVariableNewestStageEvent
         {
             RuleVariableValue variableValue;
 
-            RuleDataValue value = stageRuleDataValues.get( 0 );
+            RuleDataValueHistory value = stageRuleDataValues.get( 0 );
 
-            String optionValue = this.useCodeForOptionSet() ? value.value() : getOptionName( value.value() );
+            String optionValue = this.useCodeForOptionSet() ? value.getValue() : getOptionName( value.getValue() );
 
             variableValue = RuleVariableValue.create( optionValue,
-                        this.dataElementType(), Utils.values( stageRuleDataValues ),
-                        getLastUpdateDate( stageRuleDataValues ) );
+                        this.dataElementType(), Utils.valuesForHistory( stageRuleDataValues ),
+                        getLastUpdateDateForHistory( stageRuleDataValues ) );
 
             valueMap.put( this.name(), variableValue );
         }
