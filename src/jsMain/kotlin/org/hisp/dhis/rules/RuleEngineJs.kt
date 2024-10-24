@@ -10,7 +10,11 @@ import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.models.*
 
 @JsExport
-class RuleEngineJs {
+class RuleEngineJs(verbose: Boolean = false) {
+    init {
+        RuleEngineJs.verbose = verbose
+    }
+
     fun validate(expression: String, dataItemStore: JsMap<String, DataItemJs>): RuleValidationResult{
         return RuleEngine.getInstance().validate(expression, toMap(dataItemStore, {it}, ::toDataItemJava))
     }
@@ -189,5 +193,9 @@ class RuleEngineJs {
                 fieldType = ruleVariableJs.fieldType
             )
         }
+    }
+
+    internal companion object {
+        var verbose: Boolean = false
     }
 }
