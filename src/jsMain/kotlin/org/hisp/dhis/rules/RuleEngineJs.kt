@@ -8,6 +8,7 @@ import org.hisp.dhis.rules.api.DataItem
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.models.*
+import kotlin.time.Duration
 
 @JsExport
 class RuleEngineJs(verbose: Boolean = false) {
@@ -21,9 +22,13 @@ class RuleEngineJs(verbose: Boolean = false) {
     fun validateDataFieldExpression(expression: String, dataItemStore: JsMap<String, DataItemJs>): RuleValidationResult{
         return RuleEngine.getInstance().validateDataFieldExpression(expression, toMap(dataItemStore, {it}, ::toDataItemJava))
     }
-    fun evaluateAll(enrollmentTarget: RuleEnrollmentJs?, eventsTarget: Array<RuleEventJs>, executionContext: RuleEngineContextJs): Array<RuleEffectsJs>{
+    fun evaluateAll(enrollmentTarget: RuleEnrollmentJs?, eventsInProgressTarget: Array<RuleEventInProgressJs>, eventsTarget: Array<RuleEventJs>, executionContext: RuleEngineContextJs): Array<RuleEffectsJs>{
+        val lastEventDate = eventsTarget
+                            .map { Instant.fromEpochMilliseconds(it.eventDate.toEpochMilli().toLong())}
+                            .maxWith(compareBy { it })
+                            .plus(Duration.parse("1D"))
         return toRuleEffectsJsList(RuleEngine.getInstance().evaluateAll(toEnrollmentJava(enrollmentTarget),
-            eventsTarget.map(::toEventJava).toList(),
+            eventsTarget.map(::toEventJava).plus(eventsInProgressTarget.map{ e -> this.toEventJava(e, lastEventDate)}),
             toRuleEngineContextJava(executionContext)))
     }
 
@@ -33,8 +38,12 @@ class RuleEngineJs(verbose: Boolean = false) {
                 toRuleEngineContextJava(executionContext))
             .map(::toRuleEffectJs).toTypedArray()
     }
-    fun evaluateEvent(target: RuleEventJs, ruleEnrollment: RuleEnrollmentJs?, ruleEvents: Array<RuleEventJs>, executionContext: RuleEngineContextJs): Array<RuleEffectJs>{
-        return RuleEngine.getInstance().evaluate(toEventJava(target),
+    fun evaluateEvent(target: RuleEventInProgressJs, ruleEnrollment: RuleEnrollmentJs?, ruleEvents: Array<RuleEventJs>, executionContext: RuleEngineContextJs): Array<RuleEffectJs>{
+        val lastEventDate = ruleEvents
+            .map { Instant.fromEpochMilliseconds(it.eventDate.toEpochMilli().toLong())}
+            .maxWith(compareBy { it })
+            .plus(Duration.parse("1D"))
+        return RuleEngine.getInstance().evaluate(toEventJava(target, lastEventDate),
                 toEnrollmentJava(ruleEnrollment),
                 ruleEvents.map(::toEventJava).toList(),
                 toRuleEngineContextJava(executionContext))
@@ -76,6 +85,22 @@ class RuleEngineJs(verbose: Boolean = false) {
             programStageName = event.programStageName,
             status = event.status,
             eventDate = Instant.fromEpochMilliseconds(event.eventDate.toEpochMilli().toLong()),
+            createdDate = Instant.fromEpochMilliseconds(event.createdDate.toEpochMilli().toLong()),
+            dueDate = toLocalDate(event.dueDate),
+            completedDate = toLocalDate(event.completedDate),
+            organisationUnit = event.organisationUnit,
+            organisationUnitCode = event.organisationUnitCode,
+            dataValues = event.dataValues.toList()
+        )
+    }
+
+    private fun toEventJava(event: RuleEventInProgressJs, eventDate: Instant): RuleEvent {
+        return RuleEvent(
+            event = event.event,
+            programStage = event.programStage,
+            programStageName = event.programStageName,
+            status = event.status,
+            eventDate = eventDate,
             createdDate = Instant.fromEpochMilliseconds(event.createdDate.toEpochMilli().toLong()),
             dueDate = toLocalDate(event.dueDate),
             completedDate = toLocalDate(event.completedDate),
