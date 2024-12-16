@@ -213,6 +213,44 @@ class RuleVariableValueMapBuilderTest {
     }
 
     @Test
+    fun currentEventVariableShouldContainValuesFromCurrentEventWhenEventDateIsDistantFuture() {
+        val eventInstant = Instant.parse("2015-01-01T01:00:00Z")
+        val eventDate = LocalDate.parse("2015-01-01")
+        val dueDate = LocalDate.parse("2016-01-01")
+
+        // values from context events should be ignored
+        val contextEventOne =
+            RuleEvent(
+                "test_context_event_one",
+                "test_program_stage",
+                "",
+                RuleEventStatus.ACTIVE,
+                Instant.DISTANT_FUTURE,
+                Clock.System.now(),
+                LocalDate.currentDate(),
+                null,
+                "",
+                null,
+                listOf(
+                    RuleDataValue(
+                        "test_dataelement_one",
+                        "test_context_value_one",
+                    ),
+                    RuleDataValue(
+                        "test_dataelement_two",
+                        "test_context_value_two",
+                    ),
+                ),
+            )
+
+        val valueMap =
+            RuleVariableValueMapBuilder()
+                .build(emptyMap(), listOf(), setOf(contextEventOne), null, null)
+
+        assertNull(valueMap["event_date"])
+    }
+
+    @Test
     fun newestEventProgramVariableShouldContainValueFromNewestContextEvent() {
         val ruleVariableOne: RuleVariable =
             RuleVariableNewestEvent(
