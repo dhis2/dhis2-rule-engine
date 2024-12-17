@@ -9,7 +9,7 @@ repositories {
     maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
 }
 
-version = "3.2.0-SNAPSHOT"
+version = "3.2.1-SNAPSHOT"
 group = "org.hisp.dhis.rules"
 
 if (project.hasProperty("removeSnapshotSuffix")) {
@@ -67,7 +67,11 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val jvmMain by getting
+        val jvmMain by getting {
+            dependencies {
+                api("org.slf4j:slf4j-api:1.7.36")
+            }
+        }
         val jvmTest by getting
         val jsMain by getting {
             dependencies {

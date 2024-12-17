@@ -220,6 +220,6 @@ internal class RuleConditionEvaluator {
     }
 
     companion object {
-        private val log = createLogger(RuleConditionEvaluator::class.simpleName!!)
+        private val log = createLogger("org.hisp.dhis.rules.engine.RuleConditionEvaluator")
     }
 }
