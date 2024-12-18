@@ -135,49 +135,35 @@ internal class RuleVariableValueMapBuilder {
         currentDate: LocalDate,
     ): Map<String, RuleVariableValue> {
         val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
-        if (ruleEvent.eventDate < Instant.DISTANT_FUTURE ){
             val eventDate =
+                if (ruleEvent.eventDate < Instant.DISTANT_FUTURE )
                 ruleEvent.eventDate
                     .toLocalDateTime(TimeZone.currentSystemDefault())
                     .date
                     .toString()
+            else null
             valueMap[RuleEngineUtils.ENV_VAR_EVENT_DATE] =
                 RuleVariableValue(
                     RuleValueType.TEXT,
                     eventDate,
-                    listOf(eventDate),
+                    if(eventDate == null) listOf() else listOf(eventDate),
                     currentDate.toString(),
                 )
-        } else {
-            valueMap[RuleEngineUtils.ENV_VAR_EVENT_DATE] =
-                RuleVariableValue(
-                    RuleValueType.TEXT,
-                    null,
-                    listOf(),
-                    currentDate.toString(),
-                );
-        }
-        if (ruleEvent.dueDate != null) {
-            val dueDate = ruleEvent.dueDate
-            valueMap[RuleEngineUtils.ENV_VAR_DUE_DATE] =
-                RuleVariableValue(
-                    RuleValueType.TEXT,
-                    dueDate.toString(),
-                    listOf(dueDate.toString()),
-                    currentDate.toString(),
-                )
-        }
-        if (ruleEvent.completedDate != null) {
-            val completedDate = ruleEvent.completedDate
-            valueMap[RuleEngineUtils.ENV_VAR_COMPLETED_DATE] =
-                RuleVariableValue(
-                    RuleValueType.TEXT,
-                    completedDate.toString(),
-                    listOf(completedDate.toString()),
-                    currentDate.toString(),
-                )
-        }
 
+        valueMap[RuleEngineUtils.ENV_VAR_DUE_DATE] =
+            RuleVariableValue(
+                RuleValueType.TEXT,
+                ruleEvent.dueDate?.toString(),
+                if(ruleEvent.dueDate == null) listOf() else listOf(ruleEvent.dueDate.toString()),
+                currentDate.toString(),
+            )
+        valueMap[RuleEngineUtils.ENV_VAR_COMPLETED_DATE] =
+            RuleVariableValue(
+                RuleValueType.TEXT,
+                ruleEvent.completedDate?.toString(),
+                if(ruleEvent.completedDate == null) listOf() else listOf(ruleEvent.completedDate.toString()),
+                currentDate.toString(),
+            )
         val eventCount = ruleEvents.size.toString()
         valueMap[RuleEngineUtils.ENV_VAR_EVENT_COUNT] =
             RuleVariableValue(
