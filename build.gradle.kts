@@ -67,7 +67,11 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val jvmMain by getting
+        val jvmMain by getting {
+            dependencies {
+                api("org.slf4j:slf4j-api:1.7.36")
+            }
+        }
         val jvmTest by getting
         val jsMain by getting {
             dependencies {

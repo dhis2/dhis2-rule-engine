@@ -1,6 +1,8 @@
 package org.hisp.dhis.rules
 
+import org.slf4j.LoggerFactory
+
 actual fun createLogger(className: String): Logger{
-    val javaLogger = java.util.logging.Logger.getLogger(className)
-    return Logger({message -> javaLogger.severe(message)}, {message: String -> javaLogger.fine(message)})
+    val javaLogger = LoggerFactory.getLogger(className)
+    return Logger({message -> javaLogger.error(message)}, {message: String -> javaLogger.debug(message)})
 }
