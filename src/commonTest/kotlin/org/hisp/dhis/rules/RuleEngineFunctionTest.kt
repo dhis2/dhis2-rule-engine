@@ -167,6 +167,72 @@ class RuleEngineFunctionTest {
     }
 
     @Test
+    fun evaluateHasValueFunctionMustReturnFalseIfValueNotSpecified() {
+        val ruleAction =
+            RuleAction(
+                "d2:hasValue(V{event_date})",
+                "DISPLAYTEXT",
+                mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")),
+            )
+        val rule = Rule("d2:hasValue(V{event_date})", listOf(ruleAction), "", "")
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf())
+        val ruleEvent =
+            RuleEvent(
+                "test_event",
+                "test_program_stage",
+                "",
+                RuleEventStatus.ACTIVE,
+                Instant.DISTANT_FUTURE,
+                Clock.System.now(),
+                LocalDate.currentDate(),
+                null,
+                "",
+                null,
+                listOf(
+                    RuleDataValue(
+                        "test_data_element_one",
+                        "test_value",
+                    ),
+                ),
+            )
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
+        assertEquals(0, ruleEffects.size)
+    }
+
+    @Test
+    fun evaluateNotHasValueFunctionMustReturnTrueIfValueNotSpecified() {
+        val ruleAction =
+            RuleAction(
+                "true",
+                "DISPLAYTEXT",
+                mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")),
+            )
+        val rule = Rule("!d2:hasValue(V{event_date})", listOf(ruleAction), "", "")
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf())
+        val ruleEvent =
+            RuleEvent(
+                "test_event",
+                "test_program_stage",
+                "",
+                RuleEventStatus.ACTIVE,
+                Instant.DISTANT_FUTURE,
+                Clock.System.now(),
+                LocalDate.currentDate(),
+                null,
+                "",
+                null,
+                listOf(
+                    RuleDataValue(
+                        "test_data_element_one",
+                        "test_value",
+                    ),
+                ),
+            )
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
+        assertEquals(1, ruleEffects.size)
+    }
+
+    @Test
     fun optionSetNameShouldBeUsed() {
         val option1 = Option("name1", "code1")
         val option2 = Option("name2", "code2")

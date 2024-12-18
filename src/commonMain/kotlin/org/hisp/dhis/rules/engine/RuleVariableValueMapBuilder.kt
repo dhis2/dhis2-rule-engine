@@ -148,6 +148,14 @@ internal class RuleVariableValueMapBuilder {
                     listOf(eventDate),
                     currentDate.toString(),
                 )
+        } else {
+            valueMap[RuleEngineUtils.ENV_VAR_EVENT_DATE] =
+                RuleVariableValue(
+                    RuleValueType.TEXT,
+                    null,
+                    listOf(),
+                    currentDate.toString(),
+                );
         }
         if (ruleEvent.dueDate != null) {
             val dueDate = ruleEvent.dueDate
