@@ -124,6 +124,44 @@ class RuleEngineFunctionTest {
     }
 
     @Test
+    fun actionConditionShouldEvaluateToTrueUsingVariableDefaultValueIfVariableValueIsNull() {
+        val ruleAction =
+            RuleAction(
+                "#{test_variable} > -1",
+                "DISPLAYTEXT",
+                mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")),
+            )
+        val ruleVariable: RuleVariable =
+            RuleVariableCurrentEvent(
+                "test_variable",
+                true,
+                emptyList(),
+                "test_data_element_one",
+                RuleValueType.NUMERIC,
+            )
+        val rule = Rule("true", listOf(ruleAction), "", "")
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariable))
+        val ruleEvent =
+            RuleEvent(
+                "test_event",
+                "test_program_stage",
+                "",
+                RuleEventStatus.ACTIVE,
+                Clock.System.now(),
+                Clock.System.now(),
+                LocalDate.currentDate(),
+                null,
+                "",
+                null,
+                listOf(),
+            )
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
+        assertEquals(1, ruleEffects.size)
+        assertEquals("true", ruleEffects[0].data)
+        assertEquals(ruleAction, ruleEffects[0].ruleAction)
+    }
+
+    @Test
     fun evaluateHasValueFunctionMustReturnTrueIfValueSpecified() {
         val ruleAction =
             RuleAction(
@@ -158,7 +196,7 @@ class RuleEngineFunctionTest {
                         "test_data_element_one",
                         "test_value",
                     ),
-                ),
+                )
             )
         val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
