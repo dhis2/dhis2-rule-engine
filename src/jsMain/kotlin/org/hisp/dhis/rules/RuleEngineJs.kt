@@ -2,12 +2,14 @@ package org.hisp.dhis.rules
 
 import js.array.tupleOf
 import js.collections.JsMap
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.api.DataItem
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.models.*
+import kotlin.time.Duration
 
 @JsExport
 class RuleEngineJs(verbose: Boolean = false) {
@@ -23,7 +25,7 @@ class RuleEngineJs(verbose: Boolean = false) {
     }
     fun evaluateAll(enrollmentTarget: RuleEnrollmentJs?, eventsTarget: Array<RuleEventJs>, executionContext: RuleEngineContextJs): Array<RuleEffectsJs>{
         return toRuleEffectsJsList(RuleEngine.getInstance().evaluateAll(toEnrollmentJava(enrollmentTarget),
-            eventsTarget.map(::toEventJava).toList(),
+            eventsTarget.map(::toEventJava),
             toRuleEngineContextJava(executionContext)))
     }
 
@@ -75,7 +77,10 @@ class RuleEngineJs(verbose: Boolean = false) {
             programStage = event.programStage,
             programStageName = event.programStageName,
             status = event.status,
-            eventDate = Instant.fromEpochMilliseconds(event.eventDate.toEpochMilli().toLong()),
+            eventDate = if(event.eventDate != null)
+                Instant.fromEpochMilliseconds(event.eventDate.toEpochMilli().toLong())
+                else
+                    Instant.DISTANT_FUTURE,
             createdDate = Instant.fromEpochMilliseconds(event.createdDate.toEpochMilli().toLong()),
             dueDate = toLocalDate(event.dueDate),
             completedDate = toLocalDate(event.completedDate),
@@ -84,6 +89,8 @@ class RuleEngineJs(verbose: Boolean = false) {
             dataValues = event.dataValues.toList()
         )
     }
+
+
 
     private fun toRuleJava(rule: RuleJs): Rule {
         return Rule(
@@ -197,5 +204,6 @@ class RuleEngineJs(verbose: Boolean = false) {
 
     internal companion object {
         var verbose: Boolean = false
+        var lastDate: Instant = Clock.System.now()
     }
 }
