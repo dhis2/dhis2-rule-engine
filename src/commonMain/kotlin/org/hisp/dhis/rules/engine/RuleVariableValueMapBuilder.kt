@@ -103,7 +103,7 @@ internal class RuleVariableValueMapBuilder {
         val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
         valueMap[RuleEngineUtils.ENV_VAR_CURRENT_DATE] =
             RuleVariableValue(
-                RuleValueType.TEXT,
+                RuleValueType.DATE,
                 currentDate.toString(),
                 listOf(currentDate.toString()),
                 currentDate.toString(),
@@ -140,7 +140,7 @@ internal class RuleVariableValueMapBuilder {
                 .toString()
         valueMap[RuleEngineUtils.ENV_VAR_EVENT_DATE] =
             RuleVariableValue(
-                RuleValueType.TEXT,
+                RuleValueType.DATE,
                 eventDate,
                 listOf(eventDate),
                 currentDate.toString(),
@@ -149,7 +149,7 @@ internal class RuleVariableValueMapBuilder {
             val dueDate = ruleEvent.dueDate
             valueMap[RuleEngineUtils.ENV_VAR_DUE_DATE] =
                 RuleVariableValue(
-                    RuleValueType.TEXT,
+                    RuleValueType.DATE,
                     dueDate.toString(),
                     listOf(dueDate.toString()),
                     currentDate.toString(),
@@ -159,7 +159,7 @@ internal class RuleVariableValueMapBuilder {
             val completedDate = ruleEvent.completedDate
             valueMap[RuleEngineUtils.ENV_VAR_COMPLETED_DATE] =
                 RuleVariableValue(
-                    RuleValueType.TEXT,
+                    RuleValueType.DATE,
                     completedDate.toString(),
                     listOf(completedDate.toString()),
                     currentDate.toString(),
@@ -231,7 +231,7 @@ internal class RuleVariableValueMapBuilder {
         val enrollmentDate = ruleEnrollment.enrollmentDate
         valueMap[RuleEngineUtils.ENV_VAR_ENROLLMENT_DATE] =
             RuleVariableValue(
-                RuleValueType.TEXT,
+                RuleValueType.DATE,
                 enrollmentDate.toString(),
                 listOf(enrollmentDate.toString()),
                 currentDate.toString(),
@@ -239,7 +239,7 @@ internal class RuleVariableValueMapBuilder {
         val incidentDate = ruleEnrollment.incidentDate
         valueMap[RuleEngineUtils.ENV_VAR_INCIDENT_DATE] =
             RuleVariableValue(
-                RuleValueType.TEXT,
+                RuleValueType.DATE,
                 incidentDate.toString(),
                 listOf(incidentDate.toString()),
                 currentDate.toString(),
