@@ -169,13 +169,13 @@ class RuleVariableValueMapBuilderTest {
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
                 LocalDate.Companion.currentDate().toString(),
-            ).isTypeOf(RuleValueType.TEXT)
+            ).isTypeOf(RuleValueType.DATE)
             .hasCandidates(LocalDate.Companion.currentDate().toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_date"]!!)
             .hasValue(
                 eventDate.toString(),
-            ).isTypeOf(RuleValueType.TEXT)
+            ).isTypeOf(RuleValueType.DATE)
             .hasCandidates(eventDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_status"]!!)
@@ -198,7 +198,7 @@ class RuleVariableValueMapBuilderTest {
             .assertThatVariable(valueMap["due_date"]!!)
             .hasValue(
                 dueDate.toString(),
-            ).isTypeOf(RuleValueType.TEXT)
+            ).isTypeOf(RuleValueType.DATE)
             .hasCandidates(dueDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["test_variable_one"]!!)
@@ -312,12 +312,12 @@ class RuleVariableValueMapBuilderTest {
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
                 LocalDate.Companion.currentDate().toString(),
-            ).isTypeOf(RuleValueType.TEXT)
+            ).isTypeOf(RuleValueType.DATE)
             .hasCandidates(LocalDate.Companion.currentDate().toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_date"]!!)
             .hasValue(currentEventDate.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(currentEventDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_count"]!!)
@@ -450,12 +450,12 @@ class RuleVariableValueMapBuilderTest {
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
                 LocalDate.Companion.currentDate().toString(),
-            ).isTypeOf(RuleValueType.TEXT)
+            ).isTypeOf(RuleValueType.DATE)
             .hasCandidates(LocalDate.Companion.currentDate().toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_date"]!!)
             .hasValue(dateEventCurrent.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(dateEventCurrent.toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_count"]!!)
@@ -470,7 +470,7 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(valueMap["due_date"]!!)
             .hasValue(dateEventDueCurrent.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(dateEventDueCurrent.toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["test_variable_one"]!!)
@@ -593,12 +593,12 @@ class RuleVariableValueMapBuilderTest {
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
                 LocalDate.Companion.currentDate().toString(),
-            ).isTypeOf(RuleValueType.TEXT)
+            ).isTypeOf(RuleValueType.DATE)
             .hasCandidates(LocalDate.Companion.currentDate().toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_date"]!!)
             .hasValue(dateEventCurrent.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(dateEventCurrent.toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_count"]!!)
@@ -613,7 +613,7 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(valueMap["due_date"]!!)
             .hasValue(dateEventDueCurrent.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(dateEventDueCurrent.toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["test_variable"]!!)
@@ -683,13 +683,13 @@ class RuleVariableValueMapBuilderTest {
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
                 LocalDate.Companion.currentDate().toString(),
-            ).isTypeOf(RuleValueType.TEXT)
+            ).isTypeOf(RuleValueType.DATE)
             .hasCandidates(LocalDate.Companion.currentDate().toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_date"]!!)
             .hasValue(
                 dateEventTwo.toString(),
-            ).isTypeOf(RuleValueType.TEXT)
+            ).isTypeOf(RuleValueType.DATE)
             .hasCandidates(dateEventTwo.toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_count"]!!)
@@ -705,7 +705,7 @@ class RuleVariableValueMapBuilderTest {
             .assertThatVariable(valueMap["due_date"]!!)
             .hasValue(
                 dueDateEventTwo.toString(),
-            ).isTypeOf(RuleValueType.TEXT)
+            ).isTypeOf(RuleValueType.DATE)
             .hasCandidates(dueDateEventTwo.toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["test_variable"]!!)
@@ -806,12 +806,12 @@ class RuleVariableValueMapBuilderTest {
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
                 LocalDate.Companion.currentDate().toString(),
-            ).isTypeOf(RuleValueType.TEXT)
+            ).isTypeOf(RuleValueType.DATE)
             .hasCandidates(LocalDate.Companion.currentDate().toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_date"]!!)
             .hasValue(dateEventCurrent.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(dateEventCurrent.toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_count"]!!)
@@ -826,7 +826,7 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(valueMap["due_date"]!!)
             .hasValue(dueDateEventCurrent.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(dueDateEventCurrent.toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["test_variable"]!!)
@@ -927,12 +927,12 @@ class RuleVariableValueMapBuilderTest {
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
                 LocalDate.Companion.currentDate().toString(),
-            ).isTypeOf(RuleValueType.TEXT)
+            ).isTypeOf(RuleValueType.DATE)
             .hasCandidates(LocalDate.Companion.currentDate().toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_date"]!!)
             .hasValue(dateEventCurrent.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(dateEventCurrent.toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_count"]!!)
@@ -947,7 +947,7 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(valueMap["due_date"]!!)
             .hasValue(dueDateEventCurrent.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(dueDateEventCurrent.toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["test_variable"]!!)
@@ -1046,13 +1046,13 @@ class RuleVariableValueMapBuilderTest {
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
                 LocalDate.Companion.currentDate().toString(),
-            ).isTypeOf(RuleValueType.TEXT)
+            ).isTypeOf(RuleValueType.DATE)
             .hasCandidates(LocalDate.Companion.currentDate().toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_date"]!!)
             .hasValue(
                 eventDate.toString(),
-            ).isTypeOf(RuleValueType.TEXT)
+            ).isTypeOf(RuleValueType.DATE)
             .hasCandidates(eventDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_count"]!!)
@@ -1068,7 +1068,7 @@ class RuleVariableValueMapBuilderTest {
             .assertThatVariable(valueMap["due_date"]!!)
             .hasValue(
                 dueEventDate.toString(),
-            ).isTypeOf(RuleValueType.TEXT)
+            ).isTypeOf(RuleValueType.DATE)
             .hasCandidates(dueEventDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["enrollment_status"]!!)
@@ -1078,7 +1078,7 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(valueMap["enrollment_date"]!!)
             .hasValue(enrollmentDate.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(enrollmentDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["enrollment_id"]!!)
@@ -1093,7 +1093,7 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(valueMap["incident_date"]!!)
             .hasValue(enrollmentDate.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(enrollmentDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["tei_count"]!!)
@@ -1196,7 +1196,7 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(currentDate.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(currentDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_count"]!!)
@@ -1206,7 +1206,7 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(valueMap["enrollment_date"]!!)
             .hasValue(enrollmentDate.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(enrollmentDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["enrollment_id"]!!)
@@ -1221,7 +1221,7 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(valueMap["incident_date"]!!)
             .hasValue(incidentDate.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(incidentDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["tei_count"]!!)
@@ -1337,7 +1337,7 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(enrollmentValueMap!!["current_date"]!!)
             .hasValue(currentDate.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(currentDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(enrollmentValueMap["event_count"]!!)
@@ -1347,7 +1347,7 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(enrollmentValueMap["enrollment_date"]!!)
             .hasValue(enrollmentDate.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(enrollmentDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(enrollmentValueMap["enrollment_id"]!!)
@@ -1362,7 +1362,7 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(enrollmentValueMap["incident_date"]!!)
             .hasValue(incidentDate.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(incidentDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(enrollmentValueMap["tei_count"]!!)
@@ -1384,7 +1384,7 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(eventOneValueMap!!["current_date"]!!)
             .hasValue(currentDate.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(currentDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(eventOneValueMap["event_count"]!!)
@@ -1394,7 +1394,7 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(eventOneValueMap["enrollment_date"]!!)
             .hasValue(enrollmentDate.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(enrollmentDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(eventOneValueMap["enrollment_id"]!!)
@@ -1409,7 +1409,7 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(eventOneValueMap["incident_date"]!!)
             .hasValue(incidentDate.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(incidentDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(eventOneValueMap["tei_count"]!!)
@@ -1430,19 +1430,19 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(eventOneValueMap["event_date"]!!)
             .hasValue(eventOneDate.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(eventOneDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(eventOneValueMap["due_date"]!!)
             .hasValue(eventOneDueDate.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(eventOneDueDate.toString())
 
         // Event two
         RuleVariableValueAssert
             .assertThatVariable(eventTwoValueMap!!["current_date"]!!)
             .hasValue(currentDate.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(currentDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(eventTwoValueMap["event_count"]!!)
@@ -1452,7 +1452,7 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(eventTwoValueMap["enrollment_date"]!!)
             .hasValue(enrollmentDate.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(enrollmentDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(eventTwoValueMap["enrollment_id"]!!)
@@ -1467,7 +1467,7 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(eventTwoValueMap["incident_date"]!!)
             .hasValue(incidentDate.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(incidentDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(eventTwoValueMap["tei_count"]!!)
@@ -1488,12 +1488,12 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(eventTwoValueMap["event_date"]!!)
             .hasValue(eventTwoDate.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(eventTwoDate.toString())
         RuleVariableValueAssert
             .assertThatVariable(eventTwoValueMap["due_date"]!!)
             .hasValue(eventTwoDueDate.toString())
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates(eventTwoDueDate.toString())
     }
 }
