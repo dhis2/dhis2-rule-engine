@@ -281,7 +281,7 @@ public final class RuleVariableValueMapBuilder
         String currentDate = dateFormat.format( new Date() );
 
         valueMap.put( RuleEngineUtils.ENV_VAR_CURRENT_DATE,
-            create( currentDate, RuleValueType.TEXT, Arrays.asList( currentDate ), currentDate ) );
+            create( currentDate, RuleValueType.DATE, Arrays.asList( currentDate ), currentDate ) );
 
         if ( triggerEnvironment != null )
         {
@@ -307,11 +307,11 @@ public final class RuleVariableValueMapBuilder
 
             String enrollmentDate = dateFormat.format( ruleEnrollment.enrollmentDate() );
             valueMap.put( RuleEngineUtils.ENV_VAR_ENROLLMENT_DATE, create( enrollmentDate,
-                RuleValueType.TEXT, Arrays.asList( enrollmentDate ), currentDate ) );
+                RuleValueType.DATE, Arrays.asList( enrollmentDate ), currentDate ) );
 
             String incidentDate = dateFormat.format( ruleEnrollment.incidentDate() );
             valueMap.put( RuleEngineUtils.ENV_VAR_INCIDENT_DATE, create( incidentDate,
-                RuleValueType.TEXT, Arrays.asList( incidentDate ), currentDate ) );
+                RuleValueType.DATE, Arrays.asList( incidentDate ), currentDate ) );
 
             String status = ruleEnrollment.status().toString();
             valueMap.put( RuleEngineUtils.ENV_VAR_ENROLLMENT_STATUS, create( status,
@@ -330,18 +330,18 @@ public final class RuleVariableValueMapBuilder
         if ( ruleEvent != null )
         {
             String eventDate = dateFormat.format( ruleEvent.eventDate() );
-            valueMap.put( RuleEngineUtils.ENV_VAR_EVENT_DATE, create( eventDate, RuleValueType.TEXT,
+            valueMap.put( RuleEngineUtils.ENV_VAR_EVENT_DATE, create( eventDate, RuleValueType.DATE,
                 Arrays.asList( eventDate ), currentDate ) );
 
             if ( ruleEvent.dueDate() != null ) {
                 String dueDate = dateFormat.format(ruleEvent.dueDate());
-                valueMap.put(RuleEngineUtils.ENV_VAR_DUE_DATE, create(dueDate, RuleValueType.TEXT,
+                valueMap.put(RuleEngineUtils.ENV_VAR_DUE_DATE, create(dueDate, RuleValueType.DATE,
                         Arrays.asList(dueDate), currentDate));
             }
             if ( ruleEvent.completedDate() != null )
             {
                 String completedDate = dateFormat.format( ruleEvent.completedDate() );
-                valueMap.put( RuleEngineUtils.ENV_VAR_COMPLETED_DATE, create( completedDate, RuleValueType.TEXT,
+                valueMap.put( RuleEngineUtils.ENV_VAR_COMPLETED_DATE, create( completedDate, RuleValueType.DATE,
                     Arrays.asList( completedDate ), currentDate ) );
             }
 
