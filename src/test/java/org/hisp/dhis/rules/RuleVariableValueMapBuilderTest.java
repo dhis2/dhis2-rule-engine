@@ -135,10 +135,10 @@ public class RuleVariableValueMapBuilderTest
         assertThat( valueMap.size() ).isEqualTo( 13 );
 
         assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( new Date() ) );
 
         assertThatVariable( valueMap.get( "event_date" ) ).hasValue( wrap( dateFormat.format( eventDate ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( eventDate ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( eventDate ) );
 
         assertThatVariable( valueMap.get( "event_status" ) ).hasValue( wrap( RuleEvent.Status.ACTIVE.toString() ) )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( RuleEvent.Status.ACTIVE.toString() );
@@ -151,7 +151,7 @@ public class RuleVariableValueMapBuilderTest
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_event_uid" );
 
         assertThatVariable( valueMap.get( "due_date" ) ).hasValue( wrap( dateFormat.format( dueDate ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( dueDate ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( dueDate ) );
 
         assertThatVariable( valueMap.get( "test_variable_one" ) ).hasValue( "test_value_one" )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_value_one" );
@@ -202,11 +202,11 @@ public class RuleVariableValueMapBuilderTest
         assertThat( valueMap.size() ).isEqualTo( 12 );
 
         assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( new Date() ) );
 
         assertThatVariable( valueMap.get( "event_date" ) )
             .hasValue( wrap( dateFormat.format( currentEventDate ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( currentEventDate ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( currentEventDate ) );
 
         assertThatVariable( valueMap.get( "event_count" ) ).hasValue( "3" )
             .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "3" );
@@ -266,11 +266,11 @@ public class RuleVariableValueMapBuilderTest
         assertThat( valueMap.size() ).isEqualTo( 13 );
 
         assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( new Date() ) );
 
         assertThatVariable( valueMap.get( "event_date" ) )
             .hasValue( wrap( dateFormat.format( dateEventCurrent ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( dateEventCurrent ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( dateEventCurrent ) );
 
         assertThatVariable( valueMap.get( "event_count" ) ).hasValue( "3" )
             .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "3" );
@@ -280,7 +280,7 @@ public class RuleVariableValueMapBuilderTest
 
         assertThatVariable( valueMap.get( "due_date" ) )
             .hasValue( wrap( dateFormat.format( dateEventDueCurrent ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( dateEventDueCurrent ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( dateEventDueCurrent ) );
 
         assertThatVariable( valueMap.get( "test_variable_one" ) )
             .hasValue( "test_value_dataelement_one_current" )
@@ -332,11 +332,11 @@ public class RuleVariableValueMapBuilderTest
         assertThat( valueMap.size() ).isEqualTo( 12 );
 
         assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( new Date() ) );
 
         assertThatVariable( valueMap.get( "event_date" ) )
             .hasValue( wrap( dateFormat.format( dateEventCurrent ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( dateEventCurrent ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( dateEventCurrent ) );
 
         assertThatVariable( valueMap.get( "event_count" ) ).hasValue( "4" )
             .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "4" );
@@ -346,7 +346,7 @@ public class RuleVariableValueMapBuilderTest
 
         assertThatVariable( valueMap.get( "due_date" ) )
             .hasValue( wrap( dateFormat.format( dateEventDueCurrent ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( dateEventDueCurrent ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( dateEventDueCurrent ) );
 
         assertThatVariable( valueMap.get( "test_variable" ) ).hasValue( "test_value_one" )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_value_one", "test_value_current" );
@@ -380,10 +380,10 @@ public class RuleVariableValueMapBuilderTest
         assertThat( valueMap.size() ).isEqualTo( 12 );
 
         assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( new Date() ) );
 
         assertThatVariable( valueMap.get( "event_date" ) ).hasValue( wrap( dateFormat.format( dateEventTwo ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( dateEventTwo ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( dateEventTwo ) );
 
         assertThatVariable( valueMap.get( "event_count" ) ).hasValue( "2" )
             .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "2" );
@@ -392,7 +392,7 @@ public class RuleVariableValueMapBuilderTest
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_event_uid_two" );
 
         assertThatVariable( valueMap.get( "due_date" ) ).hasValue( wrap( dateFormat.format( dateEventTwo ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( dateEventTwo ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( dateEventTwo ) );
 
         assertThatVariable( valueMap.get( "test_variable" ) ).hasValue( null )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates();
@@ -436,11 +436,11 @@ public class RuleVariableValueMapBuilderTest
         assertThat( valueMap.size() ).isEqualTo( 12 );
 
         assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( new Date() ) );
 
         assertThatVariable( valueMap.get( "event_date" ) )
             .hasValue( wrap( dateFormat.format( dateEventCurrent ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( dateEventCurrent ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( dateEventCurrent ) );
 
         assertThatVariable( valueMap.get( "event_count" ) ).hasValue( "4" )
             .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "4" );
@@ -450,7 +450,7 @@ public class RuleVariableValueMapBuilderTest
 
         assertThatVariable( valueMap.get( "due_date" ) )
             .hasValue( wrap( dateFormat.format( dateEventCurrent ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( dateEventCurrent ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( dateEventCurrent ) );
 
         assertThatVariable( valueMap.get( "test_variable" ) ).hasValue( "test_value_two" )
             .isTypeOf( RuleValueType.TEXT )
@@ -500,10 +500,10 @@ public class RuleVariableValueMapBuilderTest
         assertThat( valueMap.size() ).isEqualTo( 20 );
 
         assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( dateFormat.format( new Date() ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( new Date() ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( new Date() ) );
 
         assertThatVariable( valueMap.get( "event_date" ) ).hasValue( wrap( dateFormat.format( eventDate ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( eventDate ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( eventDate ) );
 
         assertThatVariable( valueMap.get( "event_count" ) ).hasValue( "2" )
             .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "2" );
@@ -512,7 +512,7 @@ public class RuleVariableValueMapBuilderTest
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_event_uid" );
 
         assertThatVariable( valueMap.get( "due_date" ) ).hasValue( wrap( dateFormat.format( eventDate ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( eventDate ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( eventDate ) );
 
         assertThatVariable( valueMap.get( "enrollment_status" ) )
             .hasValue( wrap( RuleEnrollment.Status.ACTIVE.toString() ) )
@@ -520,7 +520,7 @@ public class RuleVariableValueMapBuilderTest
 
         assertThatVariable( valueMap.get( "enrollment_date" ) )
             .hasValue( wrap( dateFormat.format( enrollmentDate ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( enrollmentDate ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( enrollmentDate ) );
 
         assertThatVariable( valueMap.get( "enrollment_id" ) ).hasValue( "test_enrollment" )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_enrollment" );
@@ -530,7 +530,7 @@ public class RuleVariableValueMapBuilderTest
 
         assertThatVariable( valueMap.get( "incident_date" ) )
             .hasValue( wrap( dateFormat.format( enrollmentDate ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( enrollmentDate ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( enrollmentDate ) );
 
         assertThatVariable( valueMap.get( "tei_count" ) ).hasValue( "1" )
             .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "1" );
@@ -575,14 +575,14 @@ public class RuleVariableValueMapBuilderTest
         assertThat( valueMap.size() ).isEqualTo( 15 );
 
         assertThatVariable( valueMap.get( "current_date" ) ).hasValue( wrap( currentDate ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( currentDate );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( currentDate );
 
         assertThatVariable( valueMap.get( "event_count" ) ).hasValue( "2" )
             .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "2" );
 
         assertThatVariable( valueMap.get( "enrollment_date" ) )
             .hasValue( wrap( dateFormat.format( enrollmentDate ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( enrollmentDate ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( enrollmentDate ) );
 
         assertThatVariable( valueMap.get( "enrollment_id" ) ).hasValue( "test_enrollment" )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_enrollment" );
@@ -592,7 +592,7 @@ public class RuleVariableValueMapBuilderTest
 
         assertThatVariable( valueMap.get( "incident_date" ) )
             .hasValue( wrap( dateFormat.format( incidentDate ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( incidentDate ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( incidentDate ) );
 
         assertThatVariable( valueMap.get( "tei_count" ) ).hasValue( "1" )
             .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "1" );
@@ -656,14 +656,14 @@ public class RuleVariableValueMapBuilderTest
 
         // Enrollment
         assertThatVariable( enrollmentValueMap.get( "current_date" ) ).hasValue( wrap( currentDate ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( currentDate );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( currentDate );
 
         assertThatVariable( enrollmentValueMap.get( "event_count" ) ).hasValue( "2" )
             .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "2" );
 
         assertThatVariable( enrollmentValueMap.get( "enrollment_date" ) )
             .hasValue( wrap( dateFormat.format( enrollmentDate ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( enrollmentDate ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( enrollmentDate ) );
 
         assertThatVariable( enrollmentValueMap.get( "enrollment_id" ) ).hasValue( "test_enrollment" )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_enrollment" );
@@ -673,7 +673,7 @@ public class RuleVariableValueMapBuilderTest
 
         assertThatVariable( enrollmentValueMap.get( "incident_date" ) )
             .hasValue( wrap( dateFormat.format( incidentDate ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( incidentDate ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( incidentDate ) );
 
         assertThatVariable( enrollmentValueMap.get( "tei_count" ) ).hasValue( "1" )
             .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "1" );
@@ -686,14 +686,14 @@ public class RuleVariableValueMapBuilderTest
 
         // Event one
         assertThatVariable( eventOneValueMap.get( "current_date" ) ).hasValue( wrap( currentDate ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( currentDate );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( currentDate );
 
         assertThatVariable( eventOneValueMap.get( "event_count" ) ).hasValue( "2" )
             .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "2" );
 
         assertThatVariable( eventOneValueMap.get( "enrollment_date" ) )
             .hasValue( wrap( dateFormat.format( enrollmentDate ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( enrollmentDate ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( enrollmentDate ) );
 
         assertThatVariable( eventOneValueMap.get( "enrollment_id" ) ).hasValue( "test_enrollment" )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_enrollment" );
@@ -703,7 +703,7 @@ public class RuleVariableValueMapBuilderTest
 
         assertThatVariable( eventOneValueMap.get( "incident_date" ) )
             .hasValue( wrap( dateFormat.format( incidentDate ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( incidentDate ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( incidentDate ) );
 
         assertThatVariable( eventOneValueMap.get( "tei_count" ) ).hasValue( "1" )
             .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "1" );
@@ -716,22 +716,22 @@ public class RuleVariableValueMapBuilderTest
 
         assertThatVariable( eventOneValueMap.get( "event_date" ) )
             .hasValue( wrap( dateFormat.format( eventOneDate ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( eventOneDate ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( eventOneDate ) );
 
         assertThatVariable( eventOneValueMap.get( "due_date" ) )
             .hasValue( wrap( dateFormat.format( eventOneDueDate ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( eventOneDueDate ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( eventOneDueDate ) );
 
         // Event two
         assertThatVariable( eventTwoValueMap.get( "current_date" ) ).hasValue( wrap( currentDate ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( currentDate );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( currentDate );
 
         assertThatVariable( eventTwoValueMap.get( "event_count" ) ).hasValue( "2" )
             .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "2" );
 
         assertThatVariable( eventTwoValueMap.get( "enrollment_date" ) )
             .hasValue( wrap( dateFormat.format( enrollmentDate ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( enrollmentDate ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( enrollmentDate ) );
 
         assertThatVariable( eventTwoValueMap.get( "enrollment_id" ) ).hasValue( "test_enrollment" )
             .isTypeOf( RuleValueType.TEXT ).hasCandidates( "test_enrollment" );
@@ -741,7 +741,7 @@ public class RuleVariableValueMapBuilderTest
 
         assertThatVariable( eventTwoValueMap.get( "incident_date" ) )
             .hasValue( wrap( dateFormat.format( incidentDate ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( incidentDate ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( incidentDate ) );
 
         assertThatVariable( eventTwoValueMap.get( "tei_count" ) ).hasValue( "1" )
             .isTypeOf( RuleValueType.NUMERIC ).hasCandidates( "1" );
@@ -754,11 +754,11 @@ public class RuleVariableValueMapBuilderTest
 
         assertThatVariable( eventTwoValueMap.get( "event_date" ) )
             .hasValue( wrap( dateFormat.format( eventTwoDate ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( eventTwoDate ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( eventTwoDate ) );
 
         assertThatVariable( eventTwoValueMap.get( "due_date" ) )
             .hasValue( wrap( dateFormat.format( eventTwoDueDate ) ) )
-            .isTypeOf( RuleValueType.TEXT ).hasCandidates( dateFormat.format( eventTwoDueDate ) );
+            .isTypeOf( RuleValueType.DATE ).hasCandidates( dateFormat.format( eventTwoDueDate ) );
     }
 
     @Test( expected = IllegalStateException.class )
