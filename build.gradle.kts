@@ -9,7 +9,7 @@ repositories {
     maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
 }
 
-version = "3.2.2-SNAPSHOT"
+version = "3.3.0-SNAPSHOT"
 group = "org.hisp.dhis.rules"
 
 if (project.hasProperty("removeSnapshotSuffix")) {
@@ -58,7 +58,7 @@ kotlin {
         }
         val commonMain by getting {
             dependencies {
-                implementation("org.hisp.dhis.lib.expression:expression-parser:1.1.0")
+                implementation("org.hisp.dhis.lib.expression:expression-parser:1.1.3")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
             }
         }
