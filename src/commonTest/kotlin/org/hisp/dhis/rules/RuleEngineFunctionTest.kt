@@ -3121,6 +3121,52 @@ class RuleEngineFunctionTest {
         assertEquals(dayAfterTomorrow.toString(), ruleEffects[0].data)
     }
 
+    @Test
+    fun evaluateLastEventDateForEventIdVariable() {
+        val dayBeforeYesterday =
+            LocalDate.Companion
+                .currentDate()
+                .minus(
+                    2,
+                    DateTimeUnit.DAY,
+                ).atStartOfDayIn(TimeZone.currentSystemDefault())
+        val ruleAction =
+            RuleAction(
+                "d2:lastEventDate(V{event_id})",
+                "DISPLAYTEXT",
+                mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")),
+            )
+
+        val rule = Rule("true", listOf(ruleAction), "test_rule", "")
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf())
+        val ruleEvent1 =
+            RuleEvent(
+                "test_event1",
+                "test_program_stage1",
+                "",
+                RuleEventStatus.ACTIVE,
+                dayBeforeYesterday,
+                dayBeforeYesterday,
+                LocalDate.currentDate(),
+                null,
+                "",
+                null,
+                listOf(
+                    RuleDataValue(
+                        "test_data_element_one",
+                        "value1",
+                    ),
+                ),
+            )
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent1, null, listOf(), ruleEngineContext)
+        assertEquals(1, ruleEffects.size)
+        assertEquals(ruleAction, ruleEffects[0].ruleAction)
+        val expectedDate = dayBeforeYesterday.toLocalDateTime(TimeZone.currentSystemDefault())
+            .date
+            .toString()
+        assertEquals(expectedDate, ruleEffects[0].data)
+    }
+
     companion object {
         private const val DATE_PATTERN = "yyyy-MM-dd"
         private const val USE_CODE_FOR_OPTION_SET = true

@@ -177,7 +177,10 @@ internal class RuleVariableValueMapBuilder {
                 RuleValueType.TEXT,
                 ruleEvent.event,
                 listOf(ruleEvent.event),
-                currentDate.toString(),
+                ruleEvent.eventDate
+                    .toLocalDateTime(TimeZone.currentSystemDefault())
+                    .date
+                    .toString(),
             )
         val status = ruleEvent.status.toString()
         valueMap[RuleEngineUtils.ENV_VAR_EVENT_STATUS] =
@@ -210,7 +213,7 @@ internal class RuleVariableValueMapBuilder {
                 RuleValueType.TEXT,
                 ruleEnrollment.enrollment,
                 listOf(ruleEnrollment.enrollment),
-                currentDate.toString(),
+                ruleEnrollment.enrollmentDate.toString(),
             )
         valueMap[RuleEngineUtils.ENV_VAR_ENROLLMENT_COUNT] =
             RuleVariableValue(

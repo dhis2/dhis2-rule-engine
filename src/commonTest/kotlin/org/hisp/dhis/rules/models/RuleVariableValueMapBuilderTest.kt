@@ -370,7 +370,7 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(valueMap["due_date"]!!)
             .hasValue(null)
-            .isTypeOf(RuleValueType.TEXT)
+            .isTypeOf(RuleValueType.DATE)
             .hasCandidates()
         RuleVariableValueAssert
             .assertThatVariable(valueMap["test_variable_one"]!!)
