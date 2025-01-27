@@ -146,7 +146,7 @@ internal class RuleVariableValueMapBuilder {
                 RuleVariableValue(
                     RuleValueType.DATE,
                     eventDate,
-                    if(eventDate == null) listOf() else listOf(eventDate),
+                    eventDate?.let { listOf(it) } ?: emptyList(),
                     currentDate.toString(),
                 )
 
@@ -154,14 +154,14 @@ internal class RuleVariableValueMapBuilder {
             RuleVariableValue(
                 RuleValueType.DATE,
                 ruleEvent.dueDate?.toString(),
-                if(ruleEvent.dueDate == null) listOf() else listOf(ruleEvent.dueDate.toString()),
+                ruleEvent.dueDate?.let { listOf(it.toString()) } ?: emptyList(),
                 currentDate.toString(),
             )
         valueMap[RuleEngineUtils.ENV_VAR_COMPLETED_DATE] =
             RuleVariableValue(
                 RuleValueType.DATE,
                 ruleEvent.completedDate?.toString(),
-                if(ruleEvent.completedDate == null) listOf() else listOf(ruleEvent.completedDate.toString()),
+                ruleEvent.completedDate?.let { listOf(it.toString()) } ?: emptyList(),
                 currentDate.toString(),
             )
         val eventCount = ruleEvents.size.toString()
