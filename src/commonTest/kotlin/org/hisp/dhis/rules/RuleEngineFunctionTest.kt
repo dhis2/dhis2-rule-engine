@@ -124,6 +124,44 @@ class RuleEngineFunctionTest {
     }
 
     @Test
+    fun actionConditionShouldEvaluateToTrueUsingVariableDefaultValueIfVariableValueIsNull() {
+        val ruleAction =
+            RuleAction(
+                "#{test_variable} > -1",
+                "DISPLAYTEXT",
+                mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")),
+            )
+        val ruleVariable: RuleVariable =
+            RuleVariableCurrentEvent(
+                "test_variable",
+                true,
+                emptyList(),
+                "test_data_element_one",
+                RuleValueType.NUMERIC,
+            )
+        val rule = Rule("true", listOf(ruleAction), "", "")
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariable))
+        val ruleEvent =
+            RuleEvent(
+                "test_event",
+                "test_program_stage",
+                "",
+                RuleEventStatus.ACTIVE,
+                Clock.System.now(),
+                Clock.System.now(),
+                LocalDate.currentDate(),
+                null,
+                "",
+                null,
+                listOf(),
+            )
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
+        assertEquals(1, ruleEffects.size)
+        assertEquals("true", ruleEffects[0].data)
+        assertEquals(ruleAction, ruleEffects[0].ruleAction)
+    }
+
+    @Test
     fun evaluateHasValueFunctionMustReturnTrueIfValueSpecified() {
         val ruleAction =
             RuleAction(
@@ -158,12 +196,78 @@ class RuleEngineFunctionTest {
                         "test_data_element_one",
                         "test_value",
                     ),
-                ),
+                )
             )
         val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals("true", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
+    }
+
+    @Test
+    fun evaluateHasValueFunctionMustReturnFalseIfValueNotSpecified() {
+        val ruleAction =
+            RuleAction(
+                "d2:hasValue(V{event_date})",
+                "DISPLAYTEXT",
+                mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")),
+            )
+        val rule = Rule("d2:hasValue(V{event_date})", listOf(ruleAction), "", "")
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf())
+        val ruleEvent =
+            RuleEvent(
+                "test_event",
+                "test_program_stage",
+                "",
+                RuleEventStatus.ACTIVE,
+                Instant.DISTANT_FUTURE,
+                Clock.System.now(),
+                LocalDate.currentDate(),
+                null,
+                "",
+                null,
+                listOf(
+                    RuleDataValue(
+                        "test_data_element_one",
+                        "test_value",
+                    ),
+                ),
+            )
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
+        assertEquals(0, ruleEffects.size)
+    }
+
+    @Test
+    fun evaluateNotHasValueFunctionMustReturnTrueIfValueNotSpecified() {
+        val ruleAction =
+            RuleAction(
+                "true",
+                "DISPLAYTEXT",
+                mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")),
+            )
+        val rule = Rule("!d2:hasValue(V{event_date})", listOf(ruleAction), "", "")
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf())
+        val ruleEvent =
+            RuleEvent(
+                "test_event",
+                "test_program_stage",
+                "",
+                RuleEventStatus.ACTIVE,
+                Instant.DISTANT_FUTURE,
+                Clock.System.now(),
+                LocalDate.currentDate(),
+                null,
+                "",
+                null,
+                listOf(
+                    RuleDataValue(
+                        "test_data_element_one",
+                        "test_value",
+                    ),
+                ),
+            )
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
+        assertEquals(1, ruleEffects.size)
     }
 
     @Test
@@ -3015,6 +3119,52 @@ class RuleEngineFunctionTest {
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals(dayAfterTomorrow.toString(), ruleEffects[0].data)
+    }
+
+    @Test
+    fun evaluateLastEventDateForEventIdVariable() {
+        val dayBeforeYesterday =
+            LocalDate.Companion
+                .currentDate()
+                .minus(
+                    2,
+                    DateTimeUnit.DAY,
+                ).atStartOfDayIn(TimeZone.currentSystemDefault())
+        val ruleAction =
+            RuleAction(
+                "d2:lastEventDate(V{event_id})",
+                "DISPLAYTEXT",
+                mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")),
+            )
+
+        val rule = Rule("true", listOf(ruleAction), "test_rule", "")
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf())
+        val ruleEvent1 =
+            RuleEvent(
+                "test_event1",
+                "test_program_stage1",
+                "",
+                RuleEventStatus.ACTIVE,
+                dayBeforeYesterday,
+                dayBeforeYesterday,
+                LocalDate.currentDate(),
+                null,
+                "",
+                null,
+                listOf(
+                    RuleDataValue(
+                        "test_data_element_one",
+                        "value1",
+                    ),
+                ),
+            )
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent1, null, listOf(), ruleEngineContext)
+        assertEquals(1, ruleEffects.size)
+        assertEquals(ruleAction, ruleEffects[0].ruleAction)
+        val expectedDate = dayBeforeYesterday.toLocalDateTime(TimeZone.currentSystemDefault())
+            .date
+            .toString()
+        assertEquals(expectedDate, ruleEffects[0].data)
     }
 
     companion object {

@@ -164,7 +164,7 @@ class RuleVariableValueMapBuilderTest {
         val valueMap =
             RuleVariableValueMapBuilder()
                 .build(emptyMap(), listOf(ruleVariableOne, ruleVariableTwo), setOf(contextEventOne, contextEventTwo), null, currentEvent)
-        assertEquals(13, valueMap.size.toLong())
+        assertEquals(14, valueMap.size.toLong())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
@@ -210,6 +210,44 @@ class RuleVariableValueMapBuilderTest {
             .hasValue("test_value_two")
             .isTypeOf(RuleValueType.TEXT)
             .hasCandidates("test_value_two")
+    }
+
+    @Test
+    fun currentEventVariableShouldContainValuesFromCurrentEventWhenEventDateIsDistantFuture() {
+        val eventInstant = Instant.parse("2015-01-01T01:00:00Z")
+        val eventDate = LocalDate.parse("2015-01-01")
+        val dueDate = LocalDate.parse("2016-01-01")
+
+        // values from context events should be ignored
+        val contextEventOne =
+            RuleEvent(
+                "test_context_event_one",
+                "test_program_stage",
+                "",
+                RuleEventStatus.ACTIVE,
+                Instant.DISTANT_FUTURE,
+                Clock.System.now(),
+                LocalDate.currentDate(),
+                null,
+                "",
+                null,
+                listOf(
+                    RuleDataValue(
+                        "test_dataelement_one",
+                        "test_context_value_one",
+                    ),
+                    RuleDataValue(
+                        "test_dataelement_two",
+                        "test_context_value_two",
+                    ),
+                ),
+            )
+
+        val valueMap =
+            RuleVariableValueMapBuilder()
+                .build(emptyMap(), listOf(), setOf(contextEventOne), null, null)
+
+        assertNull(valueMap["event_date"])
     }
 
     @Test
@@ -307,7 +345,7 @@ class RuleVariableValueMapBuilderTest {
         val valueMap =
             RuleVariableValueMapBuilder()
                 .build(emptyMap(), listOf(ruleVariableOne, ruleVariableTwo), setOf(oldestRuleEvent, newestRuleEvent), null, currentEvent)
-        assertEquals(valueMap.size.toLong(), 12)
+        assertEquals(14, valueMap.size.toLong() )
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
@@ -329,7 +367,11 @@ class RuleVariableValueMapBuilderTest {
             .hasValue("test_event_uid_current")
             .isTypeOf(RuleValueType.TEXT)
             .hasCandidates("test_event_uid_current")
-        assertNull(valueMap["due_date"])
+        RuleVariableValueAssert
+            .assertThatVariable(valueMap["due_date"]!!)
+            .hasValue(null)
+            .isTypeOf(RuleValueType.DATE)
+            .hasCandidates()
         RuleVariableValueAssert
             .assertThatVariable(valueMap["test_variable_one"]!!)
             .hasValue("test_value_one_newest")
@@ -445,7 +487,7 @@ class RuleVariableValueMapBuilderTest {
         val valueMap =
             RuleVariableValueMapBuilder()
                 .build(emptyMap(), listOf(ruleVariableOne, ruleVariableTwo), setOf(firstRuleEvent, secondRuleEvent), null, currentEvent)
-        assertEquals(13, valueMap.size.toLong())
+        assertEquals(14, valueMap.size.toLong())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
@@ -588,7 +630,7 @@ class RuleVariableValueMapBuilderTest {
         val valueMap =
             RuleVariableValueMapBuilder()
                 .build(emptyMap(), listOf(ruleVariable), setOf(eventOne, eventTwo, eventThree), null, eventCurrent)
-        assertEquals(12, valueMap.size.toLong())
+        assertEquals(13, valueMap.size.toLong())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
@@ -678,7 +720,7 @@ class RuleVariableValueMapBuilderTest {
         val valueMap =
             RuleVariableValueMapBuilder()
                 .build(emptyMap(), listOf(ruleVariable), setOf(ruleEventOne), null, ruleEventTwo)
-        assertEquals(12, valueMap.size.toLong())
+        assertEquals(13, valueMap.size.toLong())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
@@ -801,7 +843,7 @@ class RuleVariableValueMapBuilderTest {
         val valueMap =
             RuleVariableValueMapBuilder()
                 .build(emptyMap(), listOf(ruleVariable), setOf(ruleEventOne, ruleEventTwo, ruleEventThree), null, ruleEventCurrent)
-        assertEquals(12, valueMap.size.toLong())
+        assertEquals(13, valueMap.size.toLong())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
@@ -922,7 +964,7 @@ class RuleVariableValueMapBuilderTest {
         val valueMap =
             RuleVariableValueMapBuilder()
                 .build(emptyMap(), listOf(ruleVariable), setOf(ruleEventOne, ruleEventTwo, ruleEventThree), null, ruleEventCurrent)
-        assertEquals(12, valueMap.size.toLong())
+        assertEquals(13, valueMap.size.toLong())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
@@ -1041,7 +1083,7 @@ class RuleVariableValueMapBuilderTest {
         val valueMap =
             RuleVariableValueMapBuilder()
                 .build(emptyMap(), listOf(ruleVariableOne, ruleVariableTwo), setOf(contextEvent), ruleEnrollment, currentEvent)
-        assertEquals(20, valueMap.size.toLong())
+        assertEquals(21, valueMap.size.toLong())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(

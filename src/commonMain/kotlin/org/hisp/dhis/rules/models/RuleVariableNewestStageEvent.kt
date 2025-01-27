@@ -1,7 +1,8 @@
 package org.hisp.dhis.rules.models
 
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.hisp.dhis.rules.engine.RuleVariableValue
-import org.hisp.dhis.rules.utils.getLastUpdateDate
 
 class RuleVariableNewestStageEvent(
     override val name: String,
@@ -27,7 +28,10 @@ class RuleVariableNewestStageEvent(
                 fieldType,
                 optionValue,
                 stageRuleDataValues.map { it.value },
-                getLastUpdateDate(stageRuleDataValues),
+                value.eventDate
+                    .toLocalDateTime(TimeZone.currentSystemDefault())
+                    .date
+                    .toString(),
             )
         }
     }

@@ -1,8 +1,10 @@
 package org.hisp.dhis.rules.engine
 
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.RuleEngineUtils
 import org.hisp.dhis.rules.utils.currentDate
@@ -133,39 +135,35 @@ internal class RuleVariableValueMapBuilder {
         currentDate: LocalDate,
     ): Map<String, RuleVariableValue> {
         val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
-        val eventDate =
-            ruleEvent.eventDate
-                .toLocalDateTime(TimeZone.currentSystemDefault())
-                .date
-                .toString()
-        valueMap[RuleEngineUtils.ENV_VAR_EVENT_DATE] =
+            val eventDate =
+                if (ruleEvent.eventDate < Instant.DISTANT_FUTURE )
+                ruleEvent.eventDate
+                    .toLocalDateTime(TimeZone.currentSystemDefault())
+                    .date
+                    .toString()
+            else null
+            valueMap[RuleEngineUtils.ENV_VAR_EVENT_DATE] =
+                RuleVariableValue(
+                    RuleValueType.DATE,
+                    eventDate,
+                    eventDate?.let { listOf(it) } ?: emptyList(),
+                    currentDate.toString(),
+                )
+
+        valueMap[RuleEngineUtils.ENV_VAR_DUE_DATE] =
             RuleVariableValue(
                 RuleValueType.DATE,
-                eventDate,
-                listOf(eventDate),
+                ruleEvent.dueDate?.toString(),
+                ruleEvent.dueDate?.let { listOf(it.toString()) } ?: emptyList(),
                 currentDate.toString(),
             )
-        if (ruleEvent.dueDate != null) {
-            val dueDate = ruleEvent.dueDate
-            valueMap[RuleEngineUtils.ENV_VAR_DUE_DATE] =
-                RuleVariableValue(
-                    RuleValueType.DATE,
-                    dueDate.toString(),
-                    listOf(dueDate.toString()),
-                    currentDate.toString(),
-                )
-        }
-        if (ruleEvent.completedDate != null) {
-            val completedDate = ruleEvent.completedDate
-            valueMap[RuleEngineUtils.ENV_VAR_COMPLETED_DATE] =
-                RuleVariableValue(
-                    RuleValueType.DATE,
-                    completedDate.toString(),
-                    listOf(completedDate.toString()),
-                    currentDate.toString(),
-                )
-        }
-
+        valueMap[RuleEngineUtils.ENV_VAR_COMPLETED_DATE] =
+            RuleVariableValue(
+                RuleValueType.DATE,
+                ruleEvent.completedDate?.toString(),
+                ruleEvent.completedDate?.let { listOf(it.toString()) } ?: emptyList(),
+                currentDate.toString(),
+            )
         val eventCount = ruleEvents.size.toString()
         valueMap[RuleEngineUtils.ENV_VAR_EVENT_COUNT] =
             RuleVariableValue(
@@ -179,7 +177,10 @@ internal class RuleVariableValueMapBuilder {
                 RuleValueType.TEXT,
                 ruleEvent.event,
                 listOf(ruleEvent.event),
-                currentDate.toString(),
+                ruleEvent.eventDate
+                    .toLocalDateTime(TimeZone.currentSystemDefault())
+                    .date
+                    .toString(),
             )
         val status = ruleEvent.status.toString()
         valueMap[RuleEngineUtils.ENV_VAR_EVENT_STATUS] =
@@ -212,7 +213,7 @@ internal class RuleVariableValueMapBuilder {
                 RuleValueType.TEXT,
                 ruleEnrollment.enrollment,
                 listOf(ruleEnrollment.enrollment),
-                currentDate.toString(),
+                ruleEnrollment.enrollmentDate.toString(),
             )
         valueMap[RuleEngineUtils.ENV_VAR_ENROLLMENT_COUNT] =
             RuleVariableValue(
