@@ -58,7 +58,7 @@ kotlin {
         }
         val commonMain by getting {
             dependencies {
-                implementation("org.hisp.dhis.lib.expression:expression-parser:1.1.5")
+                implementation("org.hisp.dhis.lib.expression:expression-parser:1.1.6")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
             }
         }
