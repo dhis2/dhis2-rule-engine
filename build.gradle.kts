@@ -58,8 +58,8 @@ kotlin {
         }
         val commonMain by getting {
             dependencies {
-                implementation("org.hisp.dhis.lib.expression:expression-parser:1.1.6")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
+                implementation(libs.dhis.expression.parser)
+                implementation(libs.kotlinx.datetime)
             }
         }
         val commonTest by getting {
@@ -69,13 +69,13 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
-                api("org.slf4j:slf4j-api:1.7.36")
+                api(libs.slf4j.api)
             }
         }
         val jvmTest by getting
         val jsMain by getting {
             dependencies {
-                api("org.jetbrains.kotlin-wrappers:kotlin-js:1.0.0-pre.722")
+                api(libs.kotlinWrappers.js)
             }
         }
         val jsTest by getting
