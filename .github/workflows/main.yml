@@ -63,3 +63,10 @@ jobs:
         run: ./.github/workflows/scripts/publish-npm-prod.sh
         env:
           NPMJS_TOKEN: ${{ secrets.DHIS2_BOT_NPM_TOKEN }}
+
+  github-release:
+    uses: dhis2/workflows/.github/workflows/gradle-publish-release-to-github.yml@10b6e0d0662a579b6057a1f7a51a94d41d53a913
+    needs: publish
+    with:
+      java_version: 21
+      gradle_args: "-PremoveSnapshotSuffix"
