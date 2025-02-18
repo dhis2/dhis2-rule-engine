@@ -10,7 +10,7 @@ on:
 
 jobs:
   unit-test:
-    name: Run tests
+    name: Run checks
     if: ${{ github.event.pull_request.merged == true }}
     runs-on: ubuntu-latest
     steps:
@@ -26,6 +26,9 @@ jobs:
 
       - name: Test
         run: ./gradlew clean allTests
+
+      - name: API Check
+        run: ./gradlew apiCheck
 
   publish:
     needs: unit-test

@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     id("maven-publish-conventions")
     id("npm-publish-conventions")
+    alias(libs.plugins.api.compatibility)
 }
 
 repositories {

@@ -3,6 +3,7 @@ kotlin = "2.0.21"
 dokka = "1.9.10"
 nexusPublish = "2.0.0"
 npmPublish = "3.5.2"
+apiCompatibility ="0.17.0"
 kotlinxDatetime = "0.6.1"
 kotlinJsWrappers = "1.0.0-pre.830"
 slf4jApi = "1.7.36"
@@ -21,5 +22,6 @@ slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref= "slf4jApi"}
 dhis-expression-parser = { group = "org.hisp.dhis.lib.expression", name = "expression-parser", version.ref = "expressionParser"}
 
 [plugins]
+api-compatibility = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "apiCompatibility" }
 
 [bundles]
