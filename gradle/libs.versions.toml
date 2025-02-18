@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.0.21"
-dokka = "1.9.10"
+dokka = "2.0.0"
 nexusPublish = "2.0.0"
 npmPublish = "3.5.2"
 apiCompatibility ="0.17.0"

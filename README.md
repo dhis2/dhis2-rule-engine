@@ -1,3 +1,7 @@
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.hisp.dhis.rules/rule-engine/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.hisp.dhis.rules/rule-engine)
+[![NPM Version](https://img.shields.io/npm/v/@dhis2/rule-engine)](https://www.npmjs.com/package/@dhis2/rule-engine)
+[![KDoc link](https://img.shields.io/badge/API_reference-KDoc-blue)](https://dhis2.github.io/dhis2-rule-engine/api/)
+
 ### RuleEngine (WIP)
 
 #### Initialization
