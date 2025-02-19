@@ -1,9 +1,9 @@
 set -x
 
-./gradlew packJsPackage
-./gradlew packJsPackage -PuseCommonJs
+OUTPUT_DIR="packageJs"
+sh $(dirname "$0")/build-npm-package.sh $OUTPUT_DIR
 
-cd build/packages/js || exit
+cd $OUTPUT_DIR || exit
 
 # Set authentication token for npmjs registry
 npm set //registry.npmjs.org/:_authToken="$NPMJS_TOKEN"
