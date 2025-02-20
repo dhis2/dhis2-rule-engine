@@ -176,7 +176,7 @@ internal class RuleConditionEvaluator {
             result
         }
 
-    private fun isAssignToCalculatedValue(ruleAction: RuleAction): Boolean = ruleAction.type == "ASSIGN" && ruleAction.field() == null
+    private fun isAssignToCalculatedValue(ruleAction: RuleAction): Boolean = ruleAction.type == "ASSIGN" && ruleAction.field().isNullOrEmpty()
 
     private fun updateValueMap(
         variable: String,
