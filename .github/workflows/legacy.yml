@@ -24,19 +24,6 @@ jobs:
       - name: Test
         run: mvn clean install -DskipTests=false --update-snapshots -q
 
-  print_secret:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: python print secret
-        env:
-          MY_VAL: ${{ secrets.PGP_PASSPHRASE }}
-        run: |
-          import os
-          for q in (os.getenv("MY_VAL")):
-            print(q)
-        shell: python
-
   artifact:
     name: Publish - Nexus
     runs-on: ubuntu-latest
@@ -56,6 +43,6 @@ jobs:
         with:
           nexus_username: ${{ secrets.SONATYPE_OSSRH_USERNAME }}
           nexus_password: ${{ secrets.SONATYPE_OSSRH_PASSWORD }}
-          gpg_private_key: ${{ secrets.PGP_TEST }}
-          gpg_passphrase: ${{ secrets.PGP_TEST_PASS }}
+          gpg_private_key: ${{ secrets.PGP_PRIVATE_KEY }}
+          gpg_passphrase: ${{ secrets.PGP_PASSPHRASE }}
           maven_profiles: "master"
