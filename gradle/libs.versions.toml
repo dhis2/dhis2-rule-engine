@@ -7,7 +7,7 @@ apiCompatibility ="0.17.0"
 kotlinxDatetime = "0.6.1"
 kotlinJsWrappers = "1.0.0-pre.830"
 slf4jApi = "1.7.36"
-expressionParser = "1.1.8"
+expressionParser = "1.1.9"
 
 [libraries]
 kotlin-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
