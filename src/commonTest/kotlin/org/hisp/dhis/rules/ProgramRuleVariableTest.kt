@@ -9,6 +9,7 @@ import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 /*
 * Copyright (c) 2004-2018, University of Oslo
@@ -43,6 +44,13 @@ class ProgramRuleVariableTest {
         val rule = getRule("V{current_date}")
         val ruleEffects = callEnrollmentRuleEngine(rule)
         assertProgramRuleVariableAssignment(ruleEffects, rule, CURRENT_DATE.toString())
+    }
+
+    @Test
+    fun testCompletedDateProgramVariableIsAssigned() {
+        val rule = getRule("V{completed_date}")
+        val ruleEffects = callEventRuleEngine(rule)
+        assertNull(ruleEffects.get(0).data)
     }
 
     @Test
