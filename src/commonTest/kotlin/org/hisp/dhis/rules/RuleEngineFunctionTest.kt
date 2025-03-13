@@ -5,10 +5,7 @@ import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.currentDate
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class RuleEngineFunctionTest {
     @Test
@@ -124,7 +121,7 @@ class RuleEngineFunctionTest {
     }
 
     @Test
-    fun actionConditionShouldEvaluateToTrueUsingVariableDefaultValueIfVariableValueIsNull() {
+    fun actionConditionShouldEvaluateToNullIfVariableValueIsNull() {
         val ruleAction =
             RuleAction(
                 "#{test_variable} > -1",
@@ -157,7 +154,7 @@ class RuleEngineFunctionTest {
             )
         val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
-        assertEquals("true", ruleEffects[0].data)
+        assertNull(ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
 
