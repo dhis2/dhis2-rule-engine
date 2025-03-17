@@ -146,7 +146,7 @@ internal class RuleConditionEvaluator {
         valueMap: Map<String, RuleVariableValue>,
         supplementaryData: Map<String, List<String>>,
         mode: ExpressionMode,
-    ): String {
+    ): String? {
         if (condition.isNullOrEmpty()) {
             return ""
         }
@@ -166,7 +166,7 @@ internal class RuleConditionEvaluator {
                     "function not supported: $name",
                 )
             }, build),
-        ).toString()
+        )?.toString()
     }
 
     private fun convertInteger(result: Any?): Any? =
@@ -195,7 +195,7 @@ internal class RuleConditionEvaluator {
         if (ruleAction.type == "ASSIGN") {
             val data = process(ruleAction.data, valueMap, supplementaryData, ExpressionMode.RULE_ENGINE_ACTION)
             updateValueMap(ruleAction.field()!!, RuleVariableValue(RuleValueType.TEXT, data, listOf(), null), valueMap)
-            return if (data.isEmpty()) {
+            return if (data.isNullOrEmpty()) {
                 RuleEffect(rule.uid, ruleAction, null)
             } else {
                 RuleEffect(rule.uid, ruleAction, data)
