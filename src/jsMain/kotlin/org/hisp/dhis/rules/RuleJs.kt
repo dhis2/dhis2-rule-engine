@@ -7,5 +7,5 @@ data class RuleJs(
     val uid: String = "",
     val name: String? = null,
     val programStage: String? = null,
-    val priority: Int? = 0
+    val priority: Int? = null
 )
