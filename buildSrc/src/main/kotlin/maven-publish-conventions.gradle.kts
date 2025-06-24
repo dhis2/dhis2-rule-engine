@@ -5,8 +5,8 @@ plugins {
     id("org.jetbrains.dokka")
 }
 
-val ossrhUsername: String? = System.getenv("OSSRH_USERNAME")
-val ossrhPassword: String? = System.getenv("OSSRH_PASSWORD")
+val centralPortalUsername: String? = System.getenv("SONATYPE_PORTAL_USERNAME")
+val centralPortalPassword: String? = System.getenv("SONATYPE_PORTAL_PASSWORD")
 val signingPrivateKey: String? = System.getenv("SIGNING_PRIVATE_KEY")
 val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
 
@@ -61,8 +61,10 @@ publishing {
 nexusPublishing {
     this.repositories {
         sonatype {
-            username.set(ossrhUsername)
-            password.set(ossrhPassword)
+            nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
+            username.set(centralPortalUsername)
+            password.set(centralPortalPassword)
         }
     }
 }
