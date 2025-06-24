@@ -45,5 +45,5 @@ jobs:
       - name: Publish Maven Snapshot
         run: ./gradlew publishToSonatype
         env:
-          OSSRH_USERNAME: ${{ secrets.SONATYPE_OSSRH_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.SONATYPE_OSSRH_PASSWORD }}
+          SONATYPE_PORTAL_USERNAME: ${{ secrets.SONATYPE_PORTAL_USERNAME }}
+          SONATYPE_PORTAL_PASSWORD: ${{ secrets.SONATYPE_PORTAL_PASSWORD }}

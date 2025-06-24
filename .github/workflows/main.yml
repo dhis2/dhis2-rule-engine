@@ -54,8 +54,8 @@ jobs:
       - name: Publish Maven
         run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository -PremoveSnapshotSuffix
         env:
-          OSSRH_USERNAME: ${{ secrets.SONATYPE_OSSRH_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.SONATYPE_OSSRH_PASSWORD }}
+          SONATYPE_PORTAL_USERNAME: ${{ secrets.SONATYPE_PORTAL_USERNAME }}
+          SONATYPE_PORTAL_PASSWORD: ${{ secrets.SONATYPE_PORTAL_PASSWORD }}
           SIGNING_PRIVATE_KEY: ${{ secrets.PGP_PRIVATE_KEY }}
           SIGNING_PASSWORD: ${{ secrets.PGP_PASSPHRASE }}
 
