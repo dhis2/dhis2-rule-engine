@@ -643,7 +643,7 @@ class RuleEngineFunctionTest {
     fun evaluateD2HasUserRole() {
         val roles = listOf("role1", "role2")
         val supplementaryData: MutableMap<String, List<String>> = HashMap()
-        supplementaryData["USER"] = roles
+        supplementaryData["USER_ROLES"] = roles
         val ruleAction =
             RuleAction(
                 "d2:hasUserRole(#{test_var_one})",
@@ -687,11 +687,52 @@ class RuleEngineFunctionTest {
     }
 
     @Test
+    fun evaluateInUserGroup() {
+        val userGroups = listOf("member1", "member2")
+        val supplementaryData: MutableMap<String, List<String>> = HashMap()
+        supplementaryData["USER_GROUPS"] = userGroups
+        val ruleAction =
+            RuleAction(
+                "d2:inUserGroup('member1')",
+                "DISPLAYTEXT",
+                mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")),
+            )
+        val ruleVariableOne: RuleVariable =
+            RuleVariableCurrentEvent(
+                "test_var_one",
+                true,
+                ArrayList(),
+                "test_data_element_one",
+                RuleValueType.TEXT,
+            )
+        val rule = Rule("true", listOf(ruleAction), "", "")
+        val ruleEngineContext =
+            RuleEngineContext(rules = listOf(rule), ruleVariables = listOf(ruleVariableOne), supplementaryData = supplementaryData)
+        val ruleEvent =
+            RuleEvent(
+                "test_event",
+                "test_program_stage",
+                "",
+                RuleEventStatus.ACTIVE,
+                Clock.System.now(),
+                Clock.System.now(),
+                LocalDate.currentDate(),
+                null,
+                "location1",
+                null,
+                emptyList()
+                )
+        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
+        assertEquals(1, ruleEffects.size)
+        assertEquals(ruleAction, ruleEffects[0].ruleAction)
+    }
+
+    @Test
     @Deprecated("")
     fun evaluateD2HasUserRoleWithStringValue() {
         val roles = listOf("role1", "role2")
         val supplementaryData: MutableMap<String, List<String>> = HashMap()
-        supplementaryData["USER"] = roles
+        supplementaryData["USER_ROLES"] = roles
         val ruleAction =
             RuleAction(
                 "d2:hasUserRole('role1')",
