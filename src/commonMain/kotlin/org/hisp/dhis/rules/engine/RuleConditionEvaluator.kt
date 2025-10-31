@@ -232,9 +232,9 @@ internal class RuleConditionEvaluator {
             ExpressionMode.RULE_ENGINE_ACTION,
         )
         log.fine(
-            "Action " + ruleAction::class.simpleName +
+            "Action " + ruleAction.type +
                 " from rule " + rule.name + " with id " + rule.uid +
-                " with condition (" + ruleAction.data + ")" +
+                " with expression (" + ruleAction.data + ")" +
                 " was evaluated " + data
         )
         return data
