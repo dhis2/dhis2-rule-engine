@@ -1,12 +1,13 @@
 package org.hisp.dhis.rules.engine
 
+import org.hisp.dhis.rules.api.SupplementaryData
 import org.hisp.dhis.rules.models.*
 
 internal class RuleEngineMultipleExecution {
     fun execute(
         rules: List<Rule>,
         ruleVariableValueMap: RuleVariableValueMap,
-        supplementaryData: Map<String, List<String>>,
+        supplementaryData: Map<SupplementaryData, List<String>>,
     ): List<RuleEffects> {
         val ruleEffects: MutableList<RuleEffects> = ArrayList()
         for ((enrollment, valueMap) in ruleVariableValueMap.enrollmentMap) {

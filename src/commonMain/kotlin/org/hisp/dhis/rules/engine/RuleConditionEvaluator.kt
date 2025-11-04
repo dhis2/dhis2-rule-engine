@@ -4,6 +4,7 @@ import org.hisp.dhis.lib.expression.Expression
 import org.hisp.dhis.lib.expression.ExpressionMode
 import org.hisp.dhis.lib.expression.spi.ExpressionData
 import org.hisp.dhis.lib.expression.spi.IllegalExpressionException
+import org.hisp.dhis.rules.api.SupplementaryData
 import org.hisp.dhis.rules.createLogger
 import org.hisp.dhis.rules.engine.RuleEvaluationResult.Companion.errorRule
 import org.hisp.dhis.rules.engine.RuleEvaluationResult.Companion.evaluatedResult
@@ -16,7 +17,7 @@ internal class RuleConditionEvaluator {
         targetType: TrackerObjectType,
         targetUid: String,
         valueMap: Map<String, RuleVariableValue>,
-        supplementaryData: Map<String, List<String>>,
+        supplementaryData: Map<SupplementaryData, List<String>>,
         rules: List<Rule>,
     ): List<RuleEffect> {
         val ruleEvaluationResults = getRuleEvaluationResults(targetType, targetUid, valueMap, supplementaryData, rules)
@@ -28,7 +29,7 @@ internal class RuleConditionEvaluator {
         targetType: TrackerObjectType,
         targetUid: String,
         valueMap: Map<String, RuleVariableValue>,
-        supplementaryData: Map<String, List<String>>,
+        supplementaryData: Map<SupplementaryData, List<String>>,
         rules: List<Rule>,
     ): List<RuleEffect> {
         val ruleEvaluationResults =
@@ -48,7 +49,7 @@ internal class RuleConditionEvaluator {
         targetType: TrackerObjectType,
         targetUid: String,
         valueMap: Map<String, RuleVariableValue>,
-        supplementaryData: Map<String, List<String>>,
+        supplementaryData: Map<SupplementaryData, List<String>>,
         rules: List<Rule>,
     ): List<RuleEvaluationResult> {
         val mutableValueMap = valueMap.toMutableMap()
@@ -144,7 +145,7 @@ internal class RuleConditionEvaluator {
     private fun process(
         condition: String?,
         valueMap: Map<String, RuleVariableValue>,
-        supplementaryData: Map<String, List<String>>,
+        supplementaryData: Map<SupplementaryData, List<String>>,
         mode: ExpressionMode,
     ): String? {
         if (condition.isNullOrEmpty()) {
@@ -154,9 +155,9 @@ internal class RuleConditionEvaluator {
 
         val build =
             ExpressionData(
-                valueMap.mapValues { v -> v.value.toVariableValue() },
+                valueMap.mapValues { (_,v) -> v.toVariableValue() },
                 emptyMap(),
-                supplementaryData,
+                supplementaryData.mapKeys { (k,_) -> k.toString() },
                 emptyMap(),
                 emptyMap(),
             )
@@ -190,7 +191,7 @@ internal class RuleConditionEvaluator {
         rule: Rule,
         ruleAction: RuleAction,
         valueMap: MutableMap<String, RuleVariableValue>,
-        supplementaryData: Map<String, List<String>>,
+        supplementaryData: Map<SupplementaryData, List<String>>,
     ): RuleEffect {
         if (ruleAction.type == "ASSIGN") {
             val data = process(ruleAction.data, valueMap, supplementaryData, ExpressionMode.RULE_ENGINE_ACTION)

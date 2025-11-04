@@ -3,6 +3,10 @@ package org.hisp.dhis.rules
 import kotlinx.datetime.*
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
+import org.hisp.dhis.rules.api.SupplementaryData
+import org.hisp.dhis.rules.api.SupplementaryData.OU_GROUP_ID
+import org.hisp.dhis.rules.api.SupplementaryData.USER_ROLES
+import org.hisp.dhis.rules.api.SupplementaryData.USER_GROUPS
 import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.*
@@ -11,7 +15,11 @@ class RuleEngineFunctionTest {
     @Test
     fun evaluateFailingRule() {
         val enrollmentDate = LocalDate.Companion.currentDate()
-        val ruleAction = RuleAction("2 + 2", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction = RuleAction(
+            "2 + 2",
+            "DISPLAYTEXT",
+            mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+        )
         val failingRule =
             Rule(
                 "d2:daysBetween(V{enrollment_date},V{event_date}) < 0",
@@ -42,7 +50,11 @@ class RuleEngineFunctionTest {
     fun evaluateFailingRuleInMultipleContext() {
         val today = LocalDate.Companion.currentDate()
         val yesterday = today.minus(1, DateTimeUnit.DAY).atStartOfDayIn(TimeZone.currentSystemDefault())
-        val ruleAction = RuleAction("2 + 2", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction = RuleAction(
+            "2 + 2",
+            "DISPLAYTEXT",
+            mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+        )
         val failingRule =
             Rule(
                 "d2:daysBetween(V{enrollment_date},V{event_date}) < 0",
@@ -100,7 +112,8 @@ class RuleEngineFunctionTest {
                 ),
             )
         val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(listOf(failingRule))
-        val ruleEffects = RuleEngine.getInstance().evaluateAll(ruleEnrollment, listOf(ruleEvent, ruleNotFailingEvent), ruleEngineContext)
+        val ruleEffects = RuleEngine.getInstance()
+            .evaluateAll(ruleEnrollment, listOf(ruleEvent, ruleNotFailingEvent), ruleEngineContext)
         assertEquals(3, ruleEffects.size)
         assertTrue(getRuleEffectsByUid(ruleEffects, "test_event")!!.ruleEffects.isEmpty())
         assertFalse(getRuleEffectsByUid(ruleEffects, "test_not_failing_event")!!.ruleEffects.isEmpty())
@@ -235,7 +248,11 @@ class RuleEngineFunctionTest {
         val option2 = Option("name2", "code2")
         val options = listOf(option1, option2)
         val ruleAction =
-            RuleAction("#{test_variable}", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+            RuleAction(
+                "#{test_variable}",
+                "DISPLAYTEXT",
+                mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+            )
         val ruleVariable: RuleVariable =
             RuleVariableNewestEvent(
                 "test_variable",
@@ -277,7 +294,11 @@ class RuleEngineFunctionTest {
         val option2 = Option("name2", "code2")
         val options = listOf(option1, option2)
         val ruleAction =
-            RuleAction("#{test_variable}", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+            RuleAction(
+                "#{test_variable}",
+                "DISPLAYTEXT",
+                mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+            )
         val ruleVariable: RuleVariable =
             RuleVariableCurrentEvent(
                 "test_variable",
@@ -403,8 +424,13 @@ class RuleEngineFunctionTest {
     @Test
     fun evaluateEnvironmentVariableProgramStageName() {
         val ruleAction =
-            RuleAction("V{program_stage_name}", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
-        val ruleVariable: RuleVariable = RuleVariableCurrentEvent("variable", true, ArrayList(), "test_data_element", RuleValueType.TEXT)
+            RuleAction(
+                "V{program_stage_name}",
+                "DISPLAYTEXT",
+                mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+            )
+        val ruleVariable: RuleVariable =
+            RuleVariableCurrentEvent("variable", true, ArrayList(), "test_data_element", RuleValueType.TEXT)
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariable))
         val ruleEvent =
@@ -547,8 +573,8 @@ class RuleEngineFunctionTest {
     @Test
     fun evaluateD2InOrgUnitGroup() {
         val members = listOf("location1", "location2")
-        val supplementaryData: MutableMap<String, List<String>> = HashMap()
-        supplementaryData["OU_GROUP_ID"] = members
+        val supplementaryData: MutableMap<SupplementaryData, List<String>> = HashMap()
+        supplementaryData[OU_GROUP_ID] = members
         val ruleAction =
             RuleAction(
                 "d2:inOrgUnitGroup(#{test_var_one})",
@@ -565,7 +591,11 @@ class RuleEngineFunctionTest {
             )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineContext =
-            RuleEngineContext(rules = listOf(rule), ruleVariables = listOf(ruleVariableOne), supplementaryData = supplementaryData)
+            RuleEngineContext(
+                rules = listOf(rule),
+                ruleVariables = listOf(ruleVariableOne),
+                supplementaryData = supplementaryData
+            )
         val ruleEvent =
             RuleEvent(
                 "test_event",
@@ -595,8 +625,8 @@ class RuleEngineFunctionTest {
     @Deprecated("")
     fun evaluateD2InOrgUnitGroupWithStringValue() {
         val members = listOf("location1", "location2")
-        val supplementaryData: MutableMap<String, List<String>> = HashMap()
-        supplementaryData["OU_GROUP_ID"] = members
+        val supplementaryData: MutableMap<SupplementaryData, List<String>> = HashMap()
+        supplementaryData[OU_GROUP_ID] = members
         val ruleAction =
             RuleAction(
                 "d2:inOrgUnitGroup('OU_GROUP_ID')",
@@ -613,7 +643,11 @@ class RuleEngineFunctionTest {
             )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineContext =
-            RuleEngineContext(rules = listOf(rule), ruleVariables = listOf(ruleVariableOne), supplementaryData = supplementaryData)
+            RuleEngineContext(
+                rules = listOf(rule),
+                ruleVariables = listOf(ruleVariableOne),
+                supplementaryData = supplementaryData
+            )
         val ruleEvent =
             RuleEvent(
                 "test_event",
@@ -642,8 +676,8 @@ class RuleEngineFunctionTest {
     @Test
     fun evaluateD2HasUserRole() {
         val roles = listOf("role1", "role2")
-        val supplementaryData: MutableMap<String, List<String>> = HashMap()
-        supplementaryData["USER_ROLES"] = roles
+        val supplementaryData: MutableMap<SupplementaryData, List<String>> = HashMap()
+        supplementaryData[USER_ROLES] = roles
         val ruleAction =
             RuleAction(
                 "d2:hasUserRole(#{test_var_one})",
@@ -660,7 +694,11 @@ class RuleEngineFunctionTest {
             )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineContext =
-            RuleEngineContext(rules = listOf(rule), ruleVariables = listOf(ruleVariableOne), supplementaryData = supplementaryData)
+            RuleEngineContext(
+                rules = listOf(rule),
+                ruleVariables = listOf(ruleVariableOne),
+                supplementaryData = supplementaryData
+            )
         val ruleEvent =
             RuleEvent(
                 "test_event",
@@ -689,8 +727,8 @@ class RuleEngineFunctionTest {
     @Test
     fun evaluateInUserGroup() {
         val userGroups = listOf("member1", "member2")
-        val supplementaryData: MutableMap<String, List<String>> = HashMap()
-        supplementaryData["USER_GROUPS"] = userGroups
+        val supplementaryData: MutableMap<SupplementaryData, List<String>> = HashMap()
+        supplementaryData[USER_GROUPS] = userGroups
         val ruleAction =
             RuleAction(
                 "d2:inUserGroup('member1')",
@@ -707,7 +745,11 @@ class RuleEngineFunctionTest {
             )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineContext =
-            RuleEngineContext(rules = listOf(rule), ruleVariables = listOf(ruleVariableOne), supplementaryData = supplementaryData)
+            RuleEngineContext(
+                rules = listOf(rule),
+                ruleVariables = listOf(ruleVariableOne),
+                supplementaryData = supplementaryData
+            )
         val ruleEvent =
             RuleEvent(
                 "test_event",
@@ -721,7 +763,7 @@ class RuleEngineFunctionTest {
                 "location1",
                 null,
                 emptyList()
-                )
+            )
         val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -731,8 +773,8 @@ class RuleEngineFunctionTest {
     @Deprecated("")
     fun evaluateD2HasUserRoleWithStringValue() {
         val roles = listOf("role1", "role2")
-        val supplementaryData: MutableMap<String, List<String>> = HashMap()
-        supplementaryData["USER_ROLES"] = roles
+        val supplementaryData: MutableMap<SupplementaryData, List<String>> = HashMap()
+        supplementaryData[USER_ROLES] = roles
         val ruleAction =
             RuleAction(
                 "d2:hasUserRole('role1')",
@@ -749,7 +791,11 @@ class RuleEngineFunctionTest {
             )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineContext =
-            RuleEngineContext(rules = listOf(rule), ruleVariables = listOf(ruleVariableOne), supplementaryData = supplementaryData)
+            RuleEngineContext(
+                rules = listOf(rule),
+                ruleVariables = listOf(ruleVariableOne),
+                supplementaryData = supplementaryData
+            )
         val ruleEvent =
             RuleEvent(
                 "test_event",
@@ -933,7 +979,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent2, ruleEvent3), ruleEngineContext)
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent2, ruleEvent3), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -1015,7 +1062,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent2, ruleEvent3), ruleEngineContext)
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent2, ruleEvent3), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -1123,7 +1171,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent2, ruleEvent3, ruleEvent4), ruleEngineContext)
+        val ruleEffects = RuleEngine.getInstance()
+            .evaluate(ruleEvent, null, listOf(ruleEvent2, ruleEvent3, ruleEvent4), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("3", ruleEffects[0].data)
@@ -1368,7 +1417,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent2, ruleEvent3, ruleEvent4), ruleEngineContext)
+        val ruleEffects = RuleEngine.getInstance()
+            .evaluate(ruleEvent, null, listOf(ruleEvent2, ruleEvent3, ruleEvent4), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("3", ruleEffects[0].data)
@@ -1747,7 +1797,11 @@ class RuleEngineFunctionTest {
     @Test
     fun evaluateD2Zing() {
         val ruleAction =
-            RuleAction("d2:zing( '-1' )", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+            RuleAction(
+                "d2:zing( '-1' )",
+                "DISPLAYTEXT",
+                mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+            )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf())
         val ruleEvent =
@@ -1773,7 +1827,11 @@ class RuleEngineFunctionTest {
     @Test
     fun evaluateD2Oizp() {
         val ruleAction =
-            RuleAction("d2:oizp( '0' )", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+            RuleAction(
+                "d2:oizp( '0' )",
+                "DISPLAYTEXT",
+                mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+            )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf())
         val ruleEvent =
@@ -1871,7 +1929,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -1953,7 +2012,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -2313,7 +2373,11 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2ZScoreWFA() {
-        val ruleAction = RuleAction("true", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction = RuleAction(
+            "true",
+            "DISPLAYTEXT",
+            mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+        )
         val ruleVariableOne: RuleVariable =
             RuleVariableNewestEvent(
                 "test_var_one",
@@ -2372,7 +2436,11 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2ZScoreHFAGirl() {
-        val ruleAction = RuleAction("true", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction = RuleAction(
+            "true",
+            "DISPLAYTEXT",
+            mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+        )
         val ruleVariableOne: RuleVariable =
             RuleVariableNewestEvent(
                 "test_var_one",
@@ -2431,7 +2499,11 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2ZScoreHFABoy() {
-        val ruleAction = RuleAction("true", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction = RuleAction(
+            "true",
+            "DISPLAYTEXT",
+            mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+        )
         val ruleVariableOne: RuleVariable =
             RuleVariableNewestEvent(
                 "test_var_one",
@@ -2490,7 +2562,11 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2ZScoreWFHBoy() {
-        val ruleAction = RuleAction("true", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction = RuleAction(
+            "true",
+            "DISPLAYTEXT",
+            mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+        )
         val ruleVariableOne: RuleVariable =
             RuleVariableNewestEvent(
                 "test_var_one",
@@ -2613,7 +2689,11 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2MaxValue() {
-        val ruleAction = RuleAction("true", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction = RuleAction(
+            "true",
+            "DISPLAYTEXT",
+            mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+        )
         val ruleVariableOne: RuleVariable =
             RuleVariableNewestEvent(
                 "test_var_one",
@@ -2705,7 +2785,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
@@ -2713,7 +2794,11 @@ class RuleEngineFunctionTest {
     @Test
     @Deprecated("")
     fun evaluateD2MaxValueWithStringValue() {
-        val ruleAction = RuleAction("true", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction = RuleAction(
+            "true",
+            "DISPLAYTEXT",
+            mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+        )
         val ruleVariableOne: RuleVariable =
             RuleVariableNewestEvent(
                 "test_var_one",
@@ -2805,7 +2890,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
@@ -2909,7 +2995,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("5", ruleEffects[0].data)
@@ -3014,7 +3101,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("5", ruleEffects[0].data)
@@ -3115,7 +3203,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals(dayAfterTomorrow.toString(), ruleEffects[0].data)

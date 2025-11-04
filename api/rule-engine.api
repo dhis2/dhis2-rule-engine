@@ -77,6 +77,15 @@ public final class org/hisp/dhis/rules/api/RuleEngineContext {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class org/hisp/dhis/rules/api/SupplementaryData : java/lang/Enum {
+	public static final field OU_GROUP_ID Lorg/hisp/dhis/rules/api/SupplementaryData;
+	public static final field USER_GROUPS Lorg/hisp/dhis/rules/api/SupplementaryData;
+	public static final field USER_ROLES Lorg/hisp/dhis/rules/api/SupplementaryData;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lorg/hisp/dhis/rules/api/SupplementaryData;
+	public static fun values ()[Lorg/hisp/dhis/rules/api/SupplementaryData;
+}
+
 public final class org/hisp/dhis/rules/engine/RuleVariableValue {
 	public fun <init> (Lorg/hisp/dhis/rules/models/RuleValueType;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;)V
 	public synthetic fun <init> (Lorg/hisp/dhis/rules/models/RuleValueType;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
