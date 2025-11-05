@@ -114,7 +114,7 @@ class RuleEngineJs(verbose: Boolean = false) {
     private fun toRuleEngineContextJava(executionContext: RuleEngineContextJs): RuleEngineContext {
         return RuleEngineContext(
             rules = executionContext.rules.map(::toRuleJava),
-            supplementaryData = toMap(executionContext.supplementaryData, {it}, { v -> v.toList() }),
+            supplementaryData = executionContext.supplementaryData,
             constantsValues = toMap(executionContext.constantsValues, {it}, {it}),
             ruleVariables = executionContext.ruleVariables.map(::toRuleVariableJava)
         )

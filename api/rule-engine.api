@@ -60,30 +60,38 @@ public final class org/hisp/dhis/rules/api/RuleEngine$Companion {
 }
 
 public final class org/hisp/dhis/rules/api/RuleEngineContext {
-	public fun <init> (Ljava/util/List;Ljava/util/List;Ljava/util/Map;Ljava/util/Map;)V
-	public synthetic fun <init> (Ljava/util/List;Ljava/util/List;Ljava/util/Map;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/util/List;Ljava/util/List;Lorg/hisp/dhis/rules/api/SupplementaryData;Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/util/List;Ljava/util/List;Lorg/hisp/dhis/rules/api/SupplementaryData;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/util/List;
 	public final fun component2 ()Ljava/util/List;
-	public final fun component3 ()Ljava/util/Map;
+	public final fun component3 ()Lorg/hisp/dhis/rules/api/SupplementaryData;
 	public final fun component4 ()Ljava/util/Map;
-	public final fun copy (Ljava/util/List;Ljava/util/List;Ljava/util/Map;Ljava/util/Map;)Lorg/hisp/dhis/rules/api/RuleEngineContext;
-	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/api/RuleEngineContext;Ljava/util/List;Ljava/util/List;Ljava/util/Map;Ljava/util/Map;ILjava/lang/Object;)Lorg/hisp/dhis/rules/api/RuleEngineContext;
+	public final fun copy (Ljava/util/List;Ljava/util/List;Lorg/hisp/dhis/rules/api/SupplementaryData;Ljava/util/Map;)Lorg/hisp/dhis/rules/api/RuleEngineContext;
+	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/api/RuleEngineContext;Ljava/util/List;Ljava/util/List;Lorg/hisp/dhis/rules/api/SupplementaryData;Ljava/util/Map;ILjava/lang/Object;)Lorg/hisp/dhis/rules/api/RuleEngineContext;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getConstantsValues ()Ljava/util/Map;
 	public final fun getRuleVariables ()Ljava/util/List;
 	public final fun getRules ()Ljava/util/List;
-	public final fun getSupplementaryData ()Ljava/util/Map;
+	public final fun getSupplementaryData ()Lorg/hisp/dhis/rules/api/SupplementaryData;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class org/hisp/dhis/rules/api/SupplementaryData : java/lang/Enum {
-	public static final field OU_GROUP_ID Lorg/hisp/dhis/rules/api/SupplementaryData;
-	public static final field USER_GROUPS Lorg/hisp/dhis/rules/api/SupplementaryData;
-	public static final field USER_ROLES Lorg/hisp/dhis/rules/api/SupplementaryData;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public static fun valueOf (Ljava/lang/String;)Lorg/hisp/dhis/rules/api/SupplementaryData;
-	public static fun values ()[Lorg/hisp/dhis/rules/api/SupplementaryData;
+public final class org/hisp/dhis/rules/api/SupplementaryData {
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;Ljava/util/List;Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/util/List;Ljava/util/List;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/util/Map;
+	public final fun copy (Ljava/util/List;Ljava/util/List;Ljava/util/Map;)Lorg/hisp/dhis/rules/api/SupplementaryData;
+	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/api/SupplementaryData;Ljava/util/List;Ljava/util/List;Ljava/util/Map;ILjava/lang/Object;)Lorg/hisp/dhis/rules/api/SupplementaryData;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getOrgUnitGroups ()Ljava/util/Map;
+	public final fun getUserGroups ()Ljava/util/List;
+	public final fun getUserRoles ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class org/hisp/dhis/rules/engine/RuleVariableValue {

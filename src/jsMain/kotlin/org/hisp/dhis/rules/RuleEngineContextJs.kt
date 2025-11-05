@@ -7,6 +7,6 @@ import org.hisp.dhis.rules.api.SupplementaryData
 data class RuleEngineContextJs(
     val rules: Array<RuleJs>,
     val ruleVariables: Array<RuleVariableJs>,
-    val supplementaryData: JsMap<SupplementaryData, Array<String>> = JsMap(),
+    val supplementaryData: SupplementaryData = SupplementaryData(),
     val constantsValues: JsMap<String, String> = JsMap()
 )

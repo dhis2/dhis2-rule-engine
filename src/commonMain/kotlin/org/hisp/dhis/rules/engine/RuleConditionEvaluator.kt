@@ -17,7 +17,7 @@ internal class RuleConditionEvaluator {
         targetType: TrackerObjectType,
         targetUid: String,
         valueMap: Map<String, RuleVariableValue>,
-        supplementaryData: Map<SupplementaryData, List<String>>,
+        supplementaryData: SupplementaryData,
         rules: List<Rule>,
     ): List<RuleEffect> {
         val ruleEvaluationResults = getRuleEvaluationResults(targetType, targetUid, valueMap, supplementaryData, rules)
@@ -29,7 +29,7 @@ internal class RuleConditionEvaluator {
         targetType: TrackerObjectType,
         targetUid: String,
         valueMap: Map<String, RuleVariableValue>,
-        supplementaryData: Map<SupplementaryData, List<String>>,
+        supplementaryData: SupplementaryData,
         rules: List<Rule>,
     ): List<RuleEffect> {
         val ruleEvaluationResults =
@@ -49,7 +49,7 @@ internal class RuleConditionEvaluator {
         targetType: TrackerObjectType,
         targetUid: String,
         valueMap: Map<String, RuleVariableValue>,
-        supplementaryData: Map<SupplementaryData, List<String>>,
+        supplementaryData: SupplementaryData,
         rules: List<Rule>,
     ): List<RuleEvaluationResult> {
         val mutableValueMap = valueMap.toMutableMap()
@@ -145,7 +145,7 @@ internal class RuleConditionEvaluator {
     private fun process(
         condition: String?,
         valueMap: Map<String, RuleVariableValue>,
-        supplementaryData: Map<SupplementaryData, List<String>>,
+        supplementaryData: SupplementaryData,
         mode: ExpressionMode,
     ): String? {
         if (condition.isNullOrEmpty()) {
@@ -157,7 +157,7 @@ internal class RuleConditionEvaluator {
             ExpressionData(
                 valueMap.mapValues { (_,v) -> v.toVariableValue() },
                 emptyMap(),
-                supplementaryData.mapKeys { (k,_) -> k.toString() },
+                convertSupplementaryData(supplementaryData),
                 emptyMap(),
                 emptyMap(),
             )
@@ -168,6 +168,20 @@ internal class RuleConditionEvaluator {
                 )
             }, build),
         )?.toString()
+    }
+
+    private fun convertSupplementaryData(supplementaryData: SupplementaryData): Map<String, List<String>> {
+        val supplementaryValues: MutableMap<String, List<String>> = HashMap()
+        if(supplementaryData.userGroups.isNotEmpty()) {
+            supplementaryValues["USER_GROUPS"] = supplementaryData.userGroups
+        }
+        if(supplementaryData.userRoles.isNotEmpty()) {
+            supplementaryValues["USER_ROLES"] = supplementaryData.userRoles
+        }
+
+        supplementaryValues.putAll(supplementaryData.orgUnitGroups)
+
+        return supplementaryValues
     }
 
     private fun convertInteger(result: Any?): Any? =
@@ -191,7 +205,7 @@ internal class RuleConditionEvaluator {
         rule: Rule,
         ruleAction: RuleAction,
         valueMap: MutableMap<String, RuleVariableValue>,
-        supplementaryData: Map<SupplementaryData, List<String>>,
+        supplementaryData: SupplementaryData,
     ): RuleEffect {
         if (ruleAction.type == "ASSIGN") {
             val data = process(ruleAction.data, valueMap, supplementaryData, ExpressionMode.RULE_ENGINE_ACTION)

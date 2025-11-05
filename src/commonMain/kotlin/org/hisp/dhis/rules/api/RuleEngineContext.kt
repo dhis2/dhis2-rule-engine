@@ -6,6 +6,6 @@ import org.hisp.dhis.rules.models.RuleVariable
 data class RuleEngineContext(
     val rules: List<Rule>,
     val ruleVariables: List<RuleVariable> = emptyList(),
-    val supplementaryData: Map<SupplementaryData, List<String>> = emptyMap(),
+    val supplementaryData: SupplementaryData = SupplementaryData(),
     val constantsValues: Map<String, String> = emptyMap(),
 )

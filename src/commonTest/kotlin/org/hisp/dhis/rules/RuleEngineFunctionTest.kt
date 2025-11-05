@@ -4,9 +4,6 @@ import kotlinx.datetime.*
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.api.SupplementaryData
-import org.hisp.dhis.rules.api.SupplementaryData.OU_GROUP_ID
-import org.hisp.dhis.rules.api.SupplementaryData.USER_ROLES
-import org.hisp.dhis.rules.api.SupplementaryData.USER_GROUPS
 import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.*
@@ -573,8 +570,8 @@ class RuleEngineFunctionTest {
     @Test
     fun evaluateD2InOrgUnitGroup() {
         val members = listOf("location1", "location2")
-        val supplementaryData: MutableMap<SupplementaryData, List<String>> = HashMap()
-        supplementaryData[OU_GROUP_ID] = members
+        val supplementaryData: MutableMap<String, List<String>> = HashMap()
+        supplementaryData["OU_GROUP_ID"] = members
         val ruleAction =
             RuleAction(
                 "d2:inOrgUnitGroup(#{test_var_one})",
@@ -594,7 +591,7 @@ class RuleEngineFunctionTest {
             RuleEngineContext(
                 rules = listOf(rule),
                 ruleVariables = listOf(ruleVariableOne),
-                supplementaryData = supplementaryData
+                supplementaryData = SupplementaryData(orgUnitGroups = supplementaryData)
             )
         val ruleEvent =
             RuleEvent(
@@ -625,8 +622,8 @@ class RuleEngineFunctionTest {
     @Deprecated("")
     fun evaluateD2InOrgUnitGroupWithStringValue() {
         val members = listOf("location1", "location2")
-        val supplementaryData: MutableMap<SupplementaryData, List<String>> = HashMap()
-        supplementaryData[OU_GROUP_ID] = members
+        val supplementaryData: MutableMap<String, List<String>> = HashMap()
+        supplementaryData["OU_GROUP_ID"] = members
         val ruleAction =
             RuleAction(
                 "d2:inOrgUnitGroup('OU_GROUP_ID')",
@@ -646,7 +643,7 @@ class RuleEngineFunctionTest {
             RuleEngineContext(
                 rules = listOf(rule),
                 ruleVariables = listOf(ruleVariableOne),
-                supplementaryData = supplementaryData
+                supplementaryData = SupplementaryData(orgUnitGroups = supplementaryData)
             )
         val ruleEvent =
             RuleEvent(
@@ -676,8 +673,6 @@ class RuleEngineFunctionTest {
     @Test
     fun evaluateD2HasUserRole() {
         val roles = listOf("role1", "role2")
-        val supplementaryData: MutableMap<SupplementaryData, List<String>> = HashMap()
-        supplementaryData[USER_ROLES] = roles
         val ruleAction =
             RuleAction(
                 "d2:hasUserRole(#{test_var_one})",
@@ -697,7 +692,7 @@ class RuleEngineFunctionTest {
             RuleEngineContext(
                 rules = listOf(rule),
                 ruleVariables = listOf(ruleVariableOne),
-                supplementaryData = supplementaryData
+                supplementaryData = SupplementaryData(userRoles = roles)
             )
         val ruleEvent =
             RuleEvent(
@@ -727,8 +722,6 @@ class RuleEngineFunctionTest {
     @Test
     fun evaluateInUserGroup() {
         val userGroups = listOf("member1", "member2")
-        val supplementaryData: MutableMap<SupplementaryData, List<String>> = HashMap()
-        supplementaryData[USER_GROUPS] = userGroups
         val ruleAction =
             RuleAction(
                 "d2:inUserGroup('member1')",
@@ -748,7 +741,7 @@ class RuleEngineFunctionTest {
             RuleEngineContext(
                 rules = listOf(rule),
                 ruleVariables = listOf(ruleVariableOne),
-                supplementaryData = supplementaryData
+                supplementaryData = SupplementaryData(userGroups = userGroups)
             )
         val ruleEvent =
             RuleEvent(
@@ -773,8 +766,6 @@ class RuleEngineFunctionTest {
     @Deprecated("")
     fun evaluateD2HasUserRoleWithStringValue() {
         val roles = listOf("role1", "role2")
-        val supplementaryData: MutableMap<SupplementaryData, List<String>> = HashMap()
-        supplementaryData[USER_ROLES] = roles
         val ruleAction =
             RuleAction(
                 "d2:hasUserRole('role1')",
@@ -794,7 +785,7 @@ class RuleEngineFunctionTest {
             RuleEngineContext(
                 rules = listOf(rule),
                 ruleVariables = listOf(ruleVariableOne),
-                supplementaryData = supplementaryData
+                supplementaryData = SupplementaryData(userRoles = roles)
             )
         val ruleEvent =
             RuleEvent(

@@ -7,7 +7,7 @@ internal class RuleEngineMultipleExecution {
     fun execute(
         rules: List<Rule>,
         ruleVariableValueMap: RuleVariableValueMap,
-        supplementaryData: Map<SupplementaryData, List<String>>,
+        supplementaryData: SupplementaryData,
     ): List<RuleEffects> {
         val ruleEffects: MutableList<RuleEffects> = ArrayList()
         for ((enrollment, valueMap) in ruleVariableValueMap.enrollmentMap) {
