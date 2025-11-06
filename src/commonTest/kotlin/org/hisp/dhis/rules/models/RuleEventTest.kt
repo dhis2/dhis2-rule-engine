@@ -1,12 +1,13 @@
 package org.hisp.dhis.rules.models
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@OptIn(kotlin.time.ExperimentalTime::class)
 class RuleEventTest {
     @Test
     fun createShouldPropagateValuesCorrectly() {
@@ -14,7 +15,7 @@ class RuleEventTest {
         val ruleDataValues: MutableList<RuleDataValue> = ArrayList()
         ruleDataValues.add(ruleDataValue)
         val eventDate = Clock.System.now()
-        val dueDate = LocalDate.Companion.currentDate()
+        val dueDate = currentDate()
         val (event, programStage, _, status, eventDate1, _, dueDate1, _, _, _, dataValues) =
             RuleEvent(
                 "test_event_uid",

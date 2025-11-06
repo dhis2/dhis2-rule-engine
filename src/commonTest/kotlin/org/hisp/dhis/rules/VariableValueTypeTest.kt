@@ -1,6 +1,6 @@
 package org.hisp.dhis.rules
 
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
@@ -35,6 +35,7 @@ import kotlin.test.assertEquals
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+@OptIn(kotlin.time.ExperimentalTime::class)
 class VariableValueTypeTest {
     @Test
     fun testNumericVariablesAreComparedCorrectly() {

@@ -1,10 +1,11 @@
 package org.hisp.dhis.rules
 
-import kotlinx.datetime.internal.JSJoda.Instant
-import kotlinx.datetime.internal.JSJoda.LocalDate
+import kotlin.time.Instant
+import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.models.RuleDataValue
 import org.hisp.dhis.rules.models.RuleEventStatus
 
+@OptIn(kotlin.time.ExperimentalTime::class)
 @JsExport
 data class RuleEventJs(
     val event: String,

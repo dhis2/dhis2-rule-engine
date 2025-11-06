@@ -1,5 +1,6 @@
 package org.hisp.dhis.rules
 
+import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.models.RuleAttributeValue
 import org.hisp.dhis.rules.models.RuleEnrollmentStatus
 
@@ -7,8 +8,8 @@ import org.hisp.dhis.rules.models.RuleEnrollmentStatus
 data class RuleEnrollmentJs(
     val enrollment: String,
     val programName: String,
-    val incidentDate: kotlinx.datetime.internal.JSJoda.LocalDate,
-    val enrollmentDate: kotlinx.datetime.internal.JSJoda.LocalDate,
+    val incidentDate: LocalDate,
+    val enrollmentDate: LocalDate,
     val status: RuleEnrollmentStatus,
     val organisationUnit: String,
     val organisationUnitCode: String?,

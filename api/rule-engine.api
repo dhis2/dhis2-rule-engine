@@ -205,16 +205,16 @@ public final class org/hisp/dhis/rules/models/RuleDataValue {
 }
 
 public final class org/hisp/dhis/rules/models/RuleDataValueHistory {
-	public fun <init> (Ljava/lang/String;Lkotlinx/datetime/Instant;Lkotlinx/datetime/Instant;Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Lkotlin/time/Instant;Lkotlin/time/Instant;Ljava/lang/String;)V
 	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Lkotlinx/datetime/Instant;
-	public final fun component3 ()Lkotlinx/datetime/Instant;
+	public final fun component2 ()Lkotlin/time/Instant;
+	public final fun component3 ()Lkotlin/time/Instant;
 	public final fun component4 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;Lkotlinx/datetime/Instant;Lkotlinx/datetime/Instant;Ljava/lang/String;)Lorg/hisp/dhis/rules/models/RuleDataValueHistory;
-	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/models/RuleDataValueHistory;Ljava/lang/String;Lkotlinx/datetime/Instant;Lkotlinx/datetime/Instant;Ljava/lang/String;ILjava/lang/Object;)Lorg/hisp/dhis/rules/models/RuleDataValueHistory;
+	public final fun copy (Ljava/lang/String;Lkotlin/time/Instant;Lkotlin/time/Instant;Ljava/lang/String;)Lorg/hisp/dhis/rules/models/RuleDataValueHistory;
+	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/models/RuleDataValueHistory;Ljava/lang/String;Lkotlin/time/Instant;Lkotlin/time/Instant;Ljava/lang/String;ILjava/lang/Object;)Lorg/hisp/dhis/rules/models/RuleDataValueHistory;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getCreatedDate ()Lkotlinx/datetime/Instant;
-	public final fun getEventDate ()Lkotlinx/datetime/Instant;
+	public final fun getCreatedDate ()Lkotlin/time/Instant;
+	public final fun getEventDate ()Lkotlin/time/Instant;
 	public final fun getProgramStage ()Ljava/lang/String;
 	public final fun getValue ()Ljava/lang/String;
 	public fun hashCode ()I
@@ -293,27 +293,27 @@ public final class org/hisp/dhis/rules/models/RuleEnrollmentStatus : java/lang/E
 }
 
 public final class org/hisp/dhis/rules/models/RuleEvent {
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/hisp/dhis/rules/models/RuleEventStatus;Lkotlinx/datetime/Instant;Lkotlinx/datetime/Instant;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/hisp/dhis/rules/models/RuleEventStatus;Lkotlin/time/Instant;Lkotlin/time/Instant;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component10 ()Ljava/lang/String;
 	public final fun component11 ()Ljava/util/List;
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()Ljava/lang/String;
 	public final fun component4 ()Lorg/hisp/dhis/rules/models/RuleEventStatus;
-	public final fun component5 ()Lkotlinx/datetime/Instant;
-	public final fun component6 ()Lkotlinx/datetime/Instant;
+	public final fun component5 ()Lkotlin/time/Instant;
+	public final fun component6 ()Lkotlin/time/Instant;
 	public final fun component7 ()Lkotlinx/datetime/LocalDate;
 	public final fun component8 ()Lkotlinx/datetime/LocalDate;
 	public final fun component9 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/hisp/dhis/rules/models/RuleEventStatus;Lkotlinx/datetime/Instant;Lkotlinx/datetime/Instant;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Lorg/hisp/dhis/rules/models/RuleEvent;
-	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/models/RuleEvent;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/hisp/dhis/rules/models/RuleEventStatus;Lkotlinx/datetime/Instant;Lkotlinx/datetime/Instant;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lorg/hisp/dhis/rules/models/RuleEvent;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/hisp/dhis/rules/models/RuleEventStatus;Lkotlin/time/Instant;Lkotlin/time/Instant;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Lorg/hisp/dhis/rules/models/RuleEvent;
+	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/models/RuleEvent;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/hisp/dhis/rules/models/RuleEventStatus;Lkotlin/time/Instant;Lkotlin/time/Instant;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lorg/hisp/dhis/rules/models/RuleEvent;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getCompletedDate ()Lkotlinx/datetime/LocalDate;
-	public final fun getCreatedDate ()Lkotlinx/datetime/Instant;
+	public final fun getCreatedDate ()Lkotlin/time/Instant;
 	public final fun getDataValues ()Ljava/util/List;
 	public final fun getDueDate ()Lkotlinx/datetime/LocalDate;
 	public final fun getEvent ()Ljava/lang/String;
-	public final fun getEventDate ()Lkotlinx/datetime/Instant;
+	public final fun getEventDate ()Lkotlin/time/Instant;
 	public final fun getOrganisationUnit ()Ljava/lang/String;
 	public final fun getOrganisationUnitCode ()Ljava/lang/String;
 	public final fun getProgramStage ()Ljava/lang/String;
@@ -481,7 +481,7 @@ public final class org/hisp/dhis/rules/models/TriggerEnvironment : java/lang/Enu
 }
 
 public final class org/hisp/dhis/rules/utils/UtilsKt {
-	public static final fun currentDate (Lkotlinx/datetime/LocalDate$Companion;)Lkotlinx/datetime/LocalDate;
+	public static final fun currentDate ()Lkotlinx/datetime/LocalDate;
 	public static final fun unwrapVariableName (Ljava/lang/String;)Ljava/lang/String;
 }
 

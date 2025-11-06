@@ -1,6 +1,6 @@
 package org.hisp.dhis.rules
 
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
@@ -36,6 +36,7 @@ import kotlin.test.assertEquals
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+@OptIn(kotlin.time.ExperimentalTime::class)
 class ConstantsValueTest {
     @Test
     fun assignConstantValueFromAssignActionInEnrollment() {
@@ -48,8 +49,8 @@ class ConstantsValueTest {
             RuleEnrollment(
                 enrollment = "test_enrollment",
                 programName = "test_program",
-                incidentDate = LocalDate.Companion.currentDate(),
-                enrollmentDate = LocalDate.Companion.currentDate(),
+                incidentDate = currentDate(),
+                enrollmentDate = currentDate(),
                 status = RuleEnrollmentStatus.ACTIVE,
                 organisationUnit = "test_ou",
                 organisationUnitCode = "test_ou_code",
@@ -76,8 +77,8 @@ class ConstantsValueTest {
             RuleEnrollment(
                 enrollment = "test_enrollment",
                 programName = "test_program",
-                incidentDate = LocalDate.Companion.currentDate(),
-                enrollmentDate = LocalDate.Companion.currentDate(),
+                incidentDate = currentDate(),
+                enrollmentDate = currentDate(),
                 status = RuleEnrollmentStatus.ACTIVE,
                 organisationUnit = "test_ou",
                 organisationUnitCode = "test_ou_code",
@@ -106,8 +107,8 @@ class ConstantsValueTest {
             RuleEnrollment(
                 enrollment = "test_enrollment",
                 programName = "test_program",
-                incidentDate = LocalDate.Companion.currentDate(),
-                enrollmentDate = LocalDate.Companion.currentDate(),
+                incidentDate = currentDate(),
+                enrollmentDate = currentDate(),
                 status = RuleEnrollmentStatus.ACTIVE,
                 organisationUnit = "test_ou",
                 organisationUnitCode = "test_ou_code",
@@ -134,10 +135,10 @@ class ConstantsValueTest {
                 status = RuleEventStatus.ACTIVE,
                 eventDate = Clock.System.now(),
                 createdDate = Clock.System.now(),
-                dueDate = LocalDate.currentDate(),
+                dueDate = currentDate(),
                 organisationUnit = "",
                 organisationUnitCode = "",
-                completedDate = LocalDate.currentDate(),
+                completedDate = currentDate(),
                 dataValues =
                     listOf(
                         RuleDataValue(

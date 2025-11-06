@@ -1,7 +1,7 @@
 package org.hisp.dhis.rules
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
@@ -38,6 +38,7 @@ import kotlin.test.assertNull
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+@OptIn(kotlin.time.ExperimentalTime::class)
 class ProgramRuleVariableTest {
     @Test
     fun testCurrentDateProgramVariableIsAssigned() {
@@ -271,7 +272,7 @@ class ProgramRuleVariableTest {
     private fun getRuleEngineContext(rules: List<Rule>): RuleEngineContext = RuleEngineContext(rules)
 
     companion object {
-        private val CURRENT_DATE = LocalDate.Companion.currentDate()
+        private val CURRENT_DATE = currentDate()
         private const val DUE_DATE_STRING = "2020-06-01"
         private val DUE_DATE = LocalDate.parse(DUE_DATE_STRING)
         private const val ENROLLMENT_DATE_STRING = "2019-01-01"

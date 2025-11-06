@@ -1,6 +1,6 @@
 package org.hisp.dhis.rules.engine
 
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -9,6 +9,7 @@ import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.RuleEngineUtils
 import org.hisp.dhis.rules.utils.currentDate
 
+@OptIn(kotlin.time.ExperimentalTime::class)
 internal class RuleVariableValueMapBuilder {
     fun build(
         allConstantValues: Map<String, String>,
@@ -89,7 +90,7 @@ internal class RuleVariableValueMapBuilder {
         ruleEnrollment: RuleEnrollment?,
         ruleEvent: RuleEvent?,
     ): Map<String, RuleVariableValue> {
-        val currentDate = LocalDate.Companion.currentDate()
+        val currentDate = currentDate()
 
         val environmentVariablesValuesMap = buildEnvironmentVariables(ruleEvents, currentDate)
         val enrollmentVariableValueMap = ruleEnrollment?.let { buildEnrollmentEnvironmentVariables(it, currentDate) }.orEmpty()

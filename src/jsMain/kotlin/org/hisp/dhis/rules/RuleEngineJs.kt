@@ -2,8 +2,8 @@ package org.hisp.dhis.rules
 
 import js.array.tupleOf
 import js.collections.JsMap
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.api.DataItem
 import org.hisp.dhis.rules.api.RuleEngine
@@ -11,6 +11,7 @@ import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.api.RuleSupplementaryData
 import org.hisp.dhis.rules.models.*
 
+@OptIn(kotlin.time.ExperimentalTime::class)
 @JsExport
 class RuleEngineJs(verbose: Boolean = false) {
     init {
@@ -62,8 +63,8 @@ class RuleEngineJs(verbose: Boolean = false) {
         return RuleEnrollment(
             enrollment = enrollmentTarget.enrollment,
             programName = enrollmentTarget.programName,
-            incidentDate = LocalDate.fromEpochDays(enrollmentTarget.incidentDate.toEpochDay().toInt()),
-            enrollmentDate = LocalDate.fromEpochDays(enrollmentTarget.enrollmentDate.toEpochDay().toInt()),
+            incidentDate = LocalDate.fromEpochDays(enrollmentTarget.incidentDate.toEpochDays().toInt()),
+            enrollmentDate = LocalDate.fromEpochDays(enrollmentTarget.enrollmentDate.toEpochDays().toInt()),
             status = enrollmentTarget.status,
             organisationUnit = enrollmentTarget.organisationUnit,
             organisationUnitCode = enrollmentTarget.organisationUnitCode,
@@ -78,10 +79,10 @@ class RuleEngineJs(verbose: Boolean = false) {
             programStageName = event.programStageName,
             status = event.status,
             eventDate = if(event.eventDate != null)
-                Instant.fromEpochMilliseconds(event.eventDate.toEpochMilli().toLong())
+                Instant.fromEpochMilliseconds(event.eventDate.toEpochMilliseconds())
                 else
                     Instant.DISTANT_FUTURE,
-            createdDate = Instant.fromEpochMilliseconds(event.createdDate.toEpochMilli().toLong()),
+            createdDate = Instant.fromEpochMilliseconds(event.createdDate.toEpochMilliseconds()),
             dueDate = toLocalDate(event.dueDate),
             completedDate = toLocalDate(event.completedDate),
             organisationUnit = event.organisationUnit,
@@ -157,9 +158,9 @@ class RuleEngineJs(verbose: Boolean = false) {
         return ruleEffects.map(::toRuleEffectsJs).toTypedArray()
     }
 
-    private fun toLocalDate(localDate: kotlinx.datetime.internal.JSJoda.LocalDate?): LocalDate? {
+    private fun toLocalDate(localDate: LocalDate?): LocalDate? {
         if (localDate == null) return null
-        return LocalDate.fromEpochDays(localDate.toEpochDay().toInt())
+        return LocalDate.fromEpochDays(localDate.toEpochDays().toInt())
     }
 
     private fun toRuleVariableJava(ruleVariableJs: RuleVariableJs): RuleVariable {

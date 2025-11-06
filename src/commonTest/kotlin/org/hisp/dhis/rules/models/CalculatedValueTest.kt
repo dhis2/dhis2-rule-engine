@@ -1,6 +1,6 @@
 package org.hisp.dhis.rules.models
 
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
@@ -35,6 +35,7 @@ import kotlin.test.assertEquals
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+@OptIn(kotlin.time.ExperimentalTime::class)
 class CalculatedValueTest {
     @Test
     fun evaluateOneThousandRulesTest() {
@@ -44,8 +45,8 @@ class CalculatedValueTest {
             RuleEnrollment(
                 "test_enrollment",
                 "test_program",
-                LocalDate.currentDate(),
-                LocalDate.currentDate(),
+                currentDate(),
+                currentDate(),
                 RuleEnrollmentStatus.ACTIVE,
                 "test_ou",
                 "test_ou_code",
@@ -59,7 +60,7 @@ class CalculatedValueTest {
                 status = RuleEventStatus.ACTIVE,
                 eventDate = Clock.System.now(),
                 createdDate = Clock.System.now(),
-                dueDate = LocalDate.currentDate(),
+                dueDate = currentDate(),
                 organisationUnit = "",
                 organisationUnitCode = "",
                 completedDate = null,
@@ -85,8 +86,8 @@ class CalculatedValueTest {
             RuleEnrollment(
                 "test_enrollment",
                 "test_program",
-                LocalDate.currentDate(),
-                LocalDate.currentDate(),
+                currentDate(),
+                currentDate(),
                 RuleEnrollmentStatus.ACTIVE,
                 "test_ou",
                 "test_ou_code",
@@ -100,7 +101,7 @@ class CalculatedValueTest {
                 status = RuleEventStatus.ACTIVE,
                 eventDate = Clock.System.now(),
                 createdDate = Clock.System.now(),
-                dueDate = LocalDate.currentDate(),
+                dueDate = currentDate(),
                 organisationUnit = "",
                 organisationUnitCode = "",
                 completedDate = null,
@@ -151,8 +152,8 @@ class CalculatedValueTest {
             RuleEnrollment(
                 "test_enrollment",
                 "test_program",
-                LocalDate.currentDate(),
-                LocalDate.currentDate(),
+                currentDate(),
+                currentDate(),
                 RuleEnrollmentStatus.ACTIVE,
                 "test_ou",
                 "test_ou_code",
@@ -166,7 +167,7 @@ class CalculatedValueTest {
                 status = RuleEventStatus.ACTIVE,
                 eventDate = Clock.System.now(),
                 createdDate = Clock.System.now(),
-                dueDate = LocalDate.currentDate(),
+                dueDate = currentDate(),
                 organisationUnit = "",
                 organisationUnitCode = "",
                 completedDate = null,

@@ -1,13 +1,21 @@
 package org.hisp.dhis.rules.models
 
-import kotlinx.datetime.*
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.minus
+
 import org.hisp.dhis.rules.RuleVariableValueAssert
 import org.hisp.dhis.rules.engine.RuleVariableValueMapBuilder
 import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.time.Clock
+import kotlin.time.Instant
 
+@OptIn(kotlin.time.ExperimentalTime::class)
 class RuleVariableValueMapBuilderTest {
     @Test
     fun currentEventVariableShouldContainNullValueForEnrollmentEvaluation() {
@@ -44,7 +52,7 @@ class RuleVariableValueMapBuilderTest {
                 RuleEventStatus.ACTIVE,
                 Clock.System.now(),
                 Clock.System.now(),
-                LocalDate.currentDate(),
+                currentDate(),
                 null,
                 "",
                 null,
@@ -99,7 +107,7 @@ class RuleVariableValueMapBuilderTest {
                 RuleEventStatus.ACTIVE,
                 Clock.System.now(),
                 Clock.System.now(),
-                LocalDate.currentDate(),
+                currentDate(),
                 null,
                 "",
                 null,
@@ -122,7 +130,7 @@ class RuleVariableValueMapBuilderTest {
                 RuleEventStatus.ACTIVE,
                 Clock.System.now(),
                 Clock.System.now(),
-                LocalDate.currentDate(),
+                currentDate(),
                 null,
                 "",
                 null,
@@ -168,9 +176,9 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
-                LocalDate.Companion.currentDate().toString(),
+                currentDate().toString(),
             ).isTypeOf(RuleValueType.DATE)
-            .hasCandidates(LocalDate.Companion.currentDate().toString())
+            .hasCandidates(currentDate().toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_date"]!!)
             .hasValue(
@@ -227,7 +235,7 @@ class RuleVariableValueMapBuilderTest {
                 RuleEventStatus.ACTIVE,
                 Instant.DISTANT_FUTURE,
                 Clock.System.now(),
-                LocalDate.currentDate(),
+                currentDate(),
                 null,
                 "",
                 null,
@@ -281,7 +289,7 @@ class RuleVariableValueMapBuilderTest {
                 RuleEventStatus.ACTIVE,
                 oldestEventDate,
                 oldestEventDate,
-                LocalDate.currentDate(),
+                currentDate(),
                 null,
                 "",
                 null,
@@ -304,7 +312,7 @@ class RuleVariableValueMapBuilderTest {
                 RuleEventStatus.ACTIVE,
                 newestEventDate,
                 newestEventDate,
-                LocalDate.currentDate(),
+                currentDate(),
                 null,
                 "",
                 null,
@@ -349,9 +357,9 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
-                LocalDate.Companion.currentDate().toString(),
+                currentDate().toString(),
             ).isTypeOf(RuleValueType.DATE)
-            .hasCandidates(LocalDate.Companion.currentDate().toString())
+            .hasCandidates(currentDate().toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_date"]!!)
             .hasValue(currentEventDate.toString())
@@ -423,7 +431,7 @@ class RuleVariableValueMapBuilderTest {
                 RuleEventStatus.ACTIVE,
                 dateEventOne,
                 dateEventOne,
-                LocalDate.currentDate(),
+                currentDate(),
                 null,
                 "",
                 null,
@@ -446,7 +454,7 @@ class RuleVariableValueMapBuilderTest {
                 RuleEventStatus.ACTIVE,
                 dateEventTwo,
                 dateEventTwo,
-                LocalDate.currentDate(),
+                currentDate(),
                 null,
                 "",
                 null,
@@ -491,9 +499,9 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
-                LocalDate.Companion.currentDate().toString(),
+                currentDate().toString(),
             ).isTypeOf(RuleValueType.DATE)
-            .hasCandidates(LocalDate.Companion.currentDate().toString())
+            .hasCandidates(currentDate().toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_date"]!!)
             .hasValue(dateEventCurrent.toString())
@@ -559,7 +567,7 @@ class RuleVariableValueMapBuilderTest {
                 RuleEventStatus.ACTIVE,
                 dateEventOne,
                 dateEventOne,
-                LocalDate.currentDate(),
+                currentDate(),
                 null,
                 "",
                 null,
@@ -578,7 +586,7 @@ class RuleVariableValueMapBuilderTest {
                 RuleEventStatus.ACTIVE,
                 dateEventTwo,
                 dateEventTwo,
-                LocalDate.currentDate(),
+                currentDate(),
                 null,
                 "",
                 null,
@@ -597,7 +605,7 @@ class RuleVariableValueMapBuilderTest {
                 RuleEventStatus.ACTIVE,
                 dateEventThree,
                 dateEventThree,
-                LocalDate.currentDate(),
+                currentDate(),
                 null,
                 "",
                 null,
@@ -634,9 +642,9 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
-                LocalDate.Companion.currentDate().toString(),
+                currentDate().toString(),
             ).isTypeOf(RuleValueType.DATE)
-            .hasCandidates(LocalDate.Companion.currentDate().toString())
+            .hasCandidates(currentDate().toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_date"]!!)
             .hasValue(dateEventCurrent.toString())
@@ -724,9 +732,9 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
-                LocalDate.Companion.currentDate().toString(),
+                currentDate().toString(),
             ).isTypeOf(RuleValueType.DATE)
-            .hasCandidates(LocalDate.Companion.currentDate().toString())
+            .hasCandidates(currentDate().toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_date"]!!)
             .hasValue(
@@ -780,7 +788,7 @@ class RuleVariableValueMapBuilderTest {
                 RuleEventStatus.ACTIVE,
                 dateEventOne,
                 dateEventOne,
-                LocalDate.currentDate(),
+                currentDate(),
                 null,
                 "",
                 null,
@@ -799,7 +807,7 @@ class RuleVariableValueMapBuilderTest {
                 RuleEventStatus.ACTIVE,
                 dateEventTwo,
                 dateEventTwo,
-                LocalDate.currentDate(),
+                currentDate(),
                 null,
                 "",
                 null,
@@ -813,7 +821,7 @@ class RuleVariableValueMapBuilderTest {
                 RuleEventStatus.ACTIVE,
                 dateEventThree,
                 dateEventThree,
-                LocalDate.currentDate(),
+                currentDate(),
                 null,
                 "",
                 null,
@@ -847,9 +855,9 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
-                LocalDate.Companion.currentDate().toString(),
+                currentDate().toString(),
             ).isTypeOf(RuleValueType.DATE)
-            .hasCandidates(LocalDate.Companion.currentDate().toString())
+            .hasCandidates(currentDate().toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_date"]!!)
             .hasValue(dateEventCurrent.toString())
@@ -901,7 +909,7 @@ class RuleVariableValueMapBuilderTest {
                 RuleEventStatus.ACTIVE,
                 dateEventOne,
                 dateEventOne,
-                LocalDate.currentDate(),
+                currentDate(),
                 null,
                 "",
                 null,
@@ -920,7 +928,7 @@ class RuleVariableValueMapBuilderTest {
                 RuleEventStatus.ACTIVE,
                 dateEventTwo,
                 dateEventTwo,
-                LocalDate.currentDate(),
+                currentDate(),
                 null,
                 "",
                 null,
@@ -934,7 +942,7 @@ class RuleVariableValueMapBuilderTest {
                 RuleEventStatus.ACTIVE,
                 dateEventThree,
                 dateEventThree,
-                LocalDate.currentDate(),
+                currentDate(),
                 null,
                 "",
                 null,
@@ -968,9 +976,9 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
-                LocalDate.Companion.currentDate().toString(),
+                currentDate().toString(),
             ).isTypeOf(RuleValueType.DATE)
-            .hasCandidates(LocalDate.Companion.currentDate().toString())
+            .hasCandidates(currentDate().toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_date"]!!)
             .hasValue(dateEventCurrent.toString())
@@ -1087,9 +1095,9 @@ class RuleVariableValueMapBuilderTest {
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
             .hasValue(
-                LocalDate.Companion.currentDate().toString(),
+                currentDate().toString(),
             ).isTypeOf(RuleValueType.DATE)
-            .hasCandidates(LocalDate.Companion.currentDate().toString())
+            .hasCandidates(currentDate().toString())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["event_date"]!!)
             .hasValue(
@@ -1180,7 +1188,7 @@ class RuleVariableValueMapBuilderTest {
                 "test_dataelement_one",
                 RuleValueType.BOOLEAN,
             )
-        val currentDate = LocalDate.Companion.currentDate()
+        val currentDate = currentDate()
         val enrollmentDate = LocalDate.parse("2017-02-02")
         val incidentDate = LocalDate.parse("2017-04-02")
         val ruleEnrollment =
@@ -1206,7 +1214,7 @@ class RuleVariableValueMapBuilderTest {
                 RuleEventStatus.ACTIVE,
                 Clock.System.now(),
                 Clock.System.now(),
-                LocalDate.currentDate(),
+                currentDate(),
                 null,
                 "",
                 null,
@@ -1220,7 +1228,7 @@ class RuleVariableValueMapBuilderTest {
                 RuleEventStatus.ACTIVE,
                 Clock.System.now(),
                 Clock.System.now(),
-                LocalDate.currentDate(),
+                currentDate(),
                 null,
                 "",
                 null,
@@ -1308,7 +1316,7 @@ class RuleVariableValueMapBuilderTest {
                 "test_dataelement_one",
                 RuleValueType.BOOLEAN,
             )
-        val currentDate = LocalDate.Companion.currentDate()
+        val currentDate = currentDate()
         val enrollmentDate = LocalDate.parse("2017-02-02")
         val incidentDate = LocalDate.parse("2017-04-02")
         val ruleEnrollment =
@@ -1326,7 +1334,7 @@ class RuleVariableValueMapBuilderTest {
                     RuleAttributeValue("test_attribute_three", "test_attribute_value_three"),
                 ),
             )
-        val now = LocalDate.Companion.currentDate()
+        val now = currentDate()
         val eventOneInstant = now.minus(1, DateTimeUnit.DAY).atStartOfDayIn(TimeZone.currentSystemDefault())
         val eventOneDate = now.minus(1, DateTimeUnit.DAY)
         val eventOneDueDate = now.minus(2, DateTimeUnit.DAY)

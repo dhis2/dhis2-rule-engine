@@ -1,8 +1,10 @@
 package org.hisp.dhis.rules.models
 
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
+@OptIn(ExperimentalTime::class)
 data class RuleEvent(
     val event: String,
     val programStage: String,
