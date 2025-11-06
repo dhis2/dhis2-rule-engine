@@ -8,8 +8,8 @@ import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.api.DataItem
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
+import org.hisp.dhis.rules.api.RuleSupplementaryData
 import org.hisp.dhis.rules.models.*
-import kotlin.time.Duration
 
 @JsExport
 class RuleEngineJs(verbose: Boolean = false) {
@@ -114,9 +114,17 @@ class RuleEngineJs(verbose: Boolean = false) {
     private fun toRuleEngineContextJava(executionContext: RuleEngineContextJs): RuleEngineContext {
         return RuleEngineContext(
             rules = executionContext.rules.map(::toRuleJava),
-            supplementaryData = executionContext.supplementaryData,
+            ruleSupplementaryData = toSupplementaryDataJava(executionContext.supplementaryData),
             constantsValues = toMap(executionContext.constantsValues, {it}, {it}),
             ruleVariables = executionContext.ruleVariables.map(::toRuleVariableJava)
+        )
+    }
+
+    private fun toSupplementaryDataJava(ruleSupplementaryDataJs: RuleSupplementaryDataJs): RuleSupplementaryData {
+        return RuleSupplementaryData(
+            userRoles = ruleSupplementaryDataJs.userRoles.toList(),
+            userGroups = ruleSupplementaryDataJs.userGroups.toList(),
+            orgUnitGroups = toMap(ruleSupplementaryDataJs.orgUnitGroups, {it}, Array<String>::toList)
         )
     }
 

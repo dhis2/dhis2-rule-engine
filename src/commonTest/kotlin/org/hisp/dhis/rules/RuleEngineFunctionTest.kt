@@ -3,7 +3,7 @@ package org.hisp.dhis.rules
 import kotlinx.datetime.*
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
-import org.hisp.dhis.rules.api.SupplementaryData
+import org.hisp.dhis.rules.api.RuleSupplementaryData
 import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.*
@@ -591,7 +591,7 @@ class RuleEngineFunctionTest {
             RuleEngineContext(
                 rules = listOf(rule),
                 ruleVariables = listOf(ruleVariableOne),
-                supplementaryData = SupplementaryData(orgUnitGroups = supplementaryData)
+                ruleSupplementaryData = RuleSupplementaryData(orgUnitGroups = supplementaryData)
             )
         val ruleEvent =
             RuleEvent(
@@ -643,7 +643,7 @@ class RuleEngineFunctionTest {
             RuleEngineContext(
                 rules = listOf(rule),
                 ruleVariables = listOf(ruleVariableOne),
-                supplementaryData = SupplementaryData(orgUnitGroups = supplementaryData)
+                ruleSupplementaryData = RuleSupplementaryData(orgUnitGroups = supplementaryData)
             )
         val ruleEvent =
             RuleEvent(
@@ -692,7 +692,7 @@ class RuleEngineFunctionTest {
             RuleEngineContext(
                 rules = listOf(rule),
                 ruleVariables = listOf(ruleVariableOne),
-                supplementaryData = SupplementaryData(userRoles = roles)
+                ruleSupplementaryData = RuleSupplementaryData(userRoles = roles)
             )
         val ruleEvent =
             RuleEvent(
@@ -741,7 +741,7 @@ class RuleEngineFunctionTest {
             RuleEngineContext(
                 rules = listOf(rule),
                 ruleVariables = listOf(ruleVariableOne),
-                supplementaryData = SupplementaryData(userGroups = userGroups)
+                ruleSupplementaryData = RuleSupplementaryData(userGroups = userGroups)
             )
         val ruleEvent =
             RuleEvent(
@@ -785,7 +785,7 @@ class RuleEngineFunctionTest {
             RuleEngineContext(
                 rules = listOf(rule),
                 ruleVariables = listOf(ruleVariableOne),
-                supplementaryData = SupplementaryData(userRoles = roles)
+                ruleSupplementaryData = RuleSupplementaryData(userRoles = roles)
             )
         val ruleEvent =
             RuleEvent(
