@@ -1,3 +1,21 @@
+public final class org/hisp/dhis/rules/DateUtils {
+	public static final field Companion Lorg/hisp/dhis/rules/DateUtils$Companion;
+	public fun <init> ()V
+	public static final fun toRuleInstant (Ljava/time/Instant;)Lorg/hisp/dhis/rules/models/RuleInstant;
+	public static final fun toRuleInstant (Ljava/util/Date;)Lorg/hisp/dhis/rules/models/RuleInstant;
+	public static final fun toRuleLocalDate (Ljava/time/Instant;)Lorg/hisp/dhis/rules/models/RuleLocalDate;
+	public static final fun toRuleLocalDate (Ljava/time/LocalDate;)Lorg/hisp/dhis/rules/models/RuleLocalDate;
+	public static final fun toRuleLocalDate (Ljava/util/Date;)Lorg/hisp/dhis/rules/models/RuleLocalDate;
+}
+
+public final class org/hisp/dhis/rules/DateUtils$Companion {
+	public final fun toRuleInstant (Ljava/time/Instant;)Lorg/hisp/dhis/rules/models/RuleInstant;
+	public final fun toRuleInstant (Ljava/util/Date;)Lorg/hisp/dhis/rules/models/RuleInstant;
+	public final fun toRuleLocalDate (Ljava/time/Instant;)Lorg/hisp/dhis/rules/models/RuleLocalDate;
+	public final fun toRuleLocalDate (Ljava/time/LocalDate;)Lorg/hisp/dhis/rules/models/RuleLocalDate;
+	public final fun toRuleLocalDate (Ljava/util/Date;)Lorg/hisp/dhis/rules/models/RuleLocalDate;
+}
+
 public final class org/hisp/dhis/rules/Logger {
 	public fun <init> (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
 	public final fun component1 ()Lkotlin/jvm/functions/Function1;
@@ -259,22 +277,22 @@ public final class org/hisp/dhis/rules/models/RuleEngineValidationException : ja
 }
 
 public final class org/hisp/dhis/rules/models/RuleEnrollment {
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Lorg/hisp/dhis/rules/models/RuleEnrollmentStatus;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lorg/hisp/dhis/rules/models/RuleLocalDate;Lorg/hisp/dhis/rules/models/RuleLocalDate;Lorg/hisp/dhis/rules/models/RuleEnrollmentStatus;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
-	public final fun component3 ()Lkotlinx/datetime/LocalDate;
-	public final fun component4 ()Lkotlinx/datetime/LocalDate;
+	public final fun component3 ()Lorg/hisp/dhis/rules/models/RuleLocalDate;
+	public final fun component4 ()Lorg/hisp/dhis/rules/models/RuleLocalDate;
 	public final fun component5 ()Lorg/hisp/dhis/rules/models/RuleEnrollmentStatus;
 	public final fun component6 ()Ljava/lang/String;
 	public final fun component7 ()Ljava/lang/String;
 	public final fun component8 ()Ljava/util/List;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Lorg/hisp/dhis/rules/models/RuleEnrollmentStatus;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Lorg/hisp/dhis/rules/models/RuleEnrollment;
-	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/models/RuleEnrollment;Ljava/lang/String;Ljava/lang/String;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Lorg/hisp/dhis/rules/models/RuleEnrollmentStatus;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lorg/hisp/dhis/rules/models/RuleEnrollment;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Lorg/hisp/dhis/rules/models/RuleLocalDate;Lorg/hisp/dhis/rules/models/RuleLocalDate;Lorg/hisp/dhis/rules/models/RuleEnrollmentStatus;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Lorg/hisp/dhis/rules/models/RuleEnrollment;
+	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/models/RuleEnrollment;Ljava/lang/String;Ljava/lang/String;Lorg/hisp/dhis/rules/models/RuleLocalDate;Lorg/hisp/dhis/rules/models/RuleLocalDate;Lorg/hisp/dhis/rules/models/RuleEnrollmentStatus;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lorg/hisp/dhis/rules/models/RuleEnrollment;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAttributeValues ()Ljava/util/List;
 	public final fun getEnrollment ()Ljava/lang/String;
-	public final fun getEnrollmentDate ()Lkotlinx/datetime/LocalDate;
-	public final fun getIncidentDate ()Lkotlinx/datetime/LocalDate;
+	public final fun getEnrollmentDate ()Lorg/hisp/dhis/rules/models/RuleLocalDate;
+	public final fun getIncidentDate ()Lorg/hisp/dhis/rules/models/RuleLocalDate;
 	public final fun getOrganisationUnit ()Ljava/lang/String;
 	public final fun getOrganisationUnitCode ()Ljava/lang/String;
 	public final fun getProgramName ()Ljava/lang/String;
@@ -293,27 +311,27 @@ public final class org/hisp/dhis/rules/models/RuleEnrollmentStatus : java/lang/E
 }
 
 public final class org/hisp/dhis/rules/models/RuleEvent {
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/hisp/dhis/rules/models/RuleEventStatus;Lkotlin/time/Instant;Lkotlin/time/Instant;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/hisp/dhis/rules/models/RuleEventStatus;Lorg/hisp/dhis/rules/models/RuleInstant;Lorg/hisp/dhis/rules/models/RuleInstant;Lorg/hisp/dhis/rules/models/RuleLocalDate;Lorg/hisp/dhis/rules/models/RuleLocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component10 ()Ljava/lang/String;
 	public final fun component11 ()Ljava/util/List;
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()Ljava/lang/String;
 	public final fun component4 ()Lorg/hisp/dhis/rules/models/RuleEventStatus;
-	public final fun component5 ()Lkotlin/time/Instant;
-	public final fun component6 ()Lkotlin/time/Instant;
-	public final fun component7 ()Lkotlinx/datetime/LocalDate;
-	public final fun component8 ()Lkotlinx/datetime/LocalDate;
+	public final fun component5 ()Lorg/hisp/dhis/rules/models/RuleInstant;
+	public final fun component6 ()Lorg/hisp/dhis/rules/models/RuleInstant;
+	public final fun component7 ()Lorg/hisp/dhis/rules/models/RuleLocalDate;
+	public final fun component8 ()Lorg/hisp/dhis/rules/models/RuleLocalDate;
 	public final fun component9 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/hisp/dhis/rules/models/RuleEventStatus;Lkotlin/time/Instant;Lkotlin/time/Instant;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Lorg/hisp/dhis/rules/models/RuleEvent;
-	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/models/RuleEvent;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/hisp/dhis/rules/models/RuleEventStatus;Lkotlin/time/Instant;Lkotlin/time/Instant;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lorg/hisp/dhis/rules/models/RuleEvent;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/hisp/dhis/rules/models/RuleEventStatus;Lorg/hisp/dhis/rules/models/RuleInstant;Lorg/hisp/dhis/rules/models/RuleInstant;Lorg/hisp/dhis/rules/models/RuleLocalDate;Lorg/hisp/dhis/rules/models/RuleLocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Lorg/hisp/dhis/rules/models/RuleEvent;
+	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/models/RuleEvent;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/hisp/dhis/rules/models/RuleEventStatus;Lorg/hisp/dhis/rules/models/RuleInstant;Lorg/hisp/dhis/rules/models/RuleInstant;Lorg/hisp/dhis/rules/models/RuleLocalDate;Lorg/hisp/dhis/rules/models/RuleLocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lorg/hisp/dhis/rules/models/RuleEvent;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getCompletedDate ()Lkotlinx/datetime/LocalDate;
-	public final fun getCreatedDate ()Lkotlin/time/Instant;
+	public final fun getCompletedDate ()Lorg/hisp/dhis/rules/models/RuleLocalDate;
+	public final fun getCreatedDate ()Lorg/hisp/dhis/rules/models/RuleInstant;
 	public final fun getDataValues ()Ljava/util/List;
-	public final fun getDueDate ()Lkotlinx/datetime/LocalDate;
+	public final fun getDueDate ()Lorg/hisp/dhis/rules/models/RuleLocalDate;
 	public final fun getEvent ()Ljava/lang/String;
-	public final fun getEventDate ()Lkotlin/time/Instant;
+	public final fun getEventDate ()Lorg/hisp/dhis/rules/models/RuleInstant;
 	public final fun getOrganisationUnit ()Ljava/lang/String;
 	public final fun getOrganisationUnitCode ()Ljava/lang/String;
 	public final fun getProgramStage ()Ljava/lang/String;
@@ -333,6 +351,44 @@ public final class org/hisp/dhis/rules/models/RuleEventStatus : java/lang/Enum {
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/hisp/dhis/rules/models/RuleEventStatus;
 	public static fun values ()[Lorg/hisp/dhis/rules/models/RuleEventStatus;
+}
+
+public final class org/hisp/dhis/rules/models/RuleInstant {
+	public static final field Companion Lorg/hisp/dhis/rules/models/RuleInstant$Companion;
+	public fun <init> (J)V
+	public final fun component1 ()J
+	public final fun copy (J)Lorg/hisp/dhis/rules/models/RuleInstant;
+	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/models/RuleInstant;JILjava/lang/Object;)Lorg/hisp/dhis/rules/models/RuleInstant;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMillis ()J
+	public fun hashCode ()I
+	public static final fun now ()Lorg/hisp/dhis/rules/models/RuleInstant;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class org/hisp/dhis/rules/models/RuleInstant$Companion {
+	public final fun now ()Lorg/hisp/dhis/rules/models/RuleInstant;
+}
+
+public final class org/hisp/dhis/rules/models/RuleLocalDate {
+	public static final field Companion Lorg/hisp/dhis/rules/models/RuleLocalDate$Companion;
+	public fun <init> (III)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun copy (III)Lorg/hisp/dhis/rules/models/RuleLocalDate;
+	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/models/RuleLocalDate;IIIILjava/lang/Object;)Lorg/hisp/dhis/rules/models/RuleLocalDate;
+	public static final fun currentDate ()Lorg/hisp/dhis/rules/models/RuleLocalDate;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDay ()I
+	public final fun getMonth ()I
+	public final fun getYear ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class org/hisp/dhis/rules/models/RuleLocalDate$Companion {
+	public final fun currentDate ()Lorg/hisp/dhis/rules/models/RuleLocalDate;
 }
 
 public final class org/hisp/dhis/rules/models/RuleValidationResult {

@@ -11,7 +11,7 @@ import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.api.RuleSupplementaryData
 import org.hisp.dhis.rules.models.*
 
-@OptIn(kotlin.time.ExperimentalTime::class)
+
 @JsExport
 class RuleEngineJs(verbose: Boolean = false) {
     init {
@@ -63,8 +63,8 @@ class RuleEngineJs(verbose: Boolean = false) {
         return RuleEnrollment(
             enrollment = enrollmentTarget.enrollment,
             programName = enrollmentTarget.programName,
-            incidentDate = LocalDate.fromEpochDays(enrollmentTarget.incidentDate.toEpochDays().toInt()),
-            enrollmentDate = LocalDate.fromEpochDays(enrollmentTarget.enrollmentDate.toEpochDays().toInt()),
+            incidentDate = enrollmentTarget.incidentDate,
+            enrollmentDate = enrollmentTarget.enrollmentDate,
             status = enrollmentTarget.status,
             organisationUnit = enrollmentTarget.organisationUnit,
             organisationUnitCode = enrollmentTarget.organisationUnitCode,
@@ -78,13 +78,10 @@ class RuleEngineJs(verbose: Boolean = false) {
             programStage = event.programStage,
             programStageName = event.programStageName,
             status = event.status,
-            eventDate = if(event.eventDate != null)
-                Instant.fromEpochMilliseconds(event.eventDate.toEpochMilliseconds())
-                else
-                    Instant.DISTANT_FUTURE,
-            createdDate = Instant.fromEpochMilliseconds(event.createdDate.toEpochMilliseconds()),
-            dueDate = toLocalDate(event.dueDate),
-            completedDate = toLocalDate(event.completedDate),
+            eventDate = event.eventDate ?: RuleInstant.fromInstant(Instant.DISTANT_FUTURE),
+            createdDate = event.createdDate,
+            dueDate = event.dueDate,
+            completedDate = event.completedDate,
             organisationUnit = event.organisationUnit,
             organisationUnitCode = event.organisationUnitCode,
             dataValues = event.dataValues.toList()
@@ -158,9 +155,9 @@ class RuleEngineJs(verbose: Boolean = false) {
         return ruleEffects.map(::toRuleEffectsJs).toTypedArray()
     }
 
-    private fun toLocalDate(localDate: LocalDate?): LocalDate? {
+    private fun toLocalDate(localDate: LocalDate?): RuleLocalDate? {
         if (localDate == null) return null
-        return LocalDate.fromEpochDays(localDate.toEpochDays().toInt())
+        return RuleLocalDate.fromLocalDate(localDate)
     }
 
     private fun toRuleVariableJava(ruleVariableJs: RuleVariableJs): RuleVariable {

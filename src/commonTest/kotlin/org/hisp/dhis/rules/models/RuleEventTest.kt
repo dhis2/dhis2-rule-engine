@@ -7,15 +7,15 @@ import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@OptIn(kotlin.time.ExperimentalTime::class)
+
 class RuleEventTest {
     @Test
     fun createShouldPropagateValuesCorrectly() {
         val ruleDataValue = RuleDataValue("dataElement", "value")
         val ruleDataValues: MutableList<RuleDataValue> = ArrayList()
         ruleDataValues.add(ruleDataValue)
-        val eventDate = Clock.System.now()
-        val dueDate = currentDate()
+        val eventDate = RuleInstant.now()
+        val dueDate = RuleLocalDate.currentDate()
         val (event, programStage, _, status, eventDate1, _, dueDate1, _, _, _, dataValues) =
             RuleEvent(
                 "test_event_uid",
@@ -48,9 +48,9 @@ class RuleEventTest {
                     "test_program_stage_one",
                     "",
                     RuleEventStatus.ACTIVE,
-                    Instant.parse("2014-02-11T01:00:00Z"),
-                    Instant.parse("2014-02-11T01:00:00Z"),
-                    LocalDate.parse("2014-02-11"),
+                    RuleInstant.parse("2014-02-11T01:00:00Z"),
+                    RuleInstant.parse("2014-02-11T01:00:00Z"),
+                    RuleLocalDate.parse("2014-02-11"),
                     null,
                     "",
                     null,
@@ -61,16 +61,16 @@ class RuleEventTest {
                     "test_program_stage_two",
                     "",
                     RuleEventStatus.ACTIVE,
-                    Instant.parse("2017-03-22T01:00:00Z"),
-                    Instant.parse("2014-02-11T01:00:00Z"),
-                    LocalDate.parse("2017-03-22"),
+                    RuleInstant.parse("2017-03-22T01:00:00Z"),
+                    RuleInstant.parse("2014-02-11T01:00:00Z"),
+                    RuleLocalDate.parse("2017-03-22"),
                     null,
                     "",
                     null,
                     emptyList(),
                 ),
             )
-        val reversed = ruleEvents.sortedBy { e -> e.eventDate }.reversed()
+        val reversed = ruleEvents.sortedBy { e -> e.eventDate.toInstant() }.reversed()
         assertEquals("test_event_two", reversed[0].event)
         assertEquals("test_event_one", reversed[1].event)
     }

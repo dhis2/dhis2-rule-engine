@@ -1,15 +1,14 @@
 package org.hisp.dhis.rules.engine
 
-import kotlin.time.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.RuleEngineUtils
 import org.hisp.dhis.rules.utils.currentDate
+import kotlin.time.Instant
 
-@OptIn(kotlin.time.ExperimentalTime::class)
+
 internal class RuleVariableValueMapBuilder {
     fun build(
         allConstantValues: Map<String, String>,
@@ -58,7 +57,7 @@ internal class RuleVariableValueMapBuilder {
         val events: MutableList<RuleEvent> = ArrayList(ruleEvents)
 
         // sort list of events by eventDate and createdDate:
-        events.sortWith(compareBy<RuleEvent>({ it.eventDate }, { it.createdDate }).reversed())
+        events.sortWith(compareBy<RuleEvent>({ it.eventDate.toInstant() }, { it.createdDate.toInstant() }).reversed())
 
         // aggregating values by data element uid
         for (i in events.indices) {
@@ -73,7 +72,7 @@ internal class RuleVariableValueMapBuilder {
 
                 // append data value to the list
                 allEventsValues[ruleDataValue.dataElement]?.add(
-                    RuleDataValueHistory(ruleDataValue.value, events[i].eventDate, events[i].createdDate, events[i].programStage),
+                    RuleDataValueHistory(ruleDataValue.value, events[i].eventDate.toInstant(), events[i].createdDate.toInstant(), events[i].programStage),
                 )
             }
         }
@@ -137,8 +136,8 @@ internal class RuleVariableValueMapBuilder {
     ): Map<String, RuleVariableValue> {
         val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
             val eventDate =
-                if (ruleEvent.eventDate < Instant.DISTANT_FUTURE )
-                ruleEvent.eventDate
+                if (ruleEvent.eventDate.toInstant() < Instant.DISTANT_FUTURE )
+                ruleEvent.eventDate.toInstant()
                     .toLocalDateTime(TimeZone.currentSystemDefault())
                     .date
                     .toString()
@@ -178,7 +177,7 @@ internal class RuleVariableValueMapBuilder {
                 RuleValueType.TEXT,
                 ruleEvent.event,
                 listOf(ruleEvent.event),
-                ruleEvent.eventDate
+                ruleEvent.eventDate.toInstant()
                     .toLocalDateTime(TimeZone.currentSystemDefault())
                     .date
                     .toString(),

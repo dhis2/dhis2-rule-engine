@@ -36,7 +36,7 @@ import kotlin.test.assertEquals
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-@OptIn(kotlin.time.ExperimentalTime::class)
+
 class ConstantsValueTest {
     @Test
     fun assignConstantValueFromAssignActionInEnrollment() {
@@ -49,8 +49,8 @@ class ConstantsValueTest {
             RuleEnrollment(
                 enrollment = "test_enrollment",
                 programName = "test_program",
-                incidentDate = currentDate(),
-                enrollmentDate = currentDate(),
+                incidentDate = RuleLocalDate.currentDate(),
+                enrollmentDate = RuleLocalDate.currentDate(),
                 status = RuleEnrollmentStatus.ACTIVE,
                 organisationUnit = "test_ou",
                 organisationUnitCode = "test_ou_code",
@@ -77,8 +77,8 @@ class ConstantsValueTest {
             RuleEnrollment(
                 enrollment = "test_enrollment",
                 programName = "test_program",
-                incidentDate = currentDate(),
-                enrollmentDate = currentDate(),
+                incidentDate = RuleLocalDate.currentDate(),
+                enrollmentDate = RuleLocalDate.currentDate(),
                 status = RuleEnrollmentStatus.ACTIVE,
                 organisationUnit = "test_ou",
                 organisationUnitCode = "test_ou_code",
@@ -107,8 +107,8 @@ class ConstantsValueTest {
             RuleEnrollment(
                 enrollment = "test_enrollment",
                 programName = "test_program",
-                incidentDate = currentDate(),
-                enrollmentDate = currentDate(),
+                incidentDate = RuleLocalDate.currentDate(),
+                enrollmentDate = RuleLocalDate.currentDate(),
                 status = RuleEnrollmentStatus.ACTIVE,
                 organisationUnit = "test_ou",
                 organisationUnitCode = "test_ou_code",
@@ -133,12 +133,12 @@ class ConstantsValueTest {
                 programStage = "test_program_stage",
                 programStageName = "",
                 status = RuleEventStatus.ACTIVE,
-                eventDate = Clock.System.now(),
-                createdDate = Clock.System.now(),
-                dueDate = currentDate(),
+                eventDate = RuleInstant.now(),
+                createdDate = RuleInstant.now(),
+                dueDate = RuleLocalDate.currentDate(),
                 organisationUnit = "",
                 organisationUnitCode = "",
-                completedDate = currentDate(),
+                completedDate = RuleLocalDate.currentDate(),
                 dataValues =
                     listOf(
                         RuleDataValue(

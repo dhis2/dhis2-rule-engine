@@ -7,7 +7,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-@OptIn(kotlin.time.ExperimentalTime::class)
+
 class RuleVariablePreviousEventTest {
     private val today = currentDate()
     private val yesterday = today.minus(1, DateTimeUnit.DAY)
@@ -97,12 +97,12 @@ class RuleVariablePreviousEventTest {
             programStage = "test_program_stage",
             programStageName = "",
             status = RuleEventStatus.ACTIVE,
-            eventDate = eventDate,
-            createdDate = createdDate,
-            dueDate = currentDate(),
+            eventDate = RuleInstant.fromInstant(eventDate),
+            createdDate = RuleInstant.fromInstant(createdDate),
+            dueDate = RuleLocalDate.currentDate(),
             organisationUnit = "",
             organisationUnitCode = "",
-            completedDate = currentDate(),
+            completedDate = RuleLocalDate.currentDate(),
             dataValues =
                 listOf(
                     RuleDataValue("data_element", "1"),

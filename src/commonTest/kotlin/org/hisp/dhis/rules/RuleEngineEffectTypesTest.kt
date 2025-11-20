@@ -12,7 +12,7 @@ import kotlin.test.assertEquals
 
 // ToDo: function tests (check that function invocations are producing expected values; check nested function invocation)
 // ToDo: various source type tests (referencing variables from different events)
-@OptIn(kotlin.time.ExperimentalTime::class)
+
 class RuleEngineEffectTypesTest {
     private fun getTestRuleEvent(status: RuleEventStatus): RuleEvent =
         RuleEvent(
@@ -20,9 +20,9 @@ class RuleEngineEffectTypesTest {
             programStage = "test_program_stage",
             programStageName = "",
             status = status,
-            eventDate = Clock.System.now(),
-            createdDate = Clock.System.now(),
-            dueDate = currentDate(),
+            eventDate = RuleInstant.now(),
+            createdDate = RuleInstant.now(),
+            dueDate = RuleLocalDate.currentDate(),
             organisationUnit = "",
             organisationUnitCode = "",
             completedDate = null,

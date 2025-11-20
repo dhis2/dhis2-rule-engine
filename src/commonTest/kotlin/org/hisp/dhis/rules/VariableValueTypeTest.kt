@@ -35,7 +35,7 @@ import kotlin.test.assertEquals
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-@OptIn(kotlin.time.ExperimentalTime::class)
+
 class VariableValueTypeTest {
     @Test
     fun testNumericVariablesAreComparedCorrectly() {
@@ -54,9 +54,9 @@ class VariableValueTypeTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                now,
-                now,
-                LocalDate.fromEpochDays(1),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -88,9 +88,9 @@ class VariableValueTypeTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                now,
-                now,
-                LocalDate.fromEpochDays(1),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,

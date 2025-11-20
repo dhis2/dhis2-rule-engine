@@ -4,7 +4,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.hisp.dhis.rules.engine.RuleVariableValue
 
-@OptIn(kotlin.time.ExperimentalTime::class)
+
 class RuleVariablePreviousEvent(
     override val name: String,
     override val useCodeForOptionSet: Boolean,
@@ -20,8 +20,8 @@ class RuleVariablePreviousEvent(
         val dataValues = allEventValues[field]
         if (ruleEvent != null && !dataValues.isNullOrEmpty()) {
             for (ruleDataValue in dataValues) {
-                if (ruleEvent.eventDate > ruleDataValue.eventDate ||
-                    (ruleEvent.eventDate == ruleDataValue.eventDate && ruleEvent.createdDate > ruleDataValue.createdDate)
+                if (ruleEvent.eventDate.toInstant() > ruleDataValue.eventDate ||
+                    (ruleEvent.eventDate.toInstant() == ruleDataValue.eventDate && ruleEvent.createdDate.toInstant() > ruleDataValue.createdDate)
                 ) {
                     val optionValue =
                         if (useCodeForOptionSet) ruleDataValue.value else getOptionName(ruleDataValue.value)

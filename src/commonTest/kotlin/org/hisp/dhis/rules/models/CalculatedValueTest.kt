@@ -35,7 +35,7 @@ import kotlin.test.assertEquals
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-@OptIn(kotlin.time.ExperimentalTime::class)
+
 class CalculatedValueTest {
     @Test
     fun evaluateOneThousandRulesTest() {
@@ -45,8 +45,8 @@ class CalculatedValueTest {
             RuleEnrollment(
                 "test_enrollment",
                 "test_program",
-                currentDate(),
-                currentDate(),
+                RuleLocalDate.currentDate(),
+                RuleLocalDate.currentDate(),
                 RuleEnrollmentStatus.ACTIVE,
                 "test_ou",
                 "test_ou_code",
@@ -58,9 +58,9 @@ class CalculatedValueTest {
                 programStage = "test_program_stage",
                 programStageName = "",
                 status = RuleEventStatus.ACTIVE,
-                eventDate = Clock.System.now(),
-                createdDate = Clock.System.now(),
-                dueDate = currentDate(),
+                eventDate = RuleInstant.now(),
+                createdDate = RuleInstant.now(),
+                dueDate = RuleLocalDate.currentDate(),
                 organisationUnit = "",
                 organisationUnitCode = "",
                 completedDate = null,
@@ -86,8 +86,8 @@ class CalculatedValueTest {
             RuleEnrollment(
                 "test_enrollment",
                 "test_program",
-                currentDate(),
-                currentDate(),
+                RuleLocalDate.currentDate(),
+                RuleLocalDate.currentDate(),
                 RuleEnrollmentStatus.ACTIVE,
                 "test_ou",
                 "test_ou_code",
@@ -99,9 +99,9 @@ class CalculatedValueTest {
                 programStage = "test_program_stage",
                 programStageName = "",
                 status = RuleEventStatus.ACTIVE,
-                eventDate = Clock.System.now(),
-                createdDate = Clock.System.now(),
-                dueDate = currentDate(),
+                eventDate = RuleInstant.now(),
+                createdDate = RuleInstant.now(),
+                dueDate = RuleLocalDate.currentDate(),
                 organisationUnit = "",
                 organisationUnitCode = "",
                 completedDate = null,
@@ -152,8 +152,8 @@ class CalculatedValueTest {
             RuleEnrollment(
                 "test_enrollment",
                 "test_program",
-                currentDate(),
-                currentDate(),
+                RuleLocalDate.currentDate(),
+                RuleLocalDate.currentDate(),
                 RuleEnrollmentStatus.ACTIVE,
                 "test_ou",
                 "test_ou_code",
@@ -165,9 +165,9 @@ class CalculatedValueTest {
                 programStage = "test_program_stage",
                 programStageName = "",
                 status = RuleEventStatus.ACTIVE,
-                eventDate = Clock.System.now(),
-                createdDate = Clock.System.now(),
-                dueDate = currentDate(),
+                eventDate = RuleInstant.now(),
+                createdDate = RuleInstant.now(),
+                dueDate = RuleLocalDate.currentDate(),
                 organisationUnit = "",
                 organisationUnitCode = "",
                 completedDate = null,
