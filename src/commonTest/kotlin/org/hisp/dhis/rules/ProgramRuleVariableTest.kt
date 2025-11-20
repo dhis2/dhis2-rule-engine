@@ -1,7 +1,7 @@
 package org.hisp.dhis.rules
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
@@ -38,6 +38,7 @@ import kotlin.test.assertNull
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+
 class ProgramRuleVariableTest {
     @Test
     fun testCurrentDateProgramVariableIsAssigned() {
@@ -245,7 +246,7 @@ class ProgramRuleVariableTest {
                 programStageName = PROGRAM_STAGE_NAME,
                 status = RULE_EVENT_STATUS,
                 eventDate = EVENT_DATE,
-                createdDate = Clock.System.now(),
+                createdDate = RuleInstant.now(),
                 dueDate = DUE_DATE,
                 organisationUnit = ORGANISATION_UNIT,
                 organisationUnitCode = ORGANISATION_UNIT_CODE,
@@ -271,15 +272,15 @@ class ProgramRuleVariableTest {
     private fun getRuleEngineContext(rules: List<Rule>): RuleEngineContext = RuleEngineContext(rules)
 
     companion object {
-        private val CURRENT_DATE = LocalDate.Companion.currentDate()
+        private val CURRENT_DATE = currentDate()
         private const val DUE_DATE_STRING = "2020-06-01"
-        private val DUE_DATE = LocalDate.parse(DUE_DATE_STRING)
+        private val DUE_DATE = RuleLocalDate.parse(DUE_DATE_STRING)
         private const val ENROLLMENT_DATE_STRING = "2019-01-01"
-        private val ENROLLMENT_DATE = LocalDate.parse(ENROLLMENT_DATE_STRING)
+        private val ENROLLMENT_DATE = RuleLocalDate.parse(ENROLLMENT_DATE_STRING)
         private const val EVENT_DATE_STRING = "2019-02-02"
-        private val EVENT_DATE = Instant.parse(EVENT_DATE_STRING + "T01:00:00Z")
+        private val EVENT_DATE = RuleInstant(Instant.parse(EVENT_DATE_STRING + "T01:00:00Z").toEpochMilliseconds())
         private const val INCIDENT_DATE_STRING = "2020-01-01"
-        private val INCIDENT_DATE = LocalDate.parse(INCIDENT_DATE_STRING)
+        private val INCIDENT_DATE = RuleLocalDate.parse(INCIDENT_DATE_STRING)
         private const val PROGRAM_STAGE = "program stage"
         private const val PROGRAM_STAGE_NAME = "program stage name"
         private val RULE_EVENT_STATUS = RuleEventStatus.ACTIVE

@@ -4,6 +4,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.hisp.dhis.rules.engine.RuleVariableValue
 
+
 class RuleVariableNewestStageEvent(
     override val name: String,
     override val useCodeForOptionSet: Boolean,

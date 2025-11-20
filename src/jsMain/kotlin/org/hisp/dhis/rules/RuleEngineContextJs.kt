@@ -6,6 +6,6 @@ import js.collections.JsMap
 data class RuleEngineContextJs(
     val rules: Array<RuleJs>,
     val ruleVariables: Array<RuleVariableJs>,
-    val supplementaryData: JsMap<String, Array<String>> = JsMap(),
+    val supplementaryData: RuleSupplementaryDataJs,
     val constantsValues: JsMap<String, String> = JsMap()
 )

@@ -1,12 +1,13 @@
 package org.hisp.dhis.rules.engine
 
+import org.hisp.dhis.rules.api.RuleSupplementaryData
 import org.hisp.dhis.rules.models.*
 
 internal class RuleEngineMultipleExecution {
     fun execute(
         rules: List<Rule>,
         ruleVariableValueMap: RuleVariableValueMap,
-        supplementaryData: Map<String, List<String>>,
+        ruleSupplementaryData: RuleSupplementaryData,
     ): List<RuleEffects> {
         val ruleEffects: MutableList<RuleEffects> = ArrayList()
         for ((enrollment, valueMap) in ruleVariableValueMap.enrollmentMap) {
@@ -16,7 +17,7 @@ internal class RuleEngineMultipleExecution {
                         TrackerObjectType.ENROLLMENT,
                         enrollment.enrollment,
                         valueMap,
-                        supplementaryData,
+                        ruleSupplementaryData,
                         filterRules(rules),
                     )
             ruleEffects.add(
@@ -36,7 +37,7 @@ internal class RuleEngineMultipleExecution {
                         TrackerObjectType.EVENT,
                         event.event,
                         valueMap,
-                        supplementaryData,
+                        ruleSupplementaryData,
                         filterRules(rules, event),
                     ),
                 ),

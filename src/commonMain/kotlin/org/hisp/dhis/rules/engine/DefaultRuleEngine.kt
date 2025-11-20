@@ -29,7 +29,7 @@ internal class DefaultRuleEngine : RuleEngine {
             TrackerObjectType.EVENT,
             target.event,
             valueMap,
-            executionContext.supplementaryData,
+            executionContext.ruleSupplementaryData,
             executionContext.rules,
         )
     }
@@ -50,7 +50,7 @@ internal class DefaultRuleEngine : RuleEngine {
             TrackerObjectType.ENROLLMENT,
             target.enrollment,
             valueMap,
-            executionContext.supplementaryData,
+            executionContext.ruleSupplementaryData,
             executionContext.rules,
         )
     }
@@ -66,7 +66,7 @@ internal class DefaultRuleEngine : RuleEngine {
         return RuleEngineMultipleExecution().execute(
             executionContext.rules,
             valueMap,
-            executionContext.supplementaryData,
+            executionContext.ruleSupplementaryData,
         )
     }
 

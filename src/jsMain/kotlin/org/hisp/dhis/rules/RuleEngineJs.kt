@@ -2,14 +2,13 @@ package org.hisp.dhis.rules
 
 import js.array.tupleOf
 import js.collections.JsMap
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.api.DataItem
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
+import org.hisp.dhis.rules.api.RuleSupplementaryData
 import org.hisp.dhis.rules.models.*
-import kotlin.time.Duration
+import kotlin.time.Instant
+
 
 @JsExport
 class RuleEngineJs(verbose: Boolean = false) {
@@ -62,8 +61,8 @@ class RuleEngineJs(verbose: Boolean = false) {
         return RuleEnrollment(
             enrollment = enrollmentTarget.enrollment,
             programName = enrollmentTarget.programName,
-            incidentDate = LocalDate.fromEpochDays(enrollmentTarget.incidentDate.toEpochDay().toInt()),
-            enrollmentDate = LocalDate.fromEpochDays(enrollmentTarget.enrollmentDate.toEpochDay().toInt()),
+            incidentDate = enrollmentTarget.incidentDate,
+            enrollmentDate = enrollmentTarget.enrollmentDate,
             status = enrollmentTarget.status,
             organisationUnit = enrollmentTarget.organisationUnit,
             organisationUnitCode = enrollmentTarget.organisationUnitCode,
@@ -77,13 +76,10 @@ class RuleEngineJs(verbose: Boolean = false) {
             programStage = event.programStage,
             programStageName = event.programStageName,
             status = event.status,
-            eventDate = if(event.eventDate != null)
-                Instant.fromEpochMilliseconds(event.eventDate.toEpochMilli().toLong())
-                else
-                    Instant.DISTANT_FUTURE,
-            createdDate = Instant.fromEpochMilliseconds(event.createdDate.toEpochMilli().toLong()),
-            dueDate = toLocalDate(event.dueDate),
-            completedDate = toLocalDate(event.completedDate),
+            eventDate = event.eventDate ?: RuleInstant.fromInstant(Instant.DISTANT_FUTURE),
+            createdDate = event.createdDate,
+            dueDate = event.dueDate,
+            completedDate = event.completedDate,
             organisationUnit = event.organisationUnit,
             organisationUnitCode = event.organisationUnitCode,
             dataValues = event.dataValues.toList()
@@ -114,9 +110,17 @@ class RuleEngineJs(verbose: Boolean = false) {
     private fun toRuleEngineContextJava(executionContext: RuleEngineContextJs): RuleEngineContext {
         return RuleEngineContext(
             rules = executionContext.rules.map(::toRuleJava),
-            supplementaryData = toMap(executionContext.supplementaryData, {it}, { v -> v.toList() }),
+            ruleSupplementaryData = toSupplementaryDataJava(executionContext.supplementaryData),
             constantsValues = toMap(executionContext.constantsValues, {it}, {it}),
             ruleVariables = executionContext.ruleVariables.map(::toRuleVariableJava)
+        )
+    }
+
+    private fun toSupplementaryDataJava(ruleSupplementaryDataJs: RuleSupplementaryDataJs): RuleSupplementaryData {
+        return RuleSupplementaryData(
+            userRoles = ruleSupplementaryDataJs.userRoles.toList(),
+            userGroups = ruleSupplementaryDataJs.userGroups.toList(),
+            orgUnitGroups = toMap(ruleSupplementaryDataJs.orgUnitGroups, {it}, Array<String>::toList)
         )
     }
 
@@ -147,11 +151,6 @@ class RuleEngineJs(verbose: Boolean = false) {
 
     private fun toRuleEffectsJsList(ruleEffects: List<RuleEffects>): Array<RuleEffectsJs> {
         return ruleEffects.map(::toRuleEffectsJs).toTypedArray()
-    }
-
-    private fun toLocalDate(localDate: kotlinx.datetime.internal.JSJoda.LocalDate?): LocalDate? {
-        if (localDate == null) return null
-        return LocalDate.fromEpochDays(localDate.toEpochDay().toInt())
     }
 
     private fun toRuleVariableJava(ruleVariableJs: RuleVariableJs): RuleVariable {
@@ -204,6 +203,5 @@ class RuleEngineJs(verbose: Boolean = false) {
 
     internal companion object {
         var verbose: Boolean = false
-        var lastDate: Instant = Clock.System.now()
     }
 }

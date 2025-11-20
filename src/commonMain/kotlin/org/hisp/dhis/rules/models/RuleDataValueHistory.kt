@@ -1,6 +1,6 @@
 package org.hisp.dhis.rules.models
 
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 data class RuleDataValueHistory(
     val value: String,
