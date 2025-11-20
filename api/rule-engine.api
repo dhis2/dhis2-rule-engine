@@ -433,7 +433,7 @@ public abstract interface class org/hisp/dhis/rules/models/RuleVariable {
 	public abstract fun getField ()Ljava/lang/String;
 	public abstract fun getFieldType ()Lorg/hisp/dhis/rules/models/RuleValueType;
 	public abstract fun getName ()Ljava/lang/String;
-	public abstract fun getOptionName (Ljava/lang/String;)Ljava/lang/String;
+	public fun getOptionName (Ljava/lang/String;)Ljava/lang/String;
 	public abstract fun getOptions ()Ljava/util/List;
 	public abstract fun getUseCodeForOptionSet ()Z
 }

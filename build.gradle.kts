@@ -37,6 +37,10 @@ kotlin {
             generateTypeScriptDefinitions()
         }
         binaries.library()
+        compilerOptions {
+            freeCompilerArgs.add("-Xes-long-as-bigint")
+            freeCompilerArgs.add("-XXLanguage:+JsAllowLongInExportedDeclarations")
+        }
     }
     val hostOs = System.getProperty("os.name")
     val isArm64 = System.getProperty("os.arch") == "aarch64"

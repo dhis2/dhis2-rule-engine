@@ -2,14 +2,12 @@ package org.hisp.dhis.rules
 
 import js.array.tupleOf
 import js.collections.JsMap
-import kotlin.time.Clock
-import kotlin.time.Instant
-import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.api.DataItem
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.api.RuleSupplementaryData
 import org.hisp.dhis.rules.models.*
+import kotlin.time.Instant
 
 
 @JsExport
@@ -205,6 +203,5 @@ class RuleEngineJs(verbose: Boolean = false) {
 
     internal companion object {
         var verbose: Boolean = false
-        var lastDate: Instant = Clock.System.now()
     }
 }
