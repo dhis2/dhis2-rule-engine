@@ -155,11 +155,6 @@ class RuleEngineJs(verbose: Boolean = false) {
         return ruleEffects.map(::toRuleEffectsJs).toTypedArray()
     }
 
-    private fun toLocalDate(localDate: LocalDate?): RuleLocalDate? {
-        if (localDate == null) return null
-        return RuleLocalDate.fromLocalDate(localDate)
-    }
-
     private fun toRuleVariableJava(ruleVariableJs: RuleVariableJs): RuleVariable {
         return when(ruleVariableJs.type){
             RuleVariableType.DATAELEMENT_NEWEST_EVENT_PROGRAM_STAGE -> RuleVariableNewestStageEvent(

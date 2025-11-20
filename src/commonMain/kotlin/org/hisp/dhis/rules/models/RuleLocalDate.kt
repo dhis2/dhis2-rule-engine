@@ -1,12 +1,13 @@
 package org.hisp.dhis.rules.models
 
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.number
 import kotlin.js.JsExport
 import kotlin.jvm.JvmStatic
 
 @JsExport
 data class RuleLocalDate(val year: Int, val month: Int, val day: Int) {
-    private val localDate: LocalDate = LocalDate.parse("$year-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}");
+    private val localDate: LocalDate = LocalDate(year, month, day);
 
     internal fun toLocalDate(): LocalDate {
         return localDate;
@@ -25,7 +26,7 @@ data class RuleLocalDate(val year: Int, val month: Int, val day: Int) {
         }
 
         internal fun fromLocalDate(localDate: LocalDate): RuleLocalDate {
-            return RuleLocalDate(localDate.year, localDate.month.ordinal + 1, localDate.day)
+            return RuleLocalDate(localDate.year, localDate.month.number, localDate.day)
         }
     }
 }
