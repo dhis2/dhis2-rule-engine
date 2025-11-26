@@ -208,7 +208,7 @@ internal class RuleConditionEvaluator {
         ruleSupplementaryData: RuleSupplementaryData,
     ): RuleEffect {
         if (ruleAction.type == "ASSIGN") {
-            val data = process(ruleAction.data, valueMap, ruleSupplementaryData, ExpressionMode.RULE_ENGINE_ACTION)
+            val data = processRuleAction(rule, ruleAction, valueMap, ruleSupplementaryData)
             updateValueMap(ruleAction.field()!!, RuleVariableValue(RuleValueType.TEXT, data, listOf(), null), valueMap)
             return if (data.isNullOrEmpty()) {
                 RuleEffect(rule.uid, ruleAction, null)
@@ -218,11 +218,11 @@ internal class RuleConditionEvaluator {
         }
         val data =
             if (!ruleAction.data.isNullOrEmpty()) {
-                process(
-                    ruleAction.data,
+                processRuleAction(
+                    rule,
+                    ruleAction,
                     valueMap,
                     ruleSupplementaryData,
-                    ExpressionMode.RULE_ENGINE_ACTION,
                 )
             } else {
                 ""
@@ -232,6 +232,27 @@ internal class RuleConditionEvaluator {
             ruleAction,
             data,
         )
+    }
+
+    private fun processRuleAction(
+        rule: Rule,
+        ruleAction: RuleAction,
+        valueMap: MutableMap<String, RuleVariableValue>,
+        supplementaryData: RuleSupplementaryData,
+    ): String? {
+        val data = process(
+            ruleAction.data,
+            valueMap,
+            supplementaryData,
+            ExpressionMode.RULE_ENGINE_ACTION,
+        )
+        log.fine(
+            "Action " + ruleAction.type +
+                " from rule " + rule.name + " with id " + rule.uid +
+                " with expression (" + ruleAction.data + ")" +
+                " was evaluated " + data
+        )
+        return data
     }
 
     companion object {
