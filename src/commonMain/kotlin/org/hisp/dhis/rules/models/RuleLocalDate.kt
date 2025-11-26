@@ -21,7 +21,7 @@ data class RuleLocalDate(val year: Int, val month: Int, val day: Int) {
             return fromLocalDate(org.hisp.dhis.rules.utils.currentDate())
         }
 
-        internal fun parse(dateString: String): RuleLocalDate {
+        fun parse(dateString: String): RuleLocalDate {
             return fromLocalDate(LocalDate.parse(dateString))
         }
 

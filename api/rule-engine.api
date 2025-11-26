@@ -368,6 +368,7 @@ public final class org/hisp/dhis/rules/models/RuleInstant {
 
 public final class org/hisp/dhis/rules/models/RuleInstant$Companion {
 	public final fun now ()Lorg/hisp/dhis/rules/models/RuleInstant;
+	public final fun parse (Ljava/lang/String;)Lorg/hisp/dhis/rules/models/RuleInstant;
 }
 
 public final class org/hisp/dhis/rules/models/RuleLocalDate {
@@ -389,6 +390,7 @@ public final class org/hisp/dhis/rules/models/RuleLocalDate {
 
 public final class org/hisp/dhis/rules/models/RuleLocalDate$Companion {
 	public final fun currentDate ()Lorg/hisp/dhis/rules/models/RuleLocalDate;
+	public final fun parse (Ljava/lang/String;)Lorg/hisp/dhis/rules/models/RuleLocalDate;
 }
 
 public final class org/hisp/dhis/rules/models/RuleValidationResult {

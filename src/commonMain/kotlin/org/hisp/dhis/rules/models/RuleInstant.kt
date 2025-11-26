@@ -25,7 +25,7 @@ data class RuleInstant(val millis: Long) {
             return RuleInstant(instant.toEpochMilliseconds())
         }
 
-        internal fun parse(instant: String): RuleInstant {
+        fun parse(instant: String): RuleInstant {
             return fromInstant(Instant.parse(instant))
         }
     }
