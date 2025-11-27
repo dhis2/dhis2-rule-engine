@@ -20,8 +20,8 @@ class RuleVariablePreviousEvent(
         val dataValues = allEventValues[field]
         if (ruleEvent != null && !dataValues.isNullOrEmpty()) {
             for (ruleDataValue in dataValues) {
-                if (ruleEvent.eventDate.toInstant() > ruleDataValue.eventDate ||
-                    (ruleEvent.eventDate.toInstant() == ruleDataValue.eventDate && ruleEvent.createdDate.toInstant() > ruleDataValue.createdDate)
+                if (ruleEvent.eventDate.instant > ruleDataValue.eventDate ||
+                    (ruleEvent.eventDate.instant == ruleDataValue.eventDate && ruleEvent.createdDate.instant > ruleDataValue.createdDate)
                 ) {
                     val optionValue =
                         if (useCodeForOptionSet) ruleDataValue.value else getOptionName(ruleDataValue.value)

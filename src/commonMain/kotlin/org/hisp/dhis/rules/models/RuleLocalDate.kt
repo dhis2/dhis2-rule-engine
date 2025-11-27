@@ -9,11 +9,7 @@ import kotlin.jvm.JvmStatic
 
 @JsExport
 data class RuleLocalDate(val year: Int, val month: Int, val day: Int) {
-    private val localDate: LocalDate = LocalDate(year, month, day);
-
-    internal fun toLocalDate(): LocalDate {
-        return localDate;
-    }
+    internal val localDate: LocalDate = LocalDate(year, month, day);
 
     override fun toString() = localDate.toString()
 

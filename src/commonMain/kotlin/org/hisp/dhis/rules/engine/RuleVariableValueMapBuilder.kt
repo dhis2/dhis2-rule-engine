@@ -57,7 +57,7 @@ internal class RuleVariableValueMapBuilder {
         val events: MutableList<RuleEvent> = ArrayList(ruleEvents)
 
         // sort list of events by eventDate and createdDate:
-        events.sortWith(compareBy<RuleEvent>({ it.eventDate.toInstant() }, { it.createdDate.toInstant() }).reversed())
+        events.sortWith(compareBy<RuleEvent>({ it.eventDate.instant }, { it.createdDate.instant }).reversed())
 
         // aggregating values by data element uid
         for (i in events.indices) {
@@ -72,7 +72,7 @@ internal class RuleVariableValueMapBuilder {
 
                 // append data value to the list
                 allEventsValues[ruleDataValue.dataElement]?.add(
-                    RuleDataValueHistory(ruleDataValue.value, events[i].eventDate.toInstant(), events[i].createdDate.toInstant(), events[i].programStage),
+                    RuleDataValueHistory(ruleDataValue.value, events[i].eventDate.instant, events[i].createdDate.instant, events[i].programStage),
                 )
             }
         }
@@ -136,8 +136,8 @@ internal class RuleVariableValueMapBuilder {
     ): Map<String, RuleVariableValue> {
         val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
             val eventDate =
-                if (ruleEvent.eventDate.toInstant() < Instant.DISTANT_FUTURE )
-                ruleEvent.eventDate.toInstant()
+                if (ruleEvent.eventDate.instant < Instant.DISTANT_FUTURE )
+                ruleEvent.eventDate.instant
                     .toLocalDateTime(TimeZone.currentSystemDefault())
                     .date
                     .toString()
@@ -177,7 +177,7 @@ internal class RuleVariableValueMapBuilder {
                 RuleValueType.TEXT,
                 ruleEvent.event,
                 listOf(ruleEvent.event),
-                ruleEvent.eventDate.toInstant()
+                ruleEvent.eventDate.instant
                     .toLocalDateTime(TimeZone.currentSystemDefault())
                     .date
                     .toString(),

@@ -26,7 +26,7 @@ class RuleVariableCurrentEvent(
                     fieldType,
                     optionValue,
                     listOf(optionValue),
-                    ruleEvent.eventDate.toInstant()
+                    ruleEvent.eventDate.instant
                         .toLocalDateTime(TimeZone.currentSystemDefault())
                         .date
                         .toString(),

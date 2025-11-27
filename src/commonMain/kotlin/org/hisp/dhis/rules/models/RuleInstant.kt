@@ -9,11 +9,7 @@ import kotlin.time.Instant
 
 @JsExport
 data class RuleInstant(val millis: Long) {
-    private val instant: Instant = Instant.fromEpochMilliseconds(millis)
-
-    internal fun toInstant(): Instant {
-        return instant
-    }
+    internal val instant: Instant = Instant.fromEpochMilliseconds(millis)
 
     override fun toString() = instant.toString()
 
