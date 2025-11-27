@@ -1,6 +1,5 @@
 package org.hisp.dhis.rules.models
 
-import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.engine.RuleVariableValue
 import org.hisp.dhis.rules.utils.currentDate
 
@@ -16,7 +15,7 @@ data class RuleVariableAttribute(
         allEventValues: Map<String, List<RuleDataValueHistory>>,
         currentEnrollmentValues: Map<String, RuleAttributeValue>,
     ): RuleVariableValue {
-        val currentDate = LocalDate.Companion.currentDate()
+        val currentDate = currentDate()
         return currentEnrollmentValues[field]?.let {
             val optionValue = if (useCodeForOptionSet) it.value else getOptionName(it.value)
             RuleVariableValue(

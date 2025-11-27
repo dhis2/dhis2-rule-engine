@@ -1,13 +1,13 @@
 package org.hisp.dhis.rules.engine
 
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.RuleEngineUtils
 import org.hisp.dhis.rules.utils.currentDate
+import kotlin.time.Instant
+
 
 internal class RuleVariableValueMapBuilder {
     fun build(
@@ -57,7 +57,7 @@ internal class RuleVariableValueMapBuilder {
         val events: MutableList<RuleEvent> = ArrayList(ruleEvents)
 
         // sort list of events by eventDate and createdDate:
-        events.sortWith(compareBy<RuleEvent>({ it.eventDate }, { it.createdDate }).reversed())
+        events.sortWith(compareBy<RuleEvent>({ it.eventDate.instant }, { it.createdDate.instant }).reversed())
 
         // aggregating values by data element uid
         for (i in events.indices) {
@@ -72,7 +72,7 @@ internal class RuleVariableValueMapBuilder {
 
                 // append data value to the list
                 allEventsValues[ruleDataValue.dataElement]?.add(
-                    RuleDataValueHistory(ruleDataValue.value, events[i].eventDate, events[i].createdDate, events[i].programStage),
+                    RuleDataValueHistory(ruleDataValue.value, events[i].eventDate.instant, events[i].createdDate.instant, events[i].programStage),
                 )
             }
         }
@@ -89,7 +89,7 @@ internal class RuleVariableValueMapBuilder {
         ruleEnrollment: RuleEnrollment?,
         ruleEvent: RuleEvent?,
     ): Map<String, RuleVariableValue> {
-        val currentDate = LocalDate.Companion.currentDate()
+        val currentDate = currentDate()
 
         val environmentVariablesValuesMap = buildEnvironmentVariables(ruleEvents, currentDate)
         val enrollmentVariableValueMap = ruleEnrollment?.let { buildEnrollmentEnvironmentVariables(it, currentDate) }.orEmpty()
@@ -136,8 +136,8 @@ internal class RuleVariableValueMapBuilder {
     ): Map<String, RuleVariableValue> {
         val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
             val eventDate =
-                if (ruleEvent.eventDate < Instant.DISTANT_FUTURE )
-                ruleEvent.eventDate
+                if (ruleEvent.eventDate.instant < Instant.DISTANT_FUTURE )
+                ruleEvent.eventDate.instant
                     .toLocalDateTime(TimeZone.currentSystemDefault())
                     .date
                     .toString()
@@ -177,7 +177,7 @@ internal class RuleVariableValueMapBuilder {
                 RuleValueType.TEXT,
                 ruleEvent.event,
                 listOf(ruleEvent.event),
-                ruleEvent.eventDate
+                ruleEvent.eventDate.instant
                     .toLocalDateTime(TimeZone.currentSystemDefault())
                     .date
                     .toString(),

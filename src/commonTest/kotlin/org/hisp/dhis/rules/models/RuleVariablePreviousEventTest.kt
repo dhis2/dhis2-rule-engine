@@ -1,16 +1,18 @@
 package org.hisp.dhis.rules.models
 
 import kotlinx.datetime.*
+import kotlin.time.Instant
 import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
+
 class RuleVariablePreviousEventTest {
-    private val today = LocalDate.Companion.currentDate()
+    private val today = currentDate()
     private val yesterday = today.minus(1, DateTimeUnit.DAY)
     private val dayBeforeYesterday = yesterday.minus(1, DateTimeUnit.DAY)
-    private val todayInstant = LocalDate.Companion.currentDate().atStartOfDayIn(TimeZone.currentSystemDefault())
+    private val todayInstant = currentDate().atStartOfDayIn(TimeZone.currentSystemDefault())
     private val yesterdayInstant = yesterday.atStartOfDayIn(TimeZone.currentSystemDefault())
     private val dayBeforeYesterdayInstant = dayBeforeYesterday.atStartOfDayIn(TimeZone.currentSystemDefault())
     private val tomorrow = today.plus(1, DateTimeUnit.DAY).atStartOfDayIn(TimeZone.currentSystemDefault())
@@ -95,12 +97,12 @@ class RuleVariablePreviousEventTest {
             programStage = "test_program_stage",
             programStageName = "",
             status = RuleEventStatus.ACTIVE,
-            eventDate = eventDate,
-            createdDate = createdDate,
-            dueDate = LocalDate.currentDate(),
+            eventDate = RuleInstant.fromInstant(eventDate),
+            createdDate = RuleInstant.fromInstant(createdDate),
+            dueDate = RuleLocalDate.currentDate(),
             organisationUnit = "",
             organisationUnitCode = "",
-            completedDate = LocalDate.currentDate(),
+            completedDate = RuleLocalDate.currentDate(),
             dataValues =
                 listOf(
                     RuleDataValue("data_element", "1"),

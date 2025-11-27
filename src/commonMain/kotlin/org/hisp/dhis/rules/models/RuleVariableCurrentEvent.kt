@@ -4,6 +4,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.hisp.dhis.rules.engine.RuleVariableValue
 
+
 class RuleVariableCurrentEvent(
     override val name: String,
     override val useCodeForOptionSet: Boolean,
@@ -25,7 +26,7 @@ class RuleVariableCurrentEvent(
                     fieldType,
                     optionValue,
                     listOf(optionValue),
-                    ruleEvent.eventDate
+                    ruleEvent.eventDate.instant
                         .toLocalDateTime(TimeZone.currentSystemDefault())
                         .date
                         .toString(),

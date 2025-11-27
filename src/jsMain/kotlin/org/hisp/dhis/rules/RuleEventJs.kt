@@ -1,9 +1,10 @@
 package org.hisp.dhis.rules
 
-import kotlinx.datetime.internal.JSJoda.Instant
-import kotlinx.datetime.internal.JSJoda.LocalDate
 import org.hisp.dhis.rules.models.RuleDataValue
 import org.hisp.dhis.rules.models.RuleEventStatus
+import org.hisp.dhis.rules.models.RuleInstant
+import org.hisp.dhis.rules.models.RuleLocalDate
+
 
 @JsExport
 data class RuleEventJs(
@@ -11,10 +12,10 @@ data class RuleEventJs(
     val programStage: String,
     val programStageName: String,
     val status: RuleEventStatus,
-    val eventDate: Instant?,
-    val createdDate: Instant,
-    val dueDate: LocalDate?,
-    val completedDate: LocalDate?,
+    val eventDate: RuleInstant?,
+    val createdDate: RuleInstant,
+    val dueDate: RuleLocalDate?,
+    val completedDate: RuleLocalDate?,
     val organisationUnit: String,
     val organisationUnitCode: String?,
     val dataValues: Array<RuleDataValue>

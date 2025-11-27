@@ -1,17 +1,32 @@
 package org.hisp.dhis.rules
 
-import kotlinx.datetime.*
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
+import org.hisp.dhis.rules.api.RuleSupplementaryData
 import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.*
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
+
 
 class RuleEngineFunctionTest {
     @Test
     fun evaluateFailingRule() {
-        val enrollmentDate = LocalDate.Companion.currentDate()
-        val ruleAction = RuleAction("2 + 2", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val enrollmentDate = currentDate()
+        val ruleAction = RuleAction(
+            "2 + 2",
+            "DISPLAYTEXT",
+            mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+        )
         val failingRule =
             Rule(
                 "d2:daysBetween(V{enrollment_date},V{event_date}) < 0",
@@ -25,8 +40,8 @@ class RuleEngineFunctionTest {
             RuleEnrollment(
                 "test_enrollment",
                 "",
-                enrollmentDate,
-                enrollmentDate,
+                RuleLocalDate.fromLocalDate(enrollmentDate),
+                RuleLocalDate.fromLocalDate(enrollmentDate),
                 RuleEnrollmentStatus.ACTIVE,
                 "",
                 "",
@@ -40,9 +55,13 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateFailingRuleInMultipleContext() {
-        val today = LocalDate.Companion.currentDate()
+        val today = currentDate()
         val yesterday = today.minus(1, DateTimeUnit.DAY).atStartOfDayIn(TimeZone.currentSystemDefault())
-        val ruleAction = RuleAction("2 + 2", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction = RuleAction(
+            "2 + 2",
+            "DISPLAYTEXT",
+            mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+        )
         val failingRule =
             Rule(
                 "d2:daysBetween(V{enrollment_date},V{event_date}) < 0",
@@ -54,8 +73,8 @@ class RuleEngineFunctionTest {
             RuleEnrollment(
                 "test_enrollment",
                 "",
-                today,
-                today,
+                RuleLocalDate.fromLocalDate(today),
+                RuleLocalDate.fromLocalDate(today),
                 RuleEnrollmentStatus.ACTIVE,
                 "",
                 "",
@@ -67,9 +86,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -86,9 +105,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                yesterday,
-                yesterday,
-                today,
+                RuleInstant.fromInstant(yesterday),
+                RuleInstant.fromInstant(yesterday),
+                RuleLocalDate.fromLocalDate(today),
                 null,
                 "",
                 null,
@@ -100,7 +119,8 @@ class RuleEngineFunctionTest {
                 ),
             )
         val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(listOf(failingRule))
-        val ruleEffects = RuleEngine.getInstance().evaluateAll(ruleEnrollment, listOf(ruleEvent, ruleNotFailingEvent), ruleEngineContext)
+        val ruleEffects = RuleEngine.getInstance()
+            .evaluateAll(ruleEnrollment, listOf(ruleEvent, ruleNotFailingEvent), ruleEngineContext)
         assertEquals(3, ruleEffects.size)
         assertTrue(getRuleEffectsByUid(ruleEffects, "test_event")!!.ruleEffects.isEmpty())
         assertFalse(getRuleEffectsByUid(ruleEffects, "test_not_failing_event")!!.ruleEffects.isEmpty())
@@ -144,9 +164,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -179,9 +199,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Instant.DISTANT_FUTURE,
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.fromInstant(Instant.DISTANT_FUTURE),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -212,9 +232,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Instant.DISTANT_FUTURE,
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.fromInstant(Instant.DISTANT_FUTURE),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -235,7 +255,11 @@ class RuleEngineFunctionTest {
         val option2 = Option("name2", "code2")
         val options = listOf(option1, option2)
         val ruleAction =
-            RuleAction("#{test_variable}", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+            RuleAction(
+                "#{test_variable}",
+                "DISPLAYTEXT",
+                mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+            )
         val ruleVariable: RuleVariable =
             RuleVariableNewestEvent(
                 "test_variable",
@@ -252,9 +276,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -277,7 +301,11 @@ class RuleEngineFunctionTest {
         val option2 = Option("name2", "code2")
         val options = listOf(option1, option2)
         val ruleAction =
-            RuleAction("#{test_variable}", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+            RuleAction(
+                "#{test_variable}",
+                "DISPLAYTEXT",
+                mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+            )
         val ruleVariable: RuleVariable =
             RuleVariableCurrentEvent(
                 "test_variable",
@@ -294,9 +322,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -338,9 +366,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -381,9 +409,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -403,8 +431,13 @@ class RuleEngineFunctionTest {
     @Test
     fun evaluateEnvironmentVariableProgramStageName() {
         val ruleAction =
-            RuleAction("V{program_stage_name}", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
-        val ruleVariable: RuleVariable = RuleVariableCurrentEvent("variable", true, ArrayList(), "test_data_element", RuleValueType.TEXT)
+            RuleAction(
+                "V{program_stage_name}",
+                "DISPLAYTEXT",
+                mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+            )
+        val ruleVariable: RuleVariable =
+            RuleVariableCurrentEvent("variable", true, ArrayList(), "test_data_element", RuleValueType.TEXT)
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf(ruleVariable))
         val ruleEvent =
@@ -413,9 +446,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage_id",
                 "test_program_stage_name",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -465,9 +498,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -521,9 +554,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -565,16 +598,20 @@ class RuleEngineFunctionTest {
             )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineContext =
-            RuleEngineContext(rules = listOf(rule), ruleVariables = listOf(ruleVariableOne), supplementaryData = supplementaryData)
+            RuleEngineContext(
+                rules = listOf(rule),
+                ruleVariables = listOf(ruleVariableOne),
+                ruleSupplementaryData = RuleSupplementaryData(orgUnitGroups = supplementaryData)
+            )
         val ruleEvent =
             RuleEvent(
                 "test_event",
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "location1",
                 null,
@@ -613,16 +650,20 @@ class RuleEngineFunctionTest {
             )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineContext =
-            RuleEngineContext(rules = listOf(rule), ruleVariables = listOf(ruleVariableOne), supplementaryData = supplementaryData)
+            RuleEngineContext(
+                rules = listOf(rule),
+                ruleVariables = listOf(ruleVariableOne),
+                ruleSupplementaryData = RuleSupplementaryData(orgUnitGroups = supplementaryData)
+            )
         val ruleEvent =
             RuleEvent(
                 "test_event",
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "location1",
                 null,
@@ -642,8 +683,6 @@ class RuleEngineFunctionTest {
     @Test
     fun evaluateD2HasUserRole() {
         val roles = listOf("role1", "role2")
-        val supplementaryData: MutableMap<String, List<String>> = HashMap()
-        supplementaryData["USER_ROLES"] = roles
         val ruleAction =
             RuleAction(
                 "d2:hasUserRole(#{test_var_one})",
@@ -660,16 +699,20 @@ class RuleEngineFunctionTest {
             )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineContext =
-            RuleEngineContext(rules = listOf(rule), ruleVariables = listOf(ruleVariableOne), supplementaryData = supplementaryData)
+            RuleEngineContext(
+                rules = listOf(rule),
+                ruleVariables = listOf(ruleVariableOne),
+                ruleSupplementaryData = RuleSupplementaryData(userRoles = roles)
+            )
         val ruleEvent =
             RuleEvent(
                 "test_event",
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "location1",
                 null,
@@ -689,8 +732,6 @@ class RuleEngineFunctionTest {
     @Test
     fun evaluateInUserGroup() {
         val userGroups = listOf("member1", "member2")
-        val supplementaryData: MutableMap<String, List<String>> = HashMap()
-        supplementaryData["USER_GROUPS"] = userGroups
         val ruleAction =
             RuleAction(
                 "d2:inUserGroup('member1')",
@@ -707,21 +748,25 @@ class RuleEngineFunctionTest {
             )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineContext =
-            RuleEngineContext(rules = listOf(rule), ruleVariables = listOf(ruleVariableOne), supplementaryData = supplementaryData)
+            RuleEngineContext(
+                rules = listOf(rule),
+                ruleVariables = listOf(ruleVariableOne),
+                ruleSupplementaryData = RuleSupplementaryData(userGroups = userGroups)
+            )
         val ruleEvent =
             RuleEvent(
                 "test_event",
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "location1",
                 null,
                 emptyList()
-                )
+            )
         val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
@@ -731,8 +776,6 @@ class RuleEngineFunctionTest {
     @Deprecated("")
     fun evaluateD2HasUserRoleWithStringValue() {
         val roles = listOf("role1", "role2")
-        val supplementaryData: MutableMap<String, List<String>> = HashMap()
-        supplementaryData["USER_ROLES"] = roles
         val ruleAction =
             RuleAction(
                 "d2:hasUserRole('role1')",
@@ -749,16 +792,20 @@ class RuleEngineFunctionTest {
             )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineContext =
-            RuleEngineContext(rules = listOf(rule), ruleVariables = listOf(ruleVariableOne), supplementaryData = supplementaryData)
+            RuleEngineContext(
+                rules = listOf(rule),
+                ruleVariables = listOf(ruleVariableOne),
+                ruleSupplementaryData = RuleSupplementaryData(userRoles = roles)
+            )
         val ruleEvent =
             RuleEvent(
                 "test_event",
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "location1",
                 null,
@@ -808,9 +855,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -835,9 +882,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -882,9 +929,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -901,9 +948,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage2",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -920,9 +967,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage3",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -933,7 +980,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent2, ruleEvent3), ruleEngineContext)
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent2, ruleEvent3), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -964,9 +1012,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -983,9 +1031,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage2",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1002,9 +1050,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage3",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1015,7 +1063,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent2, ruleEvent3), ruleEngineContext)
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent2, ruleEvent3), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -1053,9 +1102,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1072,9 +1121,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage2",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1091,9 +1140,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage3",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1110,9 +1159,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage3",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1123,7 +1172,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent2, ruleEvent3, ruleEvent4), ruleEngineContext)
+        val ruleEffects = RuleEngine.getInstance()
+            .evaluate(ruleEvent, null, listOf(ruleEvent2, ruleEvent3, ruleEvent4), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("3", ruleEffects[0].data)
@@ -1159,9 +1209,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1178,9 +1228,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage2",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1227,9 +1277,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1246,9 +1296,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage2",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1298,9 +1348,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1317,9 +1367,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage2",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1336,9 +1386,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage3",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1355,9 +1405,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage3",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1368,7 +1418,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent2, ruleEvent3, ruleEvent4), ruleEngineContext)
+        val ruleEffects = RuleEngine.getInstance()
+            .evaluate(ruleEvent, null, listOf(ruleEvent2, ruleEvent3, ruleEvent4), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("3", ruleEffects[0].data)
@@ -1398,9 +1449,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1441,9 +1492,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1484,9 +1535,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1539,9 +1590,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1598,9 +1649,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1663,9 +1714,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1730,9 +1781,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1747,7 +1798,11 @@ class RuleEngineFunctionTest {
     @Test
     fun evaluateD2Zing() {
         val ruleAction =
-            RuleAction("d2:zing( '-1' )", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+            RuleAction(
+                "d2:zing( '-1' )",
+                "DISPLAYTEXT",
+                mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+            )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf())
         val ruleEvent =
@@ -1756,9 +1811,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1773,7 +1828,11 @@ class RuleEngineFunctionTest {
     @Test
     fun evaluateD2Oizp() {
         val ruleAction =
-            RuleAction("d2:oizp( '0' )", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+            RuleAction(
+                "d2:oizp( '0' )",
+                "DISPLAYTEXT",
+                mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+            )
         val rule = Rule("true", listOf(ruleAction), "", "")
         val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(rule, listOf())
         val ruleEvent =
@@ -1782,9 +1841,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1820,9 +1879,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1839,9 +1898,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1858,9 +1917,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1871,7 +1930,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -1902,9 +1962,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1921,9 +1981,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1940,9 +2000,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -1953,7 +2013,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(ruleEvent, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("2", ruleEffects[0].data)
@@ -1983,9 +2044,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2026,9 +2087,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2069,9 +2130,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2112,9 +2173,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2135,9 +2196,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2178,9 +2239,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2221,9 +2282,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2284,9 +2345,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2313,7 +2374,11 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2ZScoreWFA() {
-        val ruleAction = RuleAction("true", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction = RuleAction(
+            "true",
+            "DISPLAYTEXT",
+            mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+        )
         val ruleVariableOne: RuleVariable =
             RuleVariableNewestEvent(
                 "test_var_one",
@@ -2348,9 +2413,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2372,7 +2437,11 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2ZScoreHFAGirl() {
-        val ruleAction = RuleAction("true", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction = RuleAction(
+            "true",
+            "DISPLAYTEXT",
+            mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+        )
         val ruleVariableOne: RuleVariable =
             RuleVariableNewestEvent(
                 "test_var_one",
@@ -2407,9 +2476,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2431,7 +2500,11 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2ZScoreHFABoy() {
-        val ruleAction = RuleAction("true", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction = RuleAction(
+            "true",
+            "DISPLAYTEXT",
+            mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+        )
         val ruleVariableOne: RuleVariable =
             RuleVariableNewestEvent(
                 "test_var_one",
@@ -2466,9 +2539,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2490,7 +2563,11 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2ZScoreWFHBoy() {
-        val ruleAction = RuleAction("true", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction = RuleAction(
+            "true",
+            "DISPLAYTEXT",
+            mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+        )
         val ruleVariableOne: RuleVariable =
             RuleVariableNewestEvent(
                 "test_var_one",
@@ -2525,9 +2602,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2589,9 +2666,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2613,7 +2690,11 @@ class RuleEngineFunctionTest {
 
     @Test
     fun evaluateD2MaxValue() {
-        val ruleAction = RuleAction("true", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction = RuleAction(
+            "true",
+            "DISPLAYTEXT",
+            mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+        )
         val ruleVariableOne: RuleVariable =
             RuleVariableNewestEvent(
                 "test_var_one",
@@ -2642,9 +2723,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage1",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2665,9 +2746,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage2",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2688,9 +2769,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage3",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2705,7 +2786,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
@@ -2713,7 +2795,11 @@ class RuleEngineFunctionTest {
     @Test
     @Deprecated("")
     fun evaluateD2MaxValueWithStringValue() {
-        val ruleAction = RuleAction("true", "DISPLAYTEXT", mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")))
+        val ruleAction = RuleAction(
+            "true",
+            "DISPLAYTEXT",
+            mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+        )
         val ruleVariableOne: RuleVariable =
             RuleVariableNewestEvent(
                 "test_var_one",
@@ -2742,9 +2828,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage1",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2765,9 +2851,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage2",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2788,9 +2874,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage3",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2805,7 +2891,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
     }
@@ -2846,9 +2933,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage1",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2869,9 +2956,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage2",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2892,9 +2979,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage3",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2909,7 +2996,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("5", ruleEffects[0].data)
@@ -2951,9 +3039,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage1",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2974,9 +3062,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage2",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -2997,9 +3085,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage3",
                 "",
                 RuleEventStatus.ACTIVE,
-                Clock.System.now(),
-                Clock.System.now(),
-                LocalDate.currentDate(),
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -3014,7 +3102,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals("5", ruleEffects[0].data)
@@ -3023,25 +3112,22 @@ class RuleEngineFunctionTest {
     @Test
     fun evaluateLastEventDate() {
         val yesterday =
-            LocalDate.Companion
-                .currentDate()
+            currentDate()
                 .minus(1, DateTimeUnit.DAY)
                 .atStartOfDayIn(TimeZone.currentSystemDefault())
         val dayBeforeYesterday =
-            LocalDate.Companion
-                .currentDate()
+            currentDate()
                 .minus(
                     2,
                     DateTimeUnit.DAY,
                 ).atStartOfDayIn(TimeZone.currentSystemDefault())
         val dayAfterTomorrowInstant =
-            LocalDate.Companion
-                .currentDate()
+            currentDate()
                 .plus(
                     2,
                     DateTimeUnit.DAY,
                 ).atStartOfDayIn(TimeZone.currentSystemDefault())
-        val dayAfterTomorrow = LocalDate.currentDate().plus(2, DateTimeUnit.DAY)
+        val dayAfterTomorrow = currentDate().plus(2, DateTimeUnit.DAY)
         val ruleAction =
             RuleAction(
                 "d2:lastEventDate('test_var_one')",
@@ -3064,9 +3150,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage1",
                 "",
                 RuleEventStatus.ACTIVE,
-                dayBeforeYesterday,
-                dayBeforeYesterday,
-                LocalDate.currentDate(),
+                RuleInstant.fromInstant(dayBeforeYesterday),
+                RuleInstant.fromInstant(dayBeforeYesterday),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -3083,9 +3169,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage2",
                 "",
                 RuleEventStatus.ACTIVE,
-                yesterday,
-                yesterday,
-                LocalDate.currentDate(),
+                RuleInstant.fromInstant(yesterday),
+                RuleInstant.fromInstant(yesterday),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -3102,9 +3188,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage3",
                 "",
                 RuleEventStatus.ACTIVE,
-                dayAfterTomorrowInstant,
-                dayAfterTomorrowInstant,
-                LocalDate.currentDate(),
+                RuleInstant.fromInstant(dayAfterTomorrowInstant),
+                RuleInstant.fromInstant(dayAfterTomorrowInstant),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
@@ -3115,7 +3201,8 @@ class RuleEngineFunctionTest {
                     ),
                 ),
             )
-        val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(ruleEvent3, null, listOf(ruleEvent1, ruleEvent2), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
         assertEquals(dayAfterTomorrow.toString(), ruleEffects[0].data)
@@ -3124,8 +3211,7 @@ class RuleEngineFunctionTest {
     @Test
     fun evaluateLastEventDateForEventIdVariable() {
         val dayBeforeYesterday =
-            LocalDate.Companion
-                .currentDate()
+            currentDate()
                 .minus(
                     2,
                     DateTimeUnit.DAY,
@@ -3145,9 +3231,9 @@ class RuleEngineFunctionTest {
                 "test_program_stage1",
                 "",
                 RuleEventStatus.ACTIVE,
-                dayBeforeYesterday,
-                dayBeforeYesterday,
-                LocalDate.currentDate(),
+                RuleInstant.fromInstant(dayBeforeYesterday),
+                RuleInstant.fromInstant(dayBeforeYesterday),
+                RuleLocalDate.currentDate(),
                 null,
                 "",
                 null,
