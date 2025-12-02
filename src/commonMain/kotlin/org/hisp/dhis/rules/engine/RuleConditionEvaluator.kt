@@ -172,13 +172,9 @@ internal class RuleConditionEvaluator {
 
     private fun convertSupplementaryData(ruleSupplementaryData: RuleSupplementaryData): Map<String, List<String>> {
         val supplementaryValues: MutableMap<String, List<String>> = HashMap()
-        if(ruleSupplementaryData.userGroups.isNotEmpty()) {
-            supplementaryValues["USER_GROUPS"] = ruleSupplementaryData.userGroups
-        }
-        if(ruleSupplementaryData.userRoles.isNotEmpty()) {
-            supplementaryValues["USER_ROLES"] = ruleSupplementaryData.userRoles
-        }
 
+        supplementaryValues["USER_GROUPS"] = ruleSupplementaryData.userGroups
+        supplementaryValues["USER_ROLES"] = ruleSupplementaryData.userRoles
         supplementaryValues.putAll(ruleSupplementaryData.orgUnitGroups)
 
         return supplementaryValues

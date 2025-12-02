@@ -734,7 +734,7 @@ class RuleEngineFunctionTest {
         val userGroups = listOf("member1", "member2")
         val ruleAction =
             RuleAction(
-                "d2:inUserGroup('member1')",
+                "",
                 "DISPLAYTEXT",
                 mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")),
             )
@@ -746,7 +746,7 @@ class RuleEngineFunctionTest {
                 "test_data_element_one",
                 RuleValueType.TEXT,
             )
-        val rule = Rule("true", listOf(ruleAction), "", "")
+        val rule = Rule("d2:inUserGroup('member1')", listOf(ruleAction), "", "")
         val ruleEngineContext =
             RuleEngineContext(
                 rules = listOf(rule),
@@ -770,6 +770,40 @@ class RuleEngineFunctionTest {
         val ruleEffects = RuleEngine.getInstance().evaluate(ruleEvent, null, emptyList(), ruleEngineContext)
         assertEquals(1, ruleEffects.size)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
+    }
+
+    @Test
+    fun evaluateInUserGroupWhenSupplementaryIsEmpty() {
+        val ruleAction =
+            RuleAction(
+                "",
+                "DISPLAYTEXT",
+                mapOf(Pair("content", "test_action_content"), Pair("location", "feedback")),
+            )
+        val rule = Rule("d2:inUserGroup('member1')", listOf(ruleAction), "", "")
+        val ruleEngineContext =
+            RuleEngineContext(
+                rules = listOf(rule),
+                ruleVariables = listOf(),
+                ruleSupplementaryData = RuleSupplementaryData()
+            )
+        val ruleEvent =
+            RuleEvent(
+                "test_event",
+                "test_program_stage",
+                "",
+                RuleEventStatus.ACTIVE,
+                RuleInstant.now(),
+                RuleInstant.now(),
+                RuleLocalDate.currentDate(),
+                null,
+                "location1",
+                null,
+                emptyList()
+            )
+        val ruleEffects = RuleEngine.getInstance().evaluateAll(null, listOf(ruleEvent), ruleEngineContext)
+        assertEquals(1, ruleEffects.size)
+        assertEquals(0, getRuleEffectsByUid(ruleEffects, "test_event")?.ruleEffects?.size)
     }
 
     @Test
