@@ -10,7 +10,7 @@ repositories {
     maven { url = uri("https://central.sonatype.com/repository/maven-snapshots/") }
 }
 
-version = "3.4.1-SNAPSHOT"
+version = "3.4.2-SNAPSHOT"
 group = "org.hisp.dhis.rules"
 
 if (project.hasProperty("removeSnapshotSuffix")) {
