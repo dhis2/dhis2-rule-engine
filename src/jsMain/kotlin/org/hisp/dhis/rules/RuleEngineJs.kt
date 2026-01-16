@@ -103,7 +103,8 @@ class RuleEngineJs(verbose: Boolean = false) {
         return RuleAction(
             data = ruleAction.data,
             type = ruleAction.type,
-            values = toMap(ruleAction.values, {it}, {it})
+            values = toMap(ruleAction.values, {it}, {it}),
+            priority = ruleAction.priority
         )
     }
 
@@ -128,7 +129,8 @@ class RuleEngineJs(verbose: Boolean = false) {
         return RuleActionJs(
             data = ruleAction.data,
             type = ruleAction.type,
-            values = JsMap(ruleAction.values.entries.map { e -> tupleOf(e.key, e.value) }.toTypedArray())
+            values = JsMap(ruleAction.values.entries.map { e -> tupleOf(e.key, e.value) }.toTypedArray()),
+            priority = ruleAction.priority
         )
     }
 

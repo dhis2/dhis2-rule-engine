@@ -65,7 +65,7 @@ internal class RuleConditionEvaluator {
                         ExpressionMode.RULE_ENGINE_CONDITION,
                     ).toBoolean()
                 ) {
-                    for (action in rule.actions) {
+                    for (action in rule.actions.sorted()) {
                         try {
                             // Check if action is assigning value to calculated variable
                             if (isAssignToCalculatedValue(action)) {
