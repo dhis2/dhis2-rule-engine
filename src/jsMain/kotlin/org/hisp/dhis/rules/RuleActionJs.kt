@@ -6,5 +6,6 @@ import js.collections.JsMap
 data class RuleActionJs(
     val data: String?,
     val type: String,
-    val values: JsMap<String, String> = JsMap()
+    val values: JsMap<String, String> = JsMap(),
+    val priority: Int? = null,
 )
