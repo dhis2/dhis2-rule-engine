@@ -9,6 +9,7 @@ import org.hisp.dhis.rules.api.DataItem
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.models.*
+import org.hisp.dhis.rules.utils.orderEvents
 
 internal class DefaultRuleEngine : RuleEngine {
     override fun evaluate(
@@ -110,4 +111,10 @@ internal class DefaultRuleEngine : RuleEngine {
                 errorMessage = ex.message,
             )
         }
+
+    override fun order(
+        ruleEvents: List<RuleEvent>,
+    ): List<RuleEvent> {
+        return orderEvents(ruleEvents)
+    }
 }

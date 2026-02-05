@@ -32,13 +32,7 @@ package org.hisp.dhis.rules
 
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
-import org.hisp.dhis.rules.models.Rule
-import org.hisp.dhis.rules.models.RuleAction
-import org.hisp.dhis.rules.models.RuleAttributeValue
-import org.hisp.dhis.rules.models.RuleEnrollment
-import org.hisp.dhis.rules.models.RuleEnrollmentStatus
-import org.hisp.dhis.rules.models.RuleEvent
-import org.hisp.dhis.rules.models.RuleLocalDate
+import org.hisp.dhis.rules.models.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

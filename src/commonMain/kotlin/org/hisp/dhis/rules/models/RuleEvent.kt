@@ -5,11 +5,20 @@ data class RuleEvent(
     val programStage: String,
     val programStageName: String,
     val status: RuleEventStatus,
-    val eventDate: RuleInstant,
+    val eventDate: RuleLocalDate,
     val createdDate: RuleInstant,
+    val createdAtClientDate: RuleInstant?,
     val dueDate: RuleLocalDate?,
     val completedDate: RuleLocalDate?,
     val organisationUnit: String,
     val organisationUnitCode: String?,
     val dataValues: List<RuleDataValue>,
-)
+): Comparable<RuleEvent> {
+    val resolvedCreatedDate get() = (createdAtClientDate ?: createdDate).instant
+
+    override fun compareTo(other: RuleEvent): Int {
+        val dateComparison = this.eventDate.compareTo(other.eventDate)
+        if (dateComparison != 0) return dateComparison
+        return this.resolvedCreatedDate.compareTo(other.resolvedCreatedDate)
+    }
+}
