@@ -345,7 +345,6 @@ public final class org/hisp/dhis/rules/models/RuleEvent : java/lang/Comparable {
 	public final fun getOrganisationUnitCode ()Ljava/lang/String;
 	public final fun getProgramStage ()Ljava/lang/String;
 	public final fun getProgramStageName ()Ljava/lang/String;
-	public final fun getResolvedCreatedDate ()Lkotlin/time/Instant;
 	public final fun getStatus ()Lorg/hisp/dhis/rules/models/RuleEventStatus;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;

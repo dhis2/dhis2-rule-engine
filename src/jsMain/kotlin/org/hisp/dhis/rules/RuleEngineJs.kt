@@ -44,6 +44,13 @@ class RuleEngineJs(verbose: Boolean = false) {
             .map(::toRuleEffectJs).toTypedArray()
     }
 
+    fun order(ruleEvents: Array<RuleEventJs>): Array<RuleEventJs>{
+        val orderedEventIds = RuleEngine.getInstance()
+            .order(ruleEvents.map(::toEventJava)).map { it.event }
+        val eventMap = ruleEvents.associateBy { it.event }
+        return orderedEventIds.map { eventMap[it]!! }.toTypedArray()
+    }
+
     private fun <Kf, Vf, K, V> toMap(map: JsMap<Kf, Vf>, key: (Kf) -> K, value: (Vf) -> V): Map<K, V> {
         val res : MutableMap<K, V> = mutableMapOf()
         map.forEach { v, k -> res[key(k)] = value(v) }

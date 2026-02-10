@@ -14,7 +14,7 @@ data class RuleEvent(
     val organisationUnitCode: String?,
     val dataValues: List<RuleDataValue>,
 ): Comparable<RuleEvent> {
-    val resolvedCreatedDate get() = (createdAtClientDate ?: createdDate).instant
+    internal val resolvedCreatedDate get() = (createdAtClientDate ?: createdDate).instant
 
     override fun compareTo(other: RuleEvent): Int {
         val dateComparison = this.eventDate.compareTo(other.eventDate)
