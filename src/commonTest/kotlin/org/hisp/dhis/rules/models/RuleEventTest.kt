@@ -14,16 +14,17 @@ class RuleEventTest {
         val ruleDataValue = RuleDataValue("dataElement", "value")
         val ruleDataValues: MutableList<RuleDataValue> = ArrayList()
         ruleDataValues.add(ruleDataValue)
-        val eventDate = RuleInstant.now()
+        val eventDate = RuleLocalDate.currentDate()
         val dueDate = RuleLocalDate.currentDate()
-        val (event, programStage, _, status, eventDate1, _, dueDate1, _, _, _, dataValues) =
+        val (event, programStage, _, status, eventDate1, _, _, dueDate1, _, _, _, dataValues) =
             RuleEvent(
                 "test_event_uid",
                 "test_stage_uid",
                 "",
                 RuleEventStatus.ACTIVE,
                 eventDate,
-                eventDate,
+                RuleInstant.now(),
+                null,
                 dueDate,
                 null,
                 "",
@@ -48,8 +49,9 @@ class RuleEventTest {
                     "test_program_stage_one",
                     "",
                     RuleEventStatus.ACTIVE,
+                    RuleLocalDate.parse("2014-02-11"),
                     RuleInstant.parse("2014-02-11T01:00:00Z"),
-                    RuleInstant.parse("2014-02-11T01:00:00Z"),
+                    null,
                     RuleLocalDate.parse("2014-02-11"),
                     null,
                     "",
@@ -61,8 +63,9 @@ class RuleEventTest {
                     "test_program_stage_two",
                     "",
                     RuleEventStatus.ACTIVE,
-                    RuleInstant.parse("2017-03-22T01:00:00Z"),
+                    RuleLocalDate.parse("2017-03-22"),
                     RuleInstant.parse("2014-02-11T01:00:00Z"),
+                    null,
                     RuleLocalDate.parse("2017-03-22"),
                     null,
                     "",
@@ -70,7 +73,7 @@ class RuleEventTest {
                     emptyList(),
                 ),
             )
-        val reversed = ruleEvents.sortedBy { e -> e.eventDate.instant }.reversed()
+        val reversed = ruleEvents.sorted().reversed()
         assertEquals("test_event_two", reversed[0].event)
         assertEquals("test_event_one", reversed[1].event)
     }

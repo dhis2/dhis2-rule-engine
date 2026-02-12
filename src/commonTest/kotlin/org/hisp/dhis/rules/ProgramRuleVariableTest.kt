@@ -247,6 +247,7 @@ class ProgramRuleVariableTest {
                 status = RULE_EVENT_STATUS,
                 eventDate = EVENT_DATE,
                 createdDate = RuleInstant.now(),
+                createdAtClientDate = null,
                 dueDate = DUE_DATE,
                 organisationUnit = ORGANISATION_UNIT,
                 organisationUnitCode = ORGANISATION_UNIT_CODE,
@@ -278,7 +279,7 @@ class ProgramRuleVariableTest {
         private const val ENROLLMENT_DATE_STRING = "2019-01-01"
         private val ENROLLMENT_DATE = RuleLocalDate.parse(ENROLLMENT_DATE_STRING)
         private const val EVENT_DATE_STRING = "2019-02-02"
-        private val EVENT_DATE = RuleInstant(Instant.parse(EVENT_DATE_STRING + "T01:00:00Z").toEpochMilliseconds())
+        private val EVENT_DATE = RuleLocalDate.parse(EVENT_DATE_STRING)
         private const val INCIDENT_DATE_STRING = "2020-01-01"
         private val INCIDENT_DATE = RuleLocalDate.parse(INCIDENT_DATE_STRING)
         private const val PROGRAM_STAGE = "program stage"

@@ -8,10 +8,14 @@ import kotlin.js.JsStatic
 import kotlin.jvm.JvmStatic
 
 @JsExport
-data class RuleLocalDate(val year: Int, val month: Int, val day: Int) {
+data class RuleLocalDate(val year: Int, val month: Int, val day: Int): Comparable<RuleLocalDate> {
     internal val localDate: LocalDate = LocalDate(year, month, day);
 
     override fun toString() = localDate.toString()
+
+    override fun compareTo(other: RuleLocalDate): Int {
+        return localDate.compareTo(other.localDate)
+    }
 
     @OptIn(ExperimentalJsStatic::class)
     companion object{

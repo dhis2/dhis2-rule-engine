@@ -1,7 +1,5 @@
 package org.hisp.dhis.rules.models
 
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import org.hisp.dhis.rules.engine.RuleVariableValue
 
 class RuleVariableNewestEvent(
@@ -26,10 +24,7 @@ class RuleVariableNewestEvent(
                 fieldType,
                 optionValue,
                 ruleDataValues.map { it.value },
-                value.eventDate
-                    .toLocalDateTime(TimeZone.currentSystemDefault())
-                    .date
-                    .toString(),
+                value.eventDate.toString(),
             )
         }
     }

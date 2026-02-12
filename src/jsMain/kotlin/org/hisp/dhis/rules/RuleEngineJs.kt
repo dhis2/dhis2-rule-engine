@@ -2,6 +2,8 @@ package org.hisp.dhis.rules
 
 import js.array.tupleOf
 import js.collections.JsMap
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.hisp.dhis.rules.api.DataItem
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
@@ -42,6 +44,13 @@ class RuleEngineJs(verbose: Boolean = false) {
             .map(::toRuleEffectJs).toTypedArray()
     }
 
+    fun order(ruleEvents: Array<RuleEventJs>): Array<RuleEventJs>{
+        val orderedEventIds = RuleEngine.getInstance()
+            .order(ruleEvents.map(::toEventJava)).map { it.event }
+        val eventMap = ruleEvents.associateBy { it.event }
+        return orderedEventIds.map { eventMap[it]!! }.toTypedArray()
+    }
+
     private fun <Kf, Vf, K, V> toMap(map: JsMap<Kf, Vf>, key: (Kf) -> K, value: (Vf) -> V): Map<K, V> {
         val res : MutableMap<K, V> = mutableMapOf()
         map.forEach { v, k -> res[key(k)] = value(v) }
@@ -76,8 +85,9 @@ class RuleEngineJs(verbose: Boolean = false) {
             programStage = event.programStage,
             programStageName = event.programStageName,
             status = event.status,
-            eventDate = event.eventDate ?: RuleInstant.fromInstant(Instant.DISTANT_FUTURE),
+            eventDate = event.eventDate ?: RuleLocalDate.fromLocalDate(Instant.DISTANT_FUTURE.toLocalDateTime(TimeZone.currentSystemDefault()).date),
             createdDate = event.createdDate,
+            createdAtClientDate = event.createdAtClientDate,
             dueDate = event.dueDate,
             completedDate = event.completedDate,
             organisationUnit = event.organisationUnit,
@@ -85,8 +95,6 @@ class RuleEngineJs(verbose: Boolean = false) {
             dataValues = event.dataValues.toList()
         )
     }
-
-
 
     private fun toRuleJava(rule: RuleJs): Rule {
         return Rule(

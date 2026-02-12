@@ -50,8 +50,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
+                RuleLocalDate.currentDate(),
                 RuleInstant.now(),
-                RuleInstant.now(),
+                null,
                 RuleLocalDate.currentDate(),
                 null,
                 "",
@@ -105,8 +106,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
+                RuleLocalDate.currentDate(),
                 RuleInstant.now(),
-                RuleInstant.now(),
+                null,
                 RuleLocalDate.currentDate(),
                 null,
                 "",
@@ -128,8 +130,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
+                RuleLocalDate.currentDate(),
                 RuleInstant.now(),
-                RuleInstant.now(),
+                null,
                 RuleLocalDate.currentDate(),
                 null,
                 "",
@@ -152,8 +155,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
+                eventDate,
                 eventInstant,
-                eventInstant,
+                null,
                 dueDate,
                 null,
                 "",
@@ -233,8 +237,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                RuleInstant.fromInstant(Instant.DISTANT_FUTURE),
+                RuleLocalDate.parse("9999-12-31"),
                 RuleInstant.now(),
+                null,
                 RuleLocalDate.currentDate(),
                 null,
                 "",
@@ -276,8 +281,10 @@ class RuleVariableValueMapBuilderTest {
                 "test_dataelement_two",
                 RuleValueType.TEXT,
             )
-        val oldestEventDate = RuleInstant.parse("2013-01-01T01:00:00Z")
-        val newestEventDate = RuleInstant.parse("2017-01-01T01:00:00Z")
+        val oldestEventInstant = RuleInstant.parse("2013-01-01T01:00:00Z")
+        val oldestEventLocalDate = RuleLocalDate.parse("2013-01-01")
+        val newestEventInstant = RuleInstant.parse("2017-01-01T01:00:00Z")
+        val newestEventLocalDate = RuleLocalDate.parse("2017-01-01")
         val currentEventInstant = RuleInstant.parse("2015-01-01T01:00:00Z")
         val currentEventDate = RuleLocalDate.parse("2015-01-01")
         val currentEventDueDate: RuleLocalDate? = null
@@ -287,8 +294,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                oldestEventDate,
-                oldestEventDate,
+                oldestEventLocalDate,
+                oldestEventInstant,
+                null,
                 RuleLocalDate.currentDate(),
                 null,
                 "",
@@ -310,8 +318,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                newestEventDate,
-                newestEventDate,
+                newestEventLocalDate,
+                newestEventInstant,
+                null,
                 RuleLocalDate.currentDate(),
                 null,
                 "",
@@ -333,8 +342,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
+                currentEventDate,
                 currentEventInstant,
-                currentEventInstant,
+                null,
                 currentEventDueDate,
                 null,
                 "",
@@ -418,8 +428,10 @@ class RuleVariableValueMapBuilderTest {
                 "test_dataelement_two",
                 RuleValueType.TEXT,
             )
-        val dateEventOne = RuleInstant.parse("2013-01-01T01:00:00Z")
-        val dateEventTwo = RuleInstant.parse("2014-01-01T01:00:00Z")
+        val instantEventOne = RuleInstant.parse("2013-01-01T01:00:00Z")
+        val localDateEventOne = RuleLocalDate.parse("2013-01-01")
+        val instantEventTwo = RuleInstant.parse("2014-01-01T01:00:00Z")
+        val localDateEventTwo = RuleLocalDate.parse("2014-01-01")
         val instantEventCurrent = RuleInstant.parse("2015-01-01T01:00:00Z")
         val dateEventCurrent = RuleLocalDate.parse("2015-01-01")
         val dateEventDueCurrent = RuleLocalDate.parse("2016-01-01")
@@ -429,8 +441,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                dateEventOne,
-                dateEventOne,
+                localDateEventOne,
+                instantEventOne,
+                null,
                 RuleLocalDate.currentDate(),
                 null,
                 "",
@@ -452,8 +465,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                dateEventTwo,
-                dateEventTwo,
+                localDateEventTwo,
+                instantEventTwo,
+                null,
                 RuleLocalDate.currentDate(),
                 null,
                 "",
@@ -475,8 +489,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
+                dateEventCurrent,
                 instantEventCurrent,
-                instantEventCurrent,
+                null,
                 dateEventDueCurrent,
                 null,
                 "",
@@ -553,9 +568,12 @@ class RuleVariableValueMapBuilderTest {
                 RuleValueType.TEXT,
                 "test_program_stage_one",
             )
-        val dateEventOne = RuleInstant.parse("2014-02-03T01:00:00Z")
-        val dateEventTwo = RuleInstant.parse("2014-03-03T01:00:00Z")
-        val dateEventThree = RuleInstant.parse("2015-02-03T01:00:00Z")
+        val instantEventOne = RuleInstant.parse("2014-02-03T01:00:00Z")
+        val localDateEventOne = RuleLocalDate.parse("2014-02-03")
+        val instantEventTwo = RuleInstant.parse("2014-03-03T01:00:00Z")
+        val localDateEventTwo = RuleLocalDate.parse("2014-03-03")
+        val instantEventThree = RuleInstant.parse("2015-02-03T01:00:00Z")
+        val localDateEventThree = RuleLocalDate.parse("2015-02-03")
         val instantEventCurrent = RuleInstant.parse("2011-02-03T01:00:00Z")
         val dateEventCurrent = RuleLocalDate.parse("2011-02-03")
         val dateEventDueCurrent = RuleLocalDate.parse("2011-02-03")
@@ -565,8 +583,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage_one",
                 "",
                 RuleEventStatus.ACTIVE,
-                dateEventOne,
-                dateEventOne,
+                localDateEventOne,
+                instantEventOne,
+                null,
                 RuleLocalDate.currentDate(),
                 null,
                 "",
@@ -584,8 +603,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage_two",
                 "",
                 RuleEventStatus.ACTIVE,
-                dateEventTwo,
-                dateEventTwo,
+                localDateEventTwo,
+                instantEventTwo,
+                null,
                 RuleLocalDate.currentDate(),
                 null,
                 "",
@@ -603,8 +623,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage_two",
                 "",
                 RuleEventStatus.ACTIVE,
-                dateEventThree,
-                dateEventThree,
+                localDateEventThree,
+                instantEventThree,
+                null,
                 RuleLocalDate.currentDate(),
                 null,
                 "",
@@ -622,8 +643,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage_one",
                 "",
                 RuleEventStatus.ACTIVE,
+                dateEventCurrent,
                 instantEventCurrent,
-                instantEventCurrent,
+                null,
                 dateEventDueCurrent,
                 null,
                 "",
@@ -683,7 +705,8 @@ class RuleVariableValueMapBuilderTest {
                 RuleValueType.TEXT,
                 "test_program_stage_one",
             )
-        val dateEventOne = RuleInstant.parse("2014-03-03T01:00:00Z")
+        val instantEventOne = RuleInstant.parse("2014-03-03T01:00:00Z")
+        val localDateEventOne = RuleLocalDate.parse("2014-03-03")
         val instantEventTwo = RuleInstant.parse("2015-02-03T01:00:00Z")
         val dateEventTwo = RuleLocalDate.parse("2015-02-03")
         val dueDateEventTwo = RuleLocalDate.parse("2015-02-03")
@@ -693,8 +716,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage_two",
                 "",
                 RuleEventStatus.ACTIVE,
-                dateEventOne,
-                dateEventOne,
+                localDateEventOne,
+                instantEventOne,
+                null,
                 dueDateEventTwo,
                 null,
                 "",
@@ -712,8 +736,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage_two",
                 "",
                 RuleEventStatus.ACTIVE,
+                dateEventTwo,
                 instantEventTwo,
-                instantEventTwo,
+                null,
                 dueDateEventTwo,
                 null,
                 "",
@@ -774,9 +799,12 @@ class RuleVariableValueMapBuilderTest {
                 "test_dataelement",
                 RuleValueType.TEXT,
             )
-        val dateEventOne = RuleInstant.parse("2014-02-03T01:00:00Z")
-        val dateEventTwo = RuleInstant.parse("2014-03-03T01:00:00Z")
-        val dateEventThree = RuleInstant.parse("2015-02-03T01:00:00Z")
+        val instantEventOne = RuleInstant.parse("2014-02-03T01:00:00Z")
+        val localDateEventOne = RuleLocalDate.parse("2014-02-03")
+        val instantEventTwo = RuleInstant.parse("2014-03-03T01:00:00Z")
+        val localDateEventTwo = RuleLocalDate.parse("2014-03-03")
+        val instantEventThree = RuleInstant.parse("2015-02-03T01:00:00Z")
+        val localDateEventThree = RuleLocalDate.parse("2015-02-03")
         val instantEventCurrent = RuleInstant.parse("2014-05-03T01:00:00Z")
         val dateEventCurrent = RuleLocalDate.parse("2014-05-03")
         val dueDateEventCurrent = RuleLocalDate.parse("2014-05-03")
@@ -786,8 +814,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                dateEventOne,
-                dateEventOne,
+                localDateEventOne,
+                instantEventOne,
+                null,
                 RuleLocalDate.currentDate(),
                 null,
                 "",
@@ -805,8 +834,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                dateEventTwo,
-                dateEventTwo,
+                localDateEventTwo,
+                instantEventTwo,
+                null,
                 RuleLocalDate.currentDate(),
                 null,
                 "",
@@ -819,8 +849,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                dateEventThree,
-                dateEventThree,
+                localDateEventThree,
+                instantEventThree,
+                null,
                 RuleLocalDate.currentDate(),
                 null,
                 "",
@@ -835,8 +866,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
+                dateEventCurrent,
                 instantEventCurrent,
-                instantEventCurrent,
+                null,
                 dueDateEventCurrent,
                 null,
                 "",
@@ -895,9 +927,12 @@ class RuleVariableValueMapBuilderTest {
                 "test_dataelement",
                 RuleValueType.TEXT,
             )
-        val dateEventOne = RuleInstant.parse("2014-02-03T01:00:00Z")
-        val dateEventTwo = RuleInstant.parse("2014-03-03T01:00:00Z")
-        val dateEventThree = RuleInstant.parse("2015-02-03T01:00:00Z")
+        val instantEventOne = RuleInstant.parse("2014-02-03T01:00:00Z")
+        val localDateEventOne = RuleLocalDate.parse("2014-02-03")
+        val instantEventTwo = RuleInstant.parse("2014-03-03T01:00:00Z")
+        val localDateEventTwo = RuleLocalDate.parse("2014-03-03")
+        val instantEventThree = RuleInstant.parse("2015-02-03T01:00:00Z")
+        val localDateEventThree = RuleLocalDate.parse("2015-02-03")
         val instantEventCurrent = RuleInstant.parse("2014-03-03T01:00:00Z")
         val dateEventCurrent = RuleLocalDate.parse("2014-03-03")
         val dueDateEventCurrent = RuleLocalDate.parse("2014-05-03")
@@ -907,8 +942,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                dateEventOne,
-                dateEventOne,
+                localDateEventOne,
+                instantEventOne,
+                null,
                 RuleLocalDate.currentDate(),
                 null,
                 "",
@@ -926,8 +962,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                dateEventTwo,
-                dateEventTwo,
+                localDateEventTwo,
+                instantEventTwo,
+                null,
                 RuleLocalDate.currentDate(),
                 null,
                 "",
@@ -940,8 +977,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                dateEventThree,
-                dateEventThree,
+                localDateEventThree,
+                instantEventThree,
+                null,
                 RuleLocalDate.currentDate(),
                 null,
                 "",
@@ -956,8 +994,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                instantEventCurrent,
-                dateEventOne,
+                dateEventCurrent,
+                instantEventOne,
+                null,
                 dueDateEventCurrent,
                 null,
                 "",
@@ -1052,8 +1091,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
+                eventDate,
                 eventInstant,
-                eventInstant,
+                null,
                 dueEventDate,
                 null,
                 "",
@@ -1075,8 +1115,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
+                eventDate,
                 eventInstant,
-                eventInstant,
+                null,
                 dueEventDate,
                 null,
                 "",
@@ -1212,8 +1253,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
+                RuleLocalDate.currentDate(),
                 RuleInstant.now(),
-                RuleInstant.now(),
+                null,
                 RuleLocalDate.currentDate(),
                 null,
                 "",
@@ -1226,8 +1268,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
+                RuleLocalDate.currentDate(),
                 RuleInstant.now(),
-                RuleInstant.now(),
+                null,
                 RuleLocalDate.currentDate(),
                 null,
                 "",
@@ -1347,8 +1390,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
+                RuleLocalDate.fromLocalDate(eventOneDate),
                 RuleInstant.fromInstant(eventOneInstant),
-                    RuleInstant.fromInstant(eventOneInstant),
+                null,
                 RuleLocalDate.fromLocalDate(eventOneDueDate),
                 null,
                 "",
@@ -1361,8 +1405,9 @@ class RuleVariableValueMapBuilderTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
+                RuleLocalDate.fromLocalDate(eventTwoDate),
                 RuleInstant.fromInstant(eventTwoInstant),
-                    RuleInstant.fromInstant(eventTwoInstant),
+                null,
                 RuleLocalDate.fromLocalDate(eventTwoDueDate),
                 null,
                 "",

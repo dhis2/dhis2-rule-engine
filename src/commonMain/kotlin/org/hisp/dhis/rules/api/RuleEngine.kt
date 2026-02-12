@@ -34,6 +34,10 @@ interface RuleEngine {
         executionContext: RuleEngineContext,
     ): List<RuleEffect>
 
+    fun order(
+        ruleEvents: List<RuleEvent>,
+    ): List<RuleEvent>
+
     companion object {
         @JvmStatic
         fun getInstance(): RuleEngine = DefaultRuleEngine()
