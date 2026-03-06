@@ -54,6 +54,140 @@ class RuleEngineFunctionTest {
     }
 
     @Test
+    fun shouldRulesForSpecificProgramStageNotBeEvaluatedForEnrollment() {
+        val ruleAction = RuleAction(
+            "2 + 2",
+            "DISPLAYTEXT",
+            mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+        )
+        val rule =
+            Rule(
+                "true",
+                listOf(ruleAction),
+                "",
+                "",
+                programStage = "NpsdDv6kKSO"
+            )
+        val ruleEnrollment =
+            RuleEnrollment(
+                "test_enrollment",
+                "",
+                RuleLocalDate.currentDate(),
+                RuleLocalDate.currentDate(),
+                RuleEnrollmentStatus.ACTIVE,
+                "",
+                "",
+                listOf(),
+            )
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(listOf(rule))
+        val ruleEffects = RuleEngine.getInstance()
+            .evaluate(ruleEnrollment, listOf(), ruleEngineContext)
+        assertEquals(0, ruleEffects.size)
+    }
+
+    @Test
+    fun shouldRulesForSpecificProgramStageNotBeEvaluatedForEventWithDifferentProgramStage() {
+        val ruleAction = RuleAction(
+            "2 + 2",
+            "DISPLAYTEXT",
+            mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+        )
+        val rule =
+            Rule(
+                "true",
+                listOf(ruleAction),
+                "",
+                "",
+                programStage = "NpsdDv6kKSO"
+            )
+        val ruleEnrollment =
+            RuleEnrollment(
+                "test_enrollment",
+                "",
+                RuleLocalDate.currentDate(),
+                RuleLocalDate.currentDate(),
+                RuleEnrollmentStatus.ACTIVE,
+                "",
+                "",
+                listOf(),
+            )
+        val ruleEvent = RuleEvent(
+            "test_event",
+            "nxP7UnKhomJ",
+            "",
+            RuleEventStatus.ACTIVE,
+            RuleLocalDate.currentDate(),
+            RuleInstant.now(),
+            null,
+            RuleLocalDate.currentDate(),
+            null,
+            "",
+            null,
+            listOf(
+                RuleDataValue(
+                    "test_data_element_one",
+                    "condition",
+                ),
+            ),
+        )
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(listOf(rule))
+        val ruleEffects = RuleEngine.getInstance()
+            .evaluate(ruleEvent, ruleEnrollment, listOf(), ruleEngineContext)
+        assertEquals(0, ruleEffects.size)
+    }
+
+    @Test
+    fun shouldRulesForSpecificProgramStageBeEvaluatedForEventWithSameProgramStage() {
+        val ruleAction = RuleAction(
+            "2 + 2",
+            "DISPLAYTEXT",
+            mapOf(Pair("content", "test_action_content"), Pair("location", "feedback"))
+        )
+        val rule =
+            Rule(
+                "true",
+                listOf(ruleAction),
+                "",
+                "",
+                programStage = "NpsdDv6kKSO"
+            )
+        val ruleEnrollment =
+            RuleEnrollment(
+                "test_enrollment",
+                "",
+                RuleLocalDate.currentDate(),
+                RuleLocalDate.currentDate(),
+                RuleEnrollmentStatus.ACTIVE,
+                "",
+                "",
+                listOf(),
+            )
+        val ruleEvent = RuleEvent(
+            "test_event",
+            "NpsdDv6kKSO",
+            "",
+            RuleEventStatus.ACTIVE,
+            RuleLocalDate.currentDate(),
+            RuleInstant.now(),
+            null,
+            RuleLocalDate.currentDate(),
+            null,
+            "",
+            null,
+            listOf(
+                RuleDataValue(
+                    "test_data_element_one",
+                    "condition",
+                ),
+            ),
+        )
+        val ruleEngineContext = RuleEngineTestUtils.getRuleEngineContext(listOf(rule))
+        val ruleEffects = RuleEngine.getInstance()
+            .evaluate(ruleEvent, ruleEnrollment, listOf(), ruleEngineContext)
+        assertEquals(1, ruleEffects.size)
+    }
+
+    @Test
     fun evaluateFailingRuleInMultipleContext() {
         val today = currentDate()
         val yesterday = today.minus(1, DateTimeUnit.DAY).atStartOfDayIn(TimeZone.currentSystemDefault())

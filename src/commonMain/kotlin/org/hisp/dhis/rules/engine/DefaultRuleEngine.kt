@@ -9,6 +9,7 @@ import org.hisp.dhis.rules.api.DataItem
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.models.*
+import org.hisp.dhis.rules.utils.filterRules
 import org.hisp.dhis.rules.utils.orderEvents
 
 internal class DefaultRuleEngine : RuleEngine {
@@ -31,7 +32,7 @@ internal class DefaultRuleEngine : RuleEngine {
             target.event,
             valueMap,
             executionContext.ruleSupplementaryData,
-            executionContext.rules,
+            filterRules(executionContext.rules, target),
         )
     }
 
@@ -52,7 +53,7 @@ internal class DefaultRuleEngine : RuleEngine {
             target.enrollment,
             valueMap,
             executionContext.ruleSupplementaryData,
-            executionContext.rules,
+            filterRules(executionContext.rules),
         )
     }
 

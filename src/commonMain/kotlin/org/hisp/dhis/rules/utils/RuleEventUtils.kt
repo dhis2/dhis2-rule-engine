@@ -1,5 +1,8 @@
 package org.hisp.dhis.rules.utils
 
+import org.hisp.dhis.rules.models.AttributeType
+import org.hisp.dhis.rules.models.Rule
+import org.hisp.dhis.rules.models.RuleAction
 import org.hisp.dhis.rules.models.RuleDataValueHistory
 import org.hisp.dhis.rules.models.RuleEvent
 
@@ -31,11 +34,11 @@ import org.hisp.dhis.rules.models.RuleEvent
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-fun orderEvents(events: Collection<RuleEvent>): List<RuleEvent> {
+internal fun orderEvents(events: Collection<RuleEvent>): List<RuleEvent> {
     return events.sorted()
 }
 
-fun getPreviousDataValue(dataValues: List<RuleDataValueHistory>, ruleEvent: RuleEvent): RuleDataValueHistory? {
+internal fun getPreviousDataValue(dataValues: List<RuleDataValueHistory>, ruleEvent: RuleEvent): RuleDataValueHistory? {
     for (ruleDataValue in dataValues) {
         if (ruleEvent.eventDate > ruleDataValue.eventDate ||
             (ruleEvent.eventDate == ruleDataValue.eventDate && ruleEvent.resolvedCreatedDate > ruleDataValue.createdDate)
@@ -44,4 +47,55 @@ fun getPreviousDataValue(dataValues: List<RuleDataValueHistory>, ruleEvent: Rule
         }
     }
     return null
+}
+
+internal fun filterRules(rules: List<Rule>): List<Rule> {
+    val filteredRules: MutableList<Rule> = mutableListOf()
+    for (rule in rules) {
+        val programStage: String? = rule.programStage
+        if (programStage.isNullOrEmpty()) {
+            val ruleActions =
+                filterActionRules(
+                    rule.actions,
+                    AttributeType.TRACKED_ENTITY_ATTRIBUTE,
+                )
+            filteredRules.add(rule.copy(actions = ruleActions))
+        }
+    }
+    return filteredRules
+}
+
+internal fun filterRules(
+    rules: List<Rule>,
+    ruleEvent: RuleEvent,
+): List<Rule> {
+    val filteredRules: MutableList<Rule> = mutableListOf()
+    for (rule in rules) {
+        val programStage: String? = rule.programStage
+        if (programStage.isNullOrEmpty() || programStage == ruleEvent.programStage) {
+            val ruleActions =
+                filterActionRules(
+                    rule.actions,
+                    AttributeType.DATA_ELEMENT,
+                )
+            filteredRules.add(rule.copy(actions = ruleActions))
+        }
+    }
+    return filteredRules
+}
+
+private fun filterActionRules(
+    ruleActions: List<RuleAction>,
+    attributeType: AttributeType,
+): List<RuleAction> {
+    val filteredRuleActions: MutableList<RuleAction> = mutableListOf()
+    for (ruleAction in ruleActions) {
+        if (ruleAction.attributeType() == null ||
+            ruleAction.attributeType() == attributeType.name ||
+            ruleAction.attributeType() == AttributeType.UNKNOWN.name
+        ) {
+            filteredRuleActions.add(ruleAction)
+        }
+    }
+    return filteredRuleActions
 }
