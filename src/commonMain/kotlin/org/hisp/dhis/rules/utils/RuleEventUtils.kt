@@ -88,14 +88,10 @@ private fun filterActionRules(
     ruleActions: List<RuleAction>,
     attributeType: AttributeType,
 ): List<RuleAction> {
-    val filteredRuleActions: MutableList<RuleAction> = mutableListOf()
-    for (ruleAction in ruleActions) {
-        if (ruleAction.attributeType() == null ||
-            ruleAction.attributeType() == attributeType.name ||
-            ruleAction.attributeType() == AttributeType.UNKNOWN.name
-        ) {
-            filteredRuleActions.add(ruleAction)
-        }
+    return ruleActions.filter {
+        it.attributeType() == null ||
+            it.attributeType() == attributeType.name ||
+            it.attributeType() == AttributeType.UNKNOWN.name
     }
-    return filteredRuleActions
+
 }
