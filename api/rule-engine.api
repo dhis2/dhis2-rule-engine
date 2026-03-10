@@ -549,11 +549,6 @@ public final class org/hisp/dhis/rules/models/TriggerEnvironment : java/lang/Enu
 	public static fun values ()[Lorg/hisp/dhis/rules/models/TriggerEnvironment;
 }
 
-public final class org/hisp/dhis/rules/utils/RuleEventUtilsKt {
-	public static final fun getPreviousDataValue (Ljava/util/List;Lorg/hisp/dhis/rules/models/RuleEvent;)Lorg/hisp/dhis/rules/models/RuleDataValueHistory;
-	public static final fun orderEvents (Ljava/util/Collection;)Ljava/util/List;
-}
-
 public final class org/hisp/dhis/rules/utils/UtilsKt {
 	public static final fun currentDate ()Lkotlinx/datetime/LocalDate;
 	public static final fun unwrapVariableName (Ljava/lang/String;)Ljava/lang/String;
