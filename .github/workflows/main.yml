@@ -47,9 +47,9 @@ jobs:
       - name: Change wrapper permission
         run: chmod +x ./gradlew
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 14.x
+          node-version: 24
 
       - name: Publish Maven
         run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository -PremoveSnapshotSuffix
