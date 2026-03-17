@@ -52,6 +52,7 @@ jobs:
           node-version: 24
 
       - name: Publish Maven
+        if: false
         run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository -PremoveSnapshotSuffix
         env:
           SONATYPE_PORTAL_USERNAME: ${{ secrets.SONATYPE_PORTAL_USERNAME }}
