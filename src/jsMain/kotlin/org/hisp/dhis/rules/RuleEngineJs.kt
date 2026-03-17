@@ -2,14 +2,11 @@ package org.hisp.dhis.rules
 
 import js.array.tupleOf
 import js.collections.JsMap
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import org.hisp.dhis.rules.api.DataItem
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.api.RuleSupplementaryData
 import org.hisp.dhis.rules.models.*
-import kotlin.time.Instant
 
 
 @JsExport
@@ -85,7 +82,7 @@ class RuleEngineJs(verbose: Boolean = false) {
             programStage = event.programStage,
             programStageName = event.programStageName,
             status = event.status,
-            eventDate = event.eventDate ?: RuleLocalDate.fromLocalDate(Instant.DISTANT_FUTURE.toLocalDateTime(TimeZone.currentSystemDefault()).date),
+            eventDate = event.eventDate ?: RuleLocalDate.distantFuture(),
             createdDate = event.createdDate,
             createdAtClientDate = event.createdAtClientDate,
             dueDate = event.dueDate,

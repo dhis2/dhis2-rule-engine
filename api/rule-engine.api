@@ -391,6 +391,7 @@ public final class org/hisp/dhis/rules/models/RuleLocalDate : java/lang/Comparab
 	public final fun copy (III)Lorg/hisp/dhis/rules/models/RuleLocalDate;
 	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/models/RuleLocalDate;IIIILjava/lang/Object;)Lorg/hisp/dhis/rules/models/RuleLocalDate;
 	public static final fun currentDate ()Lorg/hisp/dhis/rules/models/RuleLocalDate;
+	public static final fun distantFuture ()Lorg/hisp/dhis/rules/models/RuleLocalDate;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getDay ()I
 	public final fun getMonth ()I
@@ -401,6 +402,7 @@ public final class org/hisp/dhis/rules/models/RuleLocalDate : java/lang/Comparab
 
 public final class org/hisp/dhis/rules/models/RuleLocalDate$Companion {
 	public final fun currentDate ()Lorg/hisp/dhis/rules/models/RuleLocalDate;
+	public final fun distantFuture ()Lorg/hisp/dhis/rules/models/RuleLocalDate;
 	public final fun parse (Ljava/lang/String;)Lorg/hisp/dhis/rules/models/RuleLocalDate;
 }
 
