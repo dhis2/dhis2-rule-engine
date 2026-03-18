@@ -1,13 +1,10 @@
 package org.hisp.dhis.rules.engine
 
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.atStartOfDayIn
 import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.RuleEngineUtils
 import org.hisp.dhis.rules.utils.currentDate
 import org.hisp.dhis.rules.utils.orderEvents
-import kotlin.time.Instant
 
 
 internal class RuleVariableValueMapBuilder {
@@ -134,7 +131,7 @@ internal class RuleVariableValueMapBuilder {
     ): Map<String, RuleVariableValue> {
         val valueMap: MutableMap<String, RuleVariableValue> = HashMap()
             val eventDate =
-                if (ruleEvent.eventDate.localDate.atStartOfDayIn(TimeZone.currentSystemDefault()) < Instant.DISTANT_FUTURE )
+                if (ruleEvent.eventDate < RuleLocalDate.distantFuture() )
                 ruleEvent.eventDate.toString()
             else null
             valueMap[RuleEngineUtils.ENV_VAR_EVENT_DATE] =

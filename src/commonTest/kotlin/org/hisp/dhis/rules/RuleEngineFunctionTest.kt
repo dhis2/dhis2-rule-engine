@@ -1,21 +1,15 @@
 package org.hisp.dhis.rules
 
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.atStartOfDayIn
-import kotlinx.datetime.minus
-import kotlinx.datetime.plus
-import kotlinx.datetime.toLocalDateTime
-import kotlin.time.Clock
+import kotlinx.datetime.*
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.api.RuleSupplementaryData
 import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.currentDate
-import kotlin.test.*
-import kotlin.time.ExperimentalTime
-import kotlin.time.Instant
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 
 class RuleEngineFunctionTest {
@@ -336,8 +330,7 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                RuleLocalDate.fromLocalDate(Instant.DISTANT_FUTURE.toLocalDateTime(TimeZone.currentSystemDefault()).date.plus(2,
-                    DateTimeUnit.DAY)),
+                RuleLocalDate.distantFuture(),
                 RuleInstant.now(),
                 null,
                 RuleLocalDate.currentDate(),
@@ -371,8 +364,7 @@ class RuleEngineFunctionTest {
                 "test_program_stage",
                 "",
                 RuleEventStatus.ACTIVE,
-                RuleLocalDate.fromLocalDate(Instant.DISTANT_FUTURE.toLocalDateTime(TimeZone.currentSystemDefault()).date.plus(2,
-                    DateTimeUnit.DAY)),
+                RuleLocalDate.distantFuture(),
                 RuleInstant.now(),
                 null,
                 RuleLocalDate.currentDate(),

@@ -127,6 +127,17 @@ class ProgramRuleVariableTest {
     }
 
     @Test
+    fun testEventDateAsDistantFutureIsAssignedAsNull() {
+        val rule = getRule("V{event_date}")
+        val ruleEffects = callEventRuleEngine(rule, RuleLocalDate.distantFuture())
+        assertProgramRuleVariableAssignment(
+            ruleEffects,
+            rule,
+            null,
+        )
+    }
+
+    @Test
     fun testEventIdProgramVariableIsAssigned() {
         val rule = getRule("V{event_id}")
         val ruleEffects = callEventRuleEngine(rule)
@@ -225,7 +236,7 @@ class ProgramRuleVariableTest {
     private fun assertProgramRuleVariableAssignment(
         ruleEffects: List<RuleEffect>,
         rule: Rule,
-        variableValue: String,
+        variableValue: String?,
     ) {
         assertEquals(1, ruleEffects.size)
         assertEquals(variableValue, ruleEffects[0].data)
@@ -237,7 +248,7 @@ class ProgramRuleVariableTest {
         return RuleEngine.getInstance().evaluate(enrollment, emptyList(), ruleEngineContext)
     }
 
-    private fun callEventRuleEngine(rule: Rule): List<RuleEffect> {
+    private fun callEventRuleEngine(rule: Rule, eventDate: RuleLocalDate = EVENT_DATE): List<RuleEffect> {
         val ruleEngineContext = getRuleEngineContext(listOf(rule))
         val event =
             RuleEvent(
@@ -245,7 +256,7 @@ class ProgramRuleVariableTest {
                 programStage = PROGRAM_STAGE,
                 programStageName = PROGRAM_STAGE_NAME,
                 status = RULE_EVENT_STATUS,
-                eventDate = EVENT_DATE,
+                eventDate = eventDate,
                 createdDate = RuleInstant.now(),
                 createdAtClientDate = null,
                 dueDate = DUE_DATE,
