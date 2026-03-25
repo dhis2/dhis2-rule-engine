@@ -1,6 +1,8 @@
 package org.hisp.dhis.rules.engine
 
 import kotlinx.datetime.LocalDate
+import org.hisp.dhis.lib.expression.spi.ValueType
+import org.hisp.dhis.lib.expression.spi.VariableValue
 import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.RuleEngineUtils
 import org.hisp.dhis.rules.utils.currentDate
@@ -14,7 +16,7 @@ internal class RuleVariableValueMapBuilder {
         ruleEvents: Set<RuleEvent>,
         ruleEnrollment: RuleEnrollment? = null,
         ruleEvent: RuleEvent? = null,
-    ): Map<String, RuleVariableValue> {
+    ): Map<String, VariableValue> {
         val allEvents =
             ruleEvent?.let {
                 val set = HashSet(ruleEvents)
@@ -55,8 +57,8 @@ internal class RuleVariableValueMapBuilder {
         ruleEvent: RuleEvent?,
         allEventValues: Map<String, List<RuleDataValueHistory>>,
         currentEnrollmentValues: Map<String, RuleAttributeValue>,
-    ): Map<String, RuleVariableValue> {
-        val valueMap = HashMap<String, RuleVariableValue>()
+    ): Map<String, VariableValue> {
+        val valueMap = HashMap<String, VariableValue>()
         fillEnvironmentVariables(allEvents, ruleEnrollment, ruleEvent, valueMap)
         fillRuleVariableValues(ruleVariables, ruleEvent, allEventValues, currentEnrollmentValues, valueMap)
         fillConstantsValues(allConstantValues, valueMap)
@@ -94,10 +96,10 @@ internal class RuleVariableValueMapBuilder {
 
     private fun fillConstantsValues(
         allConstantValues: Map<String, String>,
-        valueMap: MutableMap<String, RuleVariableValue>,
+        valueMap: MutableMap<String, VariableValue>,
     ) {
         allConstantValues.forEach { (key, value) ->
-            valueMap[key] = RuleVariableValue(RuleValueType.NUMERIC, value)
+            valueMap[key] = VariableValue(ValueType.NUMBER, value, listOf(), null)
         }
     }
 
@@ -105,7 +107,7 @@ internal class RuleVariableValueMapBuilder {
         ruleEvents: Set<RuleEvent>,
         ruleEnrollment: RuleEnrollment?,
         ruleEvent: RuleEvent?,
-        valueMap: MutableMap<String, RuleVariableValue>,
+        valueMap: MutableMap<String, VariableValue>,
     ) {
         val currentDate = currentDate()
         fillEnvironmentVariables(ruleEvents, currentDate, valueMap)
@@ -116,26 +118,26 @@ internal class RuleVariableValueMapBuilder {
     private fun fillEnvironmentVariables(
         ruleEvents: Set<RuleEvent>,
         currentDate: LocalDate,
-        valueMap: MutableMap<String, RuleVariableValue>,
+        valueMap: MutableMap<String, VariableValue>,
     ) {
         valueMap[RuleEngineUtils.ENV_VAR_CURRENT_DATE] =
-            RuleVariableValue(
-                RuleValueType.DATE,
+            VariableValue(
+                ValueType.DATE,
                 currentDate.toString(),
                 listOf(currentDate.toString()),
                 currentDate.toString(),
             )
         valueMap[RuleEngineUtils.ENV_VAR_EVENT_COUNT] =
-            RuleVariableValue(
-                RuleValueType.NUMERIC,
+            VariableValue(
+                ValueType.NUMBER,
                 ruleEvents.size.toString(),
                 listOf(ruleEvents.size.toString()),
                 currentDate.toString(),
             )
         val environment = TriggerEnvironment.SERVER.clientName
         valueMap[RuleEngineUtils.ENV_VAR_ENVIRONMENT] =
-            RuleVariableValue(
-                RuleValueType.TEXT,
+            VariableValue(
+                ValueType.STRING,
                 environment,
                 listOf(environment),
                 currentDate.toString(),
@@ -146,115 +148,115 @@ internal class RuleVariableValueMapBuilder {
         ruleEvents: Set<RuleEvent>,
         ruleEvent: RuleEvent,
         currentDate: LocalDate,
-        valueMap: MutableMap<String, RuleVariableValue>,
+        valueMap: MutableMap<String, VariableValue>,
     ) {
         val eventDate =
             if (ruleEvent.eventDate < RuleLocalDate.distantFuture())
                 ruleEvent.eventDate.toString()
             else null
         valueMap[RuleEngineUtils.ENV_VAR_EVENT_DATE] =
-            RuleVariableValue(
-                RuleValueType.DATE,
+            VariableValue(
+                ValueType.DATE,
                 eventDate,
                 eventDate?.let { listOf(it) } ?: emptyList(),
                 currentDate.toString(),
             )
         valueMap[RuleEngineUtils.ENV_VAR_DUE_DATE] =
-            RuleVariableValue(
-                RuleValueType.DATE,
+            VariableValue(
+                ValueType.DATE,
                 ruleEvent.dueDate?.toString(),
                 ruleEvent.dueDate?.let { listOf(it.toString()) } ?: emptyList(),
                 currentDate.toString(),
             )
         valueMap[RuleEngineUtils.ENV_VAR_COMPLETED_DATE] =
-            RuleVariableValue(
-                RuleValueType.DATE,
+            VariableValue(
+                ValueType.DATE,
                 ruleEvent.completedDate?.toString(),
                 ruleEvent.completedDate?.let { listOf(it.toString()) } ?: emptyList(),
                 currentDate.toString(),
             )
         val eventCount = ruleEvents.size.toString()
         valueMap[RuleEngineUtils.ENV_VAR_EVENT_COUNT] =
-            RuleVariableValue(
-                RuleValueType.NUMERIC,
+            VariableValue(
+                ValueType.NUMBER,
                 eventCount,
                 listOf(eventCount),
                 currentDate.toString(),
             )
         valueMap[RuleEngineUtils.ENV_VAR_EVENT_ID] =
-            RuleVariableValue(
-                RuleValueType.TEXT,
+            VariableValue(
+                ValueType.STRING,
                 ruleEvent.event,
                 listOf(ruleEvent.event),
                 ruleEvent.eventDate.toString(),
             )
         val status = ruleEvent.status.toString()
         valueMap[RuleEngineUtils.ENV_VAR_EVENT_STATUS] =
-            RuleVariableValue(
-                RuleValueType.TEXT,
+            VariableValue(
+                ValueType.STRING,
                 status,
                 listOf(status),
                 currentDate.toString(),
             )
-        valueMap[RuleEngineUtils.ENV_VAR_OU] = RuleVariableValue(RuleValueType.TEXT, ruleEvent.organisationUnit)
-        valueMap[RuleEngineUtils.ENV_VAR_PROGRAM_STAGE_ID] = RuleVariableValue(RuleValueType.TEXT, ruleEvent.programStage)
-        valueMap[RuleEngineUtils.ENV_VAR_PROGRAM_STAGE_NAME] = RuleVariableValue(RuleValueType.TEXT, ruleEvent.programStageName)
-        valueMap[RuleEngineUtils.ENV_VAR_OU_CODE] = RuleVariableValue(RuleValueType.TEXT, ruleEvent.organisationUnitCode)
+        valueMap[RuleEngineUtils.ENV_VAR_OU] = VariableValue(ValueType.STRING, ruleEvent.organisationUnit, listOf(), null)
+        valueMap[RuleEngineUtils.ENV_VAR_PROGRAM_STAGE_ID] = VariableValue(ValueType.STRING, ruleEvent.programStage, listOf(), null)
+        valueMap[RuleEngineUtils.ENV_VAR_PROGRAM_STAGE_NAME] = VariableValue(ValueType.STRING, ruleEvent.programStageName, listOf(), null)
+        valueMap[RuleEngineUtils.ENV_VAR_OU_CODE] = VariableValue(ValueType.STRING, ruleEvent.organisationUnitCode, listOf(), null)
     }
 
     private fun fillEnrollmentEnvironmentVariables(
         ruleEnrollment: RuleEnrollment,
         currentDate: LocalDate,
-        valueMap: MutableMap<String, RuleVariableValue>,
+        valueMap: MutableMap<String, VariableValue>,
     ) {
         valueMap[RuleEngineUtils.ENV_VAR_ENROLLMENT_ID] =
-            RuleVariableValue(
-                RuleValueType.TEXT,
+            VariableValue(
+                ValueType.STRING,
                 ruleEnrollment.enrollment,
                 listOf(ruleEnrollment.enrollment),
                 ruleEnrollment.enrollmentDate.toString(),
             )
         valueMap[RuleEngineUtils.ENV_VAR_ENROLLMENT_COUNT] =
-            RuleVariableValue(
-                RuleValueType.NUMERIC,
+            VariableValue(
+                ValueType.NUMBER,
                 "1",
                 listOf("1"),
                 currentDate.toString(),
             )
         valueMap[RuleEngineUtils.ENV_VAR_TEI_COUNT] =
-            RuleVariableValue(
-                RuleValueType.NUMERIC,
+            VariableValue(
+                ValueType.NUMBER,
                 "1",
                 listOf("1"),
                 currentDate.toString(),
             )
         val enrollmentDate = ruleEnrollment.enrollmentDate
         valueMap[RuleEngineUtils.ENV_VAR_ENROLLMENT_DATE] =
-            RuleVariableValue(
-                RuleValueType.DATE,
+            VariableValue(
+                ValueType.DATE,
                 enrollmentDate.toString(),
                 listOf(enrollmentDate.toString()),
                 currentDate.toString(),
             )
         val incidentDate = ruleEnrollment.incidentDate
         valueMap[RuleEngineUtils.ENV_VAR_INCIDENT_DATE] =
-            RuleVariableValue(
-                RuleValueType.DATE,
+            VariableValue(
+                ValueType.DATE,
                 incidentDate.toString(),
                 listOf(incidentDate.toString()),
                 currentDate.toString(),
             )
         val status = ruleEnrollment.status.toString()
         valueMap[RuleEngineUtils.ENV_VAR_ENROLLMENT_STATUS] =
-            RuleVariableValue(
-                RuleValueType.TEXT,
+            VariableValue(
+                ValueType.STRING,
                 status,
                 listOf(status),
                 currentDate.toString(),
             )
-        valueMap[RuleEngineUtils.ENV_VAR_OU] = RuleVariableValue(RuleValueType.TEXT, ruleEnrollment.organisationUnit)
-        valueMap[RuleEngineUtils.ENV_VAR_PROGRAM_NAME] = RuleVariableValue(RuleValueType.TEXT, ruleEnrollment.programName)
-        valueMap[RuleEngineUtils.ENV_VAR_OU_CODE] = RuleVariableValue(RuleValueType.TEXT, ruleEnrollment.organisationUnitCode)
+        valueMap[RuleEngineUtils.ENV_VAR_OU] = VariableValue(ValueType.STRING, ruleEnrollment.organisationUnit, listOf(), null)
+        valueMap[RuleEngineUtils.ENV_VAR_PROGRAM_NAME] = VariableValue(ValueType.STRING, ruleEnrollment.programName, listOf(), null)
+        valueMap[RuleEngineUtils.ENV_VAR_OU_CODE] = VariableValue(ValueType.STRING, ruleEnrollment.organisationUnitCode, listOf(), null)
     }
 
     private fun fillRuleVariableValues(
@@ -262,10 +264,10 @@ internal class RuleVariableValueMapBuilder {
         ruleEvent: RuleEvent?,
         allEventValues: Map<String, List<RuleDataValueHistory>>,
         currentEnrollmentValues: Map<String, RuleAttributeValue>,
-        valueMap: MutableMap<String, RuleVariableValue>,
+        valueMap: MutableMap<String, VariableValue>,
     ) {
         ruleVariables.forEach { variable ->
-            valueMap[variable.name] = variable.createValues(ruleEvent, allEventValues, currentEnrollmentValues)
+            valueMap[variable.name] = variable.createValues(ruleEvent, allEventValues, currentEnrollmentValues).toVariableValue()
         }
     }
 }

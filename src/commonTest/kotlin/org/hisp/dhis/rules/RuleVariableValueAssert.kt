@@ -1,11 +1,11 @@
 package org.hisp.dhis.rules
 
-import org.hisp.dhis.rules.engine.RuleVariableValue
+import org.hisp.dhis.lib.expression.spi.VariableValue
 import org.hisp.dhis.rules.models.RuleValueType
 import kotlin.test.assertEquals
 
 internal class RuleVariableValueAssert private constructor(
-    private val variableValue: RuleVariableValue,
+    private val variableValue: VariableValue,
 ) {
     fun hasValue(value: String?): RuleVariableValueAssert {
         assertEquals(value, variableValue.value)
@@ -21,11 +21,11 @@ internal class RuleVariableValueAssert private constructor(
     }
 
     fun isTypeOf(valueType: RuleValueType?): RuleVariableValueAssert {
-        assertEquals(valueType, variableValue.type)
+        assertEquals(valueType?.toValueType(), variableValue.valueType)
         return this
     }
 
     companion object {
-        fun assertThatVariable(variableValue: RuleVariableValue): RuleVariableValueAssert = RuleVariableValueAssert(variableValue)
+        fun assertThatVariable(variableValue: VariableValue): RuleVariableValueAssert = RuleVariableValueAssert(variableValue)
     }
 }
