@@ -21,9 +21,9 @@ internal class RuleVariableValueMapBuilder {
                 set.add(it)
                 set.toSet()
             } ?: ruleEvents
-        return buildEnvironmentVariables(allEvents, ruleEnrollment, ruleEvent) +
-            buildRuleVariableValues(ruleVariables, allEvents, ruleEnrollment, ruleEvent) +
-            buildConstantsValues(allConstantValues)
+        val allEventValues = buildAllEventValues(allEvents)
+        val currentEnrollmentValues = ruleEnrollment?.let { buildCurrentEnrollmentValues(it) }.orEmpty()
+        return build(allConstantValues, ruleVariables, allEvents, ruleEnrollment, ruleEvent, allEventValues, currentEnrollmentValues)
     }
 
     fun multipleBuild(
@@ -32,18 +32,33 @@ internal class RuleVariableValueMapBuilder {
         ruleEvents: Set<RuleEvent>,
         ruleEnrollment: RuleEnrollment? = null,
     ): RuleVariableValueMap {
+        val allEventValues = buildAllEventValues(ruleEvents)
+        val currentEnrollmentValues = ruleEnrollment?.let { buildCurrentEnrollmentValues(it) }.orEmpty()
         val enrollmentMap =
             ruleEnrollment
                 ?.let { enrollment ->
-                    mapOf(Pair(enrollment, build(allConstantValues, ruleVariables, ruleEvents, ruleEnrollment)))
+                    mapOf(Pair(enrollment, build(allConstantValues, ruleVariables, ruleEvents, enrollment, null, allEventValues, currentEnrollmentValues)))
                 }.orEmpty()
         return RuleVariableValueMap(
             enrollmentMap,
             ruleEvents.associateBy({
                 it
-            }, { build(allConstantValues, ruleVariables, ruleEvents, ruleEnrollment, it) }),
+            }, { event -> build(allConstantValues, ruleVariables, ruleEvents, ruleEnrollment, event, allEventValues, currentEnrollmentValues) }),
         )
     }
+
+    private fun build(
+        allConstantValues: Map<String, String>,
+        ruleVariables: List<RuleVariable>,
+        allEvents: Set<RuleEvent>,
+        ruleEnrollment: RuleEnrollment?,
+        ruleEvent: RuleEvent?,
+        allEventValues: Map<String, List<RuleDataValueHistory>>,
+        currentEnrollmentValues: Map<String, RuleAttributeValue>,
+    ): Map<String, RuleVariableValue> =
+        buildEnvironmentVariables(allEvents, ruleEnrollment, ruleEvent) +
+            buildRuleVariableValues(ruleVariables, ruleEvent, allEventValues, currentEnrollmentValues) +
+            buildConstantsValues(allConstantValues)
 
     private fun buildCurrentEnrollmentValues(ruleEnrollment: RuleEnrollment): Map<String, RuleAttributeValue> =
         ruleEnrollment.attributeValues.associateBy {
@@ -255,17 +270,11 @@ internal class RuleVariableValueMapBuilder {
 
     private fun buildRuleVariableValues(
         ruleVariables: List<RuleVariable>,
-        ruleEvents: Set<RuleEvent>,
-        ruleEnrollment: RuleEnrollment?,
         ruleEvent: RuleEvent?,
-    ): Map<String, RuleVariableValue> {
-        // map data values within all events to data elements
-        val allEventValues = buildAllEventValues(ruleEvents)
-
-        // map tracked entity attributes to values from enrollment
-        val currentEnrollmentValues = ruleEnrollment?.let { buildCurrentEnrollmentValues(it) }.orEmpty()
-
-        return ruleVariables.associateBy(
+        allEventValues: Map<String, List<RuleDataValueHistory>>,
+        currentEnrollmentValues: Map<String, RuleAttributeValue>,
+    ): Map<String, RuleVariableValue> =
+        ruleVariables.associateBy(
             { it.name },
             {
                 it.createValues(
@@ -275,5 +284,4 @@ internal class RuleVariableValueMapBuilder {
                 )
             },
         )
-    }
 }
