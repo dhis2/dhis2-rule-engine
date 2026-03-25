@@ -19,7 +19,7 @@ internal class RuleVariableValueMapBuilder {
             ruleEvent?.let {
                 val set = HashSet(ruleEvents)
                 set.add(it)
-                set.toSet()
+                set
             } ?: ruleEvents
         val allEventValues = buildAllEventValues(allEvents)
         val currentEnrollmentValues = ruleEnrollment?.let { buildCurrentEnrollmentValues(it) }.orEmpty()
