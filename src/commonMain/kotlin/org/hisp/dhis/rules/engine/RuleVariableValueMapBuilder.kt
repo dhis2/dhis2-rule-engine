@@ -4,7 +4,7 @@ import kotlinx.datetime.LocalDate
 import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.RuleEngineUtils
 import org.hisp.dhis.rules.utils.currentDate
-import org.hisp.dhis.rules.utils.orderEvents
+
 
 
 internal class RuleVariableValueMapBuilder {
@@ -70,7 +70,7 @@ internal class RuleVariableValueMapBuilder {
 
     private fun buildAllEventValues(ruleEvents: Set<RuleEvent>): Map<String, List<RuleDataValueHistory>> {
         val allEventsValues: MutableMap<String, MutableList<RuleDataValueHistory>> = HashMap()
-        val events: List<RuleEvent> = orderEvents(ruleEvents).reversed()
+        val events: List<RuleEvent> = ruleEvents.sortedDescending()
 
         // aggregating values by data element uid
         for (i in events.indices) {
