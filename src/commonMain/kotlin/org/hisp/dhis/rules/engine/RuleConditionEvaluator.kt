@@ -11,14 +11,13 @@ import org.hisp.dhis.rules.engine.RuleEvaluationResult.Companion.errorRule
 import org.hisp.dhis.rules.engine.RuleEvaluationResult.Companion.evaluatedResult
 import org.hisp.dhis.rules.engine.RuleEvaluationResult.Companion.notEvaluatedResult
 import org.hisp.dhis.rules.models.*
-import org.hisp.dhis.rules.utils.isAllowedAction
 import org.hisp.dhis.rules.utils.unwrapVariableName
 
 internal class RuleConditionEvaluator {
     fun getEvaluatedAndErrorRuleEffects(
         targetType: TrackerObjectType,
         targetUid: String,
-        valueMap: Map<String, VariableValue>,
+        valueMap: MutableMap<String, VariableValue>,
         supplementaryMap: Map<String, List<String>>,
         rules: List<Rule>,
         attributeType: AttributeType,
@@ -31,7 +30,7 @@ internal class RuleConditionEvaluator {
     fun getRuleEffects(
         targetType: TrackerObjectType,
         targetUid: String,
-        valueMap: Map<String, VariableValue>,
+        valueMap: MutableMap<String, VariableValue>,
         supplementaryMap: Map<String, List<String>>,
         rules: List<Rule>,
         attributeType: AttributeType,
@@ -53,24 +52,23 @@ internal class RuleConditionEvaluator {
     fun getRuleEvaluationResults(
         targetType: TrackerObjectType,
         targetUid: String,
-        valueMap: Map<String, VariableValue>,
+        valueMap: MutableMap<String, VariableValue>,
         supplementaryMap: Map<String, List<String>>,
         rules: List<Rule>,
         attributeType: AttributeType,
     ): List<RuleEvaluationResult> {
-        val mutableValueMap = valueMap.toMutableMap()
         val ruleEvaluationResults: MutableList<RuleEvaluationResult> = ArrayList()
-        for (rule in rules.sorted()) {
+        for (rule in rules) {
             log.fine("Evaluating programrule: " + rule.name)
             try {
                 val ruleEffects: MutableList<RuleEffect> = ArrayList()
                 if (process(
                         rule.conditionExpression,
-                        mutableValueMap,
+                        valueMap,
                         supplementaryMap,
                     ).toBoolean()
                 ) {
-                    for (action in rule.actions.filter { isAllowedAction(it, attributeType) }.sorted()) {
+                    for (action in if (attributeType == AttributeType.DATA_ELEMENT) rule.actionsForDataElement else rule.actionsForEnrollment) {
                         try {
                             // Check if action is assigning value to calculated variable
                             if (isAssignToCalculatedValue(action)) {
@@ -78,14 +76,14 @@ internal class RuleConditionEvaluator {
                                     unwrapVariableName(action.content()!!),
                                     VariableValue(
                                         ValueType.STRING,
-                                        process(action.dataExpression, mutableValueMap, supplementaryMap),
+                                        process(action.dataExpression, valueMap, supplementaryMap),
                                         listOf(),
                                         null,
                                     ),
-                                    mutableValueMap,
+                                    valueMap,
                                 )
                             } else {
-                                ruleEffects.add(create(rule, action, mutableValueMap, supplementaryMap))
+                                ruleEffects.add(create(rule, action, valueMap, supplementaryMap))
                             }
                         } catch (e: Exception) {
                             addRuleErrorResult(rule, action, e, targetType, targetUid, ruleEvaluationResults)

@@ -32,7 +32,7 @@ internal class DefaultRuleEngine : RuleEngine {
             target.event,
             valueMap,
             RuleConditionEvaluator.convertSupplementaryData(executionContext.ruleSupplementaryData),
-            filterRules(executionContext.rules, target),
+            filterRules(executionContext.rules, target).sorted(),
             AttributeType.DATA_ELEMENT,
         )
     }
@@ -54,7 +54,7 @@ internal class DefaultRuleEngine : RuleEngine {
             target.enrollment,
             valueMap,
             RuleConditionEvaluator.convertSupplementaryData(executionContext.ruleSupplementaryData),
-            filterRules(executionContext.rules),
+            filterRules(executionContext.rules).sorted(),
             AttributeType.TRACKED_ENTITY_ATTRIBUTE,
         )
     }
