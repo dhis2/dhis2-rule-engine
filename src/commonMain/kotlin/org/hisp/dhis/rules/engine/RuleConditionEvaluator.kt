@@ -19,11 +19,11 @@ internal class RuleConditionEvaluator {
         targetType: TrackerObjectType,
         targetUid: String,
         valueMap: Map<String, VariableValue>,
-        ruleSupplementaryData: RuleSupplementaryData,
+        supplementaryMap: Map<String, List<String>>,
         rules: List<Rule>,
         attributeType: AttributeType,
     ): List<RuleEffect> {
-        val ruleEvaluationResults = getRuleEvaluationResults(targetType, targetUid, valueMap, ruleSupplementaryData, rules, attributeType)
+        val ruleEvaluationResults = getRuleEvaluationResults(targetType, targetUid, valueMap, supplementaryMap, rules, attributeType)
         return ruleEvaluationResults
             .flatMap { result -> result.ruleEffects }
     }
@@ -32,7 +32,7 @@ internal class RuleConditionEvaluator {
         targetType: TrackerObjectType,
         targetUid: String,
         valueMap: Map<String, VariableValue>,
-        ruleSupplementaryData: RuleSupplementaryData,
+        supplementaryMap: Map<String, List<String>>,
         rules: List<Rule>,
         attributeType: AttributeType,
     ): List<RuleEffect> {
@@ -41,7 +41,7 @@ internal class RuleConditionEvaluator {
                 targetType,
                 targetUid,
                 valueMap,
-                ruleSupplementaryData,
+                supplementaryMap,
                 rules,
                 attributeType,
             )
@@ -54,7 +54,7 @@ internal class RuleConditionEvaluator {
         targetType: TrackerObjectType,
         targetUid: String,
         valueMap: Map<String, VariableValue>,
-        ruleSupplementaryData: RuleSupplementaryData,
+        supplementaryMap: Map<String, List<String>>,
         rules: List<Rule>,
         attributeType: AttributeType,
     ): List<RuleEvaluationResult> {
@@ -67,7 +67,7 @@ internal class RuleConditionEvaluator {
                 if (process(
                         rule.conditionExpression,
                         mutableValueMap,
-                        ruleSupplementaryData,
+                        supplementaryMap,
                     ).toBoolean()
                 ) {
                     for (action in rule.actions.filter { isAllowedAction(it, attributeType) }.sorted()) {
@@ -78,14 +78,14 @@ internal class RuleConditionEvaluator {
                                     unwrapVariableName(action.content()!!),
                                     VariableValue(
                                         ValueType.STRING,
-                                        process(action.dataExpression, mutableValueMap, ruleSupplementaryData),
+                                        process(action.dataExpression, mutableValueMap, supplementaryMap),
                                         listOf(),
                                         null,
                                     ),
                                     mutableValueMap,
                                 )
                             } else {
-                                ruleEffects.add(create(rule, action, mutableValueMap, ruleSupplementaryData))
+                                ruleEffects.add(create(rule, action, mutableValueMap, supplementaryMap))
                             }
                         } catch (e: Exception) {
                             addRuleErrorResult(rule, action, e, targetType, targetUid, ruleEvaluationResults)
@@ -150,14 +150,14 @@ internal class RuleConditionEvaluator {
     private fun process(
         expressionResult: Result<Expression?>,
         valueMap: Map<String, VariableValue>,
-        ruleSupplementaryData: RuleSupplementaryData,
+        supplementaryMap: Map<String, List<String>>,
     ): String? {
         val expression = expressionResult.getOrThrow() ?: return ""
         val build =
             ExpressionData(
                 valueMap,
                 emptyMap(),
-                convertSupplementaryData(ruleSupplementaryData),
+                supplementaryMap,
                 emptyMap(),
                 emptyMap(),
             )
@@ -168,16 +168,6 @@ internal class RuleConditionEvaluator {
                 )
             }, build),
         )?.toString()
-    }
-
-    private fun convertSupplementaryData(ruleSupplementaryData: RuleSupplementaryData): Map<String, List<String>> {
-        val supplementaryValues: MutableMap<String, List<String>> = HashMap()
-
-        supplementaryValues["USER_GROUPS"] = ruleSupplementaryData.userGroups
-        supplementaryValues["USER_ROLES"] = ruleSupplementaryData.userRoles
-        supplementaryValues.putAll(ruleSupplementaryData.orgUnitGroups)
-
-        return supplementaryValues
     }
 
     private fun convertInteger(result: Any?): Any? =
@@ -201,10 +191,10 @@ internal class RuleConditionEvaluator {
         rule: Rule,
         ruleAction: RuleAction,
         valueMap: MutableMap<String, VariableValue>,
-        ruleSupplementaryData: RuleSupplementaryData,
+        supplementaryMap: Map<String, List<String>>,
     ): RuleEffect {
         if (ruleAction.type == "ASSIGN") {
-            val data = processRuleAction(rule, ruleAction, valueMap, ruleSupplementaryData)
+            val data = processRuleAction(rule, ruleAction, valueMap, supplementaryMap)
             updateValueMap(ruleAction.field()!!, VariableValue(ValueType.STRING, data, listOf(), null), valueMap)
             return if (data.isNullOrEmpty()) {
                 RuleEffect(rule.uid, ruleAction, null)
@@ -218,7 +208,7 @@ internal class RuleConditionEvaluator {
                     rule,
                     ruleAction,
                     valueMap,
-                    ruleSupplementaryData,
+                    supplementaryMap,
                 )
             } else {
                 ""
@@ -234,12 +224,12 @@ internal class RuleConditionEvaluator {
         rule: Rule,
         ruleAction: RuleAction,
         valueMap: MutableMap<String, VariableValue>,
-        supplementaryData: RuleSupplementaryData,
+        supplementaryMap: Map<String, List<String>>,
     ): String? {
         val data = process(
             ruleAction.dataExpression,
             valueMap,
-            supplementaryData,
+            supplementaryMap,
         )
         log.fine(
             "Action " + ruleAction.type +
@@ -252,5 +242,13 @@ internal class RuleConditionEvaluator {
 
     companion object {
         private val log = createLogger("org.hisp.dhis.rules.engine.RuleConditionEvaluator")
+
+        fun convertSupplementaryData(ruleSupplementaryData: RuleSupplementaryData): Map<String, List<String>> {
+            val supplementaryValues: MutableMap<String, List<String>> = HashMap()
+            supplementaryValues["USER_GROUPS"] = ruleSupplementaryData.userGroups
+            supplementaryValues["USER_ROLES"] = ruleSupplementaryData.userRoles
+            supplementaryValues.putAll(ruleSupplementaryData.orgUnitGroups)
+            return supplementaryValues
+        }
     }
 }

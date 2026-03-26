@@ -10,18 +10,19 @@ internal class RuleEngineMultipleExecution {
         ruleVariableValueMap: RuleVariableValueMap,
         ruleSupplementaryData: RuleSupplementaryData,
     ): List<RuleEffects> {
+        val supplementaryMap = RuleConditionEvaluator.convertSupplementaryData(ruleSupplementaryData)
+        val evaluator = RuleConditionEvaluator()
         val ruleEffects: MutableList<RuleEffects> = ArrayList()
         for ((enrollment, valueMap) in ruleVariableValueMap.enrollmentMap) {
             val enrollmentRuleEffects =
-                RuleConditionEvaluator()
-                    .getEvaluatedAndErrorRuleEffects(
-                        TrackerObjectType.ENROLLMENT,
-                        enrollment.enrollment,
-                        valueMap,
-                        ruleSupplementaryData,
-                        filterRules(rules),
-                        AttributeType.TRACKED_ENTITY_ATTRIBUTE,
-                    )
+                evaluator.getEvaluatedAndErrorRuleEffects(
+                    TrackerObjectType.ENROLLMENT,
+                    enrollment.enrollment,
+                    valueMap,
+                    supplementaryMap,
+                    filterRules(rules),
+                    AttributeType.TRACKED_ENTITY_ATTRIBUTE,
+                )
             ruleEffects.add(
                 RuleEffects(
                     TrackerObjectType.ENROLLMENT,
@@ -35,11 +36,11 @@ internal class RuleEngineMultipleExecution {
                 RuleEffects(
                     TrackerObjectType.EVENT,
                     event.event,
-                    RuleConditionEvaluator().getEvaluatedAndErrorRuleEffects(
+                    evaluator.getEvaluatedAndErrorRuleEffects(
                         TrackerObjectType.EVENT,
                         event.event,
                         valueMap,
-                        ruleSupplementaryData,
+                        supplementaryMap,
                         filterRules(rules, event),
                         AttributeType.DATA_ELEMENT,
                     ),
