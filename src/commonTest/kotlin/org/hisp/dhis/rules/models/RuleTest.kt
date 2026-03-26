@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 class RuleTest {
     @Test
     fun createShouldPropagatePropertiesCorrectly() {
-        val ruleAction = RuleAction("data", "ERROR")
+        val ruleAction = RuleAction("'data'", "ERROR")
         val (condition, actions, uid, _, programStage, priority) =
             Rule(
                 "test_condition",

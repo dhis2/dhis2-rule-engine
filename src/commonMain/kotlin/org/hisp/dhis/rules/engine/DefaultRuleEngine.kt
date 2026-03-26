@@ -33,6 +33,7 @@ internal class DefaultRuleEngine : RuleEngine {
             valueMap,
             executionContext.ruleSupplementaryData,
             filterRules(executionContext.rules, target),
+            AttributeType.DATA_ELEMENT,
         )
     }
 
@@ -54,6 +55,7 @@ internal class DefaultRuleEngine : RuleEngine {
             valueMap,
             executionContext.ruleSupplementaryData,
             filterRules(executionContext.rules),
+            AttributeType.TRACKED_ENTITY_ATTRIBUTE,
         )
     }
 

@@ -1,11 +1,18 @@
 package org.hisp.dhis.rules.models
 
+import org.hisp.dhis.lib.expression.Expression
+import org.hisp.dhis.lib.expression.ExpressionMode
+
 data class RuleAction(
     val data: String?,
     val type: String,
     val values: Map<String, String> = emptyMap(),
     val priority: Int? = null,
 ) : Comparable<RuleAction> {
+    internal val dataExpression: Result<Expression?> =
+        if (data.isNullOrEmpty()) Result.success(null)
+        else runCatching { Expression(data!!, ExpressionMode.RULE_ENGINE_ACTION, false) }
+
     fun content(): String? = values["content"]
 
     fun field(): String? = values["field"]

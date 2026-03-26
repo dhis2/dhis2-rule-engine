@@ -20,6 +20,7 @@ internal class RuleEngineMultipleExecution {
                         valueMap,
                         ruleSupplementaryData,
                         filterRules(rules),
+                        AttributeType.TRACKED_ENTITY_ATTRIBUTE,
                     )
             ruleEffects.add(
                 RuleEffects(
@@ -40,6 +41,7 @@ internal class RuleEngineMultipleExecution {
                         valueMap,
                         ruleSupplementaryData,
                         filterRules(rules, event),
+                        AttributeType.DATA_ELEMENT,
                     ),
                 ),
             )
