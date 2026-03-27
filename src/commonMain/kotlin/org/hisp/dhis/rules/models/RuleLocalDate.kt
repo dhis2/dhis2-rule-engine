@@ -33,11 +33,13 @@ data class RuleLocalDate(val year: Int, val month: Int, val day: Int): Comparabl
             return fromLocalDate(LocalDate.parse(dateString))
         }
 
+        private val DISTANT_FUTURE: RuleLocalDate by lazy {
+            fromLocalDate(Instant.DISTANT_FUTURE.toLocalDateTime(TimeZone.currentSystemDefault()).date)
+        }
+
         @JvmStatic
         @JsStatic
-        fun distantFuture(): RuleLocalDate {
-            return fromLocalDate(Instant.DISTANT_FUTURE.toLocalDateTime(TimeZone.currentSystemDefault()).date)
-        }
+        fun distantFuture(): RuleLocalDate = DISTANT_FUTURE
 
         internal fun fromLocalDate(localDate: LocalDate): RuleLocalDate {
             return RuleLocalDate(localDate.year, localDate.month.number, localDate.day)

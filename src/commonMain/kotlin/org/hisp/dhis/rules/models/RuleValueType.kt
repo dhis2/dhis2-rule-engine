@@ -1,6 +1,7 @@
 package org.hisp.dhis.rules.models
 
 import kotlin.js.JsExport
+import org.hisp.dhis.lib.expression.spi.ValueType
 
 @JsExport
 enum class RuleValueType(
@@ -13,4 +14,11 @@ enum class RuleValueType(
     ;
 
     fun defaultValue(): Any = defaultValue
+
+    internal fun toValueType(): ValueType = when (this) {
+        DATE -> ValueType.DATE
+        NUMERIC -> ValueType.NUMBER
+        BOOLEAN -> ValueType.BOOLEAN
+        else -> ValueType.STRING
+    }
 }

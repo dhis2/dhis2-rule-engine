@@ -31,8 +31,9 @@ internal class DefaultRuleEngine : RuleEngine {
             TrackerObjectType.EVENT,
             target.event,
             valueMap,
-            executionContext.ruleSupplementaryData,
-            filterRules(executionContext.rules, target),
+            RuleConditionEvaluator.convertSupplementaryData(executionContext.ruleSupplementaryData),
+            filterRules(executionContext.rules, target).sorted(),
+            AttributeType.DATA_ELEMENT,
         )
     }
 
@@ -52,8 +53,9 @@ internal class DefaultRuleEngine : RuleEngine {
             TrackerObjectType.ENROLLMENT,
             target.enrollment,
             valueMap,
-            executionContext.ruleSupplementaryData,
-            filterRules(executionContext.rules),
+            RuleConditionEvaluator.convertSupplementaryData(executionContext.ruleSupplementaryData),
+            filterRules(executionContext.rules).sorted(),
+            AttributeType.TRACKED_ENTITY_ATTRIBUTE,
         )
     }
 

@@ -6,6 +6,7 @@ import org.hisp.dhis.rules.models.RuleAction
 import org.hisp.dhis.rules.models.RuleDataValueHistory
 import org.hisp.dhis.rules.models.RuleEvent
 
+
 /*
 * Copyright (c) 2004-2026, University of Oslo
 * All rights reserved.
@@ -49,49 +50,16 @@ internal fun getPreviousDataValue(dataValues: List<RuleDataValueHistory>, ruleEv
     return null
 }
 
-internal fun filterRules(rules: List<Rule>): List<Rule> {
-    val filteredRules: MutableList<Rule> = mutableListOf()
-    for (rule in rules) {
-        val programStage: String? = rule.programStage
-        if (programStage.isNullOrEmpty()) {
-            val ruleActions =
-                filterActionRules(
-                    rule.actions,
-                    AttributeType.TRACKED_ENTITY_ATTRIBUTE,
-                )
-            filteredRules.add(rule.copy(actions = ruleActions))
-        }
-    }
-    return filteredRules
-}
+internal fun filterRules(rules: List<Rule>): List<Rule> =
+    rules.filter { it.programStage.isNullOrEmpty() }
 
 internal fun filterRules(
     rules: List<Rule>,
     ruleEvent: RuleEvent,
-): List<Rule> {
-    val filteredRules: MutableList<Rule> = mutableListOf()
-    for (rule in rules) {
-        val programStage: String? = rule.programStage
-        if (programStage.isNullOrEmpty() || programStage == ruleEvent.programStage) {
-            val ruleActions =
-                filterActionRules(
-                    rule.actions,
-                    AttributeType.DATA_ELEMENT,
-                )
-            filteredRules.add(rule.copy(actions = ruleActions))
-        }
-    }
-    return filteredRules
-}
+): List<Rule> =
+    rules.filter { it.programStage.isNullOrEmpty() || it.programStage == ruleEvent.programStage }
 
-private fun filterActionRules(
-    ruleActions: List<RuleAction>,
-    attributeType: AttributeType,
-): List<RuleAction> {
-    return ruleActions.filter {
-        it.attributeType() == null ||
-            it.attributeType() == attributeType.name ||
-            it.attributeType() == AttributeType.UNKNOWN.name
-    }
-
-}
+internal fun isAllowedAction(ruleAction: RuleAction, attributeType: AttributeType): Boolean =
+    ruleAction.attributeType() == null ||
+        ruleAction.attributeType() == attributeType.name ||
+        ruleAction.attributeType() == AttributeType.UNKNOWN.name
