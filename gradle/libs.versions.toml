@@ -5,6 +5,8 @@ nexusPublish = "2.0.0"
 npmPublish = "3.5.2"
 apiCompatibility ="0.17.0"
 kover = "0.9.8"
+sonarqube = "7.2.3.7755"
+
 kotlinxDatetime = "0.7.1"
 kotlinJsWrappers = "1.0.0-pre.830"
 slf4jApi = "1.7.36"
@@ -25,5 +27,6 @@ dhis-expression-parser = { group = "org.hisp.dhis.lib.expression", name = "expre
 [plugins]
 api-compatibility = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "apiCompatibility" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 
 [bundles]

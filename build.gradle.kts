@@ -4,6 +4,7 @@ plugins {
     id("npm-publish-conventions")
     alias(libs.plugins.api.compatibility)
     alias(libs.plugins.kover)
+    alias(libs.plugins.sonarqube)
 }
 
 repositories {
@@ -89,4 +90,18 @@ kotlin {
         val nativeMain by getting
         val nativeTest by getting
     }
+}
+
+sonarqube {
+    properties {
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.organization", "dhis2")
+        property("sonar.projectKey", "dhis2_dhis2-rule-engine")
+        property("sonar.projectName", "dhis2-rule-engine")
+        property("sonar.coverage.jacoco.xmlReportPaths", "${layout.buildDirectory.get()}/reports/kover/report.xml")
+    }
+}
+
+tasks.named("sonar").configure {
+    dependsOn(":koverXmlReport")
 }
