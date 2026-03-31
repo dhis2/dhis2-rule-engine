@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - name: Set up JDK 21
         uses: actions/setup-java@v5
         with:
@@ -23,6 +25,14 @@ jobs:
 
       - name: API Check
         run: ./gradlew apiCheck
+
+      - name: Generate Kover reports
+        run: ./gradlew koverXmlReport
+
+      - name: Run SonarCloud Analysis
+        run: ./gradlew sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   publish:
     name: Publish
