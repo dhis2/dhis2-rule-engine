@@ -1,5 +1,6 @@
 [![Maven Central](https://img.shields.io/maven-central/v/org.hisp.dhis.rules/rule-engine?label=maven%20central)](https://central.sonatype.com/artifact/org.hisp.dhis.rules/rule-engine)
 [![NPM Version](https://img.shields.io/npm/v/@dhis2/rule-engine)](https://www.npmjs.com/package/@dhis2/rule-engine)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=dhis2_dhis2-rule-engine&metric=coverage&branch=master)](https://sonarcloud.io/summary/new_code?id=dhis2_dhis2-rule-engine&branch=master)
 [![KDoc link](https://img.shields.io/badge/API_reference-KDoc-blue)](https://dhis2.github.io/dhis2-rule-engine/api/)
 
 ### RuleEngine (WIP)
