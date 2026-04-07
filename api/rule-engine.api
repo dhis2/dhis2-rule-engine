@@ -63,8 +63,25 @@ public final class org/hisp/dhis/rules/api/ItemValueType : java/lang/Enum {
 	public static fun values ()[Lorg/hisp/dhis/rules/api/ItemValueType;
 }
 
+public final class org/hisp/dhis/rules/api/RuleContextRequirements {
+	public static final field Companion Lorg/hisp/dhis/rules/api/RuleContextRequirements$Companion;
+	public fun <init> (Z)V
+	public final fun component1 ()Z
+	public final fun copy (Z)Lorg/hisp/dhis/rules/api/RuleContextRequirements;
+	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/api/RuleContextRequirements;ZILjava/lang/Object;)Lorg/hisp/dhis/rules/api/RuleContextRequirements;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNeedsAllEvents ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class org/hisp/dhis/rules/api/RuleContextRequirements$Companion {
+	public final fun getNONE ()Lorg/hisp/dhis/rules/api/RuleContextRequirements;
+}
+
 public abstract interface class org/hisp/dhis/rules/api/RuleEngine {
 	public static final field Companion Lorg/hisp/dhis/rules/api/RuleEngine$Companion;
+	public abstract fun analyzeContextRequirements (Ljava/util/List;Ljava/util/List;)Lorg/hisp/dhis/rules/api/RuleContextRequirements;
 	public abstract fun evaluate (Lorg/hisp/dhis/rules/models/RuleEnrollment;Ljava/util/List;Lorg/hisp/dhis/rules/api/RuleEngineContext;)Ljava/util/List;
 	public abstract fun evaluate (Lorg/hisp/dhis/rules/models/RuleEvent;Lorg/hisp/dhis/rules/models/RuleEnrollment;Ljava/util/List;Lorg/hisp/dhis/rules/api/RuleEngineContext;)Ljava/util/List;
 	public abstract fun evaluateAll (Lorg/hisp/dhis/rules/models/RuleEnrollment;Ljava/util/List;Lorg/hisp/dhis/rules/api/RuleEngineContext;)Ljava/util/List;
