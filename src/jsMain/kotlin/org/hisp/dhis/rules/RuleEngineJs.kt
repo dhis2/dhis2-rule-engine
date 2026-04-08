@@ -15,6 +15,14 @@ class RuleEngineJs(verbose: Boolean = false) {
         RuleEngineJs.verbose = verbose
     }
 
+    fun analyzeContextRequirements(rules: Array<RuleJs>, variables: Array<RuleVariableJs>): RuleContextRequirementsJs {
+        val requirements = RuleEngine.getInstance()
+            .analyzeContextRequirements(rules.map(::toRuleJava), variables.map(::toRuleVariableJava))
+        return RuleContextRequirementsJs(requirements.needsAllEvents, requirements.needsEnrollment,
+            requirements.needsDataValues, requirements.needsAttributes,
+            requirements.orgUnitGroups.toTypedArray())
+    }
+
     fun validate(expression: String, dataItemStore: JsMap<String, DataItemJs>): RuleValidationResult{
         return RuleEngine.getInstance().validate(expression, toMap(dataItemStore, {it}, ::toDataItemJava))
     }
