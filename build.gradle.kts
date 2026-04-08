@@ -94,11 +94,23 @@ kotlin {
 
 sonarqube {
     properties {
+        val branch = System.getenv("GIT_BRANCH")
+        val targetBranch = System.getenv("GIT_BRANCH_DEST")
+        val pullRequestId = System.getenv("PULL_REQUEST")
+
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.organization", "dhis2")
         property("sonar.projectKey", "dhis2_dhis2-rule-engine")
         property("sonar.projectName", "dhis2-rule-engine")
         property("sonar.coverage.jacoco.xmlReportPaths", "${layout.buildDirectory.get()}/reports/kover/report.xml")
+
+        if (pullRequestId.isNullOrEmpty()) {
+            property("sonar.branch.name", branch)
+        } else {
+            property("sonar.pullrequest.base", targetBranch)
+            property("sonar.pullrequest.branch", branch)
+            property("sonar.pullrequest.key", pullRequestId)
+        }
     }
 }
 

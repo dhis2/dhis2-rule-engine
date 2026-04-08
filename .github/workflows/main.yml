@@ -39,6 +39,7 @@ jobs:
         run: ./gradlew sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GIT_BRANCH: ${{ github.ref_name }}
 
   publish:
     needs: unit-test

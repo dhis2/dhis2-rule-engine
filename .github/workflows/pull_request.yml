@@ -33,6 +33,9 @@ jobs:
         run: ./gradlew sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GIT_BRANCH: ${{ github.ref_name}}
+          GIT_BRANCH_DEST: ${{ github.base_ref }}
+          PULL_REQUEST: ${{ github.event.pull_request.number }}
 
   publish:
     name: Publish
