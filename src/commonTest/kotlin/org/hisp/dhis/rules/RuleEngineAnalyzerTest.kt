@@ -80,7 +80,7 @@ class RuleEngineAnalyzerTest {
         assertFalse(none.needsEnrollment)
         assertFalse(none.needsDataValues)
         assertFalse(none.needsAttributes)
-        assertTrue(none.orgUnitGroups.isEmpty())
+        assertFalse(none.needsOrgUnitGroups)
     }
 
     @Test
@@ -247,33 +247,33 @@ class RuleEngineAnalyzerTest {
         assertFalse(result.needsEnrollment)
     }
 
-    // --- orgUnitGroups ---
+    // --- needsOrgUnitGroups ---
 
     @Test
-    fun orgUnitGroupInConditionIsCollected() {
+    fun orgUnitGroupInConditionTriggersNeedsOrgUnitGroups() {
         val result = analyze(listOf(rule("d2:inOrgUnitGroup('GroupA')")))
-        assertEquals(setOf("GroupA"), result.orgUnitGroups)
+        assertTrue(result.needsOrgUnitGroups)
     }
 
     @Test
-    fun orgUnitGroupInActionDataIsCollected() {
+    fun orgUnitGroupInActionDataTriggersNeedsOrgUnitGroups() {
         val result = analyze(listOf(rule("true", "d2:inOrgUnitGroup('GroupB')")))
-        assertEquals(setOf("GroupB"), result.orgUnitGroups)
+        assertTrue(result.needsOrgUnitGroups)
     }
 
     @Test
-    fun multipleOrgUnitGroupsAcrossRulesAreCollected() {
+    fun multipleOrgUnitGroupsAcrossRulesTriggersNeedsOrgUnitGroups() {
         val rules = listOf(
             rule("d2:inOrgUnitGroup('GroupA')"),
             rule("true", "d2:inOrgUnitGroup('GroupB')"),
             rule("d2:inOrgUnitGroup('GroupA') || d2:inOrgUnitGroup('GroupC')"),
         )
-        assertEquals(setOf("GroupA", "GroupB", "GroupC"), analyze(rules).orgUnitGroups)
+        assertTrue(analyze(rules).needsOrgUnitGroups)
     }
 
     @Test
-    fun noOrgUnitGroupReturnsEmptySet() {
-        assertTrue(analyze(listOf(rule("#{score} > 5")), listOf(currentEvent("score"))).orgUnitGroups.isEmpty())
+    fun noOrgUnitGroupDoesNotTriggerNeedsOrgUnitGroups() {
+        assertFalse(analyze(listOf(rule("#{score} > 5")), listOf(currentEvent("score"))).needsOrgUnitGroups)
     }
 
     // --- RuleEngine interface delegation ---
@@ -302,7 +302,7 @@ class RuleEngineAnalyzerTest {
         assertFalse(result.needsEnrollment)
         assertFalse(result.needsDataValues)
         assertFalse(result.needsAttributes)
-        assertTrue(result.orgUnitGroups.isEmpty())
+        assertFalse(result.needsOrgUnitGroups)
     }
 
     @Test
@@ -313,7 +313,7 @@ class RuleEngineAnalyzerTest {
         assertFalse(result.needsEnrollment)
         assertFalse(result.needsDataValues)
         assertFalse(result.needsAttributes)
-        assertTrue(result.orgUnitGroups.isEmpty())
+        assertFalse(result.needsOrgUnitGroups)
     }
 
     @Test

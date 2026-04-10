@@ -65,20 +65,20 @@ public final class org/hisp/dhis/rules/api/ItemValueType : java/lang/Enum {
 
 public final class org/hisp/dhis/rules/api/RuleContextRequirements {
 	public static final field Companion Lorg/hisp/dhis/rules/api/RuleContextRequirements$Companion;
-	public fun <init> (ZZZZLjava/util/Set;)V
+	public fun <init> (ZZZZZ)V
 	public final fun component1 ()Z
 	public final fun component2 ()Z
 	public final fun component3 ()Z
 	public final fun component4 ()Z
-	public final fun component5 ()Ljava/util/Set;
-	public final fun copy (ZZZZLjava/util/Set;)Lorg/hisp/dhis/rules/api/RuleContextRequirements;
-	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/api/RuleContextRequirements;ZZZZLjava/util/Set;ILjava/lang/Object;)Lorg/hisp/dhis/rules/api/RuleContextRequirements;
+	public final fun component5 ()Z
+	public final fun copy (ZZZZZ)Lorg/hisp/dhis/rules/api/RuleContextRequirements;
+	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/api/RuleContextRequirements;ZZZZZILjava/lang/Object;)Lorg/hisp/dhis/rules/api/RuleContextRequirements;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getNeedsAllEvents ()Z
 	public final fun getNeedsAttributes ()Z
 	public final fun getNeedsDataValues ()Z
 	public final fun getNeedsEnrollment ()Z
-	public final fun getOrgUnitGroups ()Ljava/util/Set;
+	public final fun getNeedsOrgUnitGroups ()Z
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }

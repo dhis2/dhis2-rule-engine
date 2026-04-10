@@ -4,6 +4,7 @@ import org.hisp.dhis.rules.api.RuleContextRequirements
 import org.hisp.dhis.rules.models.Rule
 import org.hisp.dhis.rules.models.RuleVariable
 import org.hisp.dhis.rules.models.RuleVariableAttribute
+import org.hisp.dhis.rules.models.RuleVariableCalculatedValue
 import org.hisp.dhis.rules.models.RuleVariableCurrentEvent
 import org.hisp.dhis.rules.models.RuleVariableNewestEvent
 import org.hisp.dhis.rules.models.RuleVariableNewestStageEvent
@@ -31,48 +32,49 @@ internal object RuleEngineAnalyzer {
         rules: List<Rule>,
         variables: List<RuleVariable>,
     ): RuleContextRequirements {
-        val envVars = mutableSetOf<String>()
-        val referencedVarNames = mutableSetOf<String>()
-        val orgUnitGroups = mutableSetOf<String>()
+        val byName = variables.associateBy { it.name }
+        val hasNonCalculatedVariables = variables.any { it !is RuleVariableCalculatedValue }
+
+        var needsAllEvents = false
+        var needsEnrollment = false
+        var needsDataValues = false
+        var needsAttributes = false
+        var needsOrgUnitGroups = false
 
         for (rule in rules) {
-            rule.conditionExpression.getOrNull()?.let {
-                envVars += it.collectProgramVariablesNames()
-                referencedVarNames += it.collectProgramRuleVariableNames()
-                orgUnitGroups += it.collectInOrgUnitGroups()
+            if (needsAllEvents && needsEnrollment && needsDataValues && needsAttributes && needsOrgUnitGroups) break
+
+            val expressions = buildList {
+                rule.conditionExpression.getOrNull()?.let { add(it) }
+                rule.actions.forEach { action -> action.dataExpression.getOrNull()?.let { add(it) } }
             }
-            for (action in rule.actions) {
-                action.dataExpression.getOrNull()?.let {
-                    envVars += it.collectProgramVariablesNames()
-                    referencedVarNames += it.collectProgramRuleVariableNames()
-                    orgUnitGroups += it.collectInOrgUnitGroups()
+
+            for (expr in expressions) {
+                if (!needsAllEvents || !needsEnrollment) {
+                    for (envVar in expr.collectProgramVariablesNames()) {
+                        needsAllEvents = needsAllEvents || envVar in MULTI_EVENT_ENV_VARS
+                        needsEnrollment = needsEnrollment || envVar in ENROLLMENT_ENV_VARS
+                        if (needsAllEvents && needsEnrollment) break
+                    }
                 }
+
+                if (hasNonCalculatedVariables && (!needsAllEvents || !needsDataValues || !needsAttributes)) {
+                    for (name in expr.collectProgramRuleVariableNames()) {
+                        val v = byName[name]
+                        val isMultiEvent = v is RuleVariableNewestEvent || v is RuleVariableNewestStageEvent || v is RuleVariablePreviousEvent
+                        needsAllEvents = needsAllEvents || isMultiEvent
+                        needsDataValues = needsDataValues || isMultiEvent || v is RuleVariableCurrentEvent
+                        needsAttributes = needsAttributes || v is RuleVariableAttribute
+                        needsEnrollment = needsEnrollment || needsAttributes
+                        if (needsAllEvents && needsDataValues && needsAttributes) break
+                    }
+                }
+
+
+                needsOrgUnitGroups = needsOrgUnitGroups || expr.collectInOrgUnitGroups().isNotEmpty()
             }
         }
 
-        val byName = variables.associateBy { it.name }
-        val needsAllEvents = envVars.any { it in MULTI_EVENT_ENV_VARS } ||
-            referencedVarNames.any { name ->
-                val v = byName[name]
-                v is RuleVariableNewestEvent ||
-                    v is RuleVariableNewestStageEvent ||
-                    v is RuleVariablePreviousEvent
-            }
-
-        val needsDataValues = referencedVarNames.any { name ->
-            val v = byName[name]
-            v is RuleVariableNewestEvent ||
-                v is RuleVariableNewestStageEvent ||
-                v is RuleVariablePreviousEvent ||
-                v is RuleVariableCurrentEvent
-        }
-
-        val needsAttributes = referencedVarNames.any { name ->
-            byName[name] is RuleVariableAttribute
-        }
-
-        val needsEnrollment = envVars.any { it in ENROLLMENT_ENV_VARS } || needsAttributes
-
-        return RuleContextRequirements(needsAllEvents, needsEnrollment, needsDataValues, needsAttributes, orgUnitGroups)
+        return RuleContextRequirements(needsAllEvents, needsEnrollment, needsDataValues, needsAttributes, needsOrgUnitGroups)
     }
 }

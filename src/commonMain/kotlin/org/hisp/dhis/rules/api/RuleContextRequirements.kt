@@ -5,7 +5,7 @@ data class RuleContextRequirements(
     val needsEnrollment: Boolean,
     val needsDataValues: Boolean,
     val needsAttributes: Boolean,
-    val orgUnitGroups: Set<String>,
+    val needsOrgUnitGroups: Boolean,
 ) {
     companion object {
         internal val NONE = RuleContextRequirements(
@@ -13,7 +13,7 @@ data class RuleContextRequirements(
             needsEnrollment = false,
             needsDataValues = false,
             needsAttributes = false,
-            orgUnitGroups = emptySet()
+            needsOrgUnitGroups = false,
         )
     }
 }

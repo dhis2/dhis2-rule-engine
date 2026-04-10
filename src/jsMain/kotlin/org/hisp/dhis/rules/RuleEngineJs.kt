@@ -20,7 +20,7 @@ class RuleEngineJs(verbose: Boolean = false) {
             .analyzeContextRequirements(rules.map(::toRuleJava), variables.map(::toRuleVariableJava))
         return RuleContextRequirementsJs(requirements.needsAllEvents, requirements.needsEnrollment,
             requirements.needsDataValues, requirements.needsAttributes,
-            requirements.orgUnitGroups.toTypedArray())
+            requirements.needsOrgUnitGroups)
     }
 
     fun validate(expression: String, dataItemStore: JsMap<String, DataItemJs>): RuleValidationResult{

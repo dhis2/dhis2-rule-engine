@@ -6,5 +6,5 @@ data class RuleContextRequirementsJs(
     val needsEnrollment: Boolean,
     val needsDataValues: Boolean,
     val needsAttributes: Boolean,
-    val orgUnitGroups: Array<String>,
+    val needsOrgUnitGroups: Boolean,
 )
