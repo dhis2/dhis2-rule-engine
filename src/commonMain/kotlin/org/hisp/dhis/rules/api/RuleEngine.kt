@@ -5,6 +5,8 @@ import org.hisp.dhis.rules.models.*
 import kotlin.jvm.JvmStatic
 
 interface RuleEngine {
+    fun analyzeContextRequirements(rules: List<Rule>, variables: List<RuleVariable>): RuleContextRequirements
+
     fun validate(
         expression: String,
         dataItemStore: Map<String, DataItem>,

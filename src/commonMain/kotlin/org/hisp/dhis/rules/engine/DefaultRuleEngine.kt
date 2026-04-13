@@ -6,6 +6,7 @@ import org.hisp.dhis.lib.expression.spi.IllegalExpressionException
 import org.hisp.dhis.lib.expression.spi.ParseException
 import org.hisp.dhis.lib.expression.spi.ValueType
 import org.hisp.dhis.rules.api.DataItem
+import org.hisp.dhis.rules.api.RuleContextRequirements
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.models.*
@@ -72,6 +73,10 @@ internal class DefaultRuleEngine : RuleEngine {
             valueMap,
             executionContext.ruleSupplementaryData,
         )
+    }
+
+    override fun analyzeContextRequirements(rules: List<Rule>, variables: List<RuleVariable>): RuleContextRequirements {
+        return RuleEngineAnalyzer.analyzeContextRequirements(rules, variables)
     }
 
     override fun validate(

@@ -68,6 +68,49 @@ class RuleEngineEffectTypesTest {
     }
 
     @Test
+    fun evaluateAllProducesSameEffectsAsIndividualEvaluateCalls() {
+        val ruleAction = RuleAction("'text'", "DISPLAYTEXT", mapOf("content" to "label"))
+        val testRule = Rule("true", listOf(ruleAction))
+        val context = RuleEngineContext(listOf(testRule))
+        val engine = RuleEngine.getInstance()
+
+        val enrollment = RuleEnrollment(
+            enrollment = "enrollment_uid",
+            programName = "Test Program",
+            incidentDate = RuleLocalDate(2023, 1, 1),
+            enrollmentDate = RuleLocalDate(2023, 1, 1),
+            status = RuleEnrollmentStatus.ACTIVE,
+            organisationUnit = "org_unit",
+            organisationUnitCode = null,
+            attributeValues = emptyList(),
+        )
+        val event = RuleEvent(
+            event = "event_uid",
+            programStage = "stage_uid",
+            programStageName = "Stage",
+            status = RuleEventStatus.ACTIVE,
+            eventDate = RuleLocalDate(2023, 1, 2),
+            createdDate = RuleInstant.now(),
+            createdAtClientDate = null,
+            dueDate = null,
+            completedDate = null,
+            organisationUnit = "org_unit",
+            organisationUnitCode = null,
+            dataValues = emptyList(),
+        )
+
+        val allEffects = engine.evaluateAll(enrollment, listOf(event), context)
+        val enrollmentEffectsAll = allEffects.single { it.isEnrollment }.ruleEffects
+        val eventEffectsAll = allEffects.single { it.isEvent }.ruleEffects
+
+        val enrollmentEffects = engine.evaluate(enrollment, listOf(event), context)
+        val eventEffects = engine.evaluate(event, enrollment, emptyList(), context)
+
+        assertEquals(enrollmentEffects.map { it.data }, enrollmentEffectsAll.map { it.data })
+        assertEquals(eventEffects.map { it.data }, eventEffectsAll.map { it.data })
+    }
+
+    @Test
     fun testEnvironmentVariableExpression() {
         val ruleAction = RuleAction("", "HIDEFIELD", mapOf(Pair("content", "test_action_content"), Pair("field", "test_data_element")))
         val rule = Rule("V{event_status} =='COMPLETED'", listOf(ruleAction))

@@ -58,8 +58,3 @@ internal fun filterRules(
     ruleEvent: RuleEvent,
 ): List<Rule> =
     rules.filter { it.programStage.isNullOrEmpty() || it.programStage == ruleEvent.programStage }
-
-internal fun isAllowedAction(ruleAction: RuleAction, attributeType: AttributeType): Boolean =
-    ruleAction.attributeType() == null ||
-        ruleAction.attributeType() == attributeType.name ||
-        ruleAction.attributeType() == AttributeType.UNKNOWN.name
