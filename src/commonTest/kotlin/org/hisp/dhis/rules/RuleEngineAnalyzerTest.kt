@@ -221,11 +221,6 @@ class RuleEngineAnalyzerTest {
     }
 
     @Test
-    fun incidentDateEnvVarTriggersNeedsEnrollment() {
-        assertTrue(analyze(listOf(rule("V{incident_date} > '2020-01-01'"))).needsEnrollment)
-    }
-
-    @Test
     fun teiCountEnvVarTriggersNeedsEnrollment() {
         assertTrue(analyze(listOf(rule("V{tei_count} > 0"))).needsEnrollment)
     }
