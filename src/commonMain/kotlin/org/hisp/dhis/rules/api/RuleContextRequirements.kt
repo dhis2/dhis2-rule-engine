@@ -1,5 +1,8 @@
 package org.hisp.dhis.rules.api
 
+import kotlin.js.JsExport
+
+@JsExport
 data class RuleContextRequirements(
     val needsAllEvents: Boolean,
     val needsEnrollment: Boolean,

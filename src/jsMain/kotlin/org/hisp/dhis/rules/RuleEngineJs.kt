@@ -3,6 +3,7 @@ package org.hisp.dhis.rules
 import js.array.tupleOf
 import js.collections.JsMap
 import org.hisp.dhis.rules.api.DataItem
+import org.hisp.dhis.rules.api.RuleContextRequirements
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.api.RuleSupplementaryData
@@ -15,12 +16,14 @@ class RuleEngineJs(verbose: Boolean = false) {
         RuleEngineJs.verbose = verbose
     }
 
-    fun analyzeContextRequirements(rules: Array<RuleJs>, variables: Array<RuleVariableJs>): RuleContextRequirementsJs {
+    fun analyzeContextRequirements(rules: Array<RuleJs>, variables: Array<RuleVariableJs>): RuleContextRequirements {
         val requirements = RuleEngine.getInstance()
             .analyzeContextRequirements(rules.map(::toRuleJava), variables.map(::toRuleVariableJava))
-        return RuleContextRequirementsJs(requirements.needsAllEvents, requirements.needsEnrollment,
+        return RuleContextRequirements(
+            requirements.needsAllEvents, requirements.needsEnrollment,
             requirements.needsDataValues, requirements.needsAttributes,
-            requirements.needsOrgUnitGroups)
+            requirements.needsOrgUnitGroups
+        )
     }
 
     fun validate(expression: String, dataItemStore: JsMap<String, DataItemJs>): RuleValidationResult{
