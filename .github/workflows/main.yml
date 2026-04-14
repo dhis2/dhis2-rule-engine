@@ -38,7 +38,7 @@ jobs:
       - name: Run SonarCloud Analysis
         run: ./gradlew sonar
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.DHIS2_BOT_SONARCLOUD_TOKEN }}
           GIT_BRANCH: ${{ github.ref_name }}
 
   publish:
