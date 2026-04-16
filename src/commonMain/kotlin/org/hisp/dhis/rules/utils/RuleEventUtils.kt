@@ -53,6 +53,18 @@ internal fun getPreviousDataValue(dataValues: List<RuleDataValueHistory>, ruleEv
 internal fun filterRules(rules: List<Rule>): List<Rule> =
     rules.filter { it.programStage.isNullOrEmpty() }
 
+/** Merges two already-sorted lists into a single sorted list in O(n+m). */
+internal fun <T : Comparable<T>> mergeSorted(a: List<T>, b: List<T>): List<T> {
+    val result = ArrayList<T>(a.size + b.size)
+    var i = 0; var j = 0
+    while (i < a.size && j < b.size) {
+        if (a[i] <= b[j]) result.add(a[i++]) else result.add(b[j++])
+    }
+    while (i < a.size) result.add(a[i++])
+    while (j < b.size) result.add(b[j++])
+    return result
+}
+
 internal fun filterRules(
     rules: List<Rule>,
     ruleEvent: RuleEvent,

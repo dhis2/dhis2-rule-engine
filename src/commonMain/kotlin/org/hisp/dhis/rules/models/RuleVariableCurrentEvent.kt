@@ -10,6 +10,7 @@ class RuleVariableCurrentEvent(
     override val field: String,
     override val fieldType: RuleValueType,
 ) : RuleVariable {
+    override val optionsByCode: Map<String, String> = options.associate { it.code to it.name }
     override fun createValues(
         ruleEvent: RuleEvent?,
         allEventValues: Map<String, List<RuleDataValueHistory>>,

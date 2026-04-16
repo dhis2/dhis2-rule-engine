@@ -1,23 +1,18 @@
 package org.hisp.dhis.rules.engine
 
-import org.hisp.dhis.rules.api.RuleSupplementaryData
+import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.models.*
-import org.hisp.dhis.rules.utils.filterRules
 
 internal class RuleEngineMultipleExecution {
     fun execute(
-        rules: List<Rule>,
+        executionContext: RuleEngineContext,
         ruleVariableValueMap: RuleVariableValueMap,
-        ruleSupplementaryData: RuleSupplementaryData,
     ): List<RuleEffects> {
-        val supplementaryMap = RuleConditionEvaluator.convertSupplementaryData(ruleSupplementaryData)
+        val supplementaryMap = RuleConditionEvaluator.convertSupplementaryData(executionContext.ruleSupplementaryData)
         val evaluator = RuleConditionEvaluator()
         val ruleEffects: MutableList<RuleEffects> = ArrayList()
-        val enrollmentRules: List<Rule> = filterRules(rules).sorted()
-        val rulesByStage: Map<String, List<Rule>> = rules
-            .filter { !it.programStage.isNullOrEmpty() }
-            .groupBy { it.programStage!! }
-            .mapValues { (_, stageRules) -> (enrollmentRules + stageRules).sorted() }
+        val enrollmentRules = executionContext.enrollmentRules
+        val rulesByStage = executionContext.rulesByStage
         for ((enrollment, valueMap) in ruleVariableValueMap.enrollmentMap) {
             val enrollmentRuleEffects =
                 evaluator.getEvaluatedAndErrorRuleEffects(

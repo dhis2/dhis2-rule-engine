@@ -82,14 +82,12 @@ internal class RuleVariableValueMapBuilder {
             for (j in dataValues.indices) {
                 val ruleDataValue = dataValues[j]
 
-                // push new list if it is not there for the given data element
-                if (!allEventsValues.containsKey(ruleDataValue.dataElement)) {
-                    allEventsValues[ruleDataValue.dataElement] = ArrayList(events.size)
-                }
-
-                // append data value to the list
-                allEventsValues[ruleDataValue.dataElement]?.add(
-                    RuleDataValueHistory(ruleDataValue.value, events[i].eventDate, events[i].resolvedCreatedDate, events[i].programStage),
+                allEventsValues.getOrPut(ruleDataValue.dataElement) { ArrayList(events.size) }
+                    .add(RuleDataValueHistory(
+                        ruleDataValue.value,
+                        events[i].eventDate,
+                        events[i].resolvedCreatedDate,
+                        events[i].programStage),
                 )
             }
         }
