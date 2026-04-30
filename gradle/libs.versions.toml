@@ -10,7 +10,7 @@ sonarqube = "7.2.3.7755"
 kotlinxDatetime = "0.7.1"
 kotlinJsWrappers = "1.0.0-pre.830"
 slf4jApi = "1.7.36"
-expressionParser = "1.4.1"
+expressionParser = "1.4.2"
 
 [libraries]
 kotlin-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
