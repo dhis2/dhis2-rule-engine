@@ -124,30 +124,34 @@ internal class RuleConditionEvaluator(
         // IllegalArgumentException signals a rule-configuration problem (e.g. a malformed
         // ASSIGN target), reported like an expression error rather than an unexpected one
         val isConfigurationError = e is IllegalExpressionException || e is IllegalArgumentException
-        val errorMessage: String
-        errorMessage =
-            if (ruleAction != null && isConfigurationError) {
-                "Action " + ruleAction::class.simpleName +
-                    " from rule " + rule.name + " with id " + rule.uid +
-                    " executed for " + targetType.name + "(" + targetUid + ")" +
-                    " with condition (" + rule.condition + ")" +
-                    " raised an error: " + e.message
-            } else if (ruleAction != null) {
-                "Action " + ruleAction::class.simpleName +
-                    " from rule " + rule.name + " with id " + rule.uid +
-                    " executed for " + targetType.name + "(" + targetUid + ")" +
-                    " with condition (" + rule.condition + ")" +
-                    " raised an unexpected exception: " + e.message
-            } else if (isConfigurationError) {
-                "Rule " + rule.name + " with id " + rule.uid +
-                    " executed for " + targetType.name + "(" + targetUid + ")" +
-                    " with condition (" + rule.condition + ")" +
-                    " raised an error: " + e.message
-            } else {
-                "Rule " + rule.name + " with id " + rule.uid +
-                    " executed for " + targetType.name + "(" + targetUid + ")" +
-                    " with condition (" + rule.condition + ")" +
-                    " raised an unexpected exception: " + e.message
+        val errorMessage =
+            when {
+                ruleAction != null && isConfigurationError -> {
+                    "Action " + ruleAction::class.simpleName +
+                            " from rule " + rule.name + " with id " + rule.uid +
+                            " executed for " + targetType.name + "(" + targetUid + ")" +
+                            " with condition (" + rule.condition + ")" +
+                            " raised an error: " + e.message
+                }
+                ruleAction != null -> {
+                    "Action " + ruleAction::class.simpleName +
+                            " from rule " + rule.name + " with id " + rule.uid +
+                            " executed for " + targetType.name + "(" + targetUid + ")" +
+                            " with condition (" + rule.condition + ")" +
+                            " raised an unexpected exception: " + e.message
+                }
+                isConfigurationError -> {
+                    "Rule " + rule.name + " with id " + rule.uid +
+                            " executed for " + targetType.name + "(" + targetUid + ")" +
+                            " with condition (" + rule.condition + ")" +
+                            " raised an error: " + e.message
+                }
+                else -> {
+                    "Rule " + rule.name + " with id " + rule.uid +
+                            " executed for " + targetType.name + "(" + targetUid + ")" +
+                            " with condition (" + rule.condition + ")" +
+                            " raised an unexpected exception: " + e.message
+                }
             }
         log.severe(errorMessage)
         ruleEvaluationResults.add(errorRule(rule, errorMessage))
