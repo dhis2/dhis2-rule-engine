@@ -7,11 +7,12 @@ import org.hisp.dhis.rules.utils.filterRules
 internal class RuleEngineMultipleExecution {
     fun execute(
         rules: List<Rule>,
+        ruleVariables: List<RuleVariable>,
         ruleVariableValueMap: RuleVariableValueMap,
         ruleSupplementaryData: RuleSupplementaryData,
     ): List<RuleEffects> {
         val supplementaryMap = RuleConditionEvaluator.convertSupplementaryData(ruleSupplementaryData)
-        val evaluator = RuleConditionEvaluator()
+        val evaluator = RuleConditionEvaluator(ruleVariables)
         val ruleEffects: MutableList<RuleEffects> = ArrayList()
         val enrollmentRules: List<Rule> = filterRules(rules).sorted()
         val rulesByStage: Map<String, List<Rule>> = rules

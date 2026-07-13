@@ -26,7 +26,7 @@ internal data class RuleEvaluationResult(
                 listOf(
                     RuleEffect(
                         rule.uid,
-                        RuleAction(errorMessage, "ERROR"),
+                        RuleAction(errorMessage, RuleAction.ERROR),
                         errorMessage,
                     ),
                 )

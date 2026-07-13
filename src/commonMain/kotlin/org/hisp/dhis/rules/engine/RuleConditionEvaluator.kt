@@ -11,9 +11,12 @@ import org.hisp.dhis.rules.engine.RuleEvaluationResult.Companion.errorRule
 import org.hisp.dhis.rules.engine.RuleEvaluationResult.Companion.evaluatedResult
 import org.hisp.dhis.rules.engine.RuleEvaluationResult.Companion.notEvaluatedResult
 import org.hisp.dhis.rules.models.*
-import org.hisp.dhis.rules.utils.unwrapVariableName
 
-internal class RuleConditionEvaluator {
+internal class RuleConditionEvaluator(
+    ruleVariables: List<RuleVariable> = emptyList(),
+) {
+    private val ruleVariablesByName: Map<String, RuleVariable> = ruleVariables.associateBy { it.name }
+
     fun getEvaluatedAndErrorRuleEffects(
         targetType: TrackerObjectType,
         targetUid: String,
@@ -70,18 +73,20 @@ internal class RuleConditionEvaluator {
                 ) {
                     for (action in if (attributeType == AttributeType.DATA_ELEMENT) rule.actionsForDataElement else rule.actionsForEnrollment) {
                         try {
-                            // Check if action is assigning value to calculated variable
-                            if (isAssignToCalculatedValue(action)) {
+                            // Assignments to program rule variables mutate the value map for
+                            // subsequent rules; when the variable is backed by a data element or
+                            // attribute matching the evaluation context, an effect targeting the
+                            // backing field is emitted as well
+                            val target = action.assignTarget()
+                            if (target is AssignTarget.Variable) {
+                                val data = processRuleAction(rule, action, valueMap, supplementaryMap)
                                 updateValueMap(
-                                    unwrapVariableName(action.content()!!),
-                                    VariableValue(
-                                        ValueType.STRING,
-                                        process(action.dataExpression, valueMap, supplementaryMap),
-                                        listOf(),
-                                        null,
-                                    ),
+                                    target.name,
+                                    VariableValue(ValueType.STRING, data, listOf(), null),
                                     valueMap,
                                 )
+                                createVariableAssignEffect(rule, action, target, data, attributeType)
+                                    ?.let { ruleEffects.add(it) }
                             } else {
                                 ruleEffects.add(create(rule, action, valueMap, supplementaryMap))
                             }
@@ -116,9 +121,12 @@ internal class RuleConditionEvaluator {
         targetUid: String,
         ruleEvaluationResults: MutableList<RuleEvaluationResult>,
     ) {
+        // IllegalArgumentException signals a rule-configuration problem (e.g. a malformed
+        // ASSIGN target), reported like an expression error rather than an unexpected one
+        val isConfigurationError = e is IllegalExpressionException || e is IllegalArgumentException
         val errorMessage: String
         errorMessage =
-            if (ruleAction != null && e is IllegalExpressionException) {
+            if (ruleAction != null && isConfigurationError) {
                 "Action " + ruleAction::class.simpleName +
                     " from rule " + rule.name + " with id " + rule.uid +
                     " executed for " + targetType.name + "(" + targetUid + ")" +
@@ -130,7 +138,7 @@ internal class RuleConditionEvaluator {
                     " executed for " + targetType.name + "(" + targetUid + ")" +
                     " with condition (" + rule.condition + ")" +
                     " raised an unexpected exception: " + e.message
-            } else if (e is IllegalExpressionException) {
+            } else if (isConfigurationError) {
                 "Rule " + rule.name + " with id " + rule.uid +
                     " executed for " + targetType.name + "(" + targetUid + ")" +
                     " with condition (" + rule.condition + ")" +
@@ -175,7 +183,40 @@ internal class RuleConditionEvaluator {
             result
         }
 
-    private fun isAssignToCalculatedValue(ruleAction: RuleAction): Boolean = ruleAction.type == "ASSIGN" && ruleAction.field().isNullOrEmpty()
+    /**
+     * Builds the effect for an assignment to a program rule variable, so the caller can apply
+     * the value to the data element or attribute the variable is backed by. The backing field
+     * and its attribute type are injected into a copy of the action, making the effect
+     * self-contained for consumers that read `field`.
+     *
+     * Returns null when there is nothing to apply: calculated values are not backed by a field
+     * (their `field` is the variable's own uid), and variables whose backing does not match the
+     * evaluation context are left to the pass that owns them (data elements to the event pass,
+     * tracked entity attributes to the enrollment pass) so evaluateAll emits each assignment
+     * exactly once.
+     */
+    private fun createVariableAssignEffect(
+        rule: Rule,
+        ruleAction: RuleAction,
+        target: AssignTarget.Variable,
+        data: String?,
+        attributeType: AttributeType,
+    ): RuleEffect? {
+        val variable = ruleVariablesByName[target.name] ?: return null
+        if (variable is RuleVariableCalculatedValue || variable.field.isEmpty()) return null
+        val backingType =
+            if (variable is RuleVariableAttribute) {
+                AttributeType.TRACKED_ENTITY_ATTRIBUTE
+            } else {
+                AttributeType.DATA_ELEMENT
+            }
+        if (backingType != attributeType) return null
+        val effectAction =
+            ruleAction.copy(
+                values = ruleAction.values + mapOf("field" to variable.field, "attributeType" to backingType.name),
+            )
+        return RuleEffect(rule.uid, effectAction, if (data.isNullOrEmpty()) null else data)
+    }
 
     private fun updateValueMap(
         variable: String,
@@ -191,7 +232,7 @@ internal class RuleConditionEvaluator {
         valueMap: MutableMap<String, VariableValue>,
         supplementaryMap: Map<String, List<String>>,
     ): RuleEffect {
-        if (ruleAction.type == "ASSIGN") {
+        if (ruleAction.type == RuleAction.ASSIGN) {
             val data = processRuleAction(rule, ruleAction, valueMap, supplementaryMap)
             updateValueMap(ruleAction.field()!!, VariableValue(ValueType.STRING, data, listOf(), null), valueMap)
             return if (data.isNullOrEmpty()) {
