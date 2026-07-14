@@ -2,7 +2,7 @@ package org.hisp.dhis.rules.models
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
+import kotlin.test.assertIs
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -49,18 +49,28 @@ class RuleActionAssignTargetTest {
     }
 
     @Test
-    fun assignTargetFailsWhenNeitherFieldNorContentIsSet() {
+    fun assignTargetIsInvalidWhenNeitherFieldNorContentIsSet() {
         val action = RuleAction("2+2", RuleAction.ASSIGN)
-        val exception = assertFailsWith<IllegalArgumentException> { action.assignTarget() }
-        assertTrue(exception.message!!.contains("'field'"))
-        assertTrue(exception.message!!.contains("'content'"))
+        val target = action.assignTarget()
+        assertIs<AssignTarget.Invalid>(target)
+        assertTrue(target.reason.contains("'field'"))
+        assertTrue(target.reason.contains("'content'"))
     }
 
     @Test
-    fun assignTargetFailsWhenContentIsNotAVariableReference() {
+    fun assignTargetIsInvalidWhenContentIsNotAVariableReference() {
         val action = RuleAction("2+2", RuleAction.ASSIGN, mapOf("content" to "test_variable"))
-        val exception = assertFailsWith<IllegalArgumentException> { action.assignTarget() }
-        assertTrue(exception.message!!.contains("#{variableName}"))
-        assertTrue(exception.message!!.contains("test_variable"))
+        val target = action.assignTarget()
+        assertIs<AssignTarget.Invalid>(target)
+        assertTrue(target.reason.contains("#{variableName}"))
+        assertTrue(target.reason.contains("test_variable"))
+    }
+
+    @Test
+    fun assignTargetIsInvalidWhenVariableNameIsEmptyOrMalformed() {
+        for (content in listOf("#{}", "A{}", "#{a}b}", "#{a{b}", "#{", "A{{}")) {
+            val action = RuleAction("2+2", RuleAction.ASSIGN, mapOf("content" to content))
+            assertIs<AssignTarget.Invalid>(action.assignTarget(), "content: $content")
+        }
     }
 }

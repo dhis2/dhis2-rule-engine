@@ -13,6 +13,7 @@ internal class RuleEngineMultipleExecution {
     ): List<RuleEffects> {
         val supplementaryMap = RuleConditionEvaluator.convertSupplementaryData(ruleSupplementaryData)
         val evaluator = RuleConditionEvaluator(ruleVariables)
+        val hasEnrollmentPass = ruleVariableValueMap.enrollmentMap.isNotEmpty()
         val ruleEffects: MutableList<RuleEffects> = ArrayList()
         val enrollmentRules: List<Rule> = filterRules(rules).sorted()
         val rulesByStage: Map<String, List<Rule>> = rules
@@ -50,6 +51,7 @@ internal class RuleEngineMultipleExecution {
                         supplementaryMap,
                         eventRules,
                         AttributeType.DATA_ELEMENT,
+                        hasEnrollmentPass,
                     ),
                 ),
             )

@@ -17,14 +17,16 @@ public final class org/hisp/dhis/rules/DateUtils$Companion {
 }
 
 public final class org/hisp/dhis/rules/Logger {
-	public fun <init> (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public fun <init> (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
 	public final fun component1 ()Lkotlin/jvm/functions/Function1;
 	public final fun component2 ()Lkotlin/jvm/functions/Function1;
-	public final fun copy (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lorg/hisp/dhis/rules/Logger;
-	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/Logger;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lorg/hisp/dhis/rules/Logger;
+	public final fun component3 ()Lkotlin/jvm/functions/Function1;
+	public final fun copy (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lorg/hisp/dhis/rules/Logger;
+	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/Logger;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lorg/hisp/dhis/rules/Logger;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getFine ()Lkotlin/jvm/functions/Function1;
 	public final fun getSevere ()Lkotlin/jvm/functions/Function1;
+	public final fun getWarning ()Lkotlin/jvm/functions/Function1;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
@@ -166,6 +168,17 @@ public final class org/hisp/dhis/rules/models/AssignTarget$Field : org/hisp/dhis
 	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/models/AssignTarget$Field;Ljava/lang/String;ILjava/lang/Object;)Lorg/hisp/dhis/rules/models/AssignTarget$Field;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getField ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class org/hisp/dhis/rules/models/AssignTarget$Invalid : org/hisp/dhis/rules/models/AssignTarget {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lorg/hisp/dhis/rules/models/AssignTarget$Invalid;
+	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/models/AssignTarget$Invalid;Ljava/lang/String;ILjava/lang/Object;)Lorg/hisp/dhis/rules/models/AssignTarget$Invalid;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReason ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
@@ -605,10 +618,5 @@ public final class org/hisp/dhis/rules/models/TriggerEnvironment : java/lang/Enu
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/hisp/dhis/rules/models/TriggerEnvironment;
 	public static fun values ()[Lorg/hisp/dhis/rules/models/TriggerEnvironment;
-}
-
-public final class org/hisp/dhis/rules/utils/UtilsKt {
-	public static final fun currentDate ()Lkotlinx/datetime/LocalDate;
-	public static final fun unwrapVariableName (Ljava/lang/String;)Ljava/lang/String;
 }
 
