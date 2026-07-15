@@ -11,6 +11,7 @@ class RuleVariableNewestStageEvent(
     override val fieldType: RuleValueType,
     val programStage: String,
 ) : RuleVariable {
+    override val optionsByCode: Map<String, String> = options.associate { it.code to it.name }
     override fun createValues(
         ruleEvent: RuleEvent?,
         allEventValues: Map<String, List<RuleDataValueHistory>>,

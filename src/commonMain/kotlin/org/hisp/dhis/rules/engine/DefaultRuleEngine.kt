@@ -10,7 +10,6 @@ import org.hisp.dhis.rules.api.RuleContextRequirements
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
 import org.hisp.dhis.rules.models.*
-import org.hisp.dhis.rules.utils.filterRules
 import org.hisp.dhis.rules.utils.orderEvents
 
 internal class DefaultRuleEngine : RuleEngine {
@@ -33,7 +32,7 @@ internal class DefaultRuleEngine : RuleEngine {
             target.event,
             valueMap,
             RuleConditionEvaluator.convertSupplementaryData(executionContext.ruleSupplementaryData),
-            filterRules(executionContext.rules, target).sorted(),
+            executionContext.rulesByStage[target.programStage] ?: executionContext.enrollmentRules,
             AttributeType.DATA_ELEMENT,
         )
     }
@@ -55,7 +54,7 @@ internal class DefaultRuleEngine : RuleEngine {
             target.enrollment,
             valueMap,
             RuleConditionEvaluator.convertSupplementaryData(executionContext.ruleSupplementaryData),
-            filterRules(executionContext.rules).sorted(),
+            executionContext.enrollmentRules,
             AttributeType.TRACKED_ENTITY_ATTRIBUTE,
         )
     }
@@ -69,9 +68,8 @@ internal class DefaultRuleEngine : RuleEngine {
             RuleVariableValueMapBuilder()
                 .multipleBuild(executionContext.constantsValues, executionContext.ruleVariables, eventsTarget.toSet(), enrollmentTarget)
         return RuleEngineMultipleExecution().execute(
-            executionContext.rules,
+            executionContext,
             valueMap,
-            executionContext.ruleSupplementaryData,
         )
     }
 
@@ -102,10 +100,10 @@ internal class DefaultRuleEngine : RuleEngine {
     ): RuleValidationResult =
         try {
             val validationMap: Map<String, ValueType> = dataItemStore.mapValues { e -> e.value.valueType.toValueType() }
-            Expression(expression, mode, false).validate(validationMap)
+            val parsed = Expression(expression, mode, false)
+            parsed.validate(validationMap)
             val displayNames: Map<String, String> = dataItemStore.mapValues { e -> e.value.displayName }
-            val description = Expression(expression, mode, false).describe(displayNames)
-            RuleValidationResult(valid = true, description = description)
+            RuleValidationResult(valid = true, description = parsed.describe(displayNames))
         } catch (ex: IllegalExpressionException) {
             RuleValidationResult(
                 valid = false,

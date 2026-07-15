@@ -15,8 +15,9 @@ interface RuleVariable {
         currentEnrollmentValues: Map<String, RuleAttributeValue>,
     ): RuleVariableValue
 
-    fun getOptionName(value: String): String {
-        return options
-            .find { (_, code): Option -> value == code }?.name ?: value
-    }
+    // Concrete classes should override this with a stored val so the map is built once.
+    // The default recomputes on every call, which is safe for external implementations.
+    val optionsByCode: Map<String, String> get() = options.associate { it.code to it.name }
+
+    fun getOptionName(value: String): String = optionsByCode[value] ?: value
 }

@@ -474,11 +474,13 @@ public abstract interface class org/hisp/dhis/rules/models/RuleVariable {
 	public abstract fun getName ()Ljava/lang/String;
 	public fun getOptionName (Ljava/lang/String;)Ljava/lang/String;
 	public abstract fun getOptions ()Ljava/util/List;
+	public fun getOptionsByCode ()Ljava/util/Map;
 	public abstract fun getUseCodeForOptionSet ()Z
 }
 
 public final class org/hisp/dhis/rules/models/RuleVariable$DefaultImpls {
 	public static fun getOptionName (Lorg/hisp/dhis/rules/models/RuleVariable;Ljava/lang/String;)Ljava/lang/String;
+	public static fun getOptionsByCode (Lorg/hisp/dhis/rules/models/RuleVariable;)Ljava/util/Map;
 }
 
 public final class org/hisp/dhis/rules/models/RuleVariableAttribute : org/hisp/dhis/rules/models/RuleVariable {
@@ -497,6 +499,7 @@ public final class org/hisp/dhis/rules/models/RuleVariableAttribute : org/hisp/d
 	public fun getName ()Ljava/lang/String;
 	public fun getOptionName (Ljava/lang/String;)Ljava/lang/String;
 	public fun getOptions ()Ljava/util/List;
+	public fun getOptionsByCode ()Ljava/util/Map;
 	public fun getUseCodeForOptionSet ()Z
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -510,6 +513,7 @@ public final class org/hisp/dhis/rules/models/RuleVariableCalculatedValue : org/
 	public fun getName ()Ljava/lang/String;
 	public fun getOptionName (Ljava/lang/String;)Ljava/lang/String;
 	public fun getOptions ()Ljava/util/List;
+	public fun getOptionsByCode ()Ljava/util/Map;
 	public fun getUseCodeForOptionSet ()Z
 }
 
@@ -521,6 +525,7 @@ public final class org/hisp/dhis/rules/models/RuleVariableCurrentEvent : org/his
 	public fun getName ()Ljava/lang/String;
 	public fun getOptionName (Ljava/lang/String;)Ljava/lang/String;
 	public fun getOptions ()Ljava/util/List;
+	public fun getOptionsByCode ()Ljava/util/Map;
 	public fun getUseCodeForOptionSet ()Z
 }
 
@@ -532,6 +537,7 @@ public final class org/hisp/dhis/rules/models/RuleVariableNewestEvent : org/hisp
 	public fun getName ()Ljava/lang/String;
 	public fun getOptionName (Ljava/lang/String;)Ljava/lang/String;
 	public fun getOptions ()Ljava/util/List;
+	public fun getOptionsByCode ()Ljava/util/Map;
 	public fun getUseCodeForOptionSet ()Z
 }
 
@@ -543,6 +549,7 @@ public final class org/hisp/dhis/rules/models/RuleVariableNewestStageEvent : org
 	public fun getName ()Ljava/lang/String;
 	public fun getOptionName (Ljava/lang/String;)Ljava/lang/String;
 	public fun getOptions ()Ljava/util/List;
+	public fun getOptionsByCode ()Ljava/util/Map;
 	public final fun getProgramStage ()Ljava/lang/String;
 	public fun getUseCodeForOptionSet ()Z
 }
@@ -555,6 +562,7 @@ public final class org/hisp/dhis/rules/models/RuleVariablePreviousEvent : org/hi
 	public fun getName ()Ljava/lang/String;
 	public fun getOptionName (Ljava/lang/String;)Ljava/lang/String;
 	public fun getOptions ()Ljava/util/List;
+	public fun getOptionsByCode ()Ljava/util/Map;
 	public fun getUseCodeForOptionSet ()Z
 }
 
