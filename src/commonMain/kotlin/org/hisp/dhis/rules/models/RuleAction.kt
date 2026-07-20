@@ -30,7 +30,7 @@ data class RuleAction(
      * `content` value, or when `content` is not a program rule variable reference like
      * `#{variableName}`.
      */
-    fun assignTarget(): AssignTarget? {
+    internal fun assignTarget(): AssignTarget? {
         if (type != ASSIGN) return null
         val field = field()
         if (!field.isNullOrEmpty()) return AssignTarget.Field(field)

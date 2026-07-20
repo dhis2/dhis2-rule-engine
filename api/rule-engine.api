@@ -158,42 +158,6 @@ public final class org/hisp/dhis/rules/engine/RuleVariableValue {
 	public final fun toVariableValue ()Lorg/hisp/dhis/lib/expression/spi/VariableValue;
 }
 
-public abstract class org/hisp/dhis/rules/models/AssignTarget {
-}
-
-public final class org/hisp/dhis/rules/models/AssignTarget$Field : org/hisp/dhis/rules/models/AssignTarget {
-	public fun <init> (Ljava/lang/String;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;)Lorg/hisp/dhis/rules/models/AssignTarget$Field;
-	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/models/AssignTarget$Field;Ljava/lang/String;ILjava/lang/Object;)Lorg/hisp/dhis/rules/models/AssignTarget$Field;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getField ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class org/hisp/dhis/rules/models/AssignTarget$Invalid : org/hisp/dhis/rules/models/AssignTarget {
-	public fun <init> (Ljava/lang/String;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;)Lorg/hisp/dhis/rules/models/AssignTarget$Invalid;
-	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/models/AssignTarget$Invalid;Ljava/lang/String;ILjava/lang/Object;)Lorg/hisp/dhis/rules/models/AssignTarget$Invalid;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getReason ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class org/hisp/dhis/rules/models/AssignTarget$Variable : org/hisp/dhis/rules/models/AssignTarget {
-	public fun <init> (Ljava/lang/String;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;)Lorg/hisp/dhis/rules/models/AssignTarget$Variable;
-	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/models/AssignTarget$Variable;Ljava/lang/String;ILjava/lang/Object;)Lorg/hisp/dhis/rules/models/AssignTarget$Variable;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getName ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
 public final class org/hisp/dhis/rules/models/AttributeType : java/lang/Enum {
 	public static final field DATA_ELEMENT Lorg/hisp/dhis/rules/models/AttributeType;
 	public static final field TRACKED_ENTITY_ATTRIBUTE Lorg/hisp/dhis/rules/models/AttributeType;
@@ -246,7 +210,6 @@ public final class org/hisp/dhis/rules/models/RuleAction : java/lang/Comparable 
 	public static final field ERROR Ljava/lang/String;
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Ljava/lang/Integer;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Ljava/lang/Integer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun assignTarget ()Lorg/hisp/dhis/rules/models/AssignTarget;
 	public final fun attributeType ()Ljava/lang/String;
 	public synthetic fun compareTo (Ljava/lang/Object;)I
 	public fun compareTo (Lorg/hisp/dhis/rules/models/RuleAction;)I

@@ -9,7 +9,7 @@ package org.hisp.dhis.rules.models
  * see the new value, and additionally produces a [RuleEffect] when the variable is backed by
  * a data element or tracked entity attribute.
  */
-sealed class AssignTarget {
+internal sealed class AssignTarget {
     /**
      * Assign to a program rule variable, referenced by name in the action's `content`.
      *
