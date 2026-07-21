@@ -110,7 +110,7 @@ internal class RuleConditionEvaluator(
                                         ?.let { ruleEffects.add(it) }
                                 }
                                 is AssignTarget.Invalid -> throw RuleConfigurationException(target.reason)
-                                else -> ruleEffects.add(create(rule, action, valueMap, supplementaryMap))
+                                is AssignTarget.Field, null -> ruleEffects.add(create(rule, action, valueMap, supplementaryMap))
                             }
                         } catch (e: Exception) {
                             addRuleErrorResult(rule, action, e, targetType, targetUid, ruleEvaluationResults)
