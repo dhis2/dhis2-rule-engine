@@ -28,7 +28,7 @@ internal class DefaultRuleEngine : RuleEngine {
                 ruleEnrollment,
                 target,
             )
-        return RuleConditionEvaluator().getRuleEffects(
+        return RuleConditionEvaluator(executionContext.ruleVariables).getRuleEffects(
             TrackerObjectType.EVENT,
             target.event,
             valueMap,
@@ -50,7 +50,7 @@ internal class DefaultRuleEngine : RuleEngine {
                 ruleEvents.toSet(),
                 target,
             )
-        return RuleConditionEvaluator().getRuleEffects(
+        return RuleConditionEvaluator(executionContext.ruleVariables).getRuleEffects(
             TrackerObjectType.ENROLLMENT,
             target.enrollment,
             valueMap,
@@ -70,6 +70,7 @@ internal class DefaultRuleEngine : RuleEngine {
                 .multipleBuild(executionContext.constantsValues, executionContext.ruleVariables, eventsTarget.toSet(), enrollmentTarget)
         return RuleEngineMultipleExecution().execute(
             executionContext.rules,
+            executionContext.ruleVariables,
             valueMap,
             executionContext.ruleSupplementaryData,
         )

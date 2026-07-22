@@ -9,11 +9,24 @@ import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.currentDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 // ToDo: function tests (check that function invocations are producing expected values; check nested function invocation)
 // ToDo: various source type tests (referencing variables from different events)
 
 class RuleEngineEffectTypesTest {
+    private fun getTestRuleEnrollment(): RuleEnrollment =
+        RuleEnrollment(
+            enrollment = "test_enrollment",
+            programName = "test_program",
+            incidentDate = RuleLocalDate.currentDate(),
+            enrollmentDate = RuleLocalDate.currentDate(),
+            status = RuleEnrollmentStatus.ACTIVE,
+            organisationUnit = "test_ou",
+            organisationUnitCode = "test_ou_code",
+            attributeValues = listOf(RuleAttributeValue("test_attribute_one", "test_value")),
+        )
+
     private fun getTestRuleEvent(status: RuleEventStatus): RuleEvent =
         RuleEvent(
             event = "test_event",
@@ -50,6 +63,168 @@ class RuleEngineEffectTypesTest {
         assertEquals(1, ruleEffects.size)
         assertEquals("test_string", ruleEffects[0].data)
         assertEquals(ruleAction, ruleEffects[0].ruleAction)
+    }
+
+    @Test
+    fun shouldAssignCorrectlyToAnAttribute() {
+        val ruleAction = RuleAction("'test_string'", RuleAction.ASSIGN,
+            mapOf(Pair("content", "A{attribute}")))
+        val rule = Rule("true", listOf(ruleAction))
+        val ruleVariable = RuleVariableAttribute(
+            "attribute",
+            true,
+            ArrayList(),
+            "test_attribute_one",
+            RuleValueType.TEXT,
+        )
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(
+                getTestRuleEnrollment(),
+                emptyList(),
+                RuleEngineContext(listOf(rule), listOf(ruleVariable)),
+            )
+        assertEquals(1, ruleEffects.size)
+        assertEquals("test_string", ruleEffects[0].data)
+        assertEquals("test_attribute_one", ruleEffects[0].ruleAction.field())
+        assertEquals(AttributeType.TRACKED_ENTITY_ATTRIBUTE.name, ruleEffects[0].ruleAction.attributeType())
+        assertEquals("A{attribute}", ruleEffects[0].ruleAction.content())
+    }
+
+    @Test
+    fun assignToAttributeVariableMustProduceEffectInEventOnlyEvaluation() {
+        val ruleAction = RuleAction("'test_string'", RuleAction.ASSIGN, mapOf(Pair("content", "A{attribute}")))
+        val rule = Rule("true", listOf(ruleAction))
+        val ruleVariable = RuleVariableAttribute(
+            "attribute",
+            true,
+            ArrayList(),
+            "test_attribute_one",
+            RuleValueType.TEXT,
+        )
+        // single-event evaluation has no enrollment pass to emit the attribute assignment,
+        // so the event pass emits it
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(
+                getTestRuleEvent(RuleEventStatus.ACTIVE),
+                null,
+                emptyList(),
+                RuleEngineContext(listOf(rule), listOf(ruleVariable)),
+            )
+        assertEquals(1, ruleEffects.size)
+        assertEquals("test_string", ruleEffects[0].data)
+        assertEquals("test_attribute_one", ruleEffects[0].ruleAction.field())
+        assertEquals(AttributeType.TRACKED_ENTITY_ATTRIBUTE.name, ruleEffects[0].ruleAction.attributeType())
+    }
+
+    @Test
+    fun shouldAssignCorrectlyToADataElementBackedVariable() {
+        val ruleAction = RuleAction("'test_string'", RuleAction.ASSIGN, mapOf(Pair("content", "#{variable}")))
+        val rule = Rule("true", listOf(ruleAction))
+        val ruleVariable = RuleVariableCurrentEvent(
+            "variable",
+            true,
+            ArrayList(),
+            "test_data_element",
+            RuleValueType.TEXT,
+        )
+        val ruleEffects =
+            RuleEngine.getInstance().evaluate(
+                getTestRuleEvent(RuleEventStatus.ACTIVE),
+                null,
+                emptyList(),
+                RuleEngineContext(listOf(rule), listOf(ruleVariable)),
+            )
+        assertEquals(1, ruleEffects.size)
+        assertEquals("test_string", ruleEffects[0].data)
+        assertEquals("test_data_element", ruleEffects[0].ruleAction.field())
+        assertEquals(AttributeType.DATA_ELEMENT.name, ruleEffects[0].ruleAction.attributeType())
+    }
+
+    @Test
+    fun assignToAttributeVariableMustProduceSingleEffectInMultipleExecution() {
+        val ruleAction = RuleAction("'test_string'", RuleAction.ASSIGN, mapOf(Pair("content", "A{attribute}")))
+        val rule = Rule("true", listOf(ruleAction))
+        val ruleVariable = RuleVariableAttribute(
+            "attribute",
+            true,
+            ArrayList(),
+            "test_attribute_one",
+            RuleValueType.TEXT,
+        )
+        val ruleEffects =
+            RuleEngine.getInstance().evaluateAll(
+                getTestRuleEnrollment(),
+                listOf(getTestRuleEvent(RuleEventStatus.ACTIVE)),
+                RuleEngineContext(listOf(rule), listOf(ruleVariable)),
+            )
+        val allEffects = ruleEffects.flatMap { it.ruleEffects }
+        assertEquals(1, allEffects.size)
+        assertEquals("test_attribute_one", allEffects[0].ruleAction.field())
+        assertEquals(1, ruleEffects.single { it.isEnrollment }.ruleEffects.size)
+    }
+
+    @Test
+    fun assignToAttributeVariableInStageScopedRuleMustProduceEventEffect() {
+        val ruleAction = RuleAction("'test_string'", RuleAction.ASSIGN, mapOf(Pair("content", "A{attribute}")))
+        // a stage-scoped rule is excluded from the enrollment pass, so the event pass must
+        // emit the attribute assignment instead
+        val rule = Rule(condition = "true", actions = listOf(ruleAction), programStage = "test_program_stage")
+        val ruleVariable = RuleVariableAttribute(
+            "attribute",
+            true,
+            ArrayList(),
+            "test_attribute_one",
+            RuleValueType.TEXT,
+        )
+        val ruleEffects =
+            RuleEngine.getInstance().evaluateAll(
+                getTestRuleEnrollment(),
+                listOf(getTestRuleEvent(RuleEventStatus.ACTIVE)),
+                RuleEngineContext(listOf(rule), listOf(ruleVariable)),
+            )
+        val allEffects = ruleEffects.flatMap { it.ruleEffects }
+        assertEquals(1, allEffects.size)
+        assertEquals("test_attribute_one", allEffects[0].ruleAction.field())
+        assertEquals(AttributeType.TRACKED_ENTITY_ATTRIBUTE.name, allEffects[0].ruleAction.attributeType())
+        assertEquals(0, ruleEffects.single { it.isEnrollment }.ruleEffects.size)
+    }
+
+    @Test
+    fun assignToAttributeVariableMustProduceEventEffectWhenThereIsNoEnrollment() {
+        val ruleAction = RuleAction("'test_string'", RuleAction.ASSIGN, mapOf(Pair("content", "A{attribute}")))
+        val rule = Rule("true", listOf(ruleAction))
+        val ruleVariable = RuleVariableAttribute(
+            "attribute",
+            true,
+            ArrayList(),
+            "test_attribute_one",
+            RuleValueType.TEXT,
+        )
+        val ruleEffects =
+            RuleEngine.getInstance().evaluateAll(
+                null,
+                listOf(getTestRuleEvent(RuleEventStatus.ACTIVE)),
+                RuleEngineContext(listOf(rule), listOf(ruleVariable)),
+            )
+        val allEffects = ruleEffects.flatMap { it.ruleEffects }
+        assertEquals(1, allEffects.size)
+        assertEquals("test_attribute_one", allEffects[0].ruleAction.field())
+    }
+
+    @Test
+    fun assignToUndeclaredVariableMustNotProduceEffect() {
+        val ruleAction = RuleAction("'test_string'", RuleAction.ASSIGN, mapOf(Pair("content", "#{undeclared_variable}")))
+        val rule = Rule("true", listOf(ruleAction), "rule_uid")
+        // assigning to a name without a program rule variable keeps the value visible to
+        // subsequent rules but has no backing field to emit an effect for (a warning is logged)
+        val ruleEffects =
+            RuleEngine.getInstance().evaluateAll(
+                null,
+                listOf(getTestRuleEvent(RuleEventStatus.ACTIVE)),
+                getRuleEngineContext(listOf(rule)),
+            )
+        assertEquals(1, ruleEffects.size)
+        assertEquals(0, ruleEffects[0].ruleEffects.size)
     }
 
     @Test
@@ -108,6 +283,25 @@ class RuleEngineEffectTypesTest {
 
         assertEquals(enrollmentEffects.map { it.data }, enrollmentEffectsAll.map { it.data })
         assertEquals(eventEffects.map { it.data }, eventEffectsAll.map { it.data })
+    }
+
+    @Test
+    fun malformedAssignProducesClearErrorEffectDuringEvaluation() {
+        val action = RuleAction("2+2", RuleAction.ASSIGN)
+        val rule = Rule("true", listOf(action), "rule_uid")
+        val ruleEffects =
+            RuleEngine.getInstance().evaluateAll(
+                null,
+                listOf(getTestRuleEvent(RuleEventStatus.ACTIVE)),
+                getRuleEngineContext(listOf(rule)),
+            )
+        assertEquals(1, ruleEffects.size)
+        assertEquals(1, ruleEffects[0].ruleEffects.size)
+        val errorEffect = ruleEffects[0].ruleEffects[0]
+        assertEquals(RuleAction.ERROR, errorEffect.ruleAction.type)
+        assertTrue(errorEffect.data!!.contains("raised an error"))
+        assertTrue(errorEffect.data!!.contains("'field'"))
+        assertTrue(errorEffect.data!!.contains("'content'"))
     }
 
     @Test

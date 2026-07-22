@@ -11,9 +11,12 @@ import org.hisp.dhis.rules.engine.RuleEvaluationResult.Companion.errorRule
 import org.hisp.dhis.rules.engine.RuleEvaluationResult.Companion.evaluatedResult
 import org.hisp.dhis.rules.engine.RuleEvaluationResult.Companion.notEvaluatedResult
 import org.hisp.dhis.rules.models.*
-import org.hisp.dhis.rules.utils.unwrapVariableName
 
-internal class RuleConditionEvaluator {
+internal class RuleConditionEvaluator(
+    ruleVariables: List<RuleVariable> = emptyList(),
+) {
+    private val ruleVariablesByName: Map<String, RuleVariable> = ruleVariables.associateBy { it.name }
+
     fun getEvaluatedAndErrorRuleEffects(
         targetType: TrackerObjectType,
         targetUid: String,
@@ -21,8 +24,10 @@ internal class RuleConditionEvaluator {
         supplementaryMap: Map<String, List<String>>,
         rules: List<Rule>,
         attributeType: AttributeType,
+        hasEnrollmentPass: Boolean = false,
     ): List<RuleEffect> {
-        val ruleEvaluationResults = getRuleEvaluationResults(targetType, targetUid, valueMap, supplementaryMap, rules, attributeType)
+        val ruleEvaluationResults =
+            getRuleEvaluationResults(targetType, targetUid, valueMap, supplementaryMap, rules, attributeType, hasEnrollmentPass)
         return ruleEvaluationResults
             .flatMap { result -> result.ruleEffects }
     }
@@ -49,6 +54,12 @@ internal class RuleConditionEvaluator {
             .flatMap { result -> result.ruleEffects }
     }
 
+    /**
+     * [hasEnrollmentPass] tells this pass whether the surrounding execution also evaluates
+     * the enrollment, which owns the effects for assignments to attribute-backed variables;
+     * when it does not (single-target evaluation, executions without an enrollment), the
+     * event pass emits them instead.
+     */
     fun getRuleEvaluationResults(
         targetType: TrackerObjectType,
         targetUid: String,
@@ -56,6 +67,7 @@ internal class RuleConditionEvaluator {
         supplementaryMap: Map<String, List<String>>,
         rules: List<Rule>,
         attributeType: AttributeType,
+        hasEnrollmentPass: Boolean = false,
     ): List<RuleEvaluationResult> {
         val ruleEvaluationResults: MutableList<RuleEvaluationResult> = ArrayList()
         for (rule in rules) {
@@ -70,20 +82,35 @@ internal class RuleConditionEvaluator {
                 ) {
                     for (action in if (attributeType == AttributeType.DATA_ELEMENT) rule.actionsForDataElement else rule.actionsForEnrollment) {
                         try {
-                            // Check if action is assigning value to calculated variable
-                            if (isAssignToCalculatedValue(action)) {
-                                updateValueMap(
-                                    unwrapVariableName(action.content()!!),
-                                    VariableValue(
-                                        ValueType.STRING,
-                                        process(action.dataExpression, valueMap, supplementaryMap),
-                                        listOf(),
-                                        null,
-                                    ),
-                                    valueMap,
-                                )
-                            } else {
-                                ruleEffects.add(create(rule, action, valueMap, supplementaryMap))
+                            // Assignments to program rule variables mutate the value map for
+                            // subsequent rules; when the variable is backed by a data element or
+                            // attribute, an effect targeting the backing field is emitted as well
+                            when (val target = action.assignTarget()) {
+                                is AssignTarget.Variable -> {
+                                    // Assigning to a name without a program rule variable is
+                                    // allowed: the value is visible to subsequent rules through
+                                    // the value map, but there is no backing field to emit an
+                                    // effect for, which is worth a warning as it may be a typo
+                                    val variable = ruleVariablesByName[target.name]
+                                    if (variable == null) {
+                                        log.warning(
+                                            "ASSIGN action in rule " + rule.uid + " assigns to '" + target.name +
+                                                "' which is not a defined program rule variable; the value is" +
+                                                " visible to subsequent rules but no effect is emitted",
+                                        )
+                                    }
+                                    val data = processRuleAction(rule, action, valueMap, supplementaryMap)
+                                    updateValueMap(
+                                        target.name,
+                                        VariableValue(ValueType.STRING, data, listOf(), null),
+                                        valueMap,
+                                    )
+                                    variable
+                                        ?.let { createVariableAssignEffect(rule, action, it, data, attributeType, hasEnrollmentPass) }
+                                        ?.let { ruleEffects.add(it) }
+                                }
+                                is AssignTarget.Invalid -> throw RuleConfigurationException(target.reason)
+                                is AssignTarget.Field, null -> ruleEffects.add(create(rule, action, valueMap, supplementaryMap))
                             }
                         } catch (e: Exception) {
                             addRuleErrorResult(rule, action, e, targetType, targetUid, ruleEvaluationResults)
@@ -116,31 +143,21 @@ internal class RuleConditionEvaluator {
         targetUid: String,
         ruleEvaluationResults: MutableList<RuleEvaluationResult>,
     ) {
-        val errorMessage: String
-        errorMessage =
-            if (ruleAction != null && e is IllegalExpressionException) {
-                "Action " + ruleAction::class.simpleName +
-                    " from rule " + rule.name + " with id " + rule.uid +
-                    " executed for " + targetType.name + "(" + targetUid + ")" +
-                    " with condition (" + rule.condition + ")" +
-                    " raised an error: " + e.message
-            } else if (ruleAction != null) {
-                "Action " + ruleAction::class.simpleName +
-                    " from rule " + rule.name + " with id " + rule.uid +
-                    " executed for " + targetType.name + "(" + targetUid + ")" +
-                    " with condition (" + rule.condition + ")" +
-                    " raised an unexpected exception: " + e.message
-            } else if (e is IllegalExpressionException) {
-                "Rule " + rule.name + " with id " + rule.uid +
-                    " executed for " + targetType.name + "(" + targetUid + ")" +
-                    " with condition (" + rule.condition + ")" +
-                    " raised an error: " + e.message
+        // Expression and rule-configuration errors are reported as errors; anything else as
+        // an unexpected exception
+        val isConfigurationError = e is IllegalExpressionException || e is RuleConfigurationException
+        val subject =
+            if (ruleAction != null) {
+                "Action " + ruleAction::class.simpleName + " from rule "
             } else {
-                "Rule " + rule.name + " with id " + rule.uid +
-                    " executed for " + targetType.name + "(" + targetUid + ")" +
-                    " with condition (" + rule.condition + ")" +
-                    " raised an unexpected exception: " + e.message
+                "Rule "
             }
+        val failure = if (isConfigurationError) "an error" else "an unexpected exception"
+        val errorMessage =
+            subject + rule.name + " with id " + rule.uid +
+                " executed for " + targetType.name + "(" + targetUid + ")" +
+                " with condition (" + rule.condition + ")" +
+                " raised " + failure + ": " + e.message
         log.severe(errorMessage)
         ruleEvaluationResults.add(errorRule(rule, errorMessage))
     }
@@ -175,7 +192,48 @@ internal class RuleConditionEvaluator {
             result
         }
 
-    private fun isAssignToCalculatedValue(ruleAction: RuleAction): Boolean = ruleAction.type == "ASSIGN" && ruleAction.field().isNullOrEmpty()
+    /**
+     * Builds the effect for an assignment to a program rule variable, so the caller can apply
+     * the value to the data element or attribute the variable is backed by. The backing field
+     * and its attribute type are injected into a copy of the action, making the effect
+     * self-contained for consumers that read `field`; the copy resolves to
+     * [AssignTarget.Field] and compares unequal to the configured action.
+     *
+     * Returns null when this pass does not emit the effect: calculated values are not backed
+     * by a field (their `field` is the variable's own uid), data-element backed effects are
+     * only emitted during event evaluation, and attribute backed effects are emitted during
+     * enrollment evaluation when an enrollment pass evaluates the rule — otherwise
+     * (single-event evaluation, executions without an enrollment, rules scoped to a program
+     * stage and thus excluded from the enrollment pass) the event pass emits them, so the
+     * assignment is never silently dropped.
+     */
+    private fun createVariableAssignEffect(
+        rule: Rule,
+        ruleAction: RuleAction,
+        variable: RuleVariable,
+        data: String?,
+        attributeType: AttributeType,
+        hasEnrollmentPass: Boolean,
+    ): RuleEffect? {
+        if (variable is RuleVariableCalculatedValue || variable.field.isEmpty()) return null
+        val backingType =
+            if (variable is RuleVariableAttribute) {
+                AttributeType.TRACKED_ENTITY_ATTRIBUTE
+            } else {
+                AttributeType.DATA_ELEMENT
+            }
+        val emitted =
+            when (backingType) {
+                attributeType -> true
+                AttributeType.TRACKED_ENTITY_ATTRIBUTE ->
+                    !(hasEnrollmentPass && rule.programStage.isNullOrEmpty())
+
+                else -> false
+            }
+        if (!emitted) return null
+        val effectAction = ruleAction.withAssignBacking(variable.field, backingType.name)
+        return RuleEffect(rule.uid, effectAction, if (data.isNullOrEmpty()) null else data)
+    }
 
     private fun updateValueMap(
         variable: String,
@@ -191,7 +249,7 @@ internal class RuleConditionEvaluator {
         valueMap: MutableMap<String, VariableValue>,
         supplementaryMap: Map<String, List<String>>,
     ): RuleEffect {
-        if (ruleAction.type == "ASSIGN") {
+        if (ruleAction.type == RuleAction.ASSIGN) {
             val data = processRuleAction(rule, ruleAction, valueMap, supplementaryMap)
             updateValueMap(ruleAction.field()!!, VariableValue(ValueType.STRING, data, listOf(), null), valueMap)
             return if (data.isNullOrEmpty()) {
