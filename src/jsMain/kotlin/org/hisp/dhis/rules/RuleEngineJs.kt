@@ -34,7 +34,7 @@ class RuleEngineJs(verbose: Boolean = false) {
     }
     fun evaluateAll(enrollmentTarget: RuleEnrollmentJs?, eventsTarget: Array<RuleEventJs>, executionContext: RuleEngineContextJs): Array<RuleEffectsJs>{
         return toRuleEffectsJsList(RuleEngine.getInstance().evaluateAll(toEnrollmentJava(enrollmentTarget),
-            eventsTarget.map(::toEventJava),
+            eventsTarget.map(::toEventJava).toList(),
             toRuleEngineContextJava(executionContext)))
     }
 
