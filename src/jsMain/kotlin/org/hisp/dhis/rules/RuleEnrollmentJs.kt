@@ -11,7 +11,7 @@ data class RuleEnrollmentJs(
     val incidentDate: RuleLocalDate,
     val enrollmentDate: RuleLocalDate,
     val status: RuleEnrollmentStatus,
-    val organisationUnit: String,
+    val organisationUnit: String?,
     val organisationUnitCode: String?,
     val attributeValues: Array<RuleAttributeValue>
 )
