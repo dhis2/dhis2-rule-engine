@@ -2620,7 +2620,7 @@ class RuleEngineFunctionTest {
             )
         val rule =
             Rule(
-                "d2:zScoreWFA(1,#{test_var_one},#{test_var_two}) == 0",
+                "d2:zScoreWFA(1,#{test_var_one},#{test_var_two}) == 0.05",
                 listOf(ruleAction),
                 "",
                 "",
@@ -2877,7 +2877,7 @@ class RuleEngineFunctionTest {
             )
         val rule =
             Rule(
-                "d2:zScoreWFH(81.5,#{test_var_one},#{test_var_two}) == 2",
+                "d2:zScoreWFH(81.5,#{test_var_one},#{test_var_two}) == 1.99",
                 listOf(ruleAction),
                 "",
                 "",
