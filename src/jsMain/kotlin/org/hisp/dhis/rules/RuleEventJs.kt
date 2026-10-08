@@ -17,7 +17,7 @@ data class RuleEventJs(
     val createdAtClientDate: RuleInstant?,
     val dueDate: RuleLocalDate?,
     val completedDate: RuleLocalDate?,
-    val organisationUnit: String,
+    val organisationUnit: String?,
     val organisationUnitCode: String?,
     val dataValues: Array<RuleDataValue>
 )
