@@ -81,7 +81,7 @@ class RuleEngineJs(verbose: Boolean = false) {
             incidentDate = enrollmentTarget.incidentDate,
             enrollmentDate = enrollmentTarget.enrollmentDate,
             status = enrollmentTarget.status,
-            organisationUnit = enrollmentTarget.organisationUnit,
+            organisationUnit = enrollmentTarget.organisationUnit ?: fallbackOrganisationUnit,
             organisationUnitCode = enrollmentTarget.organisationUnitCode,
             attributeValues = enrollmentTarget.attributeValues.toList()
         )
@@ -98,7 +98,7 @@ class RuleEngineJs(verbose: Boolean = false) {
             createdAtClientDate = event.createdAtClientDate,
             dueDate = event.dueDate,
             completedDate = event.completedDate,
-            organisationUnit = event.organisationUnit,
+            organisationUnit = event.organisationUnit ?: fallbackOrganisationUnit,
             organisationUnitCode = event.organisationUnitCode,
             dataValues = event.dataValues.toList()
         )
@@ -221,5 +221,6 @@ class RuleEngineJs(verbose: Boolean = false) {
 
     internal companion object {
         var verbose: Boolean = false
+        const val fallbackOrganisationUnit = "unspecified"
     }
 }
