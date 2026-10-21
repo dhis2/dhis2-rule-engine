@@ -37,6 +37,8 @@ data class RuleValidationResult(
     val errorMessage: String? = null,
     val exception: Throwable? = null,
     val description: String? = null,
+    val errors: List<RuleValidationIssue> = emptyList(),
+    val warnings: List<RuleValidationIssue> = emptyList(),
 ) {
     companion object {
         @JvmStatic
