@@ -438,21 +438,39 @@ public final class org/hisp/dhis/rules/models/RuleLocalDate$Companion {
 	public final fun parse (Ljava/lang/String;)Lorg/hisp/dhis/rules/models/RuleLocalDate;
 }
 
+public final class org/hisp/dhis/rules/models/RuleValidationIssue {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lorg/hisp/dhis/rules/models/RuleValidationIssue;
+	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/models/RuleValidationIssue;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lorg/hisp/dhis/rules/models/RuleValidationIssue;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getPosition ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class org/hisp/dhis/rules/models/RuleValidationResult {
 	public static final field Companion Lorg/hisp/dhis/rules/models/RuleValidationResult$Companion;
-	public fun <init> (ZLjava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;)V
-	public synthetic fun <init> (ZLjava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (ZLjava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;Ljava/util/List;Ljava/util/List;)V
+	public synthetic fun <init> (ZLjava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Z
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()Ljava/lang/Throwable;
 	public final fun component4 ()Ljava/lang/String;
-	public final fun copy (ZLjava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;)Lorg/hisp/dhis/rules/models/RuleValidationResult;
-	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/models/RuleValidationResult;ZLjava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;ILjava/lang/Object;)Lorg/hisp/dhis/rules/models/RuleValidationResult;
+	public final fun component5 ()Ljava/util/List;
+	public final fun component6 ()Ljava/util/List;
+	public final fun copy (ZLjava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;Ljava/util/List;Ljava/util/List;)Lorg/hisp/dhis/rules/models/RuleValidationResult;
+	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/models/RuleValidationResult;ZLjava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Lorg/hisp/dhis/rules/models/RuleValidationResult;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getDescription ()Ljava/lang/String;
 	public final fun getErrorMessage ()Ljava/lang/String;
+	public final fun getErrors ()Ljava/util/List;
 	public final fun getException ()Ljava/lang/Throwable;
 	public final fun getValid ()Z
+	public final fun getWarnings ()Ljava/util/List;
 	public fun hashCode ()I
 	public static final fun invalid (Ljava/lang/String;)Lorg/hisp/dhis/rules/models/RuleValidationResult;
 	public fun toString ()Ljava/lang/String;

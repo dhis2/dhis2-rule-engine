@@ -6,7 +6,9 @@ import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.engine.DefaultRuleEngine
 import org.hisp.dhis.rules.models.Rule
 import org.hisp.dhis.rules.models.RuleAction
+import org.hisp.dhis.lib.expression.spi.IllegalExpressionException
 import org.hisp.dhis.rules.models.RuleEngineValidationException
+import org.hisp.dhis.rules.models.RuleValidationIssue
 import kotlin.test.*
 
 /*
@@ -319,6 +321,106 @@ class RuleEngineGetDescriptionTest {
         val result = ruleEngine.validate("d2:validatePattern(d2:right(A{test_var_four},1),'\\/202\\d{1}')", itemStore)
         assertNotNull(result)
         assertTrue(result.valid)
+    }
+
+    @Test
+    fun shouldReturnIssueDetailsWhenVariableIsUnknown() {
+        val result = ruleEngine.validate("#{test_var_unknown} > 1", itemStore)
+
+        assertFalse(result.valid)
+        assertEquals(listOf(RuleValidationIssue("Unknown variable: `test_var_unknown`", "#{test_var_unknown}")), result.errors)
+        assertEquals(emptyList(), result.warnings)
+        assertEquals("Unknown variable: `test_var_unknown` (in #{test_var_unknown})", result.errorMessage)
+    }
+
+    @Test
+    fun shouldReturnIssueDetailsWhenConstantIsUnknown() {
+        val result = ruleEngine.validate("C{NAgjOfWMXg7} > 1", itemStore)
+
+        assertFalse(result.valid)
+        assertEquals(listOf(RuleValidationIssue("Unknown constant: `NAgjOfWMXg7`", "C{NAgjOfWMXg7}")), result.errors)
+        assertEquals("Unknown constant: `NAgjOfWMXg7` (in C{NAgjOfWMXg7})", result.errorMessage)
+    }
+
+    @Test
+    fun shouldReturnErrorDetailsWhenTypesAreIncompatible() {
+        val result = ruleEngine.validate("#{test_var_date_one} > 1", itemStore)
+
+        assertFalse(result.valid)
+        assertEquals(
+            listOf(
+                RuleValidationIssue(
+                    "Incompatible type for left operand of binary operator `>`, expected a NUMBER but was: DATE",
+                    "#{test_var_date_one} > 1",
+                ),
+            ),
+            result.errors,
+        )
+        assertEquals(emptyList(), result.warnings)
+    }
+
+    @Test
+    fun shouldReturnWarningDetailsWhenTypesAreMaybeIncompatible() {
+        val result = ruleEngine.validate("d2:length(#{test_var_number}) > 1", itemStore)
+
+        assertFalse(result.valid)
+        assertEquals(emptyList(), result.errors)
+        assertEquals(
+            listOf(
+                RuleValidationIssue(
+                    "Incompatible type for 1. argument of d2:length, expected STRING but was: NUMBER",
+                    "#{test_var_number}",
+                ),
+            ),
+            result.warnings,
+        )
+        assertEquals(
+            "Warning: Incompatible type for 1. argument of d2:length, expected STRING but was: NUMBER (in #{test_var_number})",
+            result.errorMessage,
+        )
+    }
+
+    @Test
+    fun shouldReturnAllIssueDetailsWhenExpressionHasMultipleIssues() {
+        val result = ruleEngine.validate("#{test_var_unknown} > 1 && d2:length(#{test_var_number}) > 1", itemStore)
+
+        assertFalse(result.valid)
+        assertEquals(1, result.errors.size)
+        assertEquals(1, result.warnings.size)
+        assertEquals(
+            "Unknown variable: `test_var_unknown` (in #{test_var_unknown}); " +
+                "Warning: Incompatible type for 1. argument of d2:length, expected STRING but was: NUMBER (in #{test_var_number})",
+            result.errorMessage,
+        )
+    }
+
+    @Test
+    fun shouldReturnErrorDetailsWhenExpressionDoesNotResultInBoolean() {
+        val result = ruleEngine.validate("#{test_var_number}", itemStore)
+
+        assertFalse(result.valid)
+        assertEquals(
+            listOf(RuleValidationIssue("Expression must result in one of the types BOOLEAN but was: NUMBER", "#{test_var_number}")),
+            result.errors,
+        )
+    }
+
+    @Test
+    fun shouldReturnParseErrorWhenExpressionIsNotWellFormed() {
+        val result = ruleEngine.validate("1 + 1 +", itemStore)
+
+        assertFalse(result.valid)
+        assertNotNull(result.errorMessage)
+        assertEquals(listOf(RuleValidationIssue(result.errorMessage!!)), result.errors)
+        assertEquals(emptyList(), result.warnings)
+    }
+
+    @Test
+    fun shouldKeepCauseInValidationException() {
+        val result = ruleEngine.validate("#{test_var_unknown} > 1", itemStore)
+
+        assertTrue(result.exception is RuleEngineValidationException)
+        assertTrue(result.exception?.cause is IllegalExpressionException)
     }
 
     companion object {

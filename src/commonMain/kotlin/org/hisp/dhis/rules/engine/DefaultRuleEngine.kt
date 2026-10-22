@@ -108,16 +108,21 @@ internal class DefaultRuleEngine : RuleEngine {
             val description = Expression(expression, mode, false).describe(displayNames)
             RuleValidationResult(valid = true, description = description)
         } catch (ex: IllegalExpressionException) {
+            val errors = ex.validationErrors()
+            val warnings = ex.validationWarnings()
             RuleValidationResult(
                 valid = false,
                 exception = RuleEngineValidationException(ex),
-                errorMessage = ex.message,
+                errorMessage = describeIssues(errors, warnings),
+                errors = errors,
+                warnings = warnings,
             )
         } catch (ex: ParseException) {
             RuleValidationResult(
                 valid = false,
                 exception = RuleEngineValidationException(ex),
                 errorMessage = ex.message,
+                errors = listOf(RuleValidationIssue(ex.message.orEmpty())),
             )
         }
 

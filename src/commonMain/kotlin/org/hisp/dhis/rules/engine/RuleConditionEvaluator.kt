@@ -153,11 +153,12 @@ internal class RuleConditionEvaluator(
                 "Rule "
             }
         val failure = if (isConfigurationError) "an error" else "an unexpected exception"
+        val cause = if (e is IllegalExpressionException) e.describeIssues() else e.message
         val errorMessage =
             subject + rule.name + " with id " + rule.uid +
                 " executed for " + targetType.name + "(" + targetUid + ")" +
                 " with condition (" + rule.condition + ")" +
-                " raised " + failure + ": " + e.message
+                " raised " + failure + ": " + cause
         log.severe(errorMessage)
         ruleEvaluationResults.add(errorRule(rule, errorMessage))
     }
