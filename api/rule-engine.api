@@ -48,9 +48,84 @@ public final class org/hisp/dhis/rules/api/DataItem {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class org/hisp/dhis/rules/api/EnvironmentVariable {
+	public fun <init> (Ljava/lang/String;Lorg/hisp/dhis/rules/api/ItemValueType;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lorg/hisp/dhis/rules/api/ItemValueType;
+	public final fun copy (Ljava/lang/String;Lorg/hisp/dhis/rules/api/ItemValueType;)Lorg/hisp/dhis/rules/api/EnvironmentVariable;
+	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/api/EnvironmentVariable;Ljava/lang/String;Lorg/hisp/dhis/rules/api/ItemValueType;ILjava/lang/Object;)Lorg/hisp/dhis/rules/api/EnvironmentVariable;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getValueType ()Lorg/hisp/dhis/rules/api/ItemValueType;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class org/hisp/dhis/rules/api/EnvironmentVariables {
 	public static final field INSTANCE Lorg/hisp/dhis/rules/api/EnvironmentVariables;
 	public final fun getENV_VARIABLES ()Ljava/util/Map;
+}
+
+public final class org/hisp/dhis/rules/api/ExpressionFunction {
+	public fun <init> (Ljava/lang/String;Lorg/hisp/dhis/rules/api/ExpressionValueType;Ljava/util/List;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lorg/hisp/dhis/rules/api/ExpressionValueType;
+	public final fun component3 ()Ljava/util/List;
+	public final fun copy (Ljava/lang/String;Lorg/hisp/dhis/rules/api/ExpressionValueType;Ljava/util/List;)Lorg/hisp/dhis/rules/api/ExpressionFunction;
+	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/api/ExpressionFunction;Ljava/lang/String;Lorg/hisp/dhis/rules/api/ExpressionValueType;Ljava/util/List;ILjava/lang/Object;)Lorg/hisp/dhis/rules/api/ExpressionFunction;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getParameters ()Ljava/util/List;
+	public final fun getReturnType ()Lorg/hisp/dhis/rules/api/ExpressionValueType;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class org/hisp/dhis/rules/api/ExpressionFunctionParameter {
+	public fun <init> (Lorg/hisp/dhis/rules/api/ExpressionValueType;ZZLjava/lang/String;)V
+	public synthetic fun <init> (Lorg/hisp/dhis/rules/api/ExpressionValueType;ZZLjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lorg/hisp/dhis/rules/api/ExpressionValueType;
+	public final fun component2 ()Z
+	public final fun component3 ()Z
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy (Lorg/hisp/dhis/rules/api/ExpressionValueType;ZZLjava/lang/String;)Lorg/hisp/dhis/rules/api/ExpressionFunctionParameter;
+	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/api/ExpressionFunctionParameter;Lorg/hisp/dhis/rules/api/ExpressionValueType;ZZLjava/lang/String;ILjava/lang/Object;)Lorg/hisp/dhis/rules/api/ExpressionFunctionParameter;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getType ()Lorg/hisp/dhis/rules/api/ExpressionValueType;
+	public fun hashCode ()I
+	public final fun isOptional ()Z
+	public final fun isVarargs ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class org/hisp/dhis/rules/api/ExpressionOperator {
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Lorg/hisp/dhis/rules/api/ExpressionValueType;Lorg/hisp/dhis/rules/api/ExpressionValueType;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Lorg/hisp/dhis/rules/api/ExpressionValueType;
+	public final fun component4 ()Lorg/hisp/dhis/rules/api/ExpressionValueType;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Lorg/hisp/dhis/rules/api/ExpressionValueType;Lorg/hisp/dhis/rules/api/ExpressionValueType;)Lorg/hisp/dhis/rules/api/ExpressionOperator;
+	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/api/ExpressionOperator;Ljava/lang/String;Ljava/util/List;Lorg/hisp/dhis/rules/api/ExpressionValueType;Lorg/hisp/dhis/rules/api/ExpressionValueType;ILjava/lang/Object;)Lorg/hisp/dhis/rules/api/ExpressionOperator;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAliases ()Ljava/util/List;
+	public final fun getOperandsType ()Lorg/hisp/dhis/rules/api/ExpressionValueType;
+	public final fun getReturnType ()Lorg/hisp/dhis/rules/api/ExpressionValueType;
+	public final fun getSymbol ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class org/hisp/dhis/rules/api/ExpressionValueType : java/lang/Enum {
+	public static final field BOOLEAN Lorg/hisp/dhis/rules/api/ExpressionValueType;
+	public static final field DATE Lorg/hisp/dhis/rules/api/ExpressionValueType;
+	public static final field MIXED Lorg/hisp/dhis/rules/api/ExpressionValueType;
+	public static final field NUMBER Lorg/hisp/dhis/rules/api/ExpressionValueType;
+	public static final field SAME Lorg/hisp/dhis/rules/api/ExpressionValueType;
+	public static final field STRING Lorg/hisp/dhis/rules/api/ExpressionValueType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lorg/hisp/dhis/rules/api/ExpressionValueType;
+	public static fun values ()[Lorg/hisp/dhis/rules/api/ExpressionValueType;
 }
 
 public final class org/hisp/dhis/rules/api/ItemValueType : java/lang/Enum {
@@ -94,6 +169,7 @@ public abstract interface class org/hisp/dhis/rules/api/RuleEngine {
 	public abstract fun evaluate (Lorg/hisp/dhis/rules/models/RuleEnrollment;Ljava/util/List;Lorg/hisp/dhis/rules/api/RuleEngineContext;)Ljava/util/List;
 	public abstract fun evaluate (Lorg/hisp/dhis/rules/models/RuleEvent;Lorg/hisp/dhis/rules/models/RuleEnrollment;Ljava/util/List;Lorg/hisp/dhis/rules/api/RuleEngineContext;)Ljava/util/List;
 	public abstract fun evaluateAll (Lorg/hisp/dhis/rules/models/RuleEnrollment;Ljava/util/List;Lorg/hisp/dhis/rules/api/RuleEngineContext;)Ljava/util/List;
+	public abstract fun getExpressionSyntax ()Lorg/hisp/dhis/rules/api/RuleExpressionSyntax;
 	public static fun getInstance ()Lorg/hisp/dhis/rules/api/RuleEngine;
 	public abstract fun order (Ljava/util/List;)Ljava/util/List;
 	public abstract fun validate (Ljava/lang/String;Ljava/util/Map;)Lorg/hisp/dhis/rules/models/RuleValidationResult;
@@ -118,6 +194,23 @@ public final class org/hisp/dhis/rules/api/RuleEngineContext {
 	public final fun getRuleSupplementaryData ()Lorg/hisp/dhis/rules/api/RuleSupplementaryData;
 	public final fun getRuleVariables ()Ljava/util/List;
 	public final fun getRules ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class org/hisp/dhis/rules/api/RuleExpressionSyntax {
+	public fun <init> (Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/util/List;
+	public final fun component4 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;)Lorg/hisp/dhis/rules/api/RuleExpressionSyntax;
+	public static synthetic fun copy$default (Lorg/hisp/dhis/rules/api/RuleExpressionSyntax;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Lorg/hisp/dhis/rules/api/RuleExpressionSyntax;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBinaryOperators ()Ljava/util/List;
+	public final fun getEnvironmentVariables ()Ljava/util/List;
+	public final fun getFunctions ()Ljava/util/List;
+	public final fun getUnaryOperators ()Ljava/util/List;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
