@@ -3,6 +3,8 @@ package org.hisp.dhis.rules
 import js.array.tupleOf
 import js.collections.JsMap
 import org.hisp.dhis.rules.api.DataItem
+import org.hisp.dhis.rules.api.ExpressionFunction
+import org.hisp.dhis.rules.api.ExpressionOperator
 import org.hisp.dhis.rules.api.RuleContextRequirements
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
@@ -57,6 +59,24 @@ class RuleEngineJs(verbose: Boolean = false) {
             .order(ruleEvents.map(::toEventJava)).map { it.event }
         val eventMap = ruleEvents.associateBy { it.event }
         return orderedEventIds.map { eventMap[it]!! }.toTypedArray()
+    }
+
+    fun getExpressionSyntax(): RuleExpressionSyntaxJs {
+        val syntax = RuleEngine.getInstance().getExpressionSyntax()
+        return RuleExpressionSyntaxJs(
+            functions = syntax.functions.map(::toExpressionFunctionJs).toTypedArray(),
+            binaryOperators = syntax.binaryOperators.map(::toExpressionOperatorJs).toTypedArray(),
+            unaryOperators = syntax.unaryOperators.map(::toExpressionOperatorJs).toTypedArray(),
+            environmentVariables = syntax.environmentVariables.toTypedArray(),
+        )
+    }
+
+    private fun toExpressionFunctionJs(function: ExpressionFunction): ExpressionFunctionJs {
+        return ExpressionFunctionJs(function.name, function.returnType, function.parameters.toTypedArray())
+    }
+
+    private fun toExpressionOperatorJs(operator: ExpressionOperator): ExpressionOperatorJs {
+        return ExpressionOperatorJs(operator.symbol, operator.aliases.toTypedArray(), operator.returnType, operator.operandsType)
     }
 
     private fun <Kf, Vf, K, V> toMap(map: JsMap<Kf, Vf>, key: (Kf) -> K, value: (Vf) -> V): Map<K, V> {

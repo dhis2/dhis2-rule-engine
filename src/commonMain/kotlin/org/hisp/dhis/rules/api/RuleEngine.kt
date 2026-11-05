@@ -40,6 +40,12 @@ interface RuleEngine {
         ruleEvents: List<RuleEvent>,
     ): List<RuleEvent>
 
+    /**
+     * @return the functions, operators and environment variables that can be used in program rule expressions
+     * (conditions and data field expressions)
+     */
+    fun getExpressionSyntax(): RuleExpressionSyntax
+
     companion object {
         @JvmStatic
         fun getInstance(): RuleEngine = DefaultRuleEngine()

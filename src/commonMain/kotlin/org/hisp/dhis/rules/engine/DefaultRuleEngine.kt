@@ -5,10 +5,20 @@ import org.hisp.dhis.lib.expression.ExpressionMode
 import org.hisp.dhis.lib.expression.spi.IllegalExpressionException
 import org.hisp.dhis.lib.expression.spi.ParseException
 import org.hisp.dhis.lib.expression.spi.ValueType
+import org.hisp.dhis.lib.expression.ast.BinaryOperator
+import org.hisp.dhis.lib.expression.ast.FunctionSignature
+import org.hisp.dhis.lib.expression.ast.UnaryOperator
 import org.hisp.dhis.rules.api.DataItem
+import org.hisp.dhis.rules.api.EnvironmentVariable
+import org.hisp.dhis.rules.api.EnvironmentVariables
+import org.hisp.dhis.rules.api.ExpressionFunction
+import org.hisp.dhis.rules.api.ExpressionFunctionParameter
+import org.hisp.dhis.rules.api.ExpressionOperator
+import org.hisp.dhis.rules.api.ExpressionValueType
 import org.hisp.dhis.rules.api.RuleContextRequirements
 import org.hisp.dhis.rules.api.RuleEngine
 import org.hisp.dhis.rules.api.RuleEngineContext
+import org.hisp.dhis.rules.api.RuleExpressionSyntax
 import org.hisp.dhis.rules.models.*
 import org.hisp.dhis.rules.utils.filterRules
 import org.hisp.dhis.rules.utils.orderEvents
@@ -131,4 +141,47 @@ internal class DefaultRuleEngine : RuleEngine {
     ): List<RuleEvent> {
         return orderEvents(ruleEvents)
     }
+
+    // Conditions and data fields share the same syntax, so the available functions and operators are the same
+    override fun getExpressionSyntax(): RuleExpressionSyntax =
+        RuleExpressionSyntax(
+            functions = Expression.getFunctions(ExpressionMode.RULE_ENGINE_CONDITION).map { it.toExpressionFunction() },
+            binaryOperators = Expression.getBinaryOperators().map { it.toExpressionOperator() },
+            unaryOperators =
+                Expression.getUnaryOperators(ExpressionMode.RULE_ENGINE_CONDITION).map { it.toExpressionOperator() },
+            environmentVariables =
+                EnvironmentVariables.ENV_VARIABLES.map { (name, type) -> EnvironmentVariable(name, type) },
+        )
+
+    private fun FunctionSignature.toExpressionFunction() =
+        ExpressionFunction(
+            name = getName(),
+            returnType = ExpressionValueType.from(getReturnType()),
+            parameters =
+                parameters.map {
+                    ExpressionFunctionParameter(
+                        type = ExpressionValueType.from(it.type),
+                        isOptional = it.isOptional,
+                        isVarargs = it.isVarargs,
+                        name = it.name,
+                    )
+                },
+        )
+
+    private fun BinaryOperator.toExpressionOperator() =
+        ExpressionOperator(
+            symbol = symbol,
+            aliases = aliases,
+            returnType = ExpressionValueType.from(getValueType()),
+            operandsType = ExpressionValueType.from(operandsType),
+        )
+
+    // unary operators expect an operand of the type they return
+    private fun UnaryOperator.toExpressionOperator() =
+        ExpressionOperator(
+            symbol = symbol,
+            aliases = aliases,
+            returnType = ExpressionValueType.from(getValueType()),
+            operandsType = ExpressionValueType.from(getValueType()),
+        )
 }
