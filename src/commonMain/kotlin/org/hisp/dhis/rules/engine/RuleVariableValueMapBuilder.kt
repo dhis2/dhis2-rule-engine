@@ -16,6 +16,7 @@ internal class RuleVariableValueMapBuilder {
         ruleEvents: Set<RuleEvent>,
         ruleEnrollment: RuleEnrollment? = null,
         ruleEvent: RuleEvent? = null,
+        environment: TriggerEnvironment,
     ): MutableMap<String, VariableValue> {
         val allEvents =
             ruleEvent?.let {
@@ -25,7 +26,7 @@ internal class RuleVariableValueMapBuilder {
             } ?: ruleEvents
         val allEventValues = buildAllEventValues(allEvents)
         val currentEnrollmentValues = ruleEnrollment?.let { buildCurrentEnrollmentValues(it) }.orEmpty()
-        return build(allConstantValues, ruleVariables, allEvents, ruleEnrollment, ruleEvent, allEventValues, currentEnrollmentValues, currentDate())
+        return build(allConstantValues, ruleVariables, allEvents, ruleEnrollment, ruleEvent, allEventValues, currentEnrollmentValues, currentDate(), environment)
     }
 
     fun multipleBuild(
@@ -33,6 +34,7 @@ internal class RuleVariableValueMapBuilder {
         ruleVariables: List<RuleVariable>,
         ruleEvents: Set<RuleEvent>,
         ruleEnrollment: RuleEnrollment? = null,
+        environment: TriggerEnvironment,
     ): RuleVariableValueMap {
         val allEventValues = buildAllEventValues(ruleEvents)
         val currentEnrollmentValues = ruleEnrollment?.let { buildCurrentEnrollmentValues(it) }.orEmpty()
@@ -40,13 +42,13 @@ internal class RuleVariableValueMapBuilder {
         val enrollmentMap =
             ruleEnrollment
                 ?.let { enrollment ->
-                    mapOf(Pair(enrollment, build(allConstantValues, ruleVariables, ruleEvents, enrollment, null, allEventValues, currentEnrollmentValues, currentDate)))
+                    mapOf(Pair(enrollment, build(allConstantValues, ruleVariables, ruleEvents, enrollment, null, allEventValues, currentEnrollmentValues, currentDate, environment)))
                 }.orEmpty()
         return RuleVariableValueMap(
             enrollmentMap,
             ruleEvents.associateBy({
                 it
-            }, { event -> build(allConstantValues, ruleVariables, ruleEvents, ruleEnrollment, event, allEventValues, currentEnrollmentValues, currentDate) }),
+            }, { event -> build(allConstantValues, ruleVariables, ruleEvents, ruleEnrollment, event, allEventValues, currentEnrollmentValues, currentDate, environment) }),
         )
     }
 
@@ -59,9 +61,10 @@ internal class RuleVariableValueMapBuilder {
         allEventValues: Map<String, List<RuleDataValueHistory>>,
         currentEnrollmentValues: Map<String, RuleAttributeValue>,
         currentDate: LocalDate,
+        environment: TriggerEnvironment,
     ): MutableMap<String, VariableValue> {
         val valueMap = HashMap<String, VariableValue>()
-        fillEnvironmentVariables(allEvents, ruleEnrollment, ruleEvent, currentDate, valueMap)
+        fillEnvironmentVariables(allEvents, ruleEnrollment, ruleEvent, currentDate, environment, valueMap)
         fillRuleVariableValues(ruleVariables, ruleEvent, allEventValues, currentEnrollmentValues, valueMap)
         fillConstantsValues(allConstantValues, valueMap)
         return valueMap
@@ -110,9 +113,10 @@ internal class RuleVariableValueMapBuilder {
         ruleEnrollment: RuleEnrollment?,
         ruleEvent: RuleEvent?,
         currentDate: LocalDate,
+        environment: TriggerEnvironment,
         valueMap: MutableMap<String, VariableValue>,
     ) {
-        fillEnvironmentVariables(ruleEvents, currentDate, valueMap)
+        fillEnvironmentVariables(ruleEvents, currentDate, environment, valueMap)
         ruleEnrollment?.let { fillEnrollmentEnvironmentVariables(it, currentDate, valueMap) }
         ruleEvent?.let { fillEventEnvironmentVariables(ruleEvents, it, currentDate, valueMap) }
     }
@@ -120,6 +124,7 @@ internal class RuleVariableValueMapBuilder {
     private fun fillEnvironmentVariables(
         ruleEvents: Set<RuleEvent>,
         currentDate: LocalDate,
+        environment: TriggerEnvironment,
         valueMap: MutableMap<String, VariableValue>,
     ) {
         val currentDateStr = currentDate.toString()
@@ -138,12 +143,12 @@ internal class RuleVariableValueMapBuilder {
                 listOf(eventCountStr),
                 currentDateStr,
             )
-        val environment = TriggerEnvironment.SERVER.clientName
+
         valueMap[RuleEngineUtils.ENV_VAR_ENVIRONMENT] =
             VariableValue(
                 ValueType.STRING,
-                environment,
-                listOf(environment),
+                environment.clientName,
+                listOf(environment.clientName),
                 currentDateStr,
             )
     }

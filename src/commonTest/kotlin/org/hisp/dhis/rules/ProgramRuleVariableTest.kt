@@ -281,7 +281,7 @@ class ProgramRuleVariableTest {
                 listOf(RuleAttributeValue("test_attribute", "test_value")),
             )
 
-    private fun getRuleEngineContext(rules: List<Rule>): RuleEngineContext = RuleEngineContext(rules)
+    private fun getRuleEngineContext(rules: List<Rule>): RuleEngineContext = RuleEngineContext(rules, environment = TriggerEnvironment.SERVER)
 
     companion object {
         private val CURRENT_DATE = currentDate()

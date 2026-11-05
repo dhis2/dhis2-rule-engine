@@ -187,6 +187,6 @@ class CalculatedValueTest {
 
     private fun getRuleEngineContext(rules: List<Rule>): RuleEngineContext {
         val ruleVariable: RuleVariable = RuleVariableCalculatedValue("test_calculated_value", true, ArrayList(), "", RuleValueType.TEXT)
-        return RuleEngineContext(rules, listOf(ruleVariable))
+        return RuleEngineContext(rules, listOf(ruleVariable), environment = TriggerEnvironment.SERVER)
     }
 }

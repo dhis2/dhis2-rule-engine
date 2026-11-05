@@ -741,7 +741,8 @@ class RuleEngineFunctionTest {
             RuleEngineContext(
                 rules = listOf(rule),
                 ruleVariables = listOf(ruleVariableOne),
-                ruleSupplementaryData = RuleSupplementaryData(orgUnitGroups = supplementaryData)
+                ruleSupplementaryData = RuleSupplementaryData(orgUnitGroups = supplementaryData),
+                environment = TriggerEnvironment.SERVER,
             )
         val ruleEvent =
             RuleEvent(
@@ -794,7 +795,8 @@ class RuleEngineFunctionTest {
             RuleEngineContext(
                 rules = listOf(rule),
                 ruleVariables = listOf(ruleVariableOne),
-                ruleSupplementaryData = RuleSupplementaryData(orgUnitGroups = supplementaryData)
+                ruleSupplementaryData = RuleSupplementaryData(orgUnitGroups = supplementaryData),
+                environment = TriggerEnvironment.SERVER,
             )
         val ruleEvent =
             RuleEvent(
@@ -844,7 +846,8 @@ class RuleEngineFunctionTest {
             RuleEngineContext(
                 rules = listOf(rule),
                 ruleVariables = listOf(ruleVariableOne),
-                ruleSupplementaryData = RuleSupplementaryData(userRoles = roles)
+                ruleSupplementaryData = RuleSupplementaryData(userRoles = roles),
+                environment = TriggerEnvironment.SERVER,
             )
         val ruleEvent =
             RuleEvent(
@@ -894,7 +897,8 @@ class RuleEngineFunctionTest {
             RuleEngineContext(
                 rules = listOf(rule),
                 ruleVariables = listOf(ruleVariableOne),
-                ruleSupplementaryData = RuleSupplementaryData(userGroups = userGroups)
+                ruleSupplementaryData = RuleSupplementaryData(userGroups = userGroups),
+                environment = TriggerEnvironment.SERVER,
             )
         val ruleEvent =
             RuleEvent(
@@ -929,7 +933,8 @@ class RuleEngineFunctionTest {
             RuleEngineContext(
                 rules = listOf(rule),
                 ruleVariables = listOf(),
-                ruleSupplementaryData = RuleSupplementaryData()
+                ruleSupplementaryData = RuleSupplementaryData(),
+                environment = TriggerEnvironment.SERVER,
             )
         val ruleEvent =
             RuleEvent(
@@ -974,7 +979,8 @@ class RuleEngineFunctionTest {
             RuleEngineContext(
                 rules = listOf(rule),
                 ruleVariables = listOf(ruleVariableOne),
-                ruleSupplementaryData = RuleSupplementaryData(userRoles = roles)
+                ruleSupplementaryData = RuleSupplementaryData(userRoles = roles),
+                environment = TriggerEnvironment.SERVER,
             )
         val ruleEvent =
             RuleEvent(

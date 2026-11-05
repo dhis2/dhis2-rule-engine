@@ -35,4 +35,5 @@ enum class TriggerEnvironment(
 ) {
     ANDROIDCLIENT("AndroidClient"),
     SERVER("Server"),
+    WEBCLIENT("WebClient"),
 }

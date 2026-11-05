@@ -108,5 +108,5 @@ class VariableValueTypeTest {
     private fun getRuleEngineContext(
         rule: Rule,
         ruleVariables: List<RuleVariable>,
-    ): RuleEngineContext = RuleEngineContext(rules = listOf(rule), ruleVariables = ruleVariables)
+    ): RuleEngineContext = RuleEngineContext(rules = listOf(rule), ruleVariables = ruleVariables, environment = TriggerEnvironment.SERVER)
 }
