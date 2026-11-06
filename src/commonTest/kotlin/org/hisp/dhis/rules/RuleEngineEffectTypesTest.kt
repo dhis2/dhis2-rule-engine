@@ -58,7 +58,7 @@ class RuleEngineEffectTypesTest {
                 getTestRuleEvent(RuleEventStatus.ACTIVE),
                 null,
                 emptyList(),
-                RuleEngineContext(listOf(rule)),
+                RuleEngineContext(listOf(rule), environment = TriggerEnvironment.SERVER),
             )
         assertEquals(1, ruleEffects.size)
         assertEquals("test_string", ruleEffects[0].data)
@@ -81,7 +81,7 @@ class RuleEngineEffectTypesTest {
             RuleEngine.getInstance().evaluate(
                 getTestRuleEnrollment(),
                 emptyList(),
-                RuleEngineContext(listOf(rule), listOf(ruleVariable)),
+                RuleEngineContext(listOf(rule), listOf(ruleVariable), environment = TriggerEnvironment.SERVER),
             )
         assertEquals(1, ruleEffects.size)
         assertEquals("test_string", ruleEffects[0].data)
@@ -108,7 +108,7 @@ class RuleEngineEffectTypesTest {
                 getTestRuleEvent(RuleEventStatus.ACTIVE),
                 null,
                 emptyList(),
-                RuleEngineContext(listOf(rule), listOf(ruleVariable)),
+                RuleEngineContext(listOf(rule), listOf(ruleVariable), environment = TriggerEnvironment.SERVER),
             )
         assertEquals(1, ruleEffects.size)
         assertEquals("test_string", ruleEffects[0].data)
@@ -132,7 +132,7 @@ class RuleEngineEffectTypesTest {
                 getTestRuleEvent(RuleEventStatus.ACTIVE),
                 null,
                 emptyList(),
-                RuleEngineContext(listOf(rule), listOf(ruleVariable)),
+                RuleEngineContext(listOf(rule), listOf(ruleVariable), environment = TriggerEnvironment.SERVER),
             )
         assertEquals(1, ruleEffects.size)
         assertEquals("test_string", ruleEffects[0].data)
@@ -155,7 +155,7 @@ class RuleEngineEffectTypesTest {
             RuleEngine.getInstance().evaluateAll(
                 getTestRuleEnrollment(),
                 listOf(getTestRuleEvent(RuleEventStatus.ACTIVE)),
-                RuleEngineContext(listOf(rule), listOf(ruleVariable)),
+                RuleEngineContext(listOf(rule), listOf(ruleVariable), environment = TriggerEnvironment.SERVER),
             )
         val allEffects = ruleEffects.flatMap { it.ruleEffects }
         assertEquals(1, allEffects.size)
@@ -180,7 +180,7 @@ class RuleEngineEffectTypesTest {
             RuleEngine.getInstance().evaluateAll(
                 getTestRuleEnrollment(),
                 listOf(getTestRuleEvent(RuleEventStatus.ACTIVE)),
-                RuleEngineContext(listOf(rule), listOf(ruleVariable)),
+                RuleEngineContext(listOf(rule), listOf(ruleVariable), environment = TriggerEnvironment.SERVER),
             )
         val allEffects = ruleEffects.flatMap { it.ruleEffects }
         assertEquals(1, allEffects.size)
@@ -204,7 +204,7 @@ class RuleEngineEffectTypesTest {
             RuleEngine.getInstance().evaluateAll(
                 null,
                 listOf(getTestRuleEvent(RuleEventStatus.ACTIVE)),
-                RuleEngineContext(listOf(rule), listOf(ruleVariable)),
+                RuleEngineContext(listOf(rule), listOf(ruleVariable), environment = TriggerEnvironment.SERVER),
             )
         val allEffects = ruleEffects.flatMap { it.ruleEffects }
         assertEquals(1, allEffects.size)
@@ -246,7 +246,7 @@ class RuleEngineEffectTypesTest {
     fun evaluateAllProducesSameEffectsAsIndividualEvaluateCalls() {
         val ruleAction = RuleAction("'text'", "DISPLAYTEXT", mapOf("content" to "label"))
         val testRule = Rule("true", listOf(ruleAction))
-        val context = RuleEngineContext(listOf(testRule))
+        val context = RuleEngineContext(listOf(testRule), environment = TriggerEnvironment.SERVER)
         val engine = RuleEngine.getInstance()
 
         val enrollment = RuleEnrollment(
@@ -313,7 +313,7 @@ class RuleEngineEffectTypesTest {
                 getTestRuleEvent(RuleEventStatus.COMPLETED),
                 null,
                 emptyList(),
-                RuleEngineContext(listOf(rule)),
+                RuleEngineContext(listOf(rule), environment = TriggerEnvironment.SERVER),
             )
         assertEquals(1, ruleEffects.size)
         assertEquals("", ruleEffects[0].data)

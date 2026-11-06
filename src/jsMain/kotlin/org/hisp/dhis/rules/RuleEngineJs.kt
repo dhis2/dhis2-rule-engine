@@ -129,7 +129,8 @@ class RuleEngineJs(verbose: Boolean = false) {
             rules = executionContext.rules.map(::toRuleJava),
             ruleSupplementaryData = toSupplementaryDataJava(executionContext.supplementaryData),
             constantsValues = toMap(executionContext.constantsValues, {it}, {it}),
-            ruleVariables = executionContext.ruleVariables.map(::toRuleVariableJava)
+            ruleVariables = executionContext.ruleVariables.map(::toRuleVariableJava),
+            environment = executionContext.environment,
         )
     }
 
