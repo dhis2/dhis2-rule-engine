@@ -27,6 +27,7 @@ internal class DefaultRuleEngine : RuleEngine {
                 ruleEvents.toSet(),
                 ruleEnrollment,
                 target,
+                environment = executionContext.environment,
             )
         return RuleConditionEvaluator(executionContext.ruleVariables).getRuleEffects(
             TrackerObjectType.EVENT,
@@ -49,6 +50,7 @@ internal class DefaultRuleEngine : RuleEngine {
                 executionContext.ruleVariables,
                 ruleEvents.toSet(),
                 target,
+                environment = executionContext.environment,
             )
         return RuleConditionEvaluator(executionContext.ruleVariables).getRuleEffects(
             TrackerObjectType.ENROLLMENT,
@@ -67,7 +69,13 @@ internal class DefaultRuleEngine : RuleEngine {
     ): List<RuleEffects> {
         val valueMap =
             RuleVariableValueMapBuilder()
-                .multipleBuild(executionContext.constantsValues, executionContext.ruleVariables, eventsTarget.toSet(), enrollmentTarget)
+                .multipleBuild(
+                    executionContext.constantsValues,
+                    executionContext.ruleVariables,
+                    eventsTarget.toSet(),
+                    enrollmentTarget,
+                    environment = executionContext.environment,
+                )
         return RuleEngineMultipleExecution().execute(
             executionContext.rules,
             executionContext.ruleVariables,

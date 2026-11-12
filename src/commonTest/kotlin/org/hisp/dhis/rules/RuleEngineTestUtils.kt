@@ -1,6 +1,7 @@
 package org.hisp.dhis.rules
 
 import org.hisp.dhis.rules.api.RuleEngineContext
+import org.hisp.dhis.rules.models.TriggerEnvironment
 import org.hisp.dhis.rules.models.Rule
 import org.hisp.dhis.rules.models.RuleVariable
 
@@ -39,7 +40,7 @@ object RuleEngineTestUtils {
     fun getRuleEngineContext(
         rule: Rule,
         ruleVariables: List<RuleVariable>,
-    ): RuleEngineContext = RuleEngineContext(listOf(rule), ruleVariables)
+    ): RuleEngineContext = RuleEngineContext(listOf(rule), ruleVariables, environment = TriggerEnvironment.SERVER)
 
-    fun getRuleEngineContext(rules: List<Rule>): RuleEngineContext = RuleEngineContext(rules, emptyList())
+    fun getRuleEngineContext(rules: List<Rule>): RuleEngineContext = RuleEngineContext(rules, emptyList(), environment = TriggerEnvironment.SERVER)
 }

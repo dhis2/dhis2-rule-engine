@@ -157,5 +157,5 @@ class ConstantsValueTest {
     private fun getRuleEngineContext(
         rules: List<Rule>,
         constantsValueMap: Map<String, String>,
-    ): RuleEngineContext = RuleEngineContext(rules = rules, constantsValues = constantsValueMap)
+    ): RuleEngineContext = RuleEngineContext(rules = rules, constantsValues = constantsValueMap, environment = TriggerEnvironment.SERVER)
 }

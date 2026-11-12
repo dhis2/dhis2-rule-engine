@@ -70,7 +70,7 @@ class RuleVariableValueMapBuilderTest {
             )
         val valueMap =
             RuleVariableValueMapBuilder()
-                .build(emptyMap(), listOf(ruleVariableOne), setOf(contextEventOne), ruleEnrollment)
+                .build(emptyMap(), listOf(ruleVariableOne), setOf(contextEventOne), ruleEnrollment, environment = TriggerEnvironment.SERVER)
         RuleVariableValueAssert
             .assertThatVariable(valueMap["test_variable_one"]!!)
             .hasValue(null)
@@ -175,7 +175,7 @@ class RuleVariableValueMapBuilderTest {
             )
         val valueMap =
             RuleVariableValueMapBuilder()
-                .build(emptyMap(), listOf(ruleVariableOne, ruleVariableTwo), setOf(contextEventOne, contextEventTwo), null, currentEvent)
+                .build(emptyMap(), listOf(ruleVariableOne, ruleVariableTwo), setOf(contextEventOne, contextEventTwo), null, currentEvent, environment = TriggerEnvironment.SERVER)
         assertEquals(14, valueMap.size.toLong())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
@@ -258,7 +258,7 @@ class RuleVariableValueMapBuilderTest {
 
         val valueMap =
             RuleVariableValueMapBuilder()
-                .build(emptyMap(), listOf(), setOf(contextEventOne), null, null)
+                .build(emptyMap(), listOf(), setOf(contextEventOne), null, null, environment = TriggerEnvironment.SERVER)
 
         assertNull(valueMap["event_date"])
     }
@@ -362,7 +362,7 @@ class RuleVariableValueMapBuilderTest {
             )
         val valueMap =
             RuleVariableValueMapBuilder()
-                .build(emptyMap(), listOf(ruleVariableOne, ruleVariableTwo), setOf(oldestRuleEvent, newestRuleEvent), null, currentEvent)
+                .build(emptyMap(), listOf(ruleVariableOne, ruleVariableTwo), setOf(oldestRuleEvent, newestRuleEvent), null, currentEvent, environment = TriggerEnvironment.SERVER)
         assertEquals(14, valueMap.size.toLong() )
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
@@ -509,7 +509,7 @@ class RuleVariableValueMapBuilderTest {
             )
         val valueMap =
             RuleVariableValueMapBuilder()
-                .build(emptyMap(), listOf(ruleVariableOne, ruleVariableTwo), setOf(firstRuleEvent, secondRuleEvent), null, currentEvent)
+                .build(emptyMap(), listOf(ruleVariableOne, ruleVariableTwo), setOf(firstRuleEvent, secondRuleEvent), null, currentEvent, environment = TriggerEnvironment.SERVER)
         assertEquals(14, valueMap.size.toLong())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
@@ -659,7 +659,7 @@ class RuleVariableValueMapBuilderTest {
             )
         val valueMap =
             RuleVariableValueMapBuilder()
-                .build(emptyMap(), listOf(ruleVariable), setOf(eventOne, eventTwo, eventThree), null, eventCurrent)
+                .build(emptyMap(), listOf(ruleVariable), setOf(eventOne, eventTwo, eventThree), null, eventCurrent, environment = TriggerEnvironment.SERVER)
         assertEquals(13, valueMap.size.toLong())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
@@ -752,7 +752,7 @@ class RuleVariableValueMapBuilderTest {
             )
         val valueMap =
             RuleVariableValueMapBuilder()
-                .build(emptyMap(), listOf(ruleVariable), setOf(ruleEventOne), null, ruleEventTwo)
+                .build(emptyMap(), listOf(ruleVariable), setOf(ruleEventOne), null, ruleEventTwo, environment = TriggerEnvironment.SERVER)
         assertEquals(13, valueMap.size.toLong())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
@@ -882,7 +882,7 @@ class RuleVariableValueMapBuilderTest {
             )
         val valueMap =
             RuleVariableValueMapBuilder()
-                .build(emptyMap(), listOf(ruleVariable), setOf(ruleEventOne, ruleEventTwo, ruleEventThree), null, ruleEventCurrent)
+                .build(emptyMap(), listOf(ruleVariable), setOf(ruleEventOne, ruleEventTwo, ruleEventThree), null, ruleEventCurrent, environment = TriggerEnvironment.SERVER)
         assertEquals(13, valueMap.size.toLong())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
@@ -1010,7 +1010,7 @@ class RuleVariableValueMapBuilderTest {
             )
         val valueMap =
             RuleVariableValueMapBuilder()
-                .build(emptyMap(), listOf(ruleVariable), setOf(ruleEventOne, ruleEventTwo, ruleEventThree), null, ruleEventCurrent)
+                .build(emptyMap(), listOf(ruleVariable), setOf(ruleEventOne, ruleEventTwo, ruleEventThree), null, ruleEventCurrent, environment = TriggerEnvironment.SERVER)
         assertEquals(13, valueMap.size.toLong())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
@@ -1131,7 +1131,7 @@ class RuleVariableValueMapBuilderTest {
         // here we will expect correct values to be returned
         val valueMap =
             RuleVariableValueMapBuilder()
-                .build(emptyMap(), listOf(ruleVariableOne, ruleVariableTwo), setOf(contextEvent), ruleEnrollment, currentEvent)
+                .build(emptyMap(), listOf(ruleVariableOne, ruleVariableTwo), setOf(contextEvent), ruleEnrollment, currentEvent, environment = TriggerEnvironment.SERVER)
         assertEquals(21, valueMap.size.toLong())
         RuleVariableValueAssert
             .assertThatVariable(valueMap["current_date"]!!)
@@ -1284,6 +1284,7 @@ class RuleVariableValueMapBuilderTest {
                     listOf(ruleVariableOne, ruleVariableTwo, ruleVariableThree),
                     setOf(ruleEventOne, ruleEventTwo),
                     ruleEnrollment,
+                    environment = TriggerEnvironment.SERVER,
                 )
         assertEquals(15, valueMap.size.toLong())
         RuleVariableValueAssert
@@ -1421,6 +1422,7 @@ class RuleVariableValueMapBuilderTest {
                     listOf(ruleVariableOne, ruleVariableTwo, ruleVariableThree),
                     setOf(ruleEventOne, ruleEventTwo),
                     ruleEnrollment,
+                    environment = TriggerEnvironment.SERVER,
                 )
         assertEquals(1, enrollmentMap.size.toLong())
         assertEquals(2, eventMap.size.toLong())

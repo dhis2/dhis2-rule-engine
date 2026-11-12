@@ -46,7 +46,7 @@ class OrderedRulesTest {
         val lowPriorityRule = Rule("true", listOf(lowPriorityRuleAction), priority = 100)
         val nullPriorityRule = Rule("true", listOf(nullPriorityRuleAction), priority = null)
 
-        val ruleEngineContext = RuleEngineContext(listOf(lowPriorityRule, nullPriorityRule, highPriorityRule))
+        val ruleEngineContext = RuleEngineContext(listOf(lowPriorityRule, nullPriorityRule, highPriorityRule), environment = TriggerEnvironment.SERVER)
 
         val effects = RuleEngine.getInstance().evaluate(enrollment(), listOf(), ruleEngineContext)
 
@@ -76,7 +76,7 @@ class OrderedRulesTest {
             lowPriorityRuleActionInNullPriorityRule,
             nullPriorityRuleActionInNullPriorityRule), priority = null)
 
-        val ruleEngineContext = RuleEngineContext(listOf(lowPriorityRule, nullPriorityRule, highPriorityRule))
+        val ruleEngineContext = RuleEngineContext(listOf(lowPriorityRule, nullPriorityRule, highPriorityRule), environment = TriggerEnvironment.SERVER)
 
         val effects = RuleEngine.getInstance().evaluate(enrollment(), listOf(), ruleEngineContext)
 
